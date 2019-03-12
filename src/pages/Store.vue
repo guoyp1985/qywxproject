@@ -58,17 +58,18 @@
           <div class="activitylist">
             <div v-for="(item,index) in suggestData" :key="item.id" class="bg-page">
               <router-link :to="{path:'/product',query:{id:item.id,wid:retailerInfo.uid}}" class="scroll_item mb5 font14 bg-white db">
-            		<div class="t-table pt10 pb10">
-            			<div class="t-cell pl10 v_middle" style="width:90px;">
+            		<div class="t-table padding10 border-box">
+            			<div class="t-cell v_middle" style="width:90px;">
                     <img slot="photo" class="imgcover" style="width:80px;height:80px;" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
             			</div>
             			<div class="t-cell v_middle">
-            				<div class="clamp1 font14 pr10">{{ item.title }}</div>
+            				<div class="clamp1">{{ item.title }}</div>
+            				<div class="clamp1 font12 color-gray" v-if="loginUser.uid == retailerInfo.uid">佣金: {{ $t('RMB') }} {{ item.rebatein }}</div>
                     <div class="clear">
               				<div class="mt5 db-in">
               					<span class="color-red font14 middle-cell">{{ $t('RMB') }} {{item.price}}</span>
               				</div>
-              				<div class="align_right pr10 db-in fr">
+              				<div class="align_right db-in fr">
               					<div class="qbtn5 bg-red color-white">马上购买</div>
               				</div>
                     </div>
