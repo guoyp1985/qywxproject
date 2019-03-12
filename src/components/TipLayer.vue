@@ -24,7 +24,7 @@
 }
 </style>
 <template>
-  <div class="auto-modal flex_center tiplayer-modal" v-if="showModal">
+  <div class="auto-modal flex_center tiplayer-modal">
     <div class="modal-inner border-box">
       <div class="pic-outer">
         <div class="pic">
@@ -35,7 +35,7 @@
       <div class="middle-con flex_center">
         <div class="w_100">{{content}}</div>
       </div>
-      <div class="bottom-con flex_center" @click="clickButton">{{buttonTxt}}</div>
+      <div class="bottom-con flex_center" v-if="buttonTxt && buttonTxt != ''" @click="clickButton">{{buttonTxt}}</div>
       <div class="close-area flex_center" @click="closeModal">
         <i class="al al-close"></i>
       </div>
@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     closeModal () {
-      this.showModal = false
+      this.$emit('clickClose')
     },
     clickButton () {
       this.$emit('clickButton')

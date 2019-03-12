@@ -186,14 +186,21 @@
         module="store"
         :on-close="closeShareSuccess">
       </share-success>
-      <div class="auto-modal flex_center help-modal" v-if="showHelpModal">
+      <!-- <div class="auto-modal flex_center help-modal" v-if="showHelpModal">
         <div class="modal-inner border-box">
           <div class="padding10">超值优惠商品是官方为你提供的爆款低价商品，帮助你转化客户，促进用户购买，用户购买完成后，你还可以获得商品的佣金奖励哦！</div>
           <div class="close-area flex_center" @click="closeHelpModal">
             <i class="al al-close"></i>
           </div>
         </div>
-      </div>
+      </div> -->
+      <template v-if="showHelpModal">
+        <tip-layer
+          @clickClose="closeHelpModal"
+          title="超值优惠"
+          content="超值优惠商品是官方为你提供的爆款低价商品，帮助你转化客户，促进用户购买，用户购买完成后，你还可以获得商品的佣金奖励哦！">
+        </tip-layer>
+      </template>
     </template>
   </div>
 </template>
@@ -222,6 +229,7 @@ import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
 import Productitemplate from '@/components/Productitemplate'
 import Newsitemplate from '@/components/Newsitemplate'
 import ShareSuccess from '@/components/ShareSuccess'
+import TipLayer from '@/components/TipLayer'
 import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
@@ -238,7 +246,7 @@ export default {
     TransferDom
   },
   components: {
-    Swiper, Popup, Groupbuyitemplate, Bargainbuyitemplate, Productitemplate, Newsitemplate, ShareSuccess, XImg, Sos
+    Swiper, Popup, Groupbuyitemplate, Bargainbuyitemplate, Productitemplate, Newsitemplate, ShareSuccess, XImg, Sos, TipLayer
   },
   filters: {
     dateformat: function (value) {
