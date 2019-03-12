@@ -13,15 +13,7 @@ const Voice = {
     if (!switcher) return
     switcher = false
     time = new Time()
-    Vue.wechat.startRecord({
-      success: () => {
-        alert('成功调用录音')
-      },
-      fail: (res) => {
-        alert('录音失败')
-        alert(JSON.stringify(res))
-      }
-    })
+    Vue.wechat.startRecord()
     Vue.wechat.onVoiceRecordEnd({
       complete: function (res) {
         switcher = true
