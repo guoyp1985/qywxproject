@@ -64,10 +64,10 @@
             			</div>
             			<div class="t-cell v_middle">
             				<div class="clamp1">{{ item.title }}</div>
-            				<div class="clamp1 font12 color-gray" v-if="loginUser.uid == retailerInfo.uid">佣金: {{ $t('RMB') }} {{ item.disrebate }}</div>
                     <div class="clear">
               				<div class="mt5 db-in">
-              					<span class="color-red font14 middle-cell">{{ $t('RMB') }} {{item.price}}</span>
+              					<div class="color-red font14 middle-cell">{{ $t('RMB') }} {{item.price}}</div>
+                				<div class="clamp1 font12 color-gray" v-if="loginUser.uid == retailerInfo.uid">佣金: {{ $t('RMB') }} {{ item.disrebate }}</div>
               				</div>
               				<div class="align_right db-in fr">
               					<div class="qbtn5 bg-red color-white">马上购买</div>
