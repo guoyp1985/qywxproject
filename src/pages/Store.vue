@@ -49,7 +49,7 @@
         </template>
         <template v-if="showSuggest && suggestData.length">
           <div class="bg-white mt5 padding10 b_top_after db-flex suggest-area">
-            <div class="flex_left flex_cell pl5 font16 vline"><span>超值优惠</span><i class="al al-wenhao font20 color-theme ml5" @click="clickHelp"></i></div>
+            <div class="flex_left flex_cell pl5 font16 vline"><span>超值优惠</span><i v-if="retailerInfo.uid == loginUser.uid" class="al al-wenhao font20 color-theme ml5" @click="clickHelp"></i></div>
             <div class="w80 flex_right" v-if="retailerInfo.uid == loginUser.uid" @click="clickSuggest">
               <div class="btn flex_center">不再显示</div>
             </div>
