@@ -64,7 +64,7 @@
             			</div>
             			<div class="t-cell v_middle">
             				<div class="clamp1">{{ item.title }}</div>
-            				<div class="clamp1 font12 color-gray" v-if="loginUser.uid == retailerInfo.uid">佣金: {{ $t('RMB') }} {{ item.rebatein }}</div>
+            				<div class="clamp1 font12 color-gray" v-if="loginUser.uid == retailerInfo.uid">佣金: {{ $t('RMB') }} {{ item.disrebate }}</div>
                     <div class="clear">
               				<div class="mt5 db-in">
               					<span class="color-red font14 middle-cell">{{ $t('RMB') }} {{item.price}}</span>
@@ -460,6 +460,11 @@ export default {
       }).then(function (res) {
         const data = res.data
         const retdata = data.data ? data.data : data
+        for (let i = 0; i < retdata.length; i++) {
+          let cur = retdata[i]
+          let disrebate = parseFloat(cur.superioraward) + parseFloat(cur.rebatein)
+          retdata[i].disrebate = disrebate.toFixed(2)
+        }
         self.suggestData = retdata
       })
     },
