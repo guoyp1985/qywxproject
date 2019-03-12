@@ -18,6 +18,7 @@ const Voice = {
         alert('成功调用录音')
       },
       fail: (res) => {
+        alert('录音失败')
         alert(JSON.stringify(res))
       }
     })
