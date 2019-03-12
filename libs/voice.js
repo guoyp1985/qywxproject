@@ -17,8 +17,8 @@ const Voice = {
       success: () => {
         alert('成功调用录音')
       },
-      fail: () => {
-        alert('录音失败')
+      fail: (res) => {
+        alert(JSON.stringify(res))
       }
     })
     Vue.wechat.onVoiceRecordEnd({
