@@ -109,7 +109,7 @@
                 <div class="t-table">
                   <div class="t-cell title-cell font14 v_middle">{{ $t('Storage unit') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
                   <div class="t-cell input-cell v_middle" style="position:relative;">
-                    <x-input v-model="submitdata.unit" type="text" class="input align_center" name="unit" size="1" maxlength="1" :placeholder="$t('Storage unit')" ></x-input>
+                    <x-input v-model="submitdata.unit" type="text" class="input align_right" name="unit" size="1" maxlength="1" :placeholder="$t('Storage unit')" ></x-input>
                   </div>
                 </div>
               </div>
@@ -481,6 +481,10 @@ export default {
           self.$vux.toast.text('请输入正确的价格', 'middle')
           return false
         }
+        if (postdata.unit !== '' && !isNaN(parseInt(postdata.unit))) {
+          self.$vux.toast.text('请输入正确的单位', 'middle')
+          return false
+        }
         if (!isNaN(rebate)) {
           const maxRebate = (parseFloat(price) - parseFloat(price) * 0.11).toFixed(2)
           if (parseFloat(rebate) > parseFloat(maxRebate)) {
@@ -682,7 +686,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .addproduct .s-container{top:0;}
 .form-item{position:relative;padding:10px 12px;}
 .form-item:after{
@@ -723,4 +727,5 @@ export default {
   left:0;top:0;right:0;bottom:0;
   opacity:0;
 }
+.input.align_right input{text-align:right;}
 </style>
