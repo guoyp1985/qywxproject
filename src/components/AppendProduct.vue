@@ -75,12 +75,13 @@ export default {
   },
   methods: {
     handleScroll () {
+      console.log('in handlescroll ')
       const _this = this
       const scrollarea = _this.$refs.scrollProduct
       _this.$util.scrollEvent({
         element: scrollarea,
         callback: () => {
-          if (_this.productdata.length === (_this.pageStart + 1) * _this.limit) {
+          if (_this.products.length === (_this.pageStart + 1) * _this.limit) {
             _this.pageStart++
             _this.$vux.loading.show()
             _this.getProductData()
