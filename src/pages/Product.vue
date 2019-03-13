@@ -1117,7 +1117,7 @@ export default {
         this.showShareSuccess = false
         this.showVideo = true
         this.query = this.$route.query
-        if (this.query.wechatorderid) {
+        if (this.query.iswechat) {
           this.showShareLayer = true
         }
         this.$vux.loading.show()
