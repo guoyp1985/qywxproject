@@ -14,9 +14,9 @@
         </div>
       </div>
       <div class="operation-area flex_right" style="width:65px;">
-        <router-link :to="{ name: 'tRoomOrderDeal', query: {id: room.id} }">
+        <div @click="toDeal">
           <span class="font13">交易</span>
-        </router-link>
+        </div>
       </div>
     </div>
     <group>
@@ -42,6 +42,7 @@ export default {
   },
   data () {
     return {
+      query: {},
       room: {}
     }
   },
@@ -61,9 +62,17 @@ export default {
           this.room = res.data.data
         }
       })
+    },
+    toDeal () {
+      let params = {id: this.room.id}
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/roomOrderDeal', query: params})
     }
   },
   activated () {
+    this.query = this.$route.query
     this.loadData()
   }
 }
