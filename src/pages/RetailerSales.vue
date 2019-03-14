@@ -226,7 +226,7 @@ export default {
       this.$router.push({path: '/membersView', query: params})
     },
     toDetail (item) {
-      if (itme.ordertype === 'orders') {
+      if (item.ordertype === 'orders') {
         let params = {id: item.id}
         if (this.query.from) {
           params.from = this.query.from
