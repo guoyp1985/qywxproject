@@ -226,11 +226,13 @@ export default {
       this.$router.push({path: '/membersView', query: params})
     },
     toDetail (item) {
-      let params = {id: item.id}
-      if (this.query.from) {
-        params.from = this.query.from
+      if (itme.ordertype === 'orders') {
+        let params = {id: item.id}
+        if (this.query.from) {
+          params.from = this.query.from
+        }
+        this.$router.push({path: '/accountDetail', query: params})
       }
-      this.$router.push({path: '/accountDetail', query: params})
     },
     influence () {
       this.isshowfluence = true
