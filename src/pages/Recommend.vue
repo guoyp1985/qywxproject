@@ -241,7 +241,7 @@ export default {
   },
   methods: {
     toRebateStore (item) {
-      let params = {wid: item.uploader}
+      let params = {wid: item.uid}
       if (this.query.from) {
         params.from = this.query.from
       }
