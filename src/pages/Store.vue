@@ -47,6 +47,37 @@
           -->
       		</div>
         </template>
+        <template v-if="showSuggest && suggestData.length">
+          <div class="bg-white mt5 padding10 b_top_after db-flex">
+            <div class="flex_left flex_cell pl5 font16 vline">超值优惠</div>
+            <div class="w100 flex_right" v-if="retailerInfo.uid == loginUser.uid" @click="clickSuggest">
+              <div class="qbtn4 font12">不再显示</div>
+            </div>
+      		</div>
+          <div class="b_top_after"></div>
+          <div class="activitylist">
+            <div v-for="(item,index) in suggestData" :key="item.id" class="bg-page">
+              <router-link :to="{path:'/product',query:{id:item.id,wid:retailerInfo.uid}}" class="scroll_item mb5 font14 bg-white db">
+            		<div class="t-table pt10 pb10">
+            			<div class="t-cell pl10 v_middle" style="width:90px;">
+                    <img slot="photo" class="imgcover" style="width:80px;height:80px;" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+            			</div>
+            			<div class="t-cell v_middle">
+            				<div class="clamp1 font14 pr10">{{ item.title }}</div>
+                    <div class="clear">
+              				<div class="mt5 db-in">
+              					<span class="color-red font14 middle-cell">{{ $t('RMB') }} {{item.price}}</span>
+              				</div>
+              				<div class="align_right pr10 db-in fr">
+              					<div class="qbtn5 bg-red color-white">马上购买</div>
+              				</div>
+                    </div>
+            			</div>
+            		</div>
+              </router-link>
+            </div>
+          </div>
+        </template>
         <template v-if="activitydata && activitydata.length > 0">
           <div class="bg-white mt5 padding10 b_top_after">
       			<span class="db-in pl5 font16 vline">{{ $t('Selection promotion') }}</span>
@@ -227,7 +258,9 @@ export default {
       hideloading: false,
       isNextNews: true,
       haveMoreNews: false,
-      scrollEnd: false
+      scrollEnd: false,
+      showSuggest: false,
+      suggestData: []
     }
   },
   watch: {
@@ -279,6 +312,19 @@ export default {
       this.hideloading = false
       this.isNextNews = true
       this.haveMoreNews = false
+    },
+    clickSuggest () {
+      this.showSuggest = false
+      this.$http.post(`${ENV.BokaApi}/api/card/setParas`, {
+        params: {suggest_open: 0}
+      }).then(res => {
+        const data = res.data
+        if (data.flag) {
+          this.loginUser.retailerinfo.params = data.data
+          this.retailerInfo.params = data.data
+          User.set(this.loginUser)
+        }
+      })
     },
     toChat () {
       const self = this
@@ -386,6 +432,16 @@ export default {
         })
       }
     },
+    getSuggestData () {
+      const self = this
+      self.$http.get(`${ENV.BokaApi}/api/list/factoryproduct`, {
+        params: {pagestart: 0, limit: 2, fid: ENV.SuggestFid}
+      }).then(function (res) {
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        self.suggestData = retdata
+      })
+    },
     changeNews () {
       const self = this
       if (!self.haveMoreNews && newPageStart === 0 && self.toplinedata.length < newsLimit) {
@@ -483,6 +539,10 @@ export default {
           self.retailerInfo = data.data ? data.data : data
           this.$util.miniPost({type: 'store', data: self.retailerInfo})
           document.title = self.retailerInfo.title
+          if (parseInt(this.retailerInfo.params.suggest_open)) {
+            this.showSuggest = true
+            this.getSuggestData()
+          }
           const wid = self.retailerInfo.uid
           let shareParams = {
             module: 'store',
@@ -535,6 +595,8 @@ export default {
     },
     init () {
       this.loginUser = User.get()
+      console.log('当前登录用户')
+      console.log(this.loginUser)
     },
     refresh (query) {
       this.initData()

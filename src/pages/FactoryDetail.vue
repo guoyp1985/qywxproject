@@ -212,7 +212,7 @@ export default {
     },
     toJoin () {
       const self = this
-      if (!this.loginUser.isretailer) {
+      if (!this.loginUser.isretailer || !this.loginUser.retailerinfo.moderate) {
         this.$vux.confirm.show({
           content: '您还不是卖家，要申请成为卖家吗？',
           onConfirm: () => {
@@ -368,11 +368,10 @@ export default {
       })
     },
     init () {
-      this.loginUser = User.get()
-      console.log(this.loginUser)
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.loginUser = User.get()
       this.query = this.$route.query
       if (this.query.fid) {
         this.fid = parseInt(this.query.fid)

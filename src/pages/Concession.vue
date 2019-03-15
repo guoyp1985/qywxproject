@@ -38,6 +38,7 @@
                   </div>
                   <div class="flex_cell padding10">
                     <div class="bold">{{item.code}}</div>
+                    <div class="color-gray font12">{{item.linkman}}</div>
                     <div class="color-gray font12">使用时间: {{item.usedateline | dateFormat}}</div>
                   </div>
                 </div>

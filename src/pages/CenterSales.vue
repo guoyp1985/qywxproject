@@ -133,7 +133,7 @@ export default {
           if (res.status === 200) {
             self.loginUser = res.data
             User.set(self.loginUser)
-            if (!self.loginUser.isretailer) {
+            if (!self.loginUser.isretailer || !self.loginUser.retailerinfo.moderate) {
               self.initContainer()
               self.showApply = true
               document.title = '申请卖家'

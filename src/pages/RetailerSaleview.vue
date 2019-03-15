@@ -382,19 +382,19 @@ export default {
       this.isshowpopup = false
     },
     clickItem (item) {
-      let params = {id: item.moduleid, wid: item.kefuid}
-      if (this.query.from) {
-        params.from = this.query.from
-      }
-      if (item.module === 'news' && this.query.from) {
-        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.news}?id=${item.id}&wid=${item.kefuid}`})
-      } else if (item.module === 'product' && this.query.from) {
-        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.id}&wid=${item.kefuid}`})
-      } else if (item.module === 'activity' && this.query.from) {
-        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.activity}?id=${item.id}&wid=${item.kefuid}`})
-      } else {
-        this.$router.push({path: `/${item.module}`, query: params})
-      }
+      // let params = {id: item.moduleid, wid: item.kefuid}
+      // if (this.query.from) {
+      //   params.from = this.query.from
+      // }
+      // if (item.module === 'news' && this.query.from) {
+      //   this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.news}?id=${item.id}&wid=${item.kefuid}`})
+      // } else if (item.module === 'product' && this.query.from) {
+      //   this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.id}&wid=${item.kefuid}`})
+      // } else if (item.module === 'activity' && this.query.from) {
+      //   this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.activity}?id=${item.id}&wid=${item.kefuid}`})
+      // } else {
+      //   this.$router.push({path: `/${item.module}`, query: params})
+      // }
     },
     getData () {
       const self = this

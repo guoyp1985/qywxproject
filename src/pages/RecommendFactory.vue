@@ -42,7 +42,7 @@
                     </div>
               			<div class="t-cell v_middle">
                       <div class="clamp1 font16 pr10 color-lightgray">{{item.linkman}}</div>
-                      <div class="color-gray font12 mt5">{{item.dateline | dateFormat}}</div>
+                      <div class="color-gray font12 mt5">{{item.jointime | dateFormat}}</div>
               			</div>
               		</div>
                 </div>

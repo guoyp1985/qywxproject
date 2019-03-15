@@ -191,7 +191,10 @@ export default {
   .vux-swiper-desc{display:none !important;}
 
   .title{padding:10px 10px;box-sizing:border-box;}
-  .details{padding:10px 10px 20px 10px;box-sizing:border-box;line-height:25px;}
+  .details{
+    padding:10px 10px 20px 10px;box-sizing:border-box;line-height:25px;
+    img{max-width:100%;}
+  }
   .btnSelect{
     width:200px;height:40px;box-sizing:border-box;background-color:#FF6B63;border-radius:20px;margin:0 auto;
     text-align:center;color:#fff;margin-top:50px;line-height:40px;
