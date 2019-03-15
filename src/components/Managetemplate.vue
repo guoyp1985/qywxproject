@@ -18,8 +18,7 @@
           <img class="imgcover" :src="data.photo" @error="`javascript:'this.src=${ENV.ImageHostUri}/nopic.jpg';`" style="width:80px;height:80px;" />
         </div>
         <div class="t-cell v_middle">
-          <div class="font14"><span class="color-lightgray">型号数量: </span>{{data.options}}</slot>
-          </div>
+          <div class="font14"><span class="color-lightgray">型号数量: </span>{{data.options}}</div>
         </div>
       </div>
       <div class="clamp1 font14"><span class="color-lightgray">手机号码: </span>{{data.telephone}}</div>

@@ -70,7 +70,7 @@
                   <check-icon class="red-check" :value.sync="offline" @click.native.stop="setbuyonline(0)">线下支付</check-icon>
                 </div>
               </forminputplate>
-              <forminputplate class="required">
+              <forminputplate class="required" v-if="query.miniconfig != 'wechat.mini_program.tljk'">
                 <span slot="title">超值优惠</span>
                 <div>
                   <!-- <check-icon class="red-check" :value.sync="suggestOpen" @click.native.stop="clickSuggest(1)">开启</check-icon>
