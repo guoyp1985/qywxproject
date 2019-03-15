@@ -163,6 +163,7 @@ export default {
       })
     },
     initData () {
+      this.showQrcode = false
       this.recommendQrcode = null
       this.disTabData1 = false
       this.pageStart1 = 0
