@@ -21,7 +21,8 @@
         <div v-if="statData && statData.length > 0" class="radiusarea mb10 pb15 bg-white list-shadow01">
           <div class="item" v-for="(item,index) in statData" :key="index">
             <div class="inner">
-              <div class="radius font22 clamp1">{{ item.value }}</div>
+              <div class="radius font15 clamp1" v-if="item.key == 'salesmoney'">{{ item.value }}</div>
+              <div class="radius font22 clamp1" v-else>{{ item.value }}</div>
               <div class="title color-gray">{{ item.title }}</div>
             </div>
           </div>

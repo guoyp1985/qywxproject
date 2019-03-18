@@ -56,7 +56,7 @@
       <div class="flex_cell">
         <div>
           <span>订单点击收入:</span>
-          <span><span class="color-red">￥{{item.viewmoney}}</span></span>
+          <span><span class="color-red">￥{{item.viewtotal}}</span></span>
         </div>
       </div>
       <div class="flex_cell">

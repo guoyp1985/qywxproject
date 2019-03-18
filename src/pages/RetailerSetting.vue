@@ -15,8 +15,7 @@
         :productClass="productClass"
         :buyonline="buyonline"
         :buyoffline="buyoffline"
-        :openSuggest="openSuggest"
-        :closeSuggest="closeSuggest"
+        :submitSuggest="submitSuggest"
         @clickSuggest="clickSuggest">
       </retailer-setting>
     </template>
@@ -55,8 +54,7 @@ export default {
       productClass: [],
       buyonline: true,
       buyoffline: false,
-      openSuggest: true,
-      closeSuggest: false
+      submitSuggest: true
     }
   },
   methods: {
@@ -69,20 +67,13 @@ export default {
     getData () {
       const self = this
       self.loginUser = User.get()
-      self.$http.get(`${ENV.BokaApi}/api/retailer/home`)
+      self.$http.get(`${ENV.BokaApi}/api/retailer/info`)
       .then(res => {
         self.$vux.loading.hide()
         if (res) {
           let data = res.data
           self.$vux.loading.hide()
           self.retailerInfo = data.data ? data.data : data
-          if (this.retailerInfo.params.suggest_open && parseInt(this.retailerInfo.params.suggest_open) === 1) {
-            this.openSuggest = true
-            this.closeSuggest = false
-          } else {
-            this.openSuggest = false
-            this.closeSuggest = true
-          }
           for (let key in self.submitdata) {
             self.submitdata[key] = self.retailerInfo[key]
           }
@@ -92,6 +83,13 @@ export default {
           } else {
             self.buyonline = false
             self.buyoffline = true
+          }
+          if (this.retailerInfo.params.suggest_open === '1' || this.retailerInfo.params.suggest_open === 1) {
+            console.log('进入到了开启')
+            this.submitSuggest = true
+          } else {
+            console.log('进入到了关闭')
+            this.submitSuggest = false
           }
           self.productClass = self.retailerInfo.productclass.split(',')
           for (let i = 0; i < self.productClass.length; i++) {
@@ -117,7 +115,8 @@ export default {
         }
       })
     },
-    clickSuggest (val) {
+    clickSuggest (val, callback) {
+      console.log(val)
       this.$http.post(`${ENV.BokaApi}/api/card/setParas`, {
         params: {suggest_open: val}
       }).then(res => {
@@ -126,6 +125,9 @@ export default {
           this.loginUser.retailerinfo.params = data.data
           this.retailerInfo.params = data.data
           User.set(this.loginUser)
+          if (callback) {
+            callback()
+          }
         }
       })
     },

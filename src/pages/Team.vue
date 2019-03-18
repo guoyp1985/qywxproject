@@ -85,6 +85,7 @@
     <template v-if="showTip">
       <tip-layer
         @clickButton="joinTeam"
+        @clickClose="closeTipModal"
         title="邀请加入"
         content="加入团队即可免费导入商品、活动、文章、培训等信息到自己的账号内，一键导入便可马上使用，赶快加入吧"
         buttonTxt="立即加入团队">
@@ -190,6 +191,9 @@ export default {
     })
   },
   methods: {
+    closeTipModal () {
+      this.showTip = false
+    },
     tabModal () {
       this.showModal = true
     },

@@ -48,27 +48,28 @@
       		</div>
         </template>
         <template v-if="showSuggest && suggestData.length">
-          <div class="bg-white mt5 padding10 b_top_after db-flex">
-            <div class="flex_left flex_cell pl5 font16 vline">超值优惠</div>
-            <div class="w100 flex_right" v-if="retailerInfo.uid == loginUser.uid" @click="clickSuggest">
-              <div class="qbtn4 font12">不再显示</div>
+          <div class="bg-white mt5 padding10 b_top_after db-flex suggest-area">
+            <div class="flex_left flex_cell pl5 font16 vline"><span>超值优惠</span><i v-if="retailerInfo.uid == loginUser.uid" class="al al-wenhao font20 color-theme ml5" @click="clickHelp"></i></div>
+            <div class="w80 flex_right" v-if="retailerInfo.uid == loginUser.uid" @click="clickSuggest">
+              <div class="btn flex_center">不再显示</div>
             </div>
       		</div>
           <div class="b_top_after"></div>
           <div class="activitylist">
             <div v-for="(item,index) in suggestData" :key="item.id" class="bg-page">
               <router-link :to="{path:'/product',query:{id:item.id,wid:retailerInfo.uid}}" class="scroll_item mb5 font14 bg-white db">
-            		<div class="t-table pt10 pb10">
-            			<div class="t-cell pl10 v_middle" style="width:90px;">
+            		<div class="t-table padding10 border-box">
+            			<div class="t-cell v_middle" style="width:90px;">
                     <img slot="photo" class="imgcover" style="width:80px;height:80px;" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
             			</div>
             			<div class="t-cell v_middle">
-            				<div class="clamp1 font14 pr10">{{ item.title }}</div>
+            				<div class="clamp1">{{ item.title }}</div>
                     <div class="clear">
               				<div class="mt5 db-in">
-              					<span class="color-red font14 middle-cell">{{ $t('RMB') }} {{item.price}}</span>
+              					<div class="color-red font14 middle-cell">{{ $t('RMB') }} {{item.price}}</div>
+                				<div class="clamp1 font12 color-gray" v-if="loginUser.uid == retailerInfo.uid">佣金: {{ $t('RMB') }} {{ item.disrebate }}</div>
               				</div>
-              				<div class="align_right pr10 db-in fr">
+              				<div class="align_right db-in fr">
               					<div class="qbtn5 bg-red color-white">马上购买</div>
               				</div>
                     </div>
@@ -185,6 +186,13 @@
         module="store"
         :on-close="closeShareSuccess">
       </share-success>
+      <template v-if="showHelpModal">
+        <tip-layer
+          @clickClose="closeHelpModal"
+          title="超值优惠"
+          content="超值优惠商品是官方为你提供的爆款低价商品，帮助你转化客户，促进用户购买，用户购买完成后，你还可以获得商品的佣金奖励哦！">
+        </tip-layer>
+      </template>
     </template>
   </div>
 </template>
@@ -213,6 +221,7 @@ import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
 import Productitemplate from '@/components/Productitemplate'
 import Newsitemplate from '@/components/Newsitemplate'
 import ShareSuccess from '@/components/ShareSuccess'
+import TipLayer from '@/components/TipLayer'
 import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
@@ -229,7 +238,7 @@ export default {
     TransferDom
   },
   components: {
-    Swiper, Popup, Groupbuyitemplate, Bargainbuyitemplate, Productitemplate, Newsitemplate, ShareSuccess, XImg, Sos
+    Swiper, Popup, Groupbuyitemplate, Bargainbuyitemplate, Productitemplate, Newsitemplate, ShareSuccess, XImg, Sos, TipLayer
   },
   filters: {
     dateformat: function (value) {
@@ -260,7 +269,8 @@ export default {
       haveMoreNews: false,
       scrollEnd: false,
       showSuggest: false,
-      suggestData: []
+      suggestData: [],
+      showHelpModal: false
     }
   },
   watch: {
@@ -313,16 +323,27 @@ export default {
       this.isNextNews = true
       this.haveMoreNews = false
     },
+    clickHelp () {
+      this.showHelpModal = true
+    },
+    closeHelpModal () {
+      this.showHelpModal = false
+    },
     clickSuggest () {
-      this.showSuggest = false
-      this.$http.post(`${ENV.BokaApi}/api/card/setParas`, {
-        params: {suggest_open: 0}
-      }).then(res => {
-        const data = res.data
-        if (data.flag) {
-          this.loginUser.retailerinfo.params = data.data
-          this.retailerInfo.params = data.data
-          User.set(this.loginUser)
+      this.$vux.confirm.show({
+        content: '确认关闭超值优惠商品？关闭后可在卖家设置中开启。',
+        onConfirm: () => {
+          this.showSuggest = false
+          this.$http.post(`${ENV.BokaApi}/api/card/setParas`, {
+            params: {suggest_open: 0}
+          }).then(res => {
+            const data = res.data
+            if (data.flag) {
+              this.loginUser.retailerinfo.params = data.data
+              this.retailerInfo.params = data.data
+              User.set(this.loginUser)
+            }
+          })
         }
       })
     },
@@ -434,11 +455,16 @@ export default {
     },
     getSuggestData () {
       const self = this
-      self.$http.get(`${ENV.BokaApi}/api/list/factoryproduct`, {
-        params: {pagestart: 0, limit: 2, fid: ENV.SuggestFid}
+      self.$http.get(`${ENV.BokaApi}/api/list/product?uploader=-1`, {
+        params: {pagestart: 0, limit: 2}
       }).then(function (res) {
         const data = res.data
         const retdata = data.data ? data.data : data
+        for (let i = 0; i < retdata.length; i++) {
+          let cur = retdata[i]
+          let disrebate = parseFloat(cur.superioraward) + parseFloat(cur.rebatein)
+          retdata[i].disrebate = disrebate.toFixed(2)
+        }
         self.suggestData = retdata
       })
     },
@@ -539,9 +565,11 @@ export default {
           self.retailerInfo = data.data ? data.data : data
           this.$util.miniPost({type: 'store', data: self.retailerInfo})
           document.title = self.retailerInfo.title
-          if (parseInt(this.retailerInfo.params.suggest_open)) {
+          if (this.retailerInfo.params.suggest_open === '1' || this.retailerInfo.params.suggest_open === 1) {
             this.showSuggest = true
             this.getSuggestData()
+          } else {
+            this.showSuggest = false
           }
           const wid = self.retailerInfo.uid
           let shareParams = {
@@ -621,6 +649,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.store{
+  .suggest-area{
+    .btn{border:#ff6a61 1px solid;color:#ff6a61;width:70px;height:25px;border-radius:30px;font-size:12px;}
+  }
+}
 .store .adbg{position:relative;padding-bottom: 55.555%;}
 .store .adbg .inner{position:absolute;left:0;top:0;right:0;bottom:0;}
 .store .adbg .inner img{vertical-align:middle;width:100%;height:100%;object-fit: cover;}

@@ -70,9 +70,11 @@
                   <check-icon class="red-check" :value.sync="offline" @click.native.stop="setbuyonline(0)">线下支付</check-icon>
                 </div>
               </forminputplate>
-              <forminputplate class="required">
+              <forminputplate class="required" v-if="query.miniconfig != 'wechat.mini_program.tljk'">
                 <span slot="title">超值优惠</span>
                 <div>
+                  <!-- <check-icon class="red-check" :value.sync="suggestOpen" @click.native.stop="clickSuggest(1)">开启</check-icon>
+                  <check-icon class="red-check" :value.sync="suggestClose" @click.native.stop="clickSuggest(0)">关闭</check-icon> -->
                   <check-icon class="red-check" :value.sync="suggestOpen" @click.native.stop="clickSuggest(1)">开启</check-icon>
                   <check-icon class="red-check" :value.sync="suggestClose" @click.native.stop="clickSuggest(0)">关闭</check-icon>
                 </div>
@@ -367,13 +369,9 @@ export default {
       type: Boolean,
       default: false
     },
-    openSuggest: {
+    submitSuggest: {
       type: Boolean,
       default: true
-    },
-    closeSuggest: {
-      type: Boolean,
-      default: false
     }
   },
   directives: {
@@ -402,7 +400,9 @@ export default {
       suggestOpen: true,
       suggestClose: false,
       isFirst2: true,
-      isFirst3: true
+      isFirst3: true,
+      oldSuggestOpen: true,
+      oldSuggestClose: false
     }
   },
   watch: {
@@ -411,13 +411,7 @@ export default {
     },
     submitdata: function () {
       console.log('in watch sumitdata')
-      if (this.submitdata.buyonline) {
-        this.online = true
-        this.offline = false
-      } else {
-        this.online = false
-        this.offline = true
-      }
+      this.watchBuyline()
       return this.submitdata
     },
     buyonline: function () {
@@ -434,22 +428,33 @@ export default {
       }
       return this.buyoffline
     },
-    openSuggest: function () {
-      if (this.isFirst2) {
-        this.suggestOpen = this.openSuggest
-        this.isFirst2 = false
-      }
-      return this.openSuggest
-    },
-    closeSuggest: function () {
-      if (this.isFirst3) {
-        this.suggestClose = this.closeSuggest
-        this.isFirst3 = false
-      }
-      return this.closeSuggest
+    submitSuggest: function () {
+      console.log('in watch submitSuggest')
+      this.watchSuggest()
+      return this.submitSuggest
     }
   },
   methods: {
+    watchBuyline () {
+      if (this.submitdata.buyonline) {
+        this.online = true
+        this.offline = false
+      } else {
+        this.online = false
+        this.offline = true
+      }
+    },
+    watchSuggest () {
+      if (this.submitSuggest) {
+        this.suggestOpen = true
+        this.suggestClose = false
+      } else {
+        this.suggestOpen = false
+        this.suggestClose = true
+      }
+      this.oldSuggestOpen = this.suggestOpen
+      this.oldSuggestClose = this.suggestClose
+    },
     textareaChange (refname) {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
       curArea.updateAutosize()
@@ -541,6 +546,7 @@ export default {
     },
     clickSuggest (val) {
       console.log(val)
+      let con = (val === 1 ? '确认要展示超值优惠商品？' : '确认要取消展示超值优惠商品？')
       if (val === 1) {
         this.suggestOpen = true
         this.suggestClose = false
@@ -548,7 +554,19 @@ export default {
         this.suggestOpen = false
         this.suggestClose = true
       }
-      this.$emit('clickSuggest', val)
+      this.$vux.confirm.show({
+        content: con,
+        onCancel: () => {
+          this.suggestOpen = this.oldSuggestOpen
+          this.suggestClose = this.oldSuggestClose
+        },
+        onConfirm: () => {
+          this.$emit('clickSuggest', val, () => {
+            this.oldSuggestOpen = this.suggestOpen
+            this.oldSuggestClose = this.suggestClose
+          })
+        }
+      })
     },
     closeOnPopup () {
       this.showonline = false
@@ -746,6 +764,11 @@ export default {
         }
       })
     }
+  },
+  mounted () {
+    console.log('in mounted')
+    this.watchBuyline()
+    this.watchSuggest()
   }
 }
 </script>

@@ -46,7 +46,7 @@
               </span>
             </div>
             <div slot="operation-area" class="room-operate-area db-flex">
-              <router-link class="flex_cell font13 button" :to="{ name: 'tRoomDetails', query: {id: item.id} }">了解更多</router-link>
+              <div class="flex_cell font13 button" @click="toRoomDetails(item)">了解更多</div>
               <div class="flex_cell font13 button" @click="toOrderDeal(item)">与TA交易</div>
             </div>
           </room-view>
@@ -98,6 +98,13 @@ export default {
         params.from = this.query.from
       }
       this.$router.push({path: '/roomOrders', query: params})
+    },
+    toRoomDetails (item) {
+      let params = {id: item.id}
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/roomDetails', query: params})
     },
     toOrderDeal (item) {
       let params = {id: item.id}
