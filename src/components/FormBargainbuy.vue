@@ -141,13 +141,16 @@ export default {
       if (self.$util.trim(price) !== '' && self.$util.trim(minprice) !== '' && !isNaN(minprice)) {
         let cha = parseFloat(price) - parseFloat(minprice)
         if (self.$util.trim(everymin) !== '' && self.$util.trim(everymax) !== '') {
-          self.neednum = Math.ceil((cha / parseFloat(everymin) + cha / parseFloat(everymax)) / 2)
+          let nnum = Math.ceil((cha / parseFloat(everymin) + cha / parseFloat(everymax)) / 2)
+          self.neednum = isNaN(nnum) ? 0 : nnum
           self.showtip = true
         } else if (self.$util.trim(everymin) !== '') {
-          self.neednum = Math.ceil(cha / parseFloat(everymin))
+          let nnum = Math.ceil(cha / parseFloat(everymin))
+          self.neednum = isNaN(nnum) ? 0 : nnum
           self.showtip = true
         } else if (self.$util.trim(everymax) !== '') {
-          self.neednum = Math.ceil(cha / parseFloat(everymax))
+          let nnum = Math.ceil(cha / parseFloat(everymax))
+          self.neednum = isNaN(nnum) ? 0 : nnum
           self.showtip = true
         } else {
           self.showtip = false
