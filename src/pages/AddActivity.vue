@@ -453,9 +453,9 @@ export default {
           })
           return false
         }
-        if (minprice > priceval) {
+        if (minprice >= priceval) {
           self.$vux.toast.show({
-            text: '活动价格不能大于原价',
+            text: '活动价格应低于原价',
             type: 'warn',
             time: 1500
           })
@@ -536,6 +536,9 @@ export default {
         }
         if (self.selectproduct.fid > 0) {
           let minprice = (priceval - parseFloat(self.selectproduct.rebatein)).toFixed(2)
+          console.log('in fid > 0')
+          console.log(`grouprice=${groupprice}`)
+          console.log(`minprice=${minprice}`)
           if (groupprice < minprice) {
             self.$vux.toast.show({
               text: `团购价不能低于${minprice}`,

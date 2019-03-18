@@ -142,15 +142,24 @@ export default {
         let cha = parseFloat(price) - parseFloat(minprice)
         if (self.$util.trim(everymin) !== '' && everymin > 0 && self.$util.trim(everymax) !== '' && everymax > 0) {
           let nnum = Math.ceil((cha / parseFloat(everymin) + cha / parseFloat(everymax)) / 2)
-          self.neednum = isNaN(nnum) ? 0 : nnum
+          if (isNaN(nnum) || nnum < 0) {
+            nnum = 0
+          }
+          self.neednum = nnum
           self.showtip = true
         } else if (self.$util.trim(everymin) !== '' && everymin > 0) {
           let nnum = Math.ceil(cha / parseFloat(everymin))
-          self.neednum = isNaN(nnum) ? 0 : nnum
+          if (isNaN(nnum) || nnum < 0) {
+            nnum = 0
+          }
+          self.neednum = nnum
           self.showtip = true
         } else if (self.$util.trim(everymax) !== '' && everymax > 0) {
           let nnum = Math.ceil(cha / parseFloat(everymax))
-          self.neednum = isNaN(nnum) ? 0 : nnum
+          if (isNaN(nnum) || nnum < 0) {
+            nnum = 0
+          }
+          self.neednum = nnum
           self.showtip = true
         } else {
           self.showtip = false
