@@ -134,21 +134,21 @@ export default {
       if (self.data && self.data.price) {
         self.price = self.data.price.replace(/,/g, '')
       }
-      let minprice = self.minprice
-      let everymin = self.everymin
-      let everymax = self.everymax
+      let minprice = isNaN(self.minprice) ? 0 : self.minprice
+      let everymin = isNaN(self.everymin) ? 0 : self.everymin
+      let everymax = isNaN(self.everymax) ? 0 : self.everymax
       let price = self.price
       if (self.$util.trim(price) !== '' && self.$util.trim(minprice) !== '' && !isNaN(minprice)) {
         let cha = parseFloat(price) - parseFloat(minprice)
-        if (self.$util.trim(everymin) !== '' && self.$util.trim(everymax) !== '') {
+        if (self.$util.trim(everymin) !== '' && everymin > 0 && self.$util.trim(everymax) !== '' && everymax > 0) {
           let nnum = Math.ceil((cha / parseFloat(everymin) + cha / parseFloat(everymax)) / 2)
           self.neednum = isNaN(nnum) ? 0 : nnum
           self.showtip = true
-        } else if (self.$util.trim(everymin) !== '') {
+        } else if (self.$util.trim(everymin) !== '' && everymin > 0) {
           let nnum = Math.ceil(cha / parseFloat(everymin))
           self.neednum = isNaN(nnum) ? 0 : nnum
           self.showtip = true
-        } else if (self.$util.trim(everymax) !== '') {
+        } else if (self.$util.trim(everymax) !== '' && everymax > 0) {
           let nnum = Math.ceil(cha / parseFloat(everymax))
           self.neednum = isNaN(nnum) ? 0 : nnum
           self.showtip = true
