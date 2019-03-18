@@ -509,7 +509,7 @@ export default {
         let numbers = parseInt(self.submitdata.param_numbers)
         let limitbuy = parseInt(self.submitdata.param_limitbuy)
         let everybuy = parseInt(self.submitdata.param_everybuy)
-        let finishtime = parseInt(self.submitdata.param_finishtime)
+        let finishtime = parseFloat(self.submitdata.param_finishtime)
         if (isNaN(self.submitdata.param_groupprice) || isNaN(self.submitdata.param_numbers) || isNaN(self.submitdata.param_limitbuy) || isNaN(self.submitdata.param_everybuy) || isNaN(self.submitdata.param_finishtime)) {
           self.$vux.toast.show({
             text: '请输入正确的数字',
