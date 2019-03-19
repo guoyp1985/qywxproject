@@ -129,7 +129,8 @@ export default {
       pageStart2: 0,
       clickItem: null,
       clickIndex: 0,
-      showTip: true
+      showTip: true,
+      loaddata: false
     }
   },
   watch: {
@@ -174,11 +175,11 @@ export default {
             time: this.$util.delay(data.error)
           })
           if (data.flag === 1) {
-            // this.showTab1 = false
-            // this.rooms = []
-            // console.log('in photoCallback')
-            // this.loadRooms()
-            this.rooms[this.clickIndex].photo = newphoto
+            this.showTab1 = false
+            this.rooms = []
+            console.log('in photoCallback')
+            this.loadRooms()
+            // this.rooms[this.clickIndex].photo = newphoto
           }
         })
       } else if (photodata.error) {
@@ -298,18 +299,22 @@ export default {
       })
     },
     loadRooms (page) {
-      page = page || 0
-      this.$vux.loading.show()
-      let params = { pagestart: page, limit: this.limit }
-      this.$http.post(`${ENV.BokaApi}/api/groups/myGroups`, params)
-      .then(res => {
-        this.$vux.loading.hide()
-        if (res.data.flag === 1) {
-          const data = res.data.data
-          this.rooms = this.rooms.concat(data)
-          this.showTab1 = true
-        }
-      })
+      if (!this.loaddata) {
+        this.loaddata = true
+        page = page || 0
+        this.$vux.loading.show()
+        let params = { pagestart: page, limit: this.limit }
+        this.$http.post(`${ENV.BokaApi}/api/groups/myGroups`, params)
+        .then(res => {
+          this.$vux.loading.hide()
+          this.loaddata = false
+          if (res.data.flag === 1) {
+            const data = res.data.data
+            this.rooms = this.rooms.concat(data)
+            this.showTab1 = true
+          }
+        })
+      }
     },
     loadOrders (page) {
       page = page || 0
