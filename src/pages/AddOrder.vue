@@ -72,7 +72,7 @@
                 </div>
               </div>
             </div>
-            <div class="b_bottom_after padding10" v-if="item.postage && item.postage != ''">
+            <div class="b_bottom_after padding10" v-if="onlineVal && item.postage && item.postage != ''">
               <div class="t-table">
                 <div class="t-cell v_middle" style="width:40px;">{{ $t('Postage') }}</div>
                 <div class="t-cell v_middle">
