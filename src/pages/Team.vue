@@ -91,6 +91,9 @@
         buttonTxt="立即加入团队">
       </tip-layer>
     </template>
+    <div class="bg-theme flex_center color-white fix-home-icon" @click="toHome" v-if="query.from">
+      <i class="al al-home1"></i>
+    </div>
   </div>
 </template>
 
@@ -191,6 +194,9 @@ export default {
     })
   },
   methods: {
+    toHome () {
+      this.$wechat.miniProgram.reLaunch({url: '/pages/index'})
+    },
     closeTipModal () {
       this.showTip = false
     },
@@ -629,5 +635,9 @@ export default {
       border-bottom: 2px solid #ff6a61;
     }
   }
+}
+.fix-home-icon{
+  position:absolute;right:20px;bottom:80px;
+  width:50px;height:50px;border-radius:50%;
 }
 </style>
