@@ -443,7 +443,7 @@ export default {
             confirmText: '立即购买',
             cancelText: '更换收货方式',
             onConfirm () {
-              let postData = this.submitdata
+              let postData = self.submitdata
               postData.delivertype = 2
               self.ajaxOrder(postData)
             }
