@@ -315,6 +315,9 @@ export default {
       this.showCard = false
       this.cardList = []
       this.selectedCard = null
+      this.buyType = 'online'
+      this.onlineVal = true
+      this.offlineVal = false
     },
     setBuy (val) {
       if (val === 1) {
