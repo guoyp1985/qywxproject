@@ -320,14 +320,21 @@ export default {
       this.offlineVal = false
     },
     setBuy (val) {
+      let total = parseFloat(this.payPrice)
+      let curpostage = this.orderdata[0].postage
+      if (curpostage) {
+        curpostage = parseFloat(curpostage.replace(/,/g, ''))
+      }
       if (val === 1) {
         this.buyType = 'online'
         this.onlineVal = true
         this.offlineVal = false
+        this.payPrice = (total + curpostage).toFixed(2)
       } else {
         this.buyType = 'offline'
         this.onlineVal = false
         this.offlineVal = true
+        this.payPrice = (total - curpostage).toFixed(2)
       }
     },
     textareaChange (refname) {

@@ -248,15 +248,11 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
-      if (this.loginUser) {
-        this.query = this.$route.query
-        if (this.tabdata1.length < limit || this.query.from === 'add') {
-          this.disList1 = false
-          pageStart1 = 0
-          this.tabdata1 = []
-          this.getData1()
-        }
-      }
+      this.query = this.$route.query
+      this.disList1 = false
+      pageStart1 = 0
+      this.tabdata1 = []
+      this.getData1()
     }
   },
   activated () {
