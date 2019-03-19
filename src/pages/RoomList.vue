@@ -159,11 +159,12 @@ export default {
       }
       this.$router.push({path: '/roomStart', query: params})
     },
-    photoCallback (data) {
-      if (data.flag === 1) {
+    photoCallback (photodata) {
+      if (photodata.flag === 1) {
         this.$vux.loading.show()
+        let newphoto = photodata.data
         this.$http.post(`${ENV.BokaApi}/api/setModulePara/wechatgroups`, {
-          id: this.clickItem.id, param: 'photo', paramvalue: data.data
+          id: this.clickItem.id, param: 'photo', paramvalue: newphoto
         }).then((res) => {
           this.$vux.loading.hide()
           const data = res.data
@@ -173,15 +174,17 @@ export default {
             time: this.$util.delay(data.error)
           })
           if (data.flag === 1) {
-            this.showTab1 = false
-            this.rooms = []
-            this.loadRooms()
+            // this.showTab1 = false
+            // this.rooms = []
+            // console.log('in photoCallback')
+            // this.loadRooms()
+            this.rooms[this.clickIndex].photo = newphoto
           }
         })
-      } else if (data.error) {
+      } else if (photodata.error) {
         this.$vux.toast.show({
-          text: data.error,
-          time: this.$util.delay(data.error)
+          text: photodata.error,
+          time: this.$util.delay(photodata.error)
         })
       }
     },
@@ -220,6 +223,7 @@ export default {
       }
     },
     toggleTab () {
+      console.log('in toggleTab')
       switch (this.selectedIndex) {
         case 0:
           !this.rooms.length && this.loadRooms()
@@ -230,6 +234,7 @@ export default {
       }
     },
     handleScroll () {
+      console.log('in handelscroll')
       const _this = this
       this.$util.scrollEvent({
         element: this.$refs.scrollContainer,
@@ -326,6 +331,7 @@ export default {
       this.selectedIndex = 0
       this.showTab1 = false
       this.rooms = []
+      console.log('in refresh')
       this.loadRooms()
     }
   },
