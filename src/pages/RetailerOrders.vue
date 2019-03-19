@@ -59,7 +59,7 @@
                         <div class="t-cell v_middle align_left color-orange">
                           <div class="clamp1">
                             <span class="v_middle">待支付: {{ $t('RMB') }}</span><span class="v_middle">{{ item.paymoney }}</span>
-                            <template v-if="item.postage && item.postage != ''">
+                            <template v-if="!item.delivertype && item.postage && item.postage != ''">
                               <span class="v_middle font12 color-gray" v-if="item.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
                               <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ item.postage }} )</span>
                             </template>
@@ -108,7 +108,7 @@
                       <div class="t-cell v_middle align_left color-orange">
                         <div class="clamp1">
                           <span class="v_middle">待支付: {{ $t('RMB') }}</span><span class="v_middle">{{ item.paymoney }}</span>
-                          <template v-if="item.postage && item.postage != ''">
+                          <template v-if="!item.delivertype && item.postage && item.postage != ''">
                             <span class="v_middle font12 color-gray" v-if="item.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
                             <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ item.postage }} )</span>
                           </template>
