@@ -193,6 +193,8 @@ export default {
         if (this.query.type === 'buy') {
           this.selectedIndex = 1
         }
+      } else {
+        this.query = this.$route.query
       }
       this.swiperChange()
     }
