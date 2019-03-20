@@ -1132,7 +1132,7 @@ export default {
     // this.$util.wxPreviewImage('#chat-room')
     // this.$refs.scrollContainer.scrollTop = this.$refs.scrollContent.clientHeight
   },
-  activated () {
+  created () {
     this.$util.miniPost()
     this.refresh()
   }
