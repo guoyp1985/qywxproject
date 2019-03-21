@@ -55,7 +55,7 @@
       <div class="modal">
         <div class="txt1 pb10">生成优惠码</div>
         <div class="mt10">数量:<input type="number" v-model="quantity"/>个</div>
-        <div class="font12 mt5 ml20"><span style="color:red;">*</span>每个优惠码{{codefee}}元，目前免费</div>
+        <div class="font12 mt5 ml20"><span style="color:red;">*</span>每个优惠码{{codefee}}元</div>
         <div class="bom mt25">
           <div class="close" @click="btnclose">取消</div>
           <div class="close color-white" style="background-color:#F85B52;" @click="createCode">立即生成</div>
@@ -226,24 +226,28 @@ export default {
       self.$http.post(`${ENV.BokaApi}/api/factory/createRetailerCode`, {
         fid: self.query.id,
         quantity: self.quantity
-      }).then(function (res) {
+      }).then((res) => {
         const data = res.data
         self.$vux.loading.hide()
-        if (data.flag === 2) {
-          location.replace(`${ENV.Host}/#/pay?id=${data.orderid}`)
+        if (data.flag) {
+          if (data.orderid) {
+            if (self.query.from) {
+              let weburl = encodeURIComponent(`concession?id=${self.query.id}`)
+              self.$wechat.miniProgram.navigateTo({url: `/packageB/pages/pay?id=${data.orderid}&module=${data.ordermodule}&weburl=${weburl}`})
+            } else {
+              location.replace(`${ENV.Host}/#/pay?id=${data.orderid}&module=${data.ordermodule}`)
+            }
+          } else {
+            self.disList1 = false
+            self.tabdata1 = []
+            pageStart1 = 0
+            self.getData1()
+          }
         } else {
           self.$vux.toast.show({
             text: data.error,
             type: (data.flag !== 1 ? 'warn' : 'success'),
-            time: self.$util.delay(data.error),
-            onHide: function () {
-              if (data.flag === 1) {
-                self.disList1 = false
-                self.tabdata1 = []
-                pageStart1 = 0
-                self.getData1()
-              }
-            }
+            time: self.$util.delay(data.error)
           })
         }
       })
