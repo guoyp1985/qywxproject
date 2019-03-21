@@ -17,7 +17,7 @@
       <div v-show="selectedIndex===0">
         <template v-if="distabdata1">
           <template v-if="tabdata1.length">
-            <order-info v-for="(item, index) in getList1" :item="item" :key="index" :index="index" @on-process="orderProcess"></order-info>
+            <order-info v-for="(item, index) in tabdata1" :item="item" :key="index" :index="index" @on-process="orderProcess"></order-info>
           </template>
           <template v-else>
             <div class="no-related-x color-gray">
@@ -29,7 +29,7 @@
       <div v-show="selectedIndex===1">
         <template v-if="distabdata2">
           <template v-if="tabdata2.length">
-            <order-info v-for="(item, index) in getList2" :item="item" :key="index" :index="index" @on-process="orderProcess"></order-info>
+            <order-info v-for="(item, index) in tabdata2" :item="item" :key="index" :index="index" @on-process="orderProcess"></order-info>
           </template>
           <template v-else>
             <div class="no-related-x color-gray">
@@ -41,7 +41,7 @@
       <div v-show="selectedIndex===2">
         <template v-if="distabdata3">
           <template v-if="tabdata3.length">
-            <order-info v-for="(item, index) in getList3" :item="item" :key="index" :index="index" @on-process="orderProcess"></order-info>
+            <order-info v-for="(item, index) in tabdata3" :item="item" :key="index" :index="index" @on-process="orderProcess"></order-info>
           </template>
           <template v-else>
             <div class="no-related-x color-gray">
@@ -53,7 +53,7 @@
       <div v-show="selectedIndex===3">
         <template v-if="distabdata4">
           <template v-if="tabdata4.length">
-            <order-info v-for="(item, index) in getList4" :item="item" :key="index" :index="index" @on-process="orderProcess"></order-info>
+            <order-info v-for="(item, index) in tabdata4" :item="item" :key="index" :index="index" @on-process="orderProcess"></order-info>
           </template>
           <template v-else>
             <div class="no-related-x color-gray">
@@ -251,7 +251,36 @@ export default {
           time: self.$util.delay(data.error),
           onHide: () => {
             if (data.flag) {
-              self.changeOrderView(this.clickOrder, 0, [])
+              // self.changeOrderView(this.clickOrder, 0, [])
+              switch (this.selectedIndex) {
+                case 0:
+                  this.tabdata1[this.clickIndex].backflag = 20
+                  this.tabdata1[this.clickIndex].flagstr = '待发货(退款申请中)'
+                  this.tabdata1[this.clickIndex].buttons = []
+                  for (let i = 0; i < this.tabdata2.length; i++) {
+                    if (this.tabdata2[i].id === this.clickData.id) {
+                      this.tabdata2[i].backflag = 20
+                      this.tabdata2[i].flagstr = '待发货(退款申请中)'
+                      this.tabdata2[i].buttons = []
+                      break
+                    }
+                  }
+                  break
+                case 1:
+                  this.tabdata2[this.clickIndex].backflag = 20
+                  this.tabdata2[this.clickIndex].flagstr = '待发货(退款申请中)'
+                  this.tabdata2[this.clickIndex].buttons = []
+                  for (let i = 0; i < this.tabdata1.length; i++) {
+                    if (this.tabdata1[i].id === this.clickData.id) {
+                      this.tabdata1[i].backflag = 20
+                      this.tabdata1[i].flagstr = '待发货(退款申请中)'
+                      this.tabdata1[i].buttons = []
+                      break
+                    }
+                  }
+                  this.$apply()
+                  break
+              }
             }
           }
         })
@@ -362,10 +391,11 @@ export default {
       this.$vux.loading.show()
       const self = this
       let params = { params: { flag: flag, pagestart: 0, limit: self.limit } }
-      this.$http.get(`${ENV.BokaApi}/api/order/orderList/user`, params).then(function (res) {
+      this.$http.get(`${ENV.BokaApi}/api/order/orderList/user`, params).then((res) => {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
+        retdata = this.setListButton(retdata)
         switch (flag) {
           case 0:
             self.tabdata1 = retdata
