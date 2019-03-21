@@ -101,10 +101,10 @@
           </div>
           <div v-if="data.nexttime" class="align_left padding10 color-gray2 font12">回访时间：{{ data.nexttime | dateformat }}</div>
         </div>
-        <div class="b_top_after bg-white padding10" v-if="data.backflag == 20">
+        <div class="padding10" v-if="data.backflag == 20">
           <div class="flex_right font12">
-            <div class="flex_center mr10" @click="agreeEvent(0)" style="border:#999 1px solid;height:25px;border-radius:60px;color:#999;width:90px;">拒绝退款</div>
-            <div class="flex_center" @click="agreeEvent(1)" style="border:#ff4400 1px solid;height:25px;border-radius:60px;color:#ff4400;width:90px;">同意退款</div>
+            <div class="flex_center mr10" @click="agreeEvent(0)" style="border:#999 1px solid;height:25px;border-radius:5px;color:#999;width:75px;">拒绝退款</div>
+            <div class="flex_center" @click="agreeEvent(1)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">同意退款</div>
           </div>
         </div>
       </div>
@@ -176,7 +176,7 @@
   </div>
 </template>
 <script>
-import { Group, Cell, Sticky, XDialog, TransferDom, Popup, XImg, XTextarea } from 'vux'
+import { Group, Cell, Sticky, XDialog, TransferDom, Popup, XImg, XTextarea, XButton } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
@@ -191,7 +191,7 @@ export default {
     TransferDom
   },
   components: {
-    Group, Cell, Sticky, XDialog, Popup, OrderInfo, XImg, Sos, Subscribe, ApplyTip, XTextarea
+    Group, Cell, Sticky, XDialog, Popup, OrderInfo, XImg, Sos, Subscribe, ApplyTip, XTextarea, XButton
   },
   filters: {
     dateformat: function (value) {
@@ -261,7 +261,17 @@ export default {
             self.$http.post(`${ENV.BokaApi}/api/order/refund`, {id: this.query.id, agree: 1})
             .then(res => {
               self.$vux.loading.hide()
-              self.$vux.toast.text(res.data.error)
+              const data = res.data
+              self.$vux.toast.show({
+                text: data.error,
+                type: (data.flag !== 1 ? 'warn' : 'success'),
+                time: self.$util.delay(data.error),
+                onHide: () => {
+                  if (data.flag === 1) {
+                    this.data.backflag = 0
+                  }
+                }
+              })
             })
           }
         })
@@ -280,7 +290,16 @@ export default {
         self.$vux.loading.hide()
         this.showRefundModal = false
         const data = res.data
-        self.$vux.toast.text(data.error)
+        self.$vux.toast.show({
+          text: data.error,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: self.$util.delay(data.error),
+          onHide: () => {
+            if (data.flag === 1) {
+              this.data.backflag = 0
+            }
+          }
+        })
       })
     },
     evaluate () {

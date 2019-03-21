@@ -170,7 +170,7 @@ export default {
             ]
             break
           case 2:
-            if (item.canback) {
+            if (item.canback && item.backflag !== 20) {
               item.buttons = [
                 {id: 3, name: '申请退款'}
               ]
@@ -245,10 +245,16 @@ export default {
         self.$vux.loading.hide()
         this.showRefundModal = false
         const data = res.data
-        self.$vux.toast.text(data.error)
-        if (data.flag) {
-          self.changeOrderView(this.clickOrder, 0, [])
-        }
+        self.$vux.toast.show({
+          text: data.error,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: self.$util.delay(data.error),
+          onHide: () => {
+            if (data.flag) {
+              self.changeOrderView(this.clickOrder, 0, [])
+            }
+          }
+        })
       })
     },
     viewShipping (order) {
