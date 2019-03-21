@@ -109,7 +109,7 @@
       <div class="padding10 align_right">
         <x-button v-if="data.flag == 1" mini @click.native="cancel" class="font12">取消订单</x-button>
         <x-button v-if="data.flag == 1 && data.payorder == ''" :link="{path: '/pay', query: {id: data.id}}" mini class="font12">去支付</x-button>
-        <x-button v-if="data.flag == 2 && data.canback" mini @click.native="refund" class="font12">申请退款</x-button>
+        <x-button v-if="data.flag == 2 && data.canback && data.backflag != 20" mini @click.native="refund" class="font12">申请退款</x-button>
         <x-button v-if="data.flag == 3" mini @click.native="confirm" class="font12">确认收货</x-button>
         <x-button v-if="data.flag == 4" mini @click.native="evaluate" class="font12">评价</x-button>
       </div>
@@ -130,10 +130,35 @@
         <router-link class="flex_cell flex_center color-white btn-bottom-red" to="/center">进入个人中心</router-link>
       </div>
     </template>
+    <div v-if="showRefundModal" class="auto-modal refund-modal flex_center">
+      <div class="modal-inner border-box" style="width:80%;">
+        <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">申请退款</div>
+        <div class="align_left txt padding10">
+          <group class="textarea-outer" style="padding:0;">
+            <x-textarea
+              ref="titleTextarea"
+              v-model="refundContent"
+              name="title" class="x-textarea noborder"
+              placeholder="请输入退款原因"
+              :show-counter="false"
+              :rows="6"
+              :max="200"
+              @on-change="textareaChange('titleTextarea')"
+              @on-focus="textareaFocus('titleTextarea')"
+              autosize>
+            </x-textarea>
+          </group>
+        </div>
+        <div class="flex_center b_top_after" style="height:50px;">
+          <div class="flex_cell flex_center h_100 b_right_after" @click="closeRefund">取消</div>
+          <div class="flex_cell flex_center h_100 color-orange" @click="submitRefund">提交</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
-import { Group, Cell, Sticky, XDialog, CellFormPreview, TransferDom, XImg, XButton } from 'vux'
+import { Group, Cell, Sticky, XDialog, CellFormPreview, TransferDom, XImg, XButton, XTextarea } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
 import Sos from '@/components/Sos'
 import Time from '#/time'
@@ -144,7 +169,7 @@ export default {
     TransferDom
   },
   components: {
-    Group, Cell, Sticky, XDialog, CellFormPreview, OrderInfo, XImg, XButton, Sos
+    Group, Cell, Sticky, XDialog, CellFormPreview, OrderInfo, XImg, XButton, Sos, XTextarea
   },
   filters: {
     dateformat: function (value) {
@@ -170,7 +195,9 @@ export default {
       priceInfos: [],
       userQrCode: '',
       wxCardShow: false,
-      query: {}
+      query: {},
+      showRefundModal: false,
+      refundContent: ''
     }
   },
   computed: {
@@ -179,6 +206,17 @@ export default {
     }
   },
   methods: {
+    textareaChange (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
+      setTimeout(function () {
+        curArea.updateAutosize()
+      }, 50)
+    },
+    textareaFocus (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
+    },
     evaluate () {
       this.$router.push({path: '/evaluation', query: {id: this.data.id}})
     },
@@ -231,25 +269,29 @@ export default {
       })
     },
     refund () {
+      this.showRefundModal = true
+    },
+    closeRefund () {
+      this.showRefundModal = false
+    },
+    submitRefund () {
       const self = this
-      this.$vux.confirm.show({
-        title: '您是否要申请退款？',
-        onConfirm () {
-          self.$http.post(`${ENV.BokaApi}/api/order/refund`, {id: self.data.id, from: self.data.from})
-          .then(res => {
-            let data = res.data
-            self.$vux.toast.show({
-              text: data.error,
-              type: (data.flag !== 1 ? 'warn' : 'success'),
-              time: self.$util.delay(data.error),
-              onHide: function () {
-                if (data.flag === 1) {
-                  self.getData()
-                }
-              }
-            })
-          })
-        }
+      self.$vux.loading.show()
+      this.showRefundModal = false
+      self.$http.post(`${ENV.BokaApi}/api/order/applyRefund`, {id: this.data.id, reasonreturn: this.refundContent})
+      .then(res => {
+        self.$vux.loading.hide()
+        const data = res.data
+        self.$vux.toast.show({
+          text: data.error,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: self.$util.delay(data.error),
+          onHide: () => {
+            if (data.flag) {
+              self.data.backflag = 20
+            }
+          }
+        })
       })
     },
     copyTxt () {

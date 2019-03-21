@@ -297,6 +297,7 @@ en:
   Add factory: Add factory
   Apply join: Apply join
   Factory name: Factory name
+  Collect product: Collect product
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -919,3 +920,4 @@ zh-CN:
   tSimpleDeliverinfo: 物流信息
   tLinkReplication: 设置小程序店铺
   LtInkReplication: 设置小程序店铺
+  Collect product: 采集商品

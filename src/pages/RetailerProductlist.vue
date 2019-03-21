@@ -69,6 +69,9 @@
         <div class="flex_cell flex_center">
           <div class="addproduct flex_center btn-bottom-red" style="width:85%;" @click="toAdd">{{ $t('Add product') }}</div>
         </div>
+        <div class="flex_cell flex_center">
+          <div class="addproduct flex_center btn-bottom-red" style="width:85%;" @click="toCollect">{{ $t('Collect product') }}</div>
+        </div>
       </template>
     </div>
     <div v-transfer-dom>
@@ -197,6 +200,8 @@
 </template>
 
 <i18n>
+Collect product:
+  zh-CN: 采集商品
 Add product:
   zh-CN: 添加商品
 Back go shop:
@@ -298,6 +303,13 @@ export default {
         this.openVip()
       } else {
         this.$router.push('/addProduct')
+      }
+    },
+    toCollect () {
+      if (this.loginUser.isretailer === 2 && this.productdata.length >= 5) {
+        this.openVip()
+      } else {
+        this.$router.push('/CollectProduct')
       }
     },
     getPhoto (src) {

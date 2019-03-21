@@ -17,7 +17,7 @@
       <div v-show="selectedIndex===0">
         <template v-if="distabdata1">
           <template v-if="tabdata1.length">
-            <order-info v-for="(item, index) in getList1" :item="item" :key="index" @on-process="orderProcess"></order-info>
+            <order-info v-for="(item, index) in getList1" :item="item" :key="index" :index="index" @on-process="orderProcess"></order-info>
           </template>
           <template v-else>
             <div class="no-related-x color-gray">
@@ -29,7 +29,7 @@
       <div v-show="selectedIndex===1">
         <template v-if="distabdata2">
           <template v-if="tabdata2.length">
-            <order-info v-for="(item, index) in getList2" :item="item" :key="index" @on-process="orderProcess"></order-info>
+            <order-info v-for="(item, index) in getList2" :item="item" :key="index" :index="index" @on-process="orderProcess"></order-info>
           </template>
           <template v-else>
             <div class="no-related-x color-gray">
@@ -41,7 +41,7 @@
       <div v-show="selectedIndex===2">
         <template v-if="distabdata3">
           <template v-if="tabdata3.length">
-            <order-info v-for="(item, index) in getList3" :item="item" :key="index" @on-process="orderProcess"></order-info>
+            <order-info v-for="(item, index) in getList3" :item="item" :key="index" :index="index" @on-process="orderProcess"></order-info>
           </template>
           <template v-else>
             <div class="no-related-x color-gray">
@@ -53,7 +53,7 @@
       <div v-show="selectedIndex===3">
         <template v-if="distabdata4">
           <template v-if="tabdata4.length">
-            <order-info v-for="(item, index) in getList4" :item="item" :key="index" @on-process="orderProcess"></order-info>
+            <order-info v-for="(item, index) in getList4" :item="item" :key="index" :index="index" @on-process="orderProcess"></order-info>
           </template>
           <template v-else>
             <div class="no-related-x color-gray">
@@ -63,6 +63,31 @@
         </template>
       </div>
     </div>
+    <div v-if="showRefundModal" class="auto-modal refund-modal flex_center">
+      <div class="modal-inner border-box" style="width:80%;">
+        <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">申请退款</div>
+        <div class="align_left txt padding10">
+          <group class="textarea-outer" style="padding:0;">
+            <x-textarea
+              ref="titleTextarea"
+              v-model="refundContent"
+              name="title" class="x-textarea noborder"
+              placeholder="请输入退款原因"
+              :show-counter="false"
+              :rows="6"
+              :max="200"
+              @on-change="textareaChange('titleTextarea')"
+              @on-focus="textareaFocus('titleTextarea')"
+              autosize>
+            </x-textarea>
+          </group>
+        </div>
+        <div class="flex_center b_top_after" style="height:50px;">
+          <div class="flex_cell flex_center h_100 b_right_after" @click="closeRefund">取消</div>
+          <div class="flex_cell flex_center h_100 color-orange" @click="submitRefund">提交</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -70,13 +95,13 @@
 </i18n>
 
 <script>
-import { Sticky, Tab, TabItem } from 'vux'
+import { Sticky, Tab, TabItem, Group, XTextarea } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
 import ENV from 'env'
 
 export default {
   components: {
-    Sticky, Tab, TabItem, OrderInfo
+    Sticky, Tab, TabItem, OrderInfo, Group, XTextarea
   },
   data () {
     return {
@@ -94,7 +119,11 @@ export default {
       pagestart1: 1,
       pagestart2: 1,
       pagestart3: 1,
-      pagestart4: 1
+      pagestart4: 1,
+      showRefundModal: false,
+      refundContent: '',
+      clickOrder: {},
+      clickIndex: 0
     }
   },
   computed: {
@@ -117,6 +146,17 @@ export default {
     }
   },
   methods: {
+    textareaChange (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
+      setTimeout(function () {
+        curArea.updateAutosize()
+      }, 50)
+    },
+    textareaFocus (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
+    },
     setListButton (list) {
       for (let item of list) {
         switch (item.flag) {
@@ -130,7 +170,7 @@ export default {
             ]
             break
           case 2:
-            if (item.canback) {
+            if (item.canback && item.backflag !== 20) {
               item.buttons = [
                 {id: 3, name: '申请退款'}
               ]
@@ -189,19 +229,32 @@ export default {
         }
       })
     },
-    refund (order) {
+    refund (order, index) {
+      this.showRefundModal = true
+      this.clickOrder = order
+      this.clickIndex = index
+    },
+    closeRefund () {
+      this.showRefundModal = false
+    },
+    submitRefund () {
       const self = this
-      this.$vux.confirm.show({
-        title: '您是否要申请退款？',
-        onConfirm () {
-          self.$vux.loading.show()
-          self.$http.post(`${ENV.BokaApi}/api/order/refund`, {id: order.id, from: order.from})
-          .then(res => {
-            self.$vux.loading.hide()
-            self.$vux.toast.text(res.data.error)
-            self.changeOrderView(order, 0, [])
-          })
-        }
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/order/applyRefund`, {id: this.clickOrder.id, reasonreturn: this.refundContent})
+      .then(res => {
+        self.$vux.loading.hide()
+        this.showRefundModal = false
+        const data = res.data
+        self.$vux.toast.show({
+          text: data.error,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: self.$util.delay(data.error),
+          onHide: () => {
+            if (data.flag) {
+              self.changeOrderView(this.clickOrder, 0, [])
+            }
+          }
+        })
       })
     },
     viewShipping (order) {
@@ -212,7 +265,7 @@ export default {
     payment (order) {
       location.replace(`${ENV.Host}/#/pay?id=${order.id}`)
     },
-    orderProcess (type, order) {
+    orderProcess (type, order, index) {
       switch (type) {
         case 1:
           this.cancel(order)
@@ -221,7 +274,7 @@ export default {
           this.payment(order)
           break
         case 3:
-          this.refund(order)
+          this.refund(order, index)
           break
         case 4:
           this.viewShipping(order)

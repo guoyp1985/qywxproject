@@ -1,7 +1,7 @@
 <template>
   <div class="add-tags">
     <div class="input-box">
-      <textarea class="font14" placeholder="链接" maxlength="200" v-model="content"></textarea>
+      <textarea class="font14" placeholder="淘宝或者天猫链接" maxlength="200" v-model="content"></textarea>
     </div>
     <div class="submit-btn flex_center">
       <button @click="submit">采集</button>
@@ -33,25 +33,29 @@ export default{
   },
   methods: {
     submit () {
+      console.log(this.content)
       if (!this.content.length) {
         this.$vux.toast.show({
-          text: '请输入内容!',
+          text: '请输入链接!',
           type: 'warn'
         })
-        return
+        return false
       }
       this.$http({
-        url: `${ENV.BokaApi}/api/team/source`,
+        url: `${ENV.BokaApi}/api/factory/collect`,
         method: 'post',
         data: {
-          type: 'add',
-          content: this.content,
-          teamid: this.id
+          url: this.content
         }
       }).then(res => {
         console.log(res)
-        if (res.data.flag) {
-          this.$router.back()
+        if (res.data.flag === 1) {
+          this.$router.push({ path: '/product', query: {id: res.data.data} })
+        } else if (res.data.error) {
+          this.$vux.toast.show({
+            text: res.data.error,
+            time: this.$util.delay(res.data.error)
+          })
         }
       })
     }

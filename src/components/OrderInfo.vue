@@ -88,6 +88,10 @@ export default {
     buttons: {
       type: Array,
       default: () => []
+    },
+    index: {
+      type: Number,
+      default: 0
     }
   },
   data () {
@@ -125,7 +129,7 @@ export default {
   },
   methods: {
     buttonClick (type) {
-      this.$emit('on-process', type, this.item)
+      this.$emit('on-process', type, this.item, this.index)
     }
   }
 }
