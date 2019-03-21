@@ -66,7 +66,7 @@
     <template v-if="showTipModal">
       <tip-button-layer
         @clickClose="closeTipModal"
-        title="支付成功">
+        title="优惠码生成成功">
       </tip-button-layer>
     </template>
   </div>
