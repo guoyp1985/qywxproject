@@ -137,5 +137,6 @@
   "RoomOrderConsumer",
   "RoomOrderBusiness",
   "RoomOrderDeal",
-  "RoomOrders"
+  "RoomOrders",
+  "CollectProduct"
 ]
