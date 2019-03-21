@@ -150,14 +150,14 @@
     </template>
     <div v-if="showRefundModal" class="auto-modal refund-modal flex_center">
       <div class="modal-inner border-box" style="width:80%;">
-        <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">退款原因</div>
+        <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">拒绝退款</div>
         <div class="align_left txt padding10">
           <group class="textarea-outer" style="padding:0;">
             <x-textarea
               ref="titleTextarea"
               v-model="refundContent"
               name="title" class="x-textarea noborder"
-              placeholder="请输入退款原因"
+              placeholder="请输入拒绝退款原因"
               :show-counter="false"
               :rows="6"
               :max="200"
