@@ -256,7 +256,7 @@ export default {
       if (val === 1) {
         this.$vux.confirm.show({
           title: '您确认同意退款？',
-          onConfirm () {
+          onConfirm: () => {
             self.$vux.loading.show()
             self.$http.post(`${ENV.BokaApi}/api/order/refund`, {id: this.query.id, agree: 1})
             .then(res => {
@@ -269,6 +269,7 @@ export default {
                 onHide: () => {
                   if (data.flag === 1) {
                     this.data.backflag = 0
+                    this.data.flag = 0
                   }
                 }
               })
@@ -285,10 +286,10 @@ export default {
     submitRefund () {
       const self = this
       self.$vux.loading.show()
+      this.showRefundModal = false
       self.$http.post(`${ENV.BokaApi}/api/order/refund`, {id: this.query.id, rejectreason: this.refundContent, agree: 0})
       .then(res => {
         self.$vux.loading.hide()
-        this.showRefundModal = false
         const data = res.data
         self.$vux.toast.show({
           text: data.error,

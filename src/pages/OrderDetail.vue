@@ -270,26 +270,6 @@ export default {
     },
     refund () {
       this.showRefundModal = true
-      const self = this
-      this.$vux.confirm.show({
-        title: '您是否要申请退款？',
-        onConfirm () {
-          self.$http.post(`${ENV.BokaApi}/api/order/refund`, {id: self.data.id, from: self.data.from})
-          .then(res => {
-            let data = res.data
-            self.$vux.toast.show({
-              text: data.error,
-              type: (data.flag !== 1 ? 'warn' : 'success'),
-              time: self.$util.delay(data.error),
-              onHide: () => {
-                if (data.flag === 1) {
-                  self.getData()
-                }
-              }
-            })
-          })
-        }
-      })
     },
     closeRefund () {
       this.showRefundModal = false
@@ -297,10 +277,10 @@ export default {
     submitRefund () {
       const self = this
       self.$vux.loading.show()
+      this.showRefundModal = false
       self.$http.post(`${ENV.BokaApi}/api/order/applyRefund`, {id: this.data.id, reasonreturn: this.refundContent})
       .then(res => {
         self.$vux.loading.hide()
-        this.showRefundModal = false
         const data = res.data
         self.$vux.toast.show({
           text: data.error,
