@@ -63,6 +63,12 @@
       </div>
       <div class="mceng"></div>
     </div>
+    <template v-if="showTipModal">
+      <tip-button-layer
+        @clickClose="closeTipModal"
+        title="支付成功">
+      </tip-button-layer>
+    </template>
   </div>
 </template>
 
@@ -72,6 +78,7 @@ import ENV from 'env'
 import Time from '#/time'
 import { User } from '#/storage'
 import jQuery from 'jquery'
+import TipButtonLayer from '@/components/TipButtonLayer'
 
 const limit = 20
 let pageStart1 = 0
@@ -83,7 +90,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem
+    Tab, TabItem, Swiper, SwiperItem, TipButtonLayer
   },
   data () {
     return {
@@ -97,7 +104,8 @@ export default {
       tabdata2: [],
       showModal: false,
       quantity: '',
-      codefee: 0
+      codefee: 0,
+      showTipModal: false
     }
   },
   filters: {
@@ -106,6 +114,9 @@ export default {
     }
   },
   methods: {
+    closeTipModal () {
+      this.showTipModal = false
+    },
     btnshow () {
       this.showModal = true
     },
@@ -232,7 +243,7 @@ export default {
         if (data.flag) {
           if (data.orderid) {
             if (self.query.from) {
-              let weburl = encodeURIComponent(`concession?id=${self.query.id}`)
+              let weburl = encodeURIComponent(`concession?id=${self.query.id}&type=pay`)
               self.$wechat.miniProgram.navigateTo({url: `/packageB/pages/pay?id=${data.orderid}&module=${data.ordermodule}&weburl=${weburl}`})
             } else {
               location.replace(`${ENV.Host}/#/pay?id=${data.orderid}&module=${data.ordermodule}`)
@@ -256,6 +267,9 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.query = this.$route.query
+      if (this.query.type === 'pay') {
+        this.showTipModal = true
+      }
       this.disList1 = false
       pageStart1 = 0
       this.tabdata1 = []
