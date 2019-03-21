@@ -55,7 +55,7 @@
       <div class="modal">
         <div class="txt1 pb10">生成优惠码</div>
         <div class="mt10">数量:<input type="number" v-model="quantity"/>个</div>
-        <div class="font12 mt5 ml20"><span style="color:red;">*</span>每个优惠码100元，目前免费</div>
+        <div class="font12 mt5 ml20"><span style="color:red;">*</span>每个优惠码{{codefee}}元，目前免费</div>
         <div class="bom mt25">
           <div class="close" @click="btnclose">取消</div>
           <div class="close color-white" style="background-color:#F85B52;" @click="createCode">立即生成</div>
@@ -96,7 +96,8 @@ export default {
       tabdata1: [],
       tabdata2: [],
       showModal: false,
-      quantity: ''
+      quantity: '',
+      codefee: 0
     }
   },
   filters: {
@@ -167,10 +168,11 @@ export default {
       let params = { pagestart: pageStart1, limit: limit, used: 0, fid: self.query.id }
       self.$http.get(`${ENV.BokaApi}/api/factory/listRetailerCode`, {
         params: params
-      }).then(function (res) {
+      }).then((res) => {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
+        this.codefee = data.codefee
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.disList1 = true
       })
@@ -179,10 +181,11 @@ export default {
       let params = { pagestart: pageStart1, limit: limit, used: 1, fid: self.query.id }
       self.$http.get(`${ENV.BokaApi}/api/factory/listRetailerCode`, {
         params: params
-      }).then(function (res) {
+      }).then((res) => {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
+        this.codefee = data.codefee
         self.tabdata2 = self.tabdata2.concat(retdata)
         self.disList2 = true
       })
