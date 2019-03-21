@@ -246,7 +246,8 @@ export default {
               let weburl = encodeURIComponent(`concession?id=${self.query.id}&type=pay`)
               self.$wechat.miniProgram.navigateTo({url: `/packageB/pages/pay?id=${data.orderid}&module=${data.ordermodule}&weburl=${weburl}`})
             } else {
-              location.replace(`${ENV.Host}/#/pay?id=${data.orderid}&module=${data.ordermodule}`)
+              let backurl = encodeURIComponent(`concession?id=${self.query.id}&type=pay`)
+              location.replace(`${ENV.Host}/#/pay?id=${data.orderid}&module=${data.ordermodule}&backurl=${backurl}`)
             }
           } else {
             self.disList1 = false
