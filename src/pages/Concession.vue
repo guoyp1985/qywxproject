@@ -55,7 +55,7 @@
       <div class="modal">
         <div class="txt1 pb10">生成优惠码</div>
         <div class="mt10">数量:<input type="number" v-model="quantity"/>个</div>
-        <div class="font12 mt5 ml20"><span style="color:red;">*</span>每个优惠码{{codefee}}元，目前免费</div>
+        <div class="font12 mt5 ml20"><span style="color:red;">*</span>每个优惠码{{codefee}}元</div>
         <div class="bom mt25">
           <div class="close" @click="btnclose">取消</div>
           <div class="close color-white" style="background-color:#F85B52;" @click="createCode">立即生成</div>
@@ -63,6 +63,12 @@
       </div>
       <div class="mceng"></div>
     </div>
+    <template v-if="showTipModal">
+      <tip-button-layer
+        @clickClose="closeTipModal"
+        title="优惠码生成成功">
+      </tip-button-layer>
+    </template>
   </div>
 </template>
 
@@ -72,6 +78,7 @@ import ENV from 'env'
 import Time from '#/time'
 import { User } from '#/storage'
 import jQuery from 'jquery'
+import TipButtonLayer from '@/components/TipButtonLayer'
 
 const limit = 20
 let pageStart1 = 0
@@ -83,7 +90,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem
+    Tab, TabItem, Swiper, SwiperItem, TipButtonLayer
   },
   data () {
     return {
@@ -97,7 +104,8 @@ export default {
       tabdata2: [],
       showModal: false,
       quantity: '',
-      codefee: 0
+      codefee: 0,
+      showTipModal: false
     }
   },
   filters: {
@@ -106,6 +114,9 @@ export default {
     }
   },
   methods: {
+    closeTipModal () {
+      this.showTipModal = false
+    },
     btnshow () {
       this.showModal = true
     },
@@ -226,24 +237,29 @@ export default {
       self.$http.post(`${ENV.BokaApi}/api/factory/createRetailerCode`, {
         fid: self.query.id,
         quantity: self.quantity
-      }).then(function (res) {
+      }).then((res) => {
         const data = res.data
         self.$vux.loading.hide()
-        if (data.flag === 2) {
-          location.replace(`${ENV.Host}/#/pay?id=${data.orderid}`)
+        if (data.flag) {
+          if (data.orderid) {
+            if (self.query.from) {
+              let weburl = encodeURIComponent(`concession?id=${self.query.id}&type=pay`)
+              self.$wechat.miniProgram.navigateTo({url: `/packageB/pages/pay?id=${data.orderid}&module=${data.ordermodule}&weburl=${weburl}`})
+            } else {
+              let backurl = encodeURIComponent(`concession?id=${self.query.id}&type=pay`)
+              location.replace(`${ENV.Host}/#/pay?id=${data.orderid}&module=${data.ordermodule}&backurl=${backurl}`)
+            }
+          } else {
+            self.disList1 = false
+            self.tabdata1 = []
+            pageStart1 = 0
+            self.getData1()
+          }
         } else {
           self.$vux.toast.show({
             text: data.error,
             type: (data.flag !== 1 ? 'warn' : 'success'),
-            time: self.$util.delay(data.error),
-            onHide: function () {
-              if (data.flag === 1) {
-                self.disList1 = false
-                self.tabdata1 = []
-                pageStart1 = 0
-                self.getData1()
-              }
-            }
+            time: self.$util.delay(data.error)
           })
         }
       })
@@ -252,6 +268,9 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.query = this.$route.query
+      if (this.query.type === 'pay') {
+        this.showTipModal = true
+      }
       this.disList1 = false
       pageStart1 = 0
       this.tabdata1 = []
