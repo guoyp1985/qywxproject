@@ -160,7 +160,11 @@ export default {
               onHide: () => {
                 _this.isSubmiting = false
                 if (data.flag) {
-                  _this.$router.push('/roomList')
+                  let params = {}
+                  if (_this.query.from) {
+                    params.from = _this.query.from
+                  }
+                  _this.$router.push({path: '/roomList', query: params})
                 } else {
                   _this.reset()
                 }
