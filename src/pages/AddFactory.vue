@@ -100,6 +100,7 @@
             <div class="profit-level">
               <span>销售佣金</span>
               <x-input class="input" type="tel" v-model="submitData.salesrate" placeholder="输入百分比，例如10%则填写10" ></x-input>
+              <div class="color-gray">%</div>
             </div>
           </div>
           <template v-if="disClassData">
