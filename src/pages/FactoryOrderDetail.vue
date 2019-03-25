@@ -51,9 +51,9 @@
           </div>
         </div>
         <div class="mt10 bg-white padding10 b_bottom_after">
-          <div class="t-table">
-            <div class="t-cell">创建时间: {{ data.dateline | dateformat }}</div>
-            <div class="t-cell align_right color-orange5" style="width:110px;">{{ data.flagstr }}</div>
+          <div class="t-table font12">
+            <div class="t-cell" style="width:165px;">创建时间: {{ data.dateline | dateformat }}</div>
+            <div class="t-cell align_right color-orange5">{{ data.flagstr }}</div>
           </div>
         </div>
         <div class="bg-white">
@@ -368,6 +368,7 @@ export default {
                   if (data.flag === 1) {
                     this.data.backflag = 0
                     this.data.flag = 0
+                    this.data.flagstr = '订单取消'
                   }
                 }
               })
@@ -396,6 +397,7 @@ export default {
           onHide: () => {
             if (data.flag === 1) {
               this.data.backflag = 0
+              this.data.flagstr = '待发货'
             }
           }
         })
