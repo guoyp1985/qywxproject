@@ -242,13 +242,13 @@ export default {
         callback: () => {
           switch (_this.selectedIndex) {
             case 0:
-              if (_this.rooms.length === _this.pageStart1 * _this.limit) {
-                _this.loadRooms(_this.pageStart1)
+              if (_this.rooms.length === (_this.pageStart1 + 1) * _this.limit) {
+                _this.loadRooms(_this.pageStart1++)
               }
               break
             case 1:
-              if (_this.roomOrders.length === _this.pageStart2 * _this.limit) {
-                _this.loadOrders(_this.pageStart2)
+              if (_this.roomOrders.length === (_this.pageStart2 + 1) * _this.limit) {
+                _this.loadOrders(_this.pageStart2++)
               }
               break
           }

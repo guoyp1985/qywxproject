@@ -14,7 +14,7 @@
             <span class="vip-icon bg-gray color-white" v-if="retailerInfo.isretailer == 2" @click="onVip">VIP</span>
             <span class="vip-icon bg-orange color-white" v-if="retailerInfo.isretailer == 1" @click="onVip">VIP</span>
           </div>
-          <div class="font13 color-white mt5">聚客365—{{ $t('Business tool') }}</div>
+          <div class="font13 color-white mt5">共销客—{{ $t('Business tool') }}</div>
         </div>
       </div>
       <div class="font0" style="position:absolute;top:20px;right:14px;height:35px;">
@@ -376,7 +376,7 @@ export default {
     inviteEvent () {
       this.$vux.alert.show({
         title: '',
-        content: '点击右上角“···”分享当前页面给好友，每成功邀请一位卖家入驻聚客365，即可获得30元推荐奖励金，推荐奖励金将发放到“我的收入”中，卖家入驻成功即可立即提现！'
+        content: '点击右上角“···”分享当前页面给好友，每成功邀请一位卖家入驻共销客，即可获得30元推荐奖励金，推荐奖励金将发放到“我的收入”中，卖家入驻成功即可立即提现！'
       })
     },
     clickStore () {

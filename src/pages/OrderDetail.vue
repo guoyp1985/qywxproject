@@ -16,10 +16,10 @@
           </div>
           <div class="contact-cell">
             <div class="ol-contact flex_center">
-              <router-link :to="{path: '/chat', query: {uid: retailerInfo.uploader,fromModule: 'order', from: query.from}}">
+              <div @click="toChat" :to="{path: '/chat', query: {uid: retailerInfo.uploader,fromModule: 'order', from: query.from}}">
                 <span class="al al-pinglun3 color-order-detail font14"></span>
                 <span class="font13">{{$t('Contact Seller')}}</span>
-              </router-link>
+              </div>
             </div>
             <div class="wx-contact flex_center">
               <a @click="wxContact">
@@ -206,6 +206,13 @@ export default {
     }
   },
   methods: {
+    toChat () {
+      let params = {uid: this.retailerInfo.uid, fromModule: 'order'}
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/chat', query: params})
+    },
     textareaChange (refname) {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
       curArea.updateAutosize()

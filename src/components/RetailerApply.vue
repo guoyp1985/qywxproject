@@ -556,7 +556,7 @@ export default {
       VIP1: false,
       VIP2: true,
       feetype: 'oneyear',
-      platform: '聚客365',
+      platform: '共销客',
       applyMobile: null
     }
   },

@@ -175,12 +175,12 @@
               <!-- <div class="item">
                 <div class="inner" @click="clickPopup('level')">设置代理级别</div>
               </div> -->
-              <div class="item" v-if="clickData.fulltime === 1">
-                <div class="inner" @click="clickPopup('uploader')">更改推荐人</div>
-              </div>
-              <!-- <div class="item" >
+              <!-- <div class="item" v-if="clickData.fulltime === 1">
                 <div class="inner" @click="clickPopup('uploader')">更改推荐人</div>
               </div> -->
+              <div class="item" >
+                <div class="inner" @click="clickPopup('uploader')">更改推荐人</div>
+              </div>
               <router-link class="item" :to="{path:'/store',query:{wid:clickData.wid}}">
                 <div class="inner">进入店铺</div>
               </router-link>

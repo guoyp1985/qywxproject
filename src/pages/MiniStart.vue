@@ -5,8 +5,8 @@
         <input type='checkbox' id="sidemenu" @click="onlayer" />
         <div class="aside">
             <div class="sideul">
-                <div class="txtgxh active" @click="getTogxh">聚客365</div>
-                <div class="txtgxk">聚客365</div>
+                <div class="txtgxh active" @click="getTogxh">共销客</div>
+                <div class="txtgxk">共销客</div>
             </div>
         </div>
         <div class='wrap'>
@@ -40,7 +40,7 @@
             <li v-for="item in slogens" :key="item.id">{{item}}</li>
           </ul>
           <img src="../assets/images/mgxk.jpg" />
-          <div class="txtFont">长按识别聚客365小程序</div>
+          <div class="txtFont">长按识别共销客小程序</div>
           <!-- <a href="https://www.sharingsales.cn/#/centerSales"><button class="animation">免费入驻<div class="sweep-light"></div></button></a> -->
         </div>
     </div>
@@ -77,7 +77,7 @@ export default{
         skillImg: 'https://tossharingsales.boka.cn/start/skill1.png',
         phone1: 'https://tossharingsales.boka.cn/start/gxk/skill1phone1.png',
         phone2: 'https://tossharingsales.boka.cn/start/gxk/skill1phone2.png',
-        skillMore: '新用户进群群主发红包答谢，发送的红包无法控制领取过的用户不再领取。聚客365小程序自动识别新用户身份，为新用户发放入群福利。'
+        skillMore: '新用户进群群主发红包答谢，发送的红包无法控制领取过的用户不再领取。共销客小程序自动识别新用户身份，为新用户发放入群福利。'
       }, {
         especial: true,
         skillTitle: '邀请进群有福利',
@@ -92,7 +92,7 @@ export default{
         skillImg: 'https://tossharingsales.boka.cn/start/skill3.png',
         phone1: 'https://tossharingsales.boka.cn/start/gxk/skill3phone1.png',
         phone2: 'https://tossharingsales.boka.cn/start/gxk/skill3phone2.png',
-        skillMore: '利用“返点客”发展裂变群，培养一个300人的返点客群，每位返点客建立一个300人的微信群，卖家即可拥有300*300=90000个潜在客户，通过聚客365轻松管理裂变群。'
+        skillMore: '利用“返点客”发展裂变群，培养一个300人的返点客群，每位返点客建立一个300人的微信群，卖家即可拥有300*300=90000个潜在客户，通过共销客轻松管理裂变群。'
       }, {
         skillTitle: '个人影响力全新打造',
         skillIntro: '与其让用户了解产品，不如先让用户了解你',
@@ -183,7 +183,7 @@ export default{
       let shareParams = {
         module: 'centerseller',
         moduleid: self.loginUser.uid,
-        title: '聚客365',
+        title: '共销客',
         desc: '微信群营销工具',
         photo: 'https://tossharingsales.boka.cn/start/gxk/intro.jpg',
         link: `${ENV.Host}/#/miniStart?share_uid=${self.loginUser.uid}`
