@@ -95,6 +95,7 @@
             <div class="profit-level b_bottom_after">
               <span>推荐人佣金</span>
               <x-input class="input" type="tel" v-model="submitData.superiorrate" placeholder="输入百分比，例如10%则填写10" ></x-input>
+              <div class="color-gray">%</div>
             </div>
             <div class="profit-level">
               <span>销售佣金</span>
