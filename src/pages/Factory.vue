@@ -78,7 +78,7 @@
       </div>
       <div v-if="!loginUser.isretailer" class="s-bottom list-shadow flex_center bg-white pl12 pr12">
         <div class="align_center flex_center flex_cell">
-          <router-link class="flex_center btn-bottom-red" style="width:85%;" to="/centerSales">入驻聚客365</router-link>
+          <router-link class="flex_center btn-bottom-red" style="width:85%;" to="/centerSales">入驻共销客</router-link>
         </div>
       </div>
     </template>

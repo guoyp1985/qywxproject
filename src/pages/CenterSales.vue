@@ -168,8 +168,8 @@ export default {
                   let shareParams = {
                     module: 'retailer',
                     moduleid: self.loginUser.uid,
-                    title: `${self.loginUser.linkman}邀请你一起入驻聚客365`,
-                    desc: '聚客365帮你解决微商创业难题',
+                    title: `${self.loginUser.linkman}邀请你一起入驻共销客`,
+                    desc: '共销客帮你解决微商创业难题',
                     photo: self.loginUser.avatar,
                     link: `${ENV.Host}/#/centerSales?&share_uid=${self.loginUser.uid}`
                   }

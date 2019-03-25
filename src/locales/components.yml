@@ -706,7 +706,7 @@ zh-CN:
   tArticles: 新闻
   tEvaluation: 评价
   tRetailerSetting: 卖家信息设置
-  tUserproducts: 聚客365
+  tUserproducts: 共销客
   tAddActivity: 创建活动
   tAddProduct: 添加商品
   tRetailerGoodeazy: 易采集
@@ -828,7 +828,7 @@ zh-CN:
   Source of goods: 货源
   tRecommendProducts: 货源
   tFactoryOrderDetail: 订单详情
-  tRetailerAcademic: 聚客365商学院
+  tRetailerAcademic: 共销客商学院
   Academic title: 素材标题
   Academic share description placeholder: 如不填写自动截取素材内容
   Change price: 修改价格
@@ -836,8 +836,8 @@ zh-CN:
   Postage: 运费
   Product class: 商品类别
   Region: 地区
-  tCenterSeller: 聚客365
-  tCenterseller: 聚客365
+  tCenterSeller: 共销客
+  tCenterseller: 共销客
   Personal image: 个人形象
   Seller said: 卖家说
   Seller show: 卖家秀
@@ -861,14 +861,14 @@ zh-CN:
   Check Record API: 录音接口检查
   tTimeline: 客户行为
   tWxOpen: 提交审核
-  tStart: 聚客365
-  tMiniStart: 聚客365
+  tStart: 共销客
+  tMiniStart: 共销客
   tCardList: 我的优惠券
   My CardList: 我的优惠券
   tReceiveCard: 领取福利
   tPayment: 支付成功
-  Mini gxk: 聚客365
-  Mini gxh: 聚客365
+  Mini gxk: 共销客
+  Mini gxh: 共销客
   Retailer recommand: 我的推荐
   tAuthentication: 实名认证
   tRetailerRecommands: 我的推荐
