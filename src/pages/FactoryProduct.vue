@@ -128,6 +128,9 @@
           :on-close="closeShareSuccess">
         </share-success>
       </template>
+      <template v-if="showTip">
+        <tip-layer buttonTxt="立即申请" content="会员卖家才可代理厂家商品，赶快入住申请吧！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
+      </template>
     </template>
   </div>
 </template>
@@ -150,6 +153,7 @@ Another batch:
 <script>
 import { Previewer, Swiper, SwiperItem, TransferDom, Popup, XImg } from 'vux'
 import ShareSuccess from '@/components/ShareSuccess'
+import TipLayer from '@/components/TipLayer'
 import Sos from '@/components/Sos'
 import TitleTip from '@/components/TitleTip'
 import Time from '#/time'
@@ -164,7 +168,7 @@ export default {
     TransferDom
   },
   components: {
-    Previewer, Swiper, SwiperItem, Popup, ShareSuccess, Sos, XImg, TitleTip, OpenVip
+    Previewer, Swiper, SwiperItem, Popup, ShareSuccess, Sos, XImg, TitleTip, OpenVip, TipLayer
   },
   filters: {
     dateformat: function (value) {
@@ -203,7 +207,8 @@ export default {
       levelNameData: {},
       topcss: '',
       showVideo: true,
-      playVideo: false
+      playVideo: false,
+      showTip: false
     }
   },
   watch: {
@@ -266,6 +271,22 @@ export default {
     },
     filterEmot (text) {
       return this.$util.emotPrase(text)
+    },
+    closeTip () {
+      this.showTip = false
+    },
+    toApply () {
+      if (this.query.from) {
+        let webquery = encodeURIComponent(`id=${this.query.id}`)
+        this.$wechat.miniProgram.redirectTo({url: `/pages/vip?weburl=factoryProduct&webquery=${webquery}`})
+      } else {
+        let backurl = `/factoryProduct?id=${this.query.id}`
+        if (this.query.from) {
+          backurl = `${backurl}&from=${this.query.from}`
+        }
+        backurl = encodeURIComponent(backurl)
+        this.$router.push({path: '/center', query: {backurl: backurl}})
+      }
     },
     toStore () {
       if (this.query.from) {
@@ -361,22 +382,10 @@ export default {
     },
     importEvent () {
       const self = this
-      if (self.loginUser.isretailer === 2) {
-        self.$vux.loading.show()
-        this.$http.get(`${ENV.BokaApi}/api/list/product?from=retailer`, {
-          params: { pagestart: 0, limit: 5 }
-        }).then(res => {
-          self.$vux.loading.hide()
-          const data = res.data
-          const retdata = data.data ? data.data : data
-          if (retdata.length < 5) {
-            self.importProduct()
-          } else {
-            self.openVip()
-          }
-        })
-      } else if (self.loginUser.isretailer === 1) {
-        self.importProduct()
+      if (!this.loginUser.isretailer || !this.loginUser.retailerinfo.moderate) {
+        this.showTip = true
+      } else {
+        this.importProduct()
       }
     },
     openVip () {

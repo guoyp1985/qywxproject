@@ -106,6 +106,9 @@ export default {
         } else {
           self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
         }
+      } else if (self.query.backurl) {
+        let backurl = decodeURIComponent(self.query.backurl)
+        this.$router.push(backurl)
       } else {
         self.initContainer()
         self.showCenter = true
