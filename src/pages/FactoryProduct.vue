@@ -381,7 +381,6 @@ export default {
       })
     },
     importEvent () {
-      const self = this
       if (!this.loginUser.isretailer || !this.loginUser.retailerinfo.moderate) {
         this.showTip = true
       } else {
