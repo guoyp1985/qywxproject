@@ -206,6 +206,7 @@
 <script>
 import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Popup, CheckIcon, XInput, Search, Radio } from 'vux'
 import Time from '#/time'
+import ENV from 'env'
 let self = {}
 let pageStart1 = 0
 let limit = 20
@@ -287,7 +288,7 @@ export default {
         return false
       }
       self.$vux.loading.show()
-      self.$http.post(`http://wechat.boka.cn/api/open/bindTester`, {
+      self.$http.post(`${ENV.BokaApi}/api/open/bindTester`, {
         appid: self.appid, wechatId: self.testerWechatId
       }).then(function (res) {
         self.$vux.loading.hide()
@@ -311,7 +312,7 @@ export default {
     },
     getQRCode () {
       self.$vux.loading.show()
-      self.$http.post(`http://wechat.boka.cn/api/open/getQRCode`, {
+      self.$http.post(`${ENV.BokaApi}/api/open/getQRCode`, {
         appid: self.appid
       }).then(function (res) {
         self.$vux.loading.hide()
@@ -383,7 +384,7 @@ export default {
     },
     confirmFactoryPopup () {
       this.$vux.loading.show()
-      this.$http.post(`http://wechat.boka.cn/api/open/bindFactory`, {
+      this.$http.post(`${ENV.BokaApi}/api/open/bindFactory`, {
         appid: this.appid,
         fid: this.selectedFactory.id
       }).then(res => {
@@ -409,7 +410,7 @@ export default {
     getFactory () {
       const self = this
       const params = { pagestart: pageStart1, limit: limit }
-      this.$http.get(`http://wechat.boka.cn/api/factory/list`, {
+      this.$http.get(`${ENV.BokaApi}/api/factory/list`, {
         params: params
       })
       .then(res => {
@@ -436,7 +437,7 @@ export default {
     },
     uploadFile (item) {
       self.$vux.loading.show()
-      self.$http.post(`http://wechat.boka.cn/api/open/commitTemplate`, {
+      self.$http.post(`${ENV.BokaApi}/api/open/commitTemplate`, {
         appid: self.appid,
         templateid: item.template_id
       }).then(res => {
@@ -451,7 +452,7 @@ export default {
       })
     },
     getAuthInfo () {
-      self.$http.get(`http://wechat.boka.cn/api/open/getAuthInfo`, {
+      self.$http.get(`${ENV.BokaApi}/api/open/getAuthInfo`, {
         params: {appid: self.appid}
       }).then(res => {
         if (res) {
@@ -478,7 +479,7 @@ export default {
         self.showContainer = true
         self.getAuthInfo()
       } else {
-        self.$http.get(`http://wechat.boka.cn/api/open/getAuthAppId`, {
+        self.$http.get(`${ENV.BokaApi}/api/open/getAuthAppId`, {
           params: {authcode: self.query.auth_code}
         }).then(function (res) {
           let data = res.data
@@ -493,7 +494,7 @@ export default {
           }
         })
       }
-      self.$http.get(`http://wechat.boka.cn/api/open/getTemplates`).then(function (res) {
+      self.$http.get(`${ENV.BokaApi}/api/open/getTemplates`).then(function (res) {
         let data = res.data
         self.developmentData = data.data ? data.data : data
         self.disDevelopmentData = true
