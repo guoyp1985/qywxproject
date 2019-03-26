@@ -69,7 +69,7 @@ export default {
     clickAuth () {
       const self = this
       self.$vux.loading.show()
-      self.$http.get(`${ENV.BokaApi}/api/open/getPreAuthorizationUrl`, {
+      self.$http.get(`http://wechat.boka.cn/api/open/getPreAuthorizationUrl`, {
         params: {url: `${ENV.Host}/#/mpSetting`}
       }).then(res => {
         self.$vux.loading.hide()
