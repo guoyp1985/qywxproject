@@ -260,8 +260,11 @@ export default {
       self.$util.scrollEvent({
         element: scrollArea,
         callback: function () {
+          console.log('in handlescroll')
+          console.log(pageStart1)
           switch (this.selectedIndex) {
             case 0:
+              console.log('in case 0 zhuangtai')
               if (self.tabData1.length === (pageStart1 + 1) * limit) {
                 pageStart1++
                 self.$vux.loading.show()
@@ -269,6 +272,7 @@ export default {
               }
               break
             case 1:
+              console.log('in case 1 zhuangtai')
               if (self.tabData2.length === (pageStart2 + 1) * limit) {
                 pageStart2++
                 self.$vux.loading.show()

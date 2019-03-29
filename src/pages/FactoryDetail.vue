@@ -418,6 +418,7 @@ export default {
             this.previewerPhotoarr = this.previewerPhotoarr.concat(cur.photoarr)
             this.wxPhotoArr = this.wxPhotoArr.concat(cur.photoarr)
           }
+          this.contentArr[i].content = this.contentArr[i].content.replace(/\n/g, '<br />')
         }
         if (this.previewerPhotoarr.length) {
           this.previewerPhotoarr = this.$util.previewerImgdata(this.previewerPhotoarr)
