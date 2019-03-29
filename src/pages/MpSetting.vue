@@ -1,10 +1,12 @@
 <template>
 <div class="containerarea mpsetting font14">
-  <template v-if="showContainer">
+  <!-- <template v-if="!showContainer">
     <template v-if="!haveAppid">
       <div class="w_100 h_100 flex_center font18">授权过期，请重新授权</div>
     </template>
-    <template v-else>
+    <template v-else> -->
+  <template>
+    <template>
       <div class="pagetop">
         <tab v-model="selectedIndex" class="b-tab">
           <tab-item :selected="selectedIndex == 0">开发管理</tab-item>
