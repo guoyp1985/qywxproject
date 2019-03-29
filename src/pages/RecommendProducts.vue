@@ -165,5 +165,6 @@ export default {
     height: 20px;
   }
   .t-icon{position:absolute;left:0;top:10px;border-top-right-radius:20px;border-bottom-right-radius:20px;background-color:#fff;padding:5px 10px 5px 5px;font-size:12px;}
+  .v-tab .vux-tab-container .vux-tab-selected{border-bottom-style:solid !important;}
 }
 </style>
