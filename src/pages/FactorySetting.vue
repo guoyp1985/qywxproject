@@ -24,7 +24,7 @@
         </div>
         <div class="item" style="padding-left:0;padding-right:0;" v-for="(item,index) in contentArr" :key="index">
           <form enctype="multipart/form-data">
-            <input :ref="`fileInput${index}`" class="hide" type="file" name="files" @change="fileChange('contentphoto',`fileInput${index}`)" />
+            <input :ref="`fileInput${index}`" multiple="multiple" class="hide" type="file" name="files" @change="fileChange('contentphoto',`fileInput${index}`)" />
           </form>
           <div class="b_bottom_after pb5 pl10 pr10 db-flex">
             <div class="flex_cell flex_left">厂家介绍 {{index+1}}</div>
