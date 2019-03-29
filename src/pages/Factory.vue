@@ -262,7 +262,8 @@ export default {
         callback: function () {
           console.log('in handlescroll')
           console.log(pageStart1)
-          switch (this.selectedIndex) {
+          console.log(self.selectedIndex)
+          switch (self.selectedIndex) {
             case 0:
               console.log('in case 0 zhuangtai')
               if (self.tabData1.length === (pageStart1 + 1) * limit) {
