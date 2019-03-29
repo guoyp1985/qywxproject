@@ -5,10 +5,10 @@
     <template v-if="showContainer">
       <div class="s-container">
         <form ref="fileForm" enctype="multipart/form-data">
-          <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange('fileForm', 'photo')" />
+          <input ref="fileInput" multiple="multiple" class="hide" type="file" name="files" @change="fileChange('fileForm', 'photo')" />
         </form>
         <form ref="fileForm1" enctype="multipart/form-data">
-          <input ref="fileInput1" class="hide" type="file" name="files" @change="fileChange('fileForm1', 'contentphoto')" />
+          <input ref="fileInput1" multiple="multiple" class="hide" type="file" name="files" @change="fileChange('fileForm1', 'contentphoto')" />
         </form>
         <div class="list-shadow01">
           <div class="form-item no-after pt15 bg-gray10">
@@ -418,17 +418,21 @@ export default {
       const target = event.target
       const files = target.files
       if (files.length > 0) {
-        let fileForm = target.parentNode
-        if (type === 'video') {
-          fileForm = target.parentNode.parentNode
+          for (var i = 0; i < files.length; i++) {
+          let fileForm = target.parentNode
+          if (type === 'video') {
+            fileForm = target.parentNode.parentNode
+          }
+          const filedata = new FormData(fileForm)
+          console.log('图片：')
+          console.log(filedata)
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
+            let data = res.data
+            self.$vux.loading.hide()
+            self.photoCallback(data, type)
+          })
         }
-        const filedata = new FormData(fileForm)
-        self.$vux.loading.show()
-        self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
-          let data = res.data
-          self.$vux.loading.hide()
-          self.photoCallback(data, type)
-        })
       }
     },
     deletephoto (item, index, type) {
