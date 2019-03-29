@@ -34,7 +34,7 @@
                 </div>
               </div>
               <div v-else v-for="(item,index1) in contentArr" :key="index1">
-                <div class="padding10">{{item.content}}</div>
+                <div class="padding10" v-html="item.content"></div>
                 <div class="flex_center" v-for="(photo,index2) in item.photoarr" :key="index2">
                   <img :src="photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" @click="viewBigImg(index2,index1)"/>
                 </div>
