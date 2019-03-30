@@ -781,8 +781,9 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 .emptyitem .t-table .t-cell{height:100%;vertical-align:middle;text-align:center;font-size:14px;color:#999;}
 
 .scrollend{position:relative;padding-bottom:100px;}
+/*
 .scrollendarea.scrollend:after {
-    content: "";
+    content: "共销客";
     position: absolute;
     bottom: 0;
     left: 0;
@@ -794,6 +795,20 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
     background-repeat: no-repeat;
     background-position: center;
     background-size: 136px 47px;
+}
+*/
+
+.scrollendarea.scrollend:before {
+    content: "共销客";
+    position: absolute;top: 20px;left: 0;right: 0;height: 30px;
+    text-align: center;color: #D6D6D8;
+		display:flex;justify-content: center; align-items: center;
+}
+.scrollendarea.scrollend:after {
+    content: "-- 社交电商2.0 --";
+    position: absolute;bottom: 20px;left: 0;right: 0;height: 30px;
+    text-align: center;color: #D6D6D8;
+		display:flex;justify-content: center; align-items: center;
 }
 
 .x-checker .ck-item {
