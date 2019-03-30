@@ -313,7 +313,7 @@ export default {
     getData1 () {
       const self = this
       self.$http.get(`${ENV.BokaApi}/api/list/factoryproduct`, {
-        params: { fid: self.query.id, pageStart: pageStart1, limit: limit }
+        params: { fid: self.query.id, pagestart: pageStart1, limit: limit }
       }).then(function (res) {
         const data = res.data
         self.$vux.loading.hide()
@@ -328,7 +328,7 @@ export default {
     getData2 () {
       const self = this
       self.$http.get(`${ENV.BokaApi}/api/list/factorynews`, {
-        params: { fid: self.query.id, pageStart: pageStart2, limit: limit }
+        params: { fid: self.query.id, pagestart: pageStart2, limit: limit }
       }).then(function (res) {
         const data = res.data
         self.$vux.loading.hide()
