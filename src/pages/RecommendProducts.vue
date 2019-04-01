@@ -1,6 +1,7 @@
 <template>
   <div class="containerarea columnarea bg-white font14 notop nobottom rproducts">
     <tab class="w_100 v-tab">
+      <tab-item selected @on-item-click="allItemClick">全部</tab-item>
       <tab-item v-for="(item,index) in classData" :selected="selectedIndex == index" :key="index"  @on-item-click="onItemClick">{{item.title}}</tab-item>
     </tab>
     <div class="column-content" style="overflow-y:auto;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
@@ -125,6 +126,17 @@ export default {
         self.productData = []
         self.getData1()
       }
+    },
+    allItemClick () {
+      self.$http.post(`${ENV.BokaApi}/api/list/factoryproduct?orderby=saled`, {
+        pagestart: pageStart, limit: limit
+      }).then(function (res) {
+        self.$vux.loading.hide()
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        self.productData = self.productData.concat(retdata)
+        self.disProductData = true
+      })
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})

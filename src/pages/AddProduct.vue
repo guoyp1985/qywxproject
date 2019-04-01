@@ -5,10 +5,10 @@
     <template v-if="showContainer">
       <div class="s-container">
         <form ref="fileForm" enctype="multipart/form-data">
-          <input ref="fileInput" multiple="multiple" class="hide" type="file" name="files" @change="fileChange('fileForm', 'photo')" />
+          <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange('fileForm', 'photo')" />
         </form>
         <form ref="fileForm1" enctype="multipart/form-data">
-          <input ref="fileInput1" multiple="multiple" class="hide" type="file" name="files" @change="fileChange('fileForm1', 'contentphoto')" />
+          <input ref="fileInput1" class="hide" type="file" name="files" @change="fileChange('fileForm1', 'contentphoto')" />
         </form>
         <div class="list-shadow01">
           <div class="form-item no-after pt15 bg-gray10">
@@ -349,7 +349,8 @@ export default {
         seotitle: '',
         seodescription: '',
         video: '',
-        allowcard: false
+        allowcard: false,
+        imgData: []
       }
       this.photoarr = []
       this.photoarr1 = []
@@ -417,7 +418,6 @@ export default {
       const self = this
       const target = event.target
       const files = target.files
-      console.log(files)
       if (files.length > 0) {
         let fileForm = target.parentNode
         if (type === 'video') {
