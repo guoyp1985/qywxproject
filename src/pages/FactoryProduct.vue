@@ -466,7 +466,11 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.loginUser = User.get()
+      this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
+        const data = res.data
+        this.loginUser = data
+        User.set(data)
+      })
       this.initData()
       this.query = this.$route.query
       this.getData()
