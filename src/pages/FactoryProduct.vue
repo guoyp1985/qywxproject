@@ -277,7 +277,7 @@ export default {
     },
     toApply () {
       if (this.query.from) {
-        let webquery = encodeURIComponent(`id=${this.query.id}`)
+        let webquery = encodeURIComponent(`id=${this.query.id}&from=${this.query.from}`)
         this.$wechat.miniProgram.redirectTo({url: `/pages/vip?weburl=factoryProduct&webquery=${webquery}`})
       } else {
         let backurl = `/factoryProduct?id=${this.query.id}`
