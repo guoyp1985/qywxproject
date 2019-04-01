@@ -260,8 +260,12 @@ export default {
       self.$util.scrollEvent({
         element: scrollArea,
         callback: function () {
-          switch (this.selectedIndex) {
+          console.log('in handlescroll')
+          console.log(pageStart1)
+          console.log(self.selectedIndex)
+          switch (self.selectedIndex) {
             case 0:
+              console.log('in case 0 zhuangtai')
               if (self.tabData1.length === (pageStart1 + 1) * limit) {
                 pageStart1++
                 self.$vux.loading.show()
@@ -269,6 +273,7 @@ export default {
               }
               break
             case 1:
+              console.log('in case 1 zhuangtai')
               if (self.tabData2.length === (pageStart2 + 1) * limit) {
                 pageStart2++
                 self.$vux.loading.show()
@@ -308,7 +313,7 @@ export default {
     getData1 () {
       const self = this
       self.$http.get(`${ENV.BokaApi}/api/list/factoryproduct`, {
-        params: { fid: self.query.id, pageStart: pageStart1, limit: limit }
+        params: { fid: self.query.id, pagestart: pageStart1, limit: limit }
       }).then(function (res) {
         const data = res.data
         self.$vux.loading.hide()
@@ -323,7 +328,7 @@ export default {
     getData2 () {
       const self = this
       self.$http.get(`${ENV.BokaApi}/api/list/factorynews`, {
-        params: { fid: self.query.id, pageStart: pageStart2, limit: limit }
+        params: { fid: self.query.id, pagestart: pageStart2, limit: limit }
       }).then(function (res) {
         const data = res.data
         self.$vux.loading.hide()
