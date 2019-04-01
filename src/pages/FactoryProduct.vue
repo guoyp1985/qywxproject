@@ -277,7 +277,7 @@ export default {
     },
     toApply () {
       if (this.query.from) {
-        let webquery = encodeURIComponent(`id=${this.query.id}`)
+        let webquery = encodeURIComponent(`id=${this.query.id}&from=${this.query.from}`)
         this.$wechat.miniProgram.redirectTo({url: `/pages/vip?weburl=factoryProduct&webquery=${webquery}`})
       } else {
         let backurl = `/factoryProduct?id=${this.query.id}`
@@ -466,7 +466,11 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.loginUser = User.get()
+      this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
+        const data = res.data
+        this.loginUser = data
+        User.set(data)
+      })
       this.initData()
       this.query = this.$route.query
       this.getData()
