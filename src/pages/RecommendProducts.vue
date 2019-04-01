@@ -50,7 +50,7 @@ import ENV from 'env'
 import Time from '#/time'
 
 let self = this
-const limit = 10
+const limit = 30
 let pageStart = 0
 
 export default {
@@ -130,7 +130,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       if (!self.classData.length) {
-        self.$http.get(`${ENV.BokaApi}/api/list/productclass?ascdesc=asc`).then(function (res) {
+        self.$http.get(`${ENV.BokaApi}/api/list/productclass?ascdesc=asc`, { params: { pagestart: pageStart, limit: limit } }).then(function (res) {
           self.$vux.loading.hide()
           const data = res.data
           const retdata = data.data ? data.data : data
