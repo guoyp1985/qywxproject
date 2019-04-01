@@ -58,7 +58,8 @@ var ENV = {
   allowVipFee: true,
   UidArr: [1, 2, 9],
   FactoryManagerUid: 9,
-  SuggestFid: 2
+  SuggestFid: 2,
+  AppHomePage: '/pages/wymh'
 }
 
 ENV.NoAccessUrls = [

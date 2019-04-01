@@ -195,7 +195,7 @@ export default {
   },
   methods: {
     toHome () {
-      this.$wechat.miniProgram.reLaunch({url: '/pages/index'})
+      this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage})
     },
     closeTipModal () {
       this.showTip = false
