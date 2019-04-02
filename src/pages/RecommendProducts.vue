@@ -1,7 +1,7 @@
 <template>
   <div class="containerarea columnarea bg-white font14 notop nobottom rproducts">
     <tab class="w_100 v-tab">
-      <tab-item selected @on-item-click="allItemClick">全部</tab-item>
+      <tab-item :selected="selectedIndex == -1" @on-item-click="allItemClick('all')">全部</tab-item>
       <tab-item v-for="(item,index) in classData" :selected="selectedIndex == index" :key="index"  @on-item-click="onItemClick">{{item.title}}</tab-item>
     </tab>
     <div class="column-content" style="overflow-y:auto;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">

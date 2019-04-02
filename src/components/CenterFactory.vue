@@ -209,8 +209,10 @@ export default {
   methods: {
     showToast () {
       let _this = this
-      _this.$vux.confirm.show({
-        title: '请联系管理员进行续费 ！'
+      _this.$vux.toast.show({
+        text: '请联系管理员进行续费',
+        type: 'text',
+        width: '220px'
       })
     },
     disJoinQrcode () {
