@@ -45,12 +45,12 @@
           </cell>
         </group>
         <grid class="pt10 pb10" :cols="4" :show-lr-borders="false" :show-vertical-dividers="false">
-          <grid-item label="朋友圈获客" @click.native="buttonClick('/friendRecommend')">
+          <grid-item label="朋友圈获客" @click.native="toLink('/friendRecommend')">
             <div slot="icon" class="circle-icon-bg rgba09 color-white flex_center mb10">
               <span class="al al-pengyouquan font20"></span>
             </div>
           </grid-item>
-          <grid-item v-if="showCenter" label="卖家中心" @click.native="buttonClick('/centerSales')">
+          <grid-item v-if="showCenter" label="卖家中心" @click.native="toLink('/centerSales')">
             <div slot="icon" class="circle-icon-bg rgba01 color-white flex_center mb10">
               <span class="al al-fuwu font20"></span>
             </div>
@@ -60,37 +60,37 @@
               <span class="al al-kehu1 font20"></span>
             </div>
           </grid-item>
-          <grid-item v-if="showManager" label="厂家管理" @click.native="buttonClick('/factoryManage')">
+          <grid-item v-if="showManager" label="厂家管理" @click.native="toLink('/factoryManage')">
             <div slot="icon" class="circle-icon-bg rgba06 color-white flex_center mb10">
               <span class="al al-guanlizhongxin1 font20"></span>
             </div>
           </grid-item>
-          <grid-item label="我的地址" @click.native="buttonClick('/address')">
+          <grid-item label="我的地址" @click.native="toLink('/address')">
             <div slot="icon" class="circle-icon-bg rgba02 color-white flex_center mb10">
               <span class="al al-wodedizhi font20"></span>
             </div>
           </grid-item>
-          <grid-item label="我的分享" @click.native="buttonClick('/share')">
+          <grid-item label="我的分享" @click.native="toLink('/share')">
             <div slot="icon" class="circle-icon-bg rgba03 color-white flex_center mb10">
               <span class="al al-ai-share font20"></span>
             </div>
           </grid-item>
-          <grid-item label="我的收藏" @click.native="buttonClick('/favorite')">
+          <grid-item label="我的收藏" @click.native="toLink('/favorite')">
             <div slot="icon" class="circle-icon-bg rgba04 color-white flex_center mb10">
               <span class="al al-qietu19 font20"></span>
             </div>
           </grid-item>
-          <grid-item label="我的优惠券" @click.native="buttonClick('/cardList')">
+          <grid-item label="我的优惠券" @click.native="toLink('/cardList')">
             <div slot="icon" class="circle-icon-bg rgba07 color-white flex_center mb10">
               <span class="al al-tubiaozhizuomoban font20"></span>
             </div>
           </grid-item>
-          <grid-item label="群群推" @click.native="buttonClick('/roomList')">
+          <grid-item label="群群推" @click.native="toLink('/roomList')">
             <div slot="icon" class="circle-icon-bg rgba08 color-white flex_center mb10">
               <span class="al al-banjiqunliao font20"></span>
             </div>
           </grid-item>
-          <grid-item label="找群推广" @click.native="buttonClick('/rooms')">
+          <grid-item label="找群推广" @click.native="toLink('/rooms')">
             <div slot="icon" class="circle-icon-bg rgba07 color-white flex_center mb10">
               <span class="al al-shouhouwuyou font20"></span>
             </div>
@@ -179,7 +179,14 @@ export default {
       this.showManager = false
       this.showQuit = false
     },
-    buttonClick (link) {
+    buttonClick (btn) {
+      if (btn.link) {
+        this.$router.push({path: btn.link})
+      } else {
+        btn.react.call(this)
+      }
+    },
+    toLink (link) {
       this.$router.push({path: link})
     },
     clickManager () {
