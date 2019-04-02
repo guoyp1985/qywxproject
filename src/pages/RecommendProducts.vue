@@ -1,7 +1,6 @@
 <template>
   <div class="containerarea columnarea bg-white font14 notop nobottom rproducts">
     <tab class="w_100 v-tab">
-      <tab-item :selected="selectedIndex == -1" @on-item-click="allItemClick('all')">全部</tab-item>
       <tab-item v-for="(item,index) in classData" :selected="selectedIndex == index" :key="index"  @on-item-click="onItemClick">{{item.title}}</tab-item>
     </tab>
     <div class="column-content" style="overflow-y:auto;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
@@ -106,21 +105,11 @@ export default {
       })
     },
     getData1 () {
-      // self.$http.post(`${ENV.BokaApi}/api/retailer/recommendByFids`, {
-      self.$http.post(`${ENV.BokaApi}/api/list/factoryproduct?orderby=saled`, {
-        pagestart: pageStart, limit: limit, classid: self.classData[self.selectedIndex].id
-      }).then(function (res) {
-        self.$vux.loading.hide()
-        const data = res.data
-        const retdata = data.data ? data.data : data
-        self.productData = self.productData.concat(retdata)
-        self.disProductData = true
-      })
-    },
-    getAll () {
-      self.$http.post(`${ENV.BokaApi}/api/list/factoryproduct?orderby=saled`, {
-        pagestart: pageStart, limit: limit
-      }).then(function (res) {
+      let params = {pagestart: pageStart, limit: limit, orderby: 'saled'}
+      if (self.selectedIndex !== 0) {
+        params.classid = self.classData[self.selectedIndex].id
+      }
+      self.$http.post(`${ENV.BokaApi}/api/list/factoryproduct`, params).then(function (res) {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
@@ -129,6 +118,8 @@ export default {
       })
     },
     onItemClick (index) {
+      console.log('in onitemclick')
+      console.log(index)
       if (index !== self.selectedIndex) {
         self.selectedIndex = index
         pageStart = 0
@@ -140,11 +131,12 @@ export default {
     },
     allItemClick () {
       console.log('ALL DATA')
+      this.selectedIndex = -1
       pageStart = 0
       self.$vux.loading.show()
       self.disProductData = false
       self.productData = []
-      self.getAll()
+      self.getData1()
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
@@ -153,7 +145,8 @@ export default {
         self.$http.get(`${ENV.BokaApi}/api/list/productclass?ascdesc=asc`, { params: { pagestart: pageStart, limit: limit } }).then(function (res) {
           self.$vux.loading.hide()
           const data = res.data
-          const retdata = data.data ? data.data : data
+          let retdata = data.data ? data.data : data
+          retdata = [{title: '全部'}].concat(retdata)
           self.classData = retdata
           pageStart = 0
           self.$vux.loading.show()
