@@ -15,6 +15,7 @@
         <div class="txt-cell pl10">
           <div class="font17 color-white">{{ factoryInfo.title }}</div>
           <div class="font13 color-white mt5">{{ factoryInfo.summary }}</div>
+          <div class="font13 mt5" style="color:#f1f78f;" @click="showToast">厂家使用期至：2019-5-2</div>
         </div>
       </div>
       <div class="font0" style="position:absolute;top:20px;right:14px;height:35px;">
@@ -93,6 +94,13 @@
             </div>
           </grid-item>
         </div>
+        <div class="gridlist">
+          <grid-item label="权限管理" :link="{path:`/factoryUser?id=${factoryInfo.id}`}" style="position:relative;">
+            <div slot="icon">
+              <i class="al al-icon12345" style="font-size:30px;"></i>
+            </div>
+          </grid-item>
+        </div>
       </grid>
     </div>
     <group class="list-shadow02 order_list_show posi_r">
@@ -125,22 +133,6 @@
         </div>
       </cell>
     </group>
-    <div v-transfer-dom class="x-popup">
-      <popup v-model="showQrcode" height="100%">
-        <div class="popup1 font14">
-          <div class="popup-top flex_center">全职加盟码</div>
-          <div class="popup-middle padding10 border-box flex_center" style="bottom:86px;">
-            <img ref="joinQrcode" class="qrcode" style="max-width:100%;max-height:100%;" />
-          </div>
-          <div class="flex_center border-box pl10 pr10 color-red font12" style="position:absolute;left:0;right:0;bottom:46px;height:40px;">
-            <div>保存图片发送给好友，邀请加盟</div>
-          </div>
-          <div class="popup-bottom flex_center">
-            <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeQrcode">{{ $t('Close') }}</div>
-          </div>
-        </div>
-      </popup>
-    </div>
   </div>
 </template>
 
@@ -215,6 +207,14 @@ export default {
   watch: {
   },
   methods: {
+    showToast () {
+      let _this = this
+      _this.$vux.toast.show({
+        text: '请联系管理员进行续费',
+        type: 'text',
+        width: '220px'
+      })
+    },
     disJoinQrcode () {
       const self = this
       self.showQrcode = true

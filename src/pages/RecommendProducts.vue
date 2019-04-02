@@ -1,7 +1,7 @@
 <template>
   <div class="containerarea columnarea bg-white font14 notop nobottom rproducts">
     <tab class="w_100 v-tab">
-      <!-- <tab-item selected @on-item-click="allItemClick">全部</tab-item> -->
+      <tab-item :selected="selectedIndex == -1" @on-item-click="allItemClick('all')">全部</tab-item>
       <tab-item v-for="(item,index) in classData" :selected="selectedIndex == index" :key="index"  @on-item-click="onItemClick">{{item.title}}</tab-item>
     </tab>
     <div class="column-content" style="overflow-y:auto;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
@@ -117,6 +117,17 @@ export default {
         self.disProductData = true
       })
     },
+    getAll () {
+      self.$http.post(`${ENV.BokaApi}/api/list/factoryproduct?orderby=saled`, {
+        pagestart: pageStart, limit: limit
+      }).then(function (res) {
+        self.$vux.loading.hide()
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        self.productData = self.productData.concat(retdata)
+        self.disProductData = true
+      })
+    },
     onItemClick (index) {
       if (index !== self.selectedIndex) {
         self.selectedIndex = index
@@ -128,15 +139,12 @@ export default {
       }
     },
     allItemClick () {
-      self.$http.post(`${ENV.BokaApi}/api/list/factoryproduct?orderby=saled`, {
-        pagestart: pageStart, limit: limit
-      }).then(function (res) {
-        self.$vux.loading.hide()
-        const data = res.data
-        const retdata = data.data ? data.data : data
-        self.productData = self.productData.concat(retdata)
-        self.disProductData = true
-      })
+      console.log('ALL DATA')
+      pageStart = 0
+      self.$vux.loading.show()
+      self.disProductData = false
+      self.productData = []
+      self.getAll()
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
@@ -178,5 +186,6 @@ export default {
   }
   .t-icon{position:absolute;left:0;top:10px;border-top-right-radius:20px;border-bottom-right-radius:20px;background-color:#fff;padding:5px 10px 5px 5px;font-size:12px;}
   .v-tab .vux-tab-container .vux-tab-selected{border-bottom-style:solid !important;}
+  .scrollable .vux-tab-ink-bar{bottom:0 !important;}
 }
 </style>
