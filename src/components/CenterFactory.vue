@@ -15,7 +15,7 @@
         <div class="txt-cell pl10">
           <div class="font17 color-white">{{ factoryInfo.title }}</div>
           <div class="font13 color-white mt5">{{ factoryInfo.summary }}</div>
-          <div class="font13 color-red mt5" @click="showToast">厂家试用期至：2019-5-2</div>
+          <div class="font13 mt5" style="color:#f1f78f;" @click="showToast">厂家试用期至：2019-5-2</div>
         </div>
       </div>
       <div class="font0" style="position:absolute;top:20px;right:14px;height:35px;">
