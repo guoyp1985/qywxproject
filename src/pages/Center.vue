@@ -60,7 +60,7 @@
               <span class="al al-kehu1 font20"></span>
             </div>
           </grid-item>
-          <grid-item v-if="showManager" label="管理中心" @click.native="buttonClick('/factoryManage')">
+          <grid-item v-if="showManager" label="厂家管理" @click.native="buttonClick('/factoryManage')">
             <div slot="icon" class="circle-icon-bg rgba06 color-white flex_center mb10">
               <span class="al al-guanlizhongxin1 font20"></span>
             </div>
