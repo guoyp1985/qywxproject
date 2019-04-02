@@ -126,7 +126,7 @@
       </div>
       <div v-show="timeShow">
         <group class="x-datetime">
-          <datetime format="YYYY-MM-DD HH:mm" :show.sync="visibility2"></datetime>
+          <datetime format="YYYY-MM-DD HH:mm" v-model="time" :show.sync="visibility2" @on-confirm="saveSuess"></datetime>
         </group>
       </div>
     </template>
@@ -155,6 +155,7 @@ export default {
   },
   data () {
     return {
+      time: '2019-05-02 12:30',
       visibility2: false,
       timeShow: false,
       showSos: false,
@@ -174,6 +175,14 @@ export default {
     }
   },
   methods: {
+    saveSuess (e) {
+      let _this = this
+      _this.$vux.toast.show({
+        text: '保存成功！',
+        type: 'text',
+        width: '200px'
+      })
+    },
     showxdate2 () {
       this.visibility2 = true
       this.showPopup1 = false
