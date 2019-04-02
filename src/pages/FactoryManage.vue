@@ -56,6 +56,9 @@
                 <div class="inner" @click="clickPopup('set')">设置佣金</div>
               </div> -->
               <div class="item">
+                <div class="inner" @click="showxdate2">设置到期时间</div>
+              </div>
+              <div class="item">
                 <div class="inner" @click="clickPopup('edit')">编辑</div>
               </div>
               <div class="item">
@@ -121,6 +124,11 @@
           </div>
         </popup>
       </div>
+      <div v-show="timeShow">
+        <group class="x-datetime">
+          <datetime format="YYYY-MM-DD HH:mm" :show.sync="visibility2"></datetime>
+        </group>
+      </div>
     </template>
   </div>
 </template>
@@ -131,7 +139,7 @@ Add factory:
 </i18n>
 
 <script>
-import { TransferDom, Popup, Confirm, CheckIcon, XImg } from 'vux'
+import { Group, Datetime, TransferDom, Popup, Confirm, CheckIcon, XImg } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
@@ -143,10 +151,12 @@ export default {
     TransferDom
   },
   components: {
-    Popup, Confirm, CheckIcon, XImg, Sos
+    Popup, Confirm, CheckIcon, XImg, Sos, Datetime, Group
   },
   data () {
     return {
+      visibility2: false,
+      timeShow: false,
       showSos: false,
       sosTitle: '抱歉，您暂无权限访问此页面！',
       showContainer: false,
@@ -164,6 +174,10 @@ export default {
     }
   },
   methods: {
+    showxdate2 () {
+      this.visibility2 = true
+      this.showPopup1 = false
+    },
     getPhoto (src) {
       return this.$util.getPhoto(src)
     },

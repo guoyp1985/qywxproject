@@ -47,19 +47,6 @@
               <!-- <div class="t-cell title-cell color-red v_middle font12 align_right" style="width:130px;">(必须为三位大写字母)</div> -->
             </div>
           </div>
-          <div class="form-item bg-white fg b-top">
-            <div class="t-table">
-              <div class="t-cell title-cell font14 v_middle w80">
-                <span>到期时间</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span>
-              </div>
-              <div class="t-cell input-cell v_middle" style="position:relative;">
-                <group class="x-datetime">
-                  <datetime format="YYYY-MM-DD HH:mm" :show.sync="visibility2" @on-change="datechange2" @on-cancel="datecancel2" @on-confirm="dateconfirm2"></datetime>
-                </group>
-                <div @click="showxdate2" class='font14 color-gray align_left' style="position:absolute;left:0;right:0;top:0;height:22px;background-color:transparent;z-index:10;">{{ selectdatetxt2 }}</div>
-              </div>
-            </div>
-          </div>
           <!--
           <div class="form-item">
             <div class="t-table">
@@ -172,8 +159,6 @@ export default {
   },
   data () {
     return {
-      selectdatetxt2: '选择结束时间',
-      visibility2: false,
       showSos: false,
       sosTitle: '抱歉，您暂无权限访问此页面！',
       showContainer: false,
@@ -207,18 +192,6 @@ export default {
     }
   },
   methods: {
-    datechange2 (val) {
-    },
-    showxdate2 () {
-      this.visibility2 = true
-    },
-    datecancel2 () {
-      this.submitdata.endtime = ''
-      this.selectdatetxt2 = '选择结束时间'
-    },
-    dateconfirm2 () {
-      this.selectdatetxt2 = ''
-    },
     clickTip () {
       this.showTip = true
     },

@@ -85,11 +85,12 @@ let factoryBtn = [
     name: 'Factory center',
     icon: 'al-kehu1',
     color: 'rgba05',
-    react: () => {
-      if (this.loginUser) {
-        
-      }
-    }
+    link: '/centerFactory'
+    // react: () => {
+    //   if (this.loginUser) {
+    //
+    //   }
+    // }
   }
 ]
 let manageBtn = [
