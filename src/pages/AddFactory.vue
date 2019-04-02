@@ -94,12 +94,12 @@
             <div class=""><span>分润比例设置</span><span @click="clickTip"><i class="al al-wenhao color-red ml5 font24" style="vertical-align:-4px;"></i></span></div>
             <div class="profit-level b_bottom_after">
               <span>推荐人佣金</span>
-              <x-input class="input" type="tel" v-model="submitData.superiorrate" placeholder="输入百分比，例如10%则填写10" ></x-input>
+              <x-input class="input" type="tel" v-model="submitData.superiorrate" placeholder="输入百分比，例如10%则填写10"></x-input>
               <div class="color-gray">%</div>
             </div>
             <div class="profit-level">
               <span>销售佣金</span>
-              <x-input class="input" type="tel" v-model="submitData.salesrate" placeholder="输入百分比，例如10%则填写10" ></x-input>
+              <x-input class="input" type="tel" v-model="submitData.salesrate" placeholder="输入百分比，例如10%则填写10"></x-input>
               <div class="color-gray">%</div>
             </div>
           </div>
@@ -166,7 +166,7 @@ export default {
       loginUser: {},
       infoData: {},
       allowsubmit: true,
-      submitData: { title: '', summary: '', shortcode: '', photo: '', superiorrate: '', salesrate: '' },
+      submitData: { title: '', summary: '', shortcode: '', photo: '', superiorrate: '20', salesrate: '80' },
       requireddata: { title: '' },
       classData: [],
       productClass: [],
@@ -285,15 +285,21 @@ export default {
         return false
       }
       postData.shortcode = postData.shortcode.toUpperCase()
+      let superiorrate = postData.superiorrate
+      let salesrate = postData.salesrate
       let reg = /^[1-9]\.?[0-9]*$/
       console.log('推荐卖家' + postData.superiorrate)
       console.log('卖家' + postData.salesrate)
-      if (postData.superiorrate !== 0 && !reg.test(postData.superiorrate)) {
+      if (superiorrate !== 0 && !reg.test(superiorrate)) {
         self.$vux.toast.text('请输入正确的分润比例', 'middle')
         return
       }
-      if (postData.salesrate !== 0 && !reg.test(postData.salesrate)) {
-        self.$vux.toast.text('请输入正确的分润比例1', 'middle')
+      if (salesrate !== 0 && !reg.test(salesrate)) {
+        self.$vux.toast.text('请输入正确的分润比例', 'middle')
+        return
+      }
+      if (parseFloat(superiorrate) + parseFloat(salesrate) > 100) {
+        self.$vux.toast.text('推荐佣金+销售佣金不能超过100', 'middle')
         return
       }
       if (!iscontinue) {
@@ -384,7 +390,7 @@ export default {
     },
     initData () {
       const self = this
-      self.submitData = { title: '', summary: '', shortcode: '', photo: '', superiorrate: '', salesrate: '' }
+      self.submitData = { title: '', summary: '', shortcode: '', photo: '', superiorrate: '20', salesrate: '80' }
       self.requireddata = { title: '' }
       self.disClassData = false
     },

@@ -200,9 +200,8 @@ export default {
       this.showSwiper = true
       if (this.query.type === 'buy') {
         this.selectedIndex = 1
-      } else {
-        this.swiperChange()
       }
+      this.swiperChange()
     }
   },
   activated () {
