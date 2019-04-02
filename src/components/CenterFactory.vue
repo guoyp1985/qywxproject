@@ -94,13 +94,13 @@
             </div>
           </grid-item>
         </div>
-        <div class="gridlist">
+        <!-- <div class="gridlist">
           <grid-item label="权限管理" :link="{path:`/factoryUser?id=${factoryInfo.id}`}" style="position:relative;">
             <div slot="icon">
               <i class="al al-icon12345" style="font-size:30px;"></i>
             </div>
           </grid-item>
-        </div>
+        </div> -->
       </grid>
     </div>
     <group class="list-shadow02 order_list_show posi_r">
