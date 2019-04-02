@@ -46,9 +46,9 @@
         <popup class="menuwrap" v-model="showPopup1">
           <div class="popup0">
             <div class="list" v-if="clickData">
-              <div class="item">
+              <!-- <div class="item">
                 <div class="inner" @click="clickPopup('push')">添加管理员</div>
-              </div>
+              </div> -->
               <div class="item">
                 <div class="inner" @click="clickPopup('manager')">管理员列表</div>
               </div>
@@ -75,22 +75,6 @@
         </popup>
       </div>
       <div v-transfer-dom class="x-popup">
-        <popup v-model="showQrcode" height="100%">
-          <div class="popup1 font14">
-            <div class="popup-top flex_center">设置管理员</div>
-            <div class="popup-middle padding10 border-box flex_center" style="bottom:86px;">
-              <img ref="adminQrcode" class="qrcode" style="max-width:100%;max-height:100%;" />
-            </div>
-            <div class="flex_center border-box pl10 pr10 color-red font12" style="position:absolute;left:0;right:0;bottom:46px;height:40px;">
-              <div>扫描二维码设置管理员</div>
-            </div>
-            <div class="popup-bottom flex_center">
-              <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeQrcode">{{ $t('Close') }}</div>
-            </div>
-          </div>
-        </popup>
-      </div>
-      <div v-transfer-dom class="x-popup">
         <popup v-model="showManager" height="100%">
           <div class="popup1 font14">
             <div class="popup-top flex_center">管理员</div>
@@ -112,8 +96,27 @@
                 </div>
               </div>
             </div>
-            <div class="popup-bottom flex_center">
+            <div class="popup-bottom flex_center" style="width:50%;">
               <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeManager">{{ $t('Close') }}</div>
+            </div>
+            <div class="popup-bottom flex_center" style="width:50%;left:50%;">
+              <div class="flex_cell h_100 flex_center bg-red color-white" @click="clickPopup1">添加管理员</div>
+            </div>
+          </div>
+        </popup>
+      </div>
+      <div v-transfer-dom class="x-popup">
+        <popup v-model="showQrcode" height="100%">
+          <div class="popup1 font14">
+            <div class="popup-top flex_center">设置管理员</div>
+            <div class="popup-middle padding10 border-box flex_center" style="bottom:86px;">
+              <img ref="adminQrcode" class="qrcode" style="max-width:100%;max-height:100%;" />
+            </div>
+            <div class="flex_center border-box pl10 pr10 color-red font12" style="position:absolute;left:0;right:0;bottom:46px;height:40px;">
+              <div>扫描二维码设置管理员</div>
+            </div>
+            <div class="popup-bottom flex_center">
+              <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeQrcode">{{ $t('Close') }}</div>
             </div>
           </div>
         </popup>
@@ -184,28 +187,30 @@ export default {
       this.clickData = item
       this.clickIndex = index
     },
+    clickPopup1 () {
+      const self = this
+      self.showPopup1 = false
+      self.showQrcode = true
+      self.$vux.loading.show()
+      self.$http.get(`${ENV.BokaApi}/api/factory/adminQRCode`, {
+        params: {fid: self.clickData.id}
+      }).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        if (data.flag === 1) {
+          let img = self.$refs.adminQrcode[0] ? self.$refs.adminQrcode[0] : self.$refs.adminQrcode
+          img.src = data.data
+        } else {
+          self.$vux.toast.show({
+            text: data.error,
+            time: self.$util.delay(data.error)
+          })
+        }
+      })
+    },
     clickPopup (key) {
       const self = this
-      if (key === 'push') {
-        self.showPopup1 = false
-        self.showQrcode = true
-        self.$vux.loading.show()
-        self.$http.get(`${ENV.BokaApi}/api/factory/adminQRCode`, {
-          params: {fid: self.clickData.id}
-        }).then(function (res) {
-          let data = res.data
-          self.$vux.loading.hide()
-          if (data.flag === 1) {
-            let img = self.$refs.adminQrcode[0] ? self.$refs.adminQrcode[0] : self.$refs.adminQrcode
-            img.src = data.data
-          } else {
-            self.$vux.toast.show({
-              text: data.error,
-              time: self.$util.delay(data.error)
-            })
-          }
-        })
-      } else if (key === 'manager') {
+      if (key === 'manager') {
         self.showPopup1 = false
         self.showManager = true
         self.$vux.loading.show()
