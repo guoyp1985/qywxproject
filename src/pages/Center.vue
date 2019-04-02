@@ -55,12 +55,12 @@
               <span class="al al-fuwu font20"></span>
             </div>
           </grid-item>
-          <grid-item label="厂家中心" @click.native="clickFactoryCenter">
+          <grid-item v-if="showFactory" label="厂家中心" @click.native="clickFactoryCenter">
             <div slot="icon" class="circle-icon-bg rgba05 color-white flex_center mb10">
               <span class="al al-kehu1 font20"></span>
             </div>
           </grid-item>
-          <grid-item label="管理中心" @click.native="buttonClick('/factoryManage')">
+          <grid-item v-if="showManager" label="厂家管理" @click.native="buttonClick('/factoryManage')">
             <div slot="icon" class="circle-icon-bg rgba06 color-white flex_center mb10">
               <span class="al al-guanlizhongxin1 font20"></span>
             </div>
@@ -167,6 +167,7 @@ export default {
       direct: '',
       loginUser: {},
       showCenter: false,
+      showFactory: false,
       showManager: false,
       showQuit: false
     }
@@ -174,6 +175,7 @@ export default {
   methods: {
     initData () {
       this.showCenter = false
+      this.showFactory = false
       this.showManager = false
       this.showQuit = false
     },
@@ -222,6 +224,9 @@ export default {
         self.loginUser = res.data
         User.set(self.loginUser)
         self.setUserInfo()
+        if (this.loginUser.fid > 0) {
+          this.showFactory = true
+        }
         for (let i = 0; i < self.loginUser.usergroup.length; i++) {
           if (this.loginUser.usergroup[i] === 1) {
             this.showManager = true
