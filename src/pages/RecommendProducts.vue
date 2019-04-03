@@ -105,7 +105,7 @@ export default {
       })
     },
     getData1 () {
-      let params = {pagestart: pageStart, limit: limit, orderby: 'saled'}
+      let params = {pagestart: pageStart, limit: limit, orderby: 'saled', from: 'origin'}
       if (self.selectedIndex !== 0) {
         params.classid = self.classData[self.selectedIndex].id
       }
