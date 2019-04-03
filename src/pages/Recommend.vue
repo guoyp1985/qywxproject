@@ -15,13 +15,13 @@
           <i class="al al-gantanhaozhong font20 v_middle"></i>
           <span class="v_middle">{{$t('Point Of Return')}}</span>
         </div>
-        <card @click.native="withdrawClick">
+        <card>
           <div slot="content" class="card-demo-flex card-demo-content01">
-            <div class="vux-1px-r">
+            <div class="vux-1px-r" @click="toRebateInfo(1)">
               <div class="color-red font18">{{ $t('RMB' )}}{{ rebateInfo.income }}</div>
               <div class="color-gray font14 mt5">{{$t('Total Amount')}}</div>
             </div>
-            <div class="vux-1px-r">
+            <div class="vux-1px-r" @click="toRebateInfo()">
               <div class="color-red font18">{{ $t('RMB' )}}{{ rebateInfo.torebate }}</div>
               <div class="color-gray font14 mt5">{{$t('Waiting To Rebate')}}</div>
             </div>
@@ -240,6 +240,16 @@ export default {
     }
   },
   methods: {
+    toRebateInfo (flag) {
+      let params = {}
+      if (flag) {
+        params.flag = flag
+      }
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/userRebateInfo', query: params})
+    },
     toRebateStore (item) {
       let params = {wid: item.uid}
       if (this.query.from) {
@@ -471,6 +481,9 @@ export default {
       let params = {}
       if (this.query.appid) {
         params.appid = this.query.appid
+      }
+      if (this.query.from) {
+        params.from = this.query.from
       }
       this.$router.push({path: '/userRevenue', query: params})
     },

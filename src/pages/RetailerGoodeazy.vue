@@ -3,17 +3,17 @@
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
-      <div class="s-topbanner s-topbanner1 bg-white">
+      <!-- <div class="s-topbanner s-topbanner1 bg-white">
         <div class="row">
           <tab v-model="selectedIndex" class="v-tab">
             <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
           </tab>
         </div>
-      </div>
-      <div class="s-container s-container1">
+      </div> -->
+      <div class="s-container s-container1" style="top:0;">
         <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
           <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
-            <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll1">
+            <!-- <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll1">
               <div class="font15 pt15 pl10 pr10">搜索关键词采集文章</div>
               <div class="font12 color-gray mt5 pl10 pr10">在搜索框内输入文章关键词，点击“搜索”按钮搜索相关文章后，即可预览或采集文章素材。</div>
               <div class="mb15" style="position:relative;">
@@ -66,8 +66,8 @@
                   </div>
                 </div>
               </div>
-            </div>
-            <div v-if="(index == 1)" class="swiper-inner scroll-container2">
+            </div> -->
+            <div class="swiper-inner scroll-container2">
               <div class="pl10 pr10">
                 <div class="font15 pt15">文章链接采集文章</div>
                 <div class="font12 color-gray mt5">请从微信公众号中复制文章链接，粘贴在文本框内，点击“采集”按钮，采集成功后即可编辑分享</div>
