@@ -220,7 +220,7 @@ export default {
       this.$router.push({name: 'tLogin'})
     },
     clickFactoryCenter () {
-      if (this.loginUser.factory_expired === 0) {
+      if (this.loginUser.factory_expired === 1) {
         this.showTip = true
       } else {
         this.$router.push('/centerFactory')
