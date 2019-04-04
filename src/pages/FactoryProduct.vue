@@ -102,7 +102,12 @@
           <div v-html="productdata.content"></div>
           <img v-for="(item,index) in previewerPhotoarr" :key="index" :src="item.src" @click="showBigimg(index)" />
         </div>
-        <div class="productarea scrollendarea scrollend" style="background-color:#f6f6f6;"></div>
+        <div class="productarea scrollendarea scrollend">
+          <div class="inner">
+            <div class="txt1">{{WeixinName}}</div>
+            <div class="txt2">-- 社交电商2.0 --</div>
+          </div>
+        </div>
       </div>
       <div v-if="loginUser.isretailer" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
         <div class="align_center flex_center flex_cell">
@@ -208,7 +213,8 @@ export default {
       topcss: '',
       showVideo: true,
       playVideo: false,
-      showTip: false
+      showTip: false,
+      WeixinName: ENV.WeixinName
     }
   },
   watch: {

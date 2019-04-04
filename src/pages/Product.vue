@@ -232,7 +232,12 @@
           <div v-html="productdata.content"></div>
           <img v-for="(item,index) in previewerPhotoarr" :key="index" :src="item.src" @click="showBigimg(index)" />
         </div>
-        <div class="productarea scrollendarea scrollend" style="background-color:#f6f6f6;"></div>
+        <div class="productarea scrollendarea scrollend">
+          <div class="inner">
+            <div class="txt1">{{WeixinName}}</div>
+            <div class="txt2">-- 社交电商2.0 --</div>
+          </div>
+        </div>
       </div>
   		<div class="pagebottom b_top_after" v-if="productdata.moderate != 1">
   			<div class="t-table h_100">
@@ -522,7 +527,8 @@ export default {
       pageStart2: 0,
       showMoreFriends: false,
       startcss: 'start',
-      showShareLayer: false
+      showShareLayer: false,
+      WeixinName: ENV.WeixinName
     }
   },
   watch: {

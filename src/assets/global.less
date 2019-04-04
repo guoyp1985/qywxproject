@@ -780,7 +780,21 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 .emptyitem .t-table{height:100%;}
 .emptyitem .t-table .t-cell{height:100%;vertical-align:middle;text-align:center;font-size:14px;color:#999;}
 
-.scrollend{position:relative;padding-bottom:100px;}
+.scrollend{
+	position:relative;padding-bottom:100px;background-color:#f6f6f6;
+	.inner{display:none;position:absolute;left:0;top:0;right:0;bottom:0;}
+	.txt1{
+		position: absolute;top: 20px;left: 0;right: 0;height: 30px;
+		text-align: center;color: #D6D6D8;
+		display:flex;justify-content: center; align-items: center;
+	}
+	.txt2{
+		position: absolute;bottom: 20px;left: 0;right: 0;height: 30px;
+    text-align: center;color: #D6D6D8;
+		display:flex;justify-content: center; align-items: center;
+	}
+}
+.scrollend.scrollend .inner{display:block;}
 /*
 .scrollendarea.scrollend:after {
     content: "共销客";
@@ -796,7 +810,6 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
     background-position: center;
     background-size: 136px 47px;
 }
-*/
 
 .scrollendarea.scrollend:before {
     content: "共销客";
@@ -810,6 +823,7 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
     text-align: center;color: #D6D6D8;
 		display:flex;justify-content: center; align-items: center;
 }
+*/
 
 .x-checker .ck-item {
   display:inline-block;
