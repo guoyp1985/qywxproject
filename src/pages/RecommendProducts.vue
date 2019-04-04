@@ -142,7 +142,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       if (!self.classData.length) {
-        self.$http.get(`${ENV.BokaApi}/api/list/productclass?ascdesc=asc`, { params: { pagestart: pageStart, limit: limit } }).then(function (res) {
+        self.$http.get(`${ENV.BokaApi}/api/list/productclass?ascdesc=asc`, { params: { pagestart: pageStart, limit: 500 } }).then(function (res) {
           self.$vux.loading.hide()
           const data = res.data
           let retdata = data.data ? data.data : data
