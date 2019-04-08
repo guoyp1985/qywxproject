@@ -5,10 +5,10 @@
     <template v-if="showContainer">
       <div class="s-container">
         <form ref="fileForm" enctype="multipart/form-data">
-          <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange('fileForm', 'photo')" />
+          <input ref="fileInput" class="hide" type="file" multiple="multiple" name="files" @change="fileMulChange('fileForm', 'photo')" />
         </form>
         <form ref="fileForm1" enctype="multipart/form-data">
-          <input ref="fileInput1" class="hide" type="file" name="files" @change="fileChange('fileForm1', 'contentphoto')" />
+          <input ref="fileInput1" class="hide" type="file" multiple="multiple" name="files" @change="fileMulChange('fileForm1', 'contentphoto')" />
         </form>
         <div class="list-shadow01">
           <div class="form-item no-after pt15 bg-gray10">
@@ -424,13 +424,48 @@ export default {
           fileForm = target.parentNode.parentNode
         }
         const filedata = new FormData(fileForm)
-        console.log('选中的文件')
-        console.log(filedata)
         self.$vux.loading.show()
         self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
           self.$vux.loading.hide()
           let data = res.data
           self.photoCallback(data, type)
+        })
+      }
+    },
+    fileMulChange (refname, type) {
+      const self = this
+      const target = event.target
+      const files = target.files
+      if (files.length > 0) {
+        let filedata = new FormData()
+        for (let i = 0; i < files.length; i++) {
+          filedata.append(`files[${i}]`, files[i])
+        }
+        self.$vux.loading.show()
+        self.$http.post(`${ENV.BokaApi}/api/uploadFiles`, filedata).then(function (res) {
+          self.$vux.loading.hide()
+          let data = res.data
+          if (data.flag === 1) {
+            let retdata = data.data
+            if (type === 'photo' && self.photoarr.length < self.maxnum) {
+              let allowNum = self.maxnum - self.photoarr.length
+              let addNum = retdata.length > allowNum ? allowNum : retdata.length
+              let addData = retdata.slice(0, addNum)
+              self.photoarr = self.photoarr.concat(addData)
+              self.submitdata.photo = self.photoarr.join(',')
+            } else if (type === 'contentphoto' && self.photoarr1.length < self.maxnum1) {
+              let allowNum = self.maxnum1 - self.photoarr1.length
+              let addNum = retdata.length > allowNum ? allowNum : retdata.length
+              let addData = retdata.slice(0, addNum)
+              self.photoarr1 = self.photoarr1.concat(addData)
+              self.submitdata.contentphoto = self.photoarr1.join(',')
+            }
+          } else if (data.error) {
+            self.$vux.toast.show({
+              text: data.error,
+              time: self.$util.delay(data.error)
+            })
+          }
         })
       }
     },
