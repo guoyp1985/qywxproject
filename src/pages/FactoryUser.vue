@@ -3,10 +3,9 @@
     <div class="manage-item">
       <div class="item-title"><span class="members-count">高级管理员</span></div>
       <div class="member">
-        <div class="member-info" @click="toggleOpeManger">
-          <img class="avatar" :src="manager.avatar"/>
-          <span class="username">{{manager.username}}</span>
-          <div class="ope-btn">...</div>
+        <div class="member-info">
+          <img class="avatar" :src="loginUser.avatar"/>
+          <span class="username">{{loginUser.username}}</span>
         </div>
       </div>
       <div class="tip-message" v-if="tipMessageShow1"><span>无高级管理员</span></div>
@@ -161,15 +160,6 @@ export default {
       }
       this.ordinaryUser[index].checked = !this.ordinaryUser[index].checked
     },
-    toggleOpeManger (index) {
-      for (var i = 0; i < this.seniorUser.length; i++) {
-        if (i !== index && this.seniorUser[i].checked) {
-          this.seniorUser[i].checked = false
-          break
-        }
-      }
-      this.seniorUser[index].checked = !this.seniorUser[index].checked
-    },
     disManger (setuid, index) {
       let _this = this
       _this.$vux.confirm.show({
@@ -271,13 +261,12 @@ export default {
       })
     }
   },
-  created () {
+  activated () {
     console.log(this.$route)
     this.id = this.$route.query.id
+    console.log('厂商ID:')
+    console.log(this.id)
     this.getMembers()
-  },
-  activated () {
-    this.refresh()
   }
 }
 </script>
