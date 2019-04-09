@@ -12,7 +12,7 @@
             <previewer :list="factoryInfo.photoArr" ref="previewer"></previewer>
           </div>
         </div>
-        <div class="txt-cell pl10">
+        <div class="txt-cell pl10" style="padding-right:40px;">
           <div class="font17 color-white">{{ factoryInfo.title }}</div>
           <div class="font13 color-white mt5">{{ factoryInfo.summary }}</div>
           <div class="font13 mt5" style="color:#f1f78f;" @click="showToast">厂家使用期至：{{endTime}}</div>
