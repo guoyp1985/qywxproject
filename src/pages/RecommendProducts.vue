@@ -120,7 +120,6 @@ export default {
     onItemClick (index) {
       console.log('in onitemclick')
       console.log(index)
-      this.indexId = index
       if (index !== self.selectedIndex) {
         self.selectedIndex = index
         pageStart = 0
