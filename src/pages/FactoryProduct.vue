@@ -86,7 +86,7 @@
         </template>
         <div class="bg-page" style="height:10px;"></div>
         <div class="b_top_after"></div>
-        <div class="padding10 b_bottom_after">
+        <div class="padding10 b_bottom_after" @click="tofactoryDetail">
           <div class="t-table">
     				<div class="t-cell v_middle w70" v-if="factoryinfo.photo && factoryinfo.photo != ''">
               <img class="v_middle imgcover" style="width:60px;height:60px;" :src="factoryinfo.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
@@ -274,6 +274,9 @@ export default {
       this.previewerFlasharr = []
       this.ingdata = []
       this.messages = 0
+    },
+    tofactoryDetail () {
+      this.$router.push('/factoryDetail')
     },
     filterEmot (text) {
       return this.$util.emotPrase(text)

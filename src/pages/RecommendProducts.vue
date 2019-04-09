@@ -4,16 +4,16 @@
       <tab-item v-for="(item,index) in classData" :selected="selectedIndex == index" :key="index"  @on-item-click="onItemClick">{{item.title}}</tab-item>
     </tab>
     <div class="column-content" style="overflow-y:auto;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
-      <div v-if="disProductData" class="pb10">
+      <div class="pb10">
         <template v-if="selectedIndex == 0">
           <div>
             <search
               class="v-search bg-white"
-              v-model='searchword1'
+              v-model='searchword'
               :auto-fixed="autofixed"
-              @on-submit="onSubmit1"
-              @on-change="onChange1"
-              @on-cancel="onCancel1"
+              @on-submit="onSubmit"
+              @on-change="onChange"
+              @on-cancel="onCancel"
               ref="search">
             </search>
           </div>
@@ -91,7 +91,7 @@ export default {
       showTips: false,
       defaultTab: [{title: '为你推荐'}, {title: '全部'}],
       autofixed: false,
-      searchword1: '',
+      searchword: '',
       datecss: 'down',
       pricecss: 'down',
       sort: 'date'
@@ -103,19 +103,19 @@ export default {
     }
   },
   methods: {
-    onChange1 (val) {
-      this.searchword1 = val
+    onChange (val) {
+      this.searchword = val
     },
-    onCancel1 () {
+    onCancel () {
       const self = this
-      self.searchword1 = ''
+      self.searchword = ''
       self.$vux.loading.show()
       self.disProductData = false
       self.productData = []
       pageStart = 0
       self.getData1()
     },
-    onSubmit1 () {
+    onSubmit () {
       const self = this
       self.$vux.loading.show()
       self.disProductData = false
@@ -181,6 +181,12 @@ export default {
       if (self.selectedIndex > this.defaultTab.length - 1) {
         params.classid = self.classData[self.selectedIndex].id
       } else if (type === 'sort') {
+      } else {
+      }
+      if (this.selectedIndex === 0) {
+        if (this.searchword !== '') {
+          params.keyword = this.searchword
+        }
       }
       self.$http.post(`${ENV.BokaApi}/api/list/factoryproduct`, params).then(function (res) {
         self.$vux.loading.hide()
@@ -194,6 +200,7 @@ export default {
       console.log('in onitemclick')
       console.log(index)
       if (index !== self.selectedIndex) {
+        this.searchword = ''
         self.selectedIndex = index
         pageStart = 0
         self.$vux.loading.show()
