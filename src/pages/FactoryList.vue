@@ -198,6 +198,8 @@ export default {
             this.disTabData1 = false
             this.tabData1 = []
             this.getData1()
+          } else {
+            this.$vux.loading.hide()
           }
         }
       }

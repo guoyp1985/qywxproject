@@ -54,7 +54,7 @@
     <div v-if="showModal" class="modal-layer flex_center">
       <div class="modal">
         <div class="txt1 pb10">生成优惠码</div>
-        <div class="mt10">数量:<input type="number" v-model="quantity"/>个</div>
+        <div class="mt10 flex_left"><span>数量:</span><x-input class="input flex_cell" type="number" v-model="quantity"></x-input><span>个</span></div>
         <div class="font12 mt5 ml20"><span style="color:red;">*</span>每个优惠码{{codefee}}元</div>
         <div class="bom mt25">
           <div class="close" @click="btnclose">取消</div>
@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, TransferDom } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, TransferDom, XInput } from 'vux'
 import ENV from 'env'
 import Time from '#/time'
 import { User } from '#/storage'
@@ -90,7 +90,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, TipButtonLayer
+    Tab, TabItem, Swiper, SwiperItem, TipButtonLayer, XInput
   },
   data () {
     return {
@@ -294,7 +294,8 @@ export default {
   position:relative;z-index:1;border-radius:10px;
 }
 .concession .modal .txt1{text-align:center;border-bottom:1px solid #e5e5e5;}
-.concession .modal input{width:150px;height:25px;border:1px solid #e5e5e5;border-radius:5px;margin-left:10px;margin-right:5px;padding:5px;box-sizing: border-box;}
+.concession .modal .input{width:150px;height:25px;border:1px solid #e5e5e5;border-radius:5px;margin-left:10px;margin-right:5px;padding:5px;box-sizing: border-box;}
+.concession .modal .input:before{display:none;}
 .concession .modal .bom{display:flex;flex-direction:row;}
 .concession .modal .close{width:100px;height:30px;background-color:#e5e5e5;text-align:center;line-height:30px;border-radius:5px;margin:0 auto;}
 
