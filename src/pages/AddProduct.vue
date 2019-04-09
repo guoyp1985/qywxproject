@@ -349,8 +349,7 @@ export default {
         seotitle: '',
         seodescription: '',
         video: '',
-        allowcard: false,
-        imgData: []
+        allowcard: false
       }
       this.photoarr = []
       this.photoarr1 = []
