@@ -306,7 +306,7 @@ export default {
         allowcard: false
       },
       allowsubmit: true,
-      requireddata: { title: '', 'price': '', 'storage': '', 'unit': '', 'postage': '', 'photo': '' },
+      requireddata: {'photo': '', classid: '', title: '', 'price': '', 'storage': '', 'unit': '', 'postage': ''},
       showRebate: false,
       classData: [],
       submitIng: false
@@ -349,8 +349,7 @@ export default {
         seotitle: '',
         seodescription: '',
         video: '',
-        allowcard: false,
-        imgData: []
+        allowcard: false
       }
       this.photoarr = []
       this.photoarr1 = []
@@ -488,25 +487,20 @@ export default {
     savedata (postdata) {
       const self = this
       if (!self.submitIng) {
-        if (self.classData.length && !parseInt(self.submitdata.classid)) {
-          self.$vux.toast.text('必填项不能为空', 'middle')
+        if (self.$util.trim(postdata.photo) === '') {
+          self.$vux.toast.text('请先上传封面图像', 'middle')
           return false
         }
-        let validateData = []
-        for (let key in self.requireddata) {
-          let v = {}
-          v[key] = self.submitdata[key]
-          validateData.push(v)
+        if (self.classData.length && !parseInt(postdata.classid)) {
+          self.$vux.toast.text('请选择商品类别', 'middle')
+          return false
         }
-        let iscontinue = self.$util.validateQueue(validateData,
-          model => {
-            switch (model.key) {
-              default:
-                self.$vux.toast.text('必填项不能为空', 'middle')
-            }
-          }
-        )
-        if (!iscontinue) {
+        if (self.$util.trim(postdata.title) === '') {
+          self.$vux.toast.text('请输入商品名称', 'middle')
+          return false
+        }
+        if (self.$util.trim(postdata.price) === '') {
+          self.$vux.toast.text('请输入商品价格', 'middle')
           return false
         }
         let price = postdata.price.toString().replace(/,/g, '')
@@ -519,9 +513,21 @@ export default {
           self.$vux.toast.text('请输入正确的价格', 'middle')
           return false
         }
+        if (self.$util.trim(postdata.storage) === '') {
+          self.$vux.toast.text('请输入商品库存', 'middle')
+          return false
+        }
+        if (self.$util.trim(postdata.unit) === '') {
+          self.$vux.toast.text('请输入商品单位', 'middle')
+          return false
+        }
         let reg = new RegExp('[0-9]+')
         if (postdata.unit !== '' && reg.test(postdata.unit)) {
           self.$vux.toast.text('请输入正确的单位', 'middle')
+          return false
+        }
+        if (self.$util.trim(postdata.postage) === '') {
+          self.$vux.toast.text('请输入运费', 'middle')
           return false
         }
         if (!isNaN(rebate)) {
