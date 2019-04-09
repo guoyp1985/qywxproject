@@ -3,6 +3,34 @@
     <tab class="w_100 v-tab">
       <tab-item v-for="(item,index) in classData" :selected="selectedIndex == index" :key="index"  @on-item-click="onItemClick">{{item.title}}</tab-item>
     </tab>
+    <!-- <div v-if="indexId == 0" class="w_100">
+      <search
+        class="v-search bg-white"
+        v-model='searchword1'
+        :auto-fixed="autofixed"
+        @on-submit="onSubmit1"
+        @on-change="onChange1"
+        @on-cancel="onCancel1"
+        ref="search">
+      </search>
+      <div class="condition font14 pl12 pr12 bg-white border-box color-lightgray">
+        <div class="t-table w_100 orderbyarea">
+          <div :class="`t-cell v_middle orderbyitem ${dateClass}`" @click="dateOrder">
+            最新上架
+            <span v-if="`${dateClass}` === 'active'" class="ico"></span>
+            <span v-else class="al al-paixu font14"></span>
+          </div>
+          <div v-if="disAreaOrder" :class="`t-cell v_middle orderbyitem ${areaClass}`" @click="areaOrder">
+            <div class="clamp1">
+              <span class="v_middle">利润最高</span>
+              <span class="v_middle font12" v-if="selectedArea">( {{selectedArea}} )</span>
+              <span v-if="`${areaClass}` === 'active'" class="ico"></span>
+              <span v-else class="al al-paixu font14"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
     <div class="column-content" style="overflow-y:auto;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
       <!--
       <div class="pro_box bg-page list_shadow pl12 pr12 pb15">
@@ -15,7 +43,7 @@
       <div v-if="disProductData" class="productlist squarepic pb10">
         <div v-if="productData.length == 0" class="emptyitem flex_center align_center w_100">该分类下暂无货源数据</div>
         <div v-else @click="toFProduct(item)" v-for="(item,index) in productData" :key="index" class="bk-productitem scroll_item font14 db ">
-      		<div class="inner list-shadow">
+          <div class="inner list-shadow">
       			<div class="picarea">
       				<div class="pic">
                 <img class="imgcover" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
@@ -45,7 +73,7 @@ Apply join:
 </i18n>
 
 <script>
-import { Tab, TabItem } from 'vux'
+import { Tab, TabItem, Search } from 'vux'
 import ENV from 'env'
 import Time from '#/time'
 
@@ -55,7 +83,7 @@ let pageStart = 0
 
 export default {
   components: {
-    Tab, TabItem
+    Tab, TabItem, Search
   },
   filters: {
     dateformat: function (value) {
@@ -70,7 +98,14 @@ export default {
       productData: [],
       classData: [],
       selectedIndex: 0,
-      showTips: false
+      showTips: false,
+      indexId: 0,
+      searchword1: '',
+      autofixed: false,
+      dateClass: 'active',
+      areaClass: '',
+      selectedArea: null,
+      disAreaOrder: false
     }
   },
   watch: {
@@ -79,6 +114,55 @@ export default {
     }
   },
   methods: {
+    removeOrderActive () {
+      const self = this
+      self.dateClass = self.dateClass.replace(' active', '').replace('active', '')
+      self.areaClass = self.areaClass.replace(' active', '').replace('active', '')
+      self.sexClass = self.sexClass.replace(' active', '').replace('active', '')
+    },
+    areaOrder () {
+      this.showPopupArea = true
+      this.removeOrderActive()
+      this.areaClass = 'active'
+    },
+    dateOrder () {
+      const self = this
+      self.selectedArea = null
+      self.selectedSex = null
+      if (self.dateClass.indexOf('active') < 0) {
+        self.removeOrderActive()
+        self.dateClass = 'active'
+        self.orderbyParams = { orderby: 'dateline' }
+      } else {
+        self.removeOrderActive()
+        self.dateClass = ''
+        self.orderbyParams = {}
+      }
+      self.pagestart1 = 0
+      self.distabdata1 = false
+      self.tabdata1 = []
+      self.getData1()
+    },
+    onSubmit1 () {
+      const self = this
+      self.$vux.loading.show()
+      self.distabdata1 = false
+      self.tabdata1 = []
+      self.pagestart1 = 0
+      self.getData1()
+    },
+    onChange1 (val) {
+      this.searchword1 = val
+    },
+    onCancel1 () {
+      const self = this
+      self.searchword1 = ''
+      self.$vux.loading.show()
+      self.distabdata1 = false
+      self.tabdata1 = []
+      self.pagestart1 = 0
+      self.getData1()
+    },
     toFProduct (item) {
       let params = {id: item.id}
       if (this.query.id) {
@@ -120,6 +204,7 @@ export default {
     onItemClick (index) {
       console.log('in onitemclick')
       console.log(index)
+      this.indexId = index
       if (index !== self.selectedIndex) {
         self.selectedIndex = index
         pageStart = 0
@@ -180,5 +265,8 @@ export default {
   .t-icon{position:absolute;left:0;top:10px;border-top-right-radius:20px;border-bottom-right-radius:20px;background-color:#fff;padding:5px 10px 5px 5px;font-size:12px;}
   .v-tab .vux-tab-container .vux-tab-selected{border-bottom-style:solid !important;}
   .scrollable .vux-tab-ink-bar{bottom:0 !important;}
+  .rproducts .orderbyitem.active .ico:after{
+    content: '▼';font-size:12px;margin-left:5px;
+  }
 }
 </style>
