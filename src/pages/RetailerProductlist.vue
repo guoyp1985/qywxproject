@@ -1,6 +1,9 @@
 <template>
   <div class="containerarea bg-page font14 s-havebottom rproductlist">
-    <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
+    <tab class="w_100 v-tab">
+      <tab-item v-for="(item,index) in classData" :selected="selectedIndex == index" :key="index"  @on-item-click="onItemClick">{{item.title}}</tab-item>
+    </tab>
+    <div class="s-container scroll-container" style="top:50px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
       <template v-if="disproductdata">
         <template v-if="!productdata || productdata.length == 0">
           <div class="scroll_list">
@@ -209,7 +212,7 @@ Back go shop:
 </i18n>
 
 <script>
-import { TransferDom, Popup, Confirm, CheckIcon, XImg } from 'vux'
+import { TransferDom, Popup, Confirm, CheckIcon, XImg, Tab, TabItem } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 
@@ -221,7 +224,7 @@ export default {
     TransferDom
   },
   components: {
-    Popup, Confirm, CheckIcon, XImg
+    Popup, Confirm, CheckIcon, XImg, Tab, TabItem
   },
   data () {
     return {
@@ -236,6 +239,8 @@ export default {
         { key: 'stat', title: '统计' },
         { key: 'createposter', title: '生成海报' }
       ],
+      selectedIndex: 0,
+      classData: [{title: '上架商品'}, {title: '厂商商品'}, {title: '下架商品'}],
       showpopup1: false,
       clickdata: {},
       clickindex: 0,
@@ -262,6 +267,33 @@ export default {
     }
   },
   methods: {
+    onItemClick (index) {
+      const self = this
+      console.log('in onitemclick')
+      console.log(index)
+      // if (index !== self.selectedIndex) {
+      //   self.selectedIndex = index
+      //   pageStart1 = 0
+      //   self.$vux.loading.show()
+      //   self.getData1()
+      // }
+      if (index === 0) {
+        pageStart1 = 0
+        self.productdata = []
+        self.$vux.loading.show()
+        self.getData1()
+      } else if (index === 1) {
+        pageStart1 = 0
+        self.productdata = []
+        self.$vux.loading.show()
+        self.getData3()
+      } else {
+        pageStart1 = 0
+        self.productdata = []
+        self.$vux.loading.show()
+        self.getData2()
+      }
+    },
     toUpdate () {
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/factory/fastImportFactoryProduct`, {
@@ -567,12 +599,42 @@ export default {
     },
     getData1 () {
       const self = this
-      const params = { params: { pagestart: pageStart1, limit: limit } }
-      this.$http.get(`${ENV.BokaApi}/api/list/product?from=retailer`, params)
+      const params = { params: { moderate: 1, pagestart: pageStart1, limit: limit } }
+      this.$http.get(`${ENV.BokaApi}/api/list/product?from=retailernew`, params)
       .then(res => {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
+        console.log('返回类型：')
+        console.log(retdata)
+        self.productdata = self.productdata.concat(retdata)
+        self.disproductdata = true
+      })
+    },
+    getData2 () {
+      const self = this
+      const params = { params: { moderate: 0, pagestart: pageStart1, limit: limit } }
+      this.$http.get(`${ENV.BokaApi}/api/list/product?from=retailernew`, params)
+      .then(res => {
+        self.$vux.loading.hide()
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        console.log('返回类型：')
+        console.log(retdata)
+        self.productdata = self.productdata.concat(retdata)
+        self.disproductdata = true
+      })
+    },
+    getData3 () {
+      const self = this
+      const params = { params: { agent: 1, pagestart: pageStart1, limit: limit } }
+      this.$http.get(`${ENV.BokaApi}/api/list/product?from=retailernew`, params)
+      .then(res => {
+        self.$vux.loading.hide()
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        console.log('返回类型：')
+        console.log(retdata)
         self.productdata = self.productdata.concat(retdata)
         self.disproductdata = true
       })
@@ -593,6 +655,7 @@ export default {
       this.$vux.loading.show()
       pageStart1 = 0
       this.getData1()
+      // this.getData2()
     }
   },
   created () {
