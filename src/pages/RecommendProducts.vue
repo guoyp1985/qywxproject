@@ -4,34 +4,52 @@
       <tab-item v-for="(item,index) in classData" :selected="selectedIndex == index" :key="index"  @on-item-click="onItemClick">{{item.title}}</tab-item>
     </tab>
     <div class="column-content" style="overflow-y:auto;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
-      <!--
-      <div class="pro_box bg-page list_shadow pl12 pr12 pb15">
-        <div class="pro_list_top bg-page color-lightgray pt10 pb10 pl12 pr12"></div>
-        <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white" style="margin-top: -4px;">
-          <div>选择你想要产品去分销吧</div>
-        </div>
-      </div>
-    -->
-      <div v-if="disProductData" class="productlist squarepic pb10">
-        <div v-if="productData.length == 0" class="emptyitem flex_center align_center w_100">该分类下暂无货源数据</div>
-        <div v-else @click="toFProduct(item)" v-for="(item,index) in productData" :key="index" class="bk-productitem scroll_item font14 db ">
-          <div class="inner list-shadow">
-      			<div class="picarea">
-      				<div class="pic">
-                <img class="imgcover" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-                <div class="t-icon color-theme">佣金: {{$t('RMB')}}{{item.levelagent}}</div>
+      <div class="pb10">
+        <template v-if="selectedIndex == 0">
+          <div>
+            <search
+              class="v-search bg-white"
+              v-model='searchword'
+              :auto-fixed="autofixed"
+              @on-submit="onSubmit"
+              @on-change="onChange"
+              @on-cancel="onCancel"
+              ref="search">
+            </search>
+          </div>
+          <div class="b_top_after pt10 pb10">
+            <div class="flex_center">
+              <div :class="`flex_cell flex_center b_right_after sort-icon ${sort == 'date' ? 'active' : ''}`" @click="sortEvent('date')">
+                <div class="txt">最新上架<span :class="`al sort ${datecss}`"></span></div>
               </div>
-      			</div>
-      			<div class="desbox" style="overflow:hidden;">
-      				<div class="align_left pl5 pr5 clamp2 distitle" style="line-height:18px;height:36px;">{{ item.title }}</div>
-      				<div class="clamp1">
-      					<div class="flex_table padding5">
-      						<span class="color-red font14 flex_cell" style="overflow: hidden;margin-right: 10px;white-space: nowrap;text-overflow: ellipsis;">{{ $t('RMB') }} <span style="margin-left:1px;">{{ item.price }}</span></span>
-      						<span class="color-gray">{{ $t('Saled txt') }}:<span style="margin-left:1px;">{{ item.saled }}</span></span>
-      					</div>
-      				</div>
-      			</div>
-      		</div>
+              <div :class="`flex_cell flex_center sort-icon ${sort == 'price' ? 'active' : ''}`" @click="sortEvent('price')">
+                <div class="txt">利润最高<span :class="`al sort ${pricecss}`"></span></div>
+              </div>
+            </div>
+          </div>
+          <div class="b_top_after"></div>
+        </template>
+        <div v-if="disProductData" class="productlist squarepic">
+          <div v-if="productData.length == 0" class="emptyitem flex_center align_center w_100">该分类下暂无货源数据</div>
+          <div v-else @click="toFProduct(item)" v-for="(item,index) in productData" :key="index" class="bk-productitem scroll_item font14 db ">
+        		<div class="inner list-shadow">
+        			<div class="picarea">
+        				<div class="pic">
+                  <img class="imgcover" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+                  <div class="t-icon color-theme">佣金: {{$t('RMB')}}{{item.levelagent}}</div>
+                </div>
+        			</div>
+        			<div class="desbox" style="overflow:hidden;">
+        				<div class="align_left pl5 pr5 clamp2 distitle" style="line-height:18px;height:36px;">{{ item.title }}</div>
+        				<div class="clamp1">
+        					<div class="flex_table padding5">
+        						<span class="color-red font14 flex_cell" style="overflow: hidden;margin-right: 10px;white-space: nowrap;text-overflow: ellipsis;">{{ $t('RMB') }} <span style="margin-left:1px;">{{ item.price }}</span></span>
+        						<span class="color-gray">{{ $t('Saled txt') }}:<span style="margin-left:1px;">{{ item.saled }}</span></span>
+        					</div>
+        				</div>
+        			</div>
+        		</div>
+          </div>
         </div>
         <div class="font12 color-gray" style="text-align: center;width: 100%;margin-top:10px;" v-if="showTips">没有更多商品啦！</div>
       </div>
@@ -45,7 +63,7 @@ Apply join:
 </i18n>
 
 <script>
-import { Tab, TabItem } from 'vux'
+import { Tab, TabItem, Search } from 'vux'
 import ENV from 'env'
 import Time from '#/time'
 
@@ -55,7 +73,7 @@ let pageStart = 0
 
 export default {
   components: {
-    Tab, TabItem
+    Tab, TabItem, Search
   },
   filters: {
     dateformat: function (value) {
@@ -70,7 +88,13 @@ export default {
       productData: [],
       classData: [],
       selectedIndex: 0,
-      showTips: false
+      showTips: false,
+      defaultTab: [{title: '为你推荐'}, {title: '全部'}],
+      autofixed: false,
+      searchword: '',
+      datecss: 'down',
+      pricecss: 'down',
+      sort: 'date'
     }
   },
   watch: {
@@ -79,6 +103,54 @@ export default {
     }
   },
   methods: {
+    onChange (val) {
+      this.searchword = val
+    },
+    onCancel () {
+      const self = this
+      self.searchword = ''
+      self.$vux.loading.show()
+      self.disProductData = false
+      self.productData = []
+      pageStart = 0
+      self.getData1()
+    },
+    onSubmit () {
+      const self = this
+      self.$vux.loading.show()
+      self.disProductData = false
+      self.productData = []
+      pageStart = 0
+      self.getData1()
+    },
+    sortEvent (type) {
+      if (type === 'date') {
+        if (this.sort === 'date') {
+          if (this.datecss === 'down') {
+            this.datecss = 'up'
+          } else {
+            this.datecss = 'down'
+          }
+        } else {
+          this.sort = 'date'
+        }
+      } else {
+        if (this.sort === 'price') {
+          if (this.pricecss === 'down') {
+            this.pricecss = 'up'
+          } else {
+            this.pricecss = 'down'
+          }
+        } else {
+          this.sort = 'price'
+        }
+      }
+      this.$vux.loading.show()
+      this.disProductData = false
+      this.productData = []
+      pageStart = 0
+      this.getData1('sort')
+    },
     toFProduct (item) {
       let params = {id: item.id}
       if (this.query.id) {
@@ -104,10 +176,17 @@ export default {
         }
       })
     },
-    getData1 () {
+    getData1 (type) {
       let params = {pagestart: pageStart, limit: limit, orderby: 'saled', from: 'origin'}
-      if (self.selectedIndex !== 0) {
+      if (self.selectedIndex > this.defaultTab.length - 1) {
         params.classid = self.classData[self.selectedIndex].id
+      } else if (type === 'sort') {
+      } else {
+      }
+      if (this.selectedIndex === 0) {
+        if (this.searchword !== '') {
+          params.keyword = this.searchword
+        }
       }
       self.$http.post(`${ENV.BokaApi}/api/list/factoryproduct`, params).then(function (res) {
         self.$vux.loading.hide()
@@ -121,6 +200,7 @@ export default {
       console.log('in onitemclick')
       console.log(index)
       if (index !== self.selectedIndex) {
+        this.searchword = ''
         self.selectedIndex = index
         pageStart = 0
         self.$vux.loading.show()
@@ -129,24 +209,15 @@ export default {
         self.getData1()
       }
     },
-    allItemClick () {
-      console.log('ALL DATA')
-      this.selectedIndex = -1
-      pageStart = 0
-      self.$vux.loading.show()
-      self.disProductData = false
-      self.productData = []
-      self.getData1()
-    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       if (!self.classData.length) {
-        self.$http.get(`${ENV.BokaApi}/api/list/productclass?ascdesc=asc`, { params: { pagestart: pageStart, limit: 500 } }).then(function (res) {
+        self.$http.get(`${ENV.BokaApi}/api/list/productclass?ascdesc=asc`, { params: { pagestart: pageStart, limit: 500 } }).then((res) => {
           self.$vux.loading.hide()
           const data = res.data
           let retdata = data.data ? data.data : data
-          retdata = [{title: '全部'}].concat(retdata)
+          retdata = this.defaultTab.concat(retdata)
           self.classData = retdata
           pageStart = 0
           self.$vux.loading.show()
@@ -180,5 +251,16 @@ export default {
   .t-icon{position:absolute;left:0;top:10px;border-top-right-radius:20px;border-bottom-right-radius:20px;background-color:#fff;padding:5px 10px 5px 5px;font-size:12px;}
   .v-tab .vux-tab-container .vux-tab-selected{border-bottom-style:solid !important;}
   .scrollable .vux-tab-ink-bar{bottom:0 !important;}
+  .sort-icon.active{color:#ff6a61;}
+  .sort-icon{
+    .txt{
+      width:86px;text-align:left;position:relative;
+      .al{position:absolute;right:0;top:50%;}
+      .sort.down{margin-top:-25px;}
+      .sort.up{margin-top:-22px;}
+    }
+    .sort.down:before {content: "\e7d4";}
+    .sort.up:before {content: "\e7d5";}
+  }
 }
 </style>
