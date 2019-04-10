@@ -7,17 +7,20 @@
   <div id="chat-room" class="font14">
     <template v-if="allowChat || loginUser.isretailer === 1">
       <div style="opacity:0;position:absolute;z-index:-1;" class="copy_txt">{{clickMsgItem.content}}</div>
-      <div v-if="retailerInfo.uid && showTip" ref="topTipArea" class="db-flex w_100 border-box padding10 bg-white b_bottom_after font13 color-gray" @click="toStore" style="color:inherit;">
+      <div v-if="retailerInfo.uid && showTip" ref="topTipArea" class="db-flex w_100 border-box padding10 bg-white b_bottom_after font13 color-gray" style="color:inherit;">
         <div class="flex_left" style="width:70px;">
           <img class="v_middle imgcover" style="width:60px;height:60px;" :src="retailerInfo.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
         </div>
         <div class="flex_cell flex_left">
           <div class="w_100">
             <div class="clamp2">{{ retailerInfo.title }}</div>
+            <div class="flex_left" @click="clickQrcode">
+              <span class="al al-erweima1 font14 color-black"></span>
+            </div>
             <div class="clamp2 color-gray font12 mt5">全部宝贝: {{ retailerInfo.productcount }}件</div>
           </div>
         </div>
-        <div class="flex_right" style="width:80px;">
+        <div class="flex_right" style="width:80px;" @click="toStore">
           <div class="qbtn4 color-orange5 font12 border-color-orange5" style="padding: 1px 8px;">进店逛逛</div>
         </div>
       </div>
@@ -217,6 +220,19 @@
           </div>
         </popup>
       </div>
+      <div class="auto-modal flex_center qrcode-modal" v-if="showQrcodeModal">
+        <div class="modal-inner border-box" style="width:80%;">
+          <div class="flex_center b_bottom_after padding10 bold font16">识别二维码加卖家微信</div>
+          <div class="flex_center padding10">
+            <div class="w_100">
+              <img :src="retailerInfo.qrcode" style="max-width:100%;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+            </div>
+          </div>
+          <div class="close-area flex_center" @click="closeQrcodeModal">
+            <i class="al al-close"></i>
+          </div>
+        </div>
+      </div>
     </template>
   </div>
 </template>
@@ -285,7 +301,8 @@ export default {
       allowChat: false,
       retailerInfo: {},
       bottomPos: 0,
-      clickMsgItem: {}
+      clickMsgItem: {},
+      showQrcodeModal: false
     }
   },
   filters: {
@@ -305,6 +322,12 @@ export default {
     }
   },
   methods: {
+    clickQrcode () {
+      this.showQrcodeModal = true
+    },
+    closeQrcodeModal () {
+      this.showQrcodeModal = false
+    },
     copyTxt (item) {
       console.log('拷贝方法')
       console.log(this)
