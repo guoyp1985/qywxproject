@@ -82,7 +82,7 @@
         <div class="popup0">
           <div class="list" v-if="clickdata">
             <div class="item" v-if="clickdata.activityid == 0">
-              <router-link class="inner" :to="{path: '/retailerActivitylist', query: {id: clickdata.id, type: 'add'}}">创建活动</router-link>
+              <div class="inner" @click="clickpopup('activity')">创建活动</div>
             </div>
             <div class="item" v-if="clickdata.activityid == 0">
               <div v-if="clickdata.fpid > 0" class="inner" @click="clickpopup('fee')">设置返点佣金</div>
@@ -501,6 +501,23 @@ export default {
         self.showFeePopup = true
         self.feeData = self.clickdata
         self.postFee = self.feeData.rebate
+      } else if (key === 'activity') {
+        self.showpopup1 = false
+        if (this.clickdata.allowcard) {
+          self.$vux.confirm.show({
+            content: '该商品是可使用优惠券的商品，继续选择该商品将会导致两种优惠叠加使用',
+            confirmText: '继续创建',
+            cancelText: '取消',
+            onCancel () {
+              self.showpopup1 = false
+            },
+            onConfirm () {
+              this.$router.push({path: '/retailerActivitylist', query: {id: this.clickdata.id, type: 'add'}})
+            }
+          })
+        } else {
+          this.$router.push({path: '/retailerActivitylist', query: {id: this.clickdata.id, type: 'add'}})
+        }
       } else {
         self.showpopup1 = false
       }
