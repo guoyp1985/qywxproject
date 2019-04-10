@@ -141,6 +141,14 @@
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>
           </div>
+          <div class="form-item required bg-white">
+            <div class="t-table">
+              <div class="t-cell title-cell w80 font14 v_middle">商品优势</div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <x-input v-model="submitdata.sellingpoint" type="text" class="input" name="sellingpoint" placeholder="请夸一夸你的商品吧" :max="30"></x-input>
+              </div>
+            </div>
+          </div>
 
           <!-- 是否为加盟礼包 -->
           <!-- <div class="form-item bg-white">
@@ -301,7 +309,7 @@ export default {
       havenum2: 0,
       showmore: false,
       submitdata: {
-        classid: '',
+        classid: '0',
         title: '',
         oriprice: '',
         price: '',
@@ -313,8 +321,8 @@ export default {
         contentphoto: '',
         seotitle: '',
         seodescription: '',
-        profit: ''
-        // isgift: false
+        profit: '',
+        sellingpoint: ''
       },
       allowsubmit: true,
       requireddata: { title: '', 'price': '', 'storage': '', 'unit': '', 'postage': '', 'photo': '', 'profit': '' },
@@ -361,8 +369,8 @@ export default {
         seotitle: '',
         seodescription: '',
         video: '',
-        profit: ''
-        // isgift: false
+        profit: '',
+        sellingpoint: ''
       }
       this.photoarr = []
       this.photoarr1 = []

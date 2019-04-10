@@ -57,6 +57,9 @@
         <popup class="menuwrap" v-model="showpopup1">
           <div class="popup0">
             <div class="list" v-if="clickdata">
+              <div class="item" v-if="clickdata.moderate == 1">
+                <div class="inner" @click="clickpopup('recommend')">商品推荐</div>
+              </div>
               <div class="item" v-if="!clickdata.activityid || clickdata.activityid == 0">
                 <router-link class="inner" :to="{path: '/addFactoryProduct', query: {id: clickdata.id, fid: query.fid}}">编辑</router-link>
               </div>
@@ -79,6 +82,15 @@
           </div>
         </popup>
       </div>
+      <template v-if="showTip">
+        <tip-layer
+          @clickButton="recommendSubmit"
+          @clickClose="closeTipModal"
+          title="商品推荐优势"
+          content="推荐商品审核通过后，将自动推荐给平台所有卖家，帮助您卖货，快速提高销售额。"
+          buttonTxt="立即推荐">
+        </tip-layer>
+      </template>
     </template>
   </div>
 </template>
@@ -91,6 +103,7 @@ import { TransferDom, Popup, Confirm, CheckIcon, XImg } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
+import TipLayer from '@/components/TipLayer'
 
 let pageStart1 = 0
 const limit = 10
@@ -100,7 +113,7 @@ export default {
     TransferDom
   },
   components: {
-    Popup, Confirm, CheckIcon, XImg, Sos
+    Popup, Confirm, CheckIcon, XImg, Sos, TipLayer
   },
   data () {
     return {
@@ -113,7 +126,8 @@ export default {
       showpopup1: false,
       clickdata: {},
       clickindex: 0,
-      disproductdata: false
+      disproductdata: false,
+      showTip: false
     }
   },
   watch: {
@@ -197,9 +211,17 @@ export default {
             })
           }
         })
+      } else if (key === 'recommend') {
+        this.showTip = true
       } else {
         self.showpopup1 = false
       }
+    },
+    closeTipModal () {
+      this.showTip = false
+    },
+    recommendSubmit () {
+      this.showTip = false
     },
     getData1 () {
       const self = this
