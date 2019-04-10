@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea s-havebottom bg-white font14 addActivity">
-    <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
+    <subscribe v-if="showSubscribe"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
       <div class="s-container">
@@ -11,23 +11,25 @@
                 <span>{{ $t('Activity product') }}</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span>
               </div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <div v-if="showselectproduct" class="qbtn flex_center color-orange" style="border:orange 1px solid;width:100%;line-height:1;padding:4px 0;" @click="selectevent">
-                  <span class="mr5 v_middle db-in" style="margin-top:-3px;">+</span><span class="v_middle db-in">{{ $t('Select product') }}</span>
-                </div>
-                <div v-if="showproductitem" class="scroll_item border db">
-                  <div class="t-table">
-                    <div class="t-cell v_middle" style="width:50px;">
-                      <img class="v_middle imgcover" style="width:40px;height:40px;" :src="selectproduct.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-                    </div>
-                    <div class="t-cell v_middle">
-                      <div class="clamp1">{{ selectproduct.title }}</div>
-                      <div class="mt5 font12 clamp1"><span class="color-orange">{{ $t('RMB') }}{{ selectproduct.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }}{{ selectproduct.storage }}</span></div>
-                    </div>
-                    <div class="t-cell align_center v_middle" style="width:60px;">
-                      <div class="qbtn color-red btnchange" style="border:#ff3b30 1px solid;line-height:1;" @click="selectevent">修改</div>
+                <template v-if="showProductArea">
+                  <div v-if="showselectproduct && !query.id" class="qbtn flex_center color-orange" style="border:orange 1px solid;width:100%;line-height:1;padding:4px 0;" @click="selectevent">
+                    <span class="mr5 v_middle db-in" style="margin-top:-3px;">+</span><span class="v_middle db-in">{{ $t('Select product') }}</span>
+                  </div>
+                  <div v-if="showproductitem || query.id" class="scroll_item border db">
+                    <div class="t-table">
+                      <div class="t-cell v_middle" style="width:50px;">
+                        <img class="v_middle imgcover" style="width:40px;height:40px;" :src="selectproduct.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+                      </div>
+                      <div class="t-cell v_middle">
+                        <div class="clamp1">{{ selectproduct.title }}</div>
+                        <div class="mt5 font12 clamp1"><span class="color-orange">{{ $t('RMB') }}{{ selectproduct.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }}{{ selectproduct.storage }}</span></div>
+                      </div>
+                      <div class="t-cell align_center v_middle" style="width:60px;" v-if="!query.id">
+                        <div class="qbtn color-red btnchange" style="border:#ff3b30 1px solid;line-height:1;" @click="selectevent">修改</div>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </template>
               </div>
             </div>
           </div>
@@ -87,7 +89,7 @@
                 ref="search">
               </search>
               <div class="scroll_list">
-                <div v-if="!productdata || productdata.length === 0" class="scroll_item padding10 color-gray align_center">
+                <div v-if="!productdata || !productdata.length" class="scroll_item padding10 color-gray align_center">
                   <template v-if="searchresult">
                     <div class="flex_center" style="height:80px;">暂无搜索结果</div>
                   </template>
@@ -95,18 +97,20 @@
                     <div class="flex_center" style="height:80px;">暂无商品</div>
                   </template>
                 </div>
-                <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in productdata" :key="item.id" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
-                  <div class="t-table">
-                    <div class="t-cell pic v_middle w50">
-                      <img class="v_middle imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" style="width:40px;height:40px;" />
+                <template v-else>
+                  <check-icon class="x-check-icon scroll_item" v-for="(item,index) in productdata" :key="item.id" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
+                    <div class="t-table">
+                      <div class="t-cell pic v_middle w50">
+                        <img class="v_middle imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" style="width:40px;height:40px;" />
+                      </div>
+                      <div class="t-cell v_middle" style="color:inherit;">
+                        <div class="clamp1">{{item.title}}</div>
+                        <div class="font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
+                        <div class="font12 clamp1 color-orange" v-if="item.allowcard">允许使用优惠券</div>
+                      </div>
                     </div>
-                    <div class="t-cell v_middle" style="color:inherit;">
-                      <div class="clamp1">{{item.title}}</div>
-                      <div class="font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
-                      <div class="font12 clamp1 color-orange" v-if="item.allowcard">允许使用优惠券</div>
-                    </div>
-                  </div>
-                </check-icon>
+                  </check-icon>
+                </template>
               </div>
             </div>
             <div class="popup-bottom flex_center">
@@ -186,7 +190,9 @@ export default {
       searchresult: false,
       limit: 20,
       pagestart1: 0,
-      selectProductIndex: -1
+      selectProductIndex: -1,
+      showProductArea: false,
+      showSubscribe: false
     }
   },
   watch: {
@@ -639,6 +645,10 @@ export default {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
+      if (this.loginUser.subscribe !== 1 && !this.loginUser.isretailer) {
+        this.showSubscribe = true
+        return false
+      }
       if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
         this.initData()
         let isAdmin = false
@@ -663,7 +673,7 @@ export default {
           this.selectdatetxt2 = ''
           this.showselectproduct = true
           this.showproductitem = false
-          this.selectproduct = null
+          this.selectproduct = {}
           this.productdata = []
           this.radiodata = []
           const submitdata = {
@@ -699,6 +709,20 @@ export default {
           }
           this.submitdata.type = this.query.type
           this.requireddata = this.submitdata
+          if (this.query.id) {
+            this.submitdata.productid = this.query.id
+            this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
+              params: {id: this.query.id, module: 'product'}
+            }).then(res => {
+              let data = res.data
+              let retdata = data.data ? data.data : data
+              if (retdata.photo && retdata.photo !== '') {
+                retdata.photo = retdata.photo.split(',')[0]
+              }
+              this.selectproduct = retdata
+            })
+          }
+          this.showProductArea = true
         }
       }
     }

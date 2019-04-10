@@ -82,6 +82,9 @@
         <div class="popup0">
           <div class="list" v-if="clickdata">
             <div class="item" v-if="clickdata.activityid == 0">
+              <router-link class="inner" :to="{path: '/retailerActivitylist', query: {id: clickdata.id, type: 'add'}}">创建活动</router-link>
+            </div>
+            <div class="item" v-if="clickdata.activityid == 0">
               <div v-if="clickdata.fpid > 0" class="inner" @click="clickpopup('fee')">设置返点佣金</div>
               <router-link v-else class="inner" :to="{path: '/addProduct', query: {id: clickdata.id}}">编辑</router-link>
             </div>
