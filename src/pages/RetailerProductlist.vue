@@ -512,11 +512,11 @@ export default {
               self.showpopup1 = false
             },
             onConfirm () {
-              this.$router.push({path: '/retailerActivitylist', query: {id: this.clickdata.id, type: 'add'}})
+              self.$router.push({path: '/retailerActivitylist', query: {id: self.clickdata.id, type: 'add'}})
             }
           })
         } else {
-          this.$router.push({path: '/retailerActivitylist', query: {id: this.clickdata.id, type: 'add'}})
+          self.$router.push({path: '/retailerActivitylist', query: {id: self.clickdata.id, type: 'add'}})
         }
       } else {
         self.showpopup1 = false
