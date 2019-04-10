@@ -14,7 +14,7 @@
         <div class="flex_cell flex_left">
           <div class="w_100">
             <div class="flex_left" @click="clickQrcode">
-              <span>{{storeTitle}}</span><span class="al al-erweima1 font14 color-black ml5"></span>
+              <span>{{storeTitle}}</span><span class="al al-erweima1 font14 color-theme bold ml5"></span>
             </div>
             <!-- <div class="flex_left" @click="clickQrcode">
               <span class="al al-erweima1 font14 color-black"></span>
