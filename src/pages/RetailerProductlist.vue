@@ -11,10 +11,10 @@
               <div class="t-table" style="padding-top:20%;">
                 <div class="t-cell padding10">
                   <i class="al al-chuangjianxiangmu" style="font-size:60px;"></i>
-                  <div>还没有添加商品哦，及时添加商品可以：</div>
-                  <div>1.创建促销活动 </div>
-                  <div>2.分享商品获得客户</div>
-                  <div>3.邀请返点客帮你赚钱</div>
+                  <div>{{showTitle}}</div>
+                  <div v-if="selectedIndex !== 2">1.创建促销活动 </div>
+                  <div v-if="selectedIndex !== 2">2.分享商品获得客户</div>
+                  <div v-if="selectedIndex !== 2">3.邀请返点客帮你赚钱</div>
                 </div>
               </div>
             </div>
@@ -240,6 +240,7 @@ export default {
         { key: 'createposter', title: '生成海报' }
       ],
       selectedIndex: 0,
+      showTitle: '',
       classData: [{title: '上架商品'}, {title: '厂家商品'}, {title: '下架商品'}],
       showpopup1: false,
       clickdata: {},
@@ -277,17 +278,21 @@ export default {
       //   self.$vux.loading.show()
       //   self.getData1()
       // }
+      self.selectedIndex = index
       if (index === 0) {
+        self.showTitle = '还没有添加商品哦，及时添加商品可以：'
         pageStart1 = 0
         self.productdata = []
         self.$vux.loading.show()
         self.getData1()
       } else if (index === 1) {
+        self.showTitle = '还没有添加厂家商品哦，及时添加厂家商品还可以：'
         pageStart1 = 0
         self.productdata = []
         self.$vux.loading.show()
         self.getData3()
       } else {
+        self.showTitle = '暂无下架商品！'
         pageStart1 = 0
         self.productdata = []
         self.$vux.loading.show()
