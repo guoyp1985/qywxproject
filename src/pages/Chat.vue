@@ -13,10 +13,12 @@
         </div>
         <div class="flex_cell flex_left">
           <div class="w_100">
-            <div class="clamp2">{{ retailerInfo.title }}</div>
             <div class="flex_left" @click="clickQrcode">
-              <span class="al al-erweima1 font14 color-black"></span>
+              <span>{{storeTitle}}</span><span class="al al-erweima1 font14 color-black ml5"></span>
             </div>
+            <!-- <div class="flex_left" @click="clickQrcode">
+              <span class="al al-erweima1 font14 color-black"></span>
+            </div> -->
             <div class="clamp2 color-gray font12 mt5">全部宝贝: {{ retailerInfo.productcount }}件</div>
           </div>
         </div>
@@ -302,7 +304,8 @@ export default {
       retailerInfo: {},
       bottomPos: 0,
       clickMsgItem: {},
-      showQrcodeModal: false
+      showQrcodeModal: false,
+      storeTitle: ''
     }
   },
   filters: {
@@ -1064,11 +1067,18 @@ export default {
       const self = this
       self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
         params: { uid: self.query.uid }
-      }).then(function (res) {
+      }).then((res) => {
         if (res && res.status === 200) {
           const data = res.data
           if (data.flag) {
             self.retailerInfo = data.data
+            let title = self.retailerInfo.title
+            if (title.length > 10) {
+              title = title.substr(0, 10)
+              this.storeTitle = `${title}...`
+            } else {
+              this.storeTitle = title
+            }
             self.setViewHeight()
           }
         }
