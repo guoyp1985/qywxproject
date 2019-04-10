@@ -240,7 +240,7 @@ export default {
         { key: 'createposter', title: '生成海报' }
       ],
       selectedIndex: 0,
-      classData: [{title: '上架商品'}, {title: '厂商商品'}, {title: '下架商品'}],
+      classData: [{title: '上架商品'}, {title: '厂家商品'}, {title: '下架商品'}],
       showpopup1: false,
       clickdata: {},
       clickindex: 0,
