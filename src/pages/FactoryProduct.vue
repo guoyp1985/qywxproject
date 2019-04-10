@@ -276,7 +276,7 @@ export default {
       this.messages = 0
     },
     tofactoryDetail () {
-      this.$router.push('/factoryDetail?fid='+this.productdata.fid)
+      this.$router.push('/factoryDetail?fid=' + this.productdata.fid)
     },
     filterEmot (text) {
       return this.$util.emotPrase(text)
