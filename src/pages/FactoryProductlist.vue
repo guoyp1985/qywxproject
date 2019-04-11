@@ -237,10 +237,18 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/setModulePara/factoryproduct`, params).then(res => {
         let data = res.data
         this.$vux.loading.hide()
+        let error = data.error
+        if (data.flag === 1) {
+          if (oldValue) {
+            error = '取消成功'
+          } else {
+            error = '推荐成功'
+          }
+        }
         this.$vux.toast.show({
-          text: data.error,
+          text: error,
           type: (data.flag !== 1 ? 'warn' : 'success'),
-          time: this.$util.delay(data.error),
+          time: this.$util.delay(error),
           onHide: () => {
             if (data.flag === 1) {
               if (oldValue) {

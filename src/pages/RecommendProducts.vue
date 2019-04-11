@@ -19,10 +19,10 @@
           </div>
           <div class="b_top_after pt10 pb10">
             <div class="flex_center">
-              <div :class="`flex_cell flex_center b_right_after sort-icon ${sort == 'date' ? 'active' : ''}`" @click="sortEvent('date')">
+              <div :class="`flex_cell flex_center b_right_after sort-icon ${sort == 'dateline' ? 'active' : ''}`" @click="sortEvent('dateline')">
                 <div class="txt">最新上架<span :class="`al sort ${datecss}`"></span></div>
               </div>
-              <div :class="`flex_cell flex_center sort-icon ${sort == 'price' ? 'active' : ''}`" @click="sortEvent('price')">
+              <div :class="`flex_cell flex_center sort-icon ${sort == 'profit' ? 'active' : ''}`" @click="sortEvent('profit')">
                 <div class="txt">利润最高<span :class="`al sort ${pricecss}`"></span></div>
               </div>
             </div>
@@ -94,7 +94,7 @@ export default {
       searchword: '',
       datecss: 'down',
       pricecss: 'down',
-      sort: 'date'
+      sort: 'dateline'
     }
   },
   watch: {
@@ -124,25 +124,25 @@ export default {
       self.getData1()
     },
     sortEvent (type) {
-      if (type === 'date') {
-        if (this.sort === 'date') {
-          if (this.datecss === 'down') {
-            this.datecss = 'up'
+      if (type === 'dateline') {
+        if (this.sort === 'dateline') {
+          if (this.datecss === 'desc') {
+            this.datecss = 'asc'
           } else {
-            this.datecss = 'down'
+            this.datecss = 'desc'
           }
         } else {
-          this.sort = 'date'
+          this.sort = 'dateline'
         }
       } else {
-        if (this.sort === 'price') {
-          if (this.pricecss === 'down') {
-            this.pricecss = 'up'
+        if (this.sort === 'profit') {
+          if (this.pricecss === 'desc') {
+            this.pricecss = 'asc'
           } else {
-            this.pricecss = 'down'
+            this.pricecss = 'desc'
           }
         } else {
-          this.sort = 'price'
+          this.sort = 'profit'
         }
       }
       this.$vux.loading.show()
@@ -181,6 +181,12 @@ export default {
       if (self.selectedIndex > this.defaultTab.length - 1) {
       } else if (this.selectedIndex === 0) {
         params.recommend = 2
+        params.orderby = this.sort
+        if (this.sort === 'dateline') {
+          params.ascdesc = this.datecss
+        } else {
+          params.ascdesc = this.pricecss
+        }
       } else if (this.selectedIndex === 1) {
         params.orderby = 'saled'
         params.from = 'origin'
@@ -262,11 +268,11 @@ export default {
     .txt{
       width:86px;text-align:left;position:relative;
       .al{position:absolute;right:0;top:50%;}
-      .sort.down{margin-top:-25px;}
-      .sort.up{margin-top:-22px;}
+      .sort.desc{margin-top:-25px;}
+      .sort.asc{margin-top:-22px;}
     }
-    .sort.down:before {content: "\e7d4";}
-    .sort.up:before {content: "\e7d5";}
+    .sort.desc:before {content: "\e7d4";}
+    .sort.asc:before {content: "\e7d5";}
   }
 }
 </style>
