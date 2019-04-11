@@ -177,11 +177,17 @@ export default {
       })
     },
     getData1 (type) {
-      let params = {pagestart: pageStart, limit: limit, orderby: 'saled', from: 'origin'}
+      let params = {pagestart: pageStart, limit: limit}
       if (self.selectedIndex > this.defaultTab.length - 1) {
-        params.classid = self.classData[self.selectedIndex].id
-      } else if (type === 'sort') {
+      } else if (this.selectedIndex === 0) {
+        params.recommend = 2
+      } else if (this.selectedIndex === 1) {
+        params.orderby = 'saled'
+        params.from = 'origin'
       } else {
+        params.orderby = 'saled'
+        params.from = 'origin'
+        params.classid = self.classData[self.selectedIndex].id
       }
       if (this.selectedIndex === 0) {
         if (this.searchword !== '') {
