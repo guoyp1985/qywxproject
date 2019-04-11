@@ -70,19 +70,24 @@
               <span class="v_middle">{{ productdata.oriprice }}</span>
             </span>
           </div>
-          <div class="t-table font12 mt5 color-gray2">
-            <template v-if="productdata.postage">
-    					<div v-if="productdata.postage == 0" class="t-cell v_middle">{{ $t('Postage') }}: 包邮</div>
-    					<div v-else class="t-cell v_middle">{{ $t('Postage') }}: {{ $t('RMB') }}{{ productdata.postage }}</div>
-    					<div class="t-cell v_middle pl10 align_right">销量: {{ productdata.saled }}{{ productdata.unit }}</div>
+          <div class="flex_left font12 mt5 color-gray2">
+  					<div v-if="productdata.postage == 0" class="flex_left w90">{{ $t('Postage') }}: 包邮</div>
+  					<div v-else class="flex_left w90">{{ $t('Postage') }}: {{ $t('RMB') }}{{ productdata.postage }}</div>
+            <template v-if="productdata.uploader != -1 && (productdata.buyonline == 1 && (!activityInfo.id || (activityInfo.id && activityInfo.type == 'bargainbuy')) && ((loginUser && loginUser.uid == retailerInfo.uid) || productdata.identity != 'user'))">
+              <div class="flex_cell flex_center">销量: {{ productdata.saled }}{{ productdata.unit }}</div>
+              <div class="flex_cell flex_right color-red" @click="clickSeller">
+                <span class="al al-bangzhu font15"></span><span>返点客佣金: {{ $t('RMB') }}{{ productdata.rebate }}</span>
+              </div>
             </template>
-            <div v-else class="t-cell v_middle align_left">销量: {{ productdata.saled }}{{ productdata.unit }}</div>
-            <div v-if="productdata.uploader != -1 && (productdata.buyonline == 1 && (!activityInfo.id || (activityInfo.id && activityInfo.type == 'bargainbuy')) && ((loginUser && loginUser.uid == retailerInfo.uid) || productdata.identity != 'user'))" class="t-cell v_middle border-box align_right">
-              <span class="color-red">返点客佣金: {{ $t('RMB') }}{{ productdata.rebate }}</span>
-            </div>
-  					<div v-if="productdata.buyonline != 1" class="t-cell v_middle align_right " @click="popupbuy">
-  						<span class="help-icon">?</span>了解购买流程
-  					</div>
+            <template v-else-if="productdata.buyonline != 1">
+              <div class="flex_cell flex_center">销量: {{ productdata.saled }}{{ productdata.unit }}</div>
+    					<div class="flex_cell flex_right" @click="popupbuy">
+    						<span class="help-icon">?</span>了解购买流程
+    					</div>
+            </template>
+            <template v-else>
+              <div class="flex_cell flex_right">销量: {{ productdata.saled }}{{ productdata.unit }}</div>
+            </template>
   				</div>
     		</div>
   			<div class="groupbuarea" v-if="activityInfo.id && activityInfo.type == 'groupbuy' && activitydata.length > 0">
@@ -433,6 +438,9 @@
         <div class="btnknow" @click="closeShareLayer">知道了</div>
       </div>
     </div>
+    <template v-if="showSellerTip">
+      <tip-layer title="什么是返点客佣金" content="当你成为某个卖家的返点客用户时，你销售该卖家的某件商品所得到的佣金，返点客佣金只有返点客才能看到。" @clickClose="closeSellerTip"></tip-layer>
+    </template>
   </div>
 </template>
 
@@ -459,6 +467,7 @@ import ShareSuccess from '@/components/ShareSuccess'
 import CommentPopup from '@/components/CommentPopup'
 import Sos from '@/components/Sos'
 import TitleTip from '@/components/TitleTip'
+import TipLayer from '@/components/TipLayer'
 import Time from '#/time'
 import jQuery from 'jquery'
 import ENV from 'env'
@@ -473,7 +482,7 @@ export default {
     TransferDom
   },
   components: {
-    Previewer, Swiper, SwiperItem, Popup, Marquee, MarqueeItem, Groupbuyitemplate, Bargainbuyitemplate, ShareSuccess, CommentPopup, Sos, XImg, TitleTip
+    Previewer, Swiper, SwiperItem, Popup, Marquee, MarqueeItem, Groupbuyitemplate, Bargainbuyitemplate, ShareSuccess, CommentPopup, Sos, XImg, TitleTip, TipLayer
   },
   filters: {
     dateformat: function (value) {
@@ -528,7 +537,8 @@ export default {
       showMoreFriends: false,
       startcss: 'start',
       showShareLayer: false,
-      WeixinName: ENV.WeixinName
+      WeixinName: ENV.WeixinName,
+      showSellerTip: false
     }
   },
   watch: {
@@ -633,6 +643,12 @@ export default {
     },
     filterEmot (text) {
       return this.$util.emotPrase(text)
+    },
+    clickSeller () {
+      this.showSellerTip = true
+    },
+    closeSellerTip () {
+      this.showSellerTip = false
     },
     copyTxt () {
       const self = this

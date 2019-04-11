@@ -9,7 +9,7 @@
           <tab-item
             v-else
             v-for="(item,index) in tabtxts"
-            :selected="(query.from != 'miniprogram' && index == 0) || (query.from == 'miniprogram' && index == 1)"
+            :selected="(query.from != 'miniprogram' && index == 0) || (query.from == 'miniprogram' && index == 1) || (query.type == 'add' && index == 1)"
             :key="index">{{item}}</tab-item>
         </tab>
       </div>
@@ -215,7 +215,13 @@ export default {
       if (this.loginUser.isretailer === 2 && this.activityCount >= 2) {
         this.openVip()
       } else {
-        let queryParams = {type: type, from: this.query.from}
+        let queryParams = {type: type}
+        if (this.query.from) {
+          queryParams.from = this.query.from
+        }
+        if (this.query.id) {
+          queryParams.id = this.query.id
+        }
         if (this.query.minibackurl) {
           queryParams.minibackurl = this.query.minibackurl
           queryParams.backtype = this.query.backtype
