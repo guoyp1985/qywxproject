@@ -283,18 +283,21 @@ export default {
         self.showTitle = '还没有添加商品哦，及时添加商品可以：'
         pageStart1 = 0
         self.productdata = []
+        self.disproductdata = false
         self.$vux.loading.show()
         self.getData1()
       } else if (index === 1) {
         self.showTitle = '还没有添加厂家商品哦，及时添加厂家商品还可以：'
         pageStart1 = 0
         self.productdata = []
+        self.disproductdata = false
         self.$vux.loading.show()
         self.getData3()
       } else {
         self.showTitle = '暂无下架商品！'
         pageStart1 = 0
         self.productdata = []
+        self.disproductdata = false
         self.$vux.loading.show()
         self.getData2()
       }
