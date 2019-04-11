@@ -92,8 +92,8 @@ export default {
       defaultTab: [{title: '为你推荐'}, {title: '全部'}],
       autofixed: false,
       searchword: '',
-      datecss: 'down',
-      pricecss: 'down',
+      datecss: 'desc',
+      pricecss: 'desc',
       sort: 'dateline'
     }
   },
