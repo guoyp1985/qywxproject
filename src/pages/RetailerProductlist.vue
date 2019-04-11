@@ -367,7 +367,13 @@ export default {
           if (self.productdata.length === (pageStart1 + 1) * limit) {
             pageStart1++
             self.$vux.loading.show()
-            self.getData1()
+            if (self.selectedIndex === 0) {
+              self.getData1()
+            } else if (self.selectedIndex === 1) {
+              self.getData3()
+            } else {
+              self.getData2()
+            }
           }
         }
       })
