@@ -76,7 +76,7 @@
             <template v-if="productdata.uploader != -1 && (productdata.buyonline == 1 && (!activityInfo.id || (activityInfo.id && activityInfo.type == 'bargainbuy')) && ((loginUser && loginUser.uid == retailerInfo.uid) || productdata.identity != 'user'))">
               <div class="flex_cell flex_center">销量: {{ productdata.saled }}{{ productdata.unit }}</div>
               <div class="flex_cell flex_right color-red" @click="clickSeller">
-                <span class="help-icon">?</span><span>返点客佣金: {{ $t('RMB') }}{{ productdata.rebate }}</span>
+                <span class="al al-bangzhu font15"></span><span>返点客佣金: {{ $t('RMB') }}{{ productdata.rebate }}</span>
               </div>
             </template>
             <template v-else-if="productdata.buyonline != 1">
