@@ -321,7 +321,7 @@ export default {
     },
     swiperChange (index) {
       const self = this
-      if (index !== undefined) {
+      if (index !== this.selectedIndex) {
         this.selectedIndex = index
       }
       switch (this.selectedIndex) {
