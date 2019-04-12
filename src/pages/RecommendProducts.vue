@@ -176,11 +176,11 @@ export default {
       let params = {pagestart: pageStart, limit: limit}
       if (this.selectedIndex === 0) {
         params.recommend = 2
-        params.orderby = this.sort
         if (this.sort === 'dateline') {
           params.orderby = 'recommendtime'
           params.ascdesc = this.datecss
         } else {
+          params.orderby = 'salesrebate'
           params.ascdesc = this.pricecss
         }
       } else if (this.selectedIndex === 1) {
