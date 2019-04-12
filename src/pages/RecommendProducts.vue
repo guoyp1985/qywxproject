@@ -51,7 +51,6 @@
         		</div>
           </div>
         </div>
-        <div class="font12 color-gray" style="text-align: center;width: 100%;margin-top:10px;" v-if="showTips">没有更多商品啦！</div>
       </div>
     </div>
   </div>
@@ -88,7 +87,6 @@ export default {
       productData: [],
       classData: [],
       selectedIndex: 0,
-      showTips: false,
       defaultTab: [{title: '为你推荐'}, {title: '全部'}],
       autofixed: false,
       searchword: '',
@@ -170,8 +168,6 @@ export default {
             pageStart++
             self.$vux.loading.show()
             self.getData1()
-          } else {
-            self.showTips = true
           }
         }
       })
