@@ -157,7 +157,7 @@
       <popup class="menuwrap" v-model="showpopup1">
         <div class="popup0">
           <div class="list" v-if="clickdata">
-            <div class="item" v-if="clickdata.activityid == 0 && clickdata.moderate == 1">
+            <div class="item" v-if="clickdata.moderate == 1">
               <div class="inner" @click="clickpopup('activity')">创建活动</div>
             </div>
             <div class="item" v-if="clickdata.activityid == 0">
@@ -638,20 +638,28 @@ export default {
         self.feeData = self.clickdata
         self.postFee = self.feeData.rebate
       } else if (key === 'activity') {
-        if (this.clickdata.allowcard) {
-          self.$vux.confirm.show({
-            content: '该商品是可使用优惠券的商品，继续选择该商品将会导致两种优惠叠加使用',
-            confirmText: '继续创建',
-            cancelText: '取消',
-            onCancel () {
-              self.showpopup1 = false
-            },
-            onConfirm () {
-              self.$router.push({path: '/retailerActivitylist', query: {id: self.clickdata.id, type: 'add'}})
-            }
+        if (this.clickdata.activityid) {
+          self.$vux.toast.show({
+            text: '该商品已创建团购/砍价活动，不能重复创建！',
+            type: 'text',
+            time: self.$util.delay(data.error)
           })
         } else {
-          self.$router.push({path: '/retailerActivitylist', query: {id: self.clickdata.id, type: 'add'}})
+          if (this.clickdata.allowcard) {
+            self.$vux.confirm.show({
+              content: '该商品是可使用优惠券的商品，继续选择该商品将会导致两种优惠叠加使用',
+              confirmText: '继续创建',
+              cancelText: '取消',
+              onCancel () {
+                self.showpopup1 = false
+              },
+              onConfirm () {
+                self.$router.push({path: '/retailerActivitylist', query: {id: self.clickdata.id, type: 'add'}})
+              }
+            })
+          } else {
+            self.$router.push({path: '/retailerActivitylist', query: {id: self.clickdata.id, type: 'add'}})
+          }
         }
       }
     },
