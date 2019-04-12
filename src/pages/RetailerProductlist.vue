@@ -554,8 +554,13 @@ export default {
           }
         })
       } else if (key === 'down') {
+        let content = '确定要下架该商品吗？'
+        if (self.selectedIndex === 1) {
+          content = '确定要下架该商品吗？下架后的商品将不会出现在厂家列表中'
+        }
         self.$vux.confirm.show({
-          title: '确定要下架该商品吗？',
+          title: '',
+          content: content,
           onConfirm () {
             self.$vux.loading.show()
             self.downEvent()
@@ -786,7 +791,7 @@ export default {
         params.pagestart = this.tabData2.length
         params.limit = 1
       }
-      this.$http.get(`${ENV.BokaApi}/api/list/product`, {
+      this.$http.get(`${ENV.BokaApi}/api/list/product?from=retailernew`, {
         params: params
       })
       .then(res => {
