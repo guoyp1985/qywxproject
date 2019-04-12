@@ -189,7 +189,7 @@ export default {
       })
     },
     getData2 () {
-      let params = { pagestart: pageStart1, limit: limit, used: 1, fid: self.query.id }
+      let params = { pagestart: pageStart2, limit: limit, used: 1, fid: self.query.id }
       self.$http.get(`${ENV.BokaApi}/api/factory/listRetailerCode`, {
         params: params
       }).then((res) => {
