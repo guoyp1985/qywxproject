@@ -340,12 +340,16 @@ export default {
           self.getProduct()
           break
         case 2:
-          if (this.newsData.length < this.limit) {
-            self.pagestart2 = 0
-            self.disNewsData = false
-            self.newsData = []
-            self.getNews()
-          }
+          // if (this.newsData.length < this.limit) {
+          //   self.pagestart2 = 0
+          //   self.disNewsData = false
+          //   self.newsData = []
+          //   self.getNews()
+          // }
+          self.pagestart2 = 0
+          self.disNewsData = false
+          self.newsData = []
+          self.getNews()
           break
       }
     },
