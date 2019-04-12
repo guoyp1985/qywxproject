@@ -329,7 +329,7 @@ export default {
         } else {
           this.$vux.loading.hide()
           this.query = this.$route.query
-          if (this.tabdata1.length < limit || this.query.from === 'add') {
+          if (this.tabdata1.length < limit || this.query.add) {
             self.initContainer()
             pageStart1 = 0
             this.tabdata1 = []

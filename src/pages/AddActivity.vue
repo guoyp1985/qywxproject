@@ -411,7 +411,15 @@ export default {
                   self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.activity}?id=${data.data}`})
                 }
               } else {
-                self.$router.push({path: '/retailerActivitylist', query: {from: 'add'}})
+                if (self.query.id) {
+                  if (self.activityType === 'groupbuy') {
+                    self.$router.push({path: '/product', query: {id: self.query.id, wid: self.loginUser.uid}})
+                  } else {
+                    self.$router.push({path: '/activity', query: {id: data.data}})
+                  }
+                } else {
+                  self.$router.push({path: '/retailerActivitylist', query: {add: 1}})
+                }
                 if (self.query.type === 'bargainbuy') {
                   self.$refs.formBargainbuy.minprice = ''
                   self.$refs.formBargainbuy.everymin = ''
