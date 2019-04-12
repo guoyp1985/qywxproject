@@ -320,8 +320,6 @@ export default {
       })
     },
     swiperChange (index) {
-      console.log('INDEX ID:')
-      console.log(index)
       const self = this
       if (index !== undefined) {
         this.selectedIndex = index
@@ -330,18 +328,22 @@ export default {
         case 0:
           break
         case 1:
-          if (this.productData.length < this.limit) {
-            self.pagestart1 = 0
-            self.disProductData = false
-            this.productData = []
-            self.getProduct()
-          }
+          // if (this.productData.length < this.limit) {
+          //   self.pagestart1 = 0
+          //   self.disProductData = false
+          //   self.productData = []
+          //   self.getProduct()
+          // }
+          self.pagestart1 = 0
+          self.disProductData = false
+          self.productData = []
+          self.getProduct()
           break
         case 2:
           if (this.newsData.length < this.limit) {
             self.pagestart2 = 0
             self.disNewsData = false
-            this.newsData = []
+            self.newsData = []
             self.getNews()
           }
           break
@@ -451,6 +453,11 @@ export default {
   },
   activated () {
     this.refresh()
+  },
+  watch: {
+    $route (to, from) {
+      this.selectedIndex = 0
+    }
   }
 }
 </script>
