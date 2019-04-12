@@ -320,8 +320,6 @@ export default {
       })
     },
     swiperChange (index) {
-      console.log('INDEX ID:')
-      console.log(index)
       const self = this
       if (index !== undefined) {
         this.selectedIndex = index
@@ -333,7 +331,7 @@ export default {
           if (this.productData.length < this.limit) {
             self.pagestart1 = 0
             self.disProductData = false
-            this.productData = []
+            self.productData = []
             self.getProduct()
           }
           break
@@ -341,7 +339,7 @@ export default {
           if (this.newsData.length < this.limit) {
             self.pagestart2 = 0
             self.disNewsData = false
-            this.newsData = []
+            self.newsData = []
             self.getNews()
           }
           break
@@ -371,7 +369,17 @@ export default {
     },
     init () {
     },
+    initData () {
+      const self = this
+      self.pagestart1 = 0
+      self.disProductData = false
+      self.productData = []
+      self.pagestart2 = 0
+      self.disNewsData = false
+      self.newsData = []
+    },
     refresh () {
+      this.initData()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.query = this.$route.query
@@ -451,6 +459,11 @@ export default {
   },
   activated () {
     this.refresh()
+  },
+  watch: {
+    $route (to, from) {
+      this.selectedIndex = 0
+    }
   }
 }
 </script>
