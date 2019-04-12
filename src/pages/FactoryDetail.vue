@@ -328,28 +328,20 @@ export default {
         case 0:
           break
         case 1:
-          // if (this.productData.length < this.limit) {
-          //   self.pagestart1 = 0
-          //   self.disProductData = false
-          //   self.productData = []
-          //   self.getProduct()
-          // }
-          self.pagestart1 = 0
-          self.disProductData = false
-          self.productData = []
-          self.getProduct()
+          if (this.productData.length < this.limit) {
+            self.pagestart1 = 0
+            self.disProductData = false
+            self.productData = []
+            self.getProduct()
+          }
           break
         case 2:
-          // if (this.newsData.length < this.limit) {
-          //   self.pagestart2 = 0
-          //   self.disNewsData = false
-          //   self.newsData = []
-          //   self.getNews()
-          // }
-          self.pagestart2 = 0
-          self.disNewsData = false
-          self.newsData = []
-          self.getNews()
+          if (this.newsData.length < this.limit) {
+            self.pagestart2 = 0
+            self.disNewsData = false
+            self.newsData = []
+            self.getNews()
+          }
           break
       }
     },
@@ -377,7 +369,17 @@ export default {
     },
     init () {
     },
+    initData () {
+      const self = this
+      self.pagestart1 = 0
+      self.disProductData = false
+      self.productData = []
+      self.pagestart2 = 0
+      self.disNewsData = false
+      self.newsData = []
+    },
     refresh () {
+      this.initData()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.query = this.$route.query
