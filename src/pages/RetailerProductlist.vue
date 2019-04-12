@@ -786,7 +786,7 @@ export default {
         params.pagestart = this.tabData2.length
         params.limit = 1
       }
-      this.$http.get(`${ENV.BokaApi}/api/list/product?from=retailernew`, {
+      this.$http.get(`${ENV.BokaApi}/api/list/product`, {
         params: params
       })
       .then(res => {
