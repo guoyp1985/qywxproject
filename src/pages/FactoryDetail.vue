@@ -24,7 +24,7 @@
     </div>
     <div class="pagemiddle">
       <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
-        <!-- <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
+        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', index)">
             <template v-if="factoryInfo.id">
               <div v-if="!contentArr.length" class="flex_empty">
@@ -74,87 +74,6 @@
             </template>
           </div>
           <div v-if="(index == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3', index)">
-            <template v-if="disNewsData">
-              <div v-if="!newsData.length" class="flex_empty">
-                <div>
-                  <div class="align_center">品牌资讯，码字中...</div>
-                  <router-link v-if="showEdit" :to="{path: '/addFactoryNews', query: {fid: fid}}" class="align_center mt10 color-blue db">创建品牌资讯</router-link>
-                </div>
-              </div>
-              <div v-else class="scroll_list ">
-                <div v-if="!newsData.length" class="scroll_item padding10 color-gray align_center">
-                    <div class="t-table">
-                      <div class="t-cell v_middle">暂无数据</div>
-                    </div>
-                </div>
-                <div v-else @click="toFactoryNews(item)" v-for="(item,index1) in newsData" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
-                  <div class="t-table">
-                    <div class="t-cell v_middle w70">
-                      <img class="imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-                    </div>
-                    <div class="t-cell v_middle">
-                      <div class="clamp1 font14 color-lightgray"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
-                      <div class="clamp1 font14 color-gray v_middle mt5">
-                          <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.views}}</span>
-                          <span class="v_middle"><i class="al al-ai-share font14 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.shares}}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </template>
-          </div>
-        </swiper-item> -->
-        <swiper-item>
-          <div v-if="this.selectedIndex == 0" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', index)">
-            <template v-if="factoryInfo.id">
-              <div v-if="!contentArr.length" class="flex_empty">
-                <div>
-                  <div class="align_center">品牌介绍，正在路上</div>
-                  <router-link v-if="showEdit" :to="{path: '/factorySetting', query: {fid: fid}}" class="align_center mt10 color-blue db">设置品牌介绍</router-link>
-                </div>
-              </div>
-              <div v-else v-for="(item,index1) in contentArr" :key="index1">
-                <div class="padding10" v-html="item.content"></div>
-                <div class="flex_center" v-for="(photo,index2) in item.photoarr" :key="index2">
-                  <img :src="photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" @click="viewBigImg(index2,index1)"/>
-                </div>
-              </div>
-            </template>
-          </div>
-          <div v-if="this.selectedIndex == 1" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', index)">
-            <template v-if="disProductData">
-              <div v-if="!productData.length" class="flex_empty">
-                <div>
-                  <div class="align_center">上等好货，敬请期待</div>
-                  <router-link v-if="showEdit" :to="{path: '/addFactoryProduct', query: {fid: fid}}" class="align_center mt10 color-blue db">添加商品信息</router-link>
-                </div>
-              </div>
-              <div v-else :class="`productlist ${productData.length == 0 ? '' : 'squarepic'}`">
-                <div @click="toFactoryProduct(item)" :data="item" v-for="(item,index) in productData" :key="item.id" class="bk-productitem scroll_item font14">
-              		<div class="inner list-shadow">
-              			<div class="picarea">
-              				<div class="pic">
-                        <img class="imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-                        <div class="t-icon color-theme">佣金: {{$t('RMB')}}{{item.levelagent}}</div>
-              				</div>
-              			</div>
-              			<div class="desbox" style="overflow:hidden;">
-              				<div class="align_left pl5 pr5 clamp2 distitle" style="line-height:18px;height:36px;">
-                        <span style="word-break:break-all;">{{ item.title }}</span>
-                      </div>
-                      <div class="clamp1">
-              					<div class="flex_table padding5 pro-desc">
-              						<span class="color-red font14 flex_cell" style="overflow: hidden;margin-right: 10px;white-space: nowrap;text-overflow: ellipsis;">{{ $t('RMB') }} <span style="margin-left:1px;">{{ item.price }}</span></span>
-                        </div>
-              				</div>
-              			</div>
-              		</div>
-                </div>
-              </div>
-            </template>
-          </div>
-          <div v-if="this.selectedIndex == 2" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3', index)">
             <template v-if="disNewsData">
               <div v-if="!newsData.length" class="flex_empty">
                 <div>
