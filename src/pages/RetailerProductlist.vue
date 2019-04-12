@@ -642,7 +642,7 @@ export default {
           self.$vux.toast.show({
             text: '该商品已创建团购/砍价活动，不能重复创建！',
             type: 'text',
-            time: self.$util.delay(data.error)
+            time: 3000
           })
         } else {
           if (this.clickdata.allowcard) {
