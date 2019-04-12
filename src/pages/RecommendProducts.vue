@@ -178,11 +178,11 @@ export default {
     },
     getData1 (type) {
       let params = {pagestart: pageStart, limit: limit}
-      if (self.selectedIndex > this.defaultTab.length - 1) {
-      } else if (this.selectedIndex === 0) {
+      if (this.selectedIndex === 0) {
         params.recommend = 2
         params.orderby = this.sort
         if (this.sort === 'dateline') {
+          params.orderby = 'recommendtime'
           params.ascdesc = this.datecss
         } else {
           params.ascdesc = this.pricecss
