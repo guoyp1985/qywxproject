@@ -394,7 +394,7 @@ export default {
           text: data.error,
           type: (data.flag !== 1 ? 'warn' : 'success'),
           time: self.$util.delay(data.error),
-          onHide: function () {
+          onHide: () => {
             if (data.flag === 1) {
               if (self.query.minibackurl) {
                 let minibackurl = decodeURIComponent(self.query.minibackurl)
@@ -404,6 +404,12 @@ export default {
                   minibackurl = `${minibackurl}?id=${data.data}&type=${self.query.type}&productid=${self.submitdata.productid}`
                 }
                 self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+              } else if (self.query.from) {
+                if (self.activityType === 'groupbuy') {
+                  self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${self.submitdata.productid}&wid=${self.loginUser.uid}`})
+                } else {
+                  self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.activity}?id=${data.data}`})
+                }
               } else {
                 self.$router.push({path: '/retailerActivitylist', query: {from: 'add'}})
                 if (self.query.type === 'bargainbuy') {

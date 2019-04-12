@@ -555,9 +555,9 @@ export default {
         })
       } else if (key === 'down') {
         let content = '确定要下架该商品吗？'
-        if (self.selectedIndex === 1) {
-          content = '确定要下架该商品吗？下架后的商品将不会出现在厂家列表中'
-        }
+        // if (self.selectedIndex === 1) {
+        //   content = '确定要下架该商品吗？下架后的商品将不会出现在厂家列表中'
+        // }
         self.$vux.confirm.show({
           title: '',
           content: content,
