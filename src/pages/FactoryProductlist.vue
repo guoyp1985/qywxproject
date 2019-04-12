@@ -58,7 +58,8 @@
           <div class="popup0">
             <div class="list" v-if="clickdata">
               <div class="item" v-if="clickdata.moderate == 1">
-                <div class="inner" @click="clickpopup('recommend')">商品推荐</div>
+                <div class="inner" @click="clickpopup('recommend')" v-if="clickdata.recommend == 0">商品推荐</div>
+                <div class="inner" @click="clickpopup('recommend')" v-else>取消推荐</div>
               </div>
               <div class="item" v-if="!clickdata.activityid || clickdata.activityid == 0">
                 <router-link class="inner" :to="{path: '/addFactoryProduct', query: {id: clickdata.id, fid: query.fid}}">编辑</router-link>
@@ -212,7 +213,12 @@ export default {
           }
         })
       } else if (key === 'recommend') {
-        this.showTip = true
+        self.showpopup1 = false
+        if (this.clickdata.recommend) {
+          self.recommendSubmit()
+        } else {
+          self.showTip = true
+        }
       } else {
         self.showpopup1 = false
       }
@@ -222,6 +228,38 @@ export default {
     },
     recommendSubmit () {
       this.showTip = false
+      this.$vux.loading.show()
+      let oldValue = this.clickdata.recommend
+      let params = {param: 'recommend', paramvalue: 1, id: this.clickdata.id, module: 'factoryproduct'}
+      if (this.clickdata.recommend) {
+        params.paramvalue = 0
+      }
+      this.$http.post(`${ENV.BokaApi}/api/setModulePara/factoryproduct`, params).then(res => {
+        let data = res.data
+        this.$vux.loading.hide()
+        let error = data.error
+        if (data.flag === 1) {
+          if (oldValue) {
+            error = '取消成功'
+          } else {
+            error = '推荐成功'
+          }
+        }
+        this.$vux.toast.show({
+          text: error,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: this.$util.delay(error),
+          onHide: () => {
+            if (data.flag === 1) {
+              if (oldValue) {
+                this.productdata[this.clickindex].recommend = 0
+              } else {
+                this.productdata[this.clickindex].recommend = 1
+              }
+            }
+          }
+        })
+      })
     },
     getData1 () {
       const self = this

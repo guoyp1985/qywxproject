@@ -144,8 +144,8 @@ export default {
       tabtxts: [ '品牌简介', '全部商品', '品牌资讯' ],
       disList: false,
       list: [],
-      pagestart1: 0,
-      pagestart2: 0,
+      pageStart1: 0,
+      pageStart2: 0,
       limit: 10,
       disProductData: false,
       productData: [],
@@ -157,7 +157,8 @@ export default {
       previewerPhotoarr: [],
       wxPhotoArr: [],
       shareUser: {},
-      disShareUser: false
+      disShareUser: false,
+      lastIndex: 0
     }
   },
   filters: {
@@ -169,6 +170,14 @@ export default {
     }
   },
   methods: {
+    initData () {
+      this.disProductData = false
+      this.disNewsData = false
+      this.pageStart1 = 0
+      this.pageStart2 = 0
+      this.productData = []
+      this.newsData = []
+    },
     toFactoryProduct (item) {
       let params = {id: item.id, fid: this.fid}
       if (this.query.wid) {
@@ -277,14 +286,14 @@ export default {
         callback: function () {
           if (index === 0) {
           } else if (index === 1) {
-            if (self.productData.length === (self.pagestart1 + 1) * self.limit) {
-              self.pagestart1++
+            if (self.productData.length === (self.pageStart1 + 1) * self.limit) {
+              self.pageStart1++
               self.$vux.loading.show()
               self.getProduct()
             }
           } else if (index === 2) {
-            if (self.newsData.length === (self.pagestart2 + 1) * self.limit) {
-              self.pagestart2++
+            if (self.newsData.length === (self.pageStart2 + 1) * self.limit) {
+              self.pageStart2++
               self.$vux.loading.show()
               self.getNews()
             }
@@ -294,7 +303,7 @@ export default {
     },
     getProduct () {
       const self = this
-      const params = { fid: self.fid, pagestart: self.pagestart1, limit: self.limit }
+      const params = { fid: self.fid, pagestart: self.pageStart1, limit: self.limit }
       this.$http.get(`${ENV.BokaApi}/api/list/factoryproduct`, {
         params: params
       })
@@ -308,7 +317,7 @@ export default {
     },
     getNews () {
       const self = this
-      const params = { fid: self.fid, pagestart: self.pagestart2, limit: self.limit }
+      const params = { fid: self.fid, pagestart: self.pageStart2, limit: self.limit }
       self.$http.get(`${ENV.BokaApi}/api/list/factorynews`, {
         params: params
       }).then(function (res) {
@@ -324,12 +333,13 @@ export default {
       if (index !== this.selectedIndex) {
         this.selectedIndex = index
       }
+      this.lastIndex = this.selectedIndex
       switch (this.selectedIndex) {
         case 0:
           break
         case 1:
           if (this.productData.length < this.limit) {
-            self.pagestart1 = 0
+            self.pageStart1 = 0
             self.disProductData = false
             this.productData = []
             self.getProduct()
@@ -337,7 +347,7 @@ export default {
           break
         case 2:
           if (this.newsData.length < this.limit) {
-            self.pagestart2 = 0
+            self.pageStart2 = 0
             self.disNewsData = false
             this.newsData = []
             self.getNews()
@@ -371,6 +381,7 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.initData()
       this.loginUser = User.get()
       this.query = this.$route.query
       if (this.query.fid) {
@@ -441,6 +452,9 @@ export default {
           shareParams.lastshareuid = this.query.share_uid
         }
         this.$util.handleWxShare(shareParams)
+        if (this.selectedIndex !== 0) {
+          this.swiperChange()
+        }
       })
     }
   },

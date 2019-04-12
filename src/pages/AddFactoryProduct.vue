@@ -542,10 +542,17 @@ export default {
           return false
         }
         // 商品利润
-        if (self.$util.trim(oriprice) !== '' && (isNaN(parseFloat(profit)) || parseFloat(profit) < 0 || parseFloat(profit) >= parseFloat(price))) {
+        if (self.$util.trim(oriprice) !== '' && (isNaN(parseFloat(profit)) || parseFloat(profit) < 0)) {
           self.$vux.alert.show({
             title: '',
             content: '请输入正确的价格'
+          })
+          return false
+        }
+        if (parseFloat(profit) >= parseFloat(price)) {
+          self.$vux.alert.show({
+            title: '',
+            content: '请输入正确的利润'
           })
           return false
         }
