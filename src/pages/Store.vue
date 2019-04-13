@@ -230,8 +230,6 @@ import { User } from '#/storage'
 const limit = 10
 const newsLimit = 3
 let initNewsData = []
-let pageStart = 0
-let newPageStart = 0
 
 export default {
   directives: {
@@ -270,7 +268,12 @@ export default {
       scrollEnd: false,
       showSuggest: false,
       suggestData: [],
-      showHelpModal: false
+      showHelpModal: false,
+      pageStart: 0,
+      newPageStart: 0,
+      fPageStart: 0,
+      isGetProduct: false,
+      fProductLen: 0
     }
   },
   watch: {
@@ -304,8 +307,8 @@ export default {
   methods: {
     initData () {
       initNewsData = []
-      pageStart = 0
-      newPageStart = 0
+      this.pageStart = 0
+      this.newPageStart = 0
       this.query = {}
       this.retailerInfo = {}
       this.showSos = false
@@ -322,6 +325,8 @@ export default {
       this.hideloading = false
       this.isNextNews = true
       this.haveMoreNews = false
+      this.isGetProduct = false
+      this.fProductLen = 0
     },
     clickHelp () {
       this.showHelpModal = true
@@ -384,27 +389,64 @@ export default {
       const scrollarea = self.$refs['scrollContainer'][0] ? self.$refs['scrollContainer'][0] : self.$refs['scrollContainer']
       self.$util.scrollEvent({
         element: scrollarea,
-        callback: function () {
+        callback: () => {
           console.log('in 滚动事件到底部了')
-          if (self.productdata.length === (pageStart + 1) * limit) {
-            pageStart++
-            self.$vux.loading.show()
-            self.getData1()
+          if (self.isGetProduct) {
+            if (self.productdata.length - self.fProductLen === (self.pageStart + 1) * limit) {
+              self.pageStart++
+              self.$vux.loading.show()
+              self.getData1()
+            } else {
+              self.scrollEnd = true
+            }
           } else {
-            self.scrollEnd = true
+            if (self.productdata.length === (self.fPageStart + 1) * limit) {
+              self.fPageStart++
+              self.$vux.loading.show()
+              self.getFactoryData()
+            }
           }
+        }
+      })
+    },
+    getFactoryData () {
+      const self = this
+      let params = { pagestart: this.fPageStart, limit: limit, agent: 1 }
+      if (self.query.wid) {
+        params.wid = self.query.wid
+      } else {
+        params.wid = self.loginUser.uid
+      }
+      self.$http.get(`${ENV.BokaApi}/api/list/product`, {
+        params: params
+      }).then(res => {
+        const data = res.data
+        if (self.hideloading) {
+          self.$vux.loading.hide()
+        }
+        const retdata = data.data ? data.data : data
+        self.productdata = self.productdata.concat(retdata)
+        self.fProductLen = self.productdata.length
+        if (self.productdata.length) {
+          self.disproductdata = true
+        }
+        if (retdata < limit) {
+          self.getData1()
         }
       })
     },
     getData1 () {
       const self = this
-      let params = { params: { pagestart: pageStart, limit: limit } }
+      let params = { pagestart: this.pageStart, limit: limit }
       if (self.query.wid) {
-        params.params.uploader = self.query.wid
+        params.uploader = self.query.wid
       } else {
-        params.params.from = 'myshop'
+        params.uploader = self.loginUser.uid
+        params.from = 'myshop'
       }
-      self.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(function (res) {
+      self.$http.get(`${ENV.BokaApi}/api/list/product`, {
+        params: params
+      }).then(function (res) {
         const data = res.data
         if (self.hideloading) {
           self.$vux.loading.hide()
@@ -412,13 +454,14 @@ export default {
         const retdata = data.data ? data.data : data
         self.productdata = self.productdata.concat(retdata)
         self.disproductdata = true
+        self.isGetProduct = true
       })
     },
     getnewsdata () {
       const self = this
       if (self.isNextNews) {
         self.isNextNews = false
-        const params = { pagestart: newPageStart, limit: newsLimit, uploader: self.query.wid }
+        const params = { pagestart: this.newPageStart, limit: newsLimit, uploader: self.query.wid }
         if (!self.query.wid) {
           params.uploader = self.loginUser.uid
         } else {
@@ -430,25 +473,25 @@ export default {
         .then(res => {
           self.isNextNews = true
           const data = res.data
-          if (newPageStart === 0) {
+          if (this.newPageStart === 0) {
             initNewsData = data
           }
           let isEmpty = false
           if (data.length === 0) {
-            if (newPageStart === 1) {
+            if (this.newPageStart === 1) {
               self.$vux.toast.text('不要再戳啦，没有更多咯', 'middle')
             }
             self.toplinedata = initNewsData
-            newPageStart = 1
+            this.newPageStart = 1
             isEmpty = true
           } else {
             self.toplinedata = data
           }
           if (data.length === newsLimit) {
-            newPageStart++
+            this.newPageStart++
             self.haveMoreNews = true
           } else if (data.length < newsLimit && !isEmpty) {
-            newPageStart = 0
+            this.newPageStart = 0
           }
         })
       }
@@ -470,7 +513,7 @@ export default {
     },
     changeNews () {
       const self = this
-      if (!self.haveMoreNews && newPageStart === 0 && self.toplinedata.length < newsLimit) {
+      if (!self.haveMoreNews && this.newPageStart === 0 && self.toplinedata.length < newsLimit) {
         self.$vux.toast.text('不要再戳啦，没有更多咯', 'middle')
       } else {
         this.getnewsdata()
@@ -634,7 +677,7 @@ export default {
       this.getData()
       if (this.productdata.length < limit) {
         this.productdata = []
-        this.getData1()
+        this.getFactoryData()
       }
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     }
