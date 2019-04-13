@@ -430,7 +430,7 @@ export default {
         if (self.productdata.length) {
           self.disproductdata = true
         }
-        if (retdata < limit) {
+        if (retdata.length < limit) {
           self.getData1()
         }
       })
