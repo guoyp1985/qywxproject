@@ -284,13 +284,15 @@ export default {
     },
     getFactoryData () {
       const self = this
-      let params = { pagestart: this.fPageStart, limit: this.limit, type: 'agent' }
+      let params = { pagestart: this.fPageStart, limit: this.limit, agent: 1 }
       if (self.query.wid) {
         params.wid = self.query.wid
       } else {
         params.wid = self.loginUser.uid
       }
-      this.$http.post(`${ENV.BokaApi}/api/seller/shareList/product`, params).then(res => {
+      self.$http.get(`${ENV.BokaApi}/api/list/product`, {
+        params: params
+      }).then(res => {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
@@ -307,7 +309,8 @@ export default {
     getData1 () {
       const self = this
       let params = { wid: self.query.wid, pagestart: pageStart1, limit: self.limit }
-      this.$http.post(`${ENV.BokaApi}/api/seller/shareList/product`, params).then(res => {
+      this.$http.post(`${ENV.BokaApi}/api/seller/shareList/product`, params)
+      .then(res => {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
