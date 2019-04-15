@@ -74,7 +74,7 @@
                     @on-cancel="onCancelSearch"
                     ref="search">
                   </search>
-                  <div class="scroll_list">
+                  <div class="scroll_list" v-if="disProductList">
                     <div v-if="!productdata || productdata.length === 0" class="scroll_item padding10 color-gray align_center">
                       <template v-if="searchresult">
                         <div class="flex_center" style="height:80px;">暂无搜索结果</div>
@@ -108,7 +108,7 @@
                     @on-cancel="onCancelSearch1"
                     ref="search">
                   </search>
-                  <div class="scroll_list">
+                  <div class="scroll_list" v-if="disFactoryList">
                     <div v-if="!factoryData || factoryData.length === 0" class="scroll_item padding10 color-gray align_center">
                       <template v-if="searchresult1">
                         <div class="flex_center" style="height:80px;">暂无搜索结果</div>
@@ -285,7 +285,9 @@ export default {
       editTipCss: '',
       selectedIndex: 0,
       fPageStart: 0,
-      factoryData: []
+      factoryData: [],
+      disProductList: false,
+      disFactoryList: false
     }
   },
   computed: {
@@ -462,6 +464,7 @@ export default {
         }
         const retdata = data.data ? data.data : data
         self.factoryData = self.factoryData.concat(retdata)
+        self.disFactoryList = true
       })
     },
     getProductData () {
@@ -482,6 +485,7 @@ export default {
         }
         let retdata = data.data ? data.data : data
         self.productdata = self.productdata.concat(retdata)
+        self.disProductList = true
       })
     },
     getCustomerdata () {
