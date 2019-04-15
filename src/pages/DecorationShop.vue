@@ -370,7 +370,7 @@ export default {
             self.showSos = false
             self.showContainer = true
             self.$vux.loading.show()
-            self.getFactoryData()
+            self.getData()
           }
         }
       })
@@ -390,7 +390,7 @@ export default {
         this.fProductLen = 0
         this.fPageStart = 0
         this.$vux.loading.show()
-        this.getFactoryData()
+        this.getData()
       }
     }
   },
