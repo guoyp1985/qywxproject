@@ -1,48 +1,98 @@
 <template>
   <div class="containerarea bg-page font14 s-havebottom decorationshop">
+    <tab v-model="selectedIndex" class="w_100 v-tab">
+      <tab-item v-for="(item,index) in tabtxts" :selected="selectedIndex == index" :key="index">{{item}}</tab-item>
+    </tab>
     <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
     </template>
     <template v-if="showContainer">
-      <div class="s-container scroll-container" :style="`top:0px;${query.from == 'miniprogram' ? 'bottom:0;' : ''}`" ref="scrollContainer" @scroll="handleScroll">
-        <div v-if="disData" class="scroll_list bg-page">
-          <template v-if="!productdata || productdata.length == 0">
-            <div class="emptyitem">
-              <div class="t-table" style="padding-top:20%;">
-                <div class="t-cell padding10">
-                  <i class="al al-chuangjianxiangmu" style="font-size:60px;"></i>
-                  <div>还没有可装修商品哦，及时添加商品可以：</div>
-                  <div>1.创建促销活动 </div>
-                  <div>2.分享商品获得客户</div>
-                  <div>3.邀请返点客帮你赚钱</div>
-                </div>
-              </div>
-            </div>
-          </template>
-          <template v-else v-for="(item,index) in productdata">
-            <!-- <router-link :to="{path:'/product',query:{id:item.id,wid:loginUser.uid}}" v-if="item.moderate == 1" class="scroll_item mb5 font14 bg-white db" :key="item.id" style="color:inherit;"> -->
-            <div v-if="item.moderate == 1" class="scroll_item mb5 font14 bg-white db" :key="item.id" style="color:inherit;">
-              <div class="t-table bg-white pt10 pb10">
-          			<div class="t-cell pl10 v_middle" style="width:90px;" @click="onProduct(item)">
-                  <img class="imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" style="width:80px;height:80px;" />
-          			</div>
-          			<div class="t-cell v_middle">
-                  <div  @click="onProduct(item)">
-                    <div class="clamp2 font15 pr10">{{item.title}}</div>
-                    <div class="mt5 dishref db">
-                      <span class="color-red font15 middle-cell">{{ $t('RMB') }} {{ item.price }}</span>
+      <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
+        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
+          <div v-if="(index == 0)">
+            <div class="s-container scroll-container" :style="`top:0px;${query.from == 'miniprogram' ? 'bottom:0;' : ''}`" ref="scrollContainer" @scroll="handleScroll">
+              <div v-if="disData" class="scroll_list bg-page">
+                <template v-if="!productdata || productdata.length == 0">
+                  <div class="emptyitem">
+                    <div class="t-table" style="padding-top:20%;">
+                      <div class="t-cell padding10">
+                        <i class="al al-chuangjianxiangmu" style="font-size:60px;"></i>
+                        <div>还没有可装修商品哦，及时添加商品可以：</div>
+                        <div>1.创建促销活动 </div>
+                        <div>2.分享商品获得客户</div>
+                        <div>3.邀请返点客帮你赚钱</div>
+                      </div>
                     </div>
                   </div>
-                  <div class="align_right pr10">
-                    <div class="qbtn2" @click="showRolling(item,index)">{{ $t('Rolling show') }}</div>
+                </template>
+                <template v-for="(item,index) in productdata">
+                  <!-- <router-link :to="{path:'/product',query:{id:item.id,wid:loginUser.uid}}" v-if="item.moderate == 1" class="scroll_item mb5 font14 bg-white db" :key="item.id" style="color:inherit;"> -->
+                  <div v-if="item.moderate == 1" class="scroll_item mb5 font14 bg-white db" :key="item.id" style="color:inherit;">
+                    <div class="t-table bg-white pt10 pb10">
+                			<div class="t-cell pl10 v_middle" style="width:90px;" @click="onProduct(item)">
+                        <img class="imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" style="width:80px;height:80px;" />
+                			</div>
+                			<div class="t-cell v_middle">
+                        <div  @click="onProduct(item)">
+                          <div class="clamp2 font15 pr10">{{item.title}}</div>
+                          <div class="mt5 dishref db">
+                            <span class="color-red font15 middle-cell">{{ $t('RMB') }} {{ item.price }}</span>
+                          </div>
+                        </div>
+                        <div class="align_right pr10">
+                          <div class="qbtn2" @click="showRolling(item,index)">{{ $t('Rolling show') }}</div>
+                        </div>
+                			</div>
+                		</div>
                   </div>
-          			</div>
-          		</div>
+                  <!-- </router-link> -->
+                </template>
+              </div>
             </div>
-            <!-- </router-link> -->
-          </template>
-        </div>
-      </div>
+          </div>
+          <div v-if="(index == 1)">
+            <div class="s-container scroll-container" :style="`top:0px;${query.from == 'miniprogram' ? 'bottom:0;' : ''}`" ref="scrollContainer" @scroll="handleScroll">
+              <div v-if="disData" class="scroll_list bg-page">
+                <template v-if="!factorydata || factorydata.length == 0">
+                  <div class="emptyitem">
+                    <div class="t-table" style="padding-top:20%;">
+                      <div class="t-cell padding10">
+                        <i class="al al-chuangjianxiangmu" style="font-size:60px;"></i>
+                        <div>还没有可装修商品哦，及时添加商品可以：</div>
+                        <div>1.创建促销活动 </div>
+                        <div>2.分享商品获得客户</div>
+                        <div>3.邀请返点客帮你赚钱</div>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+                <template v-for="(item,index) in factorydata">
+                  <!-- <router-link :to="{path:'/product',query:{id:item.id,wid:loginUser.uid}}" v-if="item.moderate == 1" class="scroll_item mb5 font14 bg-white db" :key="item.id" style="color:inherit;"> -->
+                  <div v-if="item.moderate == 1" class="scroll_item mb5 font14 bg-white db" :key="item.id" style="color:inherit;">
+                    <div class="t-table bg-white pt10 pb10">
+                			<div class="t-cell pl10 v_middle" style="width:90px;" @click="onProduct(item)">
+                        <img class="imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" style="width:80px;height:80px;" />
+                			</div>
+                			<div class="t-cell v_middle">
+                        <div  @click="onProduct(item)">
+                          <div class="clamp2 font15 pr10">{{item.title}}</div>
+                          <div class="mt5 dishref db">
+                            <span class="color-red font15 middle-cell">{{ $t('RMB') }} {{ item.price }}</span>
+                          </div>
+                        </div>
+                        <div class="align_right pr10">
+                          <div class="qbtn2" @click="showRolling(item,index)">{{ $t('Rolling show') }}</div>
+                        </div>
+                			</div>
+                		</div>
+                  </div>
+                  <!-- </router-link> -->
+                </template>
+              </div>
+            </div>
+          </div>
+        </swiper-item>
+      </swiper>
       <div class="s-bottom" v-if="query.from != 'miniprogram'">
         <div class="t-table h_100 align_center">
           <router-link class="t-cell h_100 v_middle bg-gray color-white" :to="{path: '/store'}">{{ $t('Back go shop') }}</router-link>
@@ -110,7 +160,7 @@ Please upload rolling show photo:
 </i18n>
 
 <script>
-import { TransferDom, Popup, Confirm, Alert, XImg } from 'vux'
+import { TransferDom, Popup, Confirm, Alert, XImg, Tab, TabItem, Swiper, SwiperItem } from 'vux'
 import ClipPopup from '@/components/ClipPopup'
 import Sos from '@/components/Sos'
 import { User } from '#/storage'
@@ -123,7 +173,7 @@ export default {
     TransferDom
   },
   components: {
-    Popup, Confirm, Alert, ClipPopup, XImg, Sos
+    Popup, Confirm, Alert, ClipPopup, XImg, Sos, Tab, TabItem, Swiper, SwiperItem
   },
   data () {
     return {
@@ -133,6 +183,7 @@ export default {
       showContainer: false,
       loginUser: {},
       productdata: [],
+      factorydata: [],
       clickdata: {},
       clickindex: 0,
       showphotopop: false,
@@ -145,7 +196,9 @@ export default {
       disData: false,
       fPageStart: 0,
       isGetProduct: false,
-      fProductLen: 0
+      fProductLen: 0,
+      selectedIndex: 0,
+      tabtxts: [ '上架商品', '厂家商品' ]
     }
   },
   watch: {
@@ -157,6 +210,29 @@ export default {
     }
   },
   methods: {
+    swiperChange (index) {
+      if (index !== self.selectedIndex) {
+        self.selectedIndex = index
+      }
+      switch (this.selectedIndex) {
+        case 0:
+          if (this.productdata.length < limit) {
+            this.pagestart1 = 0
+            this.disData = false
+            this.productdata = []
+            this.getData()
+          }
+          break
+        case 1:
+          if (this.factorydata.length < limit) {
+            this.fPageStart = 0
+            this.disData = false
+            this.factorydata = []
+            this.getFactoryData()
+          }
+          break
+      }
+    },
     onProduct (item) {
       if (this.query.from === 'miniprogram') {
         this.$wechat.miniProgram.redirectTo({url: `/packageB/pages/product?id=${item.id}&wid=${this.loginUser.uid}`})
@@ -338,6 +414,8 @@ export default {
         const data = res.data
         self.$vux.loading.hide()
         const retdata = data.data ? data.data : data
+        self.factorydata = self.factorydata.concat(retdata)
+        self.disData = true
       })
     },
     getData () {
@@ -386,11 +464,13 @@ export default {
         pagestart1 = 0
         this.disData = false
         this.productdata = []
+        this.factorydata = []
         this.isGetProduct = false
         this.fProductLen = 0
         this.fPageStart = 0
         this.$vux.loading.show()
         this.getData()
+        this.getFactoryData()
       }
     }
   },
@@ -404,4 +484,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
+  .decorationshop .scroll_item{overflow:hidden;position:relative;}
 </style>
