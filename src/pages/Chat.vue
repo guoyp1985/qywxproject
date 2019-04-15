@@ -305,7 +305,10 @@ export default {
       bottomPos: 0,
       clickMsgItem: {},
       showQrcodeModal: false,
-      storeTitle: ''
+      storeTitle: '',
+      fPageStart: 0,
+      isGetProduct: false,
+      fProductLen: 0
     }
   },
   filters: {
@@ -799,7 +802,7 @@ export default {
         self.$vux.loading.show()
         self.productsData = []
         self.pagestart2 = 0
-        self.getProductData()
+        self.getFactoryData()
       }
     },
     onSearchSubmit () {
@@ -813,7 +816,7 @@ export default {
         self.$vux.loading.show()
         self.productsData = []
         self.pagestart2 = 0
-        self.getProductData()
+        self.getFactoryData()
       }
     },
     swiperChange (index) {
@@ -824,7 +827,7 @@ export default {
         self.getNewsData()
       } else if (index === 1 && self.productsData.length === 0) {
         self.$vux.loading.show()
-        self.getProductData()
+        self.getFactoryData()
       }
     },
     handleScroll1 () {
@@ -844,11 +847,19 @@ export default {
       const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer2[0],
-        callback: function () {
-          if (self.productsData.length === (self.pagestart2 + 1) * self.limit1) {
-            self.pagestart2++
-            self.$vux.loading.show()
-            self.getProductData()
+        callback: () => {
+          if (self.isGetProduct) {
+            if (self.productsData.length - self.fProductLen === (self.pagestart2 + 1) * self.limit1) {
+              self.pagestart2++
+              self.$vux.loading.show()
+              self.getProductData()
+            }
+          } else {
+            if (self.productsData.length === (self.fPageStart + 1) * self.limit1) {
+              self.fPageStart++
+              self.$vux.loading.show()
+              self.getFactoryData()
+            }
           }
         }
       })
@@ -905,6 +916,32 @@ export default {
         self.disNewsData = true
       })
     },
+    getFactoryData () {
+      const self = this
+      let keyword = self.searchword
+      let params = { pagestart: this.fPageStart, limit: self.limit1, agent: 1 }
+      if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
+        self.searchresult2 = true
+        params.keyword = keyword
+      } else {
+        self.searchresult2 = false
+      }
+      self.$http.get(`${ENV.BokaApi}/api/list/product`, {
+        params: params
+      }).then(res => {
+        const data = res.data
+        self.$vux.loading.hide()
+        const retdata = data.data ? data.data : data
+        self.productsData = self.productsData.concat(retdata)
+        self.fProductLen = self.productsData.length
+        if (self.productsData.length) {
+          self.disProductsData = true
+        }
+        if (retdata.length < self.limit1) {
+          self.getProductData()
+        }
+      })
+    },
     getProductData () {
       const self = this
       let keyword = self.searchword
@@ -917,7 +954,8 @@ export default {
       }
       self.$http.get(`${ENV.BokaApi}/api/list/product?from=retailer`, {
         params: params
-      }).then(function (res) {
+      }).then(res => {
+        self.isGetProduct = true
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
