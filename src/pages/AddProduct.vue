@@ -513,6 +513,10 @@ export default {
           self.$vux.toast.text('请输入正确的价格', 'middle')
           return false
         }
+        if (self.$util.trim(oriprice) !== '' && parseFloat(oriprice) <= parseFloat(price)) {
+          self.$vux.toast.text('商品现价不能大于等于原价', 'middle')
+          return false
+        }
         if (self.$util.trim(postdata.storage) === '') {
           self.$vux.toast.text('请输入商品库存', 'middle')
           return false
