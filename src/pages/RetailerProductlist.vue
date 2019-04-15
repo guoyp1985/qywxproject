@@ -157,7 +157,7 @@
       <popup class="menuwrap" v-model="showpopup1">
         <div class="popup0">
           <div class="list" v-if="clickdata">
-            <div class="item" v-if="clickdata.moderate == 1">
+            <div class="item" v-if="clickdata.moderate == 1 && !clickdata.fid">
               <div class="inner" @click="clickpopup('activity')">创建活动</div>
             </div>
             <div class="item" v-if="clickdata.activityid == 0">
