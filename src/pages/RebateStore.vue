@@ -62,7 +62,7 @@
                     零售价：{{$t('RMB')}}{{item.price}}
                   </span>
                   <span class="date-cell color-red">
-                    佣金：{{$t('RMB')}}{{item.rebate}}
+                    返点客佣金：{{$t('RMB')}}{{item.rebate}}
                   </span>
                 </div>
               </cell>
