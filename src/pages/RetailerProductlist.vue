@@ -488,10 +488,11 @@ export default {
       self.$http.post(`${ENV.BokaApi}/api/moderate/product`, params).then((res) => {
         let data = res.data
         self.$vux.loading.hide()
+        let error = data.flag ? '上架成功' : data.error
         self.$vux.toast.show({
-          text: data.error,
+          text: error,
           type: (data.flag !== 1 ? 'warn' : 'success'),
-          time: self.$util.delay(data.error),
+          time: self.$util.delay(error),
           onHide: function () {
             if (data.flag === 1) {
               self.clickdata.moderate = 1
@@ -518,10 +519,11 @@ export default {
       self.$http.post(`${ENV.BokaApi}/api/moderate/product`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
+        let error = data.flag ? '下架成功' : data.error
         self.$vux.toast.show({
-          text: data.error,
+          text: error,
           type: (data.flag !== 1 ? 'warn' : 'success'),
-          time: self.$util.delay(data.error),
+          time: self.$util.delay(error),
           onHide: function () {
             if (data.flag === 1) {
               self.clickdata.moderate = 0
