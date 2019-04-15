@@ -384,31 +384,31 @@ export default {
       }
       self.$router.push({path: '/centerSeller', query: params})
     },
-    handleScroll () {
-      const self = this
-      const scrollarea = self.$refs['scrollContainer'][0] ? self.$refs['scrollContainer'][0] : self.$refs['scrollContainer']
-      self.$util.scrollEvent({
-        element: scrollarea,
-        callback: () => {
-          console.log('in 滚动事件到底部了')
-          if (self.isGetProduct) {
-            if (self.productdata.length - self.fProductLen === (self.pageStart + 1) * limit) {
-              self.pageStart++
-              self.$vux.loading.show()
-              self.getData1()
-            } else {
-              self.scrollEnd = true
-            }
-          } else {
-            if (self.productdata.length === (self.fPageStart + 1) * limit) {
-              self.fPageStart++
-              self.$vux.loading.show()
-              self.getFactoryData()
-            }
-          }
-        }
-      })
-    },
+    // handleScroll () {
+    //   const self = this
+    //   const scrollarea = self.$refs['scrollContainer'][0] ? self.$refs['scrollContainer'][0] : self.$refs['scrollContainer']
+    //   self.$util.scrollEvent({
+    //     element: scrollarea,
+    //     callback: () => {
+    //       console.log('in 滚动事件到底部了')
+    //       if (self.isGetProduct) {
+    //         if (self.productdata.length - self.fProductLen === (self.pageStart + 1) * limit) {
+    //           self.pageStart++
+    //           self.$vux.loading.show()
+    //           self.getData1()
+    //         } else {
+    //           self.scrollEnd = true
+    //         }
+    //       } else {
+    //         if (self.productdata.length === (self.fPageStart + 1) * limit) {
+    //           self.fPageStart++
+    //           self.$vux.loading.show()
+    //           self.getFactoryData()
+    //         }
+    //       }
+    //     }
+    //   })
+    // },
     getFactoryData () {
       const self = this
       let params = { pagestart: this.fPageStart, limit: limit, agent: 1 }
@@ -435,16 +435,52 @@ export default {
         }
       })
     },
+    // getData1 () {
+    //   const self = this
+    //   let params = { pagestart: this.pageStart, limit: limit }
+    //   if (self.query.wid) {
+    //     params.uploader = self.query.wid
+    //   } else {
+    //     params.uploader = self.loginUser.uid
+    //     params.from = 'myshop'
+    //   }
+    //   self.$http.get(`${ENV.BokaApi}/api/list/product`, {
+    //     params: params
+    //   }).then(function (res) {
+    //     const data = res.data
+    //     if (self.hideloading) {
+    //       self.$vux.loading.hide()
+    //     }
+    //     const retdata = data.data ? data.data : data
+    //     self.productdata = self.productdata.concat(retdata)
+    //     self.disproductdata = true
+    //     self.isGetProduct = true
+    //   })
+    // },
+    handleScroll () {
+      const self = this
+      const scrollarea = self.$refs['scrollContainer'][0] ? self.$refs['scrollContainer'][0] : self.$refs['scrollContainer']
+      self.$util.scrollEvent({
+        element: scrollarea,
+        callback: () => {
+          console.log('in 滚动事件到底部了')
+          if (self.productdata.length === (self.pageStart + 1) * limit) {
+            self.pageStart++
+            self.$vux.loading.show()
+            self.getData1()
+          } else {
+            self.scrollEnd = true
+          }
+        }
+      })
+    },
     getData1 () {
       const self = this
       let params = { pagestart: this.pageStart, limit: limit }
       if (self.query.wid) {
-        params.uploader = self.query.wid
-      } else {
-        params.uploader = self.loginUser.uid
-        params.from = 'myshop'
+        params.wid = self.query.wid
       }
-      self.$http.get(`${ENV.BokaApi}/api/list/product`, {
+      self.$http.get(`${ENV.BokaApi}/api/retailer/getRetailerProducts`, {
         params: params
       }).then(function (res) {
         const data = res.data
@@ -454,7 +490,6 @@ export default {
         const retdata = data.data ? data.data : data
         self.productdata = self.productdata.concat(retdata)
         self.disproductdata = true
-        self.isGetProduct = true
       })
     },
     getnewsdata () {
@@ -677,7 +712,7 @@ export default {
       this.getData()
       if (this.productdata.length < limit) {
         this.productdata = []
-        this.getFactoryData()
+        this.getData1()
       }
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     }
