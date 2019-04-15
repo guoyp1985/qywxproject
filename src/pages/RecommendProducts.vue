@@ -3,32 +3,32 @@
     <tab class="w_100 v-tab">
       <tab-item v-for="(item,index) in classData" :selected="selectedIndex == index" :key="index"  @on-item-click="onItemClick">{{item.title}}</tab-item>
     </tab>
-    <div class="column-content" style="overflow-y:auto;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
-      <div class="pb10">
-        <template v-if="selectedIndex == 0">
-          <div>
-            <search
-              class="v-search bg-white"
-              v-model='searchword'
-              :auto-fixed="autofixed"
-              @on-submit="onSubmit"
-              @on-change="onChange"
-              @on-cancel="onCancel"
-              ref="search">
-            </search>
-          </div>
-          <div class="b_top_after pt10 pb10">
-            <div class="flex_center">
-              <div :class="`flex_cell flex_center b_right_after sort-icon ${sort == 'dateline' ? 'active' : ''}`" @click="sortEvent('dateline')">
-                <div class="txt">最新上架<span :class="`al sort ${datecss}`"></span></div>
-              </div>
-              <div :class="`flex_cell flex_center sort-icon ${sort == 'profit' ? 'active' : ''}`" @click="sortEvent('profit')">
-                <div class="txt">利润最高<span :class="`al sort ${pricecss}`"></span></div>
-              </div>
+    <div class="column-content" style="padding-bottom:10px;box-sizing:border-box;position:relative;">
+      <template v-if="selectedIndex == 0">
+        <div>
+          <search
+            class="v-search bg-white"
+            v-model='searchword'
+            :auto-fixed="autofixed"
+            @on-submit="onSubmit"
+            @on-change="onChange"
+            @on-cancel="onCancel"
+            ref="search">
+          </search>
+        </div>
+        <div class="b_top_after pt10 pb10">
+          <div class="flex_center">
+            <div :class="`flex_cell flex_center b_right_after sort-icon ${sort == 'dateline' ? 'active' : ''}`" @click="sortEvent('dateline')">
+              <div class="txt">最新上架<span :class="`al sort ${datecss}`"></span></div>
+            </div>
+            <div :class="`flex_cell flex_center sort-icon ${sort == 'profit' ? 'active' : ''}`" @click="sortEvent('profit')">
+              <div class="txt">利润最高<span :class="`al sort ${pricecss}`"></span></div>
             </div>
           </div>
-          <div class="b_top_after"></div>
-        </template>
+        </div>
+        <div class="b_top_after"></div>
+      </template>
+      <div :style="`overflow-y:auto;position:absolute;left:0;top:0;right:0;bottom:0;${selectedIndex == 0 ? 'top:100px;' : 'top:0;'}`" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
         <div v-if="disProductData" class="productlist squarepic">
           <div v-if="productData.length == 0" class="emptyitem flex_center align_center w_100">该分类下暂无货源数据</div>
           <div v-else @click="toFProduct(item)" v-for="(item,index) in productData" :key="index" class="bk-productitem scroll_item font14 db ">
