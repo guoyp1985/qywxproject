@@ -328,6 +328,7 @@ export default {
     popupCancel () {
       this.popupShow = false
     },
+    // 厂家商品
     getFactoryData () {
       const self = this
       let params = { pagestart: this.fPageStart, limit: limit, agent: 1 }
