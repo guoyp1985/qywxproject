@@ -270,10 +270,7 @@ export default {
       suggestData: [],
       showHelpModal: false,
       pageStart: 0,
-      newPageStart: 0,
-      fPageStart: 0,
-      isGetProduct: false,
-      fProductLen: 0
+      newPageStart: 0
     }
   },
   watch: {
@@ -325,8 +322,6 @@ export default {
       this.hideloading = false
       this.isNextNews = true
       this.haveMoreNews = false
-      this.isGetProduct = false
-      this.fProductLen = 0
     },
     clickHelp () {
       this.showHelpModal = true
@@ -384,79 +379,6 @@ export default {
       }
       self.$router.push({path: '/centerSeller', query: params})
     },
-    // handleScroll () {
-    //   const self = this
-    //   const scrollarea = self.$refs['scrollContainer'][0] ? self.$refs['scrollContainer'][0] : self.$refs['scrollContainer']
-    //   self.$util.scrollEvent({
-    //     element: scrollarea,
-    //     callback: () => {
-    //       console.log('in 滚动事件到底部了')
-    //       if (self.isGetProduct) {
-    //         if (self.productdata.length - self.fProductLen === (self.pageStart + 1) * limit) {
-    //           self.pageStart++
-    //           self.$vux.loading.show()
-    //           self.getData1()
-    //         } else {
-    //           self.scrollEnd = true
-    //         }
-    //       } else {
-    //         if (self.productdata.length === (self.fPageStart + 1) * limit) {
-    //           self.fPageStart++
-    //           self.$vux.loading.show()
-    //           self.getFactoryData()
-    //         }
-    //       }
-    //     }
-    //   })
-    // },
-    getFactoryData () {
-      const self = this
-      let params = { pagestart: this.fPageStart, limit: limit, agent: 1 }
-      if (self.query.wid) {
-        params.wid = self.query.wid
-      } else {
-        params.wid = self.loginUser.uid
-      }
-      self.$http.get(`${ENV.BokaApi}/api/list/product`, {
-        params: params
-      }).then(res => {
-        const data = res.data
-        if (self.hideloading) {
-          self.$vux.loading.hide()
-        }
-        const retdata = data.data ? data.data : data
-        self.productdata = self.productdata.concat(retdata)
-        self.fProductLen = self.productdata.length
-        if (self.productdata.length) {
-          self.disproductdata = true
-        }
-        if (retdata.length < limit) {
-          self.getData1()
-        }
-      })
-    },
-    // getData1 () {
-    //   const self = this
-    //   let params = { pagestart: this.pageStart, limit: limit }
-    //   if (self.query.wid) {
-    //     params.uploader = self.query.wid
-    //   } else {
-    //     params.uploader = self.loginUser.uid
-    //     params.from = 'myshop'
-    //   }
-    //   self.$http.get(`${ENV.BokaApi}/api/list/product`, {
-    //     params: params
-    //   }).then(function (res) {
-    //     const data = res.data
-    //     if (self.hideloading) {
-    //       self.$vux.loading.hide()
-    //     }
-    //     const retdata = data.data ? data.data : data
-    //     self.productdata = self.productdata.concat(retdata)
-    //     self.disproductdata = true
-    //     self.isGetProduct = true
-    //   })
-    // },
     handleScroll () {
       const self = this
       const scrollarea = self.$refs['scrollContainer'][0] ? self.$refs['scrollContainer'][0] : self.$refs['scrollContainer']
