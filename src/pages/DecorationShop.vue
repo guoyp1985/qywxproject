@@ -1,16 +1,16 @@
 <template>
   <div class="containerarea bg-page font14 s-havebottom decorationshop">
-    <tab v-model="selectedIndex" class="w_100 v-tab">
-      <tab-item v-for="(item,index) in tabtxts" :selected="selectedIndex == index" :key="index">{{item}}</tab-item>
-    </tab>
     <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
     </template>
     <template v-if="showContainer">
-      <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
-        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-          <div v-if="(index == 0)" class="swiper-inner" ref="scrollContainer">
-            <div class="s-container scroll-container" :style="`top:0px;${query.from == 'miniprogram' ? 'bottom:0;' : ''}`" @scroll="handleScroll(index)">
+      <tab v-model="selectedIndex" class="w_100 v-tab">
+        <tab-item v-for="(item,index) in tabtxts" :selected="selectedIndex == index" :key="index">{{item}}</tab-item>
+      </tab>
+      <div class="s-container scroll-container" :style="`top:44px;${query.from == 'miniprogram' ? 'bottom:0;' : ''}`">
+        <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
+          <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
+            <div v-if="(index == 0)" class="swiper-inner" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
               <div v-if="disData" class="scroll_list bg-page" style="margin-bottom:45px;">
                 <template v-if="!productdata || productdata.length == 0">
                   <div class="emptyitem">
@@ -49,9 +49,7 @@
                 </template>
               </div>
             </div>
-          </div>
-          <div v-if="(index == 1)" class="swiper-inner" ref="scrollContainer">
-            <div class="s-container scroll-container" :style="`top:0px;${query.from == 'miniprogram' ? 'bottom:0;' : ''}`" @scroll="handleScroll(index)">
+            <div v-if="(index == 1)" class="swiper-inner" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1')">
               <div v-if="disData" class="scroll_list bg-page" style="margin-bottom:45px;">
                 <template v-if="!factorydata || factorydata.length == 0">
                   <div class="emptyitem">
@@ -90,9 +88,9 @@
                 </template>
               </div>
             </div>
-          </div>
-        </swiper-item>
-      </swiper>
+          </swiper-item>
+        </swiper>
+      </div>
       <div class="sv-bottom" v-if="query.from != 'miniprogram'">
         <div class="t-table h_100 align_center">
           <router-link class="t-cell h_100 v_middle bg-gray color-white" :to="{path: '/store'}">{{ $t('Back go shop') }}</router-link>
@@ -246,11 +244,11 @@ export default {
         })
       }
     },
-    handleScroll () {
+    handleScroll (refname) {
       const self = this
-        console.log(self.selectedIndex)
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
-        element: self.$refs.scrollContainer,
+        element: scrollarea,
         callback: function () {
           if (self.selectedIndex === 0) {
             if (self.productdata.length === (pagestart1 + 1) * limit) {
