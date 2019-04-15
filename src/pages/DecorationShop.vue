@@ -142,7 +142,10 @@ export default {
       rollingData: null,
       cutImg: '',
       popupShow: false,
-      disData: false
+      disData: false,
+      fPageStart: 0,
+      isGetProduct: false,
+      fProductLen: 0
     }
   },
   watch: {
@@ -172,10 +175,18 @@ export default {
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer,
         callback: function () {
-          if (self.productdata.length === (pagestart1 + 1) * limit) {
-            pagestart1++
-            self.$vux.loading.show()
-            self.getData()
+          if (self.isGetProduct) {
+            if (self.productdata.length - self.fProductLen === (pagestart1 + 1) * limit) {
+              pagestart1++
+              self.$vux.loading.show()
+              self.getData()
+            }
+          } else {
+            if (self.productdata.length === (self.fPageStart + 1) * limit) {
+              self.fPageStart++
+              self.$vux.loading.show()
+              self.getFactoryData()
+            }
           }
         }
       })
@@ -325,10 +336,30 @@ export default {
     popupCancel () {
       this.popupShow = false
     },
+    getFactoryData () {
+      const self = this
+      let params = { pagestart: this.fPageStart, limit: limit, agent: 1 }
+      self.$http.get(`${ENV.BokaApi}/api/list/product`, {
+        params: params
+      }).then(res => {
+        const data = res.data
+        self.$vux.loading.hide()
+        const retdata = data.data ? data.data : data
+        self.productdata = self.productdata.concat(retdata)
+        self.fProductLen = self.productdata.length
+        if (self.productdata.length) {
+          self.disData = true
+        }
+        if (retdata.length < limit) {
+          self.getData()
+        }
+      })
+    },
     getData () {
       const self = this
       const params = { params: { from: 'myshop', pagestart: pagestart1, limit: limit } }
       self.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(function (res) {
+        self.isGetProduct = true
         const data = res.data
         const retdata = data.data ? data.data : data
         self.$vux.loading.hide()
@@ -355,7 +386,7 @@ export default {
             self.showSos = false
             self.showContainer = true
             self.$vux.loading.show()
-            self.getData()
+            self.getFactoryData()
           }
         }
       })
@@ -371,8 +402,11 @@ export default {
         pagestart1 = 0
         this.disData = false
         this.productdata = []
+        this.isGetProduct = false
+        this.fProductLen = 0
+        this.fPageStart = 0
         this.$vux.loading.show()
-        this.getData()
+        this.getFactoryData()
       }
     }
   },
