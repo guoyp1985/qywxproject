@@ -9,8 +9,8 @@
     <template v-if="showContainer">
       <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-          <div v-if="(index == 0)">
-            <div class="s-container scroll-container" :style="`top:0px;${query.from == 'miniprogram' ? 'bottom:0;' : ''}`" ref="scrollContainer" @scroll="handleScroll">
+          <div v-if="(index == 0)" class="swiper-inner" ref="scrollContainer">
+            <div class="s-container scroll-container" :style="`top:0px;${query.from == 'miniprogram' ? 'bottom:0;' : ''}`" @scroll="handleScroll(index)">
               <div v-if="disData" class="scroll_list bg-page" style="margin-bottom:45px;">
                 <template v-if="!productdata || productdata.length == 0">
                   <div class="emptyitem">
@@ -50,8 +50,8 @@
               </div>
             </div>
           </div>
-          <div v-if="(index == 1)">
-            <div class="s-container scroll-container" :style="`top:0px;${query.from == 'miniprogram' ? 'bottom:0;' : ''}`" ref="scrollContainer" @scroll="handleScroll">
+          <div v-if="(index == 1)" class="swiper-inner" ref="scrollContainer">
+            <div class="s-container scroll-container" :style="`top:0px;${query.from == 'miniprogram' ? 'bottom:0;' : ''}`" @scroll="handleScroll(index)">
               <div v-if="disData" class="scroll_list bg-page" style="margin-bottom:45px;">
                 <template v-if="!factorydata || factorydata.length == 0">
                   <div class="emptyitem">
@@ -248,13 +248,22 @@ export default {
     },
     handleScroll () {
       const self = this
+        console.log(self.selectedIndex)
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer,
         callback: function () {
-          if (self.productdata.length === (pagestart1 + 1) * limit) {
-            pagestart1++
-            self.$vux.loading.show()
-            self.getData()
+          if (self.selectedIndex === 0) {
+            if (self.productdata.length === (pagestart1 + 1) * limit) {
+              pagestart1++
+              self.$vux.loading.show()
+              self.getData()
+            }
+          } else {
+            if (self.factorydata.length === (self.fPageStart + 1) * limit) {
+              self.fPageStart++
+              self.$vux.loading.show()
+              self.getFactoryData()
+            }
           }
         }
       })
