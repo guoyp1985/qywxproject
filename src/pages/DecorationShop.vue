@@ -11,7 +11,7 @@
         <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
           <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
             <div v-if="(index == 0)" class="swiper-inner" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
-              <div v-if="disData" class="scroll_list bg-page" style="margin-bottom:45px;">
+              <div v-if="disData" class="scroll_list bg-page">
                 <template v-if="!productdata || productdata.length == 0">
                   <div class="emptyitem">
                     <div class="t-table" style="padding-top:20%;">
@@ -50,7 +50,7 @@
               </div>
             </div>
             <div v-if="(index == 1)" class="swiper-inner" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1')">
-              <div v-if="disData" class="scroll_list bg-page" style="margin-bottom:45px;">
+              <div v-if="disData" class="scroll_list bg-page">
                 <template v-if="!factorydata || factorydata.length == 0">
                   <div class="emptyitem">
                     <div class="t-table" style="padding-top:20%;">
