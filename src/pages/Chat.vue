@@ -280,7 +280,7 @@ export default {
       diffSeconds: 300,
       msgType: 'text',
       tabmodel: 0,
-      tabtxts: [ '文章', '产品' ],
+      tabtxts: [ '文章', '商品' ],
       autofixed: false,
       searchword: '',
       showSearchEmpty: false,
@@ -769,6 +769,23 @@ export default {
     },
     sendImgTxt () {
       const self = this
+      if (self.tabmodel === 0) {
+        if (!self.selectNewsData || !self.selectNewsData.id) {
+          self.$vux.toast.show({
+            text: '请选择文章',
+            type: 'text'
+          })
+          return false
+        }
+      } else {
+        if (!self.selectProductsData || !self.selectProductsData.id) {
+          self.$vux.toast.show({
+            text: '请选择商品',
+            type: 'text'
+          })
+          return false
+        }
+      }
       let postdata = {
         touid: self.query.uid,
         sendtype: 'news',
