@@ -231,10 +231,7 @@ export default {
       tabData2: [],
       tabData3: [],
       tabData4: [],
-      platform: '共销客',
-      fPageStart: 0,
-      isGetProduct: false,
-      fProductLen: 0
+      platform: '共销客'
     }
   },
   filters: {
@@ -350,29 +347,12 @@ export default {
               }
               break
             case 1:
-              // if (self.tabData2.length === (pageStart2 + 1) * limit) {
-              //   pageStart2++
-              //   self.$vux.loading.show()
-              //   self.getData2()
-              // } else {
-              //   self.$vux.loading.hide()
-              // }
-              if (self.isGetProduct) {
-                if (self.tabData2.length - self.fProductLen === (pageStart2 + 1) * limit) {
-                  pageStart2++
-                  self.$vux.loading.show()
-                  self.getData2()
-                } else {
-                  self.$vux.loading.hide()
-                }
+              if (self.tabData2.length === (pageStart2 + 1) * limit) {
+                pageStart2++
+                self.$vux.loading.show()
+                self.getData2()
               } else {
-                if (self.tabData2.length === (self.fPageStart + 1) * limit) {
-                  self.fPageStart++
-                  self.$vux.loading.show()
-                  self.getFactoryData()
-                } else {
-                  self.$vux.loading.hide()
-                }
+                self.$vux.loading.hide()
               }
               break
             case 2:
@@ -411,14 +391,10 @@ export default {
           break
         case 1:
           if (this.tabData2.length < limit) {
-            // pageStart2 = 0
-            // this.disTabData2 = false
-            // this.tabData2 = []
-            // this.getData2()
-            this.fPageStart = 0
+            pageStart2 = 0
             this.disTabData2 = false
             this.tabData2 = []
-            this.getFactoryData()
+            this.getData2()
           } else {
             this.$vux.loading.hide()
           }
@@ -459,31 +435,13 @@ export default {
         self.disTabData1 = true
       })
     },
-    getFactoryData () {
-      const self = this
-      let params = { pagestart: this.fPageStart, limit: limit, agent: 1 }
-      self.$http.get(`${ENV.BokaApi}/api/list/product`, {
-        params: params
-      }).then(res => {
-        self.$vux.loading.hide()
-        const data = res.data
-        const retdata = data.data ? data.data : data
-        self.tabData2 = self.tabData2.concat(retdata)
-        self.fProductLen = self.tabData2.length
-        if (self.tabData2.length) {
-          self.disTabData2 = true
-        }
-        if (retdata.length < limit) {
-          self.getData2()
-        }
-      })
-    },
     getData2 () {
       const self = this
       let params = { pagestart: pageStart2, limit: limit }
-      this.$http.post(`${ENV.BokaApi}/api/seller/shareList/product`, params)
+      self.$http.get(`${ENV.BokaApi}/api/retailer/getRetailerProducts`, {
+        params: params
+      })
       .then(res => {
-        self.isGetProduct = true
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
