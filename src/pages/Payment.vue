@@ -96,7 +96,7 @@ import Productitemplate from '@/components/Productitemplate'
 let self = {}
 let pageStart = 0
 const limit = 10
-export default{
+export default {
   components: {
     Groupbuyitemplate, Bargainbuyitemplate, Productitemplate
   },
@@ -111,7 +111,10 @@ export default{
       productData: [],
       showQrcode: false,
       showMpQrcode: false,
-      WeixinQrcode: ENV.WeixinQrcode
+      WeixinQrcode: ENV.WeixinQrcode,
+      fPageStart: 0,
+      isGetProduct: false,
+      fProductLen: 0
     }
   },
   methods: {
@@ -139,11 +142,28 @@ export default{
         }
       })
     },
+    getFactoryData () {
+      const self = this
+      let params = {pagestart: this.fPageStart, limit: limit, agent: 1, wid: self.wid}
+      self.$http.get(`${ENV.BokaApi}/api/list/product`, {
+        params: params
+      }).then(res => {
+        const data = res.data
+        self.$vux.loading.hide()
+        const retdata = data.data ? data.data : data
+        self.productData = self.productData.concat(retdata)
+        self.fProductLen = self.productData.length
+        if (retdata.length < limit) {
+          self.getProduct()
+        }
+      })
+    },
     getProduct () {
       self.$http.get(`${ENV.BokaApi}/api/list/product`, {
         params: { uploader: self.wid, pagestart: pageStart, limit: limit }
-      }).then(function (res) {
+      }).then(res => {
         self.$vux.loading.hide()
+        self.isGetProduct = true
         const data = res.data
         const retdata = data.data ? data.data : data
         self.productData = self.productData.concat(retdata)
@@ -167,7 +187,7 @@ export default{
           const data = res.data
           self.activityData = data.data ? data.data : data
           if (!self.productData.length) {
-            self.getProduct()
+            self.getFactoryData()
           }
         }
       })
