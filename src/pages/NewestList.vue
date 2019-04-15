@@ -5,7 +5,6 @@
         <div v-if="module == 'news'" class="shead flex_left font16 color-white">{{titleData.news}}</div>
         <div v-if="module == 'activity'" class="shead flex_left font16 color-white">{{titleData.activity}}</div>
         <div v-if="module == 'product'" class="shead flex_left font16 color-white">{{titleData.product}}</div>
-        <div v-if="module == 'factoryProduct'" class="shead flex_left font16 color-white">{{titleData.factoryProduct}}</div>
       </div>
       <!-- 最新文章 -->
       <template v-if="disList">
@@ -64,8 +63,8 @@
             </template>
           </div>
         </div>
-        <!-- 最新商品、厂家商品 -->
-        <div v-if="module == 'product' || module == 'factoryProduct'" class="scroll_list">
+        <!-- 最新商品 -->
+        <div v-if="module == 'product'" class="scroll_list">
           <div v-if="!productData || productData.length == 0" class="flex_center font16 mt10">暂无商品数据</div>
           <router-link class="artical-item flex_left bg-white pt20 pb20 pr15 pl15" v-for="(item, index) in productData" :key="index" :to="{path: '/product',query: {id:item.id,wid:item.uploader}}">
             <div class="inner">
@@ -97,7 +96,7 @@
         activityData: [],
         productData: [],
         factoryData: [],
-        titleData: {news: '最新文章', activity: '最新活动', product: '最新商品', factoryProduct: '最新厂家商品'},
+        titleData: {news: '最新文章', activity: '最新活动', product: '最新商品'},
         module: '',
         retailerInfo: {},
         pageStart: 0,
@@ -130,11 +129,6 @@
               self.pageStart++
               self.$vux.loading.show()
               self.getData3()
-            }
-            if (self.module === 'factoryProduct' && self.productData.length === (self.pageStart + 1) * self.limit) {
-              self.pageStart++
-              self.$vux.loading.show()
-              self.getData4()
             }
           }
         })
@@ -173,24 +167,8 @@
       },
       getData3 () {
         const self = this
-        let params = {pagestart: self.pageStart, limit: self.limit, uploader: self.loginUser.uid}
-        self.$http.get(`${ENV.BokaApi}/api/list/product`, {
-          params: params
-        }).then(res => {
-          self.$vux.loading.hide()
-          let data = res.data
-          let retdata = data.data ? data.data : data
-          for (var i = 0; i < retdata.length; i++) {
-            retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd hh:mm')
-          }
-          self.productData = self.productData.concat(retdata)
-          self.disList = true
-        })
-      },
-      getData4 () {
-        const self = this
-        let params = {pagestart: self.pageStart, limit: self.limit, agent: 1}
-        self.$http.get(`${ENV.BokaApi}/api/list/product`, {
+        let params = {pagestart: self.pageStart, limit: self.limit}
+        self.$http.get(`${ENV.BokaApi}/api/retailer/getRetailerProducts`, {
           params: params
         }).then(res => {
           self.$vux.loading.hide()
@@ -216,8 +194,6 @@
           this.getData2()
         } else if (this.module === 'product') {
           this.getData3()
-        } else if (this.module === 'factoryProduct') {
-          this.getData4()
         }
       }
     },
