@@ -292,7 +292,7 @@ export default {
       disProductsData: false,
       pagestart1: 0,
       pagestart2: 0,
-      limit1: 10,
+      limit1: 20,
       selectNewsData: null,
       selectProductsData: null,
       showUserInfo: false,
