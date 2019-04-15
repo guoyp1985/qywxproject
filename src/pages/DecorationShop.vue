@@ -11,7 +11,7 @@
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)">
             <div class="s-container scroll-container" :style="`top:0px;${query.from == 'miniprogram' ? 'bottom:0;' : ''}`" ref="scrollContainer" @scroll="handleScroll">
-              <div v-if="disData" class="scroll_list bg-page">
+              <div v-if="disData" class="scroll_list bg-page" style="margin-bottom:45px;">
                 <template v-if="!productdata || productdata.length == 0">
                   <div class="emptyitem">
                     <div class="t-table" style="padding-top:20%;">
@@ -52,7 +52,7 @@
           </div>
           <div v-if="(index == 1)">
             <div class="s-container scroll-container" :style="`top:0px;${query.from == 'miniprogram' ? 'bottom:0;' : ''}`" ref="scrollContainer" @scroll="handleScroll">
-              <div v-if="disData" class="scroll_list bg-page">
+              <div v-if="disData" class="scroll_list bg-page" style="margin-bottom:45px;">
                 <template v-if="!factorydata || factorydata.length == 0">
                   <div class="emptyitem">
                     <div class="t-table" style="padding-top:20%;">
@@ -93,7 +93,7 @@
           </div>
         </swiper-item>
       </swiper>
-      <div class="s-bottom" v-if="query.from != 'miniprogram'">
+      <div class="sv-bottom" v-if="query.from != 'miniprogram'">
         <div class="t-table h_100 align_center">
           <router-link class="t-cell h_100 v_middle bg-gray color-white" :to="{path: '/store'}">{{ $t('Back go shop') }}</router-link>
           <router-link class="t-cell h_100 v_middle bg-orange color-white" to="/addProduct">{{ $t('Add product') }}</router-link>
@@ -484,5 +484,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .decorationshop .scroll_item{overflow:hidden;position:relative;}
+  .decorationshop{
+    overflow:hidden;position:relative;
+    .sv-bottom{position:absolute;left:0;right:0;bottom:0;height:45px;}
+  }
 </style>
