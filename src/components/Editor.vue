@@ -55,37 +55,83 @@
       <popup v-model="showpopup" height="100%">
         <div class="popup1">
           <div class="popup-top flex_center">{{ $t('Select product') }}</div>
-          <div ref="scrollProduct" @scroll="handleScroll('scrollProduct','product')" class="popup-middle">
-            <search
-              class="x-search"
-              v-model="searchword"
-              :auto-fixed="autofixed"
-              @on-submit="onSubmit"
-              @on-change="onChange"
-              @on-cancel="onCancelSearch"
-              ref="search">
-            </search>
-            <div class="scroll_list">
-              <div v-if="!productdata || productdata.length === 0" class="scroll_item padding10 color-gray align_center">
-                <template v-if="searchresult">
-                  <div class="flex_center" style="height:80px;">暂无搜索结果</div>
-                </template>
-                <template v-else>
-                  <div class="flex_center" style="height:80px;">暂无商品</div>
-                </template>
-              </div>
-              <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in productdata" :key="item.id" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
-                <div class="t-table">
-                  <div class="t-cell pic v_middle w50">
-                    <img :src="item.photo" style="width:40px;height:40px;" class="v_middle imgcover" />
-                  </div>
-                  <div class="t-cell v_middle" style="color:inherit;">
-                    <div class="clamp1">{{item.title}}</div>
-                    <div class="mt5 font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
+          <div style="position:absolute;left:0;top:46px;right:0;height:45px;">
+            <tab v-model="selectedIndex" class="w_100 v-tab">
+              <tab-item :selected="selectedIndex == 0">上架商品</tab-item>
+              <tab-item :selected="selectedIndex == 1">厂家商品</tab-item>
+            </tab>
+          </div>
+          <div class="popup-middle" style="top:91px;">
+            <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
+              <swiper-item>
+                <div class="swiper-inner" ref="scrollProduct" @scroll="handleScroll('scrollProduct', 'product')">
+                  <search
+                    class="x-search"
+                    v-model="searchword"
+                    :auto-fixed="autofixed"
+                    @on-submit="onSubmit"
+                    @on-change="onChange"
+                    @on-cancel="onCancelSearch"
+                    ref="search">
+                  </search>
+                  <div class="scroll_list" v-if="disProductList">
+                    <div v-if="!productdata || productdata.length === 0" class="scroll_item padding10 color-gray align_center">
+                      <template v-if="searchresult">
+                        <div class="flex_center" style="height:80px;">暂无搜索结果</div>
+                      </template>
+                      <template v-else>
+                        <div class="flex_center" style="height:80px;">暂无商品</div>
+                      </template>
+                    </div>
+                    <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in productdata" :key="item.id" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
+                      <div class="t-table">
+                        <div class="t-cell pic v_middle w50">
+                          <img :src="item.photo" style="width:40px;height:40px;" class="v_middle imgcover" />
+                        </div>
+                        <div class="t-cell v_middle" style="color:inherit;">
+                          <div class="clamp1">{{item.title}}</div>
+                          <div class="mt5 font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
+                        </div>
+                      </div>
+                    </check-icon>
                   </div>
                 </div>
-              </check-icon>
-            </div>
+              </swiper-item>
+              <swiper-item>
+                <div class="swiper-inner" ref="scrollFactory" @scroll="handleScroll('scrollFactory', 'factoryProduct')">
+                  <search
+                    class="x-search"
+                    v-model="searchword1"
+                    :auto-fixed="autofixed"
+                    @on-submit="onSubmit1"
+                    @on-change="onChange1"
+                    @on-cancel="onCancelSearch1"
+                    ref="search">
+                  </search>
+                  <div class="scroll_list" v-if="disFactoryList">
+                    <div v-if="!factoryData || factoryData.length === 0" class="scroll_item padding10 color-gray align_center">
+                      <template v-if="searchresult1">
+                        <div class="flex_center" style="height:80px;">暂无搜索结果</div>
+                      </template>
+                      <template v-else>
+                        <div class="flex_center" style="height:80px;">暂无厂家商品</div>
+                      </template>
+                    </div>
+                    <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in factoryData" :key="item.id" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
+                      <div class="t-table">
+                        <div class="t-cell pic v_middle w50">
+                          <img :src="item.photo" style="width:40px;height:40px;" class="v_middle imgcover" />
+                        </div>
+                        <div class="t-cell v_middle" style="color:inherit;">
+                          <div class="clamp1">{{item.title}}</div>
+                          <div class="mt5 font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
+                        </div>
+                      </div>
+                    </check-icon>
+                  </div>
+                </div>
+              </swiper-item>
+            </swiper>
           </div>
           <div class="popup-bottom flex_center">
             <div class="flex_cell bg-gray color-white h_100 flex_center" @click="closepopup">{{ $t('Close') }}</div>
@@ -175,7 +221,7 @@
 </template>
 
 <script>
-import { TransferDom, Flexbox, FlexboxItem, XButton, Popup, Search, CheckIcon } from 'vux'
+import { TransferDom, Flexbox, FlexboxItem, XButton, Popup, Search, CheckIcon, Tab, TabItem, Swiper, SwiperItem } from 'vux'
 import Eleditor from '#/Eleditor'
 import ENV from 'env'
 import jQuery from 'jquery'
@@ -187,7 +233,7 @@ export default {
     TransferDom
   },
   components: {
-    Flexbox, FlexboxItem, XButton, Popup, Search, CheckIcon
+    Flexbox, FlexboxItem, XButton, Popup, Search, CheckIcon, Tab, TabItem, Swiper, SwiperItem
   },
   props: {
     elem: String,
@@ -214,6 +260,8 @@ export default {
       radiodata: [],
       searchword: '',
       searchresult: false,
+      searchword1: '',
+      searchresult1: false,
       limit: 10,
       pagestart1: 0,
       insertProductCallback: Function,
@@ -234,7 +282,12 @@ export default {
       checkAll: false,
       customerPagestart: 0,
       touchElement: null,
-      editTipCss: ''
+      editTipCss: '',
+      selectedIndex: 0,
+      fPageStart: 0,
+      factoryData: [],
+      disProductList: false,
+      disFactoryList: false
     }
   },
   computed: {
@@ -330,6 +383,36 @@ export default {
         }
       }
     },
+    swiperChange () {
+      for (let d of self.factoryData) {
+        if (d.checked) {
+          delete d.checked
+          break
+        }
+      }
+      for (let d of self.productdata) {
+        if (d.checked) {
+          delete d.checked
+          break
+        }
+      }
+      switch (this.selectedIndex) {
+        case 0:
+          if (this.productdata.length < this.limit) {
+            this.pagestart1 = 0
+            this.productdata = []
+            this.getProductData()
+          }
+          break
+        case 1:
+          if (this.factoryData.length < this.limit) {
+            this.fPageStart = 0
+            this.factoryData = []
+            this.getFactoryData()
+          }
+          break
+      }
+    },
     handleScroll: function (refname, type) {
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
@@ -341,6 +424,12 @@ export default {
               self.$vux.loading.show()
               self.getProductData()
             }
+          } else if (type === 'factoryProduct') {
+            if (self.factoryData.length === (self.fPageStart + 1) * self.limit) {
+              self.fPageStart++
+              self.$vux.loading.show()
+              self.getFactoryData()
+            }
           } else if (type === 'customer') {
             if (self.customerdata.length === (self.customerPagestart + 1) * self.limit) {
               self.customerPagestart++
@@ -351,13 +440,42 @@ export default {
         }
       })
     },
+    getFactoryData () {
+      const self = this
+      let params = { pagestart: this.fPageStart, limit: this.limit, agent: 1 }
+      let keyword = self.searchword1
+      if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
+        params.keyword = keyword
+      }
+      if (self.query.wid) {
+        params.wid = self.query.wid
+      } else {
+        params.wid = self.loginUser.uid
+      }
+      self.$http.get(`${ENV.BokaApi}/api/list/product`, {
+        params: params
+      }).then(res => {
+        const data = res.data
+        self.$vux.loading.hide()
+        if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
+          self.searchresult = true
+        } else {
+          self.searchresult = false
+        }
+        const retdata = data.data ? data.data : data
+        self.factoryData = self.factoryData.concat(retdata)
+        self.disFactoryList = true
+      })
+    },
     getProductData () {
-      let params = { params: { from: 'retailer', pagestart: self.pagestart1, limit: self.limit } }
+      let params = {from: 'retailer', pagestart: self.pagestart1, limit: self.limit}
       let keyword = self.searchword
       if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
-        params.params.keyword = keyword
+        params.keyword = keyword
       }
-      self.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(function (res) {
+      self.$http.get(`${ENV.BokaApi}/api/list/product`, {
+        params: params
+      }).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
         if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
@@ -367,6 +485,7 @@ export default {
         }
         let retdata = data.data ? data.data : data
         self.productdata = self.productdata.concat(retdata)
+        self.disProductList = true
       })
     },
     getCustomerdata () {
@@ -516,10 +635,19 @@ export default {
       } else {
         self.selectpopupdata = null
       }
-      for (let d of self.productdata) {
-        if (d.id !== data.id && d.checked) {
-          delete d.checked
-          break
+      if (this.selectedIndex === 0) {
+        for (let d of self.productdata) {
+          if (d.id !== data.id && d.checked) {
+            delete d.checked
+            break
+          }
+        }
+      } else {
+        for (let d of self.factoryData) {
+          if (d.id !== data.id && d.checked) {
+            delete d.checked
+            break
+          }
         }
       }
     },
@@ -542,6 +670,9 @@ export default {
     onChange (val) {
       this.searchword = val
     },
+    onChange1 (val) {
+      this.searchword1 = val
+    },
     onCancelSearch () {
       self.searchword = ''
       self.$vux.loading.show()
@@ -549,11 +680,24 @@ export default {
       self.pagestart1 = 0
       self.getProductData()
     },
+    onCancelSearch1 () {
+      self.searchword1 = ''
+      self.$vux.loading.show()
+      self.factoryData = []
+      self.pagestart2 = 0
+      self.getFactoryData()
+    },
     onSubmit () {
       self.$vux.loading.show()
       self.productdata = []
       self.pagestart1 = 0
       self.getProductData()
+    },
+    onSubmit1 () {
+      self.$vux.loading.show()
+      self.factoryData = []
+      self.pagestart2 = 0
+      self.getFactoryData()
     },
     selectevent () {
       self.showpopup = true
