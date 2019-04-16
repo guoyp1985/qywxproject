@@ -21,9 +21,11 @@
           <title-tip scroll-box="article-content" @access="access" :user="reward" :messages="messages" :avatar-href="reward.avatar" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
         </template>
         <div class="article-view">
-          <div class="article-title" style="position:relative;">
+          <div class="article-title">
             <h2>{{article.title}}</h2>
-            <router-link v-if="(query.control == 'edit' || editIng) && article.uploader == reward.uid" :to="{path:'/addNews',query:{id: query.id}}" class="flex_center bg-theme color-white" style="position:absolute;right:0;top:10px;z-index:1;border-radius:20px;height:25px;width:70px;">修改</router-link>
+            <div class="flex_right mt5 mb5" v-if="editIng && article.uploader == reward.uid">
+              <router-link :to="{path:'/addNews',query:{id: query.id}}" class="flex_center bg-theme color-white" style="border-radius:20px;height:25px;width:90px;">修改标题</router-link>
+            </div>
           </div>
           <div class="article-vice-title">
             <h4>{{article.vicetitle}}</h4>
@@ -640,6 +642,11 @@ export default {
       this.showEditor = false
       this.showsharetip = false
       this.editIng = false
+      if (query.edit === 'control') {
+        this.editIng = true
+      } else {
+        this.editIng = false
+      }
       if (this.query.id !== query.id) {
         room = ''
         this.comments = []
