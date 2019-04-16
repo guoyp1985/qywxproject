@@ -7,105 +7,99 @@
   <div id="user-rebate" class="containerarea font14">
     <div class="s-topbanner s-topbanner1">
       <tab v-model="selectedIndex" class="v-tab">
-        <tab-item selected>{{$t('Waiting To Return Money')}}</tab-item>
-        <tab-item>{{$t('Waiting To Rebate')}}</tab-item>
-        <tab-item>{{$t('Already Return Money')}}</tab-item>
+        <tab-item v-for="(item,index) in tabtxts" :selected="index == selectedIndex" :key="index" @on-item-click="swiperChange">{{item}}</tab-item>
       </tab>
     </div>
     <div class="s-container s-container1">
-      <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
-        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-          <div v-if="(index == 0)" class="swiper-inner scroll-container1" style="bottom:50px;" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)">
+      <!-- <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
+        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index"> -->
+          <div v-show="(selectedIndex == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',0)">
             <template v-if="distabdata1">
-              <template v-if="tabdata1.length">
-                <group>
-                  <cell-box class="income-cell" v-for="(item, index) in tabdata1" :key="index" @click.native="itemClick(item)">
-                    <div class="avatar-cell w50">
-                      <img class="imgcover v_middle" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
-                    </div>
-                    <div class="db-flex flex_cell font14">
-                      <div>
-                        <div class="clamp1">{{item.username}}</div>
-                        <div class="clamp1">店铺: {{item.title}}</div>
-                        <div class="clamp1 font12 color-gray">{{item.dateline}}</div>
-                      </div>
-                    </div>
-                    <div class="value-cell font14 color-red align_center" style="width:120px;">
-                      <div class="clamp1">{{item.content}}</div>
-                      <div class="clamp1">{{$t('RMB')}}{{item.money}}</div>
-                    </div>
-                  </cell-box>
-                </group>
-              </template>
-              <template v-else>
-                <div class="no-related-x color-gray">
-                  <span>{{$t('No Related Orders')}}</span>
-                </div>
-              </template>
-            </template>
-          </div>
-          <template v-if="(index == 0)">
-            <div class="toolbar_bg bg-white list-shadow flex_center" style="position:absolute;left:0;bottom:0;right:0;height:45px; ">
-              <div class="flex_cell h_100 flex_left">
-                <div class="clamp1 pl10">
-                  <span>总计: <span class="color-red4">{{ $t('RMB') }}{{ summoney }}</span></span>
+              <div v-if="!tabdata1.length" class="flex_empty">
+                <div>
+                  <div class="align_center"><i class="al al-wushuju font60" ></i></div>
+                  <div class="mt5 align_center">暂无待返点记录！</div>
                 </div>
               </div>
-              <div class="flex_center h_100 font16 bg-red color-white w100" @click="clickCash">全部提现</div>
-            </div>
-          </template>
-          <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',index)">
+              <div v-else v-for="(item,index1) in tabdata1" :key="index1" class="scroll_item bg-white mt10 list-shadow">
+                <div class="pl12 pr12 pt10 pb10">
+                  <div class="t-table">
+                    <div class="t-cell pic v_middle w45 pr10 border-box">
+                      <img class="avatarimg6 imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
+                    </div>
+                    <div class="t-cell v_middle" style="color:inherit;">
+                      <div class="clamp1 color-999">{{item.username}}</div>
+                    </div>
+                    <div class="t-cell v_middle" style="color:inherit;">
+                      <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline }}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
+                  <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{$t('RMB')}}{{item.money}}</span></div>
+                  <div class="clamp1 font14 color-gray">店铺: {{ item.title }}</div>
+                </div>
+              </div>
+            </template>
+          </div>
+          <div v-show="(selectedIndex == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',1)">
             <template v-if="distabdata2">
-              <template v-if="tabdata2.length">
-                <group>
-                  <cell class="wait-cell font14" v-for="(item, index) in tabdata2" :key="index">
-                    <img slot="icon" class="imgcover v_middle" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
-                    <div slot="inline-desc">
-                      <div class="clamp1">{{item.username}}</div>
-                      <div class="clamp1">店铺: {{item.title}}</div>
-                      <div class="clamp1 font12 color-gray">{{item.dateline}}</div>
-                    </div>
-                    <div class="value-cell font14 color-red align_center" style="width:120px;">
-                      <div class="clamp1">{{item.content}}</div>
-                      <div class="clamp1">{{$t('RMB')}}{{item.money}}</div>
-                    </div>
-                  </cell>
-                </group>
-              </template>
-              <template v-else>
-                <div class="no-related-x color-gray">
-                  <span>{{$t('No Related Orders')}}</span>
+              <div v-if="!tabdata2.length" class="flex_empty">
+                <div>
+                  <div class="align_center"><i class="al al-wushuju font60" ></i></div>
+                  <div class="mt5 align_center">暂无已返点记录！</div>
                 </div>
-              </template>
+              </div>
+              <div v-else v-for="(item,index1) in tabdata2" :key="index1" class="scroll_item bg-white mt10 list-shadow">
+                <div class="pl12 pr12 pt10 pb10">
+                  <div class="t-table">
+                    <div class="t-cell pic v_middle w45 pr10 border-box">
+                      <img class="avatarimg6 imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
+                    </div>
+                    <div class="t-cell v_middle" style="color:inherit;">
+                      <div class="clamp1 color-999">{{item.username}}</div>
+                    </div>
+                    <div class="t-cell v_middle" style="color:inherit;">
+                      <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline }}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
+                  <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{$t('RMB')}}{{item.money}}</span></div>
+                  <div class="clamp1 font14 color-gray">店铺: {{ item.title }}</div>
+                </div>
+              </div>
             </template>
           </div>
-          <div v-if="(index == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',index)">
+          <div v-show="(selectedIndex == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',2)">
             <template v-if="distabdata3">
-              <template v-if="tabdata3.length">
-                <group>
-                  <cell class="wait-cell font14" v-for="(item, index) in tabdata3" :key="index">
-                    <img slot="icon" class="imgcover v_middle" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
-                    <div slot="inline-desc">
-                      <div class="clamp1">{{item.username}}</div>
-                      <div class="clamp1">店铺: {{item.title}}</div>
-                      <div class="clamp1 font12 color-gray">{{item.dateline}}</div>
-                    </div>
-                    <div class="value-cell font14 color-red align_center" style="width:120px;">
-                      <div class="clamp1">{{item.content}}</div>
-                      <div class="clamp1">{{$t('RMB')}}{{item.money}}</div>
-                    </div>
-                  </cell>
-                </group>
-              </template>
-              <template v-else>
-                <div class="no-related-x color-gray">
-                  <span>{{$t('No Related Orders')}}</span>
+              <div v-if="!tabdata3.length" class="flex_empty">
+                <div>
+                  <div class="align_center"><i class="al al-wushuju font60" ></i></div>
+                  <div class="mt5 align_center">暂无提现记录！</div>
                 </div>
-              </template>
+              </div>
+              <div v-else v-for="(item,index1) in tabdata3" :key="index1" class="scroll_item bg-white mt10 list-shadow">
+                <div class="pl12 pr12 pt10 pb10">
+                  <div class="db-flex">
+                    <div class="flex_cell flex_left">
+                      <div class="w_100">
+                        <div><span>{{item.cashtypetext}}</span><span v-if="item.status == 1" class="color-green2">【{{item.statustext}}】</span><span v-else class="color-theme">【{{item.statustext}}】</span></div>
+                        <div class="mt5 color-gray" v-if="item.cmms && item.cmms > 0">手续费: {{ $t('RMB') }}{{item.cmms}}</div>
+                        <div class="color-theme mt5" v-if="item.reason && item.reason != ''">{{item.reason}}</div>
+                        <div class="mt5 font12 clamp1 color-gray">{{ item.dateline | dateFormat }}</div>
+                      </div>
+                    </div>
+                    <div class="w100 flex_right">
+                      <div class="clamp1">{{ $t('RMB') }}{{item.money}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </template>
           </div>
-        </swiper-item>
-      </swiper>
+        <!-- </swiper-item>
+      </swiper> -->
     </div>
     <div v-transfer-dom>
       <popup class="bg-white" v-model="showMoneyPopup" position="bottom">
@@ -145,7 +139,7 @@ export default {
   data () {
     return {
       query: {},
-      tabtxts: [ '待提现', '待返点', '已提现' ],
+      tabtxts: [ '待返点', '已返点', '提现明细' ],
       rebateInfo: {},
       total: '0.00',
       selectedIndex: 0,
@@ -165,8 +159,8 @@ export default {
     }
   },
   filters: {
-    dateFormat (date) {
-      return new Time(date).format()
+    dateFormat: function (value) {
+      return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
     }
   },
   methods: {
@@ -216,8 +210,10 @@ export default {
     getData1 () {
       this.$vux.loading.show()
       const self = this
-      const params = { cashed: 0, from: 'user', pagestart: pageStart1, limit: limit }
-      self.$http.post(`${ENV.BokaApi}/api/seller/rebateList`, params).then(res => {
+      const params = { cashed: 2, from: 'seller', pagestart: pageStart1, limit: limit }
+      self.$http.get(`${ENV.BokaApi}/api/accounting/list`, {
+        params: params
+      }).then(res => {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
@@ -237,8 +233,10 @@ export default {
     getData2 () {
       this.$vux.loading.show()
       const self = this
-      const params = { cashed: 2, from: 'user', pagestart: pageStart2, limit: limit }
-      self.$http.post(`${ENV.BokaApi}/api/seller/rebateList`, params).then(res => {
+      const params = { cashed: 0, from: 'seller', pagestart: pageStart2, limit: limit }
+      self.$http.get(`${ENV.BokaApi}/api/accounting/list`, {
+        params: params
+      }).then(res => {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
@@ -249,8 +247,8 @@ export default {
     getData3 () {
       this.$vux.loading.show()
       const self = this
-      const params = { cashed: 1, from: 'user', pagestart: pageStart3, limit: limit }
-      self.$http.post(`${ENV.BokaApi}/api/seller/rebateList`, params).then(res => {
+      const params = { pagestart: pageStart3, limit: limit }
+      self.$http.post(`${ENV.BokaApi}/api/accounting/cashList`, params).then(res => {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
@@ -259,6 +257,7 @@ export default {
       })
     },
     swiperChange (index) {
+      console.log('in swiperchange')
       if (index !== undefined) {
         this.selectedIndex = index
       }
@@ -332,8 +331,10 @@ export default {
         } else {
           this.showMoneyPopup = false
           let cashstr = '微信'
+          let cashtype = 'lingqian'
           if (this.bankCash) {
             cashstr = '银行卡'
+            cashtype = 'yinhang'
           }
           if (this.bankCash && (!this.loginUser.bankcardno || this.loginUser.bankcardno === '')) {
             self.eventIng = false
@@ -350,8 +351,11 @@ export default {
             content: `本次提现金额为<span class='color-orange'>${self.summoney}元</span>，确认提现到${cashstr}吗？`,
             onConfirm () {
               self.$vux.loading.show()
-              let subdata = { identity: 'seller' }
-              self.$http.post(`${ENV.BokaApi}/api/accounting/getCash`, subdata).then(function (res) {
+              let postData = {type: cashtype, money: self.summoney}
+              if (self.query.appid) {
+                postData.appid = self.query.appid
+              }
+              self.$http.post(`${ENV.BokaApi}/api/accounting/cashMoney`, postData).then(function (res) {
                 let data = res.data
                 self.$vux.loading.hide()
                 self.$vux.toast.show({
@@ -375,10 +379,29 @@ export default {
     getData () {
       this.swiperChange()
     },
+    initData () {
+      pageStart1 = 0
+      pageStart2 = 0
+      pageStart3 = 0
+      this.selectedIndex = 0
+      this.distabdata1 = false
+      this.distabdata2 = false
+      this.distabdata3 = false
+      this.tabdata1 = []
+      this.tabdata2 = []
+      this.tabdata3 = []
+    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.initData()
       this.query = this.$route.query
       this.loginUser = User.get()
+      if (this.query.flag === '1' || this.query.flag === 1) {
+        this.selectedIndex = 1
+      } else if (this.query.flag === '2' || this.query.flag === 2) {
+        this.selectedIndex = 2
+      }
+      console.log(this.selectedIndex)
       this.getData()
     }
   },

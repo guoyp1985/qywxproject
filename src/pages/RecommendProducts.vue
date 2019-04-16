@@ -14,11 +14,12 @@
     -->
       <div v-if="disProductData" class="productlist squarepic pb10">
         <div v-if="productData.length == 0" class="emptyitem flex_center align_center w_100">该分类下暂无货源数据</div>
-        <router-link v-else v-for="(item,index) in productData" :key="index" :to="{path: '/factoryProduct', query: {id: item.id, fid: query.id}}" class="bk-productitem scroll_item font14 db ">
+        <div v-else @click="toFProduct(item)" v-for="(item,index) in productData" :key="index" class="bk-productitem scroll_item font14 db ">
       		<div class="inner list-shadow">
       			<div class="picarea">
       				<div class="pic">
                 <img class="imgcover" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+                <div class="t-icon color-theme">佣金: {{$t('RMB')}}{{item.levelagent}}</div>
               </div>
       			</div>
       			<div class="desbox" style="overflow:hidden;">
@@ -31,7 +32,7 @@
       				</div>
       			</div>
       		</div>
-        </router-link>
+        </div>
         <div class="font12 color-gray" style="text-align: center;width: 100%;margin-top:10px;" v-if="showTips">没有更多商品啦！</div>
       </div>
     </div>
@@ -49,7 +50,7 @@ import ENV from 'env'
 import Time from '#/time'
 
 let self = this
-const limit = 10
+const limit = 30
 let pageStart = 0
 
 export default {
@@ -78,6 +79,16 @@ export default {
     }
   },
   methods: {
+    toFProduct (item) {
+      let params = {id: item.id}
+      if (this.query.id) {
+        params.fid = this.query.id
+      }
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/factoryProduct', query: params})
+    },
     handleScroll (refname) {
       let scrollArea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
@@ -94,10 +105,11 @@ export default {
       })
     },
     getData1 () {
-      // self.$http.post(`${ENV.BokaApi}/api/retailer/recommendByFids`, {
-      self.$http.post(`${ENV.BokaApi}/api/list/factoryproduct?orderby=saled`, {
-        pagestart: pageStart, limit: limit, classid: self.classData[self.selectedIndex].id
-      }).then(function (res) {
+      let params = {pagestart: pageStart, limit: limit, orderby: 'saled'}
+      if (self.selectedIndex !== 0) {
+        params.classid = self.classData[self.selectedIndex].id
+      }
+      self.$http.post(`${ENV.BokaApi}/api/list/factoryproduct`, params).then(function (res) {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
@@ -106,6 +118,8 @@ export default {
       })
     },
     onItemClick (index) {
+      console.log('in onitemclick')
+      console.log(index)
       if (index !== self.selectedIndex) {
         self.selectedIndex = index
         pageStart = 0
@@ -115,14 +129,24 @@ export default {
         self.getData1()
       }
     },
+    allItemClick () {
+      console.log('ALL DATA')
+      this.selectedIndex = -1
+      pageStart = 0
+      self.$vux.loading.show()
+      self.disProductData = false
+      self.productData = []
+      self.getData1()
+    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       if (!self.classData.length) {
-        self.$http.get(`${ENV.BokaApi}/api/list/productclass?ascdesc=asc`).then(function (res) {
+        self.$http.get(`${ENV.BokaApi}/api/list/productclass?ascdesc=asc`, { params: { pagestart: pageStart, limit: limit } }).then(function (res) {
           self.$vux.loading.hide()
           const data = res.data
-          const retdata = data.data ? data.data : data
+          let retdata = data.data ? data.data : data
+          retdata = [{title: '全部'}].concat(retdata)
           self.classData = retdata
           pageStart = 0
           self.$vux.loading.show()
@@ -144,35 +168,17 @@ export default {
 </script>
 
 <style lang="less">
-.addFactory .x-checker .ck-item{
-  font-size:13px;
-  display: inline-block;
-  padding: 0 15px;
-  height: 30px;
-  line-height: 30px;
-  border:0px;
-  text-align: center;
-  border-radius: 3px;
-  background-color: #fff;
-  margin-right: 10px;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  box-sizing: border-box;
-}
-.x-checker .border1px.ck-item-selected:after{border:1px solid #ea3a3a;}
-.addFactory .vux-check-icon > span{color:#666;display: inline-block;vertical-align: bottom;line-height: 19px;}
-
-.rproducts .pro_list_top{
-  background: url(../assets/images/product_list_top.png);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  background-size: 100%;
-  height: 20px;
-}
 .rproducts{
-  .scroll-class{
-    width:100%;
+  .pro_list_top{
+    background: url(../assets/images/product_list_top.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-size: 100%;
+    height: 20px;
   }
+  .t-icon{position:absolute;left:0;top:10px;border-top-right-radius:20px;border-bottom-right-radius:20px;background-color:#fff;padding:5px 10px 5px 5px;font-size:12px;}
+  .v-tab .vux-tab-container .vux-tab-selected{border-bottom-style:solid !important;}
+  .scrollable .vux-tab-ink-bar{bottom:0 !important;}
 }
 </style>

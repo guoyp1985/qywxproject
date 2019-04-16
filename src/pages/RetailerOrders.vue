@@ -1,9 +1,17 @@
 <template>
-  <div class="containerarea bg-page font14 retailerordes">
+  <div id="retailer-orders-page" :class="`containerarea bg-page font14 retailerordes ${showTip ? 'show-tip-page' : ''}`">
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
-      <div class="s-topbanner s-topbanner1" style="height:99px;">
+      <div v-if="showTip" class="pagetop border-box db-flex top-subscribe-tip">
+        <div class="flex_cell h_100 flex_left">
+          <i class="al al-gantanhaozhong font20"></i><span>关注公众号可及时接收私信提醒</span>
+        </div>
+        <div class="w80 h_100 flex_right">
+          <div class="btn flex_center" @click="toSubscribe">立即关注</div>
+        </div>
+      </div>
+      <div class="s-topbanner s-topbanner1">
         <div class="row">
           <search
             class="v-search bg-white"
@@ -19,7 +27,7 @@
           </tab>
         </div>
       </div>
-      <div class="s-container s-container1" style="top:99px;">
+      <div class="s-container s-container1">
         <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
           <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
             <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)">
@@ -41,7 +49,18 @@
                   </Orderproductplate>
                   <div slot="receivearea">
                     <div class="t-table">
-                      <div class="font12 color-lightgray"><span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span></div>
+                      <div class="font12 color-lightgray">
+                        <span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span>
+                        <span @click="copyTxt(item)" class="ml5" style="position:relative;">
+                          <i class="al al-fuzhi font14 color-red4"></i><span class="font12 color-red4">复制</span>
+                          <template v-if="item.flag != 0 && item.flag != 1 && item.flag != 2">
+                            <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.delivercompanyname }} {{ item.delivercode }} {{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
+                          </template>
+                          <template v-else>
+                            <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
+                          </template>
+                        </span>
+                      </div>
                       <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right color-lightgray font12">
                         <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
                       </div>
@@ -51,7 +70,7 @@
                         <div class="t-cell v_middle align_left color-orange">
                           <div class="clamp1">
                             <span class="v_middle">待支付: {{ $t('RMB') }}</span><span class="v_middle">{{ item.paymoney }}</span>
-                            <template v-if="item.postage && item.postage != ''">
+                            <template v-if="!item.delivertype && item.postage && item.postage != ''">
                               <span class="v_middle font12 color-gray" v-if="item.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
                               <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ item.postage }} )</span>
                             </template>
@@ -91,7 +110,18 @@
                   </orderproductplate>
                   <div slot="receivearea">
                     <div class="t-table">
-                      <div class="font12 color-lightgray"><span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span></div>
+                      <div class="font12 color-lightgray">
+                        <span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span>
+                        <span @click="copyTxt(item)" class="ml5" style="position:relative;">
+                          <i class="al al-fuzhi font14 color-red4"></i><span class="font12 color-red4">复制</span>
+                          <template v-if="item.flag != 0 && item.flag != 1 && item.flag != 2">
+                            <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.delivercompanyname }} {{ item.delivercode }} {{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
+                          </template>
+                          <template v-else>
+                            <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
+                          </template>
+                        </span>
+                      </div>
                       <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right color-lightgray font12">
                         <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
                       </div>
@@ -100,7 +130,7 @@
                       <div class="t-cell v_middle align_left color-orange">
                         <div class="clamp1">
                           <span class="v_middle">待支付: {{ $t('RMB') }}</span><span class="v_middle">{{ item.paymoney }}</span>
-                          <template v-if="item.postage && item.postage != ''">
+                          <template v-if="!item.delivertype && item.postage && item.postage != ''">
                             <span class="v_middle font12 color-gray" v-if="item.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
                             <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ item.postage }} )</span>
                           </template>
@@ -133,7 +163,18 @@
                   </orderproductplate>
                   <div slot="receivearea">
                     <div class="t-table">
-                      <div class="font12 color-lightgray"><span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span></div>
+                      <div class="font12 color-lightgray">
+                        <span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span>
+                        <span @click="copyTxt(item)" class="ml5" style="position:relative;">
+                          <i class="al al-fuzhi font14 color-red4"></i><span class="font12 color-red4">复制</span>
+                          <template v-if="item.flag != 0 && item.flag != 1 && item.flag != 2">
+                            <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.delivercompanyname }} {{ item.delivercode }} {{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
+                          </template>
+                          <template v-else>
+                            <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
+                          </template>
+                        </span>
+                      </div>
                       <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right color-lightgray font12">
                         <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
                       </div>
@@ -166,7 +207,18 @@
                   </orderproductplate>
                   <div slot="receivearea">
                     <div class="t-table">
-                      <div class="font12 color-lightgray"><span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span></div>
+                      <div class="font12 color-lightgray">
+                        <span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span>
+                        <span @click="copyTxt(item)" class="ml5" style="position:relative;">
+                          <i class="al al-fuzhi font14 color-red4"></i><span class=" color-red4">复制</span>
+                          <template v-if="item.flag != 0 && item.flag != 1 && item.flag != 2">
+                            <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.delivercompanyname }} {{ item.delivercode }} {{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
+                          </template>
+                          <template v-else>
+                            <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
+                          </template>
+                        </span>
+                      </div>
                       <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right color-lightgray font12">
                         <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
                       </div>
@@ -242,6 +294,7 @@ import { Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, TransferDo
 import Orderitemplate from '@/components/Orderitemplate'
 import Orderproductplate from '@/components/Orderproductplate'
 import Time from '#/time'
+import jQuery from 'jquery'
 import ENV from 'env'
 import { User } from '#/storage'
 import Subscribe from '@/components/Subscribe'
@@ -286,10 +339,43 @@ export default {
       delivercompany: [],
       deliverdata: { delivercompany: '-1', delivercode: '' },
       autofixed: false,
-      searchword1: ''
+      searchword1: '',
+      showTip: false
     }
   },
   methods: {
+    copyTxt (item) {
+      const self = this
+      let str = `#retailer-orders-page .deliver_txt-${this.selectedIndex}-${item.id}`
+      let eleobj = jQuery(str)[0]
+      let range = null
+      let save = function (e) {
+        e.clipboardData.setData('text/plain', eleobj.innerHTML)
+        e.preventDefault()
+      }
+      if (self.$util.isIOS()) { // ios设备
+        window.getSelection().removeAllRanges()
+        range = document.createRange()
+        range.selectNode(eleobj)
+        window.getSelection().addRange(range)
+        document.execCommand('copy')
+        window.getSelection().removeAllRanges()
+      } else { // 安卓设备
+        console.log('in android')
+        document.addEventListener('copy', save)
+        document.execCommand('copy')
+        document.removeEventListener('copy', save)
+      }
+      setTimeout(function () {
+        self.$vux.toast.show({
+          text: '复制成功',
+          time: 1500
+        })
+      }, 200)
+    },
+    toSubscribe () {
+      this.$wechat.miniProgram.navigateTo({url: '/pages/subscribe'})
+    },
     onChange1 (val) {
       this.searchword1 = val
     },
@@ -563,6 +649,9 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$vux.loading.show()
       this.loginUser = User.get()
+      if (this.$route.query.from && this.loginUser.subscribe !== 1) {
+        this.showTip = true
+      }
       if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
         if (!this.loginUser.isretailer) {
           this.$vux.loading.hide()
@@ -601,4 +690,12 @@ export default {
 
 <style lang="less" scoped>
 .popup-deliver .fileinput{position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;background-color:transparent;opacity:0;}
+.retailerordes{
+  .s-topbanner{height:99px;}
+  .s-container{top:99px;}
+}
+.retailerordes.show-tip-page{
+  .s-topbanner{top:48px;}
+  .s-container{top:147px;}
+}
 </style>

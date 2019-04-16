@@ -5,7 +5,7 @@
 */
 <template>
   <div class="order-info">
-    <router-link :to="{path:'/store',query:{wid:item.wid}}">
+    <div @click="toStore" :to="{path:'/store',query:{wid:item.wid}}">
       <div class="store-info">
         <div class="info-cell">
           <span :class="`al ${storeType} font22`"></span>
@@ -16,8 +16,8 @@
           <span>{{item.flagstr}}</span>
         </div>
       </div>
-    </router-link>
-    <router-link :to="{path:'/orderDetail',query:{id:item.id}}">
+    </div>
+    <div @click="toDetail">
       <div class="products-info" v-if="item.orderlist.length > 1">
         <div class="product-img">
           <img v-for="(order, index) in item.orderlist" :key="index" class="v_middle imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
@@ -38,11 +38,11 @@
           </div>
         </div>
       </div>
-    </router-link>
+    </div>
     <div class="pay-info flex_right">
       <div class="clamp1 w_100">
         <span class="v_middle font12">实际支付: </span><span class="v_middle font14">{{ $t('RMB') }}{{item.paymoney}}</span>
-        <template v-if="item.postage && item.postage != ''">
+        <template v-if="!item.delivertype && item.postage && item.postage != ''">
           <span class="v_middle font12 color-gray" v-if="item.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
           <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ item.postage }} )</span>
         </template>
@@ -61,6 +61,7 @@
 
 <script>
 import { XImg, XButton } from 'vux'
+import ENV from 'env'
 export default {
   name: 'OrderInfo',
   components: {
@@ -88,6 +89,10 @@ export default {
     buttons: {
       type: Array,
       default: () => []
+    },
+    index: {
+      type: Number,
+      default: 0
     }
   },
   data () {
@@ -124,8 +129,24 @@ export default {
     }
   },
   methods: {
+    toStore () {
+      let params = {wid: this.item.wid}
+      if (this.$route.query.from) {
+        params.from = this.$route.query.from
+        this.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.store}?wid=${this.item.id}`})
+      } else {
+        this.$router.push({path: '/store', query: params})
+      }
+    },
+    toDetail () {
+      let params = {id: this.item.id}
+      if (this.$route.query.from) {
+        params.from = this.$route.query.from
+      }
+      this.$router.push({path: '/orderDetail', query: params})
+    },
     buttonClick (type) {
-      this.$emit('on-process', type, this.item)
+      this.$emit('on-process', type, this.item, this.index)
     }
   }
 }

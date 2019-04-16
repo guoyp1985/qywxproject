@@ -6,14 +6,14 @@
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "start": "forever start forever/config.json",
+    "start": "npm run dev",
+    "start1": "forever start forever/config.json",
     "restart": "forever restart forever/config.json",
     "unit": "jest --config test/unit/jest.conf.js --coverage",
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
-    "build": "node build/build.js",
-    "stop": "forever stop gxb"
+    "build": "node build/build.js"
   },
   "dependencies": {
     "axios": "^0.18.0",

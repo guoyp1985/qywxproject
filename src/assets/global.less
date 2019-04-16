@@ -90,7 +90,6 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 .bg-page{background-color:@page-bg-color !important;}
 .bg-page-product{background:rgba(245,249,250,0.5) !important;}
 
-
 .color-black{color:#000 !important;}
 .color-blue{color:#007aff !important;}
 .color-blue1{color:#3ac7e5 !important;}
@@ -703,11 +702,10 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 }
 
 .q_photolist:after{content:"";display:block;clear:both;}
-.q_photolist .photoitem{display:block;vertical-align:middle;
-  width: 25%;
-  padding: 8px;
-  float: left;
-  box-sizing: border-box;
+.q_photolist .photoitem{
+	display:block;vertical-align:middle;
+  width: 25%;float: left;
+  padding:10px;box-sizing: border-box;
 }
 .q_photolist .photoitem.hide{display:none;}
 .q_photolist .photoitem.add input[type=file]{position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;width:100%;}
@@ -783,8 +781,9 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 .emptyitem .t-table .t-cell{height:100%;vertical-align:middle;text-align:center;font-size:14px;color:#999;}
 
 .scrollend{position:relative;padding-bottom:100px;}
+/*
 .scrollendarea.scrollend:after {
-    content: "";
+    content: "共销客";
     position: absolute;
     bottom: 0;
     left: 0;
@@ -796,6 +795,20 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
     background-repeat: no-repeat;
     background-position: center;
     background-size: 136px 47px;
+}
+*/
+
+.scrollendarea.scrollend:before {
+    content: "共销客";
+    position: absolute;top: 20px;left: 0;right: 0;height: 30px;
+    text-align: center;color: #D6D6D8;
+		display:flex;justify-content: center; align-items: center;
+}
+.scrollendarea.scrollend:after {
+    content: "-- 社交电商2.0 --";
+    position: absolute;bottom: 20px;left: 0;right: 0;height: 30px;
+    text-align: center;color: #D6D6D8;
+		display:flex;justify-content: center; align-items: center;
 }
 
 .x-checker .ck-item {
@@ -1065,5 +1078,21 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 	color:#9a9a9a;
 }
 
+.auto-modal{
+  position:absolute;left:0;right:0;bottom:0;top:0;z-index:1000;background-color:rgba(0,0,0,0.6);
+  .modal-inner{
+    width:70%;position:relative;display:block;background-color:#fff;border-radius:10px;
+    .title{height:50px;}
+  }
+  .close-area{position:absolute;left:0;bottom:-60px;right:0;height:50px;}
+  .close-area .al{font-weight:bold;font-size:35px;color:#fff;}
+}
+
 .columnarea{display: flex;flex-direction: column;justify-content: flex-start;align-items: center;}
 .columnarea .column-content{flex:1;width:100%;overflow:hidden;height:100%;}
+
+.top-subscribe-tip{
+	background-color:#fadedd;color:#ff6a61;font-size:12px;
+	padding-left:10px;padding-right:10px;box-sizing: border-box;height:48px;
+	.btn{border:#ff6a61 1px solid;width:65px;height:25px;border-radius:30px;}
+}

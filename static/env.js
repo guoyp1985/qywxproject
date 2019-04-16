@@ -21,6 +21,7 @@ var ENV = {
     {id: 100, status: '已完成'}
   ],
   MiniRouter: {
+    activity: '/packageB/pages/activity',
     contentsNews: '/pages/contentsNews',
     knowledgeList: '/package/pages/contentsKnowledge',
     news: '/packageB/pages/news',
@@ -55,7 +56,10 @@ var ENV = {
   openVipText: '立即开通',
   giveUpVipText: '放弃=错失良机',
   allowVipFee: true,
-  UidArr: [1, 2, 9]
+  UidArr: [1, 2, 9],
+  FactoryManagerUid: 9,
+  SuggestFid: 2,
+  AppHomePage: '/pages/wymh'
 }
 
 ENV.NoAccessUrls = [

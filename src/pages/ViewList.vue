@@ -107,7 +107,7 @@ export default {
     toModule (item) {
       if (item.module === 'courseclass' || item.module === 'lottery' || item.module === 'miniactivity') {
         if (this.query.from === 'from') {
-          this.$wechat.miniProgram.reLaunch({url: '/pages/index'})
+          this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage})
         } else {
           this.$vux.toast.text('请在小程序内查看')
         }

@@ -281,7 +281,7 @@ export default {
       fromProduct: {},
       showTip: true,
       recordCheck: false,
-      allowChatModule: ['news', 'product', 'store', 'messagelist', 'retailer', 'order'],
+      allowChatModule: ['news', 'product', 'store', 'messagelist', 'retailer', 'order', 'factory'],
       allowChat: false,
       retailerInfo: {},
       bottomPos: 0,
@@ -1141,6 +1141,11 @@ export default {
 <style lang="less">
 #chat-room {
   height: 100%;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 #chat-room .bottom-area {
   position: absolute;

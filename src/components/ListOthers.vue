@@ -6,9 +6,11 @@
         <span class="title">{{item.title}}</span>
         <span class="price" v-if="module === 'product'">¥ {{item.price}}</span>
       </div>
-      <button class="ope-btn" v-if="teamInfo.manager > 0" @click.stop="onDelete(item.id, index)">删除</button>
-      <button class="ope-btn" v-if="userInfo.uid !== teamInfo.uploader && teamInfo.join" @click.stop="onImport(item.id)">导入</button>
-    </div>
+      <div class="ope-all">
+        <button class="ope-btn" v-if="teamInfo.manager > 0" @click.stop="onDelete(item.id, index)">删除</button>
+        <button class="ope-btn" @click.stop="onImport(item.id)">导入</button>
+      </div>
+  </div>
     <div class="tip-message" v-if="!data.length && loaded"><span>暂无{{moduleTransfer}}</span></div>
   </div>
 </template>
@@ -42,6 +44,14 @@ export default {
       default: null
     },
     teamInfo: {
+      type: Object,
+      default: null
+    },
+    backurl: {
+      type: String,
+      default: ''
+    },
+    loginUser: {
       type: Object,
       default: null
     }
@@ -136,22 +146,63 @@ export default {
         }
       })
     },
-    onImport (moduleid) {
-      this.$http({
+    importData (moduleid) {
+      const _this = this
+      _this.$http({
         url: `${Env.BokaApi}/api/team/copy`,
         method: 'POST',
         data: {
           id: moduleid,
-          module: this.module
+          module: _this.module
         }
       }).then(res => {
         console.log(res)
         if (res.data.flag) {
-          this.$vux.toast.show({
-            text: `导入${this.moduleTransfer}成功！`
+          _this.$vux.toast.show({
+            text: `导入${_this.moduleTransfer}成功！`
           })
         }
       })
+    },
+    onImport (moduleid) {
+      let _this = this
+      if (!this.loginUser.isretailer || this.loginUser.retailerinfo.moderate !== 1) {
+        this.$vux.confirm.show({
+          title: `你还没有注册卖家哦，注册成功可免费导入该团队的所有信息哦，一键导入便可快速使用！`,
+          onConfirm () {
+            let url = '/pages/vip'
+            if (_this.$route.query.weburl) {
+              let weburl = encodeURIComponent(_this.$route.query.weburl)
+              let webquery = encodeURIComponent(_this.$route.query.webquery)
+              url = `${url}?weburl=${weburl}&webquery=${webquery}`
+              _this.backurl = url
+            }
+            _this.$wechat.miniProgram.navigateTo({url: url})
+          }
+        })
+      } else if (!this.teamInfo.join) {
+        this.$vux.confirm.show({
+          title: `您还没有加入团队，确定加入该团队并导入吗？`,
+          onConfirm () {
+            _this.$http({
+              url: `${Env.BokaApi}/api/team/teamset`,
+              method: 'post',
+              data: {
+                id: _this.id,
+                type: 'addMember'
+              }
+            }).then(res => {
+              console.log(res)
+              if (res.data.flag) {
+                _this.teamInfo.join = 1
+                _this.importData(moduleid)
+              }
+            })
+          }
+        })
+      } else {
+        _this.importData(moduleid)
+      }
     },
     toItem (item) {
       console.log('toItem')
@@ -208,19 +259,19 @@ export default {
       justify-content: space-between;
       padding: 20px;
       background-color: #fff;
-      margin-bottom: 20px;
+      margin-bottom: 5px;
       border-top: 1px solid #e4e4e4;
       border-bottom: 1px solid #e4e4e4;
       box-sizing: border-box;
       .avatar{
         width: 50px;
         height: 50px;
-        border-radius: 10px;
+        border-radius: 6px;
         margin-right: 20px;
         object-fit: cover;
       }
       .info{
-        flex: 1;
+        flex: 2;
         width: 50%;
         display: flex;
         flex-direction: column;
@@ -237,14 +288,18 @@ export default {
           margin-top: 10px;
         }
       }
-      .ope-btn{
-        margin-right: 5px;
-        padding: 5px 8px;
-        border-radius: 10px;
-        background-color: #ff6a61;
-        color: #fff;
-        flex: 0 0 50px;
-        border: none;
+      .ope-all{
+        display: flex;
+        .ope-btn{
+          flex-direction: row;
+          margin-right: 5px;
+          padding: 5px 8px;
+          border-radius: 10px;
+          background-color: #ff6a61;
+          color: #fff;
+          flex: 0 0 50px;
+          border: none;
+        }
       }
     }
     .item:first-child{

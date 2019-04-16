@@ -106,6 +106,9 @@ export default {
         } else {
           self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
         }
+      } else if (self.query.backurl) {
+        let backurl = decodeURIComponent(self.query.backurl)
+        this.$router.push(backurl)
       } else {
         self.initContainer()
         self.showCenter = true
@@ -133,7 +136,7 @@ export default {
           if (res.status === 200) {
             self.loginUser = res.data
             User.set(self.loginUser)
-            if (!self.loginUser.isretailer) {
+            if (!self.loginUser.isretailer || !self.loginUser.retailerinfo.moderate) {
               self.initContainer()
               self.showApply = true
               document.title = '申请卖家'
@@ -168,8 +171,8 @@ export default {
                   let shareParams = {
                     module: 'retailer',
                     moduleid: self.loginUser.uid,
-                    title: `${self.loginUser.linkman}邀请你一起入驻聚客365`,
-                    desc: '聚客365帮你解决微商创业难题',
+                    title: `${self.loginUser.linkman}邀请你一起入驻共销客`,
+                    desc: '共销客帮你解决微商创业难题',
                     photo: self.loginUser.avatar,
                     link: `${ENV.Host}/#/centerSales?&share_uid=${self.loginUser.uid}`
                   }

@@ -70,6 +70,15 @@
                   <check-icon class="red-check" :value.sync="offline" @click.native.stop="setbuyonline(0)">线下支付</check-icon>
                 </div>
               </forminputplate>
+              <forminputplate class="required" v-if="query.miniconfig != 'wechat.mini_program.tljk'">
+                <span slot="title">超值优惠</span>
+                <div>
+                  <!-- <check-icon class="red-check" :value.sync="suggestOpen" @click.native.stop="clickSuggest(1)">开启</check-icon>
+                  <check-icon class="red-check" :value.sync="suggestClose" @click.native.stop="clickSuggest(0)">关闭</check-icon> -->
+                  <check-icon class="red-check" :value.sync="suggestOpen" @click.native.stop="clickSuggest(1)">开启</check-icon>
+                  <check-icon class="red-check" :value.sync="suggestClose" @click.native.stop="clickSuggest(0)">关闭</check-icon>
+                </div>
+              </forminputplate>
               <div v-show="showmore">
                 <forminputplate>
                   <span slot="title">{{ $t('Shop description') }}</span>
@@ -215,17 +224,17 @@
               <div class="bold mt5">第二条 提现</div>
               <div>买家通过线上支付购买商品，需待买家确认收货后，卖家才可以通过“我的收入”提现收益。</div>
               <div class="bold mt5">第三条 手续费</div>
-              <div>聚客365卖家需按订单交易额（含运费）的1%承担交易手续费，最低收费金额0.01元，不足0.01元按照0.01元收取。</div>
+              <div>共销客卖家需按订单交易额（含运费）的1%承担交易手续费，最低收费金额0.01元，不足0.01元按照0.01元收取。</div>
               <div class="bold mt5">退款订单处理规则：</div>
-              <div>（1）当订单为“待发货”状态时，买家可主动发起交易退款，聚客365将整单全额退款，不收取手续费。</div>
+              <div>（1）当订单为“待发货”状态时，买家可主动发起交易退款，共销客将整单全额退款，不收取手续费。</div>
               <div>（2）当订单为“已发货或已收货”状态时，线上无法申请及处理交易退款，买家可通过“申请维权”与卖家互加好友，线下协商解决，手续费不予退还。</div>
               <div class="bold mt5">第四条 交易规则</div>
-              <div>（1）除买卖双方协商一致的，聚客365平台卖家需在买家付款后的72小时内操作发货。</div>
+              <div>（1）除买卖双方协商一致的，共销客平台卖家需在买家付款后的72小时内操作发货。</div>
               <div>（2）卖家应当将商品通过物流配送至买家订单收货地址，并由收件人本人签收，需买家至指定地点提取的，应当事先予以显著明示或征得买家同意。</div>
               <div>（3）卖家优先选择有签收凭证的物流公司发货，若买卖双方使用当面交易交付货物，交易风险由买卖双方自行承担。</div>
               <div>（4）卖家违反发货规范导致买家未收到商品或拒收商品的，由此产生的相关费用及商品损毁或灭失风险，由卖家自行承担。</div>
               <div class="bold mt5">第五条 交易纠纷</div>
-              <div>聚客365平台仅提供商品展示，不做任何担保交易，买卖双方在交易过程中出现的任何问题，由买卖双方协商解决。</div>
+              <div>共销客平台仅提供商品展示，不做任何担保交易，买卖双方在交易过程中出现的任何问题，由买卖双方协商解决。</div>
               <div class="bold mt5">第六条 信息完善</div>
               <div>开通在线支付后，请及时对已有商品设置“库存”及“运费”，在商品列表中，点击“操作”-->点击“编辑”，即可设置商品的“库存”及“运费”。</div>
             </div>
@@ -243,7 +252,7 @@
               <div class="bold">第一条 定义</div>
               <div>线下支付，是指买家可通过商品页面与卖家互加好友，以传统微商（线下聊天转账）的交易方式进行交易。</div>
               <div class="bold mt5">第二条 交易纠纷</div>
-              <div>聚客365平台仅提供商品展示，不做任何担保交易，买卖双方在交易过程中出现的任何问题，由买卖双方协商解决。</div>
+              <div>共销客平台仅提供商品展示，不做任何担保交易，买卖双方在交易过程中出现的任何问题，由买卖双方协商解决。</div>
               <div class="bold mt5">第三条 功能变更</div>
               <div>由“在线支付”模式更改为“线下支付”时，所有正在进行的促销活动将全部失效，再次更改为"在线支付"模式时，原有促销活动需重新创建，请谨慎更改。</div>
             </div>
@@ -359,6 +368,10 @@ export default {
     buyoffline: {
       type: Boolean,
       default: false
+    },
+    submitSuggest: {
+      type: Boolean,
+      default: true
     }
   },
   directives: {
@@ -383,7 +396,13 @@ export default {
       online: true,
       offline: false,
       isFirst: true,
-      isFirst1: true
+      isFirst1: true,
+      suggestOpen: true,
+      suggestClose: false,
+      isFirst2: true,
+      isFirst3: true,
+      oldSuggestOpen: true,
+      oldSuggestClose: false
     }
   },
   watch: {
@@ -392,17 +411,10 @@ export default {
     },
     submitdata: function () {
       console.log('in watch sumitdata')
-      if (this.submitdata.buyonline) {
-        this.online = true
-        this.offline = false
-      } else {
-        this.online = false
-        this.offline = true
-      }
+      this.watchBuyline()
       return this.submitdata
     },
     buyonline: function () {
-      console.log('in watch bunonline')
       if (this.isFirst) {
         this.online = this.buyonline
         this.isFirst = false
@@ -410,15 +422,39 @@ export default {
       return this.buyonline
     },
     buyoffline: function () {
-      console.log('in watch buyoffline')
       if (this.isFirst1) {
         this.offline = this.buyoffline
         this.isFirst1 = false
       }
       return this.buyoffline
+    },
+    submitSuggest: function () {
+      console.log('in watch submitSuggest')
+      this.watchSuggest()
+      return this.submitSuggest
     }
   },
   methods: {
+    watchBuyline () {
+      if (this.submitdata.buyonline) {
+        this.online = true
+        this.offline = false
+      } else {
+        this.online = false
+        this.offline = true
+      }
+    },
+    watchSuggest () {
+      if (this.submitSuggest) {
+        this.suggestOpen = true
+        this.suggestClose = false
+      } else {
+        this.suggestOpen = false
+        this.suggestClose = true
+      }
+      this.oldSuggestOpen = this.suggestOpen
+      this.oldSuggestClose = this.suggestClose
+    },
     textareaChange (refname) {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
       curArea.updateAutosize()
@@ -507,6 +543,30 @@ export default {
         this.online = false
         this.offline = true
       }
+    },
+    clickSuggest (val) {
+      console.log(val)
+      let con = (val === 1 ? '确认要展示超值优惠商品？' : '确认要取消展示超值优惠商品？')
+      if (val === 1) {
+        this.suggestOpen = true
+        this.suggestClose = false
+      } else {
+        this.suggestOpen = false
+        this.suggestClose = true
+      }
+      this.$vux.confirm.show({
+        content: con,
+        onCancel: () => {
+          this.suggestOpen = this.oldSuggestOpen
+          this.suggestClose = this.oldSuggestClose
+        },
+        onConfirm: () => {
+          this.$emit('clickSuggest', val, () => {
+            this.oldSuggestOpen = this.suggestOpen
+            this.oldSuggestClose = this.suggestClose
+          })
+        }
+      })
     },
     closeOnPopup () {
       this.showonline = false
@@ -704,11 +764,19 @@ export default {
         }
       })
     }
+  },
+  mounted () {
+    console.log('in mounted')
+    this.watchBuyline()
+    this.watchSuggest()
   }
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
+.retailersetting{
+  .title-cell{width:80px;}
+}
 .retailersetting .x-checker .ck-item{
   font-size:13px;
   display: inline-block;

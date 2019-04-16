@@ -1,5 +1,8 @@
 <template>
   <div class="add-tags">
+    <form enctype="multipart/form-data">
+      <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange" />
+    </form>
     <div class="input-box">
       <textarea class="font14" placeholder="说点什么吧..." maxlength="200" v-model="content"></textarea>
       <span class="count">{{count}} / 200</span>
@@ -20,7 +23,7 @@
         </div>
       </div>
     </div>
-    <div style="height:70px;"></div>
+    <!-- <div style="height:70px;"></div> -->
     <div class="submit-btn flex_center">
       <button @click="submit">发布</button>
     </div>
@@ -28,7 +31,7 @@
 </template>
 
 <script type="text/javascript">
-import Env from 'env'
+import ENV from 'env'
 export default{
   created () {
     this.id = this.$route.query.id
@@ -43,7 +46,8 @@ export default{
       id: null,
       photos: [],
       content: '',
-      count: 0
+      count: 0,
+      maxnum: 9
     }
   },
   watch: {
@@ -53,21 +57,42 @@ export default{
     }
   },
   methods: {
+    photoCallback (data) {
+      const self = this
+      if (data.flag === 1) {
+        self.photos.push(data.data)
+      } else if (data.error) {
+        self.$vux.toast.show({
+          text: data.error,
+          time: self.$util.delay(data.error)
+        })
+      }
+    },
+    fileChange (e) {
+      const self = this
+      let files = e.target.files
+      if (files.length > 0) {
+        const fileForm = e.target.parentNode
+        const filedata = new FormData(fileForm)
+        self.$vux.loading.show()
+        self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
+          let data = res.data
+          self.$vux.loading.hide()
+          self.photoCallback(data)
+        })
+      }
+    },
     onChooseImage () {
-      if (this.$util.isPC()) {
-        console.log('现在是pc端')
+      const self = this
+      const fileInput = self.$refs.fileInput[0] ? self.$refs.fileInput[0] : self.$refs.fileInput
+      if (self.$util.isPC()) {
+        fileInput.click()
       } else {
-        this.$wechat.ready(() => {
-          this.$util.wxUploadImage({
-            maxnum: 9 - this.photos.length,
-            handleCallback: (data) => {
-              if (data.flag === 1) {
-                this.photos.push(data.data)
-              } else if (data.error) {
-                this.$vux.toast.show({
-                  text: data.error
-                })
-              }
+        self.$wechat.ready(function () {
+          self.$util.wxUploadImage({
+            maxnum: self.maxnum - self.photos.length,
+            handleCallback: function (data) {
+              self.photoCallback(data)
             }
           })
         })
@@ -82,7 +107,7 @@ export default{
         return
       }
       this.$http({
-        url: `${Env.BokaApi}/api/team/source`,
+        url: `${ENV.BokaApi}/api/team/source`,
         method: 'post',
         data: {
           type: 'add',
@@ -106,6 +131,7 @@ export default{
 
 <style lang="less" scoped="">
 .add-tags{
+  touch-action: none;
   position: relative;
   width: 100%;
   height: 110%;

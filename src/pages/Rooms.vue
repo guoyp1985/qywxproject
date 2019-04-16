@@ -5,18 +5,23 @@
 */
 <template>
   <div id="rooms" class="containerarea font14 s-havebottom">
-    <div class="s-topbanner s-topbanner1 sort-header db-flex">
+    <!-- <div class="imgitem" @click="toStart">
+      <div class="inner">
+        <img src="../assets/images/quntui.png" />
+      </div>
+    </div> -->
+    <div class="s-topbanner s-topbanner1 sort-header db-flex"><!-- s-topbanner -->
       <div class="flex_cell sort-cell" :class="{'sorted': selectIndex === 0}" @click="sortHandle(0)">
-        <span :class="{'asc': sortTotal === true, 'desc': sortTotal === false}">综合</span>
+        <span :class="{'desc': sortTotal === true, 'asc': sortTotal === false}">综合</span>
       </div>
       <div class="flex_cell sort-cell" :class="{'sorted':  selectIndex === 1}" @click="sortHandle(1)">
-        <span :class="{'asc': sortTime === true, 'desc': sortTime === false}">时间</span>
+        <span :class="{'desc': sortTime === true, 'asc': sortTime === false}">时间</span>
       </div>
       <div class="flex_cell sort-cell" :class="{'sorted':  selectIndex === 2}" @click="sortHandle(2)">
-        <span :class="{'asc': sortSales === true, 'desc': sortSales === false}">单数</span>
+        <span :class="{'desc': sortSales === true, 'asc': sortSales === false}">接单数</span>
       </div>
       <div class="flex_cell sort-cell" :class="{'sorted':  selectIndex === 3}" @click="sortHandle(3)">
-        <span :class="{'asc': sortPrice === true, 'desc': sortPrice === false}">价格</span>
+        <span :class="{'desc': sortPrice === true, 'asc': sortPrice === false}">价格</span>
       </div>
     </div>
     <div ref="scrollContainer" class="s-container s-container1 scroll-container" @scroll="handleScroll">
@@ -24,14 +29,25 @@
         <template v-if="rooms.length">
           <room-view v-for="(item, index) in rooms" :key="index" :item="item">
             <div class="font13" slot="sort-key">
-              <span v-if="selectIndex === 0">评分: {{item.score}}</span>
-              <span v-if="selectIndex === 1">时间: {{item.dateline | formatDate}}</span>
-              <span v-if="selectIndex === 2">单数: {{item.sales}}</span>
-              <span v-if="selectIndex === 3">价格: ￥{{item.viewmoney}}/人点击</span>
+              <span v-if="selectIndex === 0">
+                <div>群人数: {{item.members}}<span class="ml10">点击价值: ￥{{item.viewmoney}}</span></div>
+                评分: {{item.score}}
+              </span>
+              <span v-if="selectIndex === 1">
+                <div>群人数: {{item.members}}<span class="ml10">点击价值: ￥{{item.viewmoney}}</span></div>
+                时间: {{item.dateline | formatDate}}
+              </span>
+              <span v-if="selectIndex === 2">
+                <div>群人数: {{item.members}}<span class="ml10">点击价值: ￥{{item.viewmoney}}</span></div>
+                接单数: {{item.sales}}
+              </span>
+              <span v-if="selectIndex === 3">
+                <div>群人数: {{item.members}}<span class="ml10">点击价值: ￥{{item.viewmoney}}</span></div>
+              </span>
             </div>
             <div slot="operation-area" class="room-operate-area db-flex">
-              <router-link class="flex_cell font13 button" :to="{ name: 'tRoomDetails', query: {id: item.id} }">了解更多</router-link>
-              <router-link class="flex_cell font13 button" :to="{ name: 'tRoomOrderDeal', query: {id: item.id} }">与TA交易</router-link>
+              <div class="flex_cell font13 button" @click="toRoomDetails(item)">了解更多</div>
+              <div class="flex_cell font13 button" @click="toOrderDeal(item)">与TA交易</div>
             </div>
           </room-view>
         </template>
@@ -42,9 +58,9 @@
         </template>
       </template>
     </div>
-    <router-link class="s-bottom submit-button color-white" :to="{ name: 'tRoomOrders' }">
-      <span>订单列表</span>
-    </router-link>
+    <div class="s-bottom submit-button color-white" @click="toMyOrder">
+      <span>我的订单</span>
+    </div>
   </div>
 </template>
 <script>
@@ -58,8 +74,9 @@ export default {
   },
   data () {
     return {
-      selectIndex: -1,
-      sortTotal: null,
+      query: {},
+      selectIndex: 0,
+      sortTotal: true,
       sortTime: null,
       sortSales: null,
       sortPrice: null,
@@ -75,6 +92,30 @@ export default {
     }
   },
   methods: {
+    toMyOrder () {
+      let params = {}
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/roomOrders', query: params})
+    },
+    toRoomDetails (item) {
+      let params = {id: item.id}
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/roomDetails', query: params})
+    },
+    toOrderDeal (item) {
+      let params = {id: item.id}
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/roomOrderDeal', query: params})
+    },
+    toStart () {
+      this.$router.push('/roomStart?frompage=rooms')
+    },
     sortHandle (i) {
       this.selectIndex = i
       this.loadCompleted = false
@@ -93,6 +134,7 @@ export default {
           this.sortTime = !this.sortTime
           this.sortSales = null
           this.sortPrice = null
+          console.log(this.sortTime)
           this.loadData('dateline', this.sortTime)
           break
         case 2:
@@ -120,22 +162,46 @@ export default {
       this.$util.scrollEvent({
         element: this.$refs.scrollContainer,
         callback: () => {
-          _this.loadData()
+          if (_this.rooms.length === (_this.pageStart + 1) * _this.limit) {
+            _this.pageStart++
+            switch (_this.selectIndex) {
+              case 0:
+                this.loadData('score', this.sortTotal)
+                break
+              case 1:
+                this.loadData('dateline', this.sortTime)
+                break
+              case 2:
+                this.loadData('sales', this.sortSales)
+                break
+              case 3:
+                this.loadData('viewmoney', this.sortPrice)
+                break
+            }
+            // _this.loadData()
+          }
         }
       })
     },
     refresh () {
-      this.loadData()
+      this.selectIndex = 0
+      this.loadCompleted = false
+      this.pageStart = 0
+      this.rooms = []
+      this.sortTotal = true
+      this.sortTime = null
+      this.sortSales = null
+      this.sortPrice = null
+      this.loadData('score', this.sortTotal)
     },
     loadData (sortKey, isAsc) {
-      const params = {from: 'other', orderby: sortKey, ascdesc: isAsc ? 'asc' : 'desc', limit: this.limit, pagestart: this.pageStart}
+      const params = {from: 'other', orderby: sortKey, ascdesc: isAsc ? 'desc' : 'asc', limit: this.limit, pagestart: this.pageStart}
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/groups/myGroups`, params)
       .then(res => {
         this.$vux.loading.hide()
         if (res.data.flag === 1) {
           const data = res.data.data
-          data.length && this.pageStart++
           this.rooms = this.rooms.concat(data)
           this.loadCompleted = true
         }
@@ -143,16 +209,27 @@ export default {
     }
   },
   activated () {
+    this.query = this.$route.query
+    this.pageStart = 0
+    this.rooms = []
     this.refresh()
   }
 }
 </script>
 <style lang="less">
+// #rooms .s-container.s-container1{top:209px;}
+#rooms .imgitem{
+  position:relative;width:100%;padding-bottom:43%;box-shadow: 0px 0px 3px 1px #e6ebed;
+  .inner{position:absolute;top:0;bottom:0;left:0;right:0;}
+  img{width:100%;height:100%;}
+}
 #rooms .sort-header {
   border-bottom: 1px solid #f0f0f0;
   text-align: center;
   line-height: 44px;
   background: #ffffff;
+  // box-shadow: 0px 0px 3px 1px #e6ebed;
+  // top:165px;
 }
 #rooms .sort-header span {
   position: relative;

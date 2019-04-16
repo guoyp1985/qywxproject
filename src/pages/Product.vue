@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea bg-white font14 product notop">
+  <div id="product-page" class="containerarea bg-white font14 product notop">
     <template v-if="showSos">
       <sos :title="sosTitle"></sos>
     </template>
@@ -56,13 +56,16 @@
   			</div>
         <div class="pt12 pb12 bg-white pl10 pr10 b_bottom_after">
       		<div class="clamp2">
-            <span class="v_middle db-in bold"><span v-if="productdata.moderate != 1" class="color-gray bold">【已下架】</span>{{ productdata.title }}</span>
+            <span class="v_middle db-in bold" @click="copyTxt" style="position:relative;">
+              <span v-if="productdata.moderate != 1" class="color-gray bold">【已下架】</span>{{ productdata.title }}
+              <div class="copy_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ productdata.title }}</div>
+            </span>
             <span v-if="loginUser && loginUser.groupid == 1" class="v_middle db-in color-gray font12">分享次数:{{ productdata.shares }}</span>
           </div>
           <div class="color-red">
             <span class="font18 mr3 v_middle">{{ $t('RMB') }}</span>
             <span class="font18 mr5 v_middle">{{ productdata.price }}</span>
-            <span class="color-gray font14 line-through" v-if="productdata.oriprice">
+            <span class="color-gray font14 line-through" v-if="productdata.oriprice && productdata.oriprice > 0">
               <span class="mr3 v_middle">{{ $t('RMB') }}</span>
               <span class="v_middle">{{ productdata.oriprice }}</span>
             </span>
@@ -74,7 +77,7 @@
     					<div class="t-cell v_middle pl10 align_right">销量: {{ productdata.saled }}{{ productdata.unit }}</div>
             </template>
             <div v-else class="t-cell v_middle align_left">销量: {{ productdata.saled }}{{ productdata.unit }}</div>
-            <div v-if="productdata.buyonline == 1 && (!activityInfo.id || (activityInfo.id && activityInfo.type == 'bargainbuy')) && ((loginUser && loginUser.uid == retailerInfo.uid) || productdata.identity != 'user')" class="t-cell v_middle border-box align_right">
+            <div v-if="productdata.uploader != -1 && (productdata.buyonline == 1 && (!activityInfo.id || (activityInfo.id && activityInfo.type == 'bargainbuy')) && ((loginUser && loginUser.uid == retailerInfo.uid) || productdata.identity != 'user'))" class="t-cell v_middle border-box align_right">
               <span class="color-red">佣金: {{ $t('RMB') }}{{ productdata.rebate }}</span>
             </div>
   					<div v-if="productdata.buyonline != 1" class="t-cell v_middle align_right " @click="popupbuy">
@@ -452,6 +455,7 @@ import CommentPopup from '@/components/CommentPopup'
 import Sos from '@/components/Sos'
 import TitleTip from '@/components/TitleTip'
 import Time from '#/time'
+import jQuery from 'jquery'
 import ENV from 'env'
 import { User } from '#/storage'
 import Socket from '#/socket'
@@ -623,6 +627,34 @@ export default {
     },
     filterEmot (text) {
       return this.$util.emotPrase(text)
+    },
+    copyTxt () {
+      const self = this
+      let eleobj = jQuery('#product-page .copy_txt')[0]
+      let range = null
+      let save = function (e) {
+        e.clipboardData.setData('text/plain', eleobj.innerHTML)
+        e.preventDefault()
+      }
+      if (self.$util.isIOS()) { // ios设备
+        window.getSelection().removeAllRanges()
+        range = document.createRange()
+        range.selectNode(eleobj)
+        window.getSelection().addRange(range)
+        document.execCommand('copy')
+        window.getSelection().removeAllRanges()
+      } else { // 安卓设备
+        console.log('in android')
+        document.addEventListener('copy', save)
+        document.execCommand('copy')
+        document.removeEventListener('copy', save)
+      }
+      setTimeout(function () {
+        self.$vux.toast.show({
+          text: '复制成功',
+          time: 1500
+        })
+      }, 200)
     },
     closeShareLayer () {
       this.showShareLayer = false
@@ -1117,7 +1149,7 @@ export default {
         this.showShareSuccess = false
         this.showVideo = true
         this.query = this.$route.query
-        if (this.query.wechatorderid) {
+        if (this.query.iswechat) {
           this.showShareLayer = true
         }
         this.$vux.loading.show()

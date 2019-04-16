@@ -5,6 +5,14 @@
     <Sos v-if="showSos" :title="sosTitle"></Sos>
     <template v-if="showContainer">
       <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
+        <div v-if="showTip" class="border-box db-flex top-subscribe-tip">
+          <div class="flex_cell h_100 flex_left">
+            <i class="al al-gantanhaozhong font20"></i><span>关注公众号可及时接收私信提醒</span>
+          </div>
+          <div class="w80 h_100 flex_right">
+            <div class="btn flex_center" @click="toSubscribe">立即关注</div>
+          </div>
+        </div>
         <div v-if="query.from == 'miniprogram'" class="v-top font16 color-white clamp1">{{ data.title }}</div>
         <template v-else>
           <router-link v-if="module == 'activity' && data.type === 'groupbuy'" :to="{path: '/product', query: {id: query.id}}" class="v-top font16 color-white clamp1">{{ data.title }}</router-link>
@@ -13,7 +21,8 @@
         <div v-if="statData && statData.length > 0" class="radiusarea mb10 pb15 bg-white list-shadow01">
           <div class="item" v-for="(item,index) in statData" :key="index">
             <div class="inner">
-              <div class="radius font22 clamp1">{{ item.value }}</div>
+              <div class="radius font15 clamp1" v-if="item.key == 'salesmoney'">{{ item.value }}</div>
+              <div class="radius font22 clamp1" v-else>{{ item.value }}</div>
               <div class="title color-gray">{{ item.title }}</div>
             </div>
           </div>
@@ -603,7 +612,8 @@ export default {
       isFirst: true,
       clickTabitem: null,
       clickTabIndex: 0,
-      userData: {}
+      userData: {},
+      showTip: false
     }
   },
   watch: {
@@ -632,6 +642,9 @@ export default {
       this.tabsdata = []
       this.scrollData = []
       this.isFirst = true
+    },
+    toSubscribe () {
+      this.$wechat.miniProgram.navigateTo({url: '/pages/subscribe'})
     },
     expandEvent (item, index) {
       let curDataList = this.arrData
@@ -776,13 +789,10 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$vux.loading.show()
       this.loginUser = User.get()
+      if (this.$route.query.from && this.loginUser.subscribe !== 1) {
+        this.showTip = true
+      }
       if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
-        // if (self.loginUser.isretailer === 2) {
-        //   self.initContainer()
-        //   self.$vux.loading.hide()
-        //   let backUrl = encodeURIComponent(location.href)
-        //   location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
-        // } else {
         let isAdmin = false
         for (let i = 0; i < self.loginUser.usergroup.length; i++) {
           if (self.loginUser.usergroup[i] === 1) {
@@ -806,7 +816,6 @@ export default {
             this.swiperChange()
           }
         }
-        // }
       }
     }
   },

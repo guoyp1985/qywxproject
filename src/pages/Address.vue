@@ -24,7 +24,7 @@
                 {{item.linkman}} {{item.telephone}}
               </div>
               <div class="addr-cell font14 color-gray">
-                {{item | addressFormat}}
+                {{item.fulladdress}}
               </div>
             </div>
             <div class="link-cell"></div>

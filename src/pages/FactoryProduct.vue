@@ -58,12 +58,12 @@
         <div class="b_top_after"></div>
         <div class="padding10 b_bottom_after levelarea">
           <div class="levelitem">
-            <div>上级分润: {{ $t('RMB') }}{{ productdata.superiorrebate }}</div>
+            <div>推荐人佣金: {{ $t('RMB') }}{{ productdata.superiorrebate }}</div>
           </div>
         </div>
         <div class="padding10 b_bottom_after levelarea">
           <div class="levelitem">
-            <div>销售分润: {{ $t('RMB') }}{{ productdata.salesrebate }}</div>
+            <div>销售佣金: {{ $t('RMB') }}{{ productdata.salesrebate }}</div>
           </div>
         </div>
         <!-- <template v-if="feeData.length != 0 && (productdata.identity == 'factory' || productdata.joinstatus == 0)">
@@ -104,9 +104,13 @@
         </div>
         <div class="productarea scrollendarea scrollend" style="background-color:#f6f6f6;"></div>
       </div>
-      <div v-if="productdata.identity == 'retailer' || productdata.retailerinfo.id > 0" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
+      <div v-if="loginUser.isretailer" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
         <div class="align_center flex_center flex_cell">
-          <div class="flex_cell flex_center btn-bottom-red" @click="importEvent">我要代理</div>
+          <div class="btn-bottom-red flex_center" style="width:80%;" v-if="productdata.haveimport">已上架</div>
+          <div class="btn-bottom-red flex_center" style="width:80%;" v-else @click="importEvent">上架到店铺</div>
+        </div>
+        <div class="align_center flex_center flex_cell">
+          <div @click="toStore" class="btn-bottom-orange flex_center" style="width:80%;">我的店铺</div>
         </div>
       </div>
       <div v-transfer-dom>
@@ -123,6 +127,9 @@
           :module="module"
           :on-close="closeShareSuccess">
         </share-success>
+      </template>
+      <template v-if="showTip">
+        <tip-layer buttonTxt="立即申请" content="会员卖家才可代理厂家商品，赶快入住申请吧！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
       </template>
     </template>
   </div>
@@ -146,6 +153,7 @@ Another batch:
 <script>
 import { Previewer, Swiper, SwiperItem, TransferDom, Popup, XImg } from 'vux'
 import ShareSuccess from '@/components/ShareSuccess'
+import TipLayer from '@/components/TipLayer'
 import Sos from '@/components/Sos'
 import TitleTip from '@/components/TitleTip'
 import Time from '#/time'
@@ -160,7 +168,7 @@ export default {
     TransferDom
   },
   components: {
-    Previewer, Swiper, SwiperItem, Popup, ShareSuccess, Sos, XImg, TitleTip, OpenVip
+    Previewer, Swiper, SwiperItem, Popup, ShareSuccess, Sos, XImg, TitleTip, OpenVip, TipLayer
   },
   filters: {
     dateformat: function (value) {
@@ -199,7 +207,8 @@ export default {
       levelNameData: {},
       topcss: '',
       showVideo: true,
-      playVideo: false
+      playVideo: false,
+      showTip: false
     }
   },
   watch: {
@@ -263,6 +272,29 @@ export default {
     filterEmot (text) {
       return this.$util.emotPrase(text)
     },
+    closeTip () {
+      this.showTip = false
+    },
+    toApply () {
+      if (this.query.from) {
+        let webquery = encodeURIComponent(`id=${this.query.id}&from=${this.query.from}`)
+        this.$wechat.miniProgram.redirectTo({url: `/pages/vip?weburl=factoryProduct&webquery=${webquery}`})
+      } else {
+        let backurl = `/factoryProduct?id=${this.query.id}`
+        if (this.query.from) {
+          backurl = `${backurl}&from=${this.query.from}`
+        }
+        backurl = encodeURIComponent(backurl)
+        this.$router.push({path: '/center', query: {backurl: backurl}})
+      }
+    },
+    toStore () {
+      if (this.query.from) {
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.store}?wid=${this.loginUser.uid}`})
+      } else {
+        this.$router.push({path: '/store', query: {wid: this.loginUser.uid}})
+      }
+    },
     clickPlay (refname) {
       this.playVideo = true
     },
@@ -324,41 +356,35 @@ export default {
     importProduct () {
       const self = this
       self.$vux.confirm.show({
-        content: '确定要代理该商品吗？',
+        content: '确定将该商品上架到店铺并进行出售吗？',
         onConfirm () {
           self.$vux.loading.show()
-          self.$http.post(`${ENV.BokaApi}/api/factory/importFactoryProduct`, {
-            id: self.query.id
-          }).then(function (res) {
+          let params = {id: self.query.id}
+          if (self.query.wid) {
+            params.wid = self.query.wid
+          }
+          self.$http.post(`${ENV.BokaApi}/api/factory/importFactoryProduct`, params).then(function (res) {
             let data = res.data
             self.$vux.loading.hide()
+            let error = data.error
+            if (data.flag === 1) {
+              error = '上架成功！该商品已显示在你的店铺中！'
+              self.productdata.haveimport = 1
+            }
             self.$vux.toast.show({
-              text: data.error,
+              text: error,
               type: data.flag === 1 ? 'success' : 'warn',
-              time: self.$util.delay(data.error)
+              time: self.$util.delay(error)
             })
           })
         }
       })
     },
     importEvent () {
-      const self = this
-      if (self.loginUser.isretailer === 2) {
-        self.$vux.loading.show()
-        this.$http.get(`${ENV.BokaApi}/api/list/product?from=retailer`, {
-          params: { pagestart: 0, limit: 5 }
-        }).then(res => {
-          self.$vux.loading.hide()
-          const data = res.data
-          const retdata = data.data ? data.data : data
-          if (retdata.length < 5) {
-            self.importProduct()
-          } else {
-            self.openVip()
-          }
-        })
-      } else if (self.loginUser.isretailer === 1) {
-        self.importProduct()
+      if (!this.loginUser.isretailer || !this.loginUser.retailerinfo.moderate) {
+        this.showTip = true
+      } else {
+        this.importProduct()
       }
     },
     openVip () {
@@ -419,7 +445,7 @@ export default {
               self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
             }
             self.handelShare()
-            if (self.productdata.identity !== 'retailer') {
+            if (!self.loginUser.isretailer) {
               self.topcss = 'nobottom'
             }
             self.feeData = self.productdata.agentfee ? self.productdata.agentfee : []
@@ -440,7 +466,11 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.loginUser = User.get()
+      this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
+        const data = res.data
+        this.loginUser = data
+        User.set(data)
+      })
       this.initData()
       this.query = this.$route.query
       this.getData()

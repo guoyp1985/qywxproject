@@ -30,7 +30,7 @@
           <div class="t-cell">暂无相关订单</div>
         </div>
       </div>
-      <router-link :to="{ path: '/retailerOrderDetail', query: { id: item.orderid } }" class="scroll_item mb10 db" v-else v-for="(item,index1) in orders" :key="item.id">
+      <div @click="toOrderDetail(item)" :to="{ path: '/retailerOrderDetail', query: { id: item.orderid } }" class="scroll_item mb10 db" v-else v-for="(item,index1) in orders" :key="item.id">
         <div class="padding10">
           <div class="t-table">
             <div class="t-cell w60">
@@ -46,7 +46,7 @@
         <div class="bg-white b_bottom_after padding10 flex_left">
           <div>合计：<span class="color-orange">{{ $t('RMB') }} <span class="font16">{{ data.orderstotal }}</span></span></div>
         </div>
-      </router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -88,6 +88,13 @@ export default {
     }
   },
   methods: {
+    toOrderDetail (item) {
+      let params = {id: item.orderid}
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/retailerOrderDetail', query: params})
+    },
     getData () {
       const self = this
       this.$vux.loading.show()

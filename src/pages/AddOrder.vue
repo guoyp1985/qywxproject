@@ -6,19 +6,21 @@
     <template v-if="showContainer">
       <div class="s-container" style="top:0;">
         <form>
-  				<div class="padding10 b_bottom_after bg-white" @click="showaddress">
-  					<div class="t-table">
-  						<div v-if="selectaddress" class="t-cell v_middle">
-  							<div>收货人：{{ selectaddress.linkman }} {{ selectaddress.telephone}}</div>
-  							<div>收货地址：{{ selectaddress.fulladdress }}</div>
-  						</div>
-  						<div v-else class="t-cell v_middle color-red">请选择地址</div>
-  						<div class="t-cell v_middle" style="width:30px;">
-  							<i class="al al-mjiantou-copy2"></i>
-  						</div>
-  					</div>
-  				</div>
-          <div style="height:12px;"></div>
+          <template v-if="onlineVal">
+    				<div class="padding10 b_bottom_after bg-white" @click="showaddress">
+    					<div class="t-table">
+    						<div v-if="selectaddress" class="t-cell v_middle">
+    							<div>收货人：{{ selectaddress.linkman }} {{ selectaddress.telephone}}</div>
+    							<div>收货地址：{{ selectaddress.fulladdress }}</div>
+    						</div>
+    						<div v-else class="t-cell v_middle color-red">请选择地址</div>
+    						<div class="t-cell v_middle" style="width:30px;">
+    							<i class="al al-mjiantou-copy2"></i>
+    						</div>
+    					</div>
+    				</div>
+            <div style="height:12px;"></div>
+          </template>
           <div v-for="(item,index) in orderdata" :key="item.id" class="orderitem bg-white">
             <div v-for="(product,index1) in item.info" :key="product.id" class="productitem">
     					<div class="b_bottom_after padding10">
@@ -61,7 +63,16 @@
                 </div>
               </div>
             </div>
-            <div class="b_bottom_after padding10" v-if="item.postage && item.postage != ''">
+            <div class="b_bottom_after padding10">
+              <div class="t-table">
+                <div class="t-cell v_middle w100">收货方式</div>
+                <div class="t-cell v_middle align_right">
+                  <check-icon class="red-check" :value.sync="onlineVal"  @click.native.stop="setBuy(1)">卖家发货</check-icon>
+                  <check-icon class="red-check" :value.sync="offlineVal" @click.native.stop="setBuy(0)">到店自提</check-icon>
+                </div>
+              </div>
+            </div>
+            <div class="b_bottom_after padding10" v-if="onlineVal && item.postage && item.postage != ''">
               <div class="t-table">
                 <div class="t-cell v_middle" style="width:40px;">{{ $t('Postage') }}</div>
                 <div class="t-cell v_middle">
@@ -254,7 +265,10 @@ export default {
       cardList: [],
       selectedCard: null,
       allowCard: false,
-      curOrder: {postageNumber: 0, rebate: 0}
+      curOrder: {postageNumber: 0, rebate: 0},
+      buyType: 'online',
+      onlineVal: true,
+      offlineVal: false
     }
   },
   watch: {
@@ -301,6 +315,27 @@ export default {
       this.showCard = false
       this.cardList = []
       this.selectedCard = null
+      this.buyType = 'online'
+      this.onlineVal = true
+      this.offlineVal = false
+    },
+    setBuy (val) {
+      let total = parseFloat(this.payPrice)
+      let curpostage = this.orderdata[0].postage
+      if (curpostage) {
+        curpostage = parseFloat(curpostage.replace(/,/g, ''))
+      }
+      if (val === 1) {
+        this.buyType = 'online'
+        this.onlineVal = true
+        this.offlineVal = false
+        this.payPrice = (total + curpostage).toFixed(2)
+      } else {
+        this.buyType = 'offline'
+        this.onlineVal = false
+        this.offlineVal = true
+        this.payPrice = (total - curpostage).toFixed(2)
+      }
     },
     textareaChange (refname) {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
@@ -379,44 +414,61 @@ export default {
     closeCard () {
       this.showCard = false
     },
+    ajaxOrder (postData) {
+      const self = this
+      self.submiting = true
+      if (self.selectedCard) {
+        postData.cardid = self.selectedCard.id
+      }
+      self.$http.post(`${ENV.BokaApi}/api/order/addOrder`, postData).then(function (res) {
+        let data = res.data
+        self.isShowLoading = false
+        self.$vux.toast.show({
+          text: data.error,
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+              if (self.isMiniInvoke) {
+                self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.pay}?id=${data.id}`})
+              } else {
+                if (data.id) {
+                  location.replace(`${ENV.Host}/#/pay?id=${data.id}`)
+                } else {
+                  self.$router.push({path: `/payment?wid=${self.curOrder.wid}`})
+                }
+              }
+            } else {
+              self.submiting = false
+            }
+          }
+        })
+      })
+    },
     submitOrder () {
       const self = this
       if (!self.submiting) {
-        if (!self.submitdata.addressid) {
-          self.$vux.toast.show({
-            text: '请选择地址'
-          })
-          return false
-        }
-        self.isShowLoading = true
-        self.submiting = true
-        if (self.selectedCard) {
-          self.submitdata.cardid = self.selectedCard.id
-        }
-        self.submitdata.addressid = self.selectaddress.id
-        self.$http.post(`${ENV.BokaApi}/api/order/addOrder`, self.submitdata).then(function (res) {
-          let data = res.data
-          self.isShowLoading = false
-          self.$vux.toast.show({
-            text: data.error,
-            time: self.$util.delay(data.error),
-            onHide: function () {
-              if (data.flag === 1) {
-                if (self.isMiniInvoke) {
-                  self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.pay}?id=${data.id}`})
-                } else {
-                  if (data.id) {
-                    location.replace(`${ENV.Host}/#/pay?id=${data.id}`)
-                  } else {
-                    self.$router.push({path: `/payment?wid=${self.curOrder.wid}`})
-                  }
-                }
-              } else {
-                self.submiting = false
-              }
+        if (self.offlineVal) {
+          self.$vux.confirm.show({
+            content: '你当前选择的收货方式是到店自提，需自己去卖家实体店进行提货！',
+            confirmText: '立即购买',
+            cancelText: '更换收货方式',
+            onConfirm () {
+              let postData = self.submitdata
+              postData.delivertype = 2
+              self.ajaxOrder(postData)
             }
           })
-        })
+        } else {
+          if (!self.submitdata.addressid) {
+            self.$vux.toast.show({
+              text: '请选择地址'
+            })
+            return false
+          }
+          self.isShowLoading = true
+          self.submitdata.addressid = self.selectaddress.id
+          self.ajaxOrder(this.submitdata)
+        }
       }
     },
     getData () {

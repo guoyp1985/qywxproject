@@ -1,7 +1,7 @@
 <template>
   <scroll-view ref="wraper" @scrollEnd="scrollEnd">
     <div slot="content" ref="content" class="data">
-        <div v-for="item in data" :key="item.id" class="item" @click="onCheck(item)">
+        <div v-for="(item, index) in data" :key="item.id" class="item" @click="onCheck(item)">
           <div :class="{'selected' : item.isChecked}" class="icon">
             <span class="al al-gou" v-if="item.isChecked"></span>
           </div>
@@ -11,7 +11,7 @@
             <span class="price" v-if="module === 'product'">{{item.price}}</span>
           </div>
         </div>
-        <div class="tip-message" v-if="!data.length && loaded"><span>暂无{{moduleTransfer}}</span></div>
+        <div class="tip-message" v-if="!data.length"><span>暂无{{moduleTransfer}}</span></div>
     </div>
     <div slot="ope-btns" class="ope-btns">
       <button class="cancel-btn" @click="onCancel">取消</button>
@@ -75,7 +75,9 @@ export default {
       let height = contentHeight - wraperHeight
       if (Math.abs(y) >= height) {
         console.log('滑动到底部了！')
-        this.getData(this.module)
+        if (this.loaded) {
+          this.getData(this.module)
+        }
       }
     },
     getData (module) {
@@ -195,6 +197,7 @@ export default {
   .data{
     width: 100vw;
     padding-bottom: 45px;
+    touch-action: pan-y;
     .item{
       display: flex;
       width: 100%;
@@ -255,6 +258,7 @@ export default {
     }
   }
   .tip-message{
+    padding-top:70%;
     text-align: center;
     color: #c9c9c9;
     margin-top: 30px;

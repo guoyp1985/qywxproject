@@ -195,7 +195,7 @@ export default {
       border-top: 1px solid #e4e4e4;
       border-bottom: 1px solid #e4e4e4;
       background-color: #fff;
-      margin-bottom: 20px;
+      margin-bottom: 5px;
       .avatar{
         width: 50px;
         height: 50px;
@@ -212,6 +212,7 @@ export default {
           margin-bottom:6px;
           align-items: center;
           .username{
+            color: #5b6a92;
             width:70px;
             font-size: 16px;
           }

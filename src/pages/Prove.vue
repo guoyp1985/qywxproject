@@ -56,7 +56,7 @@ export default {
       showModal: false,
       query: {},
       loginUser: {},
-      appName: {'gxk': '共销客', 'jk365': '聚客365', 'qxb': '群销宝'},
+      appName: {'gxk': '共销客', 'jk365': '共销客', 'qxb': '群销宝'},
       fromAppName: '',
       photo: '',
       fromPage: ''

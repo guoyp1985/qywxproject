@@ -26,7 +26,7 @@
                   <div>客户在线购买成功后，待结算订单金额方可显示在此处！</div>
                 </div>
                 <div v-else v-for="(item,index1) in tabdata1" :key="index1" class="scroll_item bg-white mt10 list-shadow">
-                  <template v-if="item.content.indexOf('厂商佣金') > -1">
+                  <template v-if="item.content.indexOf('厂家佣金') > -1">
                     <div class="pl12 pr12 pt10 pb10">
                       <div class="t-table">
                         <div class="t-cell pic v_middle w45 pr10 border-box">
@@ -42,7 +42,7 @@
                     </div>
                     <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
                       <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{ item.products }}</span></div>
-                      <div class="clamp1 font14 color-gray">厂商佣金: +￥{{ item.special }}</div>
+                      <div class="clamp1 font14 color-gray">厂家佣金: +￥{{ item.special }}</div>
                       <div class="clamp1 font14 color-gray"><span class="db-in">返点佣金: -￥{{ item.income }}</span></div>
                     </div>
                     <div class="pl12 pr12 pt10 pb10 flex_right">
@@ -117,7 +117,7 @@
                   <div>请到【待提现】页面进行提现，提现后的订单金额方可显示在此处！</div>
                 </div>
                 <div v-else v-for="(item,index1) in tabdata2" :key="index1" class="scroll_item bg-white mt10 list-shadow">
-                  <template v-if="item.content.indexOf('厂商佣金') > -1">
+                  <template v-if="item.content.indexOf('厂家佣金') > -1">
                     <div class="pl12 pr12 pt10 pb10">
                       <div class="t-table">
                         <div class="t-cell pic v_middle w45 pr10 border-box">
@@ -133,7 +133,7 @@
                     </div>
                     <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
                       <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{ item.products }}</span></div>
-                      <div class="clamp1 font14 color-gray">厂商佣金: +￥{{ item.special }}</div>
+                      <div class="clamp1 font14 color-gray">厂家佣金: +￥{{ item.special }}</div>
                       <div class="clamp1 font14 color-gray"><span class="db-in">返点佣金: -￥{{ item.income }}</span></div>
                     </div>
                     <div class="pl12 pr12 pt10 pb10 flex_right">
@@ -235,7 +235,7 @@
             <div class="popup-middle font14">
               <div class="padding10">
                 <div class="bold">第一条 手续费</div>
-                <div>1. 交易手续费：聚客365卖家需按订单交易额（含运费）的0.6%承担交易手续费，最低收费金额0.01元，不足0.01元按照0.01元收取。</div>
+                <div>1. 交易手续费：共销客卖家需按订单交易额（含运费）的0.6%承担交易手续费，最低收费金额0.01元，不足0.01元按照0.01元收取。</div>
                 <div>2. 提现手续费：</div>
                 <div>提现至微信零钱：无需支付手续费。</div>
                 <div>提现至银行卡：每笔提现扣除提现金额的0.1%，最低1元，最高25元。</div>
@@ -245,7 +245,7 @@
                 <div>3. 微信规定每日提现至微信零钱的额度为5千元，每日提现至银行卡的额度为2万元。</div>
                 <div>4. 提现至银行卡的到账时间为1-3日内，具体以银行到账时间为准。</div>
                 <div class="bold mt5">第三条 退款订单处理规则</div>
-                <div>1. 当订单为“待发货”状态时，买家可主动发起交易退款，聚客365将整单全额退款，不收取手续费。</div>
+                <div>1. 当订单为“待发货”状态时，买家可主动发起交易退款，共销客将整单全额退款，不收取手续费。</div>
                 <div>2. 当订单为“已发货或已收货”状态时，线上无法申请及处理交易退款，买家可与卖家互加好友，线下协商解决，手续费不予退还。</div>
                 <div class="bold mt5">第四条 确认收货规则</div>
                 <div>线上交易的订单，若买家没有主动确认收货，系统将在卖家发货后的第7天自动确认收货。</div>
@@ -423,8 +423,10 @@ export default {
         } else {
           this.showMoneyPopup = false
           let cashstr = '微信'
+          let cashtype = 'lingqian'
           if (this.bankCash) {
             cashstr = '银行卡'
+            cashtype = 'yinhang'
           }
           if (this.bankCash && (!this.loginUser.bankcardno || this.loginUser.bankcardno === '')) {
             self.$vux.confirm.show({
@@ -441,11 +443,11 @@ export default {
             onConfirm: () => {
               self.eventIng = true
               self.$vux.loading.show()
-              let postData = {}
+              let postData = {type: cashtype, money: self.summoney}
               if (self.query.appid) {
                 postData.appid = self.query.appid
               }
-              self.$http.post(`${ENV.BokaApi}/api/accounting/getCash`, postData).then(function (res) {
+              self.$http.post(`${ENV.BokaApi}/api/accounting/cashMoney`, postData).then(function (res) {
                 let data = res.data
                 self.$vux.loading.hide()
                 self.$vux.toast.show({

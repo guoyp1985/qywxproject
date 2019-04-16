@@ -296,6 +296,8 @@ en:
   Product summary: Product summary
   Add factory: Add factory
   Apply join: Apply join
+  Factory name: Factory name
+  Collect product: Collect product
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -671,7 +673,7 @@ zh-CN:
   Delete Article Confirm: 是否确认删除？
   Apply: 申请
   Submit: 提交
-  tIndex: '加载中'
+  tIndex: 加载中
   tLogin: 扫码登录
   tCenter: 个人中心
   tCenterSales: 卖家中心
@@ -704,7 +706,7 @@ zh-CN:
   tArticles: 新闻
   tEvaluation: 评价
   tRetailerSetting: 卖家信息设置
-  tUserproducts: 聚客365
+  tUserproducts: 共销客
   tAddActivity: 创建活动
   tAddProduct: 添加商品
   tRetailerGoodeazy: 易采集
@@ -787,19 +789,19 @@ zh-CN:
   No relevant data: 暂无相关数据
   Business tool: 社交销售工具
   tRedirect: 授权中...
-  tAddFactory: 添加厂商
-  Fatory name: 厂商名称
+  tAddFactory: 添加厂家
+  Fatory name: 厂家名称
   Fatory manager: 管理员
-  Product summary: 厂商简介
-  tFactoryList: 厂商列表
-  tFactoryManage: 厂商管理
-  Add factory: 添加厂商
-  tFactory: 厂商
+  Product summary: 厂家简介
+  tFactoryList: 厂家列表
+  tFactoryManage: 厂家管理
+  Add factory: 添加厂家
+  tFactory: 厂家
   Time of admission: 入驻时间
   Apply join: 申请加入
-  tCenterFactory: 厂商中心
-  Factory center: 厂商中心
-  tFactoryLevel: 厂商等级管理
+  tCenterFactory: 厂家中心
+  Factory center: 厂家中心
+  tFactoryLevel: 厂家等级管理
   tSellerList: 卖家列表
   Seller: 卖家
   Level: 等级
@@ -822,11 +824,11 @@ zh-CN:
   Create training academics: 创建培训素材
   tAddAcademic: 创建素材
   tAcademic: 素材
-  Contact factory: 联系厂商
+  Contact factory: 联系厂家
   Source of goods: 货源
   tRecommendProducts: 货源
   tFactoryOrderDetail: 订单详情
-  tRetailerAcademic: 聚客365商学院
+  tRetailerAcademic: 共销客商学院
   Academic title: 素材标题
   Academic share description placeholder: 如不填写自动截取素材内容
   Change price: 修改价格
@@ -834,8 +836,8 @@ zh-CN:
   Postage: 运费
   Product class: 商品类别
   Region: 地区
-  tCenterSeller: 聚客365
-  tCenterseller: 聚客365
+  tCenterSeller: 共销客
+  tCenterseller: 共销客
   Personal image: 个人形象
   Seller said: 卖家说
   Seller show: 卖家秀
@@ -859,14 +861,14 @@ zh-CN:
   Check Record API: 录音接口检查
   tTimeline: 客户行为
   tWxOpen: 提交审核
-  tStart: 聚客365
-  tMiniStart: 聚客365
+  tStart: 共销客
+  tMiniStart: 共销客
   tCardList: 我的优惠券
   My CardList: 我的优惠券
   tReceiveCard: 领取福利
   tPayment: 支付成功
-  Mini gxk: 聚客365
-  Mini gxh: 聚客365
+  Mini gxk: 共销客
+  Mini gxh: 共销客
   Retailer recommand: 我的推荐
   tAuthentication: 实名认证
   tRetailerRecommands: 我的推荐
@@ -892,10 +894,31 @@ zh-CN:
   Qun Qun Tui: 群群推
   Qun Tui Guang: 找群推广
   tRoomList: 群群推
-  tRooms: 群群推发单
-  tRoomApply: 密钥验证
+  tRooms: 找群推广
+  tRoomApply: 微信群验证
   tRoomOrderConsumer: 群群推订单详情
   tRoomDetails: 群详情
   tRoomOrderDeal: 群群推交易
-  tRoomOrders: 群群推订单列表
+  tRoomOrders: 我的订单
   tRoomOrderBusiness: 群群推订单详情
+  Factory introduction: 厂家介绍
+  tFactoryDetail: 厂家介绍
+  tFactorySetting: 厂家设置
+  Factory name: 厂家名称
+  tSellerSearch: 卖家搜索
+  StellerSearch: 卖家搜索
+  tRoomStart: 群群推
+  RtOomStart: 群群推
+  tUserRevenue: 我的收入
+  tRecommendFactory: 推荐加盟
+  tFactoryBank: 厂家结算银行卡
+  tFactoryIncome: 我的收入
+  tOrderManagement: 订单管理
+  OtRderManagement: 订单管理
+  tOrderChat: 生成订单
+  tSimpleOrderDetail: 订单详情
+  tSimpleDeliverinfo: 物流信息
+  tLinkReplication: 设置小程序店铺
+  LtInkReplication: 设置小程序店铺
+  Collect product: 采集商品
+  tFactoryUser: 厂商权限管理

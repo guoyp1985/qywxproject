@@ -77,7 +77,7 @@
         </group>
       </div>
       <div class="mt20 flex_center pl12 pr12">
-        <div class="flex_cell flex_center btn-bottom-red" @click="save">{{ $t('Save') }}</div>
+        <div class="flex_cell flex_center btn-bottom-red" @click="save">下一步，编辑内容</div>
       </div>
       <clip-popup :show="popupShow" :img="cutImg" :after-submit="popupSubmit" @on-cancel="popupCancel"></clip-popup>
     </template>
@@ -153,7 +153,7 @@ export default {
       } else {
         self.$wechat.ready(function () {
           self.$util.wxUploadImage({
-            maxnum: 9 - self.photoarr.length,
+            maxnum: self.maxnum,
             handleCallback: function (data) {
               self.photoCallback(data)
             }
@@ -226,21 +226,29 @@ export default {
             onHide: function () {
               self.submitIng = false
               if (data.flag === 1) {
-                if (self.query.minibackurl) {
-                  let minibackurl = decodeURIComponent(self.query.minibackurl)
-                  if (self.query.backtype === 'relaunch') {
-                    self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
-                  } else if (self.query.backtype === 'redirect') {
-                    self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
-                  } else {
-                    self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
-                  }
-                } else {
-                  let params = { id: data.data }
-                  if (self.query.id) {
-                    params.newadd = 1
+                if (self.query.callback === 'edit') {
+                  let params = {id: data.data, control: 'edit'}
+                  if (self.query.minibackurl) {
+                    params.minibackurl = self.query.minibackurl
                   }
                   self.$router.push({ path: '/news', query: params })
+                } else {
+                  if (self.query.minibackurl) {
+                    let minibackurl = decodeURIComponent(self.query.minibackurl)
+                    if (self.query.backtype === 'relaunch') {
+                      self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+                    } else if (self.query.backtype === 'redirect') {
+                      self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+                    } else {
+                      self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+                    }
+                  } else {
+                    let params = { id: data.data }
+                    if (self.query.id) {
+                      params.newadd = 1
+                    }
+                    self.$router.push({ path: '/news', query: params })
+                  }
                 }
               }
             }

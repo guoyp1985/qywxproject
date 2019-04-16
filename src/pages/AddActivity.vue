@@ -5,40 +5,58 @@
     <template v-if="showContainer">
       <div class="s-container">
         <form class="addForm">
-          <forminputplate class="required">
-            <span slot="title">{{ $t('Activity product') }}</span>
-            <div v-if="showselectproduct" class="qbtn flex_center color-orange" style="border:orange 1px solid;width:100%;line-height:1;padding:4px 0;" @click="selectevent">
-              <span class="mr5 v_middle db-in" style="margin-top:-3px;">+</span><span class="v_middle db-in">{{ $t('Select product') }}</span>
-            </div>
-            <div v-if="showproductitem" class="scroll_item border db">
-              <div class="t-table">
-                <div class="t-cell v_middle" style="width:50px;">
-                  <img class="v_middle imgcover" style="width:40px;height:40px;" :src="selectproduct.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+          <div class="form-item required">
+            <div class="t-table">
+              <div class="t-cell title-cell font14 v_middle w80">
+                <span>{{ $t('Activity product') }}</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span>
+              </div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <div v-if="showselectproduct" class="qbtn flex_center color-orange" style="border:orange 1px solid;width:100%;line-height:1;padding:4px 0;" @click="selectevent">
+                  <span class="mr5 v_middle db-in" style="margin-top:-3px;">+</span><span class="v_middle db-in">{{ $t('Select product') }}</span>
                 </div>
-                <div class="t-cell v_middle">
-                  <div class="clamp1">{{ selectproduct.title }}</div>
-                  <div class="mt5 font12 clamp1"><span class="color-orange">{{ $t('RMB') }}{{ selectproduct.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }}{{ selectproduct.storage }}</span></div>
-                </div>
-                <div class="t-cell align_center v_middle" style="width:60px;">
-                  <div class="qbtn color-red btnchange" style="border:#ff3b30 1px solid;line-height:1;" @click="selectevent">修改</div>
+                <div v-if="showproductitem" class="scroll_item border db">
+                  <div class="t-table">
+                    <div class="t-cell v_middle" style="width:50px;">
+                      <img class="v_middle imgcover" style="width:40px;height:40px;" :src="selectproduct.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+                    </div>
+                    <div class="t-cell v_middle">
+                      <div class="clamp1">{{ selectproduct.title }}</div>
+                      <div class="mt5 font12 clamp1"><span class="color-orange">{{ $t('RMB') }}{{ selectproduct.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }}{{ selectproduct.storage }}</span></div>
+                    </div>
+                    <div class="t-cell align_center v_middle" style="width:60px;">
+                      <div class="qbtn color-red btnchange" style="border:#ff3b30 1px solid;line-height:1;" @click="selectevent">修改</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </forminputplate>
-          <forminputplate class="required">
-            <span slot="title">{{ $t('Starttime') }}</span>
-            <group class="x-datetime">
-              <datetime format="YYYY-MM-DD HH:mm" v-model='submitdata.starttime' :show.sync="visibility1" @on-change="datechange1" @on-cancel="datecancel1" @on-confirm="dateconfirm1"></datetime>
-            </group>
-            <div @click="showxdate1" class='font14 color-gray align_left' style="position:absolute;left:0;right:0;top:0;height:22px;background-color:transparent;z-index:10;">{{ selectdatetxt1 }}</div>
-          </forminputplate>
-          <forminputplate class="required">
-            <span slot="title">{{ $t('Endtime') }}</span>
-            <group class="x-datetime">
-              <datetime format="YYYY-MM-DD HH:mm" v-model='submitdata.endtime' :show.sync="visibility2" @on-change="datechange2" @on-cancel="datecancel2" @on-confirm="dateconfirm2"></datetime>
-            </group>
-            <div @click="showxdate2" class='font14 color-gray align_left' style="position:absolute;left:0;right:0;top:0;height:22px;background-color:transparent;z-index:10;">{{ selectdatetxt2 }}</div>
-          </forminputplate>
+          </div>
+          <div class="form-item required">
+            <div class="t-table">
+              <div class="t-cell title-cell font14 v_middle w80">
+                <span>{{ $t('Starttime') }}</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span>
+              </div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <group class="x-datetime">
+                  <datetime format="YYYY-MM-DD HH:mm" v-model='submitdata.starttime' :show.sync="visibility1" @on-change="datechange1" @on-cancel="datecancel1" @on-confirm="dateconfirm1"></datetime>
+                </group>
+                <div @click="showxdate1" class='font14 color-gray align_left' style="position:absolute;left:0;right:0;top:0;height:22px;background-color:transparent;z-index:10;">{{ selectdatetxt1 }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-item required">
+            <div class="t-table">
+              <div class="t-cell title-cell font14 v_middle w80">
+                <span>{{ $t('Endtime') }}</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span>
+              </div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <group class="x-datetime">
+                  <datetime format="YYYY-MM-DD HH:mm" v-model='submitdata.endtime' :show.sync="visibility2" @on-change="datechange2" @on-cancel="datecancel2" @on-confirm="dateconfirm2"></datetime>
+                </group>
+                <div @click="showxdate2" class='font14 color-gray align_left' style="position:absolute;left:0;right:0;top:0;height:22px;background-color:transparent;z-index:10;">{{ selectdatetxt2 }}</div>
+              </div>
+            </div>
+          </div>
           <div class="bg-gray6 font16 b_bottom_after padding10" style="padding:10px;">活动设置</div>
           <template v-if="activityType == 'groupbuy'">
             <form-groupbuy :submitdata="submitdata"></form-groupbuy>
@@ -125,7 +143,6 @@ Go to create:
 
 <script>
 import { Group, XInput, TransferDom, Popup, Datetime, Search, CheckIcon, XImg } from 'vux'
-import Forminputplate from '@/components/Forminputplate'
 import FormGroupbuy from '@/components/FormGroupbuy'
 import FormBargainbuy from '@/components/FormBargainbuy'
 import FormDiscount from '@/components/FormDiscount'
@@ -141,7 +158,7 @@ export default {
     TransferDom
   },
   components: {
-    Group, XInput, Popup, Datetime, Search, CheckIcon, Forminputplate, FormGroupbuy, FormBargainbuy, FormDiscount, XImg, Sos, Subscribe, ApplyTip
+    Group, XInput, Popup, Datetime, Search, CheckIcon, FormGroupbuy, FormBargainbuy, FormDiscount, XImg, Sos, Subscribe, ApplyTip
   },
   data () {
     return {
@@ -436,9 +453,9 @@ export default {
           })
           return false
         }
-        if (minprice > priceval) {
+        if (minprice >= priceval) {
           self.$vux.toast.show({
-            text: '活动价格不能大于原价',
+            text: '活动价格应低于原价',
             type: 'warn',
             time: 1500
           })
@@ -492,7 +509,7 @@ export default {
         let numbers = parseInt(self.submitdata.param_numbers)
         let limitbuy = parseInt(self.submitdata.param_limitbuy)
         let everybuy = parseInt(self.submitdata.param_everybuy)
-        let finishtime = parseInt(self.submitdata.param_finishtime)
+        let finishtime = parseFloat(self.submitdata.param_finishtime)
         if (isNaN(self.submitdata.param_groupprice) || isNaN(self.submitdata.param_numbers) || isNaN(self.submitdata.param_limitbuy) || isNaN(self.submitdata.param_everybuy) || isNaN(self.submitdata.param_finishtime)) {
           self.$vux.toast.show({
             text: '请输入正确的数字',
@@ -519,6 +536,9 @@ export default {
         }
         if (self.selectproduct.fid > 0) {
           let minprice = (priceval - parseFloat(self.selectproduct.rebatein)).toFixed(2)
+          console.log('in fid > 0')
+          console.log(`grouprice=${groupprice}`)
+          console.log(`minprice=${minprice}`)
           if (groupprice < minprice) {
             self.$vux.toast.show({
               text: `团购价不能低于${minprice}`,

@@ -187,7 +187,7 @@ export default {
           let shareParams = {
             module: 'shop',
             moduleid: 0,
-            title: '聚客365商城',
+            title: '共销客商城',
             desc: '一款能买能卖的销售平台，你要的都在这里！',
             photo: user.avatar,
             link: `${ENV.Host}/#/userproducts?wid=${user.uid}&share_uid=${user.uid}`,

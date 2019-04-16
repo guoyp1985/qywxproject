@@ -18,9 +18,9 @@
           </div>
         </template>
         <template v-else>
-          <div class="pro_box bg-page list_shadow pl12 pr12 pb15">
-            <div class="pro_list_top bg-page color-lightgray pt10 pb10 pl12 pr12"></div>
-            <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white" style="margin-top: -4px;">
+          <div class="pro_box bg-page list_shadow pl12 pr12 pb15 border-box">
+            <div class="pro_list_top"></div>
+            <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white font12" style="margin-top: -4px;">
               <div>悄悄告诉你，立即分享新发布的商品可以：</div>
               <div>1. 接收好友查看商品的通知；</div>
               <div>2. 监控谁看过、分享过以及多次浏览过你的商品；</div>
@@ -39,7 +39,7 @@
                   <div class="t-table pr12 border-box mt15">
                     <div class="t-cell color-999 font14">
                       <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ item.price }}</span></div>
-                      <div class="clamp1 mt5" v-if="item.fpid > 0">厂商佣金:<span class="color-red"> {{ $t('RMB') }}{{ item.rebatein }}</span></div>
+                      <div class="clamp1 mt5" v-if="item.fpid > 0">厂家佣金:<span class="color-red"> {{ $t('RMB') }}{{ item.rebatein }}</span></div>
                       <div class="clamp1 mt5 font12">
                           <span class="v_middle db-in mr5" v-if="item.fpid == 0">库存: {{ item.storage }}{{item.unit}}</span>
                           <span class="v_middle db-in">已售: {{ item.saled }}{{item.unit}}</span>
@@ -68,6 +68,9 @@
         </div>
         <div class="flex_cell flex_center">
           <div class="addproduct flex_center btn-bottom-red" style="width:85%;" @click="toAdd">{{ $t('Add product') }}</div>
+        </div>
+        <div class="flex_cell flex_center">
+          <div class="addproduct flex_center btn-bottom-red" style="width:85%;" @click="toCollect">{{ $t('Collect product') }}</div>
         </div>
       </template>
     </div>
@@ -168,7 +171,7 @@
                   <div class="t-table pr12 border-box mt15">
                     <div class="t-cell color-999 font14">
                       <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ feeData.price }}</span></div>
-                      <div class="clamp1 mt5" v-if="feeData.fpid > 0">厂商佣金:<span class="color-red"> {{ $t('RMB') }}{{ feeData.rebatein }}</span></div>
+                      <div class="clamp1 mt5" v-if="feeData.fpid > 0">厂家佣金:<span class="color-red"> {{ $t('RMB') }}{{ feeData.rebatein }}</span></div>
                       <div class="clamp1 mt5">
                           <span class="v_middle db-in">已售: {{ feeData.saled }}{{feeData.unit}}</span>
                       </div>
@@ -197,6 +200,8 @@
 </template>
 
 <i18n>
+Collect product:
+  zh-CN: 采集商品
 Add product:
   zh-CN: 添加商品
 Back go shop:
@@ -298,6 +303,13 @@ export default {
         this.openVip()
       } else {
         this.$router.push('/addProduct')
+      }
+    },
+    toCollect () {
+      if (this.loginUser.isretailer === 2 && this.productdata.length >= 5) {
+        this.openVip()
+      } else {
+        this.$router.push('/CollectProduct')
       }
     },
     getPhoto (src) {
@@ -472,7 +484,7 @@ export default {
       }
       if (parseFloat(self.postFee) > parseFloat(self.clickdata.rebatein)) {
         self.$vux.toast.show({
-          text: '返点佣金不能高于厂商佣金'
+          text: '返点佣金不能高于厂家佣金'
         })
         return false
       }
@@ -623,13 +635,12 @@ export default {
 .rproductlist .s-container{bottom:50px;}
 .rproductlist .s-bottom{height: 50px;}
 .rproductlist .addproduct{border-radius: 50px;height: 36px;width: 100%;}
-.rproductlist .pro_list_top{
+.pro_list_top{
+  width:100%;padding-bottom:9%;
   background: url(../assets/images/product_list_top.png);
   background-repeat: no-repeat;
   background-position: center;
-  background-size: cover;
   background-size: 100%;
-  height: 20px;
 }
 
 </style>

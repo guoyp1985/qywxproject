@@ -6,13 +6,17 @@
 <template>
   <div id="room-order-deal" class="containerarea font14 s-havebottom">
     <div class="room-details">
-      <room-view :item="room" :show-details="true"></room-view>
+      <room-view :item="room" :show-details="true" :routerPath="routePath">
+        <div slot="sort-key">
+          <div class="font12 mt5 color-gray">综合评分：{{room.score}}分</div>
+        </div>
+      </room-view>
     </div>
-    <div class="mt10 bg-white padding10 color-red">订单发起后，群主将成为您的返点客，商品出售成功后会向返点客支付返点佣金</div>
+    <!-- <div class="mt10 bg-white padding10 color-red">订单发起后，群主将成为您的返点客，商品出售成功后会向返点客支付返点佣金</div> -->
     <div class="operation-area">
       <form>
         <forminputplate class="required">
-          <span slot="title">商品</span>
+          <span slot="title">选择推广商品</span>
           <div class="pr10 color-gray" @click="handleAppend">
             <div v-if="product.id" class="select-area">
               <div class="t-table">
@@ -26,19 +30,25 @@
               </div>
             </div>
             <div v-else class="align_right select-area">
-              <span class="text">选择商品</span>
+              <span class="text color-red">点击选择推广商品</span>
             </div>
           </div>
         </forminputplate>
+        <div class="pl10 pr20 pt25 pb25">
+          <div class="color-red font14">提示</div>
+          <div class="color-gray2 font12 mt5">1. 订单发起后，群主将成为您的返点客，商品出售成功后会向返点客支付返点佣金。</div>
+          <div class="color-gray2 font12 mt5">2. 订单支付时，微信将收取0.6%的手续费。</div>
+        </div>
       </form>
     </div>
     <div class="protocal-area">
-      <check-icon :value.sync="isAccept" type="plain">同意<a class="color-red" @click.stop="showProtocol">群群推协议</a></check-icon>
+      <check-icon :value.sync="isAccept" type="plain"><a class="color-gray2" @click.stop="showProtocol">同意群群推协议</a></check-icon>
     </div>
+    <!-- <div class="align_center font14 color-red w_100" style="position:absolute;bottom:50px;">订单生成，微信将收取0.6%的手续费</div> -->
     <div class="s-bottom submit-button color-white" @click="makeDeal">
-      <span>支付保证金 ￥{{room.deposit}}</span>
+      <span>支付保证金 ￥{{room.deposit}} + 手续费￥{{fee}}</span>
     </div>
-    <append-product v-model="popupShow" @close="popupClose" @confirm="popupConfirm" from="myshop" rebate="1"></append-product>
+    <append-product v-model="popupShow" @close="popupClose" @confirm="popupConfirm" from="myshop" :rebate="propRebate"></append-product>
     <div v-transfer-dom>
       <x-dialog v-model="showDialog" hide-on-blur :dialog-style="{width: '100%', height: '50%', 'background-color': '#ffffff'}">
         <div style="text-align:center;padding-top:10px;" @click="showDialog = false">
@@ -69,12 +79,16 @@ export default {
   },
   data () {
     return {
+      query: {},
       isAccept: false,
       popupShow: false,
       product: {},
       room: {},
       isSubmiting: false,
-      showDialog: false
+      showDialog: false,
+      propRebate: true,
+      routePath: '',
+      fee: '0.00'
     }
   },
   methods: {
@@ -89,6 +103,12 @@ export default {
         this.$vux.loading.hide()
         if (res.data.flag === 1) {
           this.room = res.data.data
+          let fee = parseFloat(this.room.deposit) * 0.006
+          if (fee < 0.01) {
+            this.fee = '0.01'
+          } else {
+            this.fee = fee.toFixed(2)
+          }
         }
       })
     },
@@ -135,9 +155,12 @@ export default {
             this.$vux.toast.text(data.error, 'middle')
             if (data.flag === 1) {
               setTimeout(() => {
-                // this.$router.push({path: '/pay', query: {id: data.data, module: data.ordermodule}})
-                let backurl = encodeURIComponent(`/roomOrders`)
-                location.replace(`${ENV.Host}/#/pay?id=${data.data}&module=${data.ordermodule}&backurl=${backurl}`)
+                if (this.query.from) {
+                  this.$wechat.miniProgram.navigateTo({url: `/packageB/pages/pay?id=${data.data}&module=${data.ordermodule}&weburl=roomOrders`})
+                } else {
+                  let backurl = encodeURIComponent(`/roomOrders`)
+                  location.replace(`${ENV.Host}/#/pay?id=${data.data}&module=${data.ordermodule}&backurl=${backurl}`)
+                }
               }, 1000)
             }
           })
@@ -146,11 +169,16 @@ export default {
     }
   },
   activated () {
+    this.query = this.$route.query
+    this.routePath = this.$route.path
     this.loadData()
   }
 }
 </script>
 <style lang="less">
+#room-order-deal{
+  .title-cell{width:110px;}
+}
 #room-order-deal .operation-area {
   margin-top: 10px;
   background-color: #ffffff;
@@ -186,5 +214,7 @@ export default {
 #room-order-deal .protocal-area {
   padding: 20px 0;
   text-align: center;
+  position:absolute;bottom:40px;width:100%;
+  a{text-decoration:underline;}
 }
 </style>

@@ -10,7 +10,7 @@
             <div class="scroll_list">
               <div class="emptyitem">
                 <div class="t-table" style="padding-top:20%;">
-                  <div class="t-cell padding10">暂无厂商数据</div>
+                  <div class="t-cell padding10">暂无厂家数据</div>
                 </div>
               </div>
             </div>
@@ -46,14 +46,17 @@
         <popup class="menuwrap" v-model="showPopup1">
           <div class="popup0">
             <div class="list" v-if="clickData">
-              <div class="item">
+              <!-- <div class="item">
                 <div class="inner" @click="clickPopup('push')">添加管理员</div>
-              </div>
+              </div> -->
               <div class="item">
                 <div class="inner" @click="clickPopup('manager')">管理员列表</div>
               </div>
-              <div class="item">
+              <!-- <div class="item">
                 <div class="inner" @click="clickPopup('set')">设置佣金</div>
+              </div> -->
+              <div class="item">
+                <div class="inner" @click="showxdate2">设置到期时间</div>
               </div>
               <div class="item">
                 <div class="inner" @click="clickPopup('edit')">编辑</div>
@@ -64,25 +67,12 @@
               <div class="item">
                 <div class="inner" @click="clickPopup('stat')">统计</div>
               </div>
+              <div class="item">
+                <div class="inner" @click="clickPopup('bank')">结算银行卡</div>
+              </div>
               <div class="item close mt10" @click="clickPopup('row.key')">
                 <div class="inner">{{ $t('Cancel txt') }}</div>
               </div>
-            </div>
-          </div>
-        </popup>
-      </div>
-      <div v-transfer-dom class="x-popup">
-        <popup v-model="showQrcode" height="100%">
-          <div class="popup1 font14">
-            <div class="popup-top flex_center">设置管理员</div>
-            <div class="popup-middle padding10 border-box flex_center" style="bottom:86px;">
-              <img ref="adminQrcode" class="qrcode" style="max-width:100%;max-height:100%;" />
-            </div>
-            <div class="flex_center border-box pl10 pr10 color-red font12" style="position:absolute;left:0;right:0;bottom:46px;height:40px;">
-              <div>扫描二维码设置管理员</div>
-            </div>
-            <div class="popup-bottom flex_center">
-              <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeQrcode">{{ $t('Close') }}</div>
             </div>
           </div>
         </popup>
@@ -109,11 +99,35 @@
                 </div>
               </div>
             </div>
-            <div class="popup-bottom flex_center">
+            <div class="popup-bottom flex_center" style="width:50%;">
               <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeManager">{{ $t('Close') }}</div>
+            </div>
+            <div class="popup-bottom flex_center" style="width:50%;left:50%;">
+              <div class="flex_cell h_100 flex_center bg-red color-white" @click="clickPopup1">添加管理员</div>
             </div>
           </div>
         </popup>
+      </div>
+      <div v-transfer-dom class="x-popup">
+        <popup v-model="showQrcode" height="100%">
+          <div class="popup1 font14">
+            <div class="popup-top flex_center">设置管理员</div>
+            <div class="popup-middle padding10 border-box flex_center" style="bottom:86px;">
+              <img ref="adminQrcode" class="qrcode" style="max-width:100%;max-height:100%;" />
+            </div>
+            <div class="flex_center border-box pl10 pr10 color-red font12" style="position:absolute;left:0;right:0;bottom:46px;height:40px;">
+              <div>扫描二维码设置管理员</div>
+            </div>
+            <div class="popup-bottom flex_center">
+              <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeQrcode">{{ $t('Close') }}</div>
+            </div>
+          </div>
+        </popup>
+      </div>
+      <div v-show="timeShow">
+        <group class="x-datetime">
+          <datetime format="YYYY-MM-DD HH:mm" v-model="time" :show.sync="visibility2" @on-confirm="saveSuess"></datetime>
+        </group>
       </div>
     </template>
   </div>
@@ -121,11 +135,11 @@
 
 <i18n>
 Add factory:
-  zh-CN: 添加厂商
+  zh-CN: 添加厂家
 </i18n>
 
 <script>
-import { TransferDom, Popup, Confirm, CheckIcon, XImg } from 'vux'
+import { Group, Datetime, TransferDom, Popup, Confirm, CheckIcon, XImg } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
@@ -137,10 +151,13 @@ export default {
     TransferDom
   },
   components: {
-    Popup, Confirm, CheckIcon, XImg, Sos
+    Popup, Confirm, CheckIcon, XImg, Sos, Datetime, Group
   },
   data () {
     return {
+      time: '2019-05-02 12:30',
+      visibility2: false,
+      timeShow: false,
       showSos: false,
       sosTitle: '抱歉，您暂无权限访问此页面！',
       showContainer: false,
@@ -158,6 +175,18 @@ export default {
     }
   },
   methods: {
+    saveSuess (e) {
+      let _this = this
+      _this.$vux.toast.show({
+        text: '保存成功！',
+        type: 'text',
+        width: '200px'
+      })
+    },
+    showxdate2 () {
+      this.visibility2 = true
+      this.showPopup1 = false
+    },
     getPhoto (src) {
       return this.$util.getPhoto(src)
     },
@@ -181,28 +210,30 @@ export default {
       this.clickData = item
       this.clickIndex = index
     },
+    clickPopup1 () {
+      const self = this
+      self.showPopup1 = false
+      self.showQrcode = true
+      self.$vux.loading.show()
+      self.$http.get(`${ENV.BokaApi}/api/factory/adminQRCode`, {
+        params: {fid: self.clickData.id}
+      }).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        if (data.flag === 1) {
+          let img = self.$refs.adminQrcode[0] ? self.$refs.adminQrcode[0] : self.$refs.adminQrcode
+          img.src = data.data
+        } else {
+          self.$vux.toast.show({
+            text: data.error,
+            time: self.$util.delay(data.error)
+          })
+        }
+      })
+    },
     clickPopup (key) {
       const self = this
-      if (key === 'push') {
-        self.showPopup1 = false
-        self.showQrcode = true
-        self.$vux.loading.show()
-        self.$http.get(`${ENV.BokaApi}/api/factory/adminQRCode`, {
-          params: {fid: self.clickData.id}
-        }).then(function (res) {
-          let data = res.data
-          self.$vux.loading.hide()
-          if (data.flag === 1) {
-            let img = self.$refs.adminQrcode[0] ? self.$refs.adminQrcode[0] : self.$refs.adminQrcode
-            img.src = data.data
-          } else {
-            self.$vux.toast.show({
-              text: data.error,
-              time: self.$util.delay(data.error)
-            })
-          }
-        })
-      } else if (key === 'manager') {
+      if (key === 'manager') {
         self.showPopup1 = false
         self.showManager = true
         self.$vux.loading.show()
@@ -222,6 +253,9 @@ export default {
         self.$router.push(`/sellerList?id=${self.clickData.id}`)
       } else if (key === 'stat') {
         self.$router.push(`/stat?id=${self.clickData.id}&module=factory`)
+      } else if (key === 'bank') {
+        let fromPage = encodeURIComponent('/factoryManage')
+        self.$router.push(`/factoryBank?id=${self.clickData.id}&control=manage&fromPage=${fromPage}`)
       } else {
         self.showPopup1 = false
       }

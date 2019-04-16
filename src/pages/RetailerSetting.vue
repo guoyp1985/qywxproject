@@ -14,7 +14,9 @@
         :class-data="classData"
         :productClass="productClass"
         :buyonline="buyonline"
-        :buyoffline="buyoffline">
+        :buyoffline="buyoffline"
+        :submitSuggest="submitSuggest"
+        @clickSuggest="clickSuggest">
       </retailer-setting>
     </template>
     <template v-if="showApply">
@@ -51,7 +53,8 @@ export default {
       classData: [],
       productClass: [],
       buyonline: true,
-      buyoffline: false
+      buyoffline: false,
+      submitSuggest: true
     }
   },
   methods: {
@@ -64,7 +67,7 @@ export default {
     getData () {
       const self = this
       self.loginUser = User.get()
-      self.$http.get(`${ENV.BokaApi}/api/retailer/home`)
+      self.$http.get(`${ENV.BokaApi}/api/retailer/info`)
       .then(res => {
         self.$vux.loading.hide()
         if (res) {
@@ -80,6 +83,13 @@ export default {
           } else {
             self.buyonline = false
             self.buyoffline = true
+          }
+          if (this.retailerInfo.params.suggest_open === '1' || this.retailerInfo.params.suggest_open === 1) {
+            console.log('进入到了开启')
+            this.submitSuggest = true
+          } else {
+            console.log('进入到了关闭')
+            this.submitSuggest = false
           }
           self.productClass = self.retailerInfo.productclass.split(',')
           for (let i = 0; i < self.productClass.length; i++) {
@@ -101,6 +111,22 @@ export default {
           let showphoto = self.submitdata1.showphoto
           if (showphoto && self.$util.trim(showphoto) !== '') {
             self.showphotoArr = showphoto.split(',')
+          }
+        }
+      })
+    },
+    clickSuggest (val, callback) {
+      console.log(val)
+      this.$http.post(`${ENV.BokaApi}/api/card/setParas`, {
+        params: {suggest_open: val}
+      }).then(res => {
+        const data = res.data
+        if (data.flag) {
+          this.loginUser.retailerinfo.params = data.data
+          this.retailerInfo.params = data.data
+          User.set(this.loginUser)
+          if (callback) {
+            callback()
           }
         }
       })

@@ -12,7 +12,7 @@
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="index === 0" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)">
             <template v-if="disList1">
-              <div v-if="!tabdata1 || tabdata1.length === 0" class="w_100 h_100 flex_center color-gray">暂无有效的优惠码</div>
+              <div v-if="!tabdata1.length" class="w_100 h_100 flex_center color-gray">暂无有效的优惠码</div>
               <div v-else class="scroll_list">
                 <div v-for="(item,index1) in tabdata1" :key="index1" :class="`scroll_item bg-white flex_left item-${item.id}`">
                   <div class="flex_cell padding10">
@@ -30,14 +30,15 @@
           </div>
           <div v-if="index === 1" class="swiper-inner scroll-container1" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',index)">
             <template v-if="disList2">
-              <div v-if="!tabdata2 || tabdata2.length === 0" class="w_100 h_100 flex_center color-gray">暂无已使用的优惠码</div>
+              <div v-if="!tabdata2.length" class="w_100 h_100 flex_center color-gray">暂无已使用的优惠码</div>
               <div v-else class="scroll_list">
                 <div v-for="(item,index1) in tabdata2" :key="index1" class="scroll_item bg-white flex_left">
-                  <div class="pic flex_center" style="width:70px;">
+                  <div class="pic flex_center" style="width:70px;" v-if="item.avatar && item.avatar != ''">
                     <img class="v_middle imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" style="width:50px;height:50px;" />
                   </div>
                   <div class="flex_cell padding10">
                     <div class="bold">{{item.code}}</div>
+                    <div class="color-gray font12">{{item.linkman}}</div>
                     <div class="color-gray font12">使用时间: {{item.usedateline | dateFormat}}</div>
                   </div>
                 </div>
@@ -54,7 +55,7 @@
       <div class="modal">
         <div class="txt1 pb10">生成优惠码</div>
         <div class="mt10">数量:<input type="number" v-model="quantity"/>个</div>
-        <div class="font12 mt5 ml20"><span style="color:red;">*</span>每个优惠码100元，目前免费</div>
+        <div class="font12 mt5 ml20"><span style="color:red;">*</span>每个优惠码{{codefee}}元</div>
         <div class="bom mt25">
           <div class="close" @click="btnclose">取消</div>
           <div class="close color-white" style="background-color:#F85B52;" @click="createCode">立即生成</div>
@@ -62,6 +63,12 @@
       </div>
       <div class="mceng"></div>
     </div>
+    <template v-if="showTipModal">
+      <tip-button-layer
+        @clickClose="closeTipModal"
+        title="优惠码生成成功">
+      </tip-button-layer>
+    </template>
   </div>
 </template>
 
@@ -71,6 +78,7 @@ import ENV from 'env'
 import Time from '#/time'
 import { User } from '#/storage'
 import jQuery from 'jquery'
+import TipButtonLayer from '@/components/TipButtonLayer'
 
 const limit = 20
 let pageStart1 = 0
@@ -82,15 +90,12 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem
+    Tab, TabItem, Swiper, SwiperItem, TipButtonLayer
   },
   data () {
     return {
       loginUser: {},
       query: {},
-      showApply: false,
-      showContainer: false,
-      retailerInfo: {},
       tabtxts: [ '有效码', '已使用' ],
       selectedIndex: 0,
       disList1: false,
@@ -98,7 +103,9 @@ export default {
       tabdata1: [],
       tabdata2: [],
       showModal: false,
-      quantity: ''
+      quantity: '',
+      codefee: 0,
+      showTipModal: false
     }
   },
   filters: {
@@ -107,6 +114,9 @@ export default {
     }
   },
   methods: {
+    closeTipModal () {
+      this.showTipModal = false
+    },
     btnshow () {
       this.showModal = true
     },
@@ -169,10 +179,11 @@ export default {
       let params = { pagestart: pageStart1, limit: limit, used: 0, fid: self.query.id }
       self.$http.get(`${ENV.BokaApi}/api/factory/listRetailerCode`, {
         params: params
-      }).then(function (res) {
+      }).then((res) => {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
+        this.codefee = data.codefee
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.disList1 = true
       })
@@ -181,10 +192,11 @@ export default {
       let params = { pagestart: pageStart1, limit: limit, used: 1, fid: self.query.id }
       self.$http.get(`${ENV.BokaApi}/api/factory/listRetailerCode`, {
         params: params
-      }).then(function (res) {
+      }).then((res) => {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
+        this.codefee = data.codefee
         self.tabdata2 = self.tabdata2.concat(retdata)
         self.disList2 = true
       })
@@ -225,53 +237,44 @@ export default {
       self.$http.post(`${ENV.BokaApi}/api/factory/createRetailerCode`, {
         fid: self.query.id,
         quantity: self.quantity
-      }).then(function (res) {
+      }).then((res) => {
         const data = res.data
         self.$vux.loading.hide()
-        if (data.flag === 2) {
-          location.replace(`${ENV.Host}/#/pay?id=${data.orderid}`)
+        if (data.flag) {
+          if (data.orderid) {
+            if (self.query.from) {
+              let weburl = encodeURIComponent(`concession?id=${self.query.id}&type=pay`)
+              self.$wechat.miniProgram.navigateTo({url: `/packageB/pages/pay?id=${data.orderid}&module=${data.ordermodule}&weburl=${weburl}`})
+            } else {
+              let backurl = encodeURIComponent(`concession?id=${self.query.id}&type=pay`)
+              location.replace(`${ENV.Host}/#/pay?id=${data.orderid}&module=${data.ordermodule}&backurl=${backurl}`)
+            }
+          } else {
+            self.disList1 = false
+            self.tabdata1 = []
+            pageStart1 = 0
+            self.getData1()
+          }
         } else {
           self.$vux.toast.show({
             text: data.error,
             type: (data.flag !== 1 ? 'warn' : 'success'),
-            time: self.$util.delay(data.error),
-            onHide: function () {
-              if (data.flag === 1) {
-                self.disList1 = false
-                self.tabdata1 = []
-                pageStart1 = 0
-                self.getData1()
-              }
-            }
+            time: self.$util.delay(data.error)
           })
         }
       })
     },
-    initContainer () {
-      self.showApply = false
-      self.showContainer = false
-    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.$vux.loading.show()
       this.loginUser = User.get()
-      if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
-        if (!this.loginUser.isretailer) {
-          this.$vux.loading.hide()
-          self.initContainer()
-          this.showApply = true
-        } else {
-          this.$vux.loading.hide()
-          this.query = this.$route.query
-          if (this.tabdata1.length < limit || this.query.from === 'add') {
-            self.initContainer()
-            pageStart1 = 0
-            this.tabdata1 = []
-            this.getData1()
-          }
-        }
-        // }
+      this.query = this.$route.query
+      if (this.query.type === 'pay') {
+        this.showTipModal = true
       }
+      this.disList1 = false
+      pageStart1 = 0
+      this.tabdata1 = []
+      this.getData1()
     }
   },
   activated () {

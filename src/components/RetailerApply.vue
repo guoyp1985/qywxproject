@@ -556,7 +556,7 @@ export default {
       VIP1: false,
       VIP2: true,
       feetype: 'oneyear',
-      platform: '聚客365',
+      platform: '共销客',
       applyMobile: null
     }
   },
@@ -689,8 +689,12 @@ export default {
         }
         self.$vux.loading.show()
         self.submitdata.mobile = self.$util.trim(self.submitdata.mobile)
-        let applydata = Object
-        self.submitdata.fid = self.$route.query.fid
+        if (self.$route.query.fid) {
+          self.submitdata.fid = self.$route.query.fid
+        }
+        if (self.$route.query.wid) {
+          self.submitdata.wid = self.$route.query.wid
+        }
         if (self.query.share_uid) {
           self.submitdata.share_uid = self.query.share_uid
         }
@@ -702,6 +706,10 @@ export default {
         if (self.query.comefrom) {
           postData.comefrom = self.query.comefrom
         }
+        if (self.query.fulltime) {
+          postData.fulltime = self.query.fulltime
+        }
+        let applydata = {}
         self.$http.post(`${ENV.BokaApi}/api/retailer/apply`, postData).then(function (res) {
           applydata = res.data
           return self.$http.get(`${ENV.BokaApi}/api/user/show`)
@@ -745,6 +753,11 @@ export default {
     if (self.query.wid) {
       self.$http.get(`${ENV.BokaApi}/api/getUser/${self.query.wid}`).then(function (res) {
         self.shareUser = res.data
+      })
+    }
+    if (self.query.uploader) {
+      self.$http.post(`${ENV.BokaApi}/api/user/changeUploader`, {
+        wid: self.query.uploader
       })
     }
   }

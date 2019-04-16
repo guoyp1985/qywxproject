@@ -73,7 +73,7 @@
                     </div>
                     <div class="t-cell v_middle" @click="btnDetail(index)">
                       <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
-                      <div class="clamp1 mt5 font14 color-gray">推荐人：{{item.uploadname}}</div>
+                      <div class="clamp1 mt5 font14 color-gray">推荐人：{{item.recommendname}}</div>
                     </div>
                     <div class="t-cell v_middle w60 h_100 align_right">
                       <div class="percentarea db-in v_middle" @click="percentclick">
@@ -97,7 +97,7 @@
                         <span class="color-red4">{{item.yingxiangli}}</span>
                         <span class="al al-wenhao font20 ml5"></span>
                       </div>
-                      <div class="txt-item">推荐人: {{item.uploadname}}</div>
+                      <div class="txt-item">推荐人: {{item.recommendname}}</div>
                       <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.customertype}}</div>
                       <div class="txt-item">获客时间: {{item.dateline_str}}</div>
                     </div>
@@ -150,7 +150,7 @@
                     </div>
                     <div class="t-cell v_middle">
                       <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
-                      <div class="clamp1 mt5 font14 color-gray">推荐人：{{item.uploadname}}</div>
+                      <div class="clamp1 mt5 font14 color-gray">推荐人：{{item.recommendname}}</div>
                     </div>
                     <div class="t-cell v_middle w80 align_center color-orange">{{item.intentiondesc}}</div>
                     <div class="t-cell v_middle w60 align_right">
@@ -166,7 +166,7 @@
                         <span class="color-red4">{{item.yingxiangli}}</span>
                         <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
                       </div>
-                      <div class="txt-item">推荐人: {{item.uploadname}}</div>
+                      <div class="txt-item">推荐人: {{item.recommendname}}</div>
                       <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.customertype}}</div>
                       <div class="txt-item">获客时间: {{item.dateline_str}}</div>
                     </div>
@@ -219,7 +219,7 @@
                     </div>
                     <div class="t-cell v_middle">
                       <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
-                      <div class="clamp1 mt5 font14 color-gray">推荐人：{{item.uploadname}}</div>
+                      <div class="clamp1 mt5 font14 color-gray">推荐人：{{item.recommendname}}</div>
                     </div>
                     <div class="t-cell v_middle w60 align_right">
                       <div class="qbtnInfo bg-red color-white al al-asmkticon0165 font20"></div>
@@ -234,7 +234,7 @@
                         <span class="color-red4">{{item.yingxiangli}}</span>
                         <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
                       </div>
-                      <div class="txt-item">推荐人: {{item.uploadname}}</div>
+                      <div class="txt-item">推荐人: {{item.recommendname}}</div>
                       <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.customertype}}</div>
                       <div class="txt-item">获客时间: {{item.dateline_str}}</div>
                     </div>

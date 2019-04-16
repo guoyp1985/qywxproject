@@ -36,18 +36,18 @@
             <div class="qbtn color-orange5" @click="copyTxt(data)" style="position:relative;">
               <span>复制</span>
               <template v-if="data.flag != 0 && data.flag != 1 && data.flag != 2">
-                <div class="deliver_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ data.delivercompanyname }} {{ data.delivercode }} {{ data.linkman ? data.linkman + ', ' : '' }}{{ data.telephone ? data.telephone + ', ' : '' }}{{ data.address ? data.address : '' }}</div>
+                <div class="deliver_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ data.delivercompanyname }} {{ data.delivercode }} {{ data.address ? data.address + ', ' : '' }}{{ data.linkman ? data.linkman + ', ' : '' }}{{ data.telephone ? data.telephone : '' }}</div>
               </template>
               <template v-else>
-                <div class="deliver_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ data.linkman ? data.linkman + ', ' : '' }}{{ data.telephone ? data.telephone + ', ' : '' }}{{ data.address ? data.address : '' }}</div>
+                <div class="deliver_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ data.address ? data.address + ', ' : '' }}{{ data.linkman ? data.linkman + ', ' : '' }}{{ data.telephone ? data.telephone : '' }}</div>
               </template>
             </div>
           </div>
         </div>
         <div class="mt10 bg-white padding10 b_bottom_after">
-          <div class="t-table">
-            <div class="t-cell">创建时间: {{ data.dateline | dateformat }}</div>
-            <div class="t-cell align_right color-orange5" style="width:110px;">{{ data.flagstr }}</div>
+          <div class="t-table font12">
+            <div class="t-cell" style="width:165px;">创建时间: {{ data.dateline | dateformat }}</div>
+            <div class="t-cell align_right color-orange5">{{ data.flagstr }}</div>
           </div>
         </div>
         <div class="bg-white">
@@ -70,7 +70,7 @@
           <div class="align_right padding10 flex_right">
             <div>
               <span class="v_middle">商品: {{ $t('RMB') }}</span><span class="font16 v_middle">{{ data.special }}</span>
-              <template v-if="data.postage && data.postage != ''">
+              <template v-if="!data.delivertype && data.postage && data.postage != ''">
                 <span class="v_middle font12 color-gray" v-if="data.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
                 <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ data.postage }} )</span>
               </template>
@@ -100,6 +100,12 @@
             </div>
           </div>
           <div v-if="data.nexttime" class="align_left padding10 color-gray2 font12">回访时间：{{ data.nexttime | dateformat }}</div>
+        </div>
+        <div class="padding10" v-if="data.flag == 2 && data.backflag == 20">
+          <div class="flex_right font12">
+            <div class="flex_center mr10" @click="agreeEvent(0)" style="border:#999 1px solid;height:25px;border-radius:5px;color:#999;width:75px;">拒绝退款</div>
+            <div class="flex_center" @click="agreeEvent(1)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">同意退款</div>
+          </div>
         </div>
       </div>
       <div v-if="data.flag == 1 && data.fid == 0 && data.crowdid == 0" class="pagebottom flex_center font16 bg-orange5 color-white" @click="changePrice">{{ $t('Change price') }}</div>
@@ -142,10 +148,35 @@
         </popup>
       </div>
     </template>
+    <div v-if="showRefundModal" class="auto-modal refund-modal flex_center">
+      <div class="modal-inner border-box" style="width:80%;">
+        <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">拒绝退款</div>
+        <div class="align_left txt padding10">
+          <group class="textarea-outer" style="padding:0;">
+            <x-textarea
+              ref="titleTextarea"
+              v-model="refundContent"
+              name="title" class="x-textarea noborder"
+              placeholder="请输入拒绝退款原因"
+              :show-counter="false"
+              :rows="6"
+              :max="200"
+              @on-change="textareaChange('titleTextarea')"
+              @on-focus="textareaFocus('titleTextarea')"
+              autosize>
+            </x-textarea>
+          </group>
+        </div>
+        <div class="flex_center b_top_after" style="height:50px;">
+          <div class="flex_cell flex_center h_100 b_right_after" @click="closeRefund">取消</div>
+          <div class="flex_cell flex_center h_100 color-orange" @click="submitRefund">提交</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
-import { Group, Cell, Sticky, XDialog, TransferDom, Popup, XImg } from 'vux'
+import { Group, Cell, Sticky, XDialog, TransferDom, Popup, XImg, XTextarea, XButton } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
@@ -160,7 +191,7 @@ export default {
     TransferDom
   },
   components: {
-    Group, Cell, Sticky, XDialog, Popup, OrderInfo, XImg, Sos, Subscribe, ApplyTip
+    Group, Cell, Sticky, XDialog, Popup, OrderInfo, XImg, Sos, Subscribe, ApplyTip, XTextarea, XButton
   },
   filters: {
     dateformat: function (value) {
@@ -181,7 +212,9 @@ export default {
       bottomcss: '',
       showpopup: false,
       delivercompany: [],
-      deliverdata: { delivercompany: '-1', delivercode: '' }
+      deliverdata: { delivercompany: '-1', delivercode: '' },
+      showRefundModal: false,
+      refundContent: ''
     }
   },
   watch: {
@@ -206,6 +239,69 @@ export default {
           }
         })
       }
+    },
+    textareaChange (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
+      setTimeout(function () {
+        curArea.updateAutosize()
+      }, 50)
+    },
+    textareaFocus (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
+    },
+    agreeEvent (val) {
+      const self = this
+      if (val === 1) {
+        this.$vux.confirm.show({
+          title: '您确认同意退款？',
+          onConfirm: () => {
+            self.$vux.loading.show()
+            self.$http.post(`${ENV.BokaApi}/api/order/refund`, {id: this.query.id, agree: 1})
+            .then(res => {
+              self.$vux.loading.hide()
+              const data = res.data
+              self.$vux.toast.show({
+                text: data.error,
+                type: (data.flag !== 1 ? 'warn' : 'success'),
+                time: self.$util.delay(data.error),
+                onHide: () => {
+                  if (data.flag === 1) {
+                    this.data.backflag = 0
+                    this.data.flag = 0
+                  }
+                }
+              })
+            })
+          }
+        })
+      } else {
+        this.showRefundModal = true
+      }
+    },
+    closeRefund () {
+      this.showRefundModal = false
+    },
+    submitRefund () {
+      const self = this
+      self.$vux.loading.show()
+      this.showRefundModal = false
+      self.$http.post(`${ENV.BokaApi}/api/order/refund`, {id: this.query.id, rejectreason: this.refundContent, agree: 0})
+      .then(res => {
+        self.$vux.loading.hide()
+        const data = res.data
+        self.$vux.toast.show({
+          text: data.error,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: self.$util.delay(data.error),
+          onHide: () => {
+            if (data.flag === 1) {
+              this.data.backflag = 0
+            }
+          }
+        })
+      })
     },
     evaluate () {
       this.$router.push({name: 'evaluation', params: {order: this.order}})
@@ -273,7 +369,7 @@ export default {
     uploaddeliver () {
       const self = this
       if (!self.delivercompany.length) {
-        self.$http.post(`${ENV.BokaApi}/api/order/delivercompany`).then(function (res) {
+        self.$http.post(`${ENV.BokaApi}/api/order/delivercompany`).then(res => {
           let data = res.data
           self.delivercompany = data.data ? data.data : data
         })
