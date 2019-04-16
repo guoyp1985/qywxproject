@@ -21,8 +21,9 @@
           <title-tip scroll-box="article-content" @access="access" :user="reward" :messages="messages" :avatar-href="reward.avatar" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
         </template>
         <div class="article-view">
-          <div class="article-title">
+          <div class="article-title" style="position:relative;">
             <h2>{{article.title}}</h2>
+            <!-- <router-link v-if="query.control == 'edit' && article.uploader == reward.uid" :to="{path:'/addNews',query:{id: query.id}}" class="flex_center bg-theme color-white" style="position:absolute;right:0;top:10px;z-index:1;border-radius:20px;height:25px;width:70px;">修改</router-link> -->
           </div>
           <div class="article-vice-title">
             <h4>{{article.vicetitle}}</h4>
