@@ -79,6 +79,36 @@
                   <check-icon class="red-check" :value.sync="suggestClose" @click.native.stop="clickSuggest(0)">关闭</check-icon>
                 </div>
               </forminputplate>
+              <!-- <forminputplate class="required" v-if="query.miniconfig != 'wechat.mini_program.tljk'">
+                <span slot="title">店铺模板</span>
+                <div>
+                  <check-icon class="red-check">
+                    通用版
+                    <img src="/src/assets/images/store1.png" />
+                  </check-icon>
+                  <check-icon class="red-check">
+                    大图版
+                    <img src="/src/assets/images/store2.png" />
+                  </check-icon>
+                  <check-icon class="red-check">
+                    时尚黑
+                    <img src="/src/assets/images/store3.png" />
+                  </check-icon>
+                  <check-icon class="red-check">
+                    清新蓝
+                    <img src="/src/assets/images/store4.png" />
+                  </check-icon>
+                </div>
+              </forminputplate> -->
+              <forminputplate class="required" v-if="query.miniconfig != 'wechat.mini_program.tljk'">
+                <span slot="title">店铺模板</span>
+                <div>
+                  <check-icon class="red-check" :value.sync="template1" @click.native.stop="clickTemplate(1)">通用版</check-icon>
+                  <check-icon class="red-check" :value.sync="template2" @click.native.stop="clickTemplate(2)">大图版</check-icon>
+                  <check-icon class="red-check" :value.sync="template3" @click.native.stop="clickTemplate(3)">时尚黑</check-icon>
+                  <check-icon class="red-check" :value.sync="template4" @click.native.stop="clickTemplate(4)">清新蓝</check-icon>
+                </div>
+              </forminputplate>
               <div v-show="showmore">
                 <forminputplate>
                   <span slot="title">{{ $t('Shop description') }}</span>
@@ -343,7 +373,7 @@ export default {
     },
     submitdata: {
       type: Object,
-      default: { title: '', qrcode: '', buyonline: 1, content: '', fastreply: '你好，请稍等，一会为你服务' }
+      default: { title: '', qrcode: '', buyonline: 1, shopmodel: '1', content: '', fastreply: '你好，请稍等，一会为你服务' }
     },
     submitdata1: {
       type: Object,
@@ -402,7 +432,11 @@ export default {
       isFirst2: true,
       isFirst3: true,
       oldSuggestOpen: true,
-      oldSuggestClose: false
+      oldSuggestClose: false,
+      template1: false,
+      template2: false,
+      template3: false,
+      template4: false
     }
   },
   watch: {
@@ -412,6 +446,7 @@ export default {
     submitdata: function () {
       console.log('in watch sumitdata')
       this.watchBuyline()
+      this.watchTemplate()
       return this.submitdata
     },
     buyonline: function () {
@@ -454,6 +489,25 @@ export default {
       }
       this.oldSuggestOpen = this.suggestOpen
       this.oldSuggestClose = this.suggestClose
+    },
+    watchTemplate (val) {
+      this.template1 = false
+      this.template2 = false
+      this.template3 = false
+      this.template4 = false
+      if (val === '2') {
+        this.template2 = true
+        this.submitdata.shopmodel = 2
+      } else if (val === '3') {
+        this.template3 = true
+        this.submitdata.shopmodel = 3
+      } else if (val === '4') {
+        this.template4 = true
+        this.submitdata.shopmodel = 4
+      } else {
+        this.template1 = true
+        this.submitdata.shopmodel = 1
+      }
     },
     textareaChange (refname) {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
@@ -568,6 +622,11 @@ export default {
         }
       })
     },
+    clickTemplate (val) {
+      console.log('in clickTemplate')
+      console.log(val)
+      this.watchTemplate(`${val}`)
+    },
     closeOnPopup () {
       this.showonline = false
     },
@@ -582,7 +641,11 @@ export default {
     },
     submitevent () {
       const self = this
+      console.log(self.submitdata)
       self.submitdata.productclass = self.productClass
+      if (self.submitdata.shopmodel === '') {
+        self.submitdata.shopmodel = 1
+      }
       let validateData = []
       for (let key in self.requireddata) {
         let v = {}
@@ -769,6 +832,7 @@ export default {
     console.log('in mounted')
     this.watchBuyline()
     this.watchSuggest()
+    this.watchTemplate(`${this.retailerInfo.shopmodel}`)
   }
 }
 </script>

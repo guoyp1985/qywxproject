@@ -326,7 +326,7 @@ export default {
   },
   methods: {
     clickQrcode () {
-      if (this.retailerInfo.qrcode && this.retailerInfo.qrcode != '') {
+      if (this.retailerInfo.qrcode && this.retailerInfo.qrcode !== '') {
         this.showQrcodeModal = true
       }
     },
