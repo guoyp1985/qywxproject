@@ -45,6 +45,7 @@
       		<div class="clamp2">
             <span class="v_middle db-in bold"><span v-if="productdata.moderate != 1" class="color-gray bold">【已下架】</span>{{ productdata.title }}</span>
           </div>
+          <div v-if="productdata.sellingpoint && productdata.sellingpoint != ''" class="color-theme">{{productdata.sellingpoint}}</div>
           <div class="color-red">
             <span class="font18 mr3 v_middle">{{ $t('RMB') }}</span>
             <span class="font18 mr5 v_middle">{{ productdata.price }}</span>
@@ -86,7 +87,7 @@
         </template>
         <div class="bg-page" style="height:10px;"></div>
         <div class="b_top_after"></div>
-        <div class="padding10 b_bottom_after">
+        <div class="padding10 b_bottom_after" @click="tofactoryDetail">
           <div class="t-table">
     				<div class="t-cell v_middle w70" v-if="factoryinfo.photo && factoryinfo.photo != ''">
               <img class="v_middle imgcover" style="width:60px;height:60px;" :src="factoryinfo.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
@@ -102,7 +103,12 @@
           <div v-html="productdata.content"></div>
           <img v-for="(item,index) in previewerPhotoarr" :key="index" :src="item.src" @click="showBigimg(index)" />
         </div>
-        <div class="productarea scrollendarea scrollend" style="background-color:#f6f6f6;"></div>
+        <div class="productarea scrollendarea scrollend">
+          <div class="inner">
+            <div class="txt1">{{WeixinName}}</div>
+            <div class="txt2">-- 社交电商2.0 --</div>
+          </div>
+        </div>
       </div>
       <div v-if="loginUser.isretailer" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
         <div class="align_center flex_center flex_cell">
@@ -208,7 +214,8 @@ export default {
       topcss: '',
       showVideo: true,
       playVideo: false,
-      showTip: false
+      showTip: false,
+      WeixinName: ENV.WeixinName
     }
   },
   watch: {
@@ -268,6 +275,9 @@ export default {
       this.previewerFlasharr = []
       this.ingdata = []
       this.messages = 0
+    },
+    tofactoryDetail () {
+      this.$router.push('/factoryDetail?fid=' + this.productdata.fid)
     },
     filterEmot (text) {
       return this.$util.emotPrase(text)

@@ -2,27 +2,17 @@
   <div class="factory-user containerarea" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1')">
     <div class="manage-item">
       <div class="item-title"><span class="members-count">高级管理员</span></div>
-      <div class="member" v-for="(manager, index) in managers" :key="manager.uid">
-        <div class="member-info" @click="toggleOpeManger(index)">
-          <img class="avatar" :src="manager.avatar"/>
-          <span class="username">{{manager.username}}</span>
-          <div class="ope-btn">...</div>
-        </div>
-        <div v-if="manager.checked">
-          <div class="flex_center bg-white h40">
-            <div class="t-table align_center color-gray2 font14">
-              <div class="t-cell v_middle b_right_after" v-if="ismanager === 1" @click="delManager(manager.uid, index)">从团队中移除</div>
-              <div class="t-cell v_middle b_right_after" v-if="ismanager === 1" @click="disManger(manager.uid, index)">取消管理员</div>
-              <div class="t-cell v_middle" @click="toChat(manager.uid)">联系TA</div>
-            </div>
-          </div>
+      <div class="member">
+        <div class="member-info">
+          <img class="avatar" :src="loginUser.avatar"/>
+          <span class="username">{{loginUser.username}}</span>
         </div>
       </div>
       <div class="tip-message" v-if="tipMessageShow1"><span>无高级管理员</span></div>
     </div>
     <div class="manage-item">
       <div class="item-title"><span class="members-count">普通管理员（{{countNormal}}人）</span></div>
-      <div class="member" v-for="(member, index) in members" :key="member.uid">
+      <div class="member" v-for="(member, index) in ordinaryUser" :key="member.uid">
           <div class="member-info" @click="toggleOpePanel(index)">
             <img class="avatar" :src="member.avatar"/>
             <span class="username">{{member.username}}</span>
@@ -73,8 +63,8 @@ export default {
     return {
       id: null,
       uploader: null,
-      managers: [],
-      members: [],
+      seniorUser: [],
+      ordinaryUser: [],
       pagestart: 0,
       limit: 10,
       creater: {},
@@ -102,7 +92,7 @@ export default {
       self.$util.scrollEvent({
         element: scrollarea,
         callback: function () {
-          if (self.members.length === (self.pagestart + 1) * self.limit) {
+          if (self.ordinaryUser.length === (self.pagestart + 1) * self.limit) {
             self.pagestart++
             self.getMembers()
           }
@@ -135,8 +125,8 @@ export default {
             for (var m = 0; m < retdatamanager.length; m++) {
               retdatamanager[m].checked = false
             }
-            this.members = retdata
-            this.managers = retdatamanager
+            this.ordinaryUser = retdata
+            this.seniorUser = retdatamanager
           } else {
             console.log('2222222222')
             const retdata1 = res.data.data.normal
@@ -145,16 +135,16 @@ export default {
                 for (var k = 0; k < retdata1.length; k++) {
                   retdata1[k].checked = false
                 }
-                this.members.push(...retdata1)
+                this.ordinaryUser.push(...retdata1)
               }
             }
-            const retdata2 = res.data.data.managers
+            const retdata2 = res.data.data.seniorUser
             if (retdata2 && retdata2 !== '') {
               if (retdata2.length !== 0) {
                 for (var n = 0; n < retdata2.length; n++) {
                   retdata2[k].checked = false
                 }
-                this.managers.push(...retdata2)
+                this.seniorUser.push(...retdata2)
               }
             }
           }
@@ -162,22 +152,13 @@ export default {
       })
     },
     toggleOpePanel (index) {
-      for (var i = 0; i < this.members.length; i++) {
-        if (i !== index && this.members[i].checked) {
-          this.members[i].checked = false
+      for (var i = 0; i < this.ordinaryUser.length; i++) {
+        if (i !== index && this.ordinaryUser[i].checked) {
+          this.ordinaryUser[i].checked = false
           break
         }
       }
-      this.members[index].checked = !this.members[index].checked
-    },
-    toggleOpeManger (index) {
-      for (var i = 0; i < this.managers.length; i++) {
-        if (i !== index && this.managers[i].checked) {
-          this.managers[i].checked = false
-          break
-        }
-      }
-      this.managers[index].checked = !this.managers[index].checked
+      this.ordinaryUser[index].checked = !this.ordinaryUser[index].checked
     },
     disManger (setuid, index) {
       let _this = this
@@ -196,7 +177,7 @@ export default {
             this.tipMessageShow1 = true
             this.tipMessageShow2 = true
             this.pagestart = 0
-            this.members = []
+            this.ordinaryUser = []
             this.getMembers()
           })
         }
@@ -217,7 +198,7 @@ export default {
             }
           }).then(res => {
             this.pagestart = 0
-            this.members = []
+            this.ordinaryUser = []
             this.tipMessageShow1 = true
             this.tipMessageShow2 = true
             this.getMembers()
@@ -241,7 +222,7 @@ export default {
           }).then(res => {
             console.log(res)
             if (res.data.flag) {
-              _this.members.splice(index, 1)
+              _this.ordinaryUser.splice(index, 1)
               _this.count--
               _this.countNormal--
               if (_this.countNormal === 0) {
@@ -268,7 +249,7 @@ export default {
           }).then(res => {
             console.log(res)
             if (res.data.flag) {
-              _this.managers.splice(index, 1)
+              _this.seniorUser.splice(index, 1)
               _this.count--
               _this.countManager--
               if (_this.countNormal === 0) {
@@ -280,15 +261,14 @@ export default {
       })
     }
   },
-  created () {
+  activated () {
     console.log(this.$route)
     this.id = this.$route.query.id
+    console.log('厂商ID:')
+    console.log(this.id)
     this.getMembers()
-  },
-  activated () {
-    this.refresh()
   }
-};
+}
 </script>
 
 <style lang="less" scoped="">

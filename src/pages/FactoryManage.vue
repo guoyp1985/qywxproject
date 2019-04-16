@@ -124,10 +124,22 @@
           </div>
         </popup>
       </div>
-      <div v-show="timeShow">
+      <!-- <div v-show="timeShow">
         <group class="x-datetime">
-          <datetime format="YYYY-MM-DD HH:mm" v-model="time" :show.sync="visibility2" @on-confirm="saveSuess"></datetime>
+          <datetime format="YYYY-MM-DD HH:mm" v-model="endTime" :show.sync="visibility2" @on-confirm="saveSuess"></datetime>
         </group>
+      </div> -->
+      <div class="modalarea flex_center" v-if="timeShow">
+        <div class="modals">
+          <div class="align_center mb10">请输入延长的天数</div>
+          <div class="input-bor mb10">
+            <input :value="day" ref="input1" type="text" class="input priceInput pl10" name="days" placeholder="请输入延长天数" ></input>
+          </div>
+          <div class="flex_table flex_center">
+            <div class="btns mr10" style="background-color:#948f8f;" @click="btnClose">取消</div>
+            <div class="btns ml10" style="background-color:#ea3a3a;" @click="saveSuess">确定</div>
+          </div>
+        </div>
       </div>
     </template>
   </div>
@@ -139,8 +151,9 @@ Add factory:
 </i18n>
 
 <script>
-import { Group, Datetime, TransferDom, Popup, Confirm, CheckIcon, XImg } from 'vux'
+import { Group, Datetime, TransferDom, Popup, Confirm, CheckIcon, XImg, XInput } from 'vux'
 import ENV from 'env'
+import Time from '../../libs/time'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
 
@@ -151,11 +164,12 @@ export default {
     TransferDom
   },
   components: {
-    Popup, Confirm, CheckIcon, XImg, Sos, Datetime, Group
+    Popup, Confirm, CheckIcon, XImg, Sos, Datetime, Group, XInput
   },
   data () {
     return {
-      time: '2019-05-02 12:30',
+      day: null,
+      endTime: '',
       visibility2: false,
       timeShow: false,
       showSos: false,
@@ -175,16 +189,37 @@ export default {
     }
   },
   methods: {
+    btnClose () {
+      this.timeShow = false
+    },
     saveSuess (e) {
-      let _this = this
-      _this.$vux.toast.show({
-        text: '保存成功！',
-        type: 'text',
-        width: '200px'
+      const self = this
+      self.day = self.$refs.input1.value
+      self.$http.post(`${ENV.BokaApi}/api/factory/addFactoryDays`, {
+        fid: self.clickData.id, days: self.day
+      }).then(function (res) {
+        const data = res.data
+        if (data.flag === 1) {
+          self.timeShow = false
+          self.day = ''
+          self.$vux.toast.show({
+            text: '保存成功！',
+            type: 'text',
+            width: '200px'
+          })
+        } else {
+          self.timeShow = false
+          self.day = ''
+          self.$vux.toast.show({
+            text: '操作失败！！！',
+            type: 'text',
+            width: '200px'
+          })
+        }
       })
     },
     showxdate2 () {
-      this.visibility2 = true
+      this.timeShow = true
       this.showPopup1 = false
     },
     getPhoto (src) {
@@ -209,6 +244,8 @@ export default {
       this.showPopup1 = !this.showPopup1
       this.clickData = item
       this.clickIndex = index
+      let time = new Time(item.endtime * 1000).dateFormat('yyyy-MM-dd hh:mm')
+      this.endTime = time
     },
     clickPopup1 () {
       const self = this
@@ -381,5 +418,11 @@ export default {
   background-size: 100%;
   height: 20px;
 }
-
+.modalarea{
+  .modals{padding:20px 20px 10px 20px;box-sizing:border-box;background-color:#fff;border-radius:5px;}
+  .btns{padding:3px 25px;font-size:14px;border-radius:5px;text-align:center;color:#fff;}
+}
+.input-bor{
+  border:1px solid #e5e5e5;
+}
 </style>

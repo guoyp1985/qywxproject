@@ -327,8 +327,10 @@ export default {
     },
     getData () {
       const self = this
-      const params = { params: { from: 'myshop', pagestart: pagestart1, limit: limit } }
-      self.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(function (res) {
+      const params = {pagestart: pagestart1, limit: limit}
+      self.$http.get(`${ENV.BokaApi}/api/retailer/getRetailerProducts`, {
+        params: params
+      }).then(function (res) {
         const data = res.data
         const retdata = data.data ? data.data : data
         self.$vux.loading.hide()

@@ -62,7 +62,7 @@
                     零售价：{{$t('RMB')}}{{item.price}}
                   </span>
                   <span class="date-cell color-red">
-                    佣金：{{$t('RMB')}}{{item.rebate}}
+                    返点客佣金：{{$t('RMB')}}{{item.rebate}}
                   </span>
                 </div>
               </cell>
@@ -159,7 +159,10 @@ export default {
       tabdata2: [],
       tabdata3: [],
       limit: 10,
-      storeQrcode: null
+      storeQrcode: null,
+      fPageStart: 0,
+      isGetProduct: false,
+      fProductLen: 0
     }
   },
   filters: {
@@ -181,6 +184,9 @@ export default {
       pageStart2 = 0
       pageStart3 = 0
       this.storeQrcode = null
+      this.fPageStart = 0
+      this.isGetProduct = false
+      this.fProductLen = 0
     },
     getPhoto: function (photo) {
       return this.$util.getPhoto(photo)
@@ -244,10 +250,18 @@ export default {
         callback: function () {
           switch (self.selectedIndex) {
             case 0:
-              if (self.tabdata1.length === (pageStart1 + 1) * self.limit) {
-                pageStart1++
-                self.$vux.loading.show()
-                self.getData1()
+              if (self.isGetProduct) {
+                if (self.tabdata1.length - self.fProductLen === (pageStart1 + 1) * self.limit) {
+                  pageStart1++
+                  self.$vux.loading.show()
+                  self.getData1()
+                }
+              } else {
+                if (self.tabdata1.length === (self.fPageStart + 1) * self.limit) {
+                  self.fPageStart++
+                  self.$vux.loading.show()
+                  self.getFactoryData()
+                }
               }
               break
             case 1:
@@ -268,6 +282,30 @@ export default {
         }
       })
     },
+    getFactoryData () {
+      const self = this
+      let params = { pagestart: this.fPageStart, limit: this.limit, agent: 1 }
+      if (self.query.wid) {
+        params.wid = self.query.wid
+      } else {
+        params.wid = self.loginUser.uid
+      }
+      self.$http.get(`${ENV.BokaApi}/api/list/product`, {
+        params: params
+      }).then(res => {
+        self.$vux.loading.hide()
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        self.tabdata1 = self.tabdata1.concat(retdata)
+        self.fProductLen = self.tabdata1.length
+        if (self.tabdata1.length) {
+          self.distabdata1 = true
+        }
+        if (retdata.length < this.limit) {
+          self.getData1()
+        }
+      })
+    },
     getData1 () {
       const self = this
       let params = { wid: self.query.wid, pagestart: pageStart1, limit: self.limit }
@@ -278,6 +316,7 @@ export default {
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.distabdata1 = true
+        this.isGetProduct = true
       })
     },
     getData2 () {
@@ -307,7 +346,7 @@ export default {
     onItemClick () {
       switch (this.selectedIndex) {
         case 0:
-          !this.tabdata1.length && this.getData1()
+          !this.tabdata1.length && this.getFactoryData()
           break
         case 1:
           !this.tabdata2.length && this.getData2()

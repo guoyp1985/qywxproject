@@ -352,12 +352,14 @@ export default {
       })
     },
     getProductData () {
-      let params = { params: { from: 'retailer', pagestart: self.pagestart1, limit: self.limit } }
+      let params = {pagestart: self.pagestart1, limit: self.limit}
       let keyword = self.searchword
       if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
-        params.params.keyword = keyword
+        params.keyword = keyword
       }
-      self.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(function (res) {
+      self.$http.get(`${ENV.BokaApi}/api/retailer/getRetailerProducts`, {
+        params: params
+      }).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
         if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {

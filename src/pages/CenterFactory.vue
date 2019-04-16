@@ -9,7 +9,7 @@
       </template>
       <template v-else>
         <template v-if="showCenter">
-          <center-factory :factory-info="factoryinfo" :messages="messages" :login-user="loginUser"></center-factory>
+          <center-factory :factory-info="factoryinfo" :endTime="endTime" :messages="messages" :login-user="loginUser"></center-factory>
         </template>
       </template>
     </template>
@@ -20,6 +20,7 @@
 import { Swiper, SwiperItem } from 'vux'
 import CenterFactory from '@/components/CenterFactory'
 import ENV from 'env'
+import Time from '#/time'
 import { User } from '#/storage'
 
 export default {
@@ -36,7 +37,8 @@ export default {
       loginUser: null,
       classData: [],
       WeixinQrcode: ENV.WeixinQrcode,
-      messages: 0
+      messages: 0,
+      endTime: ''
     }
   },
   methods: {
@@ -55,6 +57,7 @@ export default {
               if (res.status === 200) {
                 let data = res.data
                 self.factoryinfo = data.data ? data.data : data
+                self.endTime = new Time(self.factoryinfo.endtime * 1000).dateFormat('yyyy-MM-dd')
                 let photoArr = [self.factoryinfo.photo]
                 self.factoryinfo.photoArr = self.$util.previewerImgdata(photoArr)
                 self.$vux.loading.hide()

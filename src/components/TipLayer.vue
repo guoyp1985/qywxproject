@@ -11,6 +11,7 @@
   .top-con{
     position:absolute;left:0;top:8%;right:0;width:100%;color:#fff;font-weight:bold;font-size:35px;
   }
+  .top-con.small{font-size:20px;}
   .middle-con{
     position:absolute;left:8%;top:28%;width:84%;height:50%;
     background-color:#fff;border-radius:5px;box-shadow: 0 0 20px #e4e8eb;
@@ -31,7 +32,12 @@
           <img src="https://tossharingsales.boka.cn/images/tip_bg.png" />
         </div>
       </div>
-      <div class="top-con flex_center">{{title}}</div>
+      <template v-if="title.length > 6">
+        <div class="top-con small flex_center">{{title}}</div>
+      </template>
+      <template v-else>
+        <div class="top-con flex_center">{{title}}</div>
+      </template>
       <div class="middle-con flex_center">
         <div class="w_100">{{content}}</div>
       </div>

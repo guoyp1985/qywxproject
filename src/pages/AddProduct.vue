@@ -5,10 +5,10 @@
     <template v-if="showContainer">
       <div class="s-container">
         <form ref="fileForm" enctype="multipart/form-data">
-          <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange('fileForm', 'photo')" />
+          <input ref="fileInput" class="hide" type="file" multiple="multiple" name="files" @change="fileMulChange('fileForm', 'photo')" />
         </form>
         <form ref="fileForm1" enctype="multipart/form-data">
-          <input ref="fileInput1" class="hide" type="file" name="files" @change="fileChange('fileForm1', 'contentphoto')" />
+          <input ref="fileInput1" class="hide" type="file" multiple="multiple" name="files" @change="fileMulChange('fileForm1', 'contentphoto')" />
         </form>
         <div class="list-shadow01">
           <div class="form-item no-after pt15 bg-gray10">
@@ -81,7 +81,7 @@
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">商品原价</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <x-input v-model="submitdata.oriprice" @keyup="priceChange('oriprice')" maxlength="7" size="7" type="text" class="input priceInput" name="oriprice" placeholder="商品原价" ></x-input>
+                <x-input v-model="submitdata.oriprice" @keyup="priceChange('oriprice')" maxlength="9" size="9" type="text" class="input priceInput" name="oriprice" placeholder="商品原价" ></x-input>
               </div>
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>
@@ -90,7 +90,7 @@
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">商品现价<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <x-input v-model="submitdata.price" @keyup="priceChange('price')" maxlength="7" size="7" type="text" class="input priceInput" name="price" :placeholder="$t('User final purchase price')" ></x-input>
+                <x-input v-model="submitdata.price" @keyup="priceChange('price')" maxlength="9" size="9" type="text" class="input priceInput" name="price" :placeholder="$t('User final purchase price')" ></x-input>
               </div>
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>
@@ -306,7 +306,7 @@ export default {
         allowcard: false
       },
       allowsubmit: true,
-      requireddata: { title: '', 'price': '', 'storage': '', 'unit': '', 'postage': '', 'photo': '' },
+      requireddata: {'photo': '', classid: '', title: '', 'price': '', 'storage': '', 'unit': '', 'postage': ''},
       showRebate: false,
       classData: [],
       submitIng: false
@@ -349,8 +349,7 @@ export default {
         seotitle: '',
         seodescription: '',
         video: '',
-        allowcard: false,
-        imgData: []
+        allowcard: false
       }
       this.photoarr = []
       this.photoarr1 = []
@@ -424,13 +423,48 @@ export default {
           fileForm = target.parentNode.parentNode
         }
         const filedata = new FormData(fileForm)
-        console.log('选中的文件')
-        console.log(filedata)
         self.$vux.loading.show()
         self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
           self.$vux.loading.hide()
           let data = res.data
           self.photoCallback(data, type)
+        })
+      }
+    },
+    fileMulChange (refname, type) {
+      const self = this
+      const target = event.target
+      const files = target.files
+      if (files.length > 0) {
+        let filedata = new FormData()
+        for (let i = 0; i < files.length; i++) {
+          filedata.append(`files[${i}]`, files[i])
+        }
+        self.$vux.loading.show()
+        self.$http.post(`${ENV.BokaApi}/api/uploadFiles`, filedata).then(function (res) {
+          self.$vux.loading.hide()
+          let data = res.data
+          if (data.flag === 1) {
+            let retdata = data.data
+            if (type === 'photo' && self.photoarr.length < self.maxnum) {
+              let allowNum = self.maxnum - self.photoarr.length
+              let addNum = retdata.length > allowNum ? allowNum : retdata.length
+              let addData = retdata.slice(0, addNum)
+              self.photoarr = self.photoarr.concat(addData)
+              self.submitdata.photo = self.photoarr.join(',')
+            } else if (type === 'contentphoto' && self.photoarr1.length < self.maxnum1) {
+              let allowNum = self.maxnum1 - self.photoarr1.length
+              let addNum = retdata.length > allowNum ? allowNum : retdata.length
+              let addData = retdata.slice(0, addNum)
+              self.photoarr1 = self.photoarr1.concat(addData)
+              self.submitdata.contentphoto = self.photoarr1.join(',')
+            }
+          } else if (data.error) {
+            self.$vux.toast.show({
+              text: data.error,
+              time: self.$util.delay(data.error)
+            })
+          }
         })
       }
     },
@@ -453,25 +487,20 @@ export default {
     savedata (postdata) {
       const self = this
       if (!self.submitIng) {
-        if (self.classData.length && !parseInt(self.submitdata.classid)) {
-          self.$vux.toast.text('必填项不能为空', 'middle')
+        if (self.$util.trim(postdata.photo) === '') {
+          self.$vux.toast.text('请先上传封面图像', 'middle')
           return false
         }
-        let validateData = []
-        for (let key in self.requireddata) {
-          let v = {}
-          v[key] = self.submitdata[key]
-          validateData.push(v)
+        if (self.classData.length && !parseInt(postdata.classid)) {
+          self.$vux.toast.text('请选择商品类别', 'middle')
+          return false
         }
-        let iscontinue = self.$util.validateQueue(validateData,
-          model => {
-            switch (model.key) {
-              default:
-                self.$vux.toast.text('必填项不能为空', 'middle')
-            }
-          }
-        )
-        if (!iscontinue) {
+        if (self.$util.trim(postdata.title) === '') {
+          self.$vux.toast.text('请输入商品名称', 'middle')
+          return false
+        }
+        if (self.$util.trim(postdata.price) === '') {
+          self.$vux.toast.text('请输入商品价格', 'middle')
           return false
         }
         let price = postdata.price.toString().replace(/,/g, '')
@@ -484,9 +513,25 @@ export default {
           self.$vux.toast.text('请输入正确的价格', 'middle')
           return false
         }
+        if (self.$util.trim(oriprice) !== '' && parseFloat(oriprice) <= parseFloat(price)) {
+          self.$vux.toast.text('商品现价不能大于等于原价', 'middle')
+          return false
+        }
+        if (self.$util.trim(postdata.storage) === '') {
+          self.$vux.toast.text('请输入商品库存', 'middle')
+          return false
+        }
+        if (self.$util.trim(postdata.unit) === '') {
+          self.$vux.toast.text('请输入商品单位', 'middle')
+          return false
+        }
         let reg = new RegExp('[0-9]+')
         if (postdata.unit !== '' && reg.test(postdata.unit)) {
           self.$vux.toast.text('请输入正确的单位', 'middle')
+          return false
+        }
+        if (self.$util.trim(postdata.postage) === '') {
+          self.$vux.toast.text('请输入运费', 'middle')
           return false
         }
         if (!isNaN(rebate)) {

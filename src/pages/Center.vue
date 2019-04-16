@@ -108,6 +108,9 @@
         </grid>
         </div>
       </div>
+      <template v-if="showTip">
+        <tip-layer buttonTxt="点击此处联系管理员" content="请联系管理员续费后，再来使用厂家功能哦！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
+      </template>
     </div>
 </template>
 
@@ -117,13 +120,20 @@
 <script>
 import { Grid, GridItem, Group, Cell } from 'vux'
 import CTitle from '@/components/CTitle'
+import TipLayer from '@/components/TipLayer'
 import ENV from 'env'
+import Time from '#/time'
 import Reg from '#/reg'
 import { Token, User } from '#/storage'
 let self = {}
 export default {
   components: {
-    Grid, GridItem, CTitle, Group, Cell
+    Grid, GridItem, CTitle, Group, Cell, TipLayer
+  },
+  filters: {
+    dateformat: function (value) {
+      return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
+    }
   },
   data () {
     // const self = this
@@ -159,6 +169,7 @@ export default {
         }
       ],
       avatarHref: 'https://tossharingsales.boka.cn/images/user.jpg',
+      query: {},
       linkMan: '',
       userCredits: 0,
       userLevels: 0,
@@ -169,10 +180,21 @@ export default {
       showCenter: false,
       showFactory: false,
       showManager: false,
-      showQuit: false
+      showQuit: false,
+      showTip: false
     }
   },
   methods: {
+    closeTip () {
+      this.showTip = false
+    },
+    toApply () {
+      let params = {uid: ENV.FactoryManagerUid, fromModule: 'retailer'}
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/chat', query: params})
+    },
     initData () {
       this.showCenter = false
       this.showFactory = false
@@ -198,7 +220,11 @@ export default {
       this.$router.push({name: 'tLogin'})
     },
     clickFactoryCenter () {
-      this.$router.push('/centerFactory')
+      if (this.loginUser.factory_expired === 1) {
+        this.showTip = true
+      } else {
+        this.$router.push('/centerFactory')
+      }
     },
     setUserInfo () {
       const user = User.get()

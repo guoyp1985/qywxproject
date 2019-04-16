@@ -6,10 +6,10 @@
     <template v-if="showContainer">
       <div class="s-container" style="top:0;">
         <form ref="fileForm" enctype="multipart/form-data">
-          <input ref="fileInput" multiple="multiple" class="hide" type="file" name="files" @change="fileChange('fileForm', 'photo')" />
+          <input ref="fileInput" class="hide" type="file" multiple="multiple" name="files" @change="fileMulChange('fileForm', 'photo')" />
         </form>
         <form ref="fileForm1" enctype="multipart/form-data">
-          <input ref="fileInput1" multiple="multiple" class="hide" type="file" name="files" @change="fileChange('fileForm1', 'contentphoto')" />
+          <input ref="fileInput1" class="hide" type="file" multiple="multiple" name="files" @change="fileMulChange('fileForm1', 'contentphoto')" />
         </form>
         <div class="list-shadow01">
           <div class="form-item no-after pt15 bg-gray10">
@@ -139,6 +139,14 @@
                 <x-input v-model="submitdata.postage" @keyup="priceChange('postage')" type="text" class="input priceInput" name="postage" :placeholder="$t('Postage')" ></x-input>
               </div>
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
+            </div>
+          </div>
+          <div class="form-item required bg-white">
+            <div class="t-table">
+              <div class="t-cell title-cell w80 font14 v_middle">商品优势</div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <x-input v-model="submitdata.sellingpoint" type="text" class="input" name="sellingpoint" placeholder="请夸一夸你的商品吧" :max="30"></x-input>
+              </div>
             </div>
           </div>
 
@@ -301,7 +309,7 @@ export default {
       havenum2: 0,
       showmore: false,
       submitdata: {
-        classid: '',
+        classid: '0',
         title: '',
         oriprice: '',
         price: '',
@@ -313,8 +321,8 @@ export default {
         contentphoto: '',
         seotitle: '',
         seodescription: '',
-        profit: ''
-        // isgift: false
+        profit: '',
+        sellingpoint: ''
       },
       allowsubmit: true,
       requireddata: { title: '', 'price': '', 'storage': '', 'unit': '', 'postage': '', 'photo': '', 'profit': '' },
@@ -361,8 +369,8 @@ export default {
         seotitle: '',
         seodescription: '',
         video: '',
-        profit: ''
-        // isgift: false
+        profit: '',
+        sellingpoint: ''
       }
       this.photoarr = []
       this.photoarr1 = []
@@ -447,6 +455,43 @@ export default {
         })
       }
     },
+    fileMulChange (refname, type) {
+      const self = this
+      const target = event.target
+      const files = target.files
+      if (files.length > 0) {
+        let filedata = new FormData()
+        for (let i = 0; i < files.length; i++) {
+          filedata.append(`files[${i}]`, files[i])
+        }
+        self.$vux.loading.show()
+        self.$http.post(`${ENV.BokaApi}/api/uploadFiles`, filedata).then(function (res) {
+          self.$vux.loading.hide()
+          let data = res.data
+          if (data.flag === 1) {
+            let retdata = data.data
+            if (type === 'photo' && self.photoarr.length < self.maxnum) {
+              let allowNum = self.maxnum - self.photoarr.length
+              let addNum = retdata.length > allowNum ? allowNum : retdata.length
+              let addData = retdata.slice(0, addNum)
+              self.photoarr = self.photoarr.concat(addData)
+              self.submitdata.photo = self.photoarr.join(',')
+            } else if (type === 'contentphoto' && self.photoarr1.length < self.maxnum1) {
+              let allowNum = self.maxnum1 - self.photoarr1.length
+              let addNum = retdata.length > allowNum ? allowNum : retdata.length
+              let addData = retdata.slice(0, addNum)
+              self.photoarr1 = self.photoarr1.concat(addData)
+              self.submitdata.contentphoto = self.photoarr1.join(',')
+            }
+          } else if (data.error) {
+            self.$vux.toast.show({
+              text: data.error,
+              time: self.$util.delay(data.error)
+            })
+          }
+        })
+      }
+    },
     deletephoto (item, index, type) {
       const self = this
       if (type === 'video') {
@@ -466,25 +511,24 @@ export default {
     savedata (postdata) {
       const self = this
       if (!self.submitIng) {
-        if (self.classData.length && !parseInt(self.submitdata.classid)) {
-          self.$vux.toast.text('必填项不能为空', 'middle')
+        if (self.$util.trim(postdata.photo) === '') {
+          self.$vux.toast.text('请先上传封面图像', 'middle')
           return false
         }
-        let validateData = []
-        for (let key in self.requireddata) {
-          let v = {}
-          v[key] = self.submitdata[key]
-          validateData.push(v)
+        if (self.classData.length && !parseInt(postdata.classid)) {
+          self.$vux.toast.text('请选择商品类别', 'middle')
+          return false
         }
-        let iscontinue = self.$util.validateQueue(validateData,
-          model => {
-            switch (model.key) {
-              default:
-                self.$vux.toast.text('必填项不能为空', 'middle')
-            }
-          }
-        )
-        if (!iscontinue) {
+        if (self.$util.trim(postdata.title) === '') {
+          self.$vux.toast.text('请输入商品名称', 'middle')
+          return false
+        }
+        if (self.$util.trim(postdata.price) === '') {
+          self.$vux.toast.text('请输入商品价格', 'middle')
+          return false
+        }
+        if (self.$util.trim(postdata.profit) === '') {
+          self.$vux.toast.text('请输入商品利润', 'middle')
           return false
         }
         let price = postdata.price.toString().replace(/,/g, '')
@@ -498,11 +542,35 @@ export default {
           return false
         }
         // 商品利润
-        if (self.$util.trim(oriprice) !== '' && (isNaN(parseFloat(profit)) || parseFloat(profit) < 0 || parseFloat(profit) >= parseFloat(price))) {
+        if (self.$util.trim(oriprice) !== '' && (isNaN(parseFloat(profit)) || parseFloat(profit) < 0)) {
           self.$vux.alert.show({
             title: '',
             content: '请输入正确的价格'
           })
+          return false
+        }
+        if (parseFloat(profit) >= parseFloat(price)) {
+          self.$vux.alert.show({
+            title: '',
+            content: '请输入正确的利润'
+          })
+          return false
+        }
+        if (self.$util.trim(postdata.storage) === '') {
+          self.$vux.toast.text('请输入商品库存', 'middle')
+          return false
+        }
+        if (self.$util.trim(postdata.unit) === '') {
+          self.$vux.toast.text('请输入商品单位', 'middle')
+          return false
+        }
+        let reg = new RegExp('[0-9]+')
+        if (postdata.unit !== '' && reg.test(postdata.unit)) {
+          self.$vux.toast.text('请输入正确的单位', 'middle')
+          return false
+        }
+        if (self.$util.trim(postdata.postage) === '') {
+          self.$vux.toast.text('请输入运费', 'middle')
           return false
         }
         if (parseFloat(profit) > parseFloat(price)) {
