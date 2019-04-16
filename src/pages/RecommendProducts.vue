@@ -92,7 +92,8 @@ export default {
       searchword: '',
       datecss: 'desc',
       pricecss: 'desc',
-      sort: 'dateline'
+      sort: 'dateline',
+      pageTop: 0
     }
   },
   watch: {
@@ -238,11 +239,22 @@ export default {
   },
   created () {
     self = this
+    this.refresh()
   },
+  activated () {
+    this.$refs.scrollContainer.scrollTop = this.pageTop
+  },
+  beforeRouteLeave (to, from, next) {
+    this.pageTop = this.$refs.scrollContainer.scrollTop
+    console.log(this.pageTop)
+    next()
+  }
+  /*
   activated () {
     self = this
     this.refresh()
   }
+  */
 }
 </script>
 
