@@ -36,7 +36,7 @@
         			<div class="picarea">
         				<div class="pic">
                   <img class="imgcover" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-                  <div class="t-icon color-theme flex_center bold font15"><i class="al al-zhuanqian font18"></i><span>赚 {{$t('RMB')}}{{item.levelagent}}</span></div>
+                  <div class="t-icon color-theme flex_center"><i class="al al-zhuanqian font18"></i><span>赚 {{$t('RMB')}}{{item.levelagent}}</span></div>
                 </div>
         			</div>
         			<div class="desbox" style="overflow:hidden;">
@@ -268,7 +268,10 @@ export default {
     background-size: 100%;
     height: 20px;
   }
-  .t-icon{position:absolute;left:0;top:10px;border-top-right-radius:20px;border-bottom-right-radius:20px;background-color:#fff;padding:5px 10px 5px 5px;font-size:12px;}
+  .t-icon{
+    position:absolute;left:0;top:10px;border-top-right-radius:20px;border-bottom-right-radius:20px;background-color:#fff;padding:5px 10px 5px 5px;font-size:15px;
+    box-shadow: 0px 0px 3px 1px #e6ebed;font-weight:bold;
+  }
   .v-tab .vux-tab-container .vux-tab-selected{border-bottom-style:solid !important;}
   .scrollable .vux-tab-ink-bar{bottom:0 !important;}
   .sort-icon.active{color:#ff6a61;}
