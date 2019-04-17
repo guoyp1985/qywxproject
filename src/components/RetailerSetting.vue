@@ -444,6 +444,11 @@ export default {
     }
   },
   watch: {
+    retailerInfo () {
+      if (this.retailerInfo.uid) {
+        this.watchTemplate(`${this.retailerInfo.shopmodel}`)
+      }
+    },
     photoarr: function () {
       return this.photoarr
     },
