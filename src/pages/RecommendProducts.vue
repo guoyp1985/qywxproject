@@ -36,7 +36,7 @@
         			<div class="picarea">
         				<div class="pic">
                   <img class="imgcover" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-                  <div class="t-icon color-theme">佣金: {{$t('RMB')}}{{item.levelagent}}</div>
+                  <div class="t-icon color-theme flex_center"><i class="al al-zhuanqian font14"></i><span>赚: {{$t('RMB')}}{{item.levelagent}}</span></div>
                 </div>
         			</div>
         			<div class="desbox" style="overflow:hidden;">
