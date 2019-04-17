@@ -842,7 +842,6 @@ export default {
     console.log('in mounted')
     this.watchBuyline()
     this.watchSuggest()
-    this.watchTemplate(`${this.retailerInfo.shopmodel}`)
   }
 }
 </script>
