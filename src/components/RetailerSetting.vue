@@ -402,6 +402,10 @@ export default {
     submitSuggest: {
       type: Boolean,
       default: true
+    },
+    submitShopModel: {
+      type: String,
+      default: '1'
     }
   },
   directives: {
@@ -467,6 +471,10 @@ export default {
       console.log('in watch submitSuggest')
       this.watchSuggest()
       return this.submitSuggest
+    },
+    submitShopModel () {
+      this.watchTemplate(`${this.submitShopModel}`)
+      return this.submitShopModel
     }
   },
   methods: {
@@ -491,6 +499,8 @@ export default {
       this.oldSuggestClose = this.suggestClose
     },
     watchTemplate (val) {
+      console.log('in watchtemplate')
+      console.log(val)
       this.template1 = false
       this.template2 = false
       this.template3 = false

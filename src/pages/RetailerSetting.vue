@@ -16,7 +16,8 @@
         :buyonline="buyonline"
         :buyoffline="buyoffline"
         :submitSuggest="submitSuggest"
-        @clickSuggest="clickSuggest">
+        @clickSuggest="clickSuggest"
+        :submitShopModel="submitShopModel">
       </retailer-setting>
     </template>
     <template v-if="showApply">
@@ -54,7 +55,8 @@ export default {
       productClass: [],
       buyonline: true,
       buyoffline: false,
-      submitSuggest: true
+      submitSuggest: true,
+      submitShopModel: '1'
     }
   },
   methods: {
@@ -74,6 +76,7 @@ export default {
           let data = res.data
           self.$vux.loading.hide()
           self.retailerInfo = data.data ? data.data : data
+          self.submitShopModel = self.retailerInfo.shopmodel
           for (let key in self.submitdata) {
             self.submitdata[key] = self.retailerInfo[key]
           }
