@@ -280,6 +280,16 @@
           </div>
         </popup>
       </div>
+      <template v-if="isFirst">
+        <firstTip @submitFirstTip="submitFirstTip">
+          <div class="font15 bold txt">
+            <div class="flex_center">订单管理就是这么简单</div>
+          </div>
+        </firstTip>
+      </template>
+      <template v-if="showHb">
+        <firstHb action="orderdeliver"></firstHb>
+      </template>
     </template>
   </div>
 </template>
@@ -299,13 +309,15 @@ import ENV from 'env'
 import { User } from '#/storage'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
+import FirstTip from '@/components/FirstTip'
+import FirstHb from '@/components/FirstHb'
 
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, Popup, Orderitemplate, Orderproductplate, XImg, Subscribe, ApplyTip, Search
+    Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, Popup, Orderitemplate, Orderproductplate, XImg, Subscribe, ApplyTip, Search, FirstTip, FirstHb
   },
   filters: {
     dateformat: function (value) {
@@ -318,6 +330,7 @@ export default {
       showContainer: false,
       query: {},
       loginUser: {},
+      retailerInfo: {},
       tabtxts: [ '全部', '待付款', '待发货', '已发货' ],
       selectedIndex: 0,
       distabdata1: false,
@@ -340,10 +353,15 @@ export default {
       deliverdata: { delivercompany: '-1', delivercode: '' },
       autofixed: false,
       searchword1: '',
-      showTip: false
+      showTip: false,
+      isFirst: false,
+      showHb: false
     }
   },
   methods: {
+    submitFirstTip () {
+      this.isFirst = false
+    },
     copyTxt (item) {
       const self = this
       let str = `#retailer-orders-page .deliver_txt-${this.selectedIndex}-${item.id}`
@@ -649,6 +667,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$vux.loading.show()
       this.loginUser = User.get()
+      this.retailerInfo = this.loginUser.retailerinfo
       if (this.$route.query.from && this.loginUser.subscribe !== 1) {
         this.showTip = true
       }
@@ -673,6 +692,9 @@ export default {
           }
           if (this.selectedIndex === 0) {
             this.swiperChange()
+          }
+          if (this.retailerInfo.firstinfo.orderdeliver === '0' && this.query.from) {
+            this.isFirst = true
           }
         }
       }
