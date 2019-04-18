@@ -64,7 +64,7 @@
         </div>
         <div class="padding10 b_bottom_after levelarea">
           <div class="levelitem">
-            <div><span class="bold">销售佣金:</span><span class="bold"> {{ $t('RMB') }}{{ productdata.salesrebate }}<span><i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp1"></i></div>
+            <div><span class="bold">销售佣金:</span><span class="bold"> {{ $t('RMB') }}{{ productdata.salesrebate }}</span><i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp1"></i></div>
           </div>
         </div>
         <!-- <template v-if="feeData.length != 0 && (productdata.identity == 'factory' || productdata.joinstatus == 0)">
