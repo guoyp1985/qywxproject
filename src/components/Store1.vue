@@ -330,18 +330,6 @@ export default {
     newPageStart: {
       type: Number,
       default: 0
-    },
-    fPageStart: {
-      type: Number,
-      default: 0
-    },
-    isGetProduct: {
-      type: Boolean,
-      default: ''
-    },
-    fProductLen: {
-      type: Number,
-      default: 0
     }
   },
   directives: {
