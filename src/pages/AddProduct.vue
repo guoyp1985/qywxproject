@@ -81,7 +81,7 @@
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">商品原价</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <x-input v-model="submitdata.oriprice" @keyup="priceChange('oriprice')" maxlength="7" size="7" type="text" class="input priceInput" name="oriprice" placeholder="商品原价" ></x-input>
+                <x-input v-model="submitdata.oriprice" @keyup="priceChange('oriprice')" maxlength="9" size="9" type="text" class="input priceInput" name="oriprice" placeholder="商品原价" ></x-input>
               </div>
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>
@@ -90,7 +90,7 @@
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">商品现价<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <x-input v-model="submitdata.price" @keyup="priceChange('price')" maxlength="7" size="7" type="text" class="input priceInput" name="price" :placeholder="$t('User final purchase price')" ></x-input>
+                <x-input v-model="submitdata.price" @keyup="priceChange('price')" maxlength="9" size="9" type="text" class="input priceInput" name="price" :placeholder="$t('User final purchase price')" ></x-input>
               </div>
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>
@@ -511,6 +511,10 @@ export default {
         }
         if ((self.$util.trim(oriprice) !== '' && (isNaN(oriprice) || parseFloat(oriprice) < 0)) || isNaN(price) || parseFloat(price) <= 0 || (self.$util.trim(rebate) !== '' && (isNaN(rebate) || parseFloat(rebate) < 0))) {
           self.$vux.toast.text('请输入正确的价格', 'middle')
+          return false
+        }
+        if (self.$util.trim(oriprice) !== '' && parseFloat(oriprice) <= parseFloat(price)) {
+          self.$vux.toast.text('商品现价不能大于等于原价', 'middle')
           return false
         }
         if (self.$util.trim(postdata.storage) === '') {

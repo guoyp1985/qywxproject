@@ -23,6 +23,9 @@
         <div class="article-view">
           <div class="article-title">
             <h2>{{article.title}}</h2>
+            <div class="flex_right mt5 mb5" v-if="editIng && article.uploader == reward.uid">
+              <router-link :to="{path:'/addNews',query:{id: query.id}}" class="flex_center bg-theme color-white" style="border-radius:20px;height:25px;width:90px;">修改标题</router-link>
+            </div>
           </div>
           <div class="article-vice-title">
             <h4>{{article.vicetitle}}</h4>
@@ -102,7 +105,7 @@
         :module="module"
         :on-close="closeShareSuccess">
       </share-success>
-      <editor v-if="reward.uid == article.uploader && showEditor && !(article.fid > 0)" elem="#editor-content" :query="query" @on-auto-save="autoSave" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
+      <editor v-if="reward.uid == article.uploader && showEditor && !(article.fid > 0)" elem="#editor-content" :query="query" @on-edit="clickEdit" @on-auto-save="autoSave" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
       <comment-popup :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-cancel="commentPopupCancel"></comment-popup>
       <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
       <div v-transfer-dom class="x-popup">
@@ -178,7 +181,8 @@ export default {
       replyData: null,
       messages: 0,
       showEditor: false,
-      showArticle: false
+      showArticle: false,
+      editIng: false
     }
   },
   filters: {
@@ -197,6 +201,9 @@ export default {
   methods: {
     access () {
       this.$util.wxAccess()
+    },
+    clickEdit () {
+      this.editIng = true
     },
     clickInsertProduct (url) {
       console.log('in in in clickInsertProduct')
@@ -518,6 +525,7 @@ export default {
       this.save()
     },
     editSave () {
+      this.editIng = false
       this.save(function () {
         if (self.query.minibackurl) {
           let minibackurl = decodeURIComponent(self.query.minibackurl)
@@ -633,6 +641,12 @@ export default {
       this.showArticle = false
       this.showEditor = false
       this.showsharetip = false
+      this.editIng = false
+      if (query.edit === 'control') {
+        this.editIng = true
+      } else {
+        this.editIng = false
+      }
       if (this.query.id !== query.id) {
         room = ''
         this.comments = []

@@ -14,7 +14,7 @@
         <div class="flex_cell flex_left">
           <div class="w_100">
             <div class="flex_left" @click="clickQrcode">
-              <span>{{storeTitle}}</span><span class="al al-erweima1 font14 color-theme bold ml5"></span>
+              <span>{{storeTitle}}</span><span class="al al-erweima1 font14 color-theme bold ml5" v-if="retailerInfo.qrcode && retailerInfo.qrcode != ''"></span>
             </div>
             <!-- <div class="flex_left" @click="clickQrcode">
               <span class="al al-erweima1 font14 color-black"></span>
@@ -161,13 +161,13 @@
             </div>
             <div class="b_top_after" style="position:absolute;left:0;top:95px;right:0;height:54px;">
               <tab v-model="tabmodel" class="v-tab">
-                <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
+                <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="swiperChange">{{item}}</tab-item>
               </tab>
             </div>
             <div class="popup-middle font14" style="top:149px;">
-              <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
-                <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-                  <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll1">
+              <!-- <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
+                <swiper-item v-for="(tabitem, index) in tabtxts" :key="index"> -->
+                  <div v-show="(tabmodel == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1')">
                     <div v-if="disNewsData" class="scroll_list">
                       <div v-if="!newsData || newsData.length === 0" class="scroll_item padding10 color-gray align_center">
                         <template v-if="searchresult1">
@@ -189,7 +189,7 @@
                       </check-icon>
                     </div>
                   </div>
-                  <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll2">
+                  <div v-show="(tabmodel == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2')">
                     <div v-if="disProductsData" class="scroll_list">
                       <div v-if="!productsData || productsData.length === 0" class="scroll_item padding10 color-gray align_center">
                         <template v-if="searchresult2">
@@ -212,8 +212,8 @@
                       </check-icon>
                     </div>
                   </div>
-                </swiper-item>
-              </swiper>
+                <!-- </swiper-item>
+              </swiper> -->
             </div>
             <div class="popup-bottom flex_center">
               <div class="flex_cell flex_center h_100 bg-gray color-white" @click="closeImgTxtPopup">{{ $t('Close') }}</div>
@@ -280,7 +280,7 @@ export default {
       diffSeconds: 300,
       msgType: 'text',
       tabmodel: 0,
-      tabtxts: [ '文章', '产品' ],
+      tabtxts: [ '文章', '商品' ],
       autofixed: false,
       searchword: '',
       showSearchEmpty: false,
@@ -292,7 +292,7 @@ export default {
       disProductsData: false,
       pagestart1: 0,
       pagestart2: 0,
-      limit1: 10,
+      limit1: 20,
       selectNewsData: null,
       selectProductsData: null,
       showUserInfo: false,
@@ -305,10 +305,7 @@ export default {
       bottomPos: 0,
       clickMsgItem: {},
       showQrcodeModal: false,
-      storeTitle: '',
-      fPageStart: 0,
-      isGetProduct: false,
-      fProductLen: 0
+      storeTitle: ''
     }
   },
   filters: {
@@ -329,7 +326,9 @@ export default {
   },
   methods: {
     clickQrcode () {
-      this.showQrcodeModal = true
+      if (this.retailerInfo.qrcode && this.retailerInfo.qrcode !== '') {
+        this.showQrcodeModal = true
+      }
     },
     closeQrcodeModal () {
       this.showQrcodeModal = false
@@ -772,6 +771,23 @@ export default {
     },
     sendImgTxt () {
       const self = this
+      if (self.tabmodel === 0) {
+        if (!self.selectNewsData || !self.selectNewsData.id) {
+          self.$vux.toast.show({
+            text: '请选择文章',
+            type: 'text'
+          })
+          return false
+        }
+      } else {
+        if (!self.selectProductsData || !self.selectProductsData.id) {
+          self.$vux.toast.show({
+            text: '请选择商品',
+            type: 'text'
+          })
+          return false
+        }
+      }
       let postdata = {
         touid: self.query.uid,
         sendtype: 'news',
@@ -802,7 +818,7 @@ export default {
         self.$vux.loading.show()
         self.productsData = []
         self.pagestart2 = 0
-        self.getFactoryData()
+        self.getProductData()
       }
     },
     onSearchSubmit () {
@@ -816,49 +832,42 @@ export default {
         self.$vux.loading.show()
         self.productsData = []
         self.pagestart2 = 0
-        self.getFactoryData()
+        self.getProductData()
       }
     },
     swiperChange (index) {
+      console.log(this.tabmodel)
       const self = this
       this.clearSelectData()
-      if (index === 0 && self.newsData.length === 0) {
-        self.$vux.loading.show()
-        self.getNewsData()
-      } else if (index === 1 && self.productsData.length === 0) {
-        self.$vux.loading.show()
-        self.getFactoryData()
+      if (this.tabmodel === 0) {
+        if (!self.newsData.length) {
+          self.$vux.loading.show()
+          self.getNewsData()
+        }
+      } else {
+        if (!self.productsData.length) {
+          self.$vux.loading.show()
+          self.getProductData()
+        }
       }
     },
-    handleScroll1 () {
+    handleScroll (refname) {
       const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
-        element: self.$refs.scrollContainer1[0],
-        callback: function () {
-          if (self.newsData.length === (self.pagestart1 + 1) * self.limit1) {
-            self.pagestart1++
-            self.$vux.loading.show()
-            self.getNewsData()
-          }
-        }
-      })
-    },
-    handleScroll2 () {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.$refs.scrollContainer2[0],
+        element: scrollarea,
         callback: () => {
-          if (self.isGetProduct) {
-            if (self.productsData.length - self.fProductLen === (self.pagestart2 + 1) * self.limit1) {
+          if (self.tabmodel === 0) {
+            if (self.newsData.length === (self.pagestart1 + 1) * self.limit1) {
+              self.pagestart1++
+              self.$vux.loading.show()
+              self.getNewsData()
+            }
+          } else {
+            if (self.productsData.length === (self.pagestart2 + 1) * self.limit1) {
               self.pagestart2++
               self.$vux.loading.show()
               self.getProductData()
-            }
-          } else {
-            if (self.productsData.length === (self.fPageStart + 1) * self.limit1) {
-              self.fPageStart++
-              self.$vux.loading.show()
-              self.getFactoryData()
             }
           }
         }
@@ -916,32 +925,6 @@ export default {
         self.disNewsData = true
       })
     },
-    getFactoryData () {
-      const self = this
-      let keyword = self.searchword
-      let params = { pagestart: this.fPageStart, limit: self.limit1, agent: 1 }
-      if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
-        self.searchresult2 = true
-        params.keyword = keyword
-      } else {
-        self.searchresult2 = false
-      }
-      self.$http.get(`${ENV.BokaApi}/api/list/product`, {
-        params: params
-      }).then(res => {
-        const data = res.data
-        self.$vux.loading.hide()
-        const retdata = data.data ? data.data : data
-        self.productsData = self.productsData.concat(retdata)
-        self.fProductLen = self.productsData.length
-        if (self.productsData.length) {
-          self.disProductsData = true
-        }
-        if (retdata.length < self.limit1) {
-          self.getProductData()
-        }
-      })
-    },
     getProductData () {
       const self = this
       let keyword = self.searchword
@@ -952,10 +935,9 @@ export default {
       } else {
         self.searchresult2 = false
       }
-      self.$http.get(`${ENV.BokaApi}/api/list/product?from=retailer`, {
+      self.$http.get(`${ENV.BokaApi}/api/retailer/getRetailerProducts`, {
         params: params
       }).then(res => {
-        self.isGetProduct = true
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data

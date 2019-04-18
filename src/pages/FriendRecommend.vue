@@ -99,32 +99,6 @@
         </div>
       </router-link>
     </div>
-    <!-- 商品 -->
-    <div class="share-list mt10" v-if="disData4">
-      <div class="border-t12 border pt10 pb10 pr15 pl15 bg-white b_bottom_after">
-        <div class="t-table">
-          <div class="t-cell middle-cell align_left font16">最新厂家商品</div>
-          <router-link v-if="factoryData.length" :to="{ path: '/NewestList', query: {module: 'factoryProduct'} }" class="t-cell middle-cell align_right font14">
-            <div style="color:rgb(255, 68, 0);">更多>></div>
-          </router-link>
-        </div>
-      </div>
-      <div v-if="!factoryData || !factoryData.length" class="flex_center font16 bg-white pt10 pb10 pr15 pl15">暂无商品</div>
-      <router-link :to="{ path: '/product', query: {id: item.id, wid: item.uploader} }" v-else v-for="(item, index) in factoryData" :key="item.id">
-        <div class="artical-item flex_left bg-white pt10 pb10 pr15 pl15">
-          <div class="inner">
-            <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-          </div>
-          <div class="txt-cell flex_cell clamp1 w_100 pr10">
-            <div class="font14 clamp1 wtitle">{{item.title}}</div>
-            <div class="font12 color-gray">{{item.dateline_str}}</div>
-          </div>
-          <div class="t-right">
-            <span class="btnicon">去分享</span>
-          </div>
-        </div>
-      </router-link>
-    </div>
   </div>
 </template>
 <script>
@@ -140,11 +114,9 @@
         articalData: [],
         listActivity: [],
         productData: [],
-        factoryData: [],
         disData1: false,
         disData2: false,
-        disData3: false,
-        disData4: false
+        disData3: false
       }
     },
     methods: {
@@ -190,19 +162,9 @@
       },
       getData3 () {
         const self = this
-        self.$http.get(`${ENV.BokaApi}/api/list/product?pagestart=0&limit=3&uploader=${this.loginUser.uid}`).then(res => {
-          let data = res.data
-          let retdata = data.data ? data.data : data
-          for (var i = 0; i < retdata.length; i++) {
-            retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd hh:mm')
-          }
-          self.factoryData = retdata
-          this.disData4 = true
-        })
-      },
-      getData4 () {
-        const self = this
-        self.$http.get(`${ENV.BokaApi}/api/list/product?agent=1&pagestart=0&limit=3`).then(res => {
+        self.$http.get(`${ENV.BokaApi}/api/retailer/getRetailerProducts`, {
+          params: {pagestart: 0, limit: 3}
+        }).then(res => {
           let data = res.data
           let retdata = data.data ? data.data : data
           for (var i = 0; i < retdata.length; i++) {
@@ -220,7 +182,6 @@
         this.getData1()
         this.getData2()
         this.getData3()
-        this.getData4()
       }
     },
     created () {

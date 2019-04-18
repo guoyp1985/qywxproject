@@ -230,10 +230,7 @@ export default {
       suggestData: [],
       showHelpModal: false,
       pageStart: 0,
-      newPageStart: 0,
-      fPageStart: 0,
-      isGetProduct: false,
-      fProductLen: 0
+      newPageStart: 0
     }
   },
   watch: {
@@ -285,8 +282,6 @@ export default {
       this.hideloading = false
       this.isNextNews = true
       this.haveMoreNews = false
-      this.isGetProduct = false
-      this.fProductLen = 0
     },
     clickHelp () {
       this.showHelpModal = true
@@ -350,47 +345,13 @@ export default {
         element: scrollarea,
         callback: () => {
           console.log('in 滚动事件到底部了')
-          if (self.isGetProduct) {
-            if (self.productdata.length - self.fProductLen === (self.pageStart + 1) * limit) {
-              self.pageStart++
-              self.$vux.loading.show()
-              self.getData1()
-            } else {
-              self.scrollEnd = true
-            }
+          if (self.productdata.length === (self.pageStart + 1) * limit) {
+            self.pageStart++
+            self.$vux.loading.show()
+            self.getData1()
           } else {
-            if (self.productdata.length === (self.fPageStart + 1) * limit) {
-              self.fPageStart++
-              self.$vux.loading.show()
-              self.getFactoryData()
-            }
+            self.scrollEnd = true
           }
-        }
-      })
-    },
-    getFactoryData () {
-      const self = this
-      let params = { pagestart: this.fPageStart, limit: limit, agent: 1 }
-      if (self.query.wid) {
-        params.wid = self.query.wid
-      } else {
-        params.wid = self.loginUser.uid
-      }
-      self.$http.get(`${ENV.BokaApi}/api/list/product`, {
-        params: params
-      }).then(res => {
-        const data = res.data
-        if (self.hideloading) {
-          self.$vux.loading.hide()
-        }
-        const retdata = data.data ? data.data : data
-        self.productdata = self.productdata.concat(retdata)
-        self.fProductLen = self.productdata.length
-        if (self.productdata.length) {
-          self.disproductdata = true
-        }
-        if (retdata.length < limit) {
-          self.getData1()
         }
       })
     },
@@ -398,12 +359,9 @@ export default {
       const self = this
       let params = { pagestart: this.pageStart, limit: limit }
       if (self.query.wid) {
-        params.uploader = self.query.wid
-      } else {
-        params.uploader = self.loginUser.uid
-        params.from = 'myshop'
+        params.wid = self.query.wid
       }
-      self.$http.get(`${ENV.BokaApi}/api/list/product`, {
+      self.$http.get(`${ENV.BokaApi}/api/retailer/getRetailerProducts`, {
         params: params
       }).then(function (res) {
         const data = res.data
@@ -413,7 +371,6 @@ export default {
         const retdata = data.data ? data.data : data
         self.productdata = self.productdata.concat(retdata)
         self.disproductdata = true
-        self.isGetProduct = true
       })
     },
     getnewsdata () {
@@ -642,7 +599,7 @@ export default {
       this.getData()
       if (this.productdata.length < limit) {
         this.productdata = []
-        this.getFactoryData()
+        this.getData1()
       }
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     }

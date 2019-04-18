@@ -36,7 +36,7 @@
         			<div class="picarea">
         				<div class="pic">
                   <img class="imgcover" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-                  <div class="t-icon color-theme">佣金: {{$t('RMB')}}{{item.levelagent}}</div>
+                  <div class="t-icon color-theme flex_center"><i class="al al-zhuanqian font18"></i><span>赚 {{$t('RMB')}}{{item.levelagent}}</span></div>
                 </div>
         			</div>
         			<div class="desbox" style="overflow:hidden;">
@@ -44,7 +44,7 @@
         				<div class="clamp1">
         					<div class="flex_table padding5">
         						<span class="color-red font14 flex_cell" style="overflow: hidden;margin-right: 10px;white-space: nowrap;text-overflow: ellipsis;">{{ $t('RMB') }} <span style="margin-left:1px;">{{ item.price }}</span></span>
-        						<span class="color-gray">{{ $t('Saled txt') }}:<span style="margin-left:1px;">{{ item.saled }}</span></span>
+        						<!-- <span class="color-gray">{{ $t('Saled txt') }}:<span style="margin-left:1px;">{{ item.saled }}</span></span> -->
         					</div>
         				</div>
         			</div>
@@ -92,7 +92,8 @@ export default {
       searchword: '',
       datecss: 'desc',
       pricecss: 'desc',
-      sort: 'dateline'
+      sort: 'dateline',
+      pageTop: 0
     }
   },
   watch: {
@@ -238,11 +239,22 @@ export default {
   },
   created () {
     self = this
+    this.refresh()
   },
+  activated () {
+    this.$refs.scrollContainer.scrollTop = this.pageTop
+  },
+  beforeRouteLeave (to, from, next) {
+    this.pageTop = this.$refs.scrollContainer.scrollTop
+    console.log(this.pageTop)
+    next()
+  }
+  /*
   activated () {
     self = this
     this.refresh()
   }
+  */
 }
 </script>
 
@@ -256,7 +268,10 @@ export default {
     background-size: 100%;
     height: 20px;
   }
-  .t-icon{position:absolute;left:0;top:10px;border-top-right-radius:20px;border-bottom-right-radius:20px;background-color:#fff;padding:5px 10px 5px 5px;font-size:12px;}
+  .t-icon{
+    position:absolute;left:0;top:10px;border-top-right-radius:20px;border-bottom-right-radius:20px;background-color:#fff;padding:5px 10px 5px 5px;font-size:15px;
+    box-shadow: 0px 0px 3px 1px #e6ebed;font-weight:bold;
+  }
   .v-tab .vux-tab-container .vux-tab-selected{border-bottom-style:solid !important;}
   .scrollable .vux-tab-ink-bar{bottom:0 !important;}
   .sort-icon.active{color:#ff6a61;}

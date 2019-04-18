@@ -6,6 +6,7 @@ vue.boka.cn
 ssh 123.206.18.149 -l root
 root:YwS3MNPN77x2rnKU
 git pwd: 140707Boka
+docker exec -i -t robot /bin/bash
 
 "https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83epfZndk1lgsPGkj3N2YUaibfjMefTy2oEPLYMuTxQGH69a2JCYibJbnRniadIjH8dugZEiclG1Zh8nkrg/132"
 "https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83epfZndk1lgsPGkj3N2YUaibfjMefTy2oEPLYMuTxQGH69a2JCYibJbnRniadIjH8dugZEiclG1Zh8nkrg/132"
