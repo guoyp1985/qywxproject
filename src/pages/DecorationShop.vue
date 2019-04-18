@@ -392,7 +392,6 @@ export default {
           if (this.retailerInfo.firstinfo.topbanner === '0' && this.query.from) {
             this.isFirst = true
           }
-          this.isFirst = true
         }
       })
       if (this.showContainer && this.productdata.length < limit) {
