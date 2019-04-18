@@ -64,7 +64,7 @@
         </div>
         <div class="padding10 b_bottom_after levelarea">
           <div class="levelitem">
-            <div><span class="bold">销售佣金:<i class="al al-bangzhu font16 color-theme ml5" @click="clickHelp"></i></span> {{ $t('RMB') }}{{ productdata.salesrebate }}</div>
+            <div><span class="bold">销售佣金:<i class="al al-bangzhu font16 color-theme ml5" @click="clickHelp1"></i></span> {{ $t('RMB') }}{{ productdata.salesrebate }}</div>
           </div>
         </div>
         <!-- <template v-if="feeData.length != 0 && (productdata.identity == 'factory' || productdata.joinstatus == 0)">
@@ -141,8 +141,15 @@
     <template v-if="showHelpModal">
       <tip-layer
         @clickClose="closeHelpModal"
-        title="超值优惠"
-        content="1、什么是推荐人佣金？推荐人佣金是指销售该商品的上级推荐人所得的佣金。 2、什么是销售佣金？销售佣金是指卖家销售厂家的商品后，卖家所得到的佣金。">
+        title="什么是推荐人佣金？"
+        content="推荐人佣金是指销售该商品的上级推荐人所得的佣金。">
+      </tip-layer>
+    </template>
+    <template v-if="showHelpModal1">
+      <tip-layer
+        @clickClose="closeHelpModal"
+        title="什么是销售佣金？"
+        content="销售佣金是指卖家销售厂家的商品后，卖家所得到的佣金。">
       </tip-layer>
     </template>
   </div>
@@ -194,6 +201,7 @@ export default {
       query: {},
       disTimeout: true,
       showHelpModal: false,
+      showHelpModal1: false,
       showSos: false,
       sosTitle: '抱歉，您暂无权限访问此页面！',
       showContainer: false,
@@ -287,8 +295,12 @@ export default {
     clickHelp () {
       this.showHelpModal = true
     },
+    clickHelp1 () {
+      this.showHelpModal1 = true
+    },
     closeHelpModal () {
       this.showHelpModal = false
+      this.showHelpModal1 = false
     },
     tofactoryDetail () {
       this.$router.push('/factoryDetail?fid=' + this.productdata.fid)
