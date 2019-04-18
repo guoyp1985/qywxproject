@@ -600,7 +600,7 @@ export default {
         self.$vux.toast.show({
           text: data.error,
           time: self.$util.delay(data.error),
-          onHide: function () {
+          onHide: () => {
             if (data.flag === 1) {
               self.deliveritem.flag = 3
               self.deliveritem.delivercompany = self.deliverdata.delivercompany
