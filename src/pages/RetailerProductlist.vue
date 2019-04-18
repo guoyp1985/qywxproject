@@ -319,7 +319,7 @@ export default {
       ],
       selectedIndex: 0,
       showTitle: '',
-      tabtxts: [ '上架商品', '厂家商品', '下架商品' ],
+      tabtxts: [ '我的商品', '厂家商品', '下架商品' ],
       disList1: false,
       disList2: false,
       disList3: false,

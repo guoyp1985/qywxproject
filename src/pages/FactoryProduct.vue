@@ -59,12 +59,12 @@
         <div class="b_top_after"></div>
         <div class="padding10 b_bottom_after levelarea">
           <div class="levelitem">
-            <div>推荐人佣金: {{ $t('RMB') }}{{ productdata.superiorrebate }}</div>
+            <div><span class="bold">推荐人佣金:</span><span class="bold">{{ $t('RMB') }}{{ productdata.superiorrebate }}</span><i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp"></i></div>
           </div>
         </div>
         <div class="padding10 b_bottom_after levelarea">
           <div class="levelitem">
-            <div>销售佣金: {{ $t('RMB') }}{{ productdata.salesrebate }}</div>
+            <div><span class="bold">销售佣金:</span><span class="bold"> {{ $t('RMB') }}{{ productdata.salesrebate }}</span><i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp1"></i></div>
           </div>
         </div>
         <!-- <template v-if="feeData.length != 0 && (productdata.identity == 'factory' || productdata.joinstatus == 0)">
@@ -138,6 +138,20 @@
         <tip-layer buttonTxt="立即申请" content="会员卖家才可代理厂家商品，赶快入住申请吧！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
       </template>
     </template>
+    <template v-if="showHelpModal">
+      <tip-layer
+        @clickClose="closeHelpModal"
+        title="什么是推荐人佣金？"
+        content="推荐人佣金是指销售该商品的上级推荐人所得的佣金。">
+      </tip-layer>
+    </template>
+    <template v-if="showHelpModal1">
+      <tip-layer
+        @clickClose="closeHelpModal"
+        title="什么是销售佣金？"
+        content="销售佣金是指卖家销售厂家的商品后，卖家所得到的佣金。">
+      </tip-layer>
+    </template>
   </div>
 </template>
 
@@ -186,6 +200,8 @@ export default {
       module: 'factoryproduct',
       query: {},
       disTimeout: true,
+      showHelpModal: false,
+      showHelpModal1: false,
       showSos: false,
       sosTitle: '抱歉，您暂无权限访问此页面！',
       showContainer: false,
@@ -275,6 +291,16 @@ export default {
       this.previewerFlasharr = []
       this.ingdata = []
       this.messages = 0
+    },
+    clickHelp () {
+      this.showHelpModal = true
+    },
+    clickHelp1 () {
+      this.showHelpModal1 = true
+    },
+    closeHelpModal () {
+      this.showHelpModal = false
+      this.showHelpModal1 = false
     },
     tofactoryDetail () {
       this.$router.push('/factoryDetail?fid=' + this.productdata.fid)
