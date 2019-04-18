@@ -35,6 +35,9 @@ export default {
       if (this.$route.query.from) {
         params.from = this.$route.query.from
       }
+      if (this.$route.query.appid) {
+        params.appid = this.$route.query.appid
+      }
       this.$router.push({path: this.orderLink, query: params})
     }
   }
