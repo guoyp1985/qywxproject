@@ -283,7 +283,7 @@
       <template v-if="isFirst">
         <firstTip @submitFirstTip="submitFirstTip">
           <div class="font15 bold txt">
-            <div class="flex_center">订单管理就是这么简单</div>
+            <div class="flex_center">订单发货就是这么简单</div>
           </div>
         </firstTip>
       </template>
@@ -594,7 +594,7 @@ export default {
       }
       self.$vux.loading.show()
       self.deliverdata.id = self.deliveritem.id
-      self.$http.post(`${ENV.BokaApi}/api/order/deliver`, self.deliverdata).then(function (res) {
+      self.$http.post(`${ENV.BokaApi}/api/order/deliver`, self.deliverdata).then(res => {
         let data = res.data
         self.$vux.loading.hide()
         self.$vux.toast.show({
@@ -612,6 +612,9 @@ export default {
               self.deliveritem = null
               self.deliverindex = 0
               self.deliverdata = { delivercompany: '-1', delivercode: '' }
+              if (this.retailerInfo.firstinfo.orderdeliver === '0' && this.query.from) {
+                this.showHb = true
+              }
             }
           }
         })
