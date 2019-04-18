@@ -59,12 +59,12 @@
         <div class="b_top_after"></div>
         <div class="padding10 b_bottom_after levelarea">
           <div class="levelitem">
-            <div><span class="bold">推荐人佣金:<i class="al al-bangzhu font16 color-theme ml5" @click="clickHelp"></i></span> {{ $t('RMB') }}{{ productdata.superiorrebate }}</div>
+            <div><span class="bold">推荐人佣金:</span><span class="bold">{{ $t('RMB') }}{{ productdata.superiorrebate }}</span><i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp"></i></div>
           </div>
         </div>
         <div class="padding10 b_bottom_after levelarea">
           <div class="levelitem">
-            <div><span class="bold">销售佣金:<i class="al al-bangzhu font16 color-theme ml5" @click="clickHelp1"></i></span> {{ $t('RMB') }}{{ productdata.salesrebate }}</div>
+            <div><span class="bold">销售佣金:</span><span class="bold"> {{ $t('RMB') }}{{ productdata.salesrebate }}<span><i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp1"></i></div>
           </div>
         </div>
         <!-- <template v-if="feeData.length != 0 && (productdata.identity == 'factory' || productdata.joinstatus == 0)">
