@@ -696,9 +696,17 @@ export default {
           if (this.selectedIndex === 0) {
             this.swiperChange()
           }
-          if (this.retailerInfo.firstinfo.orderdeliver === '0' && this.query.from) {
-            this.isFirst = true
-          }
+          this.$http.get(`${ENV.BokaApi}/api/retailer/info`).then(res => {
+            const data = res.data
+            if (data.flag) {
+              this.retailerInfo = data.data
+              this.loginUser.retailerinfo = this.retailerInfo
+              User.set(this.loginUser)
+              if (this.retailerInfo.firstinfo.orderdeliver === '0' && this.query.from) {
+                this.isFirst = true
+              }
+            }
+          })
         }
       }
     }

@@ -4,11 +4,12 @@
 }
 .first-hb-modal{
   .modal-inner{width:80%;background-color:transparent;max-width:430px;max-height:544px;}
+  .pic-outer:after{content:'';display:block;padding-bottom:170%;width:100%;}
   .pic-outer{
-    width:100%;padding-bottom:170%;position:relative;max-height:100%;
+    width:100%;position:relative;max-height:544px;max-width:430px;
     .pic{
       position:absolute;left:0;top:0;right:0;bottom:0;
-      img{width:100%;height:100%;}
+      img{max-width:100%;max-height:100%;}
     }
     .click-area{
       position:absolute;left:40%;top:56%;width:18%;
@@ -42,12 +43,13 @@
 }
 .first-result-modal{
   .inner{
-    width:90%;position:relative;
+    width:90%;position:relative;max-width:400px;max-height:428px;
+    .pic-outer:after{content:'';display:block;padding-bottom:107%;width:100%;}
     .pic-outer{
-      width:100%;padding-bottom:107%;position:relative;
+      width:100%;max-width:400px;max-height:428px;position:relative;
       .pic{
         position:absolute;left:0;top:0;right:0;bottom:0;
-        img{width:100%;height:100%;}
+        img{max-width:100%;max-height:100%;}
       }
     }
   }
@@ -70,7 +72,7 @@
     <div class="auto-modal flex_center first-hb-modal" v-if="showModal">
       <div class="modal-inner border-box">
         <div class="pic-outer">
-          <div class="pic">
+          <div class="pic flex_center">
             <img src="https://tossharingsales.boka.cn/minigxk/zpcj.jpg" />
           </div>
           <div class="click-area" @click="clickOpen">
@@ -80,14 +82,14 @@
           </div>
         </div>
         <div class="close-area flex_center" @click="closeModal">
-          <div formType="submit" class="al al-close1"></div>
+          <div formType="submit" class="al al-close"></div>
         </div>
       </div>
     </div>
     <div class="modalarea flex_center first-result-modal" v-if="showResult">
       <div class="inner">
         <div class="pic-outer">
-          <div class="pic">
+          <div class="pic flex_center">
             <img src="https://tossharingsales.boka.cn/minigxk/luck/hb2.png" />
           </div>
         </div>
@@ -104,7 +106,7 @@
           </div>
         </div>
         <div class="close-area flex_center" @click="closeHbModal">
-          <div formType="submit" class="al al-close1"></div>
+          <div class="al al-close"></div>
         </div>
       </div>
     </div>

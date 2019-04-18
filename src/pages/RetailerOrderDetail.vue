@@ -173,6 +173,18 @@
         </div>
       </div>
     </div>
+    <template v-if="data.flag == 2 && data.candeliver">
+      <template v-if="showFirst">
+        <firstTip @submitFirstTip="submitFirstTip">
+          <div class="font15 bold txt">
+            <div class="flex_center">订单发货就是这么简单</div>
+          </div>
+        </firstTip>
+      </template>
+      <template v-if="showHb">
+        <firstHb action="orderdeliver"></firstHb>
+      </template>
+    </template>
   </div>
 </template>
 <script>
@@ -181,6 +193,8 @@ import OrderInfo from '@/components/OrderInfo'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
+import FirstTip from '@/components/FirstTip'
+import FirstHb from '@/components/FirstHb'
 import Time from '#/time'
 import ENV from 'env'
 import jQuery from 'jquery'
@@ -191,7 +205,7 @@ export default {
     TransferDom
   },
   components: {
-    Group, Cell, Sticky, XDialog, Popup, OrderInfo, XImg, Sos, Subscribe, ApplyTip, XTextarea, XButton
+    Group, Cell, Sticky, XDialog, Popup, OrderInfo, XImg, Sos, Subscribe, ApplyTip, XTextarea, XButton, FirstTip, FirstHb
   },
   filters: {
     dateformat: function (value) {
@@ -205,6 +219,7 @@ export default {
       showSos: false,
       sosTitle: '该订单不存在',
       loginUser: {},
+      retailerInfo: {},
       query: {},
       data: {},
       totalPrice: '0.00',
@@ -214,7 +229,10 @@ export default {
       delivercompany: [],
       deliverdata: { delivercompany: '-1', delivercode: '' },
       showRefundModal: false,
-      refundContent: ''
+      refundContent: '',
+      showFirst: false,
+      isFirst: false,
+      showHb: false
     }
   },
   watch: {
@@ -225,6 +243,10 @@ export default {
   computed: {
   },
   methods: {
+    submitFirstTip () {
+      this.showFirst = false
+      this.uploaddeliver()
+    },
     toProduct (item) {
       console.log(item)
       console.log(this.query)
@@ -383,13 +405,13 @@ export default {
         return false
       }
       self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/order/deliver`, self.deliverdata).then(function (res) {
+      self.$http.post(`${ENV.BokaApi}/api/order/deliver`, self.deliverdata).then((res) => {
         let data = res.data
         self.$vux.loading.hide()
         self.$vux.toast.show({
           text: data.error,
           time: self.$util.delay(data.error),
-          onHide: function () {
+          onHide: () => {
             if (data.flag === 1) {
               self.showpopup = false
               self.data.delivercompany = self.deliverdata.delivercompany
@@ -403,6 +425,9 @@ export default {
                     break
                   }
                 }
+              }
+              if (this.isFirst) {
+                this.showHb = true
               }
             }
           }
@@ -501,6 +526,20 @@ export default {
             if (self.data.delivercompany && self.$util.trim(self.data.delivercompany) !== '') {
               self.deliverdata.delivercompany = self.data.delivercompany
               self.deliverdata.delivercode = self.data.delivercode
+            }
+            return this.$http.get(`${ENV.BokaApi}/api/retailer/info`)
+          }
+        }
+      }).then(res => {
+        if (res) {
+          const data = res.data
+          if (data.flag) {
+            this.retailerInfo = data.data
+            this.loginUser.retailerinfo = this.retailerInfo
+            User.set(this.loginUser)
+            if (this.retailerInfo.firstinfo.orderdeliver === '0' && this.query.from && this.data.flag === 2 && this.data.candeliver) {
+              this.isFirst = true
+              this.showFirst = true
             }
           }
         }
