@@ -124,6 +124,13 @@
           </swiper-item>
         </swiper>
       </div>
+      <template v-if="showFirst">
+        <firstTip @submitFirstTip="submitFirstTip">
+          <div class="font15 bold txt">
+            <div class="flex_center">创建团购和砍价活动都可促进用户购买哦</div>
+          </div>
+        </firstTip>
+      </template>
     </template>
   </div>
 </template>
@@ -175,6 +182,7 @@ import ENV from 'env'
 import { User } from '#/storage'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
+import FirstTip from '@/components/FirstTip'
 
 const limit = 10
 let pageStart1 = 0
@@ -184,7 +192,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Confirm, Popup, XImg, CreateActivity, Subscribe, ApplyTip
+    Tab, TabItem, Swiper, SwiperItem, Confirm, Popup, XImg, CreateActivity, Subscribe, ApplyTip, FirstTip
   },
   filters: {
     dateformat: function (value) {
@@ -194,15 +202,18 @@ export default {
   data () {
     return {
       loginUser: {},
+      retailerInfo: {},
       query: {},
       showApply: false,
       showContainer: false,
-      retailerInfo: {},
       tabtxts: [ '全部活动', '创建活动' ],
       tabmodel: 0,
       tabdata1: [],
-      isFirst: true,
-      activityCount: 0
+      isFirstLoad: true,
+      activityCount: 0,
+      showFirst: false,
+      isFirst: false,
+      showHb: false
     }
   },
   watch: {
@@ -211,6 +222,12 @@ export default {
     }
   },
   methods: {
+    submitFirstTip () {
+      this.showFirst = false
+      if (this.tabdata1.length && this.tabmodel !== 1) {
+        this.tabmodel = 1
+      }
+    },
     clickAdd (type) {
       if (this.loginUser.isretailer === 2 && this.activityCount >= 2) {
         this.openVip()
@@ -253,15 +270,18 @@ export default {
     getData1 () {
       const self = this
       let params = { params: { pagestart: pageStart1, limit: limit } }
-      self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params).then(function (res) {
+      self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params).then((res) => {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.showContainer = true
-        if (self.isFirst) {
+        if (self.isFirstLoad) {
           self.activityCount = self.tabdata1.length
-          self.isFirst = false
+          self.isFirstLoad = false
+          if (this.isFirst && ((this.retailerInfo.firstinfo.groupbuy === '0' && this.retailerInfo.firstinfo.bargainbuy === '0') || !this.tabdata1.length)) {
+            this.showFirst = true
+          }
         }
       })
     },
@@ -288,14 +308,8 @@ export default {
       })
     },
     getData () {
-      const self = this
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
         module: 'retailer', action: 'activitylist'
-      }).then(function () {
-        return self.$http.get(`${ENV.BokaApi}/api/retailer/info`)
-      }).then(function (res) {
-        const data = res.data
-        self.retailerInfo = data.data ? data.data : data
       })
     },
     init () {
@@ -313,27 +327,32 @@ export default {
       this.$vux.loading.show()
       this.loginUser = User.get()
       if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
-        // if (self.loginUser.isretailer === 2) {
-        //   self.initContainer()
-        //   self.$vux.loading.hide()
-        //   let backUrl = encodeURIComponent(location.href)
-        //   location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
-        // } else {
         if (!this.loginUser.isretailer) {
           this.$vux.loading.hide()
           self.initContainer()
           this.showApply = true
         } else {
           this.$vux.loading.hide()
+          this.retailerInfo = this.loginUser.retailerinfo
           this.query = this.$route.query
-          if (this.tabdata1.length < limit || this.query.add) {
-            self.initContainer()
-            pageStart1 = 0
-            this.tabdata1 = []
-            this.getData1()
-          }
+          this.$http.get(`${ENV.BokaApi}/api/retailer/info`).then(res => {
+            const data = res.data
+            if (data.flag) {
+              this.retailerInfo = data.data
+              this.loginUser.retailerinfo = this.retailerInfo
+              User.set(this.loginUser)
+              if ((this.retailerInfo.firstinfo.groupbuy === '0' || this.retailerInfo.firstinfo.bargainbuy === '0') && this.query.from) {
+                this.isFirst = true
+              }
+            }
+            if (this.tabdata1.length < limit || this.query.add) {
+              self.initContainer()
+              pageStart1 = 0
+              this.tabdata1 = []
+              this.getData1()
+            }
+          })
         }
-        // }
       }
     }
   },

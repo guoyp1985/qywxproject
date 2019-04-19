@@ -121,6 +121,17 @@
           </div>
         </popup>
       </div>
+      <template v-if="showFirst">
+        <firstTip @submitFirstTip="submitFirstTip">
+          <div class="font15 bold txt">
+            <div class="flex_center" v-if="query.type == 'groupbuy'">创建团购活动都可促进用户购买哦</div>
+            <div class="flex_center" v-if="query.type == 'bargainbuy'">创建砍价活动都可促进用户购买哦</div>
+          </div>
+        </firstTip>
+      </template>
+      <template v-if="showHb">
+        <firstHb :action="action" @closeFirstHb="closeFirstHb"></firstHb>
+      </template>
     </template>
   </div>
 </template>
@@ -154,6 +165,8 @@ import FormDiscount from '@/components/FormDiscount'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
+import FirstTip from '@/components/FirstTip'
+import FirstHb from '@/components/FirstHb'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
@@ -163,7 +176,7 @@ export default {
     TransferDom
   },
   components: {
-    Group, XInput, Popup, Datetime, Search, CheckIcon, FormGroupbuy, FormBargainbuy, FormDiscount, XImg, Sos, Subscribe, ApplyTip
+    Group, XInput, Popup, Datetime, Search, CheckIcon, FormGroupbuy, FormBargainbuy, FormDiscount, XImg, Sos, Subscribe, ApplyTip, FirstTip, FirstHb
   },
   data () {
     return {
@@ -172,6 +185,7 @@ export default {
       autofixed: false,
       query: {},
       loginUser: {},
+      retailerInfo: {},
       activityType: null,
       allowsubmit: true,
       showselectproduct: true,
@@ -193,7 +207,12 @@ export default {
       pagestart1: 0,
       selectProductIndex: -1,
       showProductArea: false,
-      showSubscribe: false
+      showSubscribe: false,
+      showFirst: false,
+      isFirst: false,
+      showHb: false,
+      newData: {},
+      action: ''
     }
   },
   watch: {
@@ -236,6 +255,14 @@ export default {
       this.pagestart1 = 0
       this.showContainer = false
       this.showApply = false
+    },
+    submitFirstTip () {
+      this.showFirst = false
+    },
+    closeFirstHb () {
+      this.isFirst = false
+      this.showHb = false
+      this.afterSave(this.newData)
     },
     dateformat (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
@@ -385,9 +412,42 @@ export default {
     dateconfirm2 () {
       this.selectdatetxt2 = ''
     },
+    afterSave (data) {
+      const self = this
+      if (self.query.minibackurl) {
+        let minibackurl = decodeURIComponent(self.query.minibackurl)
+        if (minibackurl.indexOf('?') > -1) {
+          minibackurl = `${minibackurl}&id=${data.data}&type=${self.query.type}&productid=${self.submitdata.productid}`
+        } else {
+          minibackurl = `${minibackurl}?id=${data.data}&type=${self.query.type}&productid=${self.submitdata.productid}`
+        }
+        self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+      } else if (self.query.from) {
+        if (self.activityType === 'groupbuy') {
+          self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${self.submitdata.productid}&wid=${self.loginUser.uid}`})
+        } else {
+          self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.activity}?id=${data.data}`})
+        }
+      } else {
+        if (self.query.id) {
+          if (self.activityType === 'groupbuy') {
+            self.$router.push({path: '/product', query: {id: self.query.id, wid: self.loginUser.uid}})
+          } else {
+            self.$router.push({path: '/activity', query: {id: data.data}})
+          }
+        } else {
+          self.$router.push({path: '/retailerActivitylist', query: {add: 1}})
+        }
+        if (self.query.type === 'bargainbuy') {
+          self.$refs.formBargainbuy.minprice = ''
+          self.$refs.formBargainbuy.everymin = ''
+          self.$refs.formBargainbuy.everymax = ''
+        }
+      }
+    },
     saveAjax () {
       const self = this
-      self.$http.post(`${ENV.BokaApi}/api/retailer/addActivity`, self.submitdata).then(function (res) {
+      self.$http.post(`${ENV.BokaApi}/api/retailer/addActivity`, self.submitdata).then((res) => {
         let data = res.data
         self.$vux.loading.hide()
         self.$vux.toast.show({
@@ -396,35 +456,11 @@ export default {
           time: self.$util.delay(data.error),
           onHide: () => {
             if (data.flag === 1) {
-              if (self.query.minibackurl) {
-                let minibackurl = decodeURIComponent(self.query.minibackurl)
-                if (minibackurl.indexOf('?') > -1) {
-                  minibackurl = `${minibackurl}&id=${data.data}&type=${self.query.type}&productid=${self.submitdata.productid}`
-                } else {
-                  minibackurl = `${minibackurl}?id=${data.data}&type=${self.query.type}&productid=${self.submitdata.productid}`
-                }
-                self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
-              } else if (self.query.from) {
-                if (self.activityType === 'groupbuy') {
-                  self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${self.submitdata.productid}&wid=${self.loginUser.uid}`})
-                } else {
-                  self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.activity}?id=${data.data}`})
-                }
+              if (this.isFirst) {
+                this.showHb = true
+                this.newData = data
               } else {
-                if (self.query.id) {
-                  if (self.activityType === 'groupbuy') {
-                    self.$router.push({path: '/product', query: {id: self.query.id, wid: self.loginUser.uid}})
-                  } else {
-                    self.$router.push({path: '/activity', query: {id: data.data}})
-                  }
-                } else {
-                  self.$router.push({path: '/retailerActivitylist', query: {add: 1}})
-                }
-                if (self.query.type === 'bargainbuy') {
-                  self.$refs.formBargainbuy.minprice = ''
-                  self.$refs.formBargainbuy.everymin = ''
-                  self.$refs.formBargainbuy.everymax = ''
-                }
+                this.afterSave(data)
               }
             }
           }
@@ -660,12 +696,26 @@ export default {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
+      this.retailerInfo = this.loginUser.retailerinfo
+      console.log(this.retailerInfo)
       if (this.loginUser.subscribe !== 1 && !this.loginUser.isretailer) {
         this.showSubscribe = true
         return false
       }
       if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
         this.initData()
+        if (((this.retailerInfo.firstinfo.groupbuy === '0' && this.$route.query.type === 'groupbuy') || (this.retailerInfo.firstinfo.bargainbuy === '0' && this.$route.query.type === 'bargainbuy')) && this.$route.query.from) {
+          this.$http.get(`${ENV.BokaApi}/api/retailer/info`).then(res => {
+            const data = res.data
+            if (data.flag) {
+              this.retailerInfo = data.data
+              this.loginUser.retailerinfo = this.retailerInfo
+              User.set(this.loginUser)
+              this.isFirst = true
+              this.showFirst = true
+            }
+          })
+        }
         let isAdmin = false
         for (let i = 0; i < self.loginUser.usergroup.length; i++) {
           if (self.loginUser.usergroup[i] === 1) {
@@ -681,6 +731,7 @@ export default {
           self.showContainer = true
           this.query = this.$route.query
           this.activityType = this.query.type
+          this.action = this.query.type
           const nowdate = new Date().getTime()
           const startime = this.dateformat(parseInt(nowdate / 1000))
           const endtime = this.dateformat(parseInt((nowdate + 7 * 24 * 60 * 60 * 1000) / 1000))
