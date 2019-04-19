@@ -120,13 +120,9 @@
           </swiper-item>
         </swiper>
       </div>
-      <!-- <div class="s-bottom bottomnaviarea b_top_after" v-if="query.from != 'miniprogram'">
-        <div class="t-table bottomnavi">
-          <router-link class="t-cell item" :to="{path: '/store', query: {wid: loginUser.uid}}">{{ $t('My shop') }}</router-link>
-          <router-link class="t-cell item" to="/centerSales">{{ $t('Sales center') }}</router-link>
-          <router-link class="t-cell item" to="/retailerOrders">{{ $t('My orders') }}</router-link>
-        </div>
-      </div> -->
+      <template v-if="showHb">
+        <firstHb action="grabnews" @closeFirstHb="closeFirstHb"></firstHb>
+      </template>
     </template>
   </div>
 </template>
@@ -141,10 +137,11 @@ import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
+import FirstHb from '@/components/FirstHb'
 
 export default {
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, Checker, CheckerItem, XImg, Sos, Subscribe
+    Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, Checker, CheckerItem, XImg, Sos, Subscribe, FirstHb
   },
   filters: {
     dateformat: function (value) {
@@ -157,6 +154,7 @@ export default {
       showContainer: false,
       query: {},
       loginUser: {},
+      retailerInfo: {},
       autofixed: false,
       tabtxts: [ '关键词', '链接' ],
       selectedIndex: 0,
@@ -174,10 +172,18 @@ export default {
       limit1: 10,
       clickSearchword: '',
       historyLimit: 15,
-      newsCount: 0
+      newsCount: 0,
+      isFirst: false,
+      showHb: false,
+      routerParams: {}
     }
   },
   methods: {
+    closeFirstHb () {
+      this.isFirst = false
+      this.showHb = false
+      this.afterCollect1()
+    },
     delKey (e) {
       console.log(e)
       console.log('删除标签')
@@ -418,13 +424,13 @@ export default {
         self.$vux.loading.show()
         self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`,
           { do: 'download', url: self.collecturl }
-        ).then(function (res) {
+        ).then((res) => {
           const data = res.data
           self.$vux.loading.hide()
           self.$vux.toast.show({
             text: data.error,
             time: self.$util.delay(data.error),
-            onHide: function () {
+            onHide: () => {
               if (data.flag === 1) {
                 self.collecturl = ''
                 let queryParmas = {id: data.data.id, control: 'edit'}
@@ -432,12 +438,20 @@ export default {
                   queryParmas.minibackurl = self.query.minibackurl
                   queryParmas.backtype = self.query.backtype
                 }
-                self.$router.push({path: '/news', query: queryParmas})
+                this.routerParams = queryParmas
+                if (this.isFirst) {
+                  this.showHb = true
+                } else {
+                  this.afterCollect1()
+                }
               }
             }
           })
         })
       }
+    },
+    afterCollect1 () {
+      this.$router.push({path: '/news', query: this.routerParams})
     },
     init () {
       const self = this
@@ -459,7 +473,15 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.query = this.$route.query
-      console.log(this.query)
+      if (this.loginUser.retailerinfo.firstinfo.grabnews === '0') {
+        this.$http.get(`${ENV.BokaApi}/api/user/show`).then((res) => {
+          this.loginUser = res.data
+          User.set(this.loginUser)
+          if (this.loginUser.retailerinfo.firstinfo.grabnews === '0') {
+            this.isFirst = true
+          }
+        })
+      }
       if (self.selectedIndex === 1) {
         let curArea = self.$refs.urlTextarea[0] ? self.$refs.urlTextarea[0] : self.$refs.urlTextarea
         curArea.updateAutosize()
