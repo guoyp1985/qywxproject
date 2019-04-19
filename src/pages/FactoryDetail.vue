@@ -12,7 +12,7 @@
         </div>
         <div class="flex_cell flex_left">
           <div class="w_100">
-            <div class="w_100 clamp1 font16">{{factoryInfo.title}}</div>
+            <div class="w_100 clamp1 font16">{{factoryInfo.title}}旗舰店</div>
             <div v-if="shareUser.uid && !isJoin && disShareUser" class="w_100 clamp1 color-theme font12">推荐人: {{shareUser.linkman}}</div>
           </div>
         </div>

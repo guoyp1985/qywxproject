@@ -13,7 +13,7 @@
           </div>
         </div>
         <div class="txt-cell pl10" style="padding-right:50px;">
-          <div class="font17 color-white">{{ factoryInfo.title }}</div>
+          <div class="font17 color-white">{{ factoryInfo.title }}旗舰店</div>
           <div class="font13 color-white mt5">{{ factoryInfo.summary }}</div>
           <div class="font13 mt5" style="color:#f1f78f;" @click="showToast">厂家使用期至：{{endTime}}</div>
         </div>
