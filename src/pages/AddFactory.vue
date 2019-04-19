@@ -12,8 +12,9 @@
           <div class="form-item fg bg-white b-top b-bottom">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Fatory name') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
-              <div class="t-cell input-cell v_middle" style="position:relative;">
-                <x-input v-model="submitData.title" type="text" class="input" :placeholder="$t('Fatory name')" ></x-input>
+              <div class="t-cell input-cell v_middle flex_table" style="position:relative;">
+                <x-input style="width:80%;padding-right:5px;" v-model="submitData.title" type="text" class="input" :placeholder="$t('Fatory name')" ></x-input>
+                <span class="font14">旗舰店</span>
               </div>
             </div>
           </div>

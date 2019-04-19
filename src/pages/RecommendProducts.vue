@@ -52,7 +52,7 @@
           		</div>
             </div>
           </div>
-          <div style="text-align:center;color:#999;height:30px;line-height:30px;font-size:14px;" v-if="scrollEnd">没有更多商品了！</div>
+          <div style="text-align:center;color:#999;height:30px;line-height:30px;font-size:14px;" v-if="scrollEnd">没有更多商品啦</div>
         </div>
       </div>
     </div>
