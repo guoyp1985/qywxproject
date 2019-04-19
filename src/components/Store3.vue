@@ -30,7 +30,6 @@
           :list="addata"
           dots-position="center"
           :interval="6000"
-          :show-dots="isshowdot"
           :aspect-ratio="500/900"
           auto
           loop>
@@ -354,19 +353,19 @@ export default {
     newPageStart: {
       type: Number,
       default: 0
-    },
-    fPageStart: {
-      type: Number,
-      default: 0
-    },
-    isGetProduct: {
-      type: Boolean,
-      default: ''
-    },
-    fProductLen: {
-      type: Number,
-      default: 0
     }
+    // fPageStart: {
+    //   type: Number,
+    //   default: 0
+    // },
+    // isGetProduct: {
+    //   type: Boolean,
+    //   default: ''
+    // },
+    // fProductLen: {
+    //   type: Number,
+    //   default: 0
+    // }
   },
   directives: {
     TransferDom

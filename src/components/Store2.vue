@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea font14 s-havebottom store2">
+  <div class="store2">
     <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
     </template>
@@ -16,7 +16,6 @@
           :list="addata"
           dots-position="center"
           :interval="6000"
-          :show-dots="isshowdot"
           :aspect-ratio="500/900"
           auto
           loop>
@@ -332,18 +331,6 @@ export default {
       default: 0
     },
     newPageStart: {
-      type: Number,
-      default: 0
-    },
-    fPageStart: {
-      type: Number,
-      default: 0
-    },
-    isGetProduct: {
-      type: Boolean,
-      default: ''
-    },
-    fProductLen: {
       type: Number,
       default: 0
     }

@@ -1,164 +1,164 @@
 <template>
-  <Storeview1
-    :showSos="showSos"
-    :sosTitle="sosTitle"
-    :showContainer="showContainer"
-    :module="module"
-    :query="query"
-    :loginUser="loginUser"
-    :showShareSuccess="showShareSuccess"
-    :retailerInfo="retailerInfo"
-    :showqrcode="showqrcode"
-    :showdot="showdot"
-    :addata="addata"
-    :activitydata="activitydata"
-    :disproductdata="disproductdata"
-    :productdata="productdata"
-    :toplinedata="toplinedata"
-    :favoritecss="favoritecss"
-    :isfavorite="isfavorite"
-    :hideloading="hideloading"
-    :isNextNews="isNextNews"
-    :haveMoreNews="haveMoreNews"
-    :scrollEnd="scrollEnd"
-    :showSuggest="showSuggest"
-    :suggestData="suggestData"
-    :showHelpModal="showHelpModal"
-    :pageStart="pageStart"
-    :newPageStart="newPageStart"
-    @clickSuggest="clickSuggest"
-    @handleScroll="handleScroll"
-    @toCenterSales="toCenterSales"
-    @toChat="toChat"
-    @clickWetchat="clickWetchat"
-    @closepopup="closepopup"
-    @closeShareSuccess="closeShareSuccess"
-    @clickHelp="clickHelp"
-    @closeHelpModal="closeHelpModal">
-  </Storeview1>
-  <!-- <Storeview2
-    :showSos="showSos"
-    :sosTitle="sosTitle"
-    :showContainer="showContainer"
-    :module="module"
-    :query="query"
-    :loginUser="loginUser"
-    :showShareSuccess="showShareSuccess"
-    :retailerInfo="retailerInfo"
-    :showqrcode="showqrcode"
-    :showdot="showdot"
-    :addata="addata"
-    :activitydata="activitydata"
-    :disproductdata="disproductdata"
-    :productdata="productdata"
-    :toplinedata="toplinedata"
-    :favoritecss="favoritecss"
-    :isfavorite="isfavorite"
-    :hideloading="hideloading"
-    :isNextNews="isNextNews"
-    :haveMoreNews="haveMoreNews"
-    :scrollEnd="scrollEnd"
-    :showSuggest="showSuggest"
-    :suggestData="suggestData"
-    :showHelpModal="showHelpModal"
-    :pageStart="pageStart"
-    :newPageStart="newPageStart"
-    :fPageStart="fPageStart"
-    :isGetProduct="isGetProduct"
-    :fProductLen="fProductLen"
-    @clickSuggest="clickSuggest"
-    @handleScroll="handleScroll"
-    @toCenterSales="toCenterSales"
-    @toChat="toChat"
-    @clickWetchat="clickWetchat"
-    @closepopup="closepopup"
-    @closeShareSuccess="closeShareSuccess"
-    @clickHelp="clickHelp"
-    @closeHelpModal="closeHelpModal"
-    @favoriteevent="favoriteevent">
-  </Storeview2> -->
-  <!-- <Storeview3
-    :showSos="showSos"
-    :sosTitle="sosTitle"
-    :showContainer="showContainer"
-    :module="module"
-    :query="query"
-    :loginUser="loginUser"
-    :showShareSuccess="showShareSuccess"
-    :retailerInfo="retailerInfo"
-    :showqrcode="showqrcode"
-    :showdot="showdot"
-    :addata="addata"
-    :activitydata="activitydata"
-    :disproductdata="disproductdata"
-    :productdata="productdata"
-    :toplinedata="toplinedata"
-    :favoritecss="favoritecss"
-    :isfavorite="isfavorite"
-    :hideloading="hideloading"
-    :isNextNews="isNextNews"
-    :haveMoreNews="haveMoreNews"
-    :scrollEnd="scrollEnd"
-    :showSuggest="showSuggest"
-    :suggestData="suggestData"
-    :showHelpModal="showHelpModal"
-    :pageStart="pageStart"
-    :newPageStart="newPageStart"
-    :fPageStart="fPageStart"
-    :isGetProduct="isGetProduct"
-    :fProductLen="fProductLen"
-    @clickSuggest="clickSuggest"
-    @handleScroll="handleScroll"
-    @toCenterSales="toCenterSales"
-    @toChat="toChat"
-    @clickWetchat="clickWetchat"
-    @closepopup="closepopup"
-    @closeShareSuccess="closeShareSuccess"
-    @clickHelp="clickHelp"
-    @closeHelpModal="closeHelpModal"
-    @favoriteevent="favoriteevent">
-  </Storeview3> -->
-  <!-- <Storeview4
-    :showSos="showSos"
-    :sosTitle="sosTitle"
-    :showContainer="showContainer"
-    :module="module"
-    :query="query"
-    :loginUser="loginUser"
-    :showShareSuccess="showShareSuccess"
-    :retailerInfo="retailerInfo"
-    :showqrcode="showqrcode"
-    :showdot="showdot"
-    :addata="addata"
-    :activitydata="activitydata"
-    :disproductdata="disproductdata"
-    :productdata="productdata"
-    :toplinedata="toplinedata"
-    :favoritecss="favoritecss"
-    :isfavorite="isfavorite"
-    :hideloading="hideloading"
-    :isNextNews="isNextNews"
-    :haveMoreNews="haveMoreNews"
-    :scrollEnd="scrollEnd"
-    :showSuggest="showSuggest"
-    :suggestData="suggestData"
-    :showHelpModal="showHelpModal"
-    :pageStart="pageStart"
-    :newPageStart="newPageStart"
-    :fPageStart="fPageStart"
-    :isGetProduct="isGetProduct"
-    :fProductLen="fProductLen"
-    @clickSuggest="clickSuggest"
-    @handleScroll="handleScroll"
-    @toCenterSales="toCenterSales"
-    @toChat="toChat"
-    @clickWetchat="clickWetchat"
-    @closepopup="closepopup"
-    @closeShareSuccess="closeShareSuccess"
-    @clickHelp="clickHelp"
-    @closeHelpModal="closeHelpModal"
-    @favoriteevent="favoriteevent">
-  </Storeview4> -->
+  <div class="containerarea font14">
+    <template v-if="showTemplate1">
+      <Storeview1
+        :showSos="showSos"
+        :sosTitle="sosTitle"
+        :showContainer="showContainer"
+        :module="module"
+        :query="query"
+        :loginUser="loginUser"
+        :showShareSuccess="showShareSuccess"
+        :retailerInfo="retailerInfo"
+        :showqrcode="showqrcode"
+        :showdot="showdot"
+        :addata="addata"
+        :activitydata="activitydata"
+        :disproductdata="disproductdata"
+        :productdata="productdata"
+        :toplinedata="toplinedata"
+        :favoritecss="favoritecss"
+        :isfavorite="isfavorite"
+        :hideloading="hideloading"
+        :isNextNews="isNextNews"
+        :haveMoreNews="haveMoreNews"
+        :scrollEnd="scrollEnd"
+        :showSuggest="showSuggest"
+        :suggestData="suggestData"
+        :showHelpModal="showHelpModal"
+        :pageStart="pageStart"
+        :newPageStart="newPageStart"
+        @clickSuggest="clickSuggest"
+        @handleScroll="handleScroll"
+        @toCenterSales="toCenterSales"
+        @toChat="toChat"
+        @clickWetchat="clickWetchat"
+        @closepopup="closepopup"
+        @closeShareSuccess="closeShareSuccess"
+        @clickHelp="clickHelp"
+        @closeHelpModal="closeHelpModal">
+      </Storeview1>
+    </template>
+    <template v-if="showTemplate2">
+      <Storeview2
+        :showSos="showSos"
+        :sosTitle="sosTitle"
+        :showContainer="showContainer"
+        :module="module"
+        :query="query"
+        :loginUser="loginUser"
+        :showShareSuccess="showShareSuccess"
+        :retailerInfo="retailerInfo"
+        :showqrcode="showqrcode"
+        :showdot="showdot"
+        :addata="addata"
+        :activitydata="activitydata"
+        :disproductdata="disproductdata"
+        :productdata="productdata"
+        :toplinedata="toplinedata"
+        :favoritecss="favoritecss"
+        :isfavorite="isfavorite"
+        :hideloading="hideloading"
+        :isNextNews="isNextNews"
+        :haveMoreNews="haveMoreNews"
+        :scrollEnd="scrollEnd"
+        :showSuggest="showSuggest"
+        :suggestData="suggestData"
+        :showHelpModal="showHelpModal"
+        :pageStart="pageStart"
+        :newPageStart="newPageStart"
+        @clickSuggest="clickSuggest"
+        @handleScroll="handleScroll"
+        @toCenterSales="toCenterSales"
+        @toChat="toChat"
+        @clickWetchat="clickWetchat"
+        @closepopup="closepopup"
+        @closeShareSuccess="closeShareSuccess"
+        @clickHelp="clickHelp"
+        @closeHelpModal="closeHelpModal"
+        @favoriteevent="favoriteevent">
+      </Storeview2>
+    </template>
+    <template v-if="showTemplate3">
+      <Storeview3
+        :showSos="showSos"
+        :sosTitle="sosTitle"
+        :showContainer="showContainer"
+        :module="module"
+        :query="query"
+        :loginUser="loginUser"
+        :showShareSuccess="showShareSuccess"
+        :retailerInfo="retailerInfo"
+        :showqrcode="showqrcode"
+        :showdot="showdot"
+        :addata="addata"
+        :activitydata="activitydata"
+        :disproductdata="disproductdata"
+        :productdata="productdata"
+        :toplinedata="toplinedata"
+        :favoritecss="favoritecss"
+        :isfavorite="isfavorite"
+        :hideloading="hideloading"
+        :isNextNews="isNextNews"
+        :haveMoreNews="haveMoreNews"
+        :scrollEnd="scrollEnd"
+        :showSuggest="showSuggest"
+        :suggestData="suggestData"
+        :showHelpModal="showHelpModal"
+        :pageStart="pageStart"
+        :newPageStart="newPageStart"
+        @clickSuggest="clickSuggest"
+        @handleScroll="handleScroll"
+        @toCenterSales="toCenterSales"
+        @toChat="toChat"
+        @clickWetchat="clickWetchat"
+        @closepopup="closepopup"
+        @closeShareSuccess="closeShareSuccess"
+        @clickHelp="clickHelp"
+        @closeHelpModal="closeHelpModal"
+        @favoriteevent="favoriteevent">
+      </Storeview3>
+    </template>
+    <template v-if="showTemplate4">
+      <Storeview4
+        :showSos="showSos"
+        :sosTitle="sosTitle"
+        :showContainer="showContainer"
+        :module="module"
+        :query="query"
+        :loginUser="loginUser"
+        :showShareSuccess="showShareSuccess"
+        :retailerInfo="retailerInfo"
+        :showqrcode="showqrcode"
+        :showdot="showdot"
+        :addata="addata"
+        :activitydata="activitydata"
+        :disproductdata="disproductdata"
+        :productdata="productdata"
+        :toplinedata="toplinedata"
+        :favoritecss="favoritecss"
+        :isfavorite="isfavorite"
+        :hideloading="hideloading"
+        :isNextNews="isNextNews"
+        :haveMoreNews="haveMoreNews"
+        :scrollEnd="scrollEnd"
+        :showSuggest="showSuggest"
+        :suggestData="suggestData"
+        :showHelpModal="showHelpModal"
+        :pageStart="pageStart"
+        @clickSuggest="clickSuggest"
+        @handleScroll="handleScroll"
+        @toCenterSales="toCenterSales"
+        @toChat="toChat"
+        @clickWetchat="clickWetchat"
+        @closepopup="closepopup"
+        @closeShareSuccess="closeShareSuccess"
+        @clickHelp="clickHelp"
+        @closeHelpModal="closeHelpModal"
+        @favoriteevent="favoriteevent">
+      </Storeview4>
+    </template>
+  </div>
 </template>
 
 <i18n>
@@ -227,7 +227,11 @@ export default {
       suggestData: [],
       showHelpModal: false,
       pageStart: 0,
-      newPageStart: 0
+      newPageStart: 0,
+      showTemplate1: false,
+      showTemplate2: false,
+      showTemplate3: false,
+      showTemplate4: false
     }
   },
   watch: {
@@ -279,6 +283,10 @@ export default {
       this.hideloading = false
       this.isNextNews = true
       this.haveMoreNews = false
+      this.showTemplate1 = false
+      this.showTemplate2 = false
+      this.showTemplate3 = false
+      this.showTemplate4 = false
     },
     clickHelp () {
       this.showHelpModal = true
@@ -531,9 +539,18 @@ export default {
           } else {
             this.showSuggest = false
           }
-          const shopmodal = this.retailerInfo.shopmodel
-          // console.log('选用的模板')
-          // console.log(shopmodal)
+          let shopmodel = `${this.retailerInfo.shopmodel}`
+          console.log('选择的店铺')
+          console.log(shopmodel)
+          if (shopmodel === '2') {
+            self.showTemplate2 = true
+          } else if (shopmodel === '3') {
+            self.showTemplate3 = true
+          } else if (shopmodel === '4') {
+            self.showTemplate4 = true
+          } else {
+            self.showTemplate1 = true
+          }
           const wid = self.retailerInfo.uid
           let shareParams = {
             module: 'store',

@@ -16,7 +16,6 @@
           :list="addata"
           dots-position="center"
           :interval="6000"
-          :show-dots="isshowdot"
           :aspect-ratio="500/900"
           auto
           loop>
