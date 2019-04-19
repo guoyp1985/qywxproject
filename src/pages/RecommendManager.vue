@@ -34,7 +34,7 @@
                         <div class="btnicon bg-theme color-white font12" @click="toRecommend(item,index)">设为推荐</div>
                       </div>
                 		</div>
-                    <div class="flex_left mt5" @click="toProduct(item)" v-if="item.sellingpoint && item.sellingpoint != ''"><span class="color-theme mr5">商品优势: </span><span>{{item.sellingpoint}}</span></div>
+                    <div class="flex_left mt5 font12" @click="toProduct(item)" v-if="item.sellingpoint && item.sellingpoint != ''"><span class="color-theme mr5">商品优势: </span><span>{{item.sellingpoint}}</span></div>
                   </div>
                 </div>
               </template>
@@ -63,7 +63,7 @@
                         <div class="btnicon bg-theme color-white font12" @click="cancelRecommend(item,index)">取消推荐</div>
                       </div>
                 		</div>
-                    <div class="flex_left mt5" @click="toProduct(item)" v-if="item.sellingpoint && item.sellingpoint != ''"><span class="color-theme mr5">商品优势: </span><span>{{item.sellingpoint}}</span></div>
+                    <div class="flex_left mt5 font12" @click="toProduct(item)" v-if="item.sellingpoint && item.sellingpoint != ''"><span class="color-theme mr5">商品优势: </span><span>{{item.sellingpoint}}</span></div>
                   </div>
                 </div>
               </template>
