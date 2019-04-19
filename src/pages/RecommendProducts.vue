@@ -253,12 +253,10 @@ export default {
           this.retailerInfo = this.loginUser.retailerinfo
           if (this.retailerInfo.firstinfo.importproduct === '0') {
             this.isFirst = true
-            this.showFirst = true
+            // this.showFirst = true
           }
         })
       }
-      this.isFirst = true
-      this.showFirst = true
       if (!self.classData.length) {
         self.$http.get(`${ENV.BokaApi}/api/list/productclass?ascdesc=asc`, { params: { pagestart: pageStart, limit: 500 } }).then((res) => {
           self.$vux.loading.hide()

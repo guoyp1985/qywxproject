@@ -488,9 +488,9 @@ export default {
           } else {
             self.showContainer = true
             self.productdata = data.data
-            if (this.isFirst && !this.productdata.haveimport) {
-              this.showFirst = true
-            }
+            // if (this.isFirst && !this.productdata.haveimport) {
+            //   this.showFirst = true
+            // }
             self.factoryinfo = self.productdata.factoryinfo
             document.title = self.productdata.title
             const photo = self.productdata.photo
