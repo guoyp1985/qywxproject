@@ -154,31 +154,28 @@ export default {
             return
           }
           this.isSubmiting = true
-          if (this.isFirst) {
-            this.showHb = true
-          }
-          // this.$vux.loading.show()
-          // this.$http.post(`${ENV.BokaApi}/api/groups/addGroup`, data).then(res => {
-          //   const data = res.data
-          //   this.$vux.loading.hide()
-          //   this.$vux.toast.show({
-          //     text: data.error,
-          //     type: 'text',
-          //     time: _this.$util.delay(data.error),
-          //     onHide: () => {
-          //       _this.isSubmiting = false
-          //       if (data.flag) {
-          //         if (this.isFirst) {
-          //           this.showHb = true
-          //         } else {
-          //           this.afterAdd()
-          //         }
-          //       } else {
-          //         _this.reset()
-          //       }
-          //     }
-          //   })
-          // })
+          this.$vux.loading.show()
+          this.$http.post(`${ENV.BokaApi}/api/groups/addGroup`, data).then(res => {
+            const data = res.data
+            this.$vux.loading.hide()
+            this.$vux.toast.show({
+              text: data.error,
+              type: 'text',
+              time: _this.$util.delay(data.error),
+              onHide: () => {
+                _this.isSubmiting = false
+                if (data.flag) {
+                  if (this.isFirst) {
+                    this.showHb = true
+                  } else {
+                    this.afterAdd()
+                  }
+                } else {
+                  _this.reset()
+                }
+              }
+            })
+          })
         }
       }
     },
