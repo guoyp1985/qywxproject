@@ -342,12 +342,12 @@ export default {
     refresh () {
       this.query = this.$route.query
       this.loginUser = User.get()
-      if (this.loginUser.retailerinfo.firstinfo.addgroup === '0' && this.query.from) {
+      if (`${this.loginUser.retailerinfo.firstinfo.addgroup}` === '0' && this.query.from) {
         this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
           const data = res.data
           this.loginUser = data
           User.set(data)
-          if (this.loginUser.retailerinfo.firstinfo.addgroup === '0' && this.query.from) {
+          if (`${this.loginUser.retailerinfo.firstinfo.addgroup}` === '0' && this.query.from) {
             this.isFirst = true
             this.showFirst = true
           }

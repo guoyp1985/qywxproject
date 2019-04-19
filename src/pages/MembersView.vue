@@ -182,14 +182,6 @@
           </slot>
         </confirm>
       </div>
-      <template v-if="showFirst">
-        <firstTip @submitFirstTip="submitFirstTip">
-          <div class="font15 bold txt">
-            <div class="flex_center">客户列表中的客户都可邀请进行代理</div>
-            <div class="flex_center mt5">轻轻松松提高销售额</div>
-          </div>
-        </firstTip>
-      </template>
       <template v-if="showHb">
         <firstHb action="seller" @closeFirstHb="closeFirstHb"></firstHb>
       </template>
@@ -210,7 +202,6 @@ import ENV from 'env'
 import { User } from '#/storage'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
-import FirstTip from '@/components/FirstTip'
 import FirstHb from '@/components/FirstHb'
 
 export default {
@@ -218,7 +209,7 @@ export default {
     TransferDom
   },
   components: {
-    Popup, Previewer, Sos, PopupHeader, Radio, Group, XImg, Subscribe, ApplyTip, XInput, Confirm, FirstTip, FirstHb
+    Popup, Previewer, Sos, PopupHeader, Radio, Group, XImg, Subscribe, ApplyTip, XInput, Confirm, FirstHb
   },
   filters: {
     dateformat: function (value) {
@@ -233,7 +224,6 @@ export default {
       showContainer: false,
       query: {},
       loginUser: {},
-      retailerInfo: {},
       viewuser: { avatar: 'https://tossharingsales.boka.cn/images/user.jpg' },
       imgarr: [{
         msrc: 'https://tossharingsales.boka.cn/images/user.jpg',
@@ -260,7 +250,6 @@ export default {
       confirmTitle: '',
       confirmData: '',
       charName: '',
-      showFirst: false,
       isFirst: false,
       showHb: false
     }
@@ -291,13 +280,6 @@ export default {
     }
   },
   methods: {
-    submitFirstTip () {
-      this.showFirst = false
-      if (this.selectedIndex !== 1) {
-        this.selectedIndex = 1
-        this.swiperChange()
-      }
-    },
     closeFirstHb () {
       this.isFirst = false
       this.showHb = false
@@ -530,15 +512,12 @@ export default {
           self.initContainer()
           this.query = this.$route.query
           this.getData()
-          if (this.loginUser.retailerinfo.firstinfo.seller === '0' && this.query.from && (!this.viewuser.isseller || this.viewuser.isseller === 0)) {
-            this.$http.get(`${ENV.BokaApi}/api/retailer/info`).then(res => {
-              const data = res.data
-              if (data.flag) {
-                this.retailerInfo = data.data
-                this.loginUser.retailerinfo = this.retailerInfo
-                User.set(this.loginUser)
+          if (`${this.loginUser.retailerinfo.firstinfo.seller}` === '0' && this.query.from && (!this.viewuser.isseller || this.viewuser.isseller === 0)) {
+            this.$http.get(`${ENV.BokaApi}/api/user/show`).then((res) => {
+              this.loginUser = res.data
+              User.set(this.loginUser)
+              if (`${this.loginUser.retailerinfo.firstinfo.seller}` === '0' && this.query.from && (!this.viewuser.isseller || this.viewuser.isseller === 0)) {
                 this.isFirst = true
-                this.showFirst = true
               }
             })
           }

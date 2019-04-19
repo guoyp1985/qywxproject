@@ -383,17 +383,15 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.$http.get(`${ENV.BokaApi}/api/retailer/info`).then(res => {
-        const data = res.data
-        if (data.flag) {
-          this.retailerInfo = data.data
-          this.loginUser.retailerinfo = this.retailerInfo
+      if (`${this.loginUser.retailerinfo.firstinfo.topbanner}` === '0' && this.query.from) {
+        this.$http.get(`${ENV.BokaApi}/api/user/show`).then((res) => {
+          this.loginUser = res.data
           User.set(this.loginUser)
-          if (this.retailerInfo.firstinfo.topbanner === '0' && this.query.from) {
+          if (`${this.loginUser.retailerinfo.firstinfo.topbanner}` === '0' && this.query.from) {
             this.isFirst = true
           }
-        }
-      })
+        })
+      }
       if (this.showContainer && this.productdata.length < limit) {
         pagestart1 = 0
         this.disData = false

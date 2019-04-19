@@ -523,7 +523,7 @@ export default {
         this.retailerInfo = this.loginUser.retailerinfo
         this.initData()
         this.query = this.$route.query
-        if (this.retailerInfo.firstinfo.importproduct === '0' && this.query.from) {
+        if (`${this.retailerInfo.firstinfo.importproduct}` === '0' && this.query.from) {
           this.isFirst = true
         }
         this.getData()

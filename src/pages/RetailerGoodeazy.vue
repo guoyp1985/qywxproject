@@ -473,11 +473,11 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.query = this.$route.query
-      if (this.loginUser.retailerinfo.firstinfo.grabnews === '0') {
+      if (`${this.loginUser.retailerinfo.firstinfo.grabnews}` === '0' && this.query.from) {
         this.$http.get(`${ENV.BokaApi}/api/user/show`).then((res) => {
           this.loginUser = res.data
           User.set(this.loginUser)
-          if (this.loginUser.retailerinfo.firstinfo.grabnews === '0') {
+          if (`${this.loginUser.retailerinfo.firstinfo.grabnews}` === '0' && this.query.from) {
             this.isFirst = true
           }
         })

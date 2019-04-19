@@ -353,15 +353,6 @@ export default {
       this.loginUser = User.get()
       if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
         self.initContainer()
-        if (this.loginUser.retailerinfo.firstinfo.addnews === '0') {
-          this.$http.get(`${ENV.BokaApi}/api/user/show`).then((res) => {
-            this.loginUser = res.data
-            User.set(this.loginUser)
-            if (this.loginUser.retailerinfo.firstinfo.addnews === '0') {
-              this.isFirst = true
-            }
-          })
-        }
         let isAdmin = false
         for (let i = 0; i < self.loginUser.usergroup.length; i++) {
           if (self.loginUser.usergroup[i] === 1) {
@@ -382,8 +373,16 @@ export default {
           }
           this.query = this.$route.query
           this.getData()
+          if (`${this.loginUser.retailerinfo.firstinfo.addnews}` === '0' && this.query.from) {
+            this.$http.get(`${ENV.BokaApi}/api/user/show`).then((res) => {
+              this.loginUser = res.data
+              User.set(this.loginUser)
+              if (`${this.loginUser.retailerinfo.firstinfo.addnews}` === '0' && this.query.from) {
+                this.isFirst = true
+              }
+            })
+          }
         }
-        // }
       }
     }
   },

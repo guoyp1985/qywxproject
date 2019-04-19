@@ -537,7 +537,7 @@ export default {
             this.retailerInfo = data.data
             this.loginUser.retailerinfo = this.retailerInfo
             User.set(this.loginUser)
-            if (this.retailerInfo.firstinfo.orderdeliver === '0' && this.query.from && this.data.flag === 2 && this.data.candeliver) {
+            if (`${this.retailerInfo.firstinfo.orderdeliver}` === '0' && this.query.from && this.data.flag === 2 && this.data.candeliver) {
               this.isFirst = true
               this.showFirst = true
             }

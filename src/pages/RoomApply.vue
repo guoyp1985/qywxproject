@@ -135,6 +135,7 @@ export default {
       this.showDialog = true
     },
     submitHandle () {
+      const _this = this
       if (!this.isSubmiting) {
         // const self = this
         const data = {

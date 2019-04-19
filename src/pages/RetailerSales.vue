@@ -491,15 +491,17 @@ export default {
           }
           this.swiperChange()
         }
-        if (this.loginUser.retailerinfo.firstinfo.seller === '0' && this.query.from) {
+        if (`${this.loginUser.retailerinfo.firstinfo.seller}` === '0' && this.query.from) {
           this.$http.get(`${ENV.BokaApi}/api/retailer/info`).then(res => {
             const data = res.data
             if (data.flag) {
               this.retailerInfo = data.data
               this.loginUser.retailerinfo = this.retailerInfo
               User.set(this.loginUser)
-              this.isFirst = true
-              this.showFirst = true
+              if (`${this.loginUser.retailerinfo.firstinfo.seller}` === '0' && this.query.from) {
+                this.isFirst = true
+                this.showFirst = true
+              }
             }
           })
         }
