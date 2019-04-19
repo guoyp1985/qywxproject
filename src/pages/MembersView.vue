@@ -303,38 +303,23 @@ export default {
       this.showHb = false
     },
     toChat () {
-      let params = {uid: this.query.uid}
-      if (this.query.from) {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {uid: this.query.uid})
       this.$router.push({path: '/chat', query: params})
     },
     toSaleview () {
-      let params = {uid: this.query.uid}
-      if (this.query.from) {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {uid: this.query.uid})
       this.$router.push({path: '/retailerSaleview', query: params})
     },
     toViewList () {
-      let params = {uid: this.viewuser.uid}
-      if (this.query.from === 'miniprogram') {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {uid: this.viewuser.uid})
       this.$router.push({path: '/viewList', query: params})
     },
     toShareList () {
-      let params = {uid: this.viewuser.uid}
-      if (this.query.from === 'miniprogram') {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {uid: this.viewuser.uid})
       this.$router.push({path: '/shareList', query: params})
     },
     toSalesList () {
-      let params = {uid: this.viewuser.uid}
-      if (this.query.from === 'miniprogram') {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {uid: this.viewuser.uid})
       this.$router.push({path: '/salesList', query: params})
     },
     priorityevent () {

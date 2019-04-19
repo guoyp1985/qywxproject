@@ -233,17 +233,11 @@ export default {
       this.showHb = false
     },
     toSaleview (item) {
-      let params = {uid: item.uid}
-      if (this.query.from) {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {uid: item.uid})
       this.$router.push({path: '/retailerSaleview', query: params})
     },
     toChat (item) {
-      let params = {uid: item.uid}
-      if (this.query.from) {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {uid: item.uid})
       this.$router.push({path: '/chat', query: params})
     },
     toMemberView (item) {
@@ -252,10 +246,7 @@ export default {
     },
     toDetail (item) {
       if (item.ordertype === 'orders') {
-        let params = {id: item.id}
-        if (this.query.from) {
-          params.from = this.query.from
-        }
+        let params = this.$util.handleAppParams(this.query, {uid: item.id})
         this.$router.push({path: '/accountDetail', query: params})
       }
     },
