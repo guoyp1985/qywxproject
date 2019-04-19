@@ -173,7 +173,7 @@
         </div>
       </div>
     </div>
-    <template v-if="data.flag == 2 && data.candeliver">
+    <template v-if="data.flag == 2 && data.backflag != 20 && data.candeliver">
       <template v-if="showFirst">
         <firstTip @submitFirstTip="submitFirstTip">
           <div class="font15 bold txt">
