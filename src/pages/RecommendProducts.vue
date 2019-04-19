@@ -111,7 +111,9 @@ export default {
       pricecss: 'desc',
       sort: 'dateline',
       pageTop: 0,
-      scrollEnd: false
+      scrollEnd: false,
+      showFirst: false,
+      isFirst: false
     }
   },
   watch: {
@@ -243,7 +245,7 @@ export default {
       this.query = this.$route.query
       this.loginUser = User.get()
       this.retailerInfo = this.loginUser.retailerinfo
-      if (this.retailerInfo.firstinfo.importproduct === '0') {
+      if (this.retailerInfo.firstinfo.importproduct === '0' && this.query.from) {
         this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
           const data = res.data
           this.loginUser = data
@@ -255,6 +257,8 @@ export default {
           }
         })
       }
+      this.isFirst = true
+      this.showFirst = true
       if (!self.classData.length) {
         self.$http.get(`${ENV.BokaApi}/api/list/productclass?ascdesc=asc`, { params: { pagestart: pageStart, limit: 500 } }).then((res) => {
           self.$vux.loading.hide()
