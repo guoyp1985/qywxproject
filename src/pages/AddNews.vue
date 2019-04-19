@@ -80,6 +80,16 @@
         <div class="flex_cell flex_center btn-bottom-red" @click="save">下一步，编辑内容</div>
       </div>
       <clip-popup :show="popupShow" :img="cutImg" :after-submit="popupSubmit" @on-cancel="popupCancel"></clip-popup>
+      <template v-if="showFirst">
+        <firstTip @submitFirstTip="submitFirstTip">
+          <div class="font15 bold txt">
+            <div class="flex_center">还在为没有好文章而发愁？</div>
+            <div class="flex_center mt5"><span>复制其他文章链接</span></div>
+            <div class="flex_center mt5"><span>在易采集中输入链接一件搜索</span></div>
+            <div class="flex_center mt5"><span>轻松采集别人的文章变自己的文章</span></div>
+          </div>
+        </firstTip>
+      </template>
       <template v-if="showHb">
         <firstHb action="addnews" @closeFirstHb="closeFirstHb"></firstHb>
       </template>
@@ -94,11 +104,12 @@ import { User } from '#/storage'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
+import FirstTip from '@/components/FirstTip'
 import FirstHb from '@/components/FirstHb'
 
 export default {
   components: {
-    Group, XInput, XTextarea, Cell, XButton, ClipPopup, Sos, Subscribe, ApplyTip, FirstHb
+    Group, XInput, XTextarea, Cell, XButton, ClipPopup, Sos, Subscribe, ApplyTip, FirstTip, FirstHb
   },
   data () {
     return {
@@ -116,6 +127,7 @@ export default {
       requireddata: { title: '', 'photo': '' },
       submitIng: false,
       isFirst: false,
+      showFirst: false,
       showHb: false,
       newData: {}
     }
@@ -131,6 +143,9 @@ export default {
       this.havenum = 0
       this.submitdata = { title: '', photo: '', seodescription: '', summary: '' }
       this.requireddata = { title: '', 'photo': '' }
+    },
+    submitFirstTip () {
+      this.showFirst = false
     },
     closeFirstHb () {
       this.isFirst = false
@@ -379,6 +394,9 @@ export default {
               User.set(this.loginUser)
               if (`${this.loginUser.retailerinfo.firstinfo.addnews}` === '0' && this.query.from) {
                 this.isFirst = true
+                if (`${this.loginUser.retailerinfo.firstinfo.grabnews}` !== '0') {
+                  this.showFirst = true
+                }
               }
             })
           }

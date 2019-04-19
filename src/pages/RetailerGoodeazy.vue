@@ -120,6 +120,16 @@
           </swiper-item>
         </swiper>
       </div>
+      <template v-if="showFirst">
+        <firstTip @submitFirstTip="submitFirstTip">
+          <div class="font15 bold txt">
+            <div class="flex_center">还在为没有好文章而发愁？</div>
+            <div class="flex_center mt5"><span>复制其他文章链接</span></div>
+            <div class="flex_center mt5"><span>在易采集中输入链接一件搜索</span></div>
+            <div class="flex_center mt5"><span>轻松采集别人的文章变自己的文章</span></div>
+          </div>
+        </firstTip>
+      </template>
       <template v-if="showHb">
         <firstHb action="grabnews" @closeFirstHb="closeFirstHb"></firstHb>
       </template>
@@ -137,11 +147,12 @@ import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
+import FirstTip from '@/components/FirstTip'
 import FirstHb from '@/components/FirstHb'
 
 export default {
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, Checker, CheckerItem, XImg, Sos, Subscribe, FirstHb
+    Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, Checker, CheckerItem, XImg, Sos, Subscribe, FirstTip, FirstHb
   },
   filters: {
     dateformat: function (value) {
@@ -174,11 +185,15 @@ export default {
       historyLimit: 15,
       newsCount: 0,
       isFirst: false,
+      showFirst: false,
       showHb: false,
       routerParams: {}
     }
   },
   methods: {
+    submitFirstTip () {
+      this.showFirst = false
+    },
     closeFirstHb () {
       this.isFirst = false
       this.showHb = false
@@ -479,6 +494,9 @@ export default {
           User.set(this.loginUser)
           if (`${this.loginUser.retailerinfo.firstinfo.grabnews}` === '0' && this.query.from) {
             this.isFirst = true
+            if (`${this.loginUser.retailerinfo.firstinfo.addnews}` !== '0') {
+              this.showFirst = true
+            }
           }
         })
       }
