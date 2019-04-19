@@ -152,6 +152,19 @@
         content="销售佣金是指卖家销售厂家的商品后，卖家所得到的佣金。">
       </tip-layer>
     </template>
+    <template v-if="showFirst">
+      <firstTip @submitFirstTip="submitFirstTip">
+        <div class="font15 bold txt">
+          <div class="flex_center">还在担心没有好货？</div>
+          <div class="flex_center mt5"><span>货源中为您提供</span><span class="color-theme">百万爆款好货</span></div>
+          <div class="flex_center mt5"><span>上架销售</span><span class="color-theme">立赚佣金</span></div>
+          <div class="flex_center mt5"><span>轻轻松松</span><span class="color-theme">赚大钱</span></div>
+        </div>
+      </firstTip>
+    </template>
+    <template v-if="showHb">
+      <firstHb action="importproduct" @closeFirstHb="closeFirstHb"></firstHb>
+    </template>
   </div>
 </template>
 
@@ -181,6 +194,8 @@ import ENV from 'env'
 import { User } from '#/storage'
 import Socket from '#/socket'
 import OpenVip from '@/components/OpenVip'
+import FirstTip from '@/components/FirstTip'
+import FirstHb from '@/components/FirstHb'
 
 let room = ''
 export default {
@@ -188,7 +203,7 @@ export default {
     TransferDom
   },
   components: {
-    Previewer, Swiper, SwiperItem, Popup, ShareSuccess, Sos, XImg, TitleTip, OpenVip, TipLayer
+    Previewer, Swiper, SwiperItem, Popup, ShareSuccess, Sos, XImg, TitleTip, OpenVip, TipLayer, FirstTip, FirstHb
   },
   filters: {
     dateformat: function (value) {
@@ -197,6 +212,8 @@ export default {
   },
   data () {
     return {
+      loginUser: {},
+      retailerInfo: {},
       module: 'factoryproduct',
       query: {},
       disTimeout: true,
@@ -209,7 +226,6 @@ export default {
       productid: null,
       productdata: {},
       factoryinfo: {},
-      loginUser: {},
       isshowtop: false,
       waitgetcredit: 100,
       showFlash: false,
@@ -231,7 +247,10 @@ export default {
       showVideo: true,
       playVideo: false,
       showTip: false,
-      WeixinName: ENV.WeixinName
+      WeixinName: ENV.WeixinName,
+      showFirst: false,
+      isFirst: false,
+      showHb: false
     }
   },
   watch: {
@@ -291,6 +310,13 @@ export default {
       this.previewerFlasharr = []
       this.ingdata = []
       this.messages = 0
+    },
+    submitFirstTip () {
+      this.showFirst = false
+    },
+    closeFirstHb () {
+      this.isFirst = false
+      this.showHb = false
     },
     clickHelp () {
       this.showHelpModal = true
@@ -393,13 +419,13 @@ export default {
       const self = this
       self.$vux.confirm.show({
         content: '确定将该商品上架到店铺并进行出售吗？',
-        onConfirm () {
+        onConfirm: () => {
           self.$vux.loading.show()
           let params = {id: self.query.id}
           if (self.query.wid) {
             params.wid = self.query.wid
           }
-          self.$http.post(`${ENV.BokaApi}/api/factory/importFactoryProduct`, params).then(function (res) {
+          self.$http.post(`${ENV.BokaApi}/api/factory/importFactoryProduct`, params).then((res) => {
             let data = res.data
             self.$vux.loading.hide()
             let error = data.error
@@ -410,14 +436,17 @@ export default {
             self.$vux.toast.show({
               text: error,
               type: data.flag === 1 ? 'success' : 'warn',
-              time: self.$util.delay(error)
+              time: self.$util.delay(error),
+              onHide: () => {
+                this.showHb = true
+              }
             })
           })
         }
       })
     },
     importEvent () {
-      if (!this.loginUser.isretailer || !this.loginUser.retailerinfo.moderate) {
+      if (!this.loginUser.isretailer || !this.retailerInfo.vipvalidate) {
         this.showTip = true
       } else {
         this.importProduct()
@@ -449,7 +478,7 @@ export default {
       }
       this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
         params: infoparams
-      }).then(function (res) {
+      }).then((res) => {
         if (res && res.status === 200) {
           let data = res.data
           self.$vux.loading.hide()
@@ -459,6 +488,9 @@ export default {
           } else {
             self.showContainer = true
             self.productdata = data.data
+            // if (this.isFirst && !this.productdata.haveimport) {
+            //   this.showFirst = true
+            // }
             self.factoryinfo = self.productdata.factoryinfo
             document.title = self.productdata.title
             const photo = self.productdata.photo
@@ -506,11 +538,15 @@ export default {
         const data = res.data
         this.loginUser = data
         User.set(data)
+        this.retailerInfo = this.loginUser.retailerinfo
+        if (this.retailerInfo.firstinfo.importproduct === '0') {
+          this.isFirst = true
+        }
+        this.initData()
+        this.query = this.$route.query
+        this.getData()
+        this.createSocket()
       })
-      this.initData()
-      this.query = this.$route.query
-      this.getData()
-      this.createSocket()
     }
   },
   created () {

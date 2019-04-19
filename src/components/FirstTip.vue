@@ -38,7 +38,7 @@
     <div class="modal-inner border-box">
       <div class="pic-outer">
         <div class="bg-pic">
-          <img src="https://tossharingsales.boka.cn/minigxk/hbicon.png" />
+          <img src="https://tossharingsales.boka.cn/minigxk/hbicon2.png" />
         </div>
         <div class="pic">
           <img src="https://tossharingsales.boka.cn/images/tip_bg.png"/>

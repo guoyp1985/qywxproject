@@ -55,6 +55,16 @@
           <div style="text-align:center;color:#999;height:30px;line-height:30px;font-size:14px;" v-if="scrollEnd">没有更多商品啦</div>
         </div>
       </div>
+      <template v-if="showFirst">
+        <firstTip @submitFirstTip="submitFirstTip">
+          <div class="font15 bold txt">
+            <div class="flex_center">还在担心没有好货？</div>
+            <div class="flex_center mt5"><span>货源中为您提供</span><span class="color-theme">百万爆款好货</span></div>
+            <div class="flex_center mt5"><span>上架销售</span><span class="color-theme">立赚佣金</span></div>
+            <div class="flex_center mt5"><span>轻轻松松</span><span class="color-theme">赚大钱</span></div>
+          </div>
+        </firstTip>
+      </template>
     </div>
   </div>
 </template>
@@ -66,8 +76,10 @@ Apply join:
 
 <script>
 import { Tab, TabItem, Search } from 'vux'
+import { User } from '#/storage'
 import ENV from 'env'
 import Time from '#/time'
+import FirstTip from '@/components/FirstTip'
 
 let self = this
 const limit = 30
@@ -75,7 +87,7 @@ let pageStart = 0
 
 export default {
   components: {
-    Tab, TabItem, Search
+    Tab, TabItem, Search, FirstTip
   },
   filters: {
     dateformat: function (value) {
@@ -85,6 +97,8 @@ export default {
   data () {
     return {
       query: {},
+      loginUser: {},
+      retailerInfo: {},
       viewData: {},
       disProductData: false,
       productData: [],
@@ -97,7 +111,9 @@ export default {
       pricecss: 'desc',
       sort: 'dateline',
       pageTop: 0,
-      scrollEnd: false
+      scrollEnd: false,
+      showFirst: false,
+      isFirst: false
     }
   },
   watch: {
@@ -106,6 +122,9 @@ export default {
     }
   },
   methods: {
+    submitFirstTip () {
+      this.showFirst = false
+    },
     onChange (val) {
       this.searchword = val
     },
@@ -224,6 +243,20 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
+      this.loginUser = User.get()
+      this.retailerInfo = this.loginUser.retailerinfo
+      if (this.retailerInfo.firstinfo.importproduct === '0' && this.query.from) {
+        this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
+          const data = res.data
+          this.loginUser = data
+          User.set(data)
+          this.retailerInfo = this.loginUser.retailerinfo
+          if (this.retailerInfo.firstinfo.importproduct === '0') {
+            this.isFirst = true
+            // this.showFirst = true
+          }
+        })
+      }
       if (!self.classData.length) {
         self.$http.get(`${ENV.BokaApi}/api/list/productclass?ascdesc=asc`, { params: { pagestart: pageStart, limit: 500 } }).then((res) => {
           self.$vux.loading.hide()
