@@ -29,27 +29,30 @@
         <div class="b_top_after"></div>
       </template>
       <div :style="`overflow-y:auto;position:absolute;left:0;top:0;right:0;bottom:0;${selectedIndex == 0 ? 'top:100px;' : 'top:0;'}`" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
-        <div v-if="disProductData" class="productlist squarepic">
-          <div v-if="productData.length == 0" class="emptyitem flex_center align_center w_100">该分类下暂无货源数据</div>
-          <div v-else @click="toFProduct(item)" v-for="(item,index) in productData" :key="index" class="bk-productitem scroll_item font14 db ">
-        		<div class="inner list-shadow">
-        			<div class="picarea">
-        				<div class="pic">
-                  <img class="imgcover" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-                  <div class="t-icon color-theme flex_center"><i class="al al-zhuanqian font18"></i><span>赚 {{$t('RMB')}}{{item.levelagent}}</span></div>
-                </div>
-        			</div>
-        			<div class="desbox" style="overflow:hidden;">
-        				<div class="align_left pl5 pr5 clamp2 distitle" style="line-height:18px;height:36px;">{{ item.title }}</div>
-        				<div class="clamp1">
-        					<div class="flex_table padding5">
-        						<span class="color-red font14 flex_cell" style="overflow: hidden;margin-right: 10px;white-space: nowrap;text-overflow: ellipsis;">{{ $t('RMB') }} <span style="margin-left:1px;">{{ item.price }}</span></span>
-        						<!-- <span class="color-gray">{{ $t('Saled txt') }}:<span style="margin-left:1px;">{{ item.saled }}</span></span> -->
-        					</div>
-        				</div>
-        			</div>
-        		</div>
+        <div v-if="disProductData">
+          <div class="productlist squarepic">
+            <div v-if="productData.length == 0" class="emptyitem flex_center align_center w_100">该分类下暂无货源数据</div>
+            <div v-else @click="toFProduct(item)" v-for="(item,index) in productData" :key="index" class="bk-productitem scroll_item font14 db ">
+          		<div class="inner list-shadow">
+          			<div class="picarea">
+          				<div class="pic">
+                    <img class="imgcover" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+                    <div class="t-icon color-theme flex_center"><i class="al al-zhuanqian font18"></i><span>赚 {{$t('RMB')}}{{item.levelagent}}</span></div>
+                  </div>
+          			</div>
+          			<div class="desbox" style="overflow:hidden;">
+          				<div class="align_left pl5 pr5 clamp2 distitle" style="line-height:18px;height:36px;">{{ item.title }}</div>
+          				<div class="clamp1">
+          					<div class="flex_table padding5">
+          						<span class="color-red font14 flex_cell" style="overflow: hidden;margin-right: 10px;white-space: nowrap;text-overflow: ellipsis;">{{ $t('RMB') }} <span style="margin-left:1px;">{{ item.price }}</span></span>
+          						<!-- <span class="color-gray">{{ $t('Saled txt') }}:<span style="margin-left:1px;">{{ item.saled }}</span></span> -->
+          					</div>
+          				</div>
+          			</div>
+          		</div>
+            </div>
           </div>
+          <div style="text-align:center;color:#999;height:30px;line-height:30px;font-size:14px;" v-if="scrollEnd">没有更多商品了！</div>
         </div>
       </div>
     </div>
@@ -93,7 +96,8 @@ export default {
       datecss: 'desc',
       pricecss: 'desc',
       sort: 'dateline',
-      pageTop: 0
+      pageTop: 0,
+      scrollEnd: false
     }
   },
   watch: {
@@ -169,6 +173,8 @@ export default {
             pageStart++
             self.$vux.loading.show()
             self.getData1()
+          } else {
+            self.scrollEnd = true
           }
         }
       })
