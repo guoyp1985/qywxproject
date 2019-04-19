@@ -149,6 +149,17 @@
         </div>
       </popup>
     </div>
+    <template v-if="showFirst">
+      <firstTip @submitFirstTip="submitFirstTip">
+        <div class="font15 bold txt">
+          <div class="flex_center">客户列表中的客户都可邀请进行代理</div>
+          <div class="flex_center mt5">轻轻松松提高销售额</div>
+        </div>
+      </firstTip>
+    </template>
+    <template v-if="showHb">
+      <firstHb action="seller" @closeFirstHb="closeFirstHb"></firstHb>
+    </template>
   </div>
 </template>
 
@@ -162,13 +173,15 @@ import ENV from 'env'
 import { User } from '#/storage'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
+import FirstTip from '@/components/FirstTip'
+import FirstHb from '@/components/FirstHb'
 
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, XImg, Subscribe, Popup, ApplyTip
+    Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, XImg, Subscribe, Popup, ApplyTip, FirstTip, FirstHb
   },
   filters: {
     dateformat: function (value) {
@@ -178,6 +191,7 @@ export default {
   data () {
     return {
       loginUser: {},
+      retailerInfo: {},
       query: {},
       showApply: false,
       showContainer: false,
@@ -199,11 +213,25 @@ export default {
       pagestart2: 0,
       pagestart3: 0,
       salesCount: 0,
-      isFirst: true,
-      isshowfluence: false
+      isFirstLoad: true,
+      isshowfluence: false,
+      showFirst: false,
+      isFirst: false,
+      showHb: false
     }
   },
   methods: {
+    submitFirstTip () {
+      this.showFirst = false
+      if (this.selectedIndex !== 1) {
+        this.selectedIndex = 1
+        this.swiperChange()
+      }
+    },
+    closeFirstHb () {
+      this.isFirst = false
+      this.showHb = false
+    },
     toSaleview (item) {
       let params = {uid: item.uid}
       if (this.query.from) {
@@ -219,10 +247,7 @@ export default {
       this.$router.push({path: '/chat', query: params})
     },
     toMemberView (item) {
-      let params = {uid: item.uid}
-      if (this.query.from) {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {uid: item.uid})
       this.$router.push({path: '/membersView', query: params})
     },
     toDetail (item) {
@@ -298,9 +323,9 @@ export default {
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.distabdata1 = true
-        if (self.isFirst) {
+        if (self.isFirstLoad) {
           self.salesCount = self.tabdata1.length
-          self.isFirst = false
+          self.isFirstLoad = false
         }
       })
     },
@@ -418,19 +443,21 @@ export default {
         }
         self.$vux.confirm.show({
           content: content,
-          onConfirm () {
+          onConfirm: () => {
             self.$vux.loading.show()
-            self.$http.post(`${ENV.BokaApi}/api/retailer/inviteSeller`, { inviteuid: item.uid })
-            .then(res => {
+            self.$http.post(`${ENV.BokaApi}/api/retailer/inviteSeller`, { inviteuid: item.uid }).then(res => {
               const data = res.data
               self.$vux.loading.hide()
               self.$vux.toast.show({
                 text: data.error,
                 time: self.$util.delay(data.error),
-                onHide: function () {
+                onHide: () => {
                   if (data.flag === 1) {
                     self.salesCount++
                     self.tabdata2.splice(index, 1)
+                    if (this.isFirst) {
+                      this.showHb = true
+                    }
                   }
                 }
               })
@@ -455,6 +482,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$vux.loading.show()
       this.loginUser = User.get()
+      this.retailerInfo = this.loginUser.retailerinfo
       this.query = this.$route.query
       if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
         self.initContainer()
@@ -471,6 +499,18 @@ export default {
             this.selectedIndex = 2
           }
           this.swiperChange()
+        }
+        if (this.loginUser.retailerinfo.firstinfo.seller === '0' && this.query.from) {
+          this.$http.get(`${ENV.BokaApi}/api/retailer/info`).then(res => {
+            const data = res.data
+            if (data.flag) {
+              this.retailerInfo = data.data
+              this.loginUser.retailerinfo = this.retailerInfo
+              User.set(this.loginUser)
+              this.isFirst = true
+              this.showFirst = true
+            }
+          })
         }
       }
     }

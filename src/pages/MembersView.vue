@@ -182,6 +182,17 @@
           </slot>
         </confirm>
       </div>
+      <template v-if="showFirst">
+        <firstTip @submitFirstTip="submitFirstTip">
+          <div class="font15 bold txt">
+            <div class="flex_center">客户列表中的客户都可邀请进行代理</div>
+            <div class="flex_center mt5">轻轻松松提高销售额</div>
+          </div>
+        </firstTip>
+      </template>
+      <template v-if="showHb">
+        <firstHb action="seller" @closeFirstHb="closeFirstHb"></firstHb>
+      </template>
     </template>
   </div>
 </template>
@@ -199,13 +210,15 @@ import ENV from 'env'
 import { User } from '#/storage'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
+import FirstTip from '@/components/FirstTip'
+import FirstHb from '@/components/FirstHb'
 
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Popup, Previewer, Sos, PopupHeader, Radio, Group, XImg, Subscribe, ApplyTip, XInput, Confirm
+    Popup, Previewer, Sos, PopupHeader, Radio, Group, XImg, Subscribe, ApplyTip, XInput, Confirm, FirstTip, FirstHb
   },
   filters: {
     dateformat: function (value) {
@@ -220,6 +233,7 @@ export default {
       showContainer: false,
       query: {},
       loginUser: {},
+      retailerInfo: {},
       viewuser: { avatar: 'https://tossharingsales.boka.cn/images/user.jpg' },
       imgarr: [{
         msrc: 'https://tossharingsales.boka.cn/images/user.jpg',
@@ -245,7 +259,10 @@ export default {
       showConfirm: false,
       confirmTitle: '',
       confirmData: '',
-      charName: ''
+      charName: '',
+      showFirst: false,
+      isFirst: false,
+      showHb: false
     }
   },
   watch: {
@@ -274,6 +291,17 @@ export default {
     }
   },
   methods: {
+    submitFirstTip () {
+      this.showFirst = false
+      if (this.selectedIndex !== 1) {
+        this.selectedIndex = 1
+        this.swiperChange()
+      }
+    },
+    closeFirstHb () {
+      this.isFirst = false
+      this.showHb = false
+    },
     toChat () {
       let params = {uid: this.query.uid}
       if (this.query.from) {
@@ -333,7 +361,7 @@ export default {
       let content = `<div class="font14">邀请成功后，返点客在本店购买以及带来客户购买，均可获得佣金奖励</div>`
       self.$vux.confirm.show({
         content: content,
-        onConfirm () {
+        onConfirm: () => {
           self.$vux.loading.show()
           self.$http.post(`${ENV.BokaApi}/api/retailer/inviteSeller`,
             { inviteuid: self.query.uid }
@@ -346,6 +374,9 @@ export default {
               onHide: () => {
                 if (data.flag === 1) {
                   self.viewuser.isseller = true
+                  if (this.isFirst) {
+                    this.showHb = true
+                  }
                 }
               }
             })
@@ -507,13 +538,6 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
-        // if (self.loginUser.isretailer === 2) {
-        //   this.$vux.loading.hide()
-        //   self.initContainer()
-        //   self.$vux.loading.hide()
-        //   let backUrl = encodeURIComponent(location.href)
-        //   location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
-        // }
         if (!this.loginUser.isretailer) {
           self.initContainer()
           this.showApply = true
@@ -521,6 +545,18 @@ export default {
           self.initContainer()
           this.query = this.$route.query
           this.getData()
+          if (this.loginUser.retailerinfo.firstinfo.seller === '0' && this.query.from && (!this.viewuser.isseller || this.viewuser.isseller === 0)) {
+            this.$http.get(`${ENV.BokaApi}/api/retailer/info`).then(res => {
+              const data = res.data
+              if (data.flag) {
+                this.retailerInfo = data.data
+                this.loginUser.retailerinfo = this.retailerInfo
+                User.set(this.loginUser)
+                this.isFirst = true
+                this.showFirst = true
+              }
+            })
+          }
         }
       }
     },

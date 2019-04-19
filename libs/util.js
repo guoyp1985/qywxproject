@@ -705,6 +705,15 @@ Util.install = function (Vue, options) {
           curFrame.attr('src', dataSrc)
         }
       })
+    },
+    handleAppParams: function (query, params) {
+      if (query.from) {
+        params.from = query.from
+      }
+      if (query.appid) {
+        params.appid = query.appid
+      }
+      return params
     }
   }
 }
