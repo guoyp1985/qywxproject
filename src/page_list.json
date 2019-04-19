@@ -92,6 +92,7 @@
   "RetailerRevenue",
   "Recommend",
   "RecommendFactory",
+  "RecommendManager",
   "RecommendProducts",
   "RetailerSetting",
   "RetailerGoodeazy",
