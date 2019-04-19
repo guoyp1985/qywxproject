@@ -80,6 +80,9 @@
         <div class="flex_cell flex_center btn-bottom-red" @click="save">下一步，编辑内容</div>
       </div>
       <clip-popup :show="popupShow" :img="cutImg" :after-submit="popupSubmit" @on-cancel="popupCancel"></clip-popup>
+      <template v-if="showHb">
+        <firstHb action="addnews" @closeFirstHb="closeFirstHb"></firstHb>
+      </template>
     </template>
   </div>
 </template>
@@ -91,10 +94,11 @@ import { User } from '#/storage'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
+import FirstHb from '@/components/FirstHb'
 
 export default {
   components: {
-    Group, XInput, XTextarea, Cell, XButton, ClipPopup, Sos, Subscribe, ApplyTip
+    Group, XInput, XTextarea, Cell, XButton, ClipPopup, Sos, Subscribe, ApplyTip, FirstHb
   },
   data () {
     return {
@@ -110,7 +114,10 @@ export default {
       havenum: 0,
       submitdata: { title: '', photo: '', seodescription: '', summary: '' },
       requireddata: { title: '', 'photo': '' },
-      submitIng: false
+      submitIng: false,
+      isFirst: false,
+      showHb: false,
+      newData: {}
     }
   },
   computed: {
@@ -124,6 +131,11 @@ export default {
       this.havenum = 0
       this.submitdata = { title: '', photo: '', seodescription: '', summary: '' }
       this.requireddata = { title: '', 'photo': '' }
+    },
+    closeFirstHb () {
+      this.isFirst = false
+      this.showHb = false
+      this.afterSave()
     },
     textareaChange (refname) {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
@@ -216,44 +228,54 @@ export default {
         } else {
           delete self.submitdata['id']
         }
-        self.$http.post(`${ENV.BokaApi}/api/add/news`, self.submitdata).then(function (res) {
+        self.$http.post(`${ENV.BokaApi}/api/add/news`, self.submitdata).then((res) => {
           let data = res.data
           self.$vux.loading.hide()
           self.$vux.toast.show({
             text: data.error,
             type: (data.flag !== 1 ? 'warn' : 'success'),
             time: self.$util.delay(data.error),
-            onHide: function () {
+            onHide: () => {
               self.submitIng = false
               if (data.flag === 1) {
-                if (self.query.callback === 'edit') {
-                  let params = {id: data.data, control: 'edit'}
-                  if (self.query.minibackurl) {
-                    params.minibackurl = self.query.minibackurl
-                  }
-                  self.$router.push({ path: '/news', query: params })
+                this.newData = data
+                if (this.isFirst) {
+                  this.showHb = true
                 } else {
-                  if (self.query.minibackurl) {
-                    let minibackurl = decodeURIComponent(self.query.minibackurl)
-                    if (self.query.backtype === 'relaunch') {
-                      self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
-                    } else if (self.query.backtype === 'redirect') {
-                      self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
-                    } else {
-                      self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
-                    }
-                  } else {
-                    let params = { id: data.data }
-                    if (self.query.id) {
-                      params.newadd = 1
-                    }
-                    self.$router.push({ path: '/news', query: params })
-                  }
+                  this.afterSave()
                 }
               }
             }
           })
         })
+      }
+    },
+    afterSave () {
+      const self = this
+      const data = this.newData
+      if (self.query.callback === 'edit') {
+        let params = {id: data.data, control: 'edit'}
+        if (self.query.minibackurl) {
+          params.minibackurl = self.query.minibackurl
+        }
+        self.$router.push({ path: '/news', query: params })
+      } else {
+        if (self.query.minibackurl) {
+          let minibackurl = decodeURIComponent(self.query.minibackurl)
+          if (self.query.backtype === 'relaunch') {
+            self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+          } else if (self.query.backtype === 'redirect') {
+            self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+          } else {
+            self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+          }
+        } else {
+          let params = { id: data.data }
+          if (self.query.id) {
+            params.newadd = 1
+          }
+          self.$router.push({ path: '/news', query: params })
+        }
       }
     },
     save () {
@@ -331,6 +353,15 @@ export default {
       this.loginUser = User.get()
       if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
         self.initContainer()
+        if (this.loginUser.retailerinfo.firstinfo.addnews === '0') {
+          this.$http.get(`${ENV.BokaApi}/api/user/show`).then((res) => {
+            this.loginUser = res.data
+            User.set(this.loginUser)
+            if (this.loginUser.retailerinfo.firstinfo.addnews === '0') {
+              this.isFirst = true
+            }
+          })
+        }
         let isAdmin = false
         for (let i = 0; i < self.loginUser.usergroup.length; i++) {
           if (self.loginUser.usergroup[i] === 1) {
