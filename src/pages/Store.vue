@@ -540,8 +540,6 @@ export default {
             this.showSuggest = false
           }
           let shopmodel = `${this.retailerInfo.shopmodel}`
-          console.log('选择的店铺')
-          console.log(shopmodel)
           if (shopmodel === '2') {
             self.showTemplate2 = true
           } else if (shopmodel === '3') {

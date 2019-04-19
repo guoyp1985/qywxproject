@@ -29,14 +29,14 @@
             <div class="flex_cell h_100 flex_left font14">
               <div class="w_100 clamp1">{{retailerInfo.title}}</div>
             </div>
-            <div class="icon-cell flex_center">
+            <!-- <div class="icon-cell flex_center">
               <div class="w_100 h_100 flex_center">
                 <div class="w_100 align_center">
                   <div class="al al-fenxiang store2-color font16"></div>
                   <div class="font14 store2-color">分享</div>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
         </template>
         <!-- 超值优惠 -->
