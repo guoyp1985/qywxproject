@@ -101,18 +101,28 @@
         </div>
       </div>
     </div> -->
+    <template v-if="showFirst">
+      <firstTip @submitFirstTip="submitFirstTip">
+        <div class="font15 bold txt">
+          <div class="flex_center">还在为不能轻松赚钱而发愁吗？</div>
+          <div class="flex_center mt5">使用群群推功能发布自己的微信群</div>
+          <div class="flex_center mt5">让卖家找您推广，轻松获利</div>
+        </div>
+      </firstTip>
+    </template>
   </div>
 </template>
 <script>
 import { Tab, TabItem, XButton } from 'vux'
 import Room from '@/components/Room'
 import RoomOrderConsumer from '@/components/RoomOrderConsumer'
+import FirstTip from '@/components/FirstTip'
 import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
   components: {
-    Tab, TabItem, XButton, Room, RoomOrderConsumer
+    Tab, TabItem, XButton, Room, RoomOrderConsumer, FirstTip
   },
   data () {
     return {
@@ -130,7 +140,9 @@ export default {
       clickItem: null,
       clickIndex: 0,
       showTip: true,
-      loaddata: false
+      loaddata: false,
+      showFirst: false,
+      isFirst: false
     }
   },
   watch: {
@@ -139,6 +151,9 @@ export default {
     }
   },
   methods: {
+    submitFirstTip () {
+      this.showFirst = false
+    },
     toSubscribe () {
       this.$wechat.miniProgram.navigateTo({url: '/pages/subscribe'})
     },
@@ -327,10 +342,20 @@ export default {
     refresh () {
       this.query = this.$route.query
       this.loginUser = User.get()
+      if (`${this.loginUser.retailerinfo.firstinfo.addgroup}` === '0' && this.query.from) {
+        this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
+          const data = res.data
+          this.loginUser = data
+          User.set(data)
+          if (`${this.loginUser.retailerinfo.firstinfo.addgroup}` === '0' && this.query.from) {
+            this.isFirst = true
+            this.showFirst = true
+          }
+        })
+      }
       this.selectedIndex = 0
       this.showTab1 = false
       this.rooms = []
-      console.log('in refresh')
       this.loadRooms()
     }
   },

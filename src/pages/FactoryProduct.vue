@@ -152,16 +152,6 @@
         content="销售佣金是指卖家销售厂家的商品后，卖家所得到的佣金。">
       </tip-layer>
     </template>
-    <template v-if="showFirst">
-      <firstTip @submitFirstTip="submitFirstTip">
-        <div class="font15 bold txt">
-          <div class="flex_center">还在担心没有好货？</div>
-          <div class="flex_center mt5"><span>货源中为您提供</span><span class="color-theme">百万爆款好货</span></div>
-          <div class="flex_center mt5"><span>上架销售</span><span class="color-theme">立赚佣金</span></div>
-          <div class="flex_center mt5"><span>轻轻松松</span><span class="color-theme">赚大钱</span></div>
-        </div>
-      </firstTip>
-    </template>
     <template v-if="showHb">
       <firstHb action="importproduct" @closeFirstHb="closeFirstHb"></firstHb>
     </template>
@@ -194,7 +184,6 @@ import ENV from 'env'
 import { User } from '#/storage'
 import Socket from '#/socket'
 import OpenVip from '@/components/OpenVip'
-import FirstTip from '@/components/FirstTip'
 import FirstHb from '@/components/FirstHb'
 
 let room = ''
@@ -203,7 +192,7 @@ export default {
     TransferDom
   },
   components: {
-    Previewer, Swiper, SwiperItem, Popup, ShareSuccess, Sos, XImg, TitleTip, OpenVip, TipLayer, FirstTip, FirstHb
+    Previewer, Swiper, SwiperItem, Popup, ShareSuccess, Sos, XImg, TitleTip, OpenVip, TipLayer, FirstHb
   },
   filters: {
     dateformat: function (value) {
@@ -248,7 +237,6 @@ export default {
       playVideo: false,
       showTip: false,
       WeixinName: ENV.WeixinName,
-      showFirst: false,
       isFirst: false,
       showHb: false
     }
@@ -310,9 +298,6 @@ export default {
       this.previewerFlasharr = []
       this.ingdata = []
       this.messages = 0
-    },
-    submitFirstTip () {
-      this.showFirst = false
     },
     closeFirstHb () {
       this.isFirst = false
@@ -488,9 +473,6 @@ export default {
           } else {
             self.showContainer = true
             self.productdata = data.data
-            // if (this.isFirst && !this.productdata.haveimport) {
-            //   this.showFirst = true
-            // }
             self.factoryinfo = self.productdata.factoryinfo
             document.title = self.productdata.title
             const photo = self.productdata.photo
@@ -539,11 +521,11 @@ export default {
         this.loginUser = data
         User.set(data)
         this.retailerInfo = this.loginUser.retailerinfo
-        if (this.retailerInfo.firstinfo.importproduct === '0') {
-          this.isFirst = true
-        }
         this.initData()
         this.query = this.$route.query
+        if (`${this.retailerInfo.firstinfo.importproduct}` === '0' && this.query.from) {
+          this.isFirst = true
+        }
         this.getData()
         this.createSocket()
       })

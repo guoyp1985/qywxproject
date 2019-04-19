@@ -83,37 +83,44 @@
       </x-dialog>
     </div>
     <div class="font12 color-red4 align_center mt10" style="padding:0 15px;box-sizing:border-box;">注意：请勿将官方客服踢出微信群，否则影响微信群接收订单！</div>
+    <template v-if="showHb">
+      <firstHb action="addgroup" @closeFirstHb="closeFirstHb"></firstHb>
+    </template>
   </div>
 </template>
 <script>
 import { CheckIcon, XButton, XDialog, TransferDom, XInput } from 'vux'
 import ENV from 'env'
+import FirstHb from '@/components/FirstHb'
+import { User } from '#/storage'
 export default {
   directives: {
     TransferDom
   },
   components: {
-    CheckIcon, XButton, XDialog, XInput
+    CheckIcon, XButton, XDialog, XInput, FirstHb
   },
   data () {
     return {
       query: {},
+      loginUser: {},
       rgbred: 'rgba09red',
       crypto: '',
       isAccept: false,
       isSubmiting: false,
       showDialog: false,
       wxCardShow: false,
-      qrcode: ''
-      // roomCategory: [1],
-      // roomCategories: [
-      //   {id: 1, title: '夜跑群'},
-      //   {id: 2, title: '养生群'},
-      //   {id: 3, title: '追星群'}
-      // ]
+      qrcode: '',
+      isFirst: false,
+      showHb: false
     }
   },
   methods: {
+    closeFirstHb () {
+      this.isFirst = false
+      this.showHb = false
+      this.afterAdd()
+    },
     toStart () {
       this.$router.push('/RoomStart')
     },
@@ -149,8 +156,7 @@ export default {
           }
           this.isSubmiting = true
           this.$vux.loading.show()
-          this.$http.post(`${ENV.BokaApi}/api/groups/addGroup`, data)
-          .then(res => {
+          this.$http.post(`${ENV.BokaApi}/api/groups/addGroup`, data).then(res => {
             const data = res.data
             this.$vux.loading.hide()
             this.$vux.toast.show({
@@ -160,11 +166,11 @@ export default {
               onHide: () => {
                 _this.isSubmiting = false
                 if (data.flag) {
-                  let params = {}
-                  if (_this.query.from) {
-                    params.from = _this.query.from
+                  if (this.isFirst) {
+                    this.showHb = true
+                  } else {
+                    this.afterAdd()
                   }
-                  _this.$router.push({path: '/roomList', query: params})
                 } else {
                   _this.reset()
                 }
@@ -174,6 +180,10 @@ export default {
         }
       }
     },
+    afterAdd () {
+      let params = this.$util.handleAppParams(this.query, {})
+      this.$router.push({path: '/roomList', query: params})
+    },
     reset () {
       this.crypto = ''
       this.isAccept = false
@@ -181,6 +191,17 @@ export default {
   },
   activated () {
     this.query = this.$route.query
+    this.loginUser = User.get()
+    if (`${this.loginUser.retailerinfo.firstinfo.addgroup}` === '0' && this.query.from) {
+      this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
+        const data = res.data
+        this.loginUser = data
+        User.set(data)
+        if (this.loginUser.retailerinfo.firstinfo.addgroup === '0' && this.query.from) {
+          this.isFirst = true
+        }
+      })
+    }
   }
 }
 </script>

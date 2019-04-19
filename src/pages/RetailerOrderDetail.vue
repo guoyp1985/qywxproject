@@ -173,7 +173,7 @@
         </div>
       </div>
     </div>
-    <template v-if="data.flag == 2 && data.candeliver">
+    <template v-if="data.flag == 2 && data.backflag != 20 && data.candeliver">
       <template v-if="showFirst">
         <firstTip @submitFirstTip="submitFirstTip">
           <div class="font15 bold txt">
@@ -537,7 +537,7 @@ export default {
             this.retailerInfo = data.data
             this.loginUser.retailerinfo = this.retailerInfo
             User.set(this.loginUser)
-            if (this.retailerInfo.firstinfo.orderdeliver === '0' && this.query.from && this.data.flag === 2 && this.data.candeliver) {
+            if (`${this.retailerInfo.firstinfo.orderdeliver}` === '0' && this.query.from && this.data.flag === 2 && this.data.candeliver) {
               this.isFirst = true
               this.showFirst = true
             }

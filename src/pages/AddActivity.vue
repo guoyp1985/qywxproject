@@ -185,7 +185,6 @@ export default {
       autofixed: false,
       query: {},
       loginUser: {},
-      retailerInfo: {},
       activityType: null,
       allowsubmit: true,
       showselectproduct: true,
@@ -696,21 +695,18 @@ export default {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
-      this.retailerInfo = this.loginUser.retailerinfo
-      console.log(this.retailerInfo)
       if (this.loginUser.subscribe !== 1 && !this.loginUser.isretailer) {
         this.showSubscribe = true
         return false
       }
       if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
         this.initData()
-        if (((this.retailerInfo.firstinfo.groupbuy === '0' && this.$route.query.type === 'groupbuy') || (this.retailerInfo.firstinfo.bargainbuy === '0' && this.$route.query.type === 'bargainbuy')) && this.$route.query.from) {
-          this.$http.get(`${ENV.BokaApi}/api/retailer/info`).then(res => {
+        if (((`${this.loginUser.retailerinfo.firstinfo.groupbuy}` === '0' && this.$route.query.type === 'groupbuy') || (`${this.loginUser.retailerinfo.firstinfo.bargainbuy}` === '0' && this.$route.query.type === 'bargainbuy')) && this.$route.query.from) {
+          this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
             const data = res.data
-            if (data.flag) {
-              this.retailerInfo = data.data
-              this.loginUser.retailerinfo = this.retailerInfo
-              User.set(this.loginUser)
+            this.loginUser = data
+            User.set(this.loginUser)
+            if (((`${this.loginUser.retailerinfo.firstinfo.groupbuy}` === '0' && this.$route.query.type === 'groupbuy') || (`${this.loginUser.retailerinfo.firstinfo.bargainbuy}` === '0' && this.$route.query.type === 'bargainbuy')) && this.$route.query.from) {
               this.isFirst = true
               this.showFirst = true
             }

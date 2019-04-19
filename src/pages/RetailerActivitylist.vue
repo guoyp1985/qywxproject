@@ -279,7 +279,7 @@ export default {
         if (self.isFirstLoad) {
           self.activityCount = self.tabdata1.length
           self.isFirstLoad = false
-          if (this.isFirst && ((this.retailerInfo.firstinfo.groupbuy === '0' && this.retailerInfo.firstinfo.bargainbuy === '0') || !this.tabdata1.length)) {
+          if (this.isFirst && ((`${this.retailerInfo.firstinfo.groupbuy}` === '0' && `${this.retailerInfo.firstinfo.bargainbuy}` === '0') || !this.tabdata1.length)) {
             this.showFirst = true
           }
         }
@@ -341,7 +341,7 @@ export default {
               this.retailerInfo = data.data
               this.loginUser.retailerinfo = this.retailerInfo
               User.set(this.loginUser)
-              if ((this.retailerInfo.firstinfo.groupbuy === '0' || this.retailerInfo.firstinfo.bargainbuy === '0') && this.query.from) {
+              if ((`${this.retailerInfo.firstinfo.groupbuy}` === '0' || `${this.retailerInfo.firstinfo.bargainbuy}` === '0') && this.query.from) {
                 this.isFirst = true
               }
             }

@@ -617,7 +617,7 @@ export default {
               self.deliveritem = null
               self.deliverindex = 0
               self.deliverdata = { delivercompany: '-1', delivercode: '' }
-              if (this.retailerInfo.firstinfo.orderdeliver === '0' && this.query.from) {
+              if (this.isFirst) {
                 this.showHb = true
               }
             }
@@ -701,14 +701,14 @@ export default {
           if (this.selectedIndex === 0) {
             this.swiperChange()
           }
-          if (this.loginUser.retailerinfo.firstinfo.orderdeliver === '0' && this.query.from) {
+          if (`${this.loginUser.retailerinfo.firstinfo.orderdeliver}` === '0' && this.query.from) {
             this.$http.get(`${ENV.BokaApi}/api/retailer/info`).then(res => {
               const data = res.data
               if (data.flag) {
                 this.retailerInfo = data.data
                 this.loginUser.retailerinfo = this.retailerInfo
                 User.set(this.loginUser)
-                if (this.retailerInfo.firstinfo.orderdeliver === '0' && this.query.from) {
+                if (`${this.loginUser.retailerinfo.firstinfo.orderdeliver}` === '0' && this.query.from) {
                   this.isFirst = true
                   this.showFirst = true
                 }
