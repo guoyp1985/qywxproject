@@ -446,7 +446,7 @@ export default {
       })
     },
     importEvent () {
-      if (!this.loginUser.isretailer || !this.retailerInfo.moderate) {
+      if (!this.loginUser.isretailer || !this.retailerInfo.vipvalidate) {
         this.showTip = true
       } else {
         this.importProduct()
