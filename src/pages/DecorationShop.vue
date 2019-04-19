@@ -94,6 +94,9 @@
         </popup>
         <clip-popup :show="popupShow" :img="cutImg" :after-submit="popupSubmit" @on-cancel="popupCancel"></clip-popup>
       </div>
+      <template v-if="showHb">
+        <firstHb action="topbanner" @closeFirstHb="closeFirstHb"></firstHb>
+      </template>
     </template>
   </div>
 </template>
@@ -113,6 +116,7 @@ Please upload rolling show photo:
 import { TransferDom, Popup, Confirm, Alert, XImg } from 'vux'
 import ClipPopup from '@/components/ClipPopup'
 import Sos from '@/components/Sos'
+import FirstHb from '@/components/FirstHb'
 import { User } from '#/storage'
 import ENV from 'env'
 
@@ -123,7 +127,7 @@ export default {
     TransferDom
   },
   components: {
-    Popup, Confirm, Alert, ClipPopup, XImg, Sos
+    Popup, Confirm, Alert, ClipPopup, XImg, Sos, FirstHb
   },
   data () {
     return {
@@ -132,6 +136,7 @@ export default {
       query: {},
       showContainer: false,
       loginUser: {},
+      retailerInfo: {},
       productdata: [],
       clickdata: {},
       clickindex: 0,
@@ -142,7 +147,9 @@ export default {
       rollingData: null,
       cutImg: '',
       popupShow: false,
-      disData: false
+      disData: false,
+      isFirst: false,
+      showHb: false
     }
   },
   watch: {
@@ -154,6 +161,10 @@ export default {
     }
   },
   methods: {
+    closeFirstHb () {
+      this.showHb = false
+      this.isFirst = false
+    },
     onProduct (item) {
       if (this.query.from === 'miniprogram') {
         this.$wechat.miniProgram.redirectTo({url: `/packageB/pages/product?id=${item.id}&wid=${this.loginUser.uid}`})
@@ -291,7 +302,7 @@ export default {
         for (let i = 0; i < self.photoarr.length; i++) {
           parr.push(self.$util.setPhoto(self.photoarr[i]))
         }
-        self.$http.post(`${ENV.BokaApi}/api/topBanner/product`, { do: 'add', id: self.clickdata.id, topbanner: parr.join(',') }).then(function (res) {
+        self.$http.post(`${ENV.BokaApi}/api/topBanner/product`, { do: 'add', id: self.clickdata.id, topbanner: parr.join(',') }).then((res) => {
           let data = res.data
           self.$vux.loading.hide()
           let toasttype = data.flag !== 1 ? 'warn' : 'success'
@@ -299,11 +310,14 @@ export default {
             text: data.error,
             type: toasttype,
             time: self.$util.delay(data.error),
-            onHide: function () {
+            onHide: () => {
               if (data.flag === 1) {
                 self.showphotopop = false
                 self.photoarr = []
                 self.rollingData = null
+                if (this.isFirst) {
+                  this.showHb = true
+                }
               }
             }
           })
@@ -369,6 +383,17 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.$http.get(`${ENV.BokaApi}/api/retailer/info`).then(res => {
+        const data = res.data
+        if (data.flag) {
+          this.retailerInfo = data.data
+          this.loginUser.retailerinfo = this.retailerInfo
+          User.set(this.loginUser)
+          if (this.retailerInfo.firstinfo.topbanner === '0' && this.query.from) {
+            this.isFirst = true
+          }
+        }
+      })
       if (this.showContainer && this.productdata.length < limit) {
         pagestart1 = 0
         this.disData = false

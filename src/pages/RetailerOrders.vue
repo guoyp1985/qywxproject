@@ -280,7 +280,7 @@
           </div>
         </popup>
       </div>
-      <template v-if="isFirst">
+      <template v-if="showFirst">
         <firstTip @submitFirstTip="submitFirstTip">
           <div class="font15 bold txt">
             <div class="flex_center">订单发货就是这么简单</div>
@@ -288,7 +288,7 @@
         </firstTip>
       </template>
       <template v-if="showHb">
-        <firstHb action="orderdeliver"></firstHb>
+        <firstHb action="orderdeliver" @closeFirstHb="closeFirstHb"></firstHb>
       </template>
     </template>
   </div>
@@ -354,13 +354,18 @@ export default {
       autofixed: false,
       searchword1: '',
       showTip: false,
+      showFirst: false,
       isFirst: false,
       showHb: false
     }
   },
   methods: {
-    submitFirstTip () {
+    closeFirstHb () {
+      this.showHb = false
       this.isFirst = false
+    },
+    submitFirstTip () {
+      this.showFirst = false
     },
     copyTxt (item) {
       const self = this
@@ -704,6 +709,7 @@ export default {
               User.set(this.loginUser)
               if (this.retailerInfo.firstinfo.orderdeliver === '0' && this.query.from) {
                 this.isFirst = true
+                this.showFirst = true
               }
             }
           })
