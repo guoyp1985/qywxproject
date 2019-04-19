@@ -110,7 +110,7 @@
           </div>
           <div v-if="productdata.length == 0" class="emptyitem flex_center">暂无商品</div>
           <div class="productlist squarepic pb10" v-if="disproductdata">
-            <div class="bk-productitem scroll_item" v-for="(item,index) in productdata">
+            <router-link class="bk-productitem scroll_item" v-for="(item,index) in productdata" :to="{path: '/product', query: {id: item.id, wid: item.uploader}}">
               <div class="inner">
                 <div class="picarea">
                   <div class="pic">
@@ -133,7 +133,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </router-link>
           </div>
         </div>
 
