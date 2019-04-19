@@ -89,10 +89,7 @@ export default {
   },
   methods: {
     toOrderDetail (item) {
-      let params = {id: item.orderid}
-      if (this.query.from) {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {id: item.orderid})
       this.$router.push({path: '/retailerOrderDetail', query: params})
     },
     getData () {

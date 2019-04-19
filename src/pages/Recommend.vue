@@ -241,29 +241,21 @@ export default {
   },
   methods: {
     toRebateInfo (flag) {
-      let params = {}
+      let params = this.$util.handleAppParams(this.query, {})
       if (flag) {
         params.flag = flag
-      }
-      if (this.query.from) {
-        params.from = this.query.from
       }
       this.$router.push({path: '/userRebateInfo', query: params})
     },
     toRebateStore (item) {
-      let params = {wid: item.uid}
-      if (this.query.from) {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {wid: item.uid})
       this.$router.push({path: '/rebateStore', query: params})
     },
     toProduct (item) {
-      let params = {id: item.id, wid: item.uploader}
       if (this.query.from) {
-        params.from = this.query.from
         this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.id}&wid=${item.uploader}`})
       } else {
-        this.$router.push({path: '/product', query: params})
+        this.$router.push({path: '/product', query: {id: item.id, wid: item.uploader}})
       }
     },
     toProduct1 (item) {
@@ -284,21 +276,17 @@ export default {
       }
     },
     toActivity (item) {
-      let params = {id: item.id}
       if (this.query.from) {
-        params.from = this.query.from
         this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.activity}?id=${item.id}&wid=${item.uploader}`})
       } else {
-        this.$router.push({path: '/activity', query: params})
+        this.$router.push({path: '/activity', query: {id: item.id}})
       }
     },
     toNews (item) {
-      let params = {id: item.id, wid: item.uploader}
       if (this.query.from) {
-        params.from = this.query.from
         this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.news}?id=${item.id}&wid=${item.uploader}`})
       } else {
-        this.$router.push({path: '/news', query: params})
+        this.$router.push({path: '/news', query: {id: item.id, wid: item.uploader}})
       }
     },
     applyClick (id) {
@@ -477,33 +465,15 @@ export default {
       this.isshowpopup = false
     },
     withdrawClick () {
-      let params = {}
-      if (this.query.appid) {
-        params.appid = this.query.appid
-      }
-      if (this.query.from) {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {})
       this.$router.push({path: '/userRevenue', query: params})
     },
     bringCustomerClick (type) {
-      let params = {}
-      if (this.query.appid) {
-        params.appid = this.query.appid
-      }
-      if (this.query.from) {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {})
       this.$router.push({path: '/bringCustomer', query: params})
     },
     bringCustomerClick1 (type) {
-      let params = {type: 'buy'}
-      if (this.query.appid) {
-        params.appid = this.query.appid
-      }
-      if (this.query.from) {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {type: 'buy'})
       this.$router.push({path: '/bringCustomer', query: params})
     },
     getData () {

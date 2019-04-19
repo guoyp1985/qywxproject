@@ -337,10 +337,7 @@ export default {
     viewDeliver (item, index) {
       this.clickData = item
       this.clickIndex = index
-      let params = {id: item.id}
-      if (this.query.from) {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {id: item.id})
       this.$router.push({path: '/simpleDeliverinfo', query: params})
     },
     closeModal () {

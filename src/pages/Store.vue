@@ -321,9 +321,7 @@ export default {
           params.fromModule = 'store'
           params.fromId = params.uid
           params.wid = params.uid
-          if (self.query.from) {
-            params.from = self.query.from
-          }
+          params = this.$util.handleAppParams(this.query, params)
           self.$router.push({path: '/chat', query: params})
         }
       }

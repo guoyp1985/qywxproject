@@ -43,17 +43,11 @@ export default {
   },
   methods: {
     toRooms () {
-      let params = {}
-      if (this.query.from) {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {})
       this.$router.push({path: '/rooms', query: params})
     },
     toMoney () {
-      let params = {}
-      if (this.query.from) {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {})
       if (this.query.frompage === 'rooms') {
         this.$router.push({path: '/roomList', query: params})
       } else {

@@ -93,24 +93,15 @@ export default {
   },
   methods: {
     toMyOrder () {
-      let params = {}
-      if (this.query.from) {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {})
       this.$router.push({path: '/roomOrders', query: params})
     },
     toRoomDetails (item) {
-      let params = {id: item.id}
-      if (this.query.from) {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {id: item.id})
       this.$router.push({path: '/roomDetails', query: params})
     },
     toOrderDeal (item) {
-      let params = {id: item.id}
-      if (this.query.from) {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {id: item.id})
       this.$router.push({path: '/roomOrderDeal', query: params})
     },
     toStart () {

@@ -155,12 +155,9 @@ export default {
       this.getData1('sort')
     },
     toFProduct (item) {
-      let params = {id: item.id}
+      let params = this.$util.handleAppParams(this.query, {id: item.id})
       if (this.query.id) {
         params.fid = this.query.id
-      }
-      if (this.query.from) {
-        params.from = this.query.from
       }
       this.$router.push({path: '/factoryProduct', query: params})
     },

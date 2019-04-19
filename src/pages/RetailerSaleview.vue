@@ -240,20 +240,14 @@ export default {
       this.storeQrcode = null
     },
     toChat (item) {
-      let params = {uid: this.query.uid}
+      let params = this.$util.handleAppParams(this.query, {uid: this.query.uid})
       if (item && item.uid) {
         params.uid = item.uid
-      }
-      if (this.query.from) {
-        params.from = this.query.from
       }
       this.$router.push({path: '/chat', query: params})
     },
     toMemberView (item) {
-      let params = {uid: item.uid}
-      if (this.query.from) {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {uid: item.uid})
       this.$router.push({path: '/membersView', query: params})
     },
     createQrcode: function () {
@@ -382,10 +376,6 @@ export default {
       this.isshowpopup = false
     },
     clickItem (item) {
-      // let params = {id: item.moduleid, wid: item.kefuid}
-      // if (this.query.from) {
-      //   params.from = this.query.from
-      // }
       // if (item.module === 'news' && this.query.from) {
       //   this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.news}?id=${item.id}&wid=${item.kefuid}`})
       // } else if (item.module === 'product' && this.query.from) {
@@ -393,6 +383,7 @@ export default {
       // } else if (item.module === 'activity' && this.query.from) {
       //   this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.activity}?id=${item.id}&wid=${item.kefuid}`})
       // } else {
+      //   let params = this.$util.handleAppParams(this.query, {id: item.moduleid, wid: item.kefuid})
       //   this.$router.push({path: `/${item.module}`, query: params})
       // }
     },

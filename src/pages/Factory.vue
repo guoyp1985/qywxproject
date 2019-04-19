@@ -144,10 +144,7 @@ export default {
       this.showBottom = false
     },
     toProduct (item) {
-      let params = {id: item.id, fid: this.query.id}
-      if (this.query.from) {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {id: item.id, fid: this.query.id})
       this.$router.push({path: '/factoryProduct', query: params})
     },
     toStore () {

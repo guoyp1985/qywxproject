@@ -207,10 +207,7 @@ export default {
   },
   methods: {
     toChat () {
-      let params = {uid: this.retailerInfo.uid, fromModule: 'order'}
-      if (this.query.from) {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {uid: this.retailerInfo.uid, fromModule: 'order'})
       this.$router.push({path: '/chat', query: params})
     },
     textareaChange (refname) {

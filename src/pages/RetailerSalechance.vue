@@ -165,17 +165,11 @@ export default {
   },
   methods: {
     toMembersView (item) {
-      let params = {uid: item.uid}
-      if (this.query.from) {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {uid: item.uid})
       this.$router.push({path: '/membersView', query: params})
     },
     toChat (item) {
-      let params = {uid: item.uid, fromModule: 'retailer'}
-      if (this.query.from) {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {uid: item.uid, fromModule: 'retailer'})
       this.$router.push({path: '/chat', query: params})
     },
     handleScroll: function (refname, index) {

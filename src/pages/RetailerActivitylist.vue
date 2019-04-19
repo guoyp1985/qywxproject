@@ -215,10 +215,7 @@ export default {
       if (this.loginUser.isretailer === 2 && this.activityCount >= 2) {
         this.openVip()
       } else {
-        let queryParams = {type: type}
-        if (this.query.from) {
-          queryParams.from = this.query.from
-        }
+        let queryParams = this.$util.handleAppParams(this.query, {type: type})
         if (this.query.id) {
           queryParams.id = this.query.id
         }
