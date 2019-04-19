@@ -14,7 +14,7 @@
         <div class="txt">如何打开厂家后台管理</div>
       </div>
       <div class="first">
-        <div><span class="bold" style="color:#fd6a61;">第一步：</span>进入厂家中心的PC端后台，点击【复制后台管理链接】按钮</div>
+        <div><span class="bold" style="color:#fd6a61;">第一步：</span>进入厂家中心的PC端后台，点击【复制后台管理链接】按钮。</div>
       </div>
       <div class="img1 mt20">
         <img src="../assets/images/bg-one.png" />
@@ -22,7 +22,7 @@
       <div class="first mt20">
         <div>
           <span class="bold" style="color:#fd6a61;">第二步：</span>
-          打开电脑中的浏览器，将链接复制到浏览器，点击【Enter】键回车搜索，然后用微信【扫一扫】即可进入到厂家后台管理，进行操作
+          打开电脑中的浏览器，将链接复制到浏览器，点击【Enter】键回车搜索，然后用微信【扫一扫】即可进入到厂家后台管理，进行操作。
         </div>
       </div>
       <div class="img1 mt20">

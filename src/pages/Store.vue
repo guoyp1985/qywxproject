@@ -531,6 +531,9 @@ export default {
           } else {
             this.showSuggest = false
           }
+          const shopmodal = this.retailerInfo.shopmodel
+          // console.log('选用的模板')
+          // console.log(shopmodal)
           const wid = self.retailerInfo.uid
           let shareParams = {
             module: 'store',
