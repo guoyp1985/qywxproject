@@ -170,22 +170,16 @@ export default {
   },
   methods: {
     toFactoryProduct (item) {
-      let params = {id: item.id, fid: this.fid}
+      let params = this.$util.handleAppParams(this.query, {id: item.id, fid: this.fid})
       if (this.query.wid) {
         params.wid = this.query.wid
-      }
-      if (this.query.from) {
-        params.from = this.query.from
       }
       this.$router.push({path: '/factoryProduct', query: params})
     },
     toFactoryNews (item) {
-      let params = {id: item.id, fid: this.fid}
+      let params = this.$util.handleAppParams(this.query, {id: item.id, fid: this.fid})
       if (this.query.wid) {
         params.wid = this.query.wid
-      }
-      if (this.query.from) {
-        params.from = this.query.from
       }
       this.$router.push({path: '/factoryNews', query: params})
     },
@@ -261,10 +255,7 @@ export default {
           const callbackHref = encodeURIComponent(`${ENV.Host}/#/redirect`)
           location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${callbackHref}&response_type=code&scope=snsapi_userinfo&state=${originHref}#wechat_redirect`)
         } else {
-          let params = {uid: this.fid, fromModule: 'factory', fromId: this.fid}
-          if (this.query.from) {
-            params.from = this.query.from
-          }
+          let params = this.$util.handleAppParams(this.query, {uid: this.fid, fromModule: 'factory', fromId: this.fid})
           this.$router.push({path: '/chat', query: params})
         }
       }

@@ -64,10 +64,7 @@ export default {
       })
     },
     toDeal () {
-      let params = {id: this.room.id}
-      if (this.query.from) {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {id: this.room.id})
       this.$router.push({path: '/roomOrderDeal', query: params})
     }
   },

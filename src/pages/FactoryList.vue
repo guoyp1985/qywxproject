@@ -97,10 +97,7 @@ export default {
       return this.$util.getPhoto(src)
     },
     toDetail (item) {
-      let params = {id: item.id, wid: this.loginUser.uid}
-      if (this.query.from) {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {id: item.id, wid: this.loginUser.uid})
       this.$router.push({path: '/factory', query: params})
     },
     toRecommend (item) {

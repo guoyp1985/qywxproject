@@ -192,22 +192,14 @@ export default {
       return this.$util.getPhoto(photo)
     },
     toCustomer () {
-      let params = {wid: this.query.wid}
-      if (this.query.appid) {
-        params.appid = this.query.appid
-      }
-      if (this.query.from) {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {wid: this.query.wid})
       this.$router.push({path: '/bringCustomer', query: params})
     },
     toProduct (item) {
-      let params = {id: item.id, wid: item.uploader}
       if (this.query.from) {
-        params.from = this.query.from
         this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.id}&wid=${item.uploader}`})
       } else {
-        this.$router.push({path: '/product', query: params})
+        this.$router.push({path: '/product', query: {id: item.id, wid: item.uploader}})
       }
     },
     toProduct1 (item) {

@@ -189,10 +189,7 @@ export default {
       this.showTip = false
     },
     toApply () {
-      let params = {uid: ENV.FactoryManagerUid, fromModule: 'retailer'}
-      if (this.query.from) {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {uid: ENV.FactoryManagerUid, fromModule: 'retailer'})
       this.$router.push({path: '/chat', query: params})
     },
     initData () {
