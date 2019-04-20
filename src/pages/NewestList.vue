@@ -167,7 +167,7 @@
       },
       getData3 () {
         const self = this
-        let params = {pagestart: self.pageStart, limit: self.limit}
+        let params = {pagestart: self.pageStart, limit: self.limit, wid: this.loginUser.uid}
         self.$http.get(`${ENV.BokaApi}/api/retailer/getRetailerProducts`, {
           params: params
         }).then(res => {

@@ -192,6 +192,10 @@ export default {
   props: {
     elem: String,
     query: Object,
+    loginUser: {
+      type: Object,
+      default: {}
+    },
     module: {
       type: String,
       default: 'news'
@@ -352,7 +356,7 @@ export default {
       })
     },
     getProductData () {
-      let params = {pagestart: self.pagestart1, limit: self.limit}
+      let params = {pagestart: self.pagestart1, limit: self.limit, wid: this.loginUser.uid}
       let keyword = self.searchword
       if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
         params.keyword = keyword

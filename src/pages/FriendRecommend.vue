@@ -163,7 +163,7 @@
       getData3 () {
         const self = this
         self.$http.get(`${ENV.BokaApi}/api/retailer/getRetailerProducts`, {
-          params: {pagestart: 0, limit: 3}
+          params: {pagestart: 0, limit: 3, wid: this.loginUser.uid}
         }).then(res => {
           let data = res.data
           let retdata = data.data ? data.data : data

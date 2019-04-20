@@ -360,7 +360,7 @@ export default {
     },
     getData1 () {
       const self = this
-      let params = { pagestart: this.pageStart, limit: limit }
+      let params = {pagestart: this.pageStart, limit: limit, wid: this.loginUser.uid}
       if (self.query.wid) {
         params.wid = self.query.wid
       }

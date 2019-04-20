@@ -341,7 +341,7 @@ export default {
     },
     getData () {
       const self = this
-      const params = {pagestart: pagestart1, limit: limit}
+      const params = {pagestart: pagestart1, limit: limit, wid: this.loginUser.uid}
       self.$http.get(`${ENV.BokaApi}/api/retailer/getRetailerProducts`, {
         params: params
       }).then(function (res) {
