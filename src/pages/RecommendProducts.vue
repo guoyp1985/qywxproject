@@ -243,6 +243,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       this.loginUser = User.get()
+      console.log(this.loginUser)
       if (`${this.loginUser.retailerinfo.firstinfo.importproduct}` === '0' && this.query.from) {
         this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
           const data = res.data
