@@ -135,7 +135,7 @@
         </share-success>
       </template>
       <template v-if="showTip">
-        <tip-layer buttonTxt="立即申请" content="会员卖家才可代理厂家商品，赶快入住申请吧！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
+        <tip-layer buttonTxt="立即申请" content="会员卖家才可代理厂家商品，赶快入驻申请吧！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
       </template>
     </template>
     <template v-if="showHelpModal">
