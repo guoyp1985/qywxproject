@@ -124,13 +124,13 @@
           </swiper-item>
         </swiper>
       </div>
-      <template v-if="showFirst">
+      <!-- <template v-if="showFirst">
         <firstTip @submitFirstTip="submitFirstTip">
           <div class="font15 bold txt">
             <div class="flex_center">创建团购和砍价活动都可促进用户购买哦</div>
           </div>
         </firstTip>
-      </template>
+      </template> -->
     </template>
   </div>
 </template>
