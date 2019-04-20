@@ -132,8 +132,7 @@ export default {
     toStore () {
       let params = {wid: this.item.wid}
       if (this.$route.query.from) {
-        params.from = this.$route.query.from
-        this.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.store}?wid=${this.item.id}`})
+        this.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.store}?wid=${this.item.wid}`})
       } else {
         this.$router.push({path: '/store', query: params})
       }
