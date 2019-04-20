@@ -125,7 +125,7 @@
           <div class="font15 bold txt">
             <div class="flex_center">还在为没有好文章而发愁？</div>
             <div class="flex_center mt5"><span>复制其他文章链接</span></div>
-            <div class="flex_center mt5"><span>在易采集中输入链接一件搜索</span></div>
+            <div class="flex_center mt5"><span>在易采集中输入链接一键搜索</span></div>
             <div class="flex_center mt5"><span>轻松采集别人的文章变自己的文章</span></div>
           </div>
         </firstTip>
