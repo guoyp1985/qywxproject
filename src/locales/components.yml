@@ -682,7 +682,7 @@ zh-CN:
   tRetailerSalechance: 销售机会
   tRetailerCustomerlist: 联系客户
   tRetailerAddorder: 订单录入
-  tRetailerOrders: 订单列表
+  tRetailerOrders: 我的销售订单
   tStore: 我的店铺
   tRetailerNews: 文章
   tRetailerProductlist: 商品
@@ -699,7 +699,7 @@ zh-CN:
   tNewAddress: 新建地址
   tFavorite: 我的收藏
   tMessages: 消息列表
-  tOrderSearch: 订单列表
+  tOrderSearch: 我的订单
   tOrderDetail: 订单详情
   tShippingDetails: 物流信息
   tRecommend: 返点客
