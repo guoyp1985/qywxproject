@@ -423,7 +423,9 @@ export default {
               type: data.flag === 1 ? 'success' : 'warn',
               time: self.$util.delay(error),
               onHide: () => {
-                this.showHb = true
+                if (this.isFirst && data.flag) {
+                  this.showHb = true
+                }
               }
             })
           })
@@ -525,6 +527,8 @@ export default {
         this.query = this.$route.query
         if (`${this.retailerInfo.firstinfo.importproduct}` === '0' && this.query.from) {
           this.isFirst = true
+        } else {
+          this.isFirst = false
         }
         this.getData()
         this.createSocket()
