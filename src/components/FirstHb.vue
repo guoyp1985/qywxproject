@@ -3,10 +3,10 @@
   position:absolute;left:0;top:0;right:0;bottom:0;
 }
 .first-hb-modal{
-  .modal-inner{width:80%;background-color:transparent;max-width:236px;max-height:400px;}
+  .modal-inner{width:80%;height:72%;background-color:transparent;max-width:430px;}
   .pic-outer:after{content:'';display:block;padding-bottom:170%;width:100%;}
   .pic-outer{
-    width:100%;position:relative;max-width:236px;max-height:400px;
+    width:100%;position:relative;max-width:430px;max-height:100%;
     .pic{
       position:absolute;left:0;top:0;right:0;bottom:0;
       img{max-width:100%;max-height:100%;}
