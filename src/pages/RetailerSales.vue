@@ -152,7 +152,8 @@
     <template v-if="showFirst">
       <firstTip @submitFirstTip="submitFirstTip">
         <div class="font15 bold txt">
-          <div class="flex_center">客户列表中的客户都可邀请进行代理</div>
+          <div class="flex_center">客户列表中的客户</div>
+          <div class="flex_center mt5">都可邀请进行代理</div>
           <div class="flex_center mt5">轻轻松松提高销售额</div>
         </div>
       </firstTip>
