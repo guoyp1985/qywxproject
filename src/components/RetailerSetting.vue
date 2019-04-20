@@ -79,28 +79,7 @@
                   <check-icon class="red-check" :value.sync="suggestClose" @click.native.stop="clickSuggest(0)">关闭</check-icon>
                 </div>
               </forminputplate>
-              <!-- <forminputplate class="required" v-if="query.miniconfig != 'wechat.mini_program.tljk'">
-                <span slot="title">店铺模板</span>
-                <div>
-                  <check-icon class="red-check">
-                    通用版
-                    <img src="/src/assets/images/store1.png" />
-                  </check-icon>
-                  <check-icon class="red-check">
-                    大图版
-                    <img src="/src/assets/images/store2.png" />
-                  </check-icon>
-                  <check-icon class="red-check">
-                    时尚黑
-                    <img src="/src/assets/images/store3.png" />
-                  </check-icon>
-                  <check-icon class="red-check">
-                    清新蓝
-                    <img src="/src/assets/images/store4.png" />
-                  </check-icon>
-                </div>
-              </forminputplate> -->
-              <forminputplate class="required" v-if="query.miniconfig != 'wechat.mini_program.tljk'">
+              <forminputplate class="required">
                 <span slot="title">店铺模板</span>
                 <div>
                   <check-icon class="red-check" :value.sync="template1" @click.native.stop="clickTemplate(1)">通用版</check-icon>
