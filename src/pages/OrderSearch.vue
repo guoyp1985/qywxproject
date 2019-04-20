@@ -4,7 +4,7 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div id="order-search" class="containerarea font14 nobottom">
+  <div id="order-search" :class="`containerarea font14 ${loginUser.isretailer ? 's-havebottom' : ''}`">
     <div class="s-topbanner s-topbanner1">
       <tab class="b-tab" v-model="selectedIndex">
         <tab-item :selected="selectedIndex==0" @on-item-click="toggleTab">{{ $t('All') }}</tab-item>
@@ -63,6 +63,11 @@
         </template>
       </div>
     </div>
+    <div class="s-bottom flex_center pl12 pr12 list-shadow02" v-if="loginUser.isretailer">
+      <div class="flex_cell flex_center">
+        <router-link class="color-white flex_center btn-bottom-red" to="/retailerOrders" style="width:85%;">我的销售订单</router-link>
+      </div>
+    </div>
     <div v-if="showRefundModal" class="auto-modal refund-modal flex_center">
       <div class="modal-inner border-box" style="width:80%;">
         <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">申请退款</div>
@@ -97,6 +102,7 @@
 <script>
 import { Sticky, Tab, TabItem, Group, XTextarea } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
+import {User} from '#/storage'
 import ENV from 'env'
 
 export default {
@@ -106,6 +112,7 @@ export default {
   data () {
     return {
       query: {},
+      loginUser: {},
       selectedIndex: 0,
       distabdata1: false,
       distabdata2: false,
@@ -451,6 +458,7 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.loginUser = User.get()
       if ((this.query.flag === undefined && this.$route.query.flag === undefined) || this.query.flag !== this.$route.query.flag) {
         this.query = this.$route.query
         let flag = parseInt(this.query.flag)
