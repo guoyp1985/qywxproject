@@ -300,7 +300,7 @@ export default {
     },
     payment (order) {
       if (this.query.from) {
-        this.$wechat.miniProgram.navigateTo({url: `/packageB/pages/pay?id=${order.id}&module=payorders&weburl=orderSearch`})
+        this.$wechat.miniProgram.navigateTo({url: `/packageB/pages/pay?id=${order.id}&weburl=orderSearch`})
       } else {
         location.replace(`${ENV.Host}/#/pay?id=${order.id}`)
       }
