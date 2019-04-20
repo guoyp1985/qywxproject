@@ -708,7 +708,9 @@ export default {
             User.set(this.loginUser)
             if (((`${this.loginUser.retailerinfo.firstinfo.groupbuy}` === '0' && this.$route.query.type === 'groupbuy') || (`${this.loginUser.retailerinfo.firstinfo.bargainbuy}` === '0' && this.$route.query.type === 'bargainbuy')) && this.$route.query.from) {
               this.isFirst = true
-              this.showFirst = true
+              if (!(`${this.loginUser.retailerinfo.firstinfo.groupbuy}` === '0' && `${this.loginUser.retailerinfo.firstinfo.bargainbuy}` === '0')) {
+                this.showFirst = true
+              }
             }
           })
         }
