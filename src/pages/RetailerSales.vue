@@ -222,6 +222,11 @@ export default {
     }
   },
   methods: {
+    initData () {
+      this.isFirst = false
+      this.showFirst = false
+      this.showHb = false
+    },
     submitFirstTip () {
       this.showFirst = false
       if (this.selectedIndex !== 1) {
@@ -473,6 +478,7 @@ export default {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$vux.loading.show()
+      this.initData()
       this.loginUser = User.get()
       this.retailerInfo = this.loginUser.retailerinfo
       this.query = this.$route.query

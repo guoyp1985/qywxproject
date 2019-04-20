@@ -243,6 +243,11 @@ export default {
   computed: {
   },
   methods: {
+    initData () {
+      this.isFirst = false
+      this.showFirst = false
+      this.showHb = false
+    },
     submitFirstTip () {
       this.showFirst = false
       this.uploaddeliver()
@@ -557,13 +562,8 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$vux.loading.show()
       this.loginUser = User.get()
+      this.initData()
       if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
-        // if (self.loginUser.isretailer === 2) {
-        //   self.initContainer()
-        //   self.$vux.loading.hide()
-        //   let backUrl = encodeURIComponent(location.href)
-        //   location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
-        // } else {
         if (!this.loginUser.isretailer) {
           this.$vux.loading.hide()
           self.initContainer()
@@ -577,7 +577,6 @@ export default {
             this.getData()
           }
         }
-        // }
       }
     }
   },

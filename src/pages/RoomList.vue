@@ -151,6 +151,10 @@ export default {
     }
   },
   methods: {
+    initData () {
+      this.isFirst = false
+      this.showFirst = false
+    },
     submitFirstTip () {
       this.showFirst = false
     },
@@ -340,6 +344,7 @@ export default {
       })
     },
     refresh () {
+      this.initData()
       this.query = this.$route.query
       this.loginUser = User.get()
       if (`${this.loginUser.retailerinfo.firstinfo.addgroup}` === '0' && this.query.from) {

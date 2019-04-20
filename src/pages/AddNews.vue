@@ -135,6 +135,12 @@ export default {
   computed: {
   },
   methods: {
+    initFirstData () {
+      this.isFirst = false
+      this.showFirst = false
+      this.showHb = false
+      this.newData = {}
+    },
     initData () {
       this.cutImg = ''
       this.popupShow = false
@@ -366,6 +372,7 @@ export default {
       self.$vux.loading.show()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
+      this.initFirstData()
       if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
         self.initContainer()
         let isAdmin = false

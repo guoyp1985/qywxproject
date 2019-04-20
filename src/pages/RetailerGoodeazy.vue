@@ -191,6 +191,12 @@ export default {
     }
   },
   methods: {
+    initData () {
+      this.isFirst = false
+      this.showFirst = false
+      this.showHb = false
+      this.routerParams = {}
+    },
     submitFirstTip () {
       this.showFirst = false
     },
@@ -488,6 +494,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.query = this.$route.query
+      this.initData()
       if (`${this.loginUser.retailerinfo.firstinfo.grabnews}` === '0' && this.query.from) {
         this.$http.get(`${ENV.BokaApi}/api/user/show`).then((res) => {
           this.loginUser = res.data

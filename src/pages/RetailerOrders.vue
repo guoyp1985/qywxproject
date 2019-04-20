@@ -360,6 +360,11 @@ export default {
     }
   },
   methods: {
+    initData () {
+      this.isFirst = false
+      this.showFirst = false
+      this.showHb = false
+    },
     closeFirstHb () {
       this.showHb = false
       this.isFirst = false
@@ -676,6 +681,7 @@ export default {
       this.$vux.loading.show()
       this.loginUser = User.get()
       this.retailerInfo = this.loginUser.retailerinfo
+      this.initData()
       if (this.$route.query.from && this.loginUser.subscribe !== 1) {
         this.showTip = true
       }

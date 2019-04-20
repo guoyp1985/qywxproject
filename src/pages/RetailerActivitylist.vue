@@ -212,8 +212,7 @@ export default {
       isFirstLoad: true,
       activityCount: 0,
       showFirst: false,
-      isFirst: false,
-      showHb: false
+      isFirst: false
     }
   },
   watch: {
@@ -222,6 +221,10 @@ export default {
     }
   },
   methods: {
+    initData () {
+      this.isFirst = false
+      this.showFirst = false
+    },
     submitFirstTip () {
       this.showFirst = false
       if (this.tabdata1.length && this.tabmodel !== 1) {
@@ -326,6 +329,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$vux.loading.show()
       this.loginUser = User.get()
+      this.initData()
       if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
         if (!this.loginUser.isretailer) {
           this.$vux.loading.hide()

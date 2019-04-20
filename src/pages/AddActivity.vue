@@ -254,6 +254,11 @@ export default {
       this.pagestart1 = 0
       this.showContainer = false
       this.showApply = false
+      this.showFirst = false
+      this.isFirst = false
+      this.showHb = false
+      this.newData = {}
+      this.action = ''
     },
     submitFirstTip () {
       this.showFirst = false
