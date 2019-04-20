@@ -292,6 +292,7 @@ export default {
                   if (data.flag === 1) {
                     this.data.backflag = 0
                     this.data.flag = 0
+                    this.data.flagstr = '已退款'
                   }
                 }
               })
