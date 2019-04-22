@@ -42,13 +42,15 @@
           			</div>
           			<div class="desbox" style="overflow:hidden;">
           				<div class="align_left clamp1">{{ item.title }}</div>
-                  <div class="clamp1 color-red">{{item.sellingpoint}}</div>
-          				<div class="clamp1">
-          					<div class="flex_table">
-          						<span class="color-red flex_cell" style="overflow: hidden;margin-right: 10px;white-space: nowrap;text-overflow: ellipsis;">{{ $t('RMB') }} <span style="margin-left:1px;">{{ item.price }}</span></span>
-          						<!-- <span class="color-gray">{{ $t('Saled txt') }}:<span style="margin-left:1px;">{{ item.saled }}</span></span> -->
-          					</div>
-          				</div>
+                  <div class="clamp1 color-red" style="height:20px;">{{item.sellingpoint}}</div>
+                  <div class="flex_left mt5">
+                    <div class="flex_cell flex_left">
+                      <div class="w_100 clamp1 color-red">{{ $t('RMB') }} {{ item.price }}</div>
+                    </div>
+                    <div class="w50 flex_right">
+                      <div class="bg-theme color-white flex_center" style="width:40px;border-radius:10px;" @click.stop="upEvent(item)">上架</div>
+                    </div>
+                  </div>
           			</div>
           		</div>
             </div>
@@ -56,6 +58,9 @@
           <div style="text-align:center;color:#999;height:30px;line-height:30px;font-size:14px;" v-if="scrollEnd">没有更多商品啦</div>
         </div>
       </div>
+      <template v-if="showTip">
+        <tip-layer buttonTxt="立即申请" content="会员卖家才可代理厂家商品，赶快入驻申请吧！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
+      </template>
       <template v-if="showFirst">
         <firstTip @submitFirstTip="submitFirstTip">
           <div class="font15 bold txt">
@@ -65,6 +70,9 @@
             <div class="flex_center mt5"><span>轻轻松松</span><span class="color-theme">赚大钱</span></div>
           </div>
         </firstTip>
+      </template>
+      <template v-if="showHb">
+        <firstHb action="importproduct" @closeFirstHb="closeFirstHb"></firstHb>
       </template>
     </div>
   </div>
@@ -81,6 +89,7 @@ import { User } from '#/storage'
 import ENV from 'env'
 import Time from '#/time'
 import FirstTip from '@/components/FirstTip'
+import FirstHb from '@/components/FirstHb'
 
 let self = this
 const limit = 30
@@ -88,7 +97,7 @@ let pageStart = 0
 
 export default {
   components: {
-    Tab, TabItem, Search, FirstTip
+    Tab, TabItem, Search, FirstTip, FirstHb
   },
   filters: {
     dateformat: function (value) {
@@ -112,8 +121,10 @@ export default {
       sort: 'dateline',
       pageTop: 0,
       scrollEnd: false,
+      showTip: false,
       showFirst: false,
-      isFirst: false
+      isFirst: false,
+      showHb: false
     }
   },
   watch: {
@@ -126,8 +137,63 @@ export default {
       this.isFirst = false
       this.showFirst = false
     },
+    closeTip () {
+      this.showTip = false
+    },
+    toApply () {
+      if (this.query.from) {
+        let webquery = encodeURIComponent(`from=${this.query.from}`)
+        this.$wechat.miniProgram.redirectTo({url: `/pages/vip?weburl=recommendProducts&webquery=${webquery}`})
+      } else {
+        let backurl = `/recommendProducts`
+        backurl = encodeURIComponent(backurl)
+        this.$router.push({path: '/center', query: {backurl: backurl}})
+      }
+    },
     submitFirstTip () {
       this.showFirst = false
+    },
+    closeFirstHb () {
+      this.isFirst = false
+      this.showHb = false
+    },
+    importProduct (item) {
+      const self = this
+      self.$vux.confirm.show({
+        content: '确定将该商品上架到店铺并进行出售吗？',
+        onConfirm: () => {
+          self.$vux.loading.show()
+          let params = {id: item.id}
+          if (self.query.wid) {
+            params.wid = self.query.wid
+          }
+          self.$http.post(`${ENV.BokaApi}/api/factory/importFactoryProduct`, params).then((res) => {
+            let data = res.data
+            self.$vux.loading.hide()
+            let error = data.error
+            if (data.flag === 1) {
+              error = '上架成功！该商品已显示在你的店铺中！'
+            }
+            self.$vux.toast.show({
+              text: error,
+              type: data.flag === 1 ? 'success' : 'warn',
+              time: self.$util.delay(error),
+              onHide: () => {
+                if (this.isFirst && data.flag) {
+                  this.showHb = true
+                }
+              }
+            })
+          })
+        }
+      })
+    },
+    upEvent (item) {
+      if (!this.loginUser.isretailer || !this.loginUser.retailerinfo.vipvalidate) {
+        this.showTip = true
+      } else {
+        this.importProduct(item)
+      }
     },
     onChange (val) {
       this.searchword = val
@@ -249,7 +315,7 @@ export default {
       this.query = this.$route.query
       this.loginUser = User.get()
       this.initData()
-      if (`${this.loginUser.retailerinfo.firstinfo.importproduct}` === '0' && this.query.from) {
+      if ((`${this.loginUser.retailerinfo.firstinfo.importproduct}` === '0' && this.query.from) || !this.loginUser.retailerinfo.vipvalidate) {
         this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
           const data = res.data
           this.loginUser = data
@@ -281,6 +347,8 @@ export default {
   },
   activated () {
     this.$refs.scrollContainer.scrollTop = this.pageTop
+    this.showHb = false
+    this.isFirst = false
   },
   beforeRouteLeave (to, from, next) {
     this.pageTop = this.$refs.scrollContainer.scrollTop
@@ -298,7 +366,7 @@ export default {
 
 <style lang="less">
 .rproducts{
-  .squarepic .desbox{height:70px;}
+  .squarepic .desbox{height:75px;}
   .t-icon{
     position:absolute;left:0;top:10px;border-top-right-radius:20px;border-bottom-right-radius:20px;background-color:#fff;padding:5px 10px 5px 5px;font-size:15px;
     box-shadow: 0px 0px 3px 1px #e6ebed;font-weight:bold;
