@@ -41,10 +41,11 @@
                   </div>
           			</div>
           			<div class="desbox" style="overflow:hidden;">
-          				<div class="align_left pl5 pr5 clamp2 distitle" style="line-height:18px;height:36px;">{{ item.title }}</div>
+          				<div class="align_left clamp1">{{ item.title }}</div>
+                  <div class="clamp1 color-red">{{item.sellingpoint}}</div>
           				<div class="clamp1">
-          					<div class="flex_table padding5">
-          						<span class="color-red font14 flex_cell" style="overflow: hidden;margin-right: 10px;white-space: nowrap;text-overflow: ellipsis;">{{ $t('RMB') }} <span style="margin-left:1px;">{{ item.price }}</span></span>
+          					<div class="flex_table">
+          						<span class="color-red flex_cell" style="overflow: hidden;margin-right: 10px;white-space: nowrap;text-overflow: ellipsis;">{{ $t('RMB') }} <span style="margin-left:1px;">{{ item.price }}</span></span>
           						<!-- <span class="color-gray">{{ $t('Saled txt') }}:<span style="margin-left:1px;">{{ item.saled }}</span></span> -->
           					</div>
           				</div>
@@ -297,14 +298,7 @@ export default {
 
 <style lang="less">
 .rproducts{
-  .pro_list_top{
-    background: url(../assets/images/product_list_top.png);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    background-size: 100%;
-    height: 20px;
-  }
+  .squarepic .desbox{height:70px;}
   .t-icon{
     position:absolute;left:0;top:10px;border-top-right-radius:20px;border-bottom-right-radius:20px;background-color:#fff;padding:5px 10px 5px 5px;font-size:15px;
     box-shadow: 0px 0px 3px 1px #e6ebed;font-weight:bold;
