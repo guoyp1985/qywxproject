@@ -518,12 +518,12 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.initData()
       this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
         const data = res.data
         this.loginUser = data
         User.set(data)
         this.retailerInfo = this.loginUser.retailerinfo
-        this.initData()
         this.query = this.$route.query
         if (`${this.retailerInfo.firstinfo.importproduct}` === '0' && this.query.from) {
           this.isFirst = true
