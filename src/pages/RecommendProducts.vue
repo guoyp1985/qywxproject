@@ -47,8 +47,8 @@
                     <div class="flex_cell flex_left">
                       <div class="w_100 clamp1 color-red">{{ $t('RMB') }} {{ item.price }}</div>
                     </div>
-                    <div class="w50 flex_right">
-                      <div class="bg-theme color-white flex_center" style="width:40px;border-radius:10px;" @click.stop="upEvent(item)">上架</div>
+                    <div class="flex_right" style="width:55px;">
+                      <div class="bg-theme color-white flex_center" style="width:50px;border-radius:10px;height:25px;" @click.stop="upEvent(item)">上架</div>
                     </div>
                   </div>
           			</div>
@@ -366,7 +366,7 @@ export default {
 
 <style lang="less">
 .rproducts{
-  .squarepic .desbox{height:75px;}
+  .squarepic .desbox{height:85px;}
   .t-icon{
     position:absolute;left:0;top:10px;border-top-right-radius:20px;border-bottom-right-radius:20px;background-color:#fff;padding:5px 10px 5px 5px;font-size:15px;
     box-shadow: 0px 0px 3px 1px #e6ebed;font-weight:bold;

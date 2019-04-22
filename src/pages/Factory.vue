@@ -122,7 +122,9 @@ export default {
       tabData2: [],
       disTabData1: false,
       disTabData2: false,
-      showBottom: false
+      showBottom: false,
+      productCount: 0,
+      newsCount: 0
     }
   },
   watch: {
@@ -142,6 +144,8 @@ export default {
       this.disTabData1 = false
       this.disTabData2 = false
       this.showBottom = false
+      this.productCount = 0
+      this.newsCount = 0
     },
     toProduct (item) {
       let params = this.$util.handleAppParams(this.query, {id: item.id, fid: this.query.id})
@@ -179,10 +183,10 @@ export default {
       let con = ''
       let ajaxUrl = ''
       if (type === 'product') {
-        con = '确定要上架该厂家的所有商品？'
+        con = `确定要上架该厂家的${this.productCount}件商品？`
         ajaxUrl = `${ENV.BokaApi}/api/factory/fastImportFactoryProduct`
       } else if (type === 'factorynews') {
-        con = '确定要导入该厂家的所有文章？'
+        con = `确定要导入该厂家的${this.newsCount}篇文章？`
         ajaxUrl = `${ENV.BokaApi}/api/factory/fastImportFactoryNews`
       }
       self.$vux.confirm.show({
@@ -311,10 +315,11 @@ export default {
       const self = this
       self.$http.get(`${ENV.BokaApi}/api/list/factoryproduct`, {
         params: { fid: self.query.id, pagestart: pageStart1, limit: limit }
-      }).then(function (res) {
+      }).then(res => {
         const data = res.data
         self.$vux.loading.hide()
         const retdata = data.data ? data.data : data
+        this.productCount = data.allcount
         self.tabData1 = self.tabData1.concat(retdata)
         self.disTabData1 = true
         if (self.loginUser.isretailer && (self.tabData1.length > 0 || self.tabData2.length > 0)) {
@@ -326,10 +331,11 @@ export default {
       const self = this
       self.$http.get(`${ENV.BokaApi}/api/list/factorynews`, {
         params: { fid: self.query.id, pagestart: pageStart2, limit: limit }
-      }).then(function (res) {
+      }).then(res => {
         const data = res.data
         self.$vux.loading.hide()
         const retdata = data.data ? data.data : data
+        this.newsCount = data.allcount
         self.tabData2 = self.tabData2.concat(retdata)
         self.disTabData2 = true
         if (self.loginUser.isretailer && (self.tabData1.length > 0 || self.tabData2.length > 0)) {
