@@ -129,7 +129,8 @@ export default {
               type: 'del',
               module: 'teamsource',
               id: _this.id,
-              moduleid: moduleid
+              moduleid: moduleid,
+              teamid: _this.id
             }
           }).then(res => {
             if (res.data.flag) {

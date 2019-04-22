@@ -131,7 +131,8 @@ export default {
               type: 'del',
               module: _this.module,
               id: _this.id,
-              moduleid: moduleid
+              moduleid: moduleid,
+              teamid: _this.id
             }
           }).then(res => {
             console.log(res)
