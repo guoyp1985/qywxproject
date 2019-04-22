@@ -116,6 +116,10 @@ export default {
     }
   },
   methods: {
+    initData () {
+      this.isFirst = false
+      this.showHb = false
+    },
     closeFirstHb () {
       this.isFirst = false
       this.showHb = false
@@ -192,6 +196,7 @@ export default {
   activated () {
     this.query = this.$route.query
     this.loginUser = User.get()
+    this.initData()
     if (`${this.loginUser.retailerinfo.firstinfo.addgroup}` === '0' && this.query.from) {
       this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
         const data = res.data
