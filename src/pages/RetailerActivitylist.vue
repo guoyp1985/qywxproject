@@ -227,9 +227,9 @@ export default {
     },
     submitFirstTip () {
       this.showFirst = false
-      if (this.tabdata1.length && this.tabmodel !== 1) {
-        this.tabmodel = 1
-      }
+      // if (this.tabdata1.length && this.tabmodel !== 1) {
+      //   this.tabmodel = 1
+      // }
     },
     clickAdd (type) {
       if (this.loginUser.isretailer === 2 && this.activityCount >= 2) {

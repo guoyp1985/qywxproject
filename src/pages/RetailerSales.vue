@@ -229,10 +229,10 @@ export default {
     },
     submitFirstTip () {
       this.showFirst = false
-      if (this.selectedIndex !== 1) {
-        this.selectedIndex = 1
-        this.swiperChange()
-      }
+      // if (this.selectedIndex !== 1) {
+      //   this.selectedIndex = 1
+      //   this.swiperChange()
+      // }
     },
     closeFirstHb () {
       this.isFirst = false
