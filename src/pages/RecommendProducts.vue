@@ -49,7 +49,7 @@
                     </div>
                     <div class="flex_right" style="width:55px;">
                       <div v-if="!item.haveimport" class="bg-theme color-white flex_center" style="width:50px;border-radius:10px;height:25px;" @click.stop="upEvent(item)">上架</div>
-                      <span v-else class="color-gray">已上架</span>
+                      <div v-else class="bg-theme color-white flex_center" style="width:50px;border-radius:10px;height:25px;">已上架</div>
                     </div>
                   </div>
           			</div>
