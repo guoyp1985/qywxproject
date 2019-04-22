@@ -245,7 +245,7 @@ export default {
   methods: {
     getNewsData () {
       this.$http.get(`${ENV.BokaApi}/api/list/factorynews`, {
-        params: {pagestart: this.pageStartNews, limit: this.limit, fid: this.retailerInfo.fid}
+        params: {pagestart: this.pageStartNews, limit: this.limit, fid: this.retailerInfo.fid, wid: this.loginUser.uid}
       }).then(res => {
         const data = res.data
         const retdata = data.data ? data.data : data

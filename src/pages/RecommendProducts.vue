@@ -89,6 +89,7 @@ import { Tab, TabItem, Search } from 'vux'
 import { User } from '#/storage'
 import ENV from 'env'
 import Time from '#/time'
+import TipLayer from '@/components/TipLayer'
 import FirstTip from '@/components/FirstTip'
 import FirstHb from '@/components/FirstHb'
 
@@ -98,7 +99,7 @@ let pageStart = 0
 
 export default {
   components: {
-    Tab, TabItem, Search, FirstTip, FirstHb
+    Tab, TabItem, Search, TipLayer, FirstTip, FirstHb
   },
   filters: {
     dateformat: function (value) {
