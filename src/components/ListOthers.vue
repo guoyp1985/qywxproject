@@ -231,13 +231,13 @@ export default {
             path = '/product'
           }
           query = {
-            id: item.id
+            id: item.moduleid
           }
           break
         case 'news':
           path = '/news'
           query = {
-            id: item.id
+            id: item.moduleid
           }
           break
       }
