@@ -505,15 +505,15 @@ export default {
               this.retailerInfo = data.data
               this.loginUser.retailerinfo = this.retailerInfo
               User.set(this.loginUser)
-              if (`${this.loginUser.retailerinfo.firstinfo.seller}` === '0' && this.query.from) {
+              if (`${this.retailerInfo.firstinfo.seller}` === '0' && this.query.from) {
                 this.isFirst = true
                 let finfo = FirstInfo.get()
                 if (!finfo) {
-                  finfo = this.loginUser.retailerinfo.firstinfo
+                  finfo = this.retailerInfo.firstinfo
                 }
                 if (`${finfo.seller}` === '0') {
                   this.showFirst = true
-                  finfo.orderdeliver = 1
+                  finfo.seller = 1
                 }
                 FirstInfo.set(finfo)
               }

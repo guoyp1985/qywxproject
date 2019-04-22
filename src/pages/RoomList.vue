@@ -360,7 +360,7 @@ export default {
             }
             if (`${finfo.addgroup}` === '0') {
               this.showFirst = true
-              finfo.orderdeliver = 1
+              finfo.addgroup = 1
             }
             FirstInfo.set(finfo)
           }
