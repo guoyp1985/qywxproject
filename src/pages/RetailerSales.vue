@@ -171,7 +171,7 @@
 import { Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, TransferDom, Popup, Group, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
-import { User } from '#/storage'
+import { User, FirstInfo } from '#/storage'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
 import FirstTip from '@/components/FirstTip'

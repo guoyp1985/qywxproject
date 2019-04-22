@@ -118,7 +118,7 @@ import Room from '@/components/Room'
 import RoomOrderConsumer from '@/components/RoomOrderConsumer'
 import FirstTip from '@/components/FirstTip'
 import ENV from 'env'
-import { User } from '#/storage'
+import { User, FirstInfo } from '#/storage'
 
 export default {
   components: {
