@@ -154,7 +154,6 @@ export default {
       this.showFirst = false
     },
     closeFirstHb () {
-      this.isFirst = false
       this.showHb = false
     },
     importProduct (item) {
