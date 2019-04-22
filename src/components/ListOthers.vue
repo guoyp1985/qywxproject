@@ -219,7 +219,7 @@ export default {
         case 'product':
           path = '/product'
           query = {
-            id: item.id,
+            id: item.moduleid,
             wid: this.teamInfo.uid
           }
           break
@@ -299,6 +299,7 @@ export default {
           color: #fff;
           flex: 0 0 50px;
           border: none;
+          outline: 0;
         }
       }
     }
