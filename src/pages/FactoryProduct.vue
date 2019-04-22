@@ -298,6 +298,8 @@ export default {
       this.previewerFlasharr = []
       this.ingdata = []
       this.messages = 0
+      this.isFirst = false
+      this.showHb = false
     },
     closeFirstHb () {
       this.isFirst = false
