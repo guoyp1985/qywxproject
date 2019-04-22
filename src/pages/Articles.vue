@@ -112,7 +112,9 @@ export default {
       const self = this
       this.$http.get(`${ENV.BokaApi}/api/list/news?classid=${id}`) // ${this.tabs[index].id}
       .then(res => {
-        self.oArticles = res.data
+        const data = res.data
+        let retdata = data.data ? data.data : data
+        self.oArticles = retdata
       })
     },
     init () {

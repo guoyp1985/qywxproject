@@ -48,7 +48,8 @@
                       <div class="w_100 clamp1 color-red">{{ $t('RMB') }} {{ item.price }}</div>
                     </div>
                     <div class="flex_right" style="width:55px;">
-                      <div class="bg-theme color-white flex_center" style="width:50px;border-radius:10px;height:25px;" @click.stop="upEvent(item)">上架</div>
+                      <div v-if="!item.haveimport" class="bg-theme color-white flex_center" style="width:50px;border-radius:10px;height:25px;" @click.stop="upEvent(item)">上架</div>
+                      <span v-else class="color-gray">已上架</span>
                     </div>
                   </div>
           			</div>
@@ -265,7 +266,7 @@ export default {
       })
     },
     getData1 (type) {
-      let params = {pagestart: pageStart, limit: limit}
+      let params = {pagestart: pageStart, limit: limit, wid: this.loginUser.uid}
       if (this.selectedIndex === 0) {
         params.recommend = 2
         if (this.sort === 'dateline') {
