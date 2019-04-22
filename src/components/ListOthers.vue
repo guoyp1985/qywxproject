@@ -7,7 +7,7 @@
         <span class="price" v-if="module === 'product'">¥ {{item.price}}</span>
       </div>
       <div class="ope-all">
-        <button class="ope-btn" v-if="teamInfo.manager > 0" @click.stop="onDelete(item.id, index)">删除</button>
+        <button class="ope-btn" v-if="teamInfo.manager > 0" @click.stop="onDelete(item.moduleid, index)">删除</button>
         <button class="ope-btn" @click.stop="onImport(item.moduleid)">导入</button>
       </div>
   </div>
@@ -131,8 +131,7 @@ export default {
               type: 'del',
               module: _this.module,
               id: _this.id,
-              moduleid: moduleid,
-              teamid: _this.id
+              moduleid: moduleid
             }
           }).then(res => {
             console.log(res)

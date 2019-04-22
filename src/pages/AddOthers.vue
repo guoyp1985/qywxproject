@@ -177,8 +177,7 @@ export default {
           type: 'add',
           module: this.module,
           id: this.id,
-          moduleid: this.selectedItemId.join(),
-          teamid: _this.id
+          moduleid: this.selectedItemId.join()
         }
       }).then(res => {
         if (res.data.flag) {
