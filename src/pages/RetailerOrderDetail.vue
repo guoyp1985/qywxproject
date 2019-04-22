@@ -250,7 +250,6 @@ export default {
     },
     submitFirstTip () {
       this.showFirst = false
-      this.uploaddeliver()
     },
     toProduct (item) {
       console.log(item)
