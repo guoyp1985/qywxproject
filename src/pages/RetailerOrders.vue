@@ -306,7 +306,7 @@ import Orderproductplate from '@/components/Orderproductplate'
 import Time from '#/time'
 import jQuery from 'jquery'
 import ENV from 'env'
-import { User } from '#/storage'
+import { User, FirstInfo } from '#/storage'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
 import FirstTip from '@/components/FirstTip'
@@ -716,7 +716,15 @@ export default {
                 User.set(this.loginUser)
                 if (`${this.loginUser.retailerinfo.firstinfo.orderdeliver}` === '0' && this.query.from) {
                   this.isFirst = true
-                  this.showFirst = true
+                  let finfo = FirstInfo.get()
+                  if (!finfo) {
+                    finfo = this.loginUser.retailerinfo.firstinfo
+                  }
+                  if (`${finfo.orderdeliver}` === '0') {
+                    this.showFirst = true
+                    finfo.orderdeliver = 1
+                  }
+                  FirstInfo.set(finfo)
                 }
               }
             })

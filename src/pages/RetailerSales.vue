@@ -507,7 +507,15 @@ export default {
               User.set(this.loginUser)
               if (`${this.loginUser.retailerinfo.firstinfo.seller}` === '0' && this.query.from) {
                 this.isFirst = true
-                this.showFirst = true
+                let finfo = FirstInfo.get()
+                if (!finfo) {
+                  finfo = this.loginUser.retailerinfo.firstinfo
+                }
+                if (`${finfo.seller}` === '0') {
+                  this.showFirst = true
+                  finfo.orderdeliver = 1
+                }
+                FirstInfo.set(finfo)
               }
             }
           })

@@ -354,7 +354,15 @@ export default {
           User.set(data)
           if (`${this.loginUser.retailerinfo.firstinfo.addgroup}` === '0' && this.query.from) {
             this.isFirst = true
-            this.showFirst = true
+            let finfo = FirstInfo.get()
+            if (!finfo) {
+              finfo = this.loginUser.retailerinfo.firstinfo
+            }
+            if (`${finfo.addgroup}` === '0') {
+              this.showFirst = true
+              finfo.orderdeliver = 1
+            }
+            FirstInfo.set(finfo)
           }
         })
       }

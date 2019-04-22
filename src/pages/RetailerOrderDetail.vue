@@ -544,7 +544,7 @@ export default {
             User.set(this.loginUser)
             if (`${this.retailerInfo.firstinfo.orderdeliver}` === '0' && this.query.from && this.data.flag === 2 && this.data.candeliver) {
               this.isFirst = true
-              this.showFirst = true
+              // this.showFirst = true
             }
           }
         }

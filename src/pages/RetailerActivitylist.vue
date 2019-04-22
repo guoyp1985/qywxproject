@@ -282,9 +282,9 @@ export default {
         if (self.isFirstLoad) {
           self.activityCount = self.tabdata1.length
           self.isFirstLoad = false
-          if (this.isFirst && ((`${this.retailerInfo.firstinfo.groupbuy}` === '0' && `${this.retailerInfo.firstinfo.bargainbuy}` === '0') || !this.tabdata1.length)) {
-            this.showFirst = true
-          }
+          // if (this.isFirst && ((`${this.retailerInfo.firstinfo.groupbuy}` === '0' && `${this.retailerInfo.firstinfo.bargainbuy}` === '0') || !this.tabdata1.length)) {
+          //   this.showFirst = true
+          // }
         }
       })
     },

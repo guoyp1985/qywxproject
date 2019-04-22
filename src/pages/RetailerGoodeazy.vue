@@ -501,9 +501,9 @@ export default {
           User.set(this.loginUser)
           if (`${this.loginUser.retailerinfo.firstinfo.grabnews}` === '0' && this.query.from) {
             this.isFirst = true
-            if (`${this.loginUser.retailerinfo.firstinfo.addnews}` !== '0') {
-              this.showFirst = true
-            }
+            // if (`${this.loginUser.retailerinfo.firstinfo.addnews}` !== '0') {
+            //   this.showFirst = true
+            // }
           }
         })
       }
