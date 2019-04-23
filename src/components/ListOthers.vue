@@ -157,9 +157,14 @@ export default {
         }
       }).then(res => {
         console.log(res)
-        if (res.data.flag) {
+        const data = res.data
+        if (data.flag) {
           _this.$vux.toast.show({
             text: `导入${_this.moduleTransfer}成功！`
+          })
+        } else {
+          _this.$vux.toast.show({
+            text: data.error
           })
         }
       })

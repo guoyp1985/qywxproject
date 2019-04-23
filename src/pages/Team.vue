@@ -410,13 +410,18 @@ export default {
         }
       }).then(res => {
         console.log(res)
-        if (res.data.flag === 1) {
+        const data = res.data
+        if (data.flag === 1) {
           _this.$vux.toast.show({
             text: `导入全部${_this.moduleTransfer}成功!`
           })
-        } else if (res.data.flag === 3) {
+        } else if (data.flag === 3) {
           _this.$vux.toast.show({
             text: `没有内容可导入!`
+          })
+        } else {
+          _this.$vux.toast.show({
+            text: data.error
           })
         }
       })
