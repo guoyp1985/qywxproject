@@ -436,7 +436,7 @@ export default {
         }
         self.$vux.toast.show({
           text: error,
-          type: 'warn',
+          type: data.flag ? 'success' : 'warn',
           time: self.$util.delay(error)
         })
         if (data.flag === 1) {
