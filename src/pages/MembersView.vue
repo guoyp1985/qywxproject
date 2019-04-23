@@ -430,17 +430,20 @@ export default {
       ).then(res => {
         const data = res.data
         self.$vux.loading.hide()
+        let error = data.error
+        if (data.flag) {
+          error = '更新成功'
+        }
+        self.$vux.toast.show({
+          text: error,
+          type: 'warn',
+          time: self.$util.delay(error)
+        })
         if (data.flag === 1) {
           let retdata = data.data
           self.viewuser.country = retdata.country
           self.viewuser.province = retdata.province
           self.viewuser.city = retdata.city
-        } else {
-          self.$vux.toast.show({
-            text: data.error,
-            type: 'warn',
-            time: self.$util.delay(data.error)
-          })
         }
       })
     },
