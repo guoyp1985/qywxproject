@@ -19,7 +19,7 @@
 
 <script>
 import ENV from 'env'
-import { User, Version, Token, Access } from '#/storage'
+import { User, Version, Token, Access, FirstInfo } from '#/storage'
 
 export default {
   data () {
@@ -33,6 +33,7 @@ export default {
       User.remove()
       Access.remove()
       Version.remove()
+      FirstInfo.remove()
     },
     deleteEvent () {
       const self = this

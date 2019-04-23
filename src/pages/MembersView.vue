@@ -280,6 +280,10 @@ export default {
     }
   },
   methods: {
+    initData () {
+      this.isFirst = false
+      this.showHb = false
+    },
     closeFirstHb () {
       this.isFirst = false
       this.showHb = false
@@ -503,6 +507,7 @@ export default {
     refresh () {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.initData()
       this.loginUser = User.get()
       if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
         if (!this.loginUser.isretailer) {

@@ -128,15 +128,16 @@ export default {
           }).then(res => {
             console.log(res)
             const data = res.data
-            for (let i = 0; i < data.length; i++) {
-              data[i].isChecked = false
+            let retdata = data.data ? data.data : data
+            for (let i = 0; i < retdata.length; i++) {
+              retdata[i].isChecked = false
             }
             if (!this.pagestart) {
-              this.data = data
+              this.data = retdata
             } else {
-              this.data.push(...data)
+              this.data.push(...retdata)
             }
-            console.log(data)
+            console.log(retdata)
             console.log(this)
             this.pagestart++
             this.loaded = true

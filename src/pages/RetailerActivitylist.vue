@@ -227,9 +227,9 @@ export default {
     },
     submitFirstTip () {
       this.showFirst = false
-      if (this.tabdata1.length && this.tabmodel !== 1) {
-        this.tabmodel = 1
-      }
+      // if (this.tabdata1.length && this.tabmodel !== 1) {
+      //   this.tabmodel = 1
+      // }
     },
     clickAdd (type) {
       if (this.loginUser.isretailer === 2 && this.activityCount >= 2) {
@@ -282,9 +282,9 @@ export default {
         if (self.isFirstLoad) {
           self.activityCount = self.tabdata1.length
           self.isFirstLoad = false
-          if (this.isFirst && ((`${this.retailerInfo.firstinfo.groupbuy}` === '0' && `${this.retailerInfo.firstinfo.bargainbuy}` === '0') || !this.tabdata1.length)) {
-            this.showFirst = true
-          }
+          // if (this.isFirst && ((`${this.retailerInfo.firstinfo.groupbuy}` === '0' && `${this.retailerInfo.firstinfo.bargainbuy}` === '0') || !this.tabdata1.length)) {
+          //   this.showFirst = true
+          // }
         }
       })
     },

@@ -431,9 +431,9 @@ export default {
                   }
                 }
               }
-              if (this.isFirst) {
-                this.showHb = true
-              }
+              // if (this.isFirst) {
+              //   this.showHb = true
+              // }
             }
           }
         })
@@ -542,10 +542,9 @@ export default {
             this.retailerInfo = data.data
             this.loginUser.retailerinfo = this.retailerInfo
             User.set(this.loginUser)
-            if (`${this.retailerInfo.firstinfo.orderdeliver}` === '0' && this.query.from && this.data.flag === 2 && this.data.candeliver) {
-              this.isFirst = true
-              this.showFirst = true
-            }
+            // if (`${this.retailerInfo.firstinfo.orderdeliver}` === '0' && this.query.from && this.data.flag === 2 && this.data.candeliver) {
+            //   this.isFirst = true
+            // }
           }
         }
       })

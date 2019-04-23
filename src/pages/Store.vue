@@ -392,11 +392,12 @@ export default {
         .then(res => {
           self.isNextNews = true
           const data = res.data
+          const retdata = data.data ? data.data : data
           if (this.newPageStart === 0) {
-            initNewsData = data
+            initNewsData = retdata
           }
           let isEmpty = false
-          if (data.length === 0) {
+          if (retdata.length === 0) {
             if (this.newPageStart === 1) {
               self.$vux.toast.text('不要再戳啦，没有更多咯', 'middle')
             }
@@ -404,12 +405,12 @@ export default {
             this.newPageStart = 1
             isEmpty = true
           } else {
-            self.toplinedata = data
+            self.toplinedata = retdata
           }
-          if (data.length === newsLimit) {
+          if (retdata.length === newsLimit) {
             this.newPageStart++
             self.haveMoreNews = true
-          } else if (data.length < newsLimit && !isEmpty) {
+          } else if (retdata.length < newsLimit && !isEmpty) {
             this.newPageStart = 0
           }
         })

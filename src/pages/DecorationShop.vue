@@ -161,6 +161,10 @@ export default {
     }
   },
   methods: {
+    initData () {
+      this.isFirst = false
+      this.showHb = false
+    },
     closeFirstHb () {
       this.showHb = false
       this.isFirst = false
@@ -383,6 +387,7 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.initData()
       if (`${this.loginUser.retailerinfo.firstinfo.topbanner}` === '0' && this.query.from) {
         this.$http.get(`${ENV.BokaApi}/api/user/show`).then((res) => {
           this.loginUser = res.data

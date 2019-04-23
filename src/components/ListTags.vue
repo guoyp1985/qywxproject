@@ -22,7 +22,7 @@
         </div>
         <div class="info-bottom">
           <span class="time">{{tag.time}}</span>
-          <span class="delete" v-if="teamInfo.manager > 0" @click="deleteTag(tag.id, index)">删除</span>
+          <span class="delete" v-if="teamInfo.manager > 0" @click="deleteTag(tag.moduleid, index)">删除</span>
         </div>
       </div>
     </div>

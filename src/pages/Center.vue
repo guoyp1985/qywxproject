@@ -124,7 +124,7 @@ import TipLayer from '@/components/TipLayer'
 import ENV from 'env'
 import Time from '#/time'
 import Reg from '#/reg'
-import { Token, User } from '#/storage'
+import { Token, User, FirstInfo } from '#/storage'
 let self = {}
 export default {
   components: {
@@ -214,6 +214,7 @@ export default {
     clickQuit () {
       Token.remove()
       User.remove()
+      FirstInfo.remove()
       this.$router.push({name: 'tLogin'})
     },
     clickFactoryCenter () {

@@ -306,6 +306,7 @@ import Orderproductplate from '@/components/Orderproductplate'
 import Time from '#/time'
 import jQuery from 'jquery'
 import ENV from 'env'
+// import { User, FirstInfo } from '#/storage'
 import { User } from '#/storage'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
@@ -707,20 +708,28 @@ export default {
           if (this.selectedIndex === 0) {
             this.swiperChange()
           }
-          if (`${this.loginUser.retailerinfo.firstinfo.orderdeliver}` === '0' && this.query.from) {
-            this.$http.get(`${ENV.BokaApi}/api/retailer/info`).then(res => {
-              const data = res.data
-              if (data.flag) {
-                this.retailerInfo = data.data
-                this.loginUser.retailerinfo = this.retailerInfo
-                User.set(this.loginUser)
-                if (`${this.loginUser.retailerinfo.firstinfo.orderdeliver}` === '0' && this.query.from) {
-                  this.isFirst = true
-                  this.showFirst = true
-                }
-              }
-            })
-          }
+          // if (`${this.loginUser.retailerinfo.firstinfo.orderdeliver}` === '0' && this.query.from) {
+          //   this.$http.get(`${ENV.BokaApi}/api/retailer/info`).then(res => {
+          //     const data = res.data
+          //     if (data.flag) {
+          //       this.retailerInfo = data.data
+          //       this.loginUser.retailerinfo = this.retailerInfo
+          //       User.set(this.loginUser)
+          //       if (`${this.loginUser.retailerinfo.firstinfo.orderdeliver}` === '0' && this.query.from) {
+          //         this.isFirst = true
+          //         let finfo = FirstInfo.get()
+          //         if (!finfo) {
+          //           finfo = this.loginUser.retailerinfo.firstinfo
+          //         }
+          //         if (`${finfo.orderdeliver}` === '0') {
+          //           this.showFirst = true
+          //           finfo.orderdeliver = 1
+          //         }
+          //         FirstInfo.set(finfo)
+          //       }
+          //     }
+          //   })
+          // }
         }
       }
     }

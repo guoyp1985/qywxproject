@@ -239,7 +239,7 @@ export default {
     },
     getData1 (isone) {
       const self = this
-      let params = {pagestart: this.pageStart1, limit: limit, recommend: 1}
+      let params = {pagestart: this.pageStart1, limit: limit, recommend: 1, wid: this.loginUser.uid}
       if (isone) {
         params.pagestart = this.tabData1.length
         params.limit = 1
@@ -255,7 +255,7 @@ export default {
     },
     getData2 (isone) {
       const self = this
-      let params = {pagestart: this.pageStart2, limit: limit, recommend: 2}
+      let params = {pagestart: this.pageStart2, limit: limit, recommend: 2, wid: this.loginUser.uid}
       if (isone) {
         params.pagestart = this.tabData2.length
         params.limit = 1

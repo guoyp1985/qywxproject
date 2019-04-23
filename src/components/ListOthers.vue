@@ -7,7 +7,7 @@
         <span class="price" v-if="module === 'product'">¥ {{item.price}}</span>
       </div>
       <div class="ope-all">
-        <button class="ope-btn" v-if="teamInfo.manager > 0" @click.stop="onDelete(item.id, index)">删除</button>
+        <button class="ope-btn" v-if="teamInfo.manager > 0" @click.stop="onDelete(item.moduleid, index)">删除</button>
         <button class="ope-btn" @click.stop="onImport(item.moduleid)">导入</button>
       </div>
   </div>
@@ -219,7 +219,7 @@ export default {
         case 'product':
           path = '/product'
           query = {
-            id: item.id,
+            id: item.moduleid,
             wid: this.teamInfo.uid
           }
           break
@@ -231,13 +231,13 @@ export default {
             path = '/product'
           }
           query = {
-            id: item.id
+            id: item.moduleid
           }
           break
         case 'news':
           path = '/news'
           query = {
-            id: item.id
+            id: item.moduleid
           }
           break
       }
@@ -299,6 +299,7 @@ export default {
           color: #fff;
           flex: 0 0 50px;
           border: none;
+          outline: 0;
         }
       }
     }
