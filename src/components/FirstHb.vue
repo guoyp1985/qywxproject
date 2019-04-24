@@ -166,6 +166,7 @@ export default {
             this.moneyParams.awardtype = 'vip'
           }
           this.moneyParams.awardmoney = data.datadesc
+          this.showResult = true
         } else {
           this.$vux.toast.show({
             text: data.error,
@@ -174,7 +175,6 @@ export default {
           })
         }
         this.showModal = false
-        this.showResult = true
       })
     },
     closeHbModal (e) {
