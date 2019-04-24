@@ -8,7 +8,7 @@
       </div>
       <div class="ope-all">
         <button class="ope-btn" v-if="teamInfo.manager > 0" @click.stop="onDelete(item.moduleid, index)">删除</button>
-        <button class="ope-btn" @click.stop="onImport(item.moduleid)">导入</button>
+        <button class="ope-btn" @click.stop="onImport(item.id)">导入</button>
       </div>
   </div>
     <div class="tip-message" v-if="!data.length && loaded"><span>暂无{{moduleTransfer}}</span></div>
@@ -146,13 +146,13 @@ export default {
         }
       })
     },
-    importData (moduleid) {
+    importData (itemid) {
       const _this = this
       _this.$http({
         url: `${Env.BokaApi}/api/team/copy`,
         method: 'POST',
         data: {
-          id: moduleid,
+          id: itemid,
           module: _this.module
         }
       }).then(res => {
@@ -169,7 +169,7 @@ export default {
         }
       })
     },
-    onImport (moduleid) {
+    onImport (itemid) {
       let _this = this
       if (!this.loginUser.isretailer || this.loginUser.retailerinfo.moderate !== 1) {
         this.$vux.confirm.show({
@@ -200,13 +200,13 @@ export default {
               console.log(res)
               if (res.data.flag) {
                 _this.teamInfo.join = 1
-                _this.importData(moduleid)
+                _this.importData(itemid)
               }
             })
           }
         })
       } else {
-        _this.importData(moduleid)
+        _this.importData(itemid)
       }
     },
     toItem (item) {
