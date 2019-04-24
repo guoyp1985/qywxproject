@@ -8,7 +8,8 @@
       </div>
       <div class="ope-all">
         <button class="ope-btn" v-if="teamInfo.manager > 0" @click.stop="onDelete(item.moduleid, index)">删除</button>
-        <button class="ope-btn" @click.stop="onImport(item.id)">导入</button>
+        <button class="ope-btn" v-if="!item.haveimport" @click.stop="onImport(item.id)">导入</button>
+        <button class="ope-btn" v-else>已导入</button>
       </div>
   </div>
     <div class="tip-message" v-if="!data.length && loaded"><span>暂无{{moduleTransfer}}</span></div>
@@ -298,7 +299,7 @@ export default {
         .ope-btn{
           flex-direction: row;
           margin-right: 5px;
-          padding: 5px 8px;
+          padding: 5px;
           border-radius: 10px;
           background-color: #ff6a61;
           color: #fff;
