@@ -1,15 +1,19 @@
 <template>
   <div class="data">
-    <div v-for="(item, index) in data" :key="item.id" class="item">
-      <img class="avatar" :src="item.photo" @click="toItem(item)"/>
-      <div class="info" @click="toItem(item)">
-        <span class="title">{{item.title}}</span>
-        <span class="price" v-if="module === 'product'">¥ {{item.price}}</span>
+    <div v-for="(item, index) in data" :key="item.id" class="item flex_left">
+      <div class="pic flex_left" @click="toItem(item)">
+        <img class="avatar" :src="item.photo"/>
       </div>
-      <div class="ope-all">
-        <button class="ope-btn" v-if="teamInfo.manager > 0" @click.stop="onDelete(item.moduleid, index)">删除</button>
-        <button class="ope-btn" v-if="!item.haveimport" @click.stop="onImport(item.id)">导入</button>
-        <button class="ope-btn" v-else>已导入</button>
+      <div class="info flex_left flex_cell" @click="toItem(item)">
+        <div class="w_100">
+          <div class="font14 clamp1">{{item.title}}</div>
+          <div class="price" v-if="module === 'product'">¥ {{item.price}}</div>
+        </div>
+      </div>
+      <div class="ope-all flex_right">
+        <button class="ope-btn flex_center" v-if="teamInfo.manager > 0" @click.stop="onDelete(item.moduleid, index)">删除</button>
+        <button class="ope-btn flex_center" v-if="!item.haveimport" @click.stop="onImport(item.id,index)">导入</button>
+        <button class="ope-btn flex_center" v-else>已导入</button>
       </div>
   </div>
     <div class="tip-message" v-if="!data.length && loaded"><span>暂无{{moduleTransfer}}</span></div>
@@ -147,7 +151,7 @@ export default {
         }
       })
     },
-    importData (itemid) {
+    importData (itemid, index) {
       const _this = this
       _this.$http({
         url: `${Env.BokaApi}/api/team/copy`,
@@ -160,6 +164,7 @@ export default {
         console.log(res)
         const data = res.data
         if (data.flag) {
+          this.data[index].haveimport = 1
           _this.$vux.toast.show({
             text: `导入${_this.moduleTransfer}成功！`
           })
@@ -170,7 +175,7 @@ export default {
         }
       })
     },
-    onImport (itemid) {
+    onImport (itemid, index) {
       let _this = this
       if (!this.loginUser.isretailer || this.loginUser.retailerinfo.moderate !== 1) {
         this.$vux.confirm.show({
@@ -201,13 +206,13 @@ export default {
               console.log(res)
               if (res.data.flag) {
                 _this.teamInfo.join = 1
-                _this.importData(itemid)
+                _this.importData(itemid, index)
               }
             })
           }
         })
       } else {
-        _this.importData(itemid)
+        _this.importData(itemid, index)
       }
     },
     toItem (item) {
@@ -259,62 +264,31 @@ export default {
 <style lang="less" scoped="">
   .data{
     .item{
-      display: flex;
-      align-items: center;
-      width: 100%;
-      justify-content: space-between;
-      padding: 20px;
+      width: 100%;padding:20px 10px;box-sizing: border-box;
       background-color: #fff;
-      margin-bottom: 5px;
-      border-top: 1px solid #e4e4e4;
       border-bottom: 1px solid #e4e4e4;
-      box-sizing: border-box;
-      .avatar{
-        width: 50px;
-        height: 50px;
-        border-radius: 6px;
-        margin-right: 20px;
-        object-fit: cover;
+      .pic{
+        width:60px;
+        .avatar{width: 50px;height: 50px;border-radius: 6px;object-fit: cover;}
       }
       .info{
-        flex: 2;
-        width: 50%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        .title{
-          font-size: 14px;
-          overflow: hidden;
-          text-overflow:ellipsis;
-          white-space: nowrap;
-        }
-        .price{
-          font-size: 14px;
-          color: #ff6a61;
-          margin-top: 10px;
-        }
+        .price{font-size: 14px;color: #ff6a61;margin-top: 10px;}
       }
       .ope-all{
-        display: flex;
+        width:120px;
         .ope-btn{
-          flex-direction: row;
-          margin-right: 5px;
-          padding: 5px;
+          width:50px;height:25px;
           border-radius: 10px;
           background-color: #ff6a61;
           color: #fff;
-          flex: 0 0 50px;
           border: none;
           outline: 0;
         }
+        .ope-btn:not(:last-child){margin-right:10px;}
       }
     }
-    .item:first-child{
-      border-top: none;
-    }
-    .item:last-child{
-      margin-bottom: 0;
-    }
+    .item:not(:first-child){border-top: 1px solid #e4e4e4;}
+    .item:not(:last-child){margin-bottom:5px;}
     .tip-message{
       text-align: center;
       color: #c9c9c9;
