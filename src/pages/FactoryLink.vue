@@ -1,5 +1,5 @@
 <template>
-  <div id="link-web-page" class="containerarea font14 linkreplication">
+  <div id="link-web-page" class="containerarea font14 factorylink">
     <div class="toplink">
       <div class="flex_table flex_center font12">
         <div class="frame pl5 pr5 flex_left" style="">{{appPath}}</div>
@@ -75,20 +75,26 @@ export default {
           time: 1500
         })
       }, 200)
+    },
+    toLink () {
+      const link = window.location.host
+      console.log('当前域名：')
+      console.log(link)
     }
   },
   activated () {
     this.loginUser = User.get()
+    this.toLink()
   }
 }
 </script>
 <style lang="less">
-  .linkreplication{
+  .factorylink{
     background-color:#f2f2f2;
     .toplink{
       padding:20px 10px;background-color:#ffffff;box-sizing:border-box;
-      .frame{border:1px solid #cccccc;border-right:0;height:35px;width:100%;}
-      .btnCopy{width:130px;height:35px;text-align:center;line-height:35px;background-color:#fd6a61;color:#fff;border:1px solid #fd6a61;}
+      .frame{border:1px solid #cccccc;border-right:0;height:35px;width:100%;word-wrap:break-word;word-break:break-all;overflow:hidden;}
+      .btnCopy{width:165px;height:35px;text-align:center;line-height:35px;background-color:#fd6a61;color:#fff;border:1px solid #fd6a61;}
     }
     .imgContent{
       padding:20px;box-sizing:border-box;background-color:#fff;
