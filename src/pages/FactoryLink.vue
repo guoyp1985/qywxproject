@@ -75,16 +75,15 @@ export default {
           time: 1500
         })
       }, 200)
-    },
-    toLink () {
-      const link = window.location.host
-      console.log('当前域名：')
-      console.log(link)
     }
+    // toLink () {
+    //   const link = window.location.host
+    //   console.log('当前域名：')
+    //   console.log(link)
+    // }
   },
   activated () {
     this.loginUser = User.get()
-    this.toLink()
   }
 }
 </script>
