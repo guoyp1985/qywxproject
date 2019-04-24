@@ -1,8 +1,8 @@
 <template>
   <div class="data">
-    <div v-for="(item, index) in data" :key="item.id" class="item" @click="toItem(item)">
-      <img class="avatar" :src="item.photo"/>
-      <div class="info">
+    <div v-for="(item, index) in data" :key="item.id" class="item">
+      <img class="avatar" :src="item.photo" @click="toItem(item)"/>
+      <div class="info" @click="toItem(item)">
         <span class="title">{{item.title}}</span>
         <span class="price" v-if="module === 'product'">¥ {{item.price}}</span>
       </div>
