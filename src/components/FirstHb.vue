@@ -175,6 +175,7 @@ export default {
           })
         }
         this.showModal = false
+        this.$emit('afterOpen', data)
       })
     },
     closeHbModal (e) {

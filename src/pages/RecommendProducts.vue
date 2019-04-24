@@ -73,7 +73,7 @@
         </firstTip>
       </template>
       <template v-if="showHb">
-        <firstHb action="importproduct" @closeFirstHb="closeFirstHb"></firstHb>
+        <firstHb action="importproduct" @closeFirstHb="closeFirstHb" @afterOpen="afterClickOpen"></firstHb>
       </template>
     </div>
   </div>
@@ -157,6 +157,9 @@ export default {
     },
     closeFirstHb () {
       this.showHb = false
+    },
+    afterClickOpen (data) {
+      this.isFirst = false
     },
     importProduct (item) {
       const self = this
