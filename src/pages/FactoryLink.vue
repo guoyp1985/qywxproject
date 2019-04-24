@@ -39,7 +39,7 @@ export default {
   data () {
     return {
       loginUser: {},
-      appPath: 'http://laravelcms.boka.cn/admin/login/login?role=factory',
+      appPath: ENV.FactoryLoginUrl,
       webPath: `${ENV.Host}/#/shop`
     }
   },
