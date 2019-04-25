@@ -73,7 +73,7 @@
         </firstTip>
       </template>
       <template v-if="showHb">
-        <firstHb action="importproduct" @closeFirstHb="closeFirstHb"></firstHb>
+        <firstHb action="importproduct" @closeFirstHb="closeFirstHb" @afterOpen="afterClickOpen"></firstHb>
       </template>
     </div>
   </div>
@@ -122,6 +122,7 @@ export default {
       pricecss: 'desc',
       sort: 'dateline',
       pageTop: 0,
+      tabLeft: 0,
       scrollEnd: false,
       showTip: false,
       showFirst: false,
@@ -157,6 +158,9 @@ export default {
     },
     closeFirstHb () {
       this.showHb = false
+    },
+    afterClickOpen (data) {
+      this.isFirst = false
     },
     importProduct (item) {
       const self = this
@@ -348,12 +352,13 @@ export default {
   },
   activated () {
     this.$refs.scrollContainer.scrollTop = this.pageTop
+    document.querySelector('.vux-tab').scrollLeft = this.tabLeft
     this.showHb = false
     this.isFirst = false
   },
   beforeRouteLeave (to, from, next) {
     this.pageTop = this.$refs.scrollContainer.scrollTop
-    console.log(this.pageTop)
+    this.tabLeft = document.querySelector('.vux-tab').scrollLeft
     next()
   }
   /*

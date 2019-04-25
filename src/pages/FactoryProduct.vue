@@ -542,6 +542,9 @@ export default {
   },
   activated () {
     this.refresh()
+  },
+  deactivated () {
+    this.showContainer = false
   }
 }
 </script>
