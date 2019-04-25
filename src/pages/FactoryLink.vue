@@ -2,7 +2,7 @@
   <div id="link-web-page" class="containerarea font14 factorylink">
     <div class="toplink">
       <div class="flex_table flex_center font12">
-        <div class="frame pl5 pr5 flex_left" style="">http://sharingadmin.boka.cn/admin/login/login?role=factory</div>
+        <div class="frame pl5 pr5 flex_left" style="">{{appPath}}</div>
         <div class="btnCopy" style="position:relative;" @click="copyTxt('app', 'copy_app_txt')">复制后台管理链接
           <div class="copy_app_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{appPath}}</div>
         </div>
@@ -17,7 +17,7 @@
         <div><span class="bold" style="color:#fd6a61;">第一步：</span>进入厂家中心的PC端后台，点击【复制后台管理链接】按钮。</div>
       </div>
       <div class="img1 mt20">
-        <img src="../assets/images/bg-one.png" />
+        <img :src="adminImg1" />
       </div>
       <div class="first mt20">
         <div>
@@ -26,7 +26,7 @@
         </div>
       </div>
       <div class="img1 mt20">
-        <img src="../assets/images/bg-two.png" />
+        <img :src="adminImg2" />
       </div>
     </div>
   </div>
@@ -40,7 +40,9 @@ export default {
     return {
       loginUser: {},
       appPath: ENV.FactoryLoginUrl,
-      webPath: `${ENV.Host}/#/shop`
+      webPath: `${ENV.Host}/#/shop`,
+      adminImg1: ENV.AdminFactoryImg1,
+      adminImg2: ENV.AdminFactoryImg2
     }
   },
   methods: {

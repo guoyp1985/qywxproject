@@ -62,7 +62,9 @@ var ENV = {
   AppHomePage: '/pages/wymh',
   FactoryLoginUrl: 'http://laravelcms.boka.cn/admin/login/login?role=factory',
   RetailerLoginUrl: 'http://laravelcms.boka.cn/admin/login/login?role=retailer',
-  AdminLoginUrl: 'http://laravelcms.boka.cn/admin/login/login?role=admin'
+  AdminLoginUrl: 'http://laravelcms.boka.cn/admin/login/login?role=admin',
+  AdminFactoryImg1: 'https://tossharingsales.boka.cn/images/vue_admin_factory1.png',
+  AdminFactoryImg2: 'https://tossharingsales.boka.cn/images/vue_admin_factory2.png'
 }
 
 ENV.NoAccessUrls = [
