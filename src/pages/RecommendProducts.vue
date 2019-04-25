@@ -122,6 +122,7 @@ export default {
       pricecss: 'desc',
       sort: 'dateline',
       pageTop: 0,
+      tabLeft: 0,
       scrollEnd: false,
       showTip: false,
       showFirst: false,
@@ -351,11 +352,13 @@ export default {
   },
   activated () {
     this.$refs.scrollContainer.scrollTop = this.pageTop
+    document.querySelector('.vux-tab .scrollable').scrollLeft = this.tabLeft
     this.showHb = false
     this.isFirst = false
   },
   beforeRouteLeave (to, from, next) {
     this.pageTop = this.$refs.scrollContainer.scrollTop
+    this.tabLeft = document.querySelector('.vux-tab .scrollable').scrollLeft
     console.log(this.pageTop)
     next()
   }
