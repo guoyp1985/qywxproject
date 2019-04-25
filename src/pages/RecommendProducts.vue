@@ -352,14 +352,14 @@ export default {
   },
   activated () {
     this.$refs.scrollContainer.scrollTop = this.pageTop
-    console.log(document.querySelector('.vux-tab .scrollable'))
-    document.querySelector('.vux-tab .scrollable').scrollLeft = this.tabLeft
+    console.log(document.querySelector('.vux-tab.scrollable'))
+    document.querySelector('.vux-tab.scrollable').scrollLeft = this.tabLeft
     this.showHb = false
     this.isFirst = false
   },
   beforeRouteLeave (to, from, next) {
     this.pageTop = this.$refs.scrollContainer.scrollTop
-    this.tabLeft = document.querySelector('.vux-tab .scrollable').scrollLeft
+    this.tabLeft = document.querySelector('.vux-tab.scrollable').scrollLeft
     console.log(this.pageTop)
     next()
   }
