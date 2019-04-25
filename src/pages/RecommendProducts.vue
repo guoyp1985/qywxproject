@@ -352,6 +352,7 @@ export default {
   },
   activated () {
     this.$refs.scrollContainer.scrollTop = this.pageTop
+    console.log(document.querySelector('.vux-tab .scrollable'))
     document.querySelector('.vux-tab .scrollable').scrollLeft = this.tabLeft
     this.showHb = false
     this.isFirst = false
