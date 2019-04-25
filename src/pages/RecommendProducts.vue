@@ -354,14 +354,14 @@ export default {
     this.$refs.scrollContainer.scrollTop = this.pageTop
     const appNode = document.getElementById('app')
     console.log(appNode)
-    appNode.querySelector('.vux-tab.scrollable').scrollLeft = this.tabLeft
+    appNode.querySelector('.vux-tab').scrollLeft = this.tabLeft
     this.showHb = false
     this.isFirst = false
   },
   beforeRouteLeave (to, from, next) {
     this.pageTop = this.$refs.scrollContainer.scrollTop
     const appNode = document.getElementById('app')
-    this.tabLeft = appNode.querySelector('.vux-tab.scrollable').scrollLeft
+    this.tabLeft = appNode.querySelector('.vux-tab').scrollLeft
     console.log(this.pageTop)
     next()
   }
