@@ -2,7 +2,7 @@
   <div id="link-web-page" class="containerarea font14 factorylink">
     <div class="toplink">
       <div class="flex_table flex_center font12">
-        <div class="frame pl5 pr5 flex_left" style="">{{appPath}}</div>
+        <div class="frame pl5 pr5 flex_left" style="">http://sharingadmin.boka.cn/admin/login/login?role=factory</div>
         <div class="btnCopy" style="position:relative;" @click="copyTxt('app', 'copy_app_txt')">复制后台管理链接
           <div class="copy_app_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{appPath}}</div>
         </div>
