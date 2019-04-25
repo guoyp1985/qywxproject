@@ -353,7 +353,7 @@ export default {
   activated () {
     this.$refs.scrollContainer.scrollTop = this.pageTop
     const appNode = document.getElementById('app')
-    console.log(appNode.querySelector('.vux-tab.scrollable'))
+    console.log(appNode)
     appNode.querySelector('.vux-tab.scrollable').scrollLeft = this.tabLeft
     this.showHb = false
     this.isFirst = false
