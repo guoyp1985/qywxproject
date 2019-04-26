@@ -850,6 +850,13 @@ export default {
           if (parseInt(retdata.oriprice) === 0) {
             retdata.oriprice = ''
           }
+          if (retdata.options && retdata.options.length) {
+            this.optionsData = retdata.options
+            this.optionsPhoto = []
+            for (let i = 0; i < this.optionsData.length; i++) {
+              this.optionsPhoto.push(this.optionsData.photo)
+            }
+          }
           self.data = retdata
           self.activityInfo = self.data.activitinfo
           for (let key in self.submitdata) {
