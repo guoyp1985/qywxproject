@@ -854,7 +854,7 @@ export default {
             this.optionsData = retdata.options
             this.optionsPhoto = []
             for (let i = 0; i < this.optionsData.length; i++) {
-              this.optionsPhoto.push(this.optionsData.photo)
+              this.optionsPhoto.push(this.optionsData[i].photo)
             }
           }
           self.data = retdata
