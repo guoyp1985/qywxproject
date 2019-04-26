@@ -782,7 +782,11 @@ export default {
         if (this.optionsData.length) {
           for (let i = 0; i < this.optionsData.length; i++) {
             let curOption = this.optionsData[i]
-            postOptions.push({title: curOption.title, photo: curOption.photo, storage: curOption.storage})
+            let addoption = {title: curOption.title, photo: curOption.photo, storage: curOption.storage}
+            if (curOption.id) {
+              addoption.id = curOption.id
+            }
+            postOptions.push(addoption)
           }
         }
         postdata.options = postOptions
