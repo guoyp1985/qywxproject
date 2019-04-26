@@ -843,6 +843,7 @@ export default {
         this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, params2).then(res => {
           const data = res.data
           let retdata = data.data ? data.data : data
+          this.optionsData = retdata.options
           if (parseInt(retdata.oriprice) === 0) {
             retdata.oriprice = ''
           }
