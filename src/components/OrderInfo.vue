@@ -25,7 +25,12 @@
       </div>
       <div class="product-info" v-else>
         <div class="product-img" style="position:relative;">
-          <img class="v_middle imgcover" :src="item.orderlist[0].photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+          <template v-if="item.orderlist[0].options && item.orderlist[0].options.id">
+            <img class="v_middle imgcover" :src="item.orderlist[0].options.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+          </template>
+          <template v-else>
+            <img class="v_middle imgcover" :src="item.orderlist[0].photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+          </template>
           <img v-if="item.carddeduct > 0" class="yhq" src="https://tossharingsales.boka.cn/minigxk/yhq.png"/>
         </div>
         <div class="flex_cell flex_left">

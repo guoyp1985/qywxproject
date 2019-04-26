@@ -62,7 +62,12 @@
       </div>
       <group>
         <cell class="order-list font12" v-for="(order, index) in orders" :key="index" :link="`/product?id=${order.pid}&wid=${order.wid}`">
-          <img slot="icon" class="imgcover" :src="order.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+          <template v-if="order.options && order.options.id">
+            <img slot="icon" class="imgcover" :src="order.options.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+          </template>
+          <template v-else>
+            <img slot="icon" class="imgcover" :src="order.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+          </template>
           <div slot="title">{{order.name}}</div>
           <div slot="after-title" class="color-gray" v-if="order.options && order.options.id">{{order.options.title}}</div>
           <div slot="inline-desc">
