@@ -717,7 +717,8 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
+.vux-x-input.align_right input{text-align:right;}
 .form-item{position:relative;padding:10px 12px;}
 .form-item:after{
   content:"";display:block;
