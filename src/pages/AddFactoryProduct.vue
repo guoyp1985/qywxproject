@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea s-havebottom font14 addproduct">
+  <div class="containerarea s-havebottom font14 add-factory-product-page">
     <template v-if="showSos">
       <sos :title="sosTitle"></sos>
     </template>
@@ -10,6 +10,9 @@
         </form>
         <form ref="fileForm1" enctype="multipart/form-data">
           <input ref="fileInput1" class="hide" type="file" multiple="multiple" name="files" @change="fileMulChange('fileForm1', 'contentphoto')" />
+        </form>
+        <form ref="optioinsForm" enctype="multipart/form-data">
+          <input ref="optionsInput" class="hide" type="file" name="files" @change="fileOptionChange('optioinsForm')" />
         </form>
         <div class="list-shadow01">
           <div class="form-item no-after pt15 bg-gray10">
@@ -141,6 +144,45 @@
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>
           </div>
+
+          <div class="form-item bg-white">
+            <div class="flex_left">商品规格</div>
+            <div class="option-list">
+              <div class="option-item" v-for="(item,index) in optionsData" :key="index">
+                <div class="option-title flex_left">
+                  <div class="flex_cell flex_left">规格 {{index + 1}}</div>
+                  <div class="w60 flex_right color-theme" @click="deleteOption(index)">删除</div>
+                </div>
+                <div class="option-con">
+                  <div class="flex_left con-item">
+                    <div class="title-cell1 flex_left">规格名称</div>
+                    <div class="border-cell flex_left flex_cell">
+                      <input class="input" type="text" placeholder="规格名称" :value="item.title"></input>
+                    </div>
+                  </div>
+                  <div class="flex_left mt10 con-item">
+                    <div class="title-cell1 flex_left">图片</div>
+                    <div class="border-cell flex_left flex_cell">
+                      <div class="flex_left flex_cell option-pic-list">
+                        <img v-if="optionsPhoto[index] && optionsPhoto[index] != ''" class="option-pic" :src="optionsPhoto[index]" />
+                      </div>
+                      <div class="icon-cell flex_center" @click="uploadOptionPhoto('optionsInput',index)"><span class="al al-zhaoxiangji font18 color-theme"></span></div>
+                    </div>
+                  </div>
+                  <div class="flex_left mt10 con-item">
+                    <div class="title-cell1 flex_left">库存</div>
+                    <div class="border-cell flex_left flex_cell">
+                      <input class="input" type="text" placeholder="库存" :value="item.storage"></input>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="flex_center pt10 pb10">
+              <div class="color-theme btn-add flex_center" @click="addOption">添加一项</div>
+            </div>
+          </div>
+
           <div class="form-item required bg-white">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">商品优势</div>
@@ -204,12 +246,12 @@
               <div class="t-cell title-cell w80 font14 v_middle">视频</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
                 <div class="q_photolist align_left" style="overflow:hidden;">
-                  <form ref="videoForm" class="db" enctype="multipart/form-data" v-if="videoarr.length == 0">
+                  <div ref="videoForm" class="db" enctype="multipart/form-data" v-if="videoarr.length == 0">
                     <div class="button_video flex_center">
                       <i class="al al-ai-video color-white"></i>
                       <input ref="videoInput" type="file" name="files" @change="fileChange('videoForm', 'video')" />
                     </div>
-                  </form>
+                  </div>
                   <div v-else v-for="(item,index) in videoarr" :key="index" class="videoitem photoitem">
                     <div class="inner photo imgcover" :photo="item" style="border:#ccc 1px solid;">
                       <div class="flex_center" style="position:absolute;left:0;top:0;bottom:0;right:0;">
@@ -329,7 +371,10 @@ export default {
       levels: [],
       classData: [],
       submitIng: false,
-      showTip: false
+      showTip: false,
+      optionsData: [],
+      selectedOptionIndex: 0,
+      optionsPhoto: []
     }
   },
   watch: {
@@ -343,6 +388,13 @@ export default {
     havenum1: function (val) {
       this.havenum1 = this.photoarr1.length
       return this.havenum1
+    },
+    optionsPhoto: {
+      handler: (newval) => {
+        console.log('监控规格的变化 ')
+        console.log(newval)
+      },
+      deep: true
     }
   },
   computed: {
@@ -374,6 +426,108 @@ export default {
       }
       this.photoarr = []
       this.photoarr1 = []
+    },
+    addOption () {
+      this.optionsData.push({})
+    },
+    deleteOption (index) {
+      this.$vux.confirm.show({
+        content: '确定要删除吗？',
+        onConfirm: () => {
+          if (this.optionsData[index].id) {
+            this.$vux.loading.show()
+            this.$http.post(`${ENV.BokaApi}/api/delete/productoptions`, {
+              id: this.optionsData[index].id
+            }).then((res) => {
+              this.$vux.loading.hide()
+              let data = res.data
+              let error = data.flag ? '删除成功' : data.error
+              this.$vux.toast.show({
+                text: error,
+                type: data.flag ? 'success' : 'warn',
+                time: this.$util.delay(error)
+              })
+              if (data.flag) {
+                this.optionsData.splice(index, 1)
+              }
+            })
+          } else {
+            this.optionsData.splice(index, 1)
+            this.$apply()
+          }
+        }
+      })
+    },
+    previewImg (e) {
+      // const url = e.currentTarget.dataset.url
+      // wepy.previewImage({
+      //   current: 0,
+      //   urls: [url]
+      // })
+    },
+    handleOptionPhoto (photo) {
+      if (!this.optionsData[this.selectedOptionIndex]) {
+        this.optionsData[this.selectedOptionIndex] = {}
+      }
+      this.optionsData[this.selectedOptionIndex].photo = photo
+      if (this.optionsPhoto.length > this.selectedOptionIndex) {
+        this.optionsPhoto.splice(this.selectedOptionIndex, 1, photo)
+        console.log('上传后')
+        console.log(this.optionsPhoto)
+      } else {
+        this.optionsPhoto.push(photo)
+      }
+    },
+    fileOptionChange (refname) {
+      const self = this
+      const target = event.target
+      const files = target.files
+      if (files.length > 0) {
+        let fileForm = target.parentNode
+        const filedata = new FormData(fileForm)
+        self.$vux.loading.show()
+        self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then((res) => {
+          let data = res.data
+          self.$vux.loading.hide()
+          if (data.flag) {
+            this.handleOptionPhoto(data.data)
+            console.log('上传完图片')
+            console.log(this.optionsData)
+            console.log(this.optionsPhoto)
+          } else if (data.error) {
+            self.$vux.toast.show({
+              text: data.error,
+              time: self.$util.delay(data.error)
+            })
+          }
+        })
+      }
+    },
+    uploadOptionPhoto (refname, index) {
+      const self = this
+      const fileInput = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      console.log('点击索引')
+      console.log(index)
+      this.selectedOptionIndex = index
+      if (self.$util.isPC()) {
+        fileInput.click()
+      } else {
+        self.$wechat.ready(function () {
+          self.$util.wxUploadImage({
+            maxnum: 1,
+            handleCallback: (data) => {
+              if (data.flag === 1) {
+                this.handleOptionPhoto(data.data)
+              } else if (data.error) {
+                self.$vux.toast.show({
+                  text: data.error,
+                  time: self.$util.delay(data.error)
+                })
+              }
+            }
+          })
+        })
+      }
     },
     clickTip () {
       this.showTip = true
@@ -718,43 +872,71 @@ export default {
 </script>
 
 <style lang="less">
-.vux-x-input.align_right input{text-align:right;}
-.form-item{position:relative;padding:10px 12px;}
-.form-item:after{
-  content:"";display:block;
-	background-color:@list-border-color;height:1px;overflow:hidden;
-	position: absolute;left: 12px;right: 0;bottom:1px;
-	-webkit-transform: scaleY(0.5) translateY(0.5px);
-	transform: scaleY(0.5) translateY(0.5px);
-	-webkit-transform-origin: 0% 0%;
-	transform-origin: 0% 0%;
-}
-.b_top_after:after,.b_bottom_after:after{left:12px;}
-.button_photo{
-  position:relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width:60px;
-  height:60px;
-  background-color:#ea3a3a;
-  margin: 0 auto;
-  border-radius:50%;
-  overflow:hidden;
-}
-.button_photo .fileinput{position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;background-color:transparent;opacity:0;}
-.s-havebottom .s-container{bottom:50px;}
-.s-bottom{height:50px;padding-left:12px;padding-right:12px;background-color:#fff;}
-.button_video{
-  position:relative;
-  width:60px;
-  height:60px;
-  background-color:#ea3a3a;
-  border-radius:50%;
-}
-.button_video input{
-  position:absolute;
-  left:0;top:0;right:0;bottom:0;
-  opacity:0;
+.add-factory-product-page{
+  .vux-x-input.align_right input{text-align:right;}
+  .form-item{position:relative;padding:10px 12px;}
+  .form-item:after{
+    content:"";display:block;
+  	background-color:@list-border-color;height:1px;overflow:hidden;
+  	position: absolute;left: 12px;right: 0;bottom:1px;
+  	-webkit-transform: scaleY(0.5) translateY(0.5px);
+  	transform: scaleY(0.5) translateY(0.5px);
+  	-webkit-transform-origin: 0% 0%;
+  	transform-origin: 0% 0%;
+  }
+  .b_top_after:after,.b_bottom_after:after{left:12px;}
+  .button_photo{
+    position:relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width:60px;
+    height:60px;
+    background-color:#ea3a3a;
+    margin: 0 auto;
+    border-radius:50%;
+    overflow:hidden;
+  }
+  .button_photo .fileinput{position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;background-color:transparent;opacity:0;}
+  .s-havebottom .s-container{bottom:50px;}
+  .s-bottom{height:50px;padding-left:12px;padding-right:12px;background-color:#fff;}
+  .button_video{
+    position:relative;
+    width:60px;
+    height:60px;
+    background-color:#ea3a3a;
+    border-radius:50%;
+  }
+  .button_video input{
+    position:absolute;
+    left:0;top:0;right:0;bottom:0;
+    opacity:0;
+  }
+
+  .btn-add{width:100px;height:30px;border:#ccc 1px solid;border-radius:10px;}
+  .option-list{
+    .option-item{
+      border:#ccc 1px solid;margin-top:10px;
+      .option-title{border-bottom:#ccc 1px solid;padding:10px;}
+      .option-con{
+        padding:10px;
+        .con-item:not(:last-child) {margin-bottom:10px;}
+        .con-item{
+          width:100%;height:30px;
+          .title-cell1{width:60px;height:100%;}
+          .border-cell{
+            border:#ccc 1px solid;height:100%;
+            .input{width:100%;height:100%;padding:0 5px;box-sizing: border-box;}
+          }
+          .icon-cell{
+            width:30px;height:100%;
+          }
+        }
+      }
+      .option-pic-list{
+        .option-pic{width:30px;height:30px;}
+      }
+    }
+  }
 }
 </style>
