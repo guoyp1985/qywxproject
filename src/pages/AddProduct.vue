@@ -10,8 +10,8 @@
         <form ref="fileForm1" enctype="multipart/form-data">
           <input ref="fileInput1" class="hide" type="file" multiple="multiple" name="files" @change="fileMulChange('fileForm1', 'contentphoto')" />
         </form>
-        <form ref="fileForm1" enctype="multipart/form-data">
-          <input ref="fileInput2" class="hide" type="file" name="files" @change="fileMulChange('fileForm2', 'gsphoto')" />
+        <form ref="optioinsForm" enctype="multipart/form-data">
+          <input ref="optionsInput" class="hide" type="file" name="files" @change="fileOptionChange('optioinsForm')" />
         </form>
         <div class="list-shadow01">
           <div class="form-item no-after pt15 bg-gray10">
@@ -139,8 +139,7 @@
           <div class="form-item bg-white">
             <div class="t-cell title-cell w80 font14 v_middle">商品规格</div>
             <div class="option-list">
-              <div v-for="(item, index) in optionsData" :key="index">
-                <div class="option-item">
+              <div class="option-item" v-for="(item, index) in optionsData" :key="index">
                   <div class="option-title flex_left">
                     <div class="flex_cell flex_left">规格 {{index + 1}}</div>
                     <div class="w60 flex_right color-theme" @click="deleteOption(index)">
@@ -149,32 +148,33 @@
                   </div>
                   <div class="option-con">
                     <div class="flex_left con-item">
-                      <div class="t-cell">规格名称</div>
+                      <div class="title-cell1 flex_left">规格名称</div>
                       <div class="border-cell flex_left flex_cell">
-                        <x-input v-model="item.title" class="input" @on-change="keyupOptionTitle" type="text" placeholder="规格名称"></x-input>
+                        <x-input v-model="item.title" class="input" @keyup="optionTitleChange(index)" type="text" placeholder="规格名称"></x-input>
                       </div>
                     </div>
                     <div class="flex_left mt10 con-item">
-                      <div class="t-cell">图片</div>
+                      <div class="title-cell1 flex_left">图片</div>
                       <div class="border-cell flex_left flex_cell">
                         <div class="flex_left flex_cell option-pic-list">
-                          <div v-for="(photo, index1) in photoarr2" :key="index1" style="margin-top:5px;">
-                            <!-- <div class="inner photo option-pic" :photo="photo" :style="`background-image: url('${photo}');`"></div> -->
-                            <img class="inner photo option-pic" :src="photo" />
-                          </div>
+                          <img v-if="optionsPhoto[index] && optionsPhoto[index] != ''" class="option-pic" :src="optionsPhoto[index]" @click="previewImg(index,item.photoarr,`previewer${index}`)"/>
                         </div>
-                        <div class="icon-cell flex_center" @click.stop="uploadPhoto('fileInput2','gsphoto',index)"><span class="al al-zhaoxiangji font18 color-theme"></span></div>
+                        <div class="icon-cell flex_center" @click="uploadOptionPhoto('optionsInput',index)"><span class="al al-zhaoxiangji font18 color-theme"></span></div>
                       </div>
+                      <template v-if="optionsPhoto[index] && optionsPhoto[index] != ''">
+                        <div v-transfer-dom>
+                          <previewer :list="item.previewerPhoto" :ref="`previewer${index}`"></previewer>
+                        </div>
+                      </template>
                     </div>
                     <div class="flex_left mt10 con-item">
-                      <div class="t-cell">库存</div>
+                      <div class="title-cell1 flex_left">库存</div>
                       <div class="border-cell flex_left flex_cell">
-                        <x-input v-model="item.storage" class="input" @keyup="keyupOptionStorage(index)" type="text" placeholder="库存"></x-input>
+                        <x-input v-model="item.storage" class="input" @keyup="optionStorageChange(index)" type="tel" placeholder="库存" maxlength="5" size="5"></x-input>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
             </div>
             <div class="flex_center pt10 pb10" @click="addOption">
               <div class="color-theme btn-add flex_center">添加一项</div>
@@ -306,7 +306,7 @@
 </i18n>
 
 <script>
-import { Group, XInput, XTextarea, XSwitch } from 'vux'
+import { TransferDom, Group, XInput, XTextarea, XSwitch, Previewer } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
@@ -315,8 +315,11 @@ import ApplyTip from '@/components/ApplyTip'
 import OpenVip from '@/components/OpenVip'
 
 export default {
+  directives: {
+    TransferDom
+  },
   components: {
-    Group, XInput, XTextarea, Sos, Subscribe, ApplyTip, OpenVip, XSwitch
+    Group, XInput, XTextarea, Sos, Subscribe, ApplyTip, OpenVip, XSwitch, Previewer
   },
   data () {
     return {
@@ -358,7 +361,9 @@ export default {
       showRebate: false,
       classData: [],
       submitIng: false,
-      optionsData: []
+      optionsData: [],
+      selectedOptionIndex: 0,
+      optionsPhoto: []
     }
   },
   watch: {
@@ -381,41 +386,118 @@ export default {
   computed: {
   },
   methods: {
+    addOption () {
+      this.optionsData.push({})
+    },
+    optionTitleChange (index) {
+      let val = event.target.value
+      this.optionsData[index].title = val
+    },
+    optionStorageChange (index) {
+      let val = event.target.value
+      this.optionsData[index].storage = val
+    },
     deleteOption (index) {
-      console.log('deleteOption')
-      let _this = this
-      _this.$vux.confirm.show({
-        title: `确定要删除吗？`,
+      this.$vux.confirm.show({
+        content: '确定要删除吗？',
         onConfirm: () => {
-          _this.$http({
-            url: `${ENV.BokaApi}/api/delete/productoptions`,
-            method: 'post',
-            data: {id: index}
-          }).then(res => {
-            const data = res.data
-            if (data.flag) {
-              this.optionsData.splice(index, 1)
-            }
-          })
+          if (this.optionsData[index].id) {
+            this.$vux.loading.show()
+            this.$http.post(`${ENV.BokaApi}/api/delete/productoptions`, {
+              id: this.optionsData[index].id
+            }).then((res) => {
+              this.$vux.loading.hide()
+              let data = res.data
+              let error = data.flag ? '删除成功' : data.error
+              this.$vux.toast.show({
+                text: error,
+                type: data.flag ? 'success' : 'warn',
+                time: this.$util.delay(error)
+              })
+              if (data.flag) {
+                this.optionsData.splice(index, 1)
+              }
+            })
+          } else {
+            this.optionsData.splice(index, 1)
+          }
         }
       })
     },
-    keyupOptionTitle (e, index) {
-      console.log('keyupOptionTitle')
-      console.log('ZHIl:')
-      console.log(e)
+    previewImg (index, arr, refname) {
+      const self = this
+      if (self.$util.isPC()) {
+        let view = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+        view.show(index)
+      } else {
+        if (window.WeixinJSBridge) {
+          window.WeixinJSBridge.invoke('imagePreview', {
+            current: arr[0],
+            urls: arr
+          })
+        }
+      }
     },
-    predivImg (photo) {
-      console.log('predivImg')
+    handleOptionPhoto (photo) {
+      if (!this.optionsData[this.selectedOptionIndex]) {
+        this.optionsData[this.selectedOptionIndex] = {}
+      }
+      this.optionsData[this.selectedOptionIndex].photo = photo
+      this.optionsData[this.selectedOptionIndex].photoarr = [photo]
+      this.optionsData[this.selectedOptionIndex].previewerPhoto = this.$util.previewerImgdata(this.optionsData[this.selectedOptionIndex].photoarr)
+      if (this.optionsPhoto.length > this.selectedOptionIndex) {
+        this.optionsPhoto.splice(this.selectedOptionIndex, 1, photo)
+        console.log('上传后')
+        console.log(this.optionsPhoto)
+      } else {
+        this.optionsPhoto.push(photo)
+      }
     },
-    optionsPhoto (index) {
-      console.log('uploadOptionPhoto')
+    fileOptionChange (refname) {
+      const self = this
+      const target = event.target
+      const files = target.files
+      if (files.length > 0) {
+        let fileForm = target.parentNode
+        const filedata = new FormData(fileForm)
+        self.$vux.loading.show()
+        self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then((res) => {
+          let data = res.data
+          self.$vux.loading.hide()
+          if (data.flag) {
+            this.handleOptionPhoto(data.data)
+          } else if (data.error) {
+            self.$vux.toast.show({
+              text: data.error,
+              time: self.$util.delay(data.error)
+            })
+          }
+        })
+      }
     },
-    keyupOptionStorage (index) {
-      console.log('keyupOptionStorage')
-    },
-    addOption () {
-      this.optionsData.push({})
+    uploadOptionPhoto (refname, index) {
+      const self = this
+      const fileInput = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      this.selectedOptionIndex = index
+      if (self.$util.isPC()) {
+        fileInput.click()
+      } else {
+        self.$wechat.ready(function () {
+          self.$util.wxUploadImage({
+            maxnum: 1,
+            handleCallback: (data) => {
+              if (data.flag === 1) {
+                this.handleOptionPhoto(data.data)
+              } else if (data.error) {
+                self.$vux.toast.show({
+                  text: data.error,
+                  time: self.$util.delay(data.error)
+                })
+              }
+            }
+          })
+        })
+      }
     },
     initSubmitData () {
       this.videoarr = []
@@ -630,6 +712,28 @@ export default {
             return false
           }
         }
+        let iscontinue = true
+        if (this.optionsData.length) {
+          for (let i = 0; i < this.optionsData.length; i++) {
+            let curOption = this.optionsData[i]
+            let curTitle = curOption.title
+            let curPhoto = curOption.photo
+            let curStorage = curOption.storage
+            if (self.$util.trim(curTitle) === '' || self.$util.trim(curPhoto) === '' || self.$util.trim(curStorage) === '') {
+              self.$vux.toast.text('请完规格信息', 'middle')
+              iscontinue = false
+              break
+            }
+            if (isNaN(curStorage) || parseFloat(curStorage) <= 0) {
+              self.$vux.toast.text('库存必须大于0', 'middle')
+              iscontinue = false
+              break
+            }
+          }
+        }
+        if (!iscontinue) {
+          return false
+        }
         if (self.$util.trim(postdata.content) === '' && self.$util.trim(postdata.contentphoto) === '') {
           self.$vux.toast.text('请完善商品介绍或者详情图片', 'middle')
           return false
@@ -639,6 +743,14 @@ export default {
         postdata.oriprice = oriprice
         postdata.rebate = rebate
         postdata.postage = postdata.postage.toString().replace(/,/g, '')
+        let postOptions = []
+        if (this.optionsData.length) {
+          for (let i = 0; i < this.optionsData.length; i++) {
+            let curOption = this.optionsData[i]
+            postOptions.push({title: curOption.title, photo: curOption.photo, storage: curOption.storage})
+          }
+        }
+        postdata.options = postOptions
         self.$vux.loading.show()
         if (self.query.id) {
           postdata.id = self.query.id
@@ -744,7 +856,6 @@ export default {
             } else {
               self.submitdata[key] = self.data[key]
             }
-            this.optionsData = this.productData.options
           }
           if (self.submitdata.photo && self.$util.trim(self.submitdata.photo) !== '') {
             self.photoarr = self.submitdata.photo.split(',')
@@ -884,7 +995,7 @@ export default {
       .con-item:not(:last-child) {margin-bottom:10px;}
       .con-item{
         width:100%;height:30px;
-        .t-cell{width:60px;height:100%;}
+        .title-cell1{width:60px;height:100%;}
         .border-cell{
           border:#ccc 1px solid;height:100%;
           .input{width:100%;height:100%;padding:0 5px;box-sizing: border-box;}
