@@ -139,12 +139,10 @@
           <div class="form-item bg-white">
             <div class="t-cell title-cell w80 font14 v_middle">商品规格</div>
             <div class="option-list">
-              <div class="option-item" v-for="(item, index) in optionsData" :key="index">
+              <div class="option-item" v-for="(item,index) in optionsData" :key="index">
                   <div class="option-title flex_left">
                     <div class="flex_cell flex_left">规格 {{index + 1}}</div>
-                    <div class="w60 flex_right color-theme" @click="deleteOption(index)">
-                      <div>删除</div>
-                    </div>
+                    <div class="w60 flex_right color-theme" @click="deleteOption(index)">删除</div>
                   </div>
                   <div class="option-con">
                     <div class="flex_left con-item">
@@ -711,6 +709,10 @@ export default {
             self.$vux.toast.text(`返点佣金应小于${maxRebate}元`, 'middle')
             return false
           }
+        }
+        if (!this.optionsData.length && self.$util.trim(postdata.storage) === '') {
+          self.$vux.toast.text('请输入商品库存', 'middle')
+          return false
         }
         let iscontinue = true
         if (this.optionsData.length) {
