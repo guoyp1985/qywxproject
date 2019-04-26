@@ -444,7 +444,7 @@ export default {
         onConfirm: () => {
           if (this.optionsData[index].id) {
             this.$vux.loading.show()
-            this.$http.post(`${ENV.BokaApi}/api/delete/productoptions`, {
+            this.$http.post(`${ENV.BokaApi}/api/delete/factoryproductoptions`, {
               id: this.optionsData[index].id
             }).then((res) => {
               this.$vux.loading.hide()
