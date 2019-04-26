@@ -1,5 +1,5 @@
 <template>
-  <div :class="`containerarea bg-white font14 product notop ${topcss}`">
+  <div :class="`containerarea bg-white font14 f-product-page notop ${topcss}`">
     <template v-if="showSos">
       <sos :title="sosTitle"></sos>
     </template>
@@ -57,6 +57,21 @@
         </div>
         <div class="bg-page" style="height:10px;"></div>
         <div class="b_top_after"></div>
+        <template v-if="productdata.options && productdata.options.length">
+          <div class="padding10 b_bottom_after levelarea flex_left">
+            <div class="w60 flex_left bold">规格</div>
+            <div class="flex_cell">
+              <div class="options-list">
+                <div class="options-item" v-for="(item,index) in productdata.options" :key="index">
+                  <div class="flex_center">
+                    <img :src="item.photo" /><span class="ml5">{{item.title}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-page" style="height:10px;"></div>
+        </template>
         <div class="padding10 b_bottom_after levelarea">
           <div class="levelitem">
             <div><span class="bold">推荐人佣金:</span><span class="bold">{{ $t('RMB') }}{{ productdata.superiorrebate }}</span><i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp"></i></div>
@@ -551,112 +566,125 @@ export default {
 
 <style lang="less">
 .notop .pagetop{display:none;}
-.product .videobg{width:100%;height:100%;background-size:cover;background-position:center;position:relative;}
-.product .play-icon{
-  width:60px;height:60px;background: rgba(0,0,0,.4);border-radius: 50%;color:#fff;
-  position:absolute;left:50%;top:50%;margin-left:-30px;margin-top:-30px;
-}
-.product .play-icon .al{margin-left:4px;}
-.product .videoarea{position:absolute;left:0;top:0;right:0;bottom:0;z-index:9999;background-color:#000;color:#fff;}
-.product .videoarea video{position: absolute;width: 100%;height: 100%;}
-.product .videoarea .close-icon{position:absolute;left:15px;top:15px;width:40px;height:40px;}
-.vline{position:relative;}
-.vline:after {
-  content: " ";
-  display: block;
-  position: absolute;
-  width: 2px;
-  top: 4px;
-  bottom: 4px;
-  margin: auto 0;
-  left: -1px;
-  background-color: #ff6600;
-}
-.product .buylist:after{
-  content:'';
-  display:block;
-  clear:both;
-}
-.product .buylist .item{
-  float: left;
-  width: 50px;
-  text-align: center;
-  display:block;
-  color:inherit;;
-}
-.productcontent{
-  padding:20px 15px;
-}
-.product .productcontent img{
-  max-width:100%;
-  vertical-align: middle;
-}
-.product .productarea.scrollend:after {
-    background-color: #f6f6f6;
-}
+.f-product-page{
+  .options-list{
+    display: flex;flex-wrap: wrap;
+    .options-item:not(:last-child){margin-right:10px;}
+    .options-item.active{border-color:#ff6a61;color:#ff6a61;}
+    .options-item.disabled{background-color:#ccc;}
+    .options-item{
+      border:#ccc 1px solid;border-radius:5px;padding:5px;
+      img{width:30px;height:30px;}
+    }
+  }
 
-.product .pagetop{
-  box-shadow: 0px 0px 10px 3px #d0d0d0;
-}
-.product.notop .pagemiddle{top:0px;}
-.product.nobottom .pagemiddle{bottom:0px;}
-.product .numicon {
+  .videobg{width:100%;height:100%;background-size:cover;background-position:center;position:relative;}
+  .play-icon{
+    width:60px;height:60px;background: rgba(0,0,0,.4);border-radius: 50%;color:#fff;
+    position:absolute;left:50%;top:50%;margin-left:-30px;margin-top:-30px;
+  }
+  .play-icon .al{margin-left:4px;}
+  .videoarea{position:absolute;left:0;top:0;right:0;bottom:0;z-index:9999;background-color:#000;color:#fff;}
+  .videoarea video{position: absolute;width: 100%;height: 100%;}
+  .videoarea .close-icon{position:absolute;left:15px;top:15px;width:40px;height:40px;}
+  .vline{position:relative;}
+  .vline:after {
+    content: " ";
+    display: block;
     position: absolute;
-    top: 0;
-    right: -15px;
-    background: #f06825;
-    padding: 0 1px;
-    border-radius: 16%;
-    color: #fff;
-    font-size: 10px;
-    min-width: 18px;
+    width: 2px;
+    top: 4px;
+    bottom: 4px;
+    margin: auto 0;
+    left: -1px;
+    background-color: #ff6600;
+  }
+  .buylist:after{
+    content:'';
+    display:block;
+    clear:both;
+  }
+  .buylist .item{
+    float: left;
+    width: 50px;
     text-align: center;
-}
-.product .pic-swiper{padding-bottom:100%;box-sizing: border-box;}
-.product .pic-swiper .vux-swiper{
-  position:absolute !important;left:0;top:0;right:0;bottom:0;height:100% !important;
-}
-.product .vux-swiper-item {}
-.product .vux-swiper-item img{}
-.product .vux-swiper-desc{display:none !important;}
-.product .grouptitle{
-  width:100%;
-  height: 45px;
-  color: #fff;
-  font-size: 12px;
-  background-image: url(../assets/images/productbg.png);
-  background-repeat: no-repeat;
-  background-position: left top;
-  background-size: cover;
-  position:relative;
-}
-.product .grouptitle .t-table{height:100%;}
-.product .grouptitle .t-cell{height:100%;vertical-align:middle;}
-.product .grouptitle .col1{padding-left:10px;padding-right:10px;display:inline-block;}
-.product .grouptitle .col2{display:inline-block;margin-top:2px;}
-.product .grouptitle .col3{
-	display:inline-block;border-radius:10px;padding:1px 10px;text-align:center;background-color:rgba(0,0,0,0.1);
-	position:absolute;right:10px;top:50%;margin-top:-9px;
-}
-.product .grouptitle .col2 .colicon{display:inline-block;border-radius:10px;border:#fff 1px solid;padding:1px 10px;text-align:center;}
-.product .help-icon{
-  color:#ff3b30;
-  border:#ff3b30 1px solid;
-  border-radius:50%;
-  display:inline-block;
-  width:13px;height:13px;
-  font-size:10px;
-  text-align:center;
-  line-height:14px;
-}
+    display:block;
+    color:inherit;;
+  }
+  .productcontent{
+    padding:20px 15px;
+  }
+  .productcontent img{
+    max-width:100%;
+    vertical-align: middle;
+  }
+  .productarea.scrollend:after {
+      background-color: #f6f6f6;
+  }
 
-.product .btnfavorite.have .al:before{content:"\e68c";color:red;}
-.product .btnfavorite.none .al:before{content:"\e68b";}
-.product .groupbybottom .btnfavorite:after{display:block;}
-.product .btnfavorite.none:after{content:"收藏";}
-.product .btnfavorite.have:after{content:"已收藏";}
+  .pagetop{
+    box-shadow: 0px 0px 10px 3px #d0d0d0;
+  }
+  .product.notop .pagemiddle{top:0px;}
+  .product.nobottom .pagemiddle{bottom:0px;}
+  .numicon {
+      position: absolute;
+      top: 0;
+      right: -15px;
+      background: #f06825;
+      padding: 0 1px;
+      border-radius: 16%;
+      color: #fff;
+      font-size: 10px;
+      min-width: 18px;
+      text-align: center;
+  }
+  .pic-swiper{padding-bottom:100%;box-sizing: border-box;}
+  .pic-swiper .vux-swiper{
+    position:absolute !important;left:0;top:0;right:0;bottom:0;height:100% !important;
+  }
+  .vux-swiper-item {}
+  .vux-swiper-item img{}
+  .vux-swiper-desc{display:none !important;}
+  .grouptitle{
+    width:100%;
+    height: 45px;
+    color: #fff;
+    font-size: 12px;
+    background-image: url(../assets/images/productbg.png);
+    background-repeat: no-repeat;
+    background-position: left top;
+    background-size: cover;
+    position:relative;
+  }
+  .grouptitle .t-table{height:100%;}
+  .grouptitle .t-cell{height:100%;vertical-align:middle;}
+  .grouptitle .col1{padding-left:10px;padding-right:10px;display:inline-block;}
+  .grouptitle .col2{display:inline-block;margin-top:2px;}
+  .grouptitle .col3{
+  	display:inline-block;border-radius:10px;padding:1px 10px;text-align:center;background-color:rgba(0,0,0,0.1);
+  	position:absolute;right:10px;top:50%;margin-top:-9px;
+  }
+  .grouptitle .col2 .colicon{display:inline-block;border-radius:10px;border:#fff 1px solid;padding:1px 10px;text-align:center;}
+  .help-icon{
+    color:#ff3b30;
+    border:#ff3b30 1px solid;
+    border-radius:50%;
+    display:inline-block;
+    width:13px;height:13px;
+    font-size:10px;
+    text-align:center;
+    line-height:14px;
+  }
 
-.product .pagemiddle{bottom:50px;}
-.product .pagebottom{height:50px;}
-.levelarea .levelitem:not(:last-child){margin-bottom:12px;}
+  .btnfavorite.have .al:before{content:"\e68c";color:red;}
+  .btnfavorite.none .al:before{content:"\e68b";}
+  .groupbybottom .btnfavorite:after{display:block;}
+  .btnfavorite.none:after{content:"收藏";}
+  .btnfavorite.have:after{content:"已收藏";}
+
+  .pagemiddle{bottom:50px;}
+  .pagebottom{height:50px;}
+  .levelarea .levelitem:not(:last-child){margin-bottom:12px;}
+}
 </style>

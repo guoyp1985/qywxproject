@@ -115,7 +115,7 @@
             </div>
           </div>
 
-          <div class="form-item required bg-white">
+          <div class="form-item required bg-white" v-if="!optionsData.length">
             <div class="flex_row">
               <div class="flex_cell">
                 <div class="t-table">
@@ -157,22 +157,27 @@
                   <div class="flex_left con-item">
                     <div class="title-cell1 flex_left">规格名称</div>
                     <div class="border-cell flex_left flex_cell">
-                      <input class="input" type="text" placeholder="规格名称" :value="item.title"></input>
+                      <x-input v-model="item.title" @keyup="optionTitleChange(index)" type="text" class="input" placeholder="规格名称" ></x-input>
                     </div>
                   </div>
                   <div class="flex_left mt10 con-item">
                     <div class="title-cell1 flex_left">图片</div>
                     <div class="border-cell flex_left flex_cell">
                       <div class="flex_left flex_cell option-pic-list">
-                        <img v-if="optionsPhoto[index] && optionsPhoto[index] != ''" class="option-pic" :src="optionsPhoto[index]" />
+                        <img v-if="optionsPhoto[index] && optionsPhoto[index] != ''" class="option-pic" :src="optionsPhoto[index]" @click="previewImg(index,item.photoarr,`previewer${index}`)"/>
                       </div>
                       <div class="icon-cell flex_center" @click="uploadOptionPhoto('optionsInput',index)"><span class="al al-zhaoxiangji font18 color-theme"></span></div>
                     </div>
+                    <template v-if="optionsPhoto[index] && optionsPhoto[index] != ''">
+                      <div v-transfer-dom>
+                        <previewer :list="item.previewerPhoto" :ref="`previewer${index}`"></previewer>
+                      </div>
+                    </template>
                   </div>
                   <div class="flex_left mt10 con-item">
                     <div class="title-cell1 flex_left">库存</div>
                     <div class="border-cell flex_left flex_cell">
-                      <input class="input" type="text" placeholder="库存" :value="item.storage"></input>
+                      <x-input v-model="item.storage" @keyup="optionStorageChange(index)" type="tel" class="input" :placeholder="$t('Storage')" maxlength="5" size="5" ></x-input>
                     </div>
                   </div>
                 </div>
@@ -323,14 +328,17 @@
 </i18n>
 
 <script>
-import { Group, XInput, XTextarea, XSwitch } from 'vux'
+import { TransferDom, Previewer, Group, XInput, XTextarea, XSwitch } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
 
 export default {
+  directives: {
+    TransferDom
+  },
   components: {
-    Group, XInput, XTextarea, Sos, XSwitch
+    Previewer, Group, XInput, XTextarea, Sos, XSwitch
   },
   data () {
     return {
@@ -457,18 +465,27 @@ export default {
         }
       })
     },
-    previewImg (e) {
-      // const url = e.currentTarget.dataset.url
-      // wepy.previewImage({
-      //   current: 0,
-      //   urls: [url]
-      // })
+    previewImg (index, arr, refname) {
+      const self = this
+      if (self.$util.isPC()) {
+        let view = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+        view.show(index)
+      } else {
+        if (window.WeixinJSBridge) {
+          window.WeixinJSBridge.invoke('imagePreview', {
+            current: arr[0],
+            urls: arr
+          })
+        }
+      }
     },
     handleOptionPhoto (photo) {
       if (!this.optionsData[this.selectedOptionIndex]) {
         this.optionsData[this.selectedOptionIndex] = {}
       }
       this.optionsData[this.selectedOptionIndex].photo = photo
+      this.optionsData[this.selectedOptionIndex].photoarr = [photo]
+      this.optionsData[this.selectedOptionIndex].previewerPhoto = this.$util.previewerImgdata(this.optionsData[this.selectedOptionIndex].photoarr)
       if (this.optionsPhoto.length > this.selectedOptionIndex) {
         this.optionsPhoto.splice(this.selectedOptionIndex, 1, photo)
         console.log('上传后')
@@ -704,7 +721,14 @@ export default {
           })
           return false
         }
-        if (self.$util.trim(postdata.storage) === '') {
+        if (parseFloat(profit) > parseFloat(price)) {
+          self.$vux.alert.show({
+            title: '',
+            content: '商品利润不得大于商品现价'
+          })
+          return false
+        }
+        if (!this.optionsData.length && self.$util.trim(postdata.storage) === '') {
           self.$vux.toast.text('请输入商品库存', 'middle')
           return false
         }
@@ -721,11 +745,26 @@ export default {
           self.$vux.toast.text('请输入运费', 'middle')
           return false
         }
-        if (parseFloat(profit) > parseFloat(price)) {
-          self.$vux.alert.show({
-            title: '',
-            content: '商品利润不得大于商品现价'
-          })
+        let iscontinue = true
+        if (this.optionsData.length) {
+          for (let i = 0; i < this.optionsData.length; i++) {
+            let curOption = this.optionsData[i]
+            let curTitle = curOption.title
+            let curPhoto = curOption.photo
+            let curStorage = curOption.storage
+            if (self.$util.trim(curTitle) === '' || self.$util.trim(curPhoto) === '' || self.$util.trim(curStorage) === '') {
+              self.$vux.toast.text('请完规格信息', 'middle')
+              iscontinue = false
+              break
+            }
+            if (isNaN(curStorage) || parseFloat(curStorage) <= 0) {
+              self.$vux.toast.text('库存必须大于0', 'middle')
+              iscontinue = false
+              break
+            }
+          }
+        }
+        if (!iscontinue) {
           return false
         }
         if (self.$util.trim(postdata.content) === '' && self.$util.trim(postdata.contentphoto) === '') {
@@ -739,6 +778,14 @@ export default {
         postdata.price = price
         postdata.oriprice = oriprice
         postdata.profit = profit
+        let postOptions = []
+        if (this.optionsData.length) {
+          for (let i = 0; i < this.optionsData.length; i++) {
+            let curOption = this.optionsData[i]
+            postOptions.push({title: curOption.title, photo: curOption.photo, storage: curOption.storage})
+          }
+        }
+        postdata.options = postOptions
         self.$vux.loading.show()
         if (self.query.id) {
           postdata.id = self.query.id
@@ -782,6 +829,14 @@ export default {
         val = val.substr(0, vallen - cha + 2)
       }
       this.submitdata[key] = val
+    },
+    optionTitleChange (index) {
+      let val = event.target.value
+      this.optionsData[index].title = val
+    },
+    optionStorageChange (index) {
+      let val = event.target.value
+      this.optionsData[index].storage = val
     },
     getData () {
       const self = this
