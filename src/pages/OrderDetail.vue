@@ -63,14 +63,10 @@
       <group>
         <cell class="order-list font12" v-for="(order, index) in orders" :key="index" :link="`/product?id=${order.pid}&wid=${order.wid}`">
           <img slot="icon" class="imgcover" :src="order.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-          <div slot="title">
-            {{order.name}}
-          </div>
-          <div slot="after-title" class="color-gray">
-            数量: {{order.quantity}}
-          </div>
+          <div slot="title">{{order.name}}</div>
+          <div slot="after-title" class="color-gray" v-if="order.options && order.options.id">{{order.options.title}}</div>
           <div slot="inline-desc">
-            ¥{{order.special}}
+            <span>¥{{order.special}}</span><span class="color-gray ml5 font12">× {{order.quantity}}</span>
           </div>
         </cell>
       </group>
