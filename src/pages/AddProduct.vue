@@ -10,6 +10,9 @@
         <form ref="fileForm1" enctype="multipart/form-data">
           <input ref="fileInput1" class="hide" type="file" multiple="multiple" name="files" @change="fileMulChange('fileForm1', 'contentphoto')" />
         </form>
+        <form ref="fileForm1" enctype="multipart/form-data">
+          <input ref="fileInput2" class="hide" type="file" name="files" @change="fileMulChange('fileForm2', 'gsphoto')" />
+        </form>
         <div class="list-shadow01">
           <div class="form-item no-after pt15 bg-gray10">
             <div class="cover_map" v-if="photoarr.length == 0" @click.stop="uploadPhoto('fileInput','photo')">
@@ -131,6 +134,50 @@
                 <x-input v-model="submitdata.rebate" @keyup="priceChange('rebate')" type="text" class="input rebateInput" name="rebate" :placeholder="$t('Goods sold to rebate user commission')" ></x-input>
               </div>
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
+            </div>
+          </div>
+          <div class="form-item bg-white">
+            <div class="t-cell title-cell w80 font14 v_middle">商品规格</div>
+            <div class="option-list">
+              <div v-for="(item, index) in optionsData" :key="index">
+                <div class="option-item">
+                  <div class="option-title flex_left">
+                    <div class="flex_cell flex_left">规格 {{index + 1}}</div>
+                    <div class="w60 flex_right color-theme" @click="deleteOption(index)">
+                      <div>删除</div>
+                    </div>
+                  </div>
+                  <div class="option-con">
+                    <div class="flex_left con-item">
+                      <div class="t-cell">规格名称</div>
+                      <div class="border-cell flex_left flex_cell">
+                        <x-input v-model="item.title" class="input" @on-change="keyupOptionTitle" type="text" placeholder="规格名称"></x-input>
+                      </div>
+                    </div>
+                    <div class="flex_left mt10 con-item">
+                      <div class="t-cell">图片</div>
+                      <div class="border-cell flex_left flex_cell">
+                        <div class="flex_left flex_cell option-pic-list">
+                          <div v-for="(photo, index1) in photoarr2" :key="index1" style="margin-top:5px;">
+                            <!-- <div class="inner photo option-pic" :photo="photo" :style="`background-image: url('${photo}');`"></div> -->
+                            <img class="inner photo option-pic" :src="photo" />
+                          </div>
+                        </div>
+                        <div class="icon-cell flex_center" @click.stop="uploadPhoto('fileInput2','gsphoto',index)"><span class="al al-zhaoxiangji font18 color-theme"></span></div>
+                      </div>
+                    </div>
+                    <div class="flex_left mt10 con-item">
+                      <div class="t-cell">库存</div>
+                      <div class="border-cell flex_left flex_cell">
+                        <x-input v-model="item.storage" class="input" @keyup="keyupOptionStorage(index)" type="text" placeholder="库存"></x-input>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="flex_center pt10 pb10" @click="addOption">
+              <div class="color-theme btn-add flex_center">添加一项</div>
             </div>
           </div>
           <div class="form-item bg-white" v-if="showRebate">
@@ -282,6 +329,7 @@ export default {
       maxnum: 9,
       havenum: 0,
       photoarr1: [],
+      photoarr2: [],
       maxnum1: 19,
       havenum1: 0,
       videoarr: [],
@@ -309,7 +357,8 @@ export default {
       requireddata: {'photo': '', classid: '', title: '', 'price': '', 'storage': '', 'unit': '', 'postage': ''},
       showRebate: false,
       classData: [],
-      submitIng: false
+      submitIng: false,
+      optionsData: []
     }
   },
   watch: {
@@ -332,6 +381,42 @@ export default {
   computed: {
   },
   methods: {
+    deleteOption (index) {
+      console.log('deleteOption')
+      let _this = this
+      _this.$vux.confirm.show({
+        title: `确定要删除吗？`,
+        onConfirm: () => {
+          _this.$http({
+            url: `${ENV.BokaApi}/api/delete/productoptions`,
+            method: 'post',
+            data: {id: index}
+          }).then(res => {
+            const data = res.data
+            if (data.flag) {
+              this.optionsData.splice(index, 1)
+            }
+          })
+        }
+      })
+    },
+    keyupOptionTitle (e, index) {
+      console.log('keyupOptionTitle')
+      console.log('ZHIl:')
+      console.log(e)
+    },
+    predivImg (photo) {
+      console.log('predivImg')
+    },
+    optionsPhoto (index) {
+      console.log('uploadOptionPhoto')
+    },
+    keyupOptionStorage (index) {
+      console.log('keyupOptionStorage')
+    },
+    addOption () {
+      this.optionsData.push({})
+    },
     initSubmitData () {
       this.videoarr = []
       this.submitdata = {
@@ -431,7 +516,7 @@ export default {
         })
       }
     },
-    fileMulChange (refname, type) {
+    fileMulChange (refname, type, index) {
       const self = this
       const target = event.target
       const files = target.files
@@ -458,6 +543,10 @@ export default {
               let addData = retdata.slice(0, addNum)
               self.photoarr1 = self.photoarr1.concat(addData)
               self.submitdata.contentphoto = self.photoarr1.join(',')
+            } else if (type === 'gsphoto') {
+              self.photoarr2 = retdata
+              console.log('规格图片：')
+              console.log(self.photoarr2, index)
             }
           } else if (data.error) {
             self.$vux.toast.show({
@@ -651,6 +740,7 @@ export default {
             } else {
               self.submitdata[key] = self.data[key]
             }
+            this.optionsData = this.productData.options
           }
           if (self.submitdata.photo && self.$util.trim(self.submitdata.photo) !== '') {
             self.photoarr = self.submitdata.photo.split(',')
@@ -777,4 +867,29 @@ export default {
   opacity:0;
 }
 .input.align_right input{text-align:right;}
+.addproduct .btn-add{width:100px;height:30px;border:#ccc 1px solid;border-radius:10px;}
+.addproduct .option-list{
+  .option-item{
+    border:#ccc 1px solid;margin-top:10px;
+    .option-title{border-bottom:#ccc 1px solid;padding:10px;}
+    .option-con{
+      padding:10px;
+      .con-item:not(:last-child) {margin-bottom:10px;}
+      .con-item{
+        width:100%;height:30px;
+        .t-cell{width:60px;height:100%;}
+        .border-cell{
+          border:#ccc 1px solid;height:100%;
+          .input{width:100%;height:100%;padding:0 5px;box-sizing: border-box;}
+        }
+        .icon-cell{
+          width:30px;height:100%;
+        }
+      }
+    }
+    .option-pic-list{
+      .option-pic{width:30px;height:30px;}
+    }
+  }
+}
 </style>
