@@ -495,4 +495,6 @@ export default {
 </script>
 
 <style lang="less">
+.b-tab .vux-tab .vux-tab-item.vux-tab-selected{color:#ea3a3a;}
+.b-tab .vux-tab-ink-bar{background-color:#ea3a3a;}
 </style>
