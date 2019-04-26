@@ -453,7 +453,6 @@ export default {
             })
           } else {
             this.optionsData.splice(index, 1)
-            this.$apply()
           }
         }
       })
@@ -491,9 +490,6 @@ export default {
           self.$vux.loading.hide()
           if (data.flag) {
             this.handleOptionPhoto(data.data)
-            console.log('上传完图片')
-            console.log(this.optionsData)
-            console.log(this.optionsPhoto)
           } else if (data.error) {
             self.$vux.toast.show({
               text: data.error,
@@ -506,8 +502,6 @@ export default {
     uploadOptionPhoto (refname, index) {
       const self = this
       const fileInput = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
-      console.log('点击索引')
-      console.log(index)
       this.selectedOptionIndex = index
       if (self.$util.isPC()) {
         fileInput.click()
@@ -797,7 +791,11 @@ export default {
         const params2 = { params: { id: this.query.id, module: 'factoryproduct', from: 'edit' } }
         this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, params2).then(res => {
           const data = res.data
-          self.data = data.data ? data.data : data
+          let retdata = data.data ? data.data : data
+          if (parseInt(retdata.oriprice) === 0) {
+            retdata.oriprice = ''
+          }
+          self.data = retdata
           self.activityInfo = self.data.activitinfo
           for (let key in self.submitdata) {
             self.submitdata[key] = self.data[key]
