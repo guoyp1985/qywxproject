@@ -61,10 +61,16 @@
             <router-link v-for="(item,index) in data.orderlist" :key="item.id" :to="{path: '/product', query: {id: item.pid, wid: data.wid}}" class="scroll_item db padding10 bg-gray4">
               <div class="t-table">
                 <div class="t-cell v_middle w60 algin_left">
-                  <img class="v_middle imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"style="width:50px;height:50px;" />
+                  <template v-if="item.options && item.options.id">
+                    <img class="v_middle imgcover" :src="item.options.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" style="width:50px;height:50px;" />
+                  </template>
+                  <template v-else>
+                    <img class="v_middle imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"style="width:50px;height:50px;" />
+                  </template>
                 </div>
                 <div class="t-cell v_top">
                   <div class="clamp2 font12 align_left">{{ item.name }}</div>
+                  <div class="clamp1 font12 align_left color-gray" v-if="item.options && item.options.id">{{ item.options.title }}</div>
                 </div>
                 <div class="t-cell align_right w90">
                   <div>{{ $t('RMB') }}{{ item.special }}</div>

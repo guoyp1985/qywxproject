@@ -312,7 +312,7 @@ export default {
           content: '该商品是可使用优惠券的商品，继续选择该商品将会导致两种优惠叠加使用',
           confirmText: '继续创建',
           cancelText: '停用优惠券',
-          onCancel () {
+          onCancel: () => {
             self.$vux.loading.show()
             self.$http.post(`${ENV.BokaApi}/api/setModulePara/product`, {
               module: 'product', id: self.selectpopupdata.id, param: 'allowcard', paramvalue: 0
@@ -323,7 +323,7 @@ export default {
               self.afterSelectProduct()
             })
           },
-          onConfirm () {
+          onConfirm: () => {
             self.afterSelectProduct()
           }
         })

@@ -25,16 +25,22 @@
       </div>
       <div class="product-info" v-else>
         <div class="product-img" style="position:relative;">
-          <img class="v_middle imgcover" :src="item.orderlist[0].photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+          <template v-if="item.orderlist[0].options && item.orderlist[0].options.id">
+            <img class="v_middle imgcover" :src="item.orderlist[0].options.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+          </template>
+          <template v-else>
+            <img class="v_middle imgcover" :src="item.orderlist[0].photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+          </template>
           <img v-if="item.carddeduct > 0" class="yhq" src="https://tossharingsales.boka.cn/minigxk/yhq.png"/>
         </div>
-        <div class="flex_cell">
-          <div class="product-name font12">
-            {{item.orderlist[0].name}}
-          </div>
-          <div class="mt5 db-flex font14">
-            <div class="flex_cell flex_left color-red4">{{ $t('RMB') }} {{ item.orderlist[0].special }}</div>
-            <div class="flex_cell flex_right color-999">× <span class="font12">{{ item.orderlist[0].quantity }}</span></div>
+        <div class="flex_cell flex_left">
+          <div class="w_100">
+            <div class="product-name font12 clamp1">{{item.orderlist[0].name}}</div>
+            <div class="color-gray font12" v-if="item.orderlist[0].options && item.orderlist[0].options.id">{{item.orderlist[0].options.title}}</div>
+            <div class="db-flex font14">
+              <div class="flex_cell flex_left color-red4">{{ $t('RMB') }} {{ item.orderlist[0].special }}</div>
+              <div class="flex_cell flex_right color-999">× <span class="font12">{{ item.orderlist[0].quantity }}</span></div>
+            </div>
           </div>
         </div>
       </div>

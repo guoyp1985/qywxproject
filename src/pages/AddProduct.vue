@@ -728,7 +728,11 @@ export default {
         const params2 = { params: { id: this.query.id, module: 'product', from: 'edit' } }
         this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, params2).then(res => {
           const data = res.data
-          self.data = data.data ? data.data : data
+          let retdata = data.data ? data.data : data
+          if (parseInt(retdata.oriprice) === 0) {
+            retdata.oriprice = ''
+          }
+          self.data = retdata
           self.activityInfo = self.data.activitinfo
           for (let key in self.submitdata) {
             if (key === 'allowcard') {
@@ -826,7 +830,10 @@ export default {
 </script>
 
 <style lang="less">
-.addproduct .s-container{top:0;}
+.addproduct{
+  .s-container{top:0;}
+  .vux-x-input.align_right input{text-align:right;}
+}
 .form-item{position:relative;padding:10px 12px;}
 .form-item:after{
   content:"";display:block;

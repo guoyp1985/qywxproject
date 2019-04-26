@@ -23,13 +23,7 @@
                 <Orderitemplate v-else v-for="(item,index1) in tabdata1" :key="item.id" :data="item" order-link="/factoryOrderDetail">
                   <span slot="orderno">{{ item.orderno }}</span>
                   <span slot="flagstr">{{ item.flagstr }}</span>
-                  <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item">
-                    <img slot="photo" class="imgcover" :src="product.photo" @error="`javascript:'this.src=${ENV.ImageHostUri}/nopic.jpg';`" style="width:80px;height:80px;" />
-                    <span slot="name">{{ product.name }}</span>
-                    <span slot="special">{{ product.special }}</span>
-                    <span slot="quantity" class="font12">{{ product.quantity }}</span>
-                    <span slot="createdate">{{ product.dateline | dateformat }}</span>
-                  </Orderproductplate>
+                  <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item" :product="product"></Orderproductplate>
                   <div slot="receivearea">
                     <div class="t-table">
                       <div class="font12 color-lightgray">
@@ -69,13 +63,7 @@
                 <orderitemplate v-else v-for="(item,index1) in tabdata2" :key="item.id" :data="item" order-link="/factoryOrderDetail">
                   <span slot="orderno">{{ item.orderno }}</span>
                   <span slot="flagstr">{{ item.flagstr }}</span>
-                  <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item">
-                    <img slot="photo" class="imgcover" :src="product.photo" @error="`javascript:'this.src=${ENV.ImageHostUri}/nopic.jpg';`" style="width:80px;height:80px;" />
-                    <span slot="name">{{ product.name }}</span>
-                    <span slot="special">{{ product.special }}</span>
-                    <span slot="quantity" class="font12">{{ product.quantity }}</span>
-                    <span slot="createdate">{{ product.dateline | dateformat }}</span>
-                  </orderproductplate>
+                  <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item" :product="product"></Orderproductplate>
                   <div slot="receivearea">
                     <div class="t-table">
                       <div class="font12 color-lightgray">
@@ -107,13 +95,7 @@
                 <orderitemplate v-else v-for="(item,index1) in tabdata3" :key="item.id" :data="item" order-link="/factoryOrderDetail">
                   <span slot="orderno">{{ item.orderno }}</span>
                   <span slot="flagstr">{{ item.flagstr }}</span>
-                  <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item">
-                    <img slot="photo" class="imgcover" :src="product.photo" @error="`javascript:'this.src=${ENV.ImageHostUri}/nopic.jpg';`" style="width:80px;height:80px;" />
-                    <span slot="name">{{ product.name }}</span>
-                    <span slot="special">{{ product.special }}</span>
-                    <span slot="quantity" class="font12">{{ product.quantity }}</span>
-                    <span slot="createdate">{{ product.dateline | dateformat }}</span>
-                  </orderproductplate>
+                  <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item" :product="product"></Orderproductplate>
                   <div slot="receivearea">
                     <div class="t-table">
                       <div class="font12 color-lightgray">
@@ -150,13 +132,7 @@
                 <orderitemplate v-else v-for="(item,index1) in tabdata4" :key="item.id" :data="item" order-link="/factoryOrderDetail">
                   <span slot="orderno">{{ item.orderno }}</span>
                   <span slot="flagstr">{{ item.flagstr }}</span>
-                  <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item">
-                    <img slot="photo" class="imgcover" :src="product.photo" @error="`javascript:'this.src=${ENV.ImageHostUri}/nopic.jpg';`" style="width:80px;height:80px;" />
-                    <span slot="name">{{ product.name }}</span>
-                    <span slot="special">{{ product.special }}</span>
-                    <span slot="quantity" class="font12">{{ product.quantity }}</span>
-                    <span slot="createdate">{{ product.dateline | dateformat }}</span>
-                  </orderproductplate>
+                  <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item" :product="product"></Orderproductplate>
                   <div slot="receivearea">
                     <div class="t-table">
                       <div class="font12 color-lightgray">
