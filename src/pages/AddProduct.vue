@@ -843,9 +843,19 @@ export default {
         this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, params2).then(res => {
           const data = res.data
           let retdata = data.data ? data.data : data
-          this.optionsData = retdata.options
           if (parseInt(retdata.oriprice) === 0) {
             retdata.oriprice = ''
+          }
+          if (retdata.options && retdata.options.length) {
+            let retOptions = retdata.options
+            this.optionsPhoto = []
+            for (let i = 0; i < retOptions.length; i++) {
+              this.optionsPhoto.push(retOptions[i].photo)
+              retOptions[i].previewerPhoto = this.$util.previewerImgdata([retOptions[i].photo])
+            }
+            console.log('处理过的规格参数')
+            this.optionsData = retOptions
+            console.log(this.optionsData)
           }
           self.data = retdata
           self.activityInfo = self.data.activitinfo
