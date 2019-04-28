@@ -580,7 +580,7 @@ export default {
       showSellerTip: false,
       showBuy: false,
       selectedOption: {},
-      selectedOptionIndex: -1
+      selectedOptionIndex: 0
     }
   },
   watch: {
@@ -682,6 +682,9 @@ export default {
       this.playVideo = false
       this.startcss = 'start'
       this.showShareLayer = false
+      this.showBuy = false
+      this.selectedOption = {}
+      this.selectedOptionIndex = 0
     },
     filterEmot (text) {
       return this.$util.emotPrase(text)
@@ -896,6 +899,10 @@ export default {
     },
     buyevent (buytype) {
       if (this.productdata.options.length) {
+        if (!this.selectedOption || !this.selectedOption.id) {
+          this.selectedOption = this.productdata.options[0]
+          this.selectedOptionIndex = 0
+        }
         this.showBuy = true
       } else {
         this.addShop(buytype)
