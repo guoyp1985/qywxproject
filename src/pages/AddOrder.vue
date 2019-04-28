@@ -30,6 +30,7 @@
                   </div>
     							<div class="t-cell v_middle">
     								<div class="name color-black font15">{{ product.name }}</div>
+    								<div class="clamp1 color-gray font12" v-if="item.options && item.options.id">{{ item.options.title }}</div>
     							</div>
     							<div class="t-cell v_middle w100 align_right">¥{{ product.special }}×{{ submitdata.quantity }}</div>
     						</div>
@@ -43,7 +44,7 @@
                         <x-number v-model="submitdata.quantity" :min="1" :max="1" @on-change="changenumber()"></x-number>
                       </template>
                       <template v-else>
-                        <x-number v-model="submitdata.quantity" :min="1" @on-change="changenumber()"></x-number>
+                        <x-number v-model="submitdata.quantity" :min="1" :max="maxQuantity" @on-change="changenumber()"></x-number>
                       </template>
                     </group>
     							</div>
@@ -268,7 +269,8 @@ export default {
       curOrder: {postageNumber: 0, rebate: 0},
       buyType: 'online',
       onlineVal: true,
-      offlineVal: false
+      offlineVal: false,
+      maxQuantity: 1
     }
   },
   watch: {
@@ -473,7 +475,7 @@ export default {
     },
     getData () {
       const self = this
-      self.$http.get(`${ENV.BokaApi}/api/order/shopShow`).then(function (res) {
+      self.$http.get(`${ENV.BokaApi}/api/order/shopShow`).then((res) => {
         let data = res.data
         if (data.length === 0) {
           self.showContainer = false
@@ -482,7 +484,7 @@ export default {
           self.showContainer = true
           self.orderdata = data
           self.curOrder = self.orderdata[0]
-
+          self.maxQuantity = self.curOrder.storage
           let curpostage = self.curOrder.postage.replace(/,/g, '')
           self.curOrder.postageNumber = parseFloat(curpostage).toFixed(2)
           self.curOrder.rebate = parseFloat(self.curOrder.rebate).toFixed(2)

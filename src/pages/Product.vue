@@ -440,6 +440,46 @@
     <template v-if="showSellerTip">
       <tip-layer title="什么是返点客佣金" content="当你成为某个卖家的返点客用户时，你销售该卖家的某件商品所得到的佣金，返点客佣金只有返点客才能看到。" @clickClose="closeSellerTip"></tip-layer>
     </template>
+    <div v-transfer-dom class="x-popup buy-popup-layer">
+      <popup v-model="showBuy" height="100%">
+        <div class="product-options-area columnarea">
+          <div class="column-content" @click="closeOptions"></div>
+          <div class="options-box columnarea">
+            <div class="close-area flex_center color-gray" @click="closeOptions"><span class="al al-close"></span></div>
+            <div class="column-content">
+              <div class="part1 flex_left">
+                <div class="pic flex_left">
+                  <img :src="selectedOption.photo" />
+                </div>
+                <div class="flex_cell flex_left">
+                  <div class="w_100">
+                    <div class="color-theme"><span>￥</span><span class="bold font16">{{productdata.price}}</span></div>
+                    <div class="mt10 color-gray">库存{{selectedOption.storage}}{{productdata.unit}}</div>
+                    <div class="mt10" v-if="selectedOption.title">已选: {{selectedOption.title}}</div>
+                    <div class="mt10" v-else>请选择 规格</div>
+                  </div>
+                </div>
+              </div>
+              <div class="part2">
+                <div class="pt10 pb10">规格</div>
+                <div class="options-list">
+                  <div v-for="(item,index) in productdata.options" :class="`options-item ${(selectedOptionIndex == index && item.storage > 0) ? 'active' : ''} ${item.storage <= 0 ? 'disabled' : ''}`" @click="clickOptions(item,index)">
+                    <div class="flex_center">
+                      <img :src="item.photo" /><span class="ml5">{{item.title}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="options-bottom" @click="buyOption">
+              <div class="w_100 h_100 flex_center">
+                <button class="bg-theme color-white flex_center btn">立即购买</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </popup>
+    </div>
   </div>
 </template>
 
@@ -537,7 +577,10 @@ export default {
       startcss: 'start',
       showShareLayer: false,
       WeixinName: ENV.WeixinName,
-      showSellerTip: false
+      showSellerTip: false,
+      showBuy: false,
+      selectedOption: {},
+      selectedOptionIndex: -1
     }
   },
   watch: {
@@ -642,6 +685,57 @@ export default {
     },
     filterEmot (text) {
       return this.$util.emotPrase(text)
+    },
+    closeOptions () {
+      this.showBuy = false
+    },
+    clickOptions (item, index) {
+      this.selectedOption = item
+      this.selectedOptionIndex = index
+    },
+    addShop (buytype) {
+      let isActivity = false
+      this.$vux.loading.show()
+      let postData = this.submitdata
+      if (buytype === 'groupbuy' && this.activityInfo.id) {
+        postData.activityid = this.activityInfo.id
+        isActivity = true
+      }
+      postData.id = this.productdata.id
+      postData.wid = this.retailerInfo.uid
+      if (this.query.wechatorderid) {
+        postData.wechatorderid = this.query.wechatorderid
+      }
+      if (this.productdata.options.length && this.selectedOption && this.selectedOption.id) {
+        postData.poid = this.selectedOption.id
+      }
+      this.$http.post(`${ENV.BokaApi}/api/order/addShop`, postData).then((res) => {
+        let data = res.data
+        this.$vux.loading.hide()
+        if (data.flag === 1) {
+          let rparams = {id: data.data}
+          if (isActivity) {
+            rparams['activityid'] = this.activityInfo.id
+          }
+          this.$router.push({ path: '/addOrder', query: rparams })
+        } else if (data.error) {
+          this.$vux.toast.show({
+            text: data.error,
+            time: self.$util.delay(data.error)
+          })
+        }
+      })
+    },
+    buyOption () {
+      if (!this.selectedOption.id) {
+        this.$vux.toast.text('请选择商品规格', 'middle')
+        return false
+      }
+      if (this.selectedOption.storage <= 0) {
+        this.$vux.toast.text('该规格商品库存不足', 'middle')
+        return false
+      }
+      this.addShop()
     },
     clickSeller () {
       this.showSellerTip = true
@@ -801,37 +895,11 @@ export default {
       this.isfavorite = !this.isfavorite
     },
     buyevent (buytype) {
-      const self = this
-      let isActivity = false
-      self.$vux.loading.show()
-      if (buytype === 'groupbuy' && self.activityInfo.id) {
-        self.submitdata['activityid'] = self.activityInfo.id
-        isActivity = true
+      if (this.productdata.options.length) {
+        this.showBuy = true
       } else {
-        delete self.submitdata.activityid
+        this.addShop(buytype)
       }
-      self.submitdata.id = self.productdata.id
-      self.submitdata.wid = self.retailerInfo.uid
-      let postData = self.submitdata
-      if (self.query.wechatorderid) {
-        postData.wechatorderid = self.query.wechatorderid
-      }
-      self.$http.post(`${ENV.BokaApi}/api/order/addShop`, postData).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        if (data.flag === 1) {
-          let rparams = {id: data.data}
-          if (isActivity) {
-            rparams['activityid'] = self.activityInfo.id
-          }
-          self.$router.push({ path: '/addOrder', query: rparams })
-        } else if (data.error) {
-          self.$vux.toast.show({
-            text: data.error,
-            time: self.$util.delay(data.error)
-          })
-        }
-      })
     },
     showBigimg (index) {
       const self = this
@@ -996,7 +1064,7 @@ export default {
       }
       this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
         params: infoparams
-      }).then(function (res) {
+      }).then((res) => {
         if (res && res.status === 200) {
           let data = res.data
           self.$vux.loading.hide()
@@ -1006,6 +1074,9 @@ export default {
           } else {
             self.showcontainer = true
             self.productdata = data.data
+            if (this.productdata.options.length) {
+              this.selectedOption = {storage: this.productdata.storage, photo: this.productdata.options[0].photo}
+            }
             self.retailerInfo = self.productdata.retailerinfo
             if (self.productdata.activityinfo) {
               self.activityInfo = self.productdata.activityinfo
@@ -1335,6 +1406,46 @@ export default {
       .al{font-size:80px;margin-left:auto;margin-right: 100px;}
     }
     .btnknow{padding:3px 25px;border:1px solid #fff;color:#fff;margin: 0 auto;border-radius:20px;font-size:14px;margin-top: 20px;}
+  }
+}
+.buy-popup-layer{
+  .vux-popup-dialog{
+    background:rgba(0,0,0,0.5)
+  }
+  .product-options-area{
+    width:100%;height:100%;
+    .options-box{
+      width:100%;height:77%;position:relative;
+      background-color:#fff;border-top-left-radius:30px;border-top-right-radius:30px;
+      padding:20px 15px 0;box-sizing: border-box;
+      .close-area{
+        position:absolute;right:20px;top:20px;width:30px;height:30px;
+        .al{font-size:30px;}
+      }
+      .part1{
+        width:100%;height:150px;border-bottom:#ccc 1px solid;
+        .pic{
+          width:120px;
+          img{width:100px;height:100px;object-fit:cover;}
+        }
+      }
+      .part2{
+        .options-list{
+          display: flex;flex-wrap: wrap;
+          .options-item:not(:last-child){margin-right:10px;}
+          .options-item.active{border-color:#ff6a61;color:#ff6a61;}
+          .options-item.disabled{background-color:#ccc;}
+          .options-item{
+            border:#ccc 1px solid;border-radius:5px;padding:5px;
+            img{width:30px;height:30px;object-fit:cover;}
+          }
+        }
+      }
+      .options-bottom{
+        width:100%;height:60px;
+        .btn{width:90%;height:45px;border-radius:15px;font-size:16px;}
+      }
+    }
   }
 }
 </style>

@@ -414,10 +414,12 @@ export default {
               })
               if (data.flag) {
                 this.optionsData.splice(index, 1)
+                this.optionsPhoto.splice(index, 1)
               }
             })
           } else {
             this.optionsData.splice(index, 1)
+            this.optionsPhoto.splice(index, 1)
           }
         }
       })
@@ -518,6 +520,9 @@ export default {
       }
       this.photoarr = []
       this.photoarr1 = []
+      this.optionsData = []
+      this.selectedOptionIndex = 0
+      this.optionsPhoto = []
     },
     textareaChange (refname) {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
@@ -749,7 +754,11 @@ export default {
         if (this.optionsData.length) {
           for (let i = 0; i < this.optionsData.length; i++) {
             let curOption = this.optionsData[i]
-            postOptions.push({title: curOption.title, photo: curOption.photo, storage: curOption.storage})
+            let addoption = {title: curOption.title, photo: curOption.photo, storage: curOption.storage}
+            if (curOption.id) {
+              addoption.id = curOption.id
+            }
+            postOptions.push(addoption)
           }
         }
         postdata.options = postOptions

@@ -434,6 +434,9 @@ export default {
       }
       this.photoarr = []
       this.photoarr1 = []
+      this.optionsData = []
+      this.selectedOptionIndex = 0
+      this.optionsPhoto = []
     },
     addOption () {
       this.optionsData.push({})
@@ -444,7 +447,7 @@ export default {
         onConfirm: () => {
           if (this.optionsData[index].id) {
             this.$vux.loading.show()
-            this.$http.post(`${ENV.BokaApi}/api/delete/productoptions`, {
+            this.$http.post(`${ENV.BokaApi}/api/delete/factoryproductoptions`, {
               id: this.optionsData[index].id
             }).then((res) => {
               this.$vux.loading.hide()
@@ -457,10 +460,12 @@ export default {
               })
               if (data.flag) {
                 this.optionsData.splice(index, 1)
+                this.optionsPhoto.splice(index, 1)
               }
             })
           } else {
             this.optionsData.splice(index, 1)
+            this.optionsPhoto.splice(index, 1)
           }
         }
       })
@@ -528,7 +533,7 @@ export default {
             maxnum: 1,
             handleCallback: (data) => {
               if (data.flag === 1) {
-                this.handleOptionPhoto(data.data)
+                self.handleOptionPhoto(data.data)
               } else if (data.error) {
                 self.$vux.toast.show({
                   text: data.error,
@@ -782,7 +787,11 @@ export default {
         if (this.optionsData.length) {
           for (let i = 0; i < this.optionsData.length; i++) {
             let curOption = this.optionsData[i]
-            postOptions.push({title: curOption.title, photo: curOption.photo, storage: curOption.storage})
+            let addoption = {title: curOption.title, photo: curOption.photo, storage: curOption.storage}
+            if (curOption.id) {
+              addoption.id = curOption.id
+            }
+            postOptions.push(addoption)
           }
         }
         postdata.options = postOptions
