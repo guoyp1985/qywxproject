@@ -342,7 +342,6 @@ export default {
         title: '',
         oriprice: '',
         price: '',
-        storage: '',
         postage: '0.00',
         photo: '',
         content: '',
@@ -353,7 +352,7 @@ export default {
         sellingpoint: ''
       },
       allowsubmit: true,
-      requireddata: { title: '', 'price': '', 'storage': '', 'postage': '', 'photo': '', 'profit': '' },
+      requireddata: { title: '', 'price': '', 'postage': '', 'photo': '', 'profit': '' },
       levels: [],
       classData: [],
       submitIng: false,
@@ -398,7 +397,6 @@ export default {
         title: '',
         oriprice: '',
         price: '',
-        storage: '',
         postage: '0.00',
         photo: '',
         content: '',
@@ -708,10 +706,6 @@ export default {
             title: '',
             content: '商品利润不得大于商品现价'
           })
-          return false
-        }
-        if (!this.optionsData.length && self.$util.trim(postdata.storage) === '') {
-          self.$vux.toast.text('请输入商品库存', 'middle')
           return false
         }
         if (self.$util.trim(postdata.postage) === '') {

@@ -322,7 +322,6 @@ export default {
         title: '',
         price: '',
         oriprice: '',
-        storage: '',
         postage: '0.00',
         rebate: '',
         photo: '',
@@ -334,7 +333,7 @@ export default {
         allowcard: false
       },
       allowsubmit: true,
-      requireddata: {'photo': '', classid: '', title: '', 'price': '', 'storage': '', 'postage': ''},
+      requireddata: {'photo': '', classid: '', title: '', 'price': '', 'postage': ''},
       showRebate: false,
       classData: [],
       submitIng: false,
@@ -485,7 +484,6 @@ export default {
         title: '',
         oriprice: '',
         price: '',
-        storage: '',
         postage: '0.00',
         rebate: '',
         photo: '',
@@ -669,10 +667,6 @@ export default {
           self.$vux.toast.text('商品现价不能大于等于原价', 'middle')
           return false
         }
-        if (self.$util.trim(postdata.storage) === '') {
-          self.$vux.toast.text('请输入商品库存', 'middle')
-          return false
-        }
         if (self.$util.trim(postdata.postage) === '') {
           self.$vux.toast.text('请输入运费', 'middle')
           return false
@@ -683,10 +677,6 @@ export default {
             self.$vux.toast.text(`返点佣金应小于${maxRebate}元`, 'middle')
             return false
           }
-        }
-        if (!this.optionsData.length && self.$util.trim(postdata.storage) === '') {
-          self.$vux.toast.text('请输入商品库存', 'middle')
-          return false
         }
         let iscontinue = true
         if (this.optionsData.length) {
