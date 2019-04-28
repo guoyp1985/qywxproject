@@ -26,7 +26,8 @@
     					<div class="b_bottom_after padding10">
     						<div class="t-table">
     							<div class="t-cell v_middle" style="width:65px;">
-                    <img class="v_middle imgcover" style="width:45px;height:45px;" :src="product.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+                    <img v-if="item.options && item.options.id" class="v_middle imgcover" style="width:45px;height:45px;" :src="item.options.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+                    <img v-else class="v_middle imgcover" style="width:45px;height:45px;" :src="product.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                   </div>
     							<div class="t-cell v_middle">
     								<div class="name color-black font15">{{ product.name }}</div>
