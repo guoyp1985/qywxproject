@@ -434,6 +434,9 @@ export default {
       }
       this.photoarr = []
       this.photoarr1 = []
+      this.optionsData = []
+      this.selectedOptionIndex = 0
+      this.optionsPhoto = []
     },
     addOption () {
       this.optionsData.push({})
