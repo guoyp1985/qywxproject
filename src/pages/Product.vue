@@ -449,7 +449,7 @@
             <div class="column-content">
               <div class="part1 flex_left">
                 <div class="pic flex_left">
-                  <img :src="selectedOption.photo" />
+                  <img :src="selectedOption.photo" @click="viewBigImg(0)" />
                 </div>
                 <div class="flex_cell flex_left">
                   <div class="w_100">
@@ -479,6 +479,9 @@
           </div>
         </div>
       </popup>
+    </div>
+    <div v-transfer-dom>
+      <previewer :list="previewerOptionsPhoto" ref="previewerOption"></previewer>
     </div>
   </div>
 </template>
@@ -580,7 +583,8 @@ export default {
       showSellerTip: false,
       showBuy: false,
       selectedOption: {},
-      selectedOptionIndex: 0
+      selectedOptionIndex: 0,
+      previewerOptionsPhoto: []
     }
   },
   watch: {
@@ -631,6 +635,10 @@ export default {
     },
     evluatedata: function () {
       return this.evluatedata
+    },
+    previewerOptionsPhoto () {
+      console.log('监控规格图片的变化')
+      return this.previewerOptionsPhoto
     }
   },
   computed: {
@@ -685,6 +693,7 @@ export default {
       this.showBuy = false
       this.selectedOption = {}
       this.selectedOptionIndex = 0
+      this.previewerOptionsPhoto = []
     },
     filterEmot (text) {
       return this.$util.emotPrase(text)
@@ -695,6 +704,7 @@ export default {
     clickOptions (item, index) {
       this.selectedOption = item
       this.selectedOptionIndex = index
+      this.previewerOptionsPhoto = this.$util.previewerImgdata([this.selectedOption.photo])
     },
     addShop (buytype) {
       let isActivity = false
@@ -902,6 +912,7 @@ export default {
         if (!this.selectedOption || !this.selectedOption.id) {
           this.selectedOption = this.productdata.options[0]
           this.selectedOptionIndex = 0
+          this.previewerOptionsPhoto = this.$util.previewerImgdata([this.selectedOption.photo])
         }
         this.showBuy = true
       } else {
@@ -930,6 +941,18 @@ export default {
         window.WeixinJSBridge.invoke('imagePreview', {
           current: self.photoarr[index],
           urls: self.photoarr
+        })
+      }
+    },
+    viewBigImg (index) {
+      const self = this
+      console.log(self.$refs.previewerOption)
+      if (self.$util.isPC()) {
+        self.$refs.previewerOption.show(0)
+      } else {
+        window.WeixinJSBridge.invoke('imagePreview', {
+          current: this.selectedOption.photo,
+          urls: [this.selectedOption.photo]
         })
       }
     },
@@ -1083,6 +1106,7 @@ export default {
             self.productdata = data.data
             if (this.productdata.options.length) {
               this.selectedOption = {storage: this.productdata.storage, photo: this.productdata.options[0].photo}
+              this.previewerOptionsPhoto = this.$util.previewerImgdata([this.productdata.options[0].photo])
             }
             self.retailerInfo = self.productdata.retailerinfo
             if (self.productdata.activityinfo) {
@@ -1423,7 +1447,7 @@ export default {
     width:100%;height:100%;
     .options-box{
       width:100%;height:77%;position:relative;
-      background-color:#fff;border-top-left-radius:30px;border-top-right-radius:30px;
+      background-color:#fff;border-top-left-radius:15px;border-top-right-radius:15px;
       padding:20px 15px 0;box-sizing: border-box;
       .close-area{
         position:absolute;right:20px;top:20px;width:30px;height:30px;
