@@ -487,7 +487,7 @@ export default {
             maxnum: 1,
             handleCallback: (data) => {
               if (data.flag === 1) {
-                this.handleOptionPhoto(data.data)
+                self.handleOptionPhoto(data.data)
               } else if (data.error) {
                 self.$vux.toast.show({
                   text: data.error,
