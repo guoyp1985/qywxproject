@@ -71,12 +71,11 @@
             </span>
           </div>
           <div class="flex_left font12 mt5 color-gray2">
-  					<div v-if="productdata.postage == 0" class="flex_left w90">{{ $t('Postage') }}: 包邮</div>
+  					<div v-if="productdata.postage == 0" class="flex_left">{{ $t('Postage') }}: 包邮</div>
   					<div v-else class="flex_left w90">{{ $t('Postage') }}: {{ $t('RMB') }}{{ productdata.postage }}</div>
             <template v-if="productdata.uploader != -1 && (productdata.buyonline == 1 && (!activityInfo.id || (activityInfo.id && activityInfo.type == 'bargainbuy')) && ((loginUser && loginUser.uid == retailerInfo.uid) || productdata.identity != 'user'))">
               <div class="flex_cell flex_center">销量: {{ productdata.saled }}{{ productdata.unit }}</div>
-              <div class="flex_cell flex_right color-red" @click="clickSeller">
-                <span class="al al-bangzhu font15"></span><span>返点客佣金: {{ $t('RMB') }}{{ productdata.rebate }}</span>
+              <div class="flex_right color-red" @click="clickSeller"><span class="al al-bangzhu font15"></span><span>返点客佣金: {{ $t('RMB') }}{{ productdata.rebate }}</span>
               </div>
             </template>
             <template v-else-if="productdata.buyonline != 1">
