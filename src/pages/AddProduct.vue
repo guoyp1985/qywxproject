@@ -414,10 +414,12 @@ export default {
               })
               if (data.flag) {
                 this.optionsData.splice(index, 1)
+                this.optionsPhoto.splice(index, 1)
               }
             })
           } else {
             this.optionsData.splice(index, 1)
+            this.optionsPhoto.splice(index, 1)
           }
         }
       })
