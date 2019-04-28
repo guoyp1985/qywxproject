@@ -98,7 +98,7 @@
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>
           </div>
-          <div class="form-item required bg-white">
+          <!-- <div class="form-item required bg-white">
             <div class="flex_row">
               <div class="flex_cell">
                 <div class="t-table">
@@ -115,6 +115,14 @@
                     <x-input v-model="submitdata.unit" type="text" class="input align_right" name="unit" size="1" maxlength="1" :placeholder="$t('Storage unit')" ></x-input>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div> -->
+          <div class="form-item required bg-white">
+            <div class="t-table">
+              <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Storage unit') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <x-input v-model="submitdata.unit" type="text" class="input" name="unit" size="1" maxlength="1" :placeholder="$t('Storage unit')" ></x-input>
               </div>
             </div>
           </div>
@@ -142,7 +150,7 @@
               <div class="option-item" v-for="(item,index) in optionsData" :key="index">
                   <div class="option-title flex_left">
                     <div class="flex_cell flex_left">规格 {{index + 1}}</div>
-                    <div class="w60 flex_right color-theme" @click="deleteOption(index)">删除</div>
+                    <div v-if="index > 0" class="w60 flex_right color-theme" @click="deleteOption(index)">删除</div>
                   </div>
                   <div class="option-con">
                     <div class="flex_left con-item">
@@ -359,7 +367,7 @@ export default {
       showRebate: false,
       classData: [],
       submitIng: false,
-      optionsData: [],
+      optionsData: [''],
       selectedOptionIndex: 0,
       optionsPhoto: []
     }
