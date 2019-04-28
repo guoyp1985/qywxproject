@@ -491,7 +491,6 @@ export default {
         return false
       }
       const priceval = parseFloat(self.selectproduct.price.replace(/,/g, ''))
-      const storage = parseInt(self.selectproduct.storage)
       if (self.activityType === 'bargainbuy') {
         let minprice = parseFloat(self.submitdata.param_minprice)
         let minval = parseFloat(self.submitdata.param_everymin)
@@ -543,6 +542,14 @@ export default {
         if (minval > priceval || maxval > priceval) {
           self.$vux.toast.show({
             text: '可砍金额不能大于活动价格',
+            type: 'warn',
+            time: 2000
+          })
+          return false
+        }
+        if (minval > maxval) {
+          self.$vux.toast.show({
+            text: '最大可砍金额应大于等于最小可砍金额',
             type: 'warn',
             time: 2000
           })
