@@ -152,9 +152,7 @@
     <template v-if="showFirst">
       <firstTip @submitFirstTip="submitFirstTip">
         <div class="font15 bold txt">
-          <div class="flex_center">客户列表中的客户</div>
-          <div class="flex_center mt5">都可邀请进行代理</div>
-          <div class="flex_center mt5">轻轻松松提高销售额</div>
+          <div class="flex_center">{{sysParams.advance_seller}}</div>
         </div>
       </firstTip>
     </template>
@@ -171,7 +169,7 @@
 import { Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, TransferDom, Popup, Group, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
-import { User, FirstInfo } from '#/storage'
+import { User, FirstInfo, SystemParams } from '#/storage'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
 import FirstTip from '@/components/FirstTip'
@@ -218,7 +216,8 @@ export default {
       isshowfluence: false,
       showFirst: false,
       isFirst: false,
-      showHb: false
+      showHb: false,
+      sysParams: {}
     }
   },
   methods: {
@@ -528,6 +527,13 @@ export default {
   },
   activated () {
     this.refresh()
+    if (!SystemParams.get()) {
+      this.$util.getSystemParams(() => {
+        this.sysParams = SystemParams.get()
+      })
+    } else {
+      this.sysParams = SystemParams.get()
+    }
     this.$util.miniPost()
   }
 }

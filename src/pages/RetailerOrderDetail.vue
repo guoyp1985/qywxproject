@@ -183,7 +183,7 @@
       <template v-if="showFirst">
         <firstTip @submitFirstTip="submitFirstTip">
           <div class="font15 bold txt">
-            <div class="flex_center">订单发货就是这么简单</div>
+            <div class="flex_center">{{sysParams.advance_orderdeliver}}</div>
           </div>
         </firstTip>
       </template>
@@ -204,7 +204,7 @@ import FirstHb from '@/components/FirstHb'
 import Time from '#/time'
 import ENV from 'env'
 import jQuery from 'jquery'
-import { User } from '#/storage'
+import { User, SystemParams } from '#/storage'
 
 export default {
   directives: {
@@ -238,7 +238,8 @@ export default {
       refundContent: '',
       showFirst: false,
       isFirst: false,
-      showHb: false
+      showHb: false,
+      sysParams: {}
     }
   },
   watch: {
@@ -586,6 +587,13 @@ export default {
   },
   activated () {
     this.refresh()
+    if (!SystemParams.get()) {
+      this.$util.getSystemParams(() => {
+        this.sysParams = SystemParams.get()
+      })
+    } else {
+      this.sysParams = SystemParams.get()
+    }
     this.$util.miniPost()
   }
 }
