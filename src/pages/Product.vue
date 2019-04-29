@@ -955,7 +955,6 @@ export default {
     },
     viewBigImg (index) {
       const self = this
-      console.log(self.$refs.previewerOption)
       if (self.$util.isPC()) {
         self.$refs.previewerOption.show(0)
       } else {

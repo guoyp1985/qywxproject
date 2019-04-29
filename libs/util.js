@@ -5,7 +5,7 @@ import SHA1 from 'js-sha1'
 import Time from './time'
 import urlParse from 'url-parse'
 import jQuery from 'jquery'
-import { User, Roomid, Token } from './storage'
+import { User, Roomid, Token, SystemParams } from './storage'
 const Util = {}
 
 Util.install = function (Vue, options) {
@@ -714,6 +714,11 @@ Util.install = function (Vue, options) {
         params.appid = query.appid
       }
       return params
+    },
+    getSystermParams: () => {
+      Vue.http.get(`${ENV.BokaApi}/api/common/getSysParas`).then(res => {
+        let data = res.data
+      })
     }
   }
 }
