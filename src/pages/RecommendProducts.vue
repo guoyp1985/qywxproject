@@ -48,7 +48,7 @@
                       <div class="w_100 clamp1 color-red">{{ $t('RMB') }} {{ item.price }}</div>
                     </div>
                     <div class="flex_right" style="width:55px;">
-                      <div v-if="!item.haveimport" class="bg-theme color-white flex_center" style="width:50px;border-radius:10px;height:25px;" @click.stop="upEvent(item)">上架</div>
+                      <div v-if="!item.haveimport" class="bg-theme color-white flex_center" style="width:50px;border-radius:10px;height:25px;" @click.stop="upEvent(item, index)">上架</div>
                       <div v-else class="bg-theme color-white flex_center" style="width:50px;border-radius:10px;height:25px;">已上架</div>
                     </div>
                   </div>
@@ -125,7 +125,9 @@ export default {
       showFirst: false,
       isFirst: false,
       showHb: false,
-      sysParams: {}
+      sysParams: {},
+      clickData: null,
+      clickIndex: 0
     }
   },
   watch: {
@@ -137,6 +139,8 @@ export default {
     initData () {
       this.isFirst = false
       this.showFirst = false
+      this.clickData = null
+      this.clickIndex = 0
     },
     closeTip () {
       this.showTip = false
@@ -176,6 +180,7 @@ export default {
             let error = data.error
             if (data.flag === 1) {
               error = '上架成功！该商品已显示在你的店铺中！'
+              this.productData[this.clickIndex].haveimport = 1
             }
             self.$vux.toast.show({
               text: error,
@@ -191,7 +196,9 @@ export default {
         }
       })
     },
-    upEvent (item) {
+    upEvent (item, index) {
+      this.clickData = item
+      this.clickIndex = index
       if (!this.loginUser.isretailer || !this.loginUser.retailerinfo.vipvalidate) {
         this.showTip = true
       } else {
