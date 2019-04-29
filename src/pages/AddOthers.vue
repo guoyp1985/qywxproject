@@ -115,7 +115,24 @@ export default {
               this.$refs.wraper.bscroll.refresh()
             })
           })
-        } else {
+        }
+        if(module === 'news')
+          {
+            url = `${Env.BokaApi}/api/list/news?from=retaile`
+          }
+          else if(module === 'prodcut')
+          {
+            url = `${Env.BokaApi}/api/retailer/getRetailerProducts`
+          }
+          else
+          {
+            url = `${Env.BokaApi}/api/list/${module}`
+          }
+          params = {
+            ...params,
+            uploader: this.userInfo.uid
+            wid: this.userInfo.uid
+          } else {
           url = `${Env.BokaApi}/api/list/${module}`
           params = {
             ...params,
