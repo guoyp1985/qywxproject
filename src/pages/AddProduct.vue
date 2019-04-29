@@ -685,8 +685,9 @@ export default {
             let curTitle = curOption.title
             let curPhoto = curOption.photo
             let curStorage = curOption.storage
+            console.log(curOption)
             if (self.$util.trim(curTitle) === '' || self.$util.trim(curPhoto) === '' || self.$util.trim(curStorage) === '') {
-              self.$vux.toast.text('请完规格信息', 'middle')
+              self.$vux.toast.text('请完善规格信息', 'middle')
               iscontinue = false
               break
             }
