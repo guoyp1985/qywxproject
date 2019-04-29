@@ -116,10 +116,13 @@ export default {
             })
           })
         } else {
+          let type = 'POST'
           if (module === 'news') {
             url = `${Env.BokaApi}/api/list/news?from=retaile`
+            type = 'GET'
           } else if (module === 'product') {
             url = `${Env.BokaApi}/api/retailer/getRetailerProducts`
+            type = 'GET'
           } else {
             url = `${Env.BokaApi}/api/list/${module}`
           }
