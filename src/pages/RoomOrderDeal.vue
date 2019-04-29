@@ -48,7 +48,7 @@
     <div class="s-bottom submit-button color-white" @click="makeDeal">
       <span>支付保证金 ￥{{room.deposit}} + 手续费￥{{fee}}</span>
     </div>
-    <append-product v-model="popupShow" @close="popupClose" @confirm="popupConfirm" from="myshop" :rebate="propRebate"></append-product>
+    <append-product v-model="popupShow" @close="popupClose" @confirm="popupConfirm" from="roomorder" :rebate="propRebate"></append-product>
     <div v-transfer-dom>
       <x-dialog v-model="showDialog" hide-on-blur :dialog-style="{width: '100%', height: '50%', 'background-color': '#ffffff'}">
         <div style="text-align:center;padding-top:10px;" @click="showDialog = false">
