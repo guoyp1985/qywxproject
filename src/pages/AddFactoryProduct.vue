@@ -969,7 +969,7 @@ export default {
         }
       }
       .option-pic-list{
-        .option-pic{width:30px;height:30px;}
+        .option-pic{width:30px;height:30px;object-fit:cover;}
       }
     }
   }
