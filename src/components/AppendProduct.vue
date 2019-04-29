@@ -30,7 +30,7 @@
                 <div class="t-cell v_middle" style="color:inherit;">
                   <div class="clamp1">{{item.title}}</div>
                   <div class="font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
-                  <div class="font12" v-if="rebate">佣金: {{item.rebate}}</div>
+                  <div class="font12" v-if="rebate">返点客佣金: {{item.rebate}}</div>
                   <div class="font12 clamp1 color-orange" v-if="item.allowcard">允许使用优惠券</div>
                 </div>
               </div>
