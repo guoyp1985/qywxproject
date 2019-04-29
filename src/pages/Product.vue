@@ -92,10 +92,20 @@
         <template v-if="productdata.options && productdata.options.length">
           <div class="bg-page" style="height:10px;"></div>
           <div class="b_top_after"></div>
-          <div class="padding10 b_bottom_after flex_left" @click="buyevent">
-            <div class="w40 flex_left">规格</div>
-            <div class="flex_cell flex_left color-gray" v-if="selectedOption && selectedOption.id">{{selectedOption.title}}</div>
-            <div class="flex_cell flex_left color-gray" v-else>请选择</div>
+          <div class="padding10 b_bottom_after" @click="buyevent">
+            <div class="flex_left">
+              <div class="w40 flex_left">规格</div>
+              <div class="flex_cell flex_left color-gray" v-if="selectedOption && selectedOption.id">{{selectedOption.title}}</div>
+              <div class="flex_cell flex_left color-gray" v-else>请选择</div>
+            </div>
+            <div class="card-options mt10">
+              <template v-for="(item,index) in productdata.options">
+                <img :src="item.photo" />
+              </template>
+              <div class="flex_center">
+                <div class="btn flex_center">共{{productdata.options.length}}种规格可选</div>
+              </div>
+            </div>
           </div>
         </template>
   			<div class="groupbuarea" v-if="activityInfo.id && activityInfo.type == 'groupbuy' && activitydata.length > 0">
@@ -1310,6 +1320,13 @@ export default {
 
 <style lang="less">
 .notop .pagetop{display:none;}
+.product{
+  .card-options{
+    display: flex;flex-wrap: wrap;
+    img{width:30px;height:30px;margin-right:10px;object-fit:cover;}
+    .btn{border-radius:10px;background-color:#ccc;color:#999;font-size:12px;height:22px;padding:0 10px;}
+  }
+}
 .product .videobg{width:100%;height:100%;background-size:cover;background-position:center;position:relative;}
 .product .play-icon{
   width:60px;height:60px;background: rgba(0,0,0,.4);border-radius: 50%;color:#fff;
