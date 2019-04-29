@@ -98,11 +98,11 @@
               <div class="flex_cell flex_left color-gray" v-if="selectedOption && selectedOption.id">{{selectedOption.title}}</div>
               <div class="flex_cell flex_left color-gray" v-else>请选择</div>
             </div>
-            <div class="card-options mt10">
+            <div class="card-options">
               <template v-for="(item,index) in productdata.options">
                 <img :src="item.photo" />
               </template>
-              <div class="flex_center">
+              <div class="flex_center txt-item">
                 <div class="btn flex_center">共{{productdata.options.length}}种规格可选</div>
               </div>
             </div>
@@ -465,7 +465,7 @@
           <div class="column-content" @click="closeOptions"></div>
           <div class="options-box columnarea">
             <div class="close-area flex_center color-gray" @click="closeOptions"><span class="al al-close"></span></div>
-            <div class="column-content">
+            <div class="column-content columnarea">
               <div class="part1 flex_left">
                 <div class="pic flex_left">
                   <img :src="selectedOption.photo" @click="viewBigImg(0)" />
@@ -479,7 +479,7 @@
                   </div>
                 </div>
               </div>
-              <div class="part2">
+              <div class="part2 column-content">
                 <div class="pt10">规格</div>
                 <div class="options-list">
                   <div v-for="(item,index) in productdata.options" :class="`options-item ${(selectedOptionIndex == index && item.storage > 0) ? 'active' : ''} ${item.storage <= 0 ? 'disabled' : ''}`" @click="clickOptions(item,index)">
@@ -1323,7 +1323,8 @@ export default {
 .product{
   .card-options{
     display: flex;flex-wrap: wrap;
-    img{width:30px;height:30px;margin-right:10px;object-fit:cover;}
+    img{width:30px;height:30px;margin-right:10px;object-fit:cover;margin-top:10px;}
+    .txt-item{margin-top:10px;}
     .btn{border-radius:10px;background-color:#ccc;color:#999;font-size:12px;height:22px;padding:0 10px;}
   }
 }
@@ -1486,6 +1487,7 @@ export default {
         }
       }
       .part2{
+        overflow-y:auto;
         .options-list{
           display: flex;flex-wrap: wrap;
           .options-item:not(:last-child){margin-right:10px;}
