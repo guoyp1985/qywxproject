@@ -1,12 +1,12 @@
 <template>
   <div class="containerarea bg-page font14 s-havebottom rproductlist">
     <tab v-model="selectedIndex" class="w_100 v-tab">
-      <tab-item v-for="(item,index) in tabtxts" :selected="selectedIndex == index" :key="index">{{item}}</tab-item>
+      <tab-item v-for="(item,index) in tabtxts" :selected="selectedIndex == index" :key="index" @on-item-click="clickTab(index)">{{item}}</tab-item>
     </tab>
     <div class="s-container scroll-container" style="top:50px;">
-      <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
-        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-          <div v-if="(index == 0)" class="swiper-inner" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', index)">
+      <!-- <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
+        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index"> -->
+          <div v-show="(selectedIndex == 0)" class="swiper-inner" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', 0)">
             <div class="pro_box bg-page list_shadow pl12 pr12 pb15 border-box">
               <div class="pro_list_top"></div>
               <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white font12" style="margin-top: -4px;">
@@ -50,7 +50,7 @@
               </div>
             </template>
           </div>
-          <div v-if="(index == 1)" class="swiper-inner" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', index)">
+          <div v-show="(selectedIndex == 1)" class="swiper-inner" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', 1)">
             <div class="pro_box bg-page list_shadow pl12 pr12 pb15 border-box">
               <div class="pro_list_top"></div>
               <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white font12" style="margin-top: -4px;">
@@ -92,7 +92,7 @@
               </div>
             </template>
           </div>
-          <div v-if="(index == 2)" class="swiper-inner" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3', index)">
+          <div v-show="(selectedIndex == 2)" class="swiper-inner" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3', 2)">
             <div class="pro_box bg-page list_shadow pl12 pr12 pb15 border-box">
               <div class="pro_list_top"></div>
               <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white font12" style="margin-top: -4px;">
@@ -134,8 +134,8 @@
               </div>
             </template>
           </div>
-        </swiper-item>
-      </swiper>
+        <!-- </swiper-item>
+      </swiper> -->
     </div>
     <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
       <div class="flex_cell flex_center" v-if="retailerInfo.fid > 0">
@@ -350,6 +350,10 @@ export default {
     }
   },
   methods: {
+    clickTab (index) {
+      this.selectedIndex = index
+      this.swiperChange()
+    },
     swiperChange (index) {
       if (index !== self.selectedIndex) {
         self.selectedIndex = index
