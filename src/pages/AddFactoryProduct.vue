@@ -136,7 +136,7 @@
                   <div class="flex_left con-item">
                     <div class="title-cell1 flex_left">规格名称</div>
                     <div class="border-cell flex_left flex_cell">
-                      <x-input v-model="item.title" type="text" class="input" placeholder="规格名称" ></x-input>
+                      <x-input v-model="item.title" :max="15" type="text" class="input" placeholder="规格名称" ></x-input>
                     </div>
                   </div>
                   <div class="flex_left mt10 con-item">
