@@ -47,6 +47,7 @@
 </template>
 <script>
 import { TransferDom, Popup, Search, CheckIcon } from 'vux'
+import { User } from '#/storage'
 import ENV from 'env'
 export default {
   name: 'AppendProduct',
@@ -66,6 +67,7 @@ export default {
   },
   data () {
     return {
+      loginUser: {},
       limit: 20,
       pageStart: 0,
       searchWord: '',
@@ -160,12 +162,22 @@ export default {
       }
     },
     getProductData () {
-      let params = { params: { from: this.from, pagestart: this.pageStart, limit: this.limit } }
+      console.log('in getProductData')
+      let ajaxUrl = `${ENV.BokaApi}/api/list/product`
+      let params = {pagestart: this.pageStart, limit: this.limit}
+      if (this.from === 'roomorder') {
+        ajaxUrl = `${ENV.BokaApi}/api/retailer/getRetailerProducts`
+        params.wid = this.loginUser.uid
+      } else {
+        params.from = this.from
+      }
       let keyword = this.searchWord
       if (typeof keyword !== 'undefined' && this.$util.trim(keyword) !== '') {
         params.params.keyword = keyword
       }
-      this.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(res => {
+      this.$http.get(ajaxUrl, {
+        params: params
+      }).then(res => {
         let data = res.data
         this.$vux.loading.hide()
         if (typeof keyword !== 'undefined' && this.$util.trim(keyword) !== '') {
@@ -179,6 +191,7 @@ export default {
     }
   },
   created () {
+    this.loginUser = User.get()
     this.getProductData()
   }
 }

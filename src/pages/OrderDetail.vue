@@ -116,12 +116,17 @@
       </div>
       <div v-transfer-dom class="qrcode-dialog">
         <x-dialog v-model="wxCardShow" class="dialog-demo">
-          <div class="img-box">
-            <img :src="retailerInfo.qrcode" style="max-width:100%">
-          </div>
-          <div>
-            <span>{{$t('Add To Contacts With Scan Qrcode')}}</span>
-          </div>
+          <template v-if="!retailerInfo || !retailerInfo.qrcode || retailerInfo.qrcode == ''">
+            <div class="img-box flex_center">卖家未上传二维码</div>
+          </template>
+          <template v-else>
+            <div class="img-box">
+              <img :src="retailerInfo.qrcode" style="max-width:100%">
+            </div>
+            <div>
+              <span>{{$t('Add To Contacts With Scan Qrcode')}}</span>
+            </div>
+          </template>
           <div @click="wxCardShow=false">
             <span class="vux-close"></span>
           </div>

@@ -302,10 +302,11 @@ export default {
     confirmpopup () {
       const self = this
       if (!this.selectpopupdata || !this.selectpopupdata.id) {
-        self.$vux.alert.show({
-          title: '',
-          content: '请选择商品'
-        })
+        self.$vux.toast.text('请选择商品', 'middle')
+        return false
+      }
+      if (this.selectpopupdata.fid > 0 && parseFloat(this.selectpopupdata.rebatein) <= 0) {
+        self.$vux.toast.text('佣金为0的厂家商品不能创建活动', 'middle')
         return false
       }
       if (this.selectpopupdata.allowcard) {
@@ -366,7 +367,7 @@ export default {
     },
     getProductData () {
       const self = this
-      let params = {pagestart: self.pagestart1, limit: self.limit}
+      let params = {from: 'activity', wid: this.loginUser.uid, pagestart: self.pagestart1, limit: self.limit}
       let keyword = self.searchword
       if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
         params.keyword = keyword
