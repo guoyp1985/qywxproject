@@ -116,13 +116,13 @@ export default {
             })
           })
         } else {
-          if (module === 'news') {
-            url = `${Env.BokaApi}/api/list/news?from=retaile`
-          } else if (module === 'product') {
-            url = `${Env.BokaApi}/api/retailer/getRetailerProducts`
-          } else {
-            url = `${Env.BokaApi}/api/list/${module}`
-          }
+          // if (module === 'news') {
+          //   url = `${Env.BokaApi}/api/list/news?from=retaile`
+          // } else if (module === 'product') {
+          //   url = `${Env.BokaApi}/api/retailer/getRetailerProducts`
+          // } else {
+          url = `${Env.BokaApi}/api/list/${module}`
+          // }
           params = {
             ...params,
             uploader: this.userInfo.uid,
