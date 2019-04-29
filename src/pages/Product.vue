@@ -492,7 +492,8 @@
             </div>
             <div class="options-bottom flex_center">
               <div class="flex_cell h_100 flex_center">
-                <div class="bg-theme color-white flex_center btn" @click="buyOption">立即购买</div>
+                <div v-if="activityInfo.id && activityInfo.type == 'groupbuy'" class="bg-theme color-white flex_center btn" @click="buyOption">原价购买</div>
+                <div v-else class="bg-theme color-white flex_center btn" @click="buyOption">立即购买</div>
               </div>
               <div class="flex_cell h_100 flex_center" v-if="activityInfo.id && activityInfo.type == 'groupbuy'">
                 <div class="bg-orange color-white flex_center btn" @click="buyOption('groupbuy')">一键拼团</div>
