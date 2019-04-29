@@ -100,7 +100,7 @@
             </div>
             <div class="card-options">
               <template v-for="(item,index) in productdata.options">
-                <img :src="item.photo" />
+                <img v-if="index < 5" :src="item.photo" />
               </template>
               <div class="flex_center txt-item">
                 <div class="btn flex_center">共{{productdata.options.length}}种规格可选</div>
