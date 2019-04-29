@@ -165,7 +165,11 @@ export default {
               self.crowduser = self.data.crowduser
               sharelink = `${sharelink}&crowduserid=${self.crowduser.id}`
             }
-            self.product = self.data.product
+            let curp = self.data.product
+            if (!curp.wid) {
+              curp.wid = self.data.retailer.uid
+            }
+            self.product = curp
             let inpage = ''
             if (self.crowduserid && self.crowduser) {
               if (self.loginUser.uid === self.crowduser.crowdowner) {

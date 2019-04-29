@@ -5,7 +5,7 @@
         <img src="https://tossharingsales.boka.cn/images/bargainbuy_bg.png" />
       </div>
       <div class="boxarea productarea">
-        <router-link class="t-table" :to="{path:'/product',query:{wid:product.uploader,id:product.id}}" style="color:inherit;">
+        <router-link class="t-table" :to="{path:'/product',query:{wid:product.wid,id:product.id}}" style="color:inherit;">
             <div class="t-cell pic v_middle">
               <img class="imgcover" :src="product.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
             </div>

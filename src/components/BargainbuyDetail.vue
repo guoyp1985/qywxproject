@@ -14,7 +14,7 @@
     <div class="boxarea">
       <div class="inner">
         <div class="innerbg">
-          <router-link class="t-table" style="color:inherit;" :to="{path:'/product',query:{wid:product.uploader,id:product.id}}">
+          <router-link class="t-table" style="color:inherit;" :to="{path:'/product',query:{wid:product.wid,id:product.id}}">
             <div class="t-cell v_middle w80">
               <img class="imgcover" :src="product.photo" style="width:70px;height:70px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
             </div>
