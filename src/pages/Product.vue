@@ -89,6 +89,15 @@
             </template>
   				</div>
     		</div>
+        <template v-if="productdata.options && productdata.options.length">
+          <div class="bg-page" style="height:10px;"></div>
+          <div class="b_top_after"></div>
+          <div class="padding10 b_bottom_after flex_left" @click="buyevent">
+            <div class="w40 flex_left">规格</div>
+            <div class="flex_cell flex_left color-gray" v-if="selectedOption && selectedOption.id">{{selectedOption.title}}</div>
+            <div class="flex_cell flex_left color-gray" v-else>请选择</div>
+          </div>
+        </template>
   			<div class="groupbuarea" v-if="activityInfo.id && activityInfo.type == 'groupbuy' && activitydata.length > 0">
   				<div class="bg-page" style="height:10px;"></div>
   				<div class="bg-white">
