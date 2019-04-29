@@ -124,8 +124,8 @@
       <template v-if="showFirst">
         <firstTip @submitFirstTip="submitFirstTip">
           <div class="font15 bold txt">
-            <div class="flex_center" v-if="query.type == 'groupbuy'">创建团购活动都可促进用户购买哦</div>
-            <div class="flex_center" v-if="query.type == 'bargainbuy'">创建砍价活动都可促进用户购买哦</div>
+            <div class="flex_center" v-if="query.type == 'groupbuy'">{{sysParams.advance_groupbuy}}</div>
+            <div class="flex_center" v-if="query.type == 'bargainbuy'">{{sysParams.advance_bargainbuy}}</div>
           </div>
         </firstTip>
       </template>
@@ -169,7 +169,7 @@ import FirstTip from '@/components/FirstTip'
 import FirstHb from '@/components/FirstHb'
 import Time from '#/time'
 import ENV from 'env'
-import { User } from '#/storage'
+import { User, SystemParams } from '#/storage'
 
 export default {
   directives: {
@@ -211,7 +211,8 @@ export default {
       isFirst: false,
       showHb: false,
       newData: {},
-      action: ''
+      action: '',
+      sysParams: {}
     }
   },
   watch: {
@@ -365,12 +366,14 @@ export default {
     },
     getProductData () {
       const self = this
-      let params = { params: { from: 'activity', pagestart: self.pagestart1, limit: self.limit } }
+      let params = {pagestart: self.pagestart1, limit: self.limit}
       let keyword = self.searchword
       if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
-        params.params.keyword = keyword
+        params.keyword = keyword
       }
-      self.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(function (res) {
+      self.$http.get(`${ENV.BokaApi}/api/retailer/getRetailerProducts`, {
+        params: params
+      }).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
         if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
@@ -761,6 +764,13 @@ export default {
   },
   activated () {
     this.$util.miniPost()
+    if (!SystemParams.get()) {
+      this.$util.getSystemParams(() => {
+        this.sysParams = SystemParams.get()
+      })
+    } else {
+      this.sysParams = SystemParams.get()
+    }
     this.refresh()
   }
 }

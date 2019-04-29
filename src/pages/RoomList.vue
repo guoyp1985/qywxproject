@@ -104,9 +104,7 @@
     <template v-if="showFirst">
       <firstTip @submitFirstTip="submitFirstTip">
         <div class="font15 bold txt">
-          <div class="flex_center">还在为不能轻松赚钱而发愁吗？</div>
-          <div class="flex_center mt5">使用群群推功能发布自己的微信群</div>
-          <div class="flex_center mt5">让卖家找您推广，轻松获利</div>
+          <div class="flex_center">{{sysParams.advance_addgroup}}</div>
         </div>
       </firstTip>
     </template>
@@ -118,7 +116,7 @@ import Room from '@/components/Room'
 import RoomOrderConsumer from '@/components/RoomOrderConsumer'
 import FirstTip from '@/components/FirstTip'
 import ENV from 'env'
-import { User, FirstInfo } from '#/storage'
+import { User, FirstInfo, SystemParams } from '#/storage'
 
 export default {
   components: {
@@ -142,7 +140,8 @@ export default {
       showTip: true,
       loaddata: false,
       showFirst: false,
-      isFirst: false
+      isFirst: false,
+      sysParams: {}
     }
   },
   watch: {
@@ -373,6 +372,13 @@ export default {
     }
   },
   activated () {
+    if (!SystemParams.get()) {
+      this.$util.getSystemParams(() => {
+        this.sysParams = SystemParams.get()
+      })
+    } else {
+      this.sysParams = SystemParams.get()
+    }
     this.refresh()
   }
 }

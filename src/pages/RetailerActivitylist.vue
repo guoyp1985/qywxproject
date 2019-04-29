@@ -124,13 +124,6 @@
           </swiper-item>
         </swiper>
       </div>
-      <!-- <template v-if="showFirst">
-        <firstTip @submitFirstTip="submitFirstTip">
-          <div class="font15 bold txt">
-            <div class="flex_center">创建团购和砍价活动都可促进用户购买哦</div>
-          </div>
-        </firstTip>
-      </template> -->
     </template>
   </div>
 </template>
@@ -182,7 +175,6 @@ import ENV from 'env'
 import { User } from '#/storage'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
-import FirstTip from '@/components/FirstTip'
 
 const limit = 10
 let pageStart1 = 0
@@ -192,7 +184,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Confirm, Popup, XImg, CreateActivity, Subscribe, ApplyTip, FirstTip
+    Tab, TabItem, Swiper, SwiperItem, Confirm, Popup, XImg, CreateActivity, Subscribe, ApplyTip
   },
   filters: {
     dateformat: function (value) {
@@ -210,9 +202,7 @@ export default {
       tabmodel: 0,
       tabdata1: [],
       isFirstLoad: true,
-      activityCount: 0,
-      showFirst: false,
-      isFirst: false
+      activityCount: 0
     }
   },
   watch: {
@@ -222,14 +212,6 @@ export default {
   },
   methods: {
     initData () {
-      this.isFirst = false
-      this.showFirst = false
-    },
-    submitFirstTip () {
-      this.showFirst = false
-      // if (this.tabdata1.length && this.tabmodel !== 1) {
-      //   this.tabmodel = 1
-      // }
     },
     clickAdd (type) {
       if (this.loginUser.isretailer === 2 && this.activityCount >= 2) {
@@ -282,9 +264,6 @@ export default {
         if (self.isFirstLoad) {
           self.activityCount = self.tabdata1.length
           self.isFirstLoad = false
-          // if (this.isFirst && ((`${this.retailerInfo.firstinfo.groupbuy}` === '0' && `${this.retailerInfo.firstinfo.bargainbuy}` === '0') || !this.tabdata1.length)) {
-          //   this.showFirst = true
-          // }
         }
       })
     },
@@ -345,9 +324,6 @@ export default {
               this.retailerInfo = data.data
               this.loginUser.retailerinfo = this.retailerInfo
               User.set(this.loginUser)
-              if ((`${this.retailerInfo.firstinfo.groupbuy}` === '0' || `${this.retailerInfo.firstinfo.bargainbuy}` === '0') && this.query.from) {
-                this.isFirst = true
-              }
             }
             if (this.tabdata1.length < limit || this.query.add) {
               self.initContainer()

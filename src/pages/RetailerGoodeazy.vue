@@ -123,10 +123,7 @@
       <template v-if="showFirst">
         <firstTip @submitFirstTip="submitFirstTip">
           <div class="font15 bold txt">
-            <div class="flex_center">还在为没有好文章而发愁？</div>
-            <div class="flex_center mt5"><span>复制其他文章链接</span></div>
-            <div class="flex_center mt5"><span>在易采集中输入链接一键搜索</span></div>
-            <div class="flex_center mt5"><span>轻松采集别人的文章变自己的文章</span></div>
+            <div class="flex_center">{{sysParams.advance_grabnews}}</div>
           </div>
         </firstTip>
       </template>
@@ -144,7 +141,7 @@
 import { Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, Checker, CheckerItem, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
-import { User } from '#/storage'
+import { User, SystemParams } from '#/storage'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
 import FirstTip from '@/components/FirstTip'
@@ -187,7 +184,8 @@ export default {
       isFirst: false,
       showFirst: false,
       showHb: false,
-      routerParams: {}
+      routerParams: {},
+      sysParams: {}
     }
   },
   methods: {
@@ -548,6 +546,13 @@ export default {
   },
   activated () {
     this.refresh()
+    if (!SystemParams.get()) {
+      this.$util.getSystemParams(() => {
+        this.sysParams = SystemParams.get()
+      })
+    } else {
+      this.sysParams = SystemParams.get()
+    }
     this.$util.miniPost()
   }
 }

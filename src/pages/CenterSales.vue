@@ -41,7 +41,7 @@ import Subscribe from '@/components/Subscribe'
 import OpenVip from '@/components/OpenVip'
 import Vip from '@/components/Vip'
 import ENV from 'env'
-import { User } from '#/storage'
+import { User, SystemParams } from '#/storage'
 
 export default {
   components: {
@@ -140,17 +140,7 @@ export default {
               self.initContainer()
               self.showApply = true
               document.title = '申请卖家'
-              self.$http.post(`${ENV.BokaApi}/api/common/getSysParas`).then(function (res) {
-                self.$vux.loading.hide()
-                if (res.status === 200) {
-                  let data = res.data
-                  data = data.data ? data.data : data
-                  self.systemParams = data
-                }
-                return self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
-                  { params: { limit: 100 } }
-                )
-              }).then(function (res) {
+              self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`, {params: {limit: 100}}).then((res) => {
                 self.$vux.loading.hide()
                 if (res.status === 200) {
                   let data = res.data
@@ -219,6 +209,13 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = query
       this.getData()
+      if (!SystemParams.get()) {
+        this.$util.getSystemParams(() => {
+          this.systemParams = SystemParams.get()
+        })
+      } else {
+        this.systemParams = SystemParams.get()
+      }
     }
   },
   activated () {

@@ -65,10 +65,7 @@
       <template v-if="showFirst">
         <firstTip @submitFirstTip="submitFirstTip">
           <div class="font15 bold txt">
-            <div class="flex_center">还在担心没有好货？</div>
-            <div class="flex_center mt5"><span>货源中为您提供</span><span class="color-theme">百万爆款好货</span></div>
-            <div class="flex_center mt5"><span>上架销售</span><span class="color-theme">立赚佣金</span></div>
-            <div class="flex_center mt5"><span>轻轻松松</span><span class="color-theme">赚大钱</span></div>
+            <div class="flex_center">{{sysParams.advance_importproduct}}</div>
           </div>
         </firstTip>
       </template>
@@ -86,7 +83,7 @@ Apply join:
 
 <script>
 import { Tab, TabItem, Search } from 'vux'
-import { User } from '#/storage'
+import { User, SystemParams } from '#/storage'
 import ENV from 'env'
 import Time from '#/time'
 import TipLayer from '@/components/TipLayer'
@@ -127,7 +124,8 @@ export default {
       showTip: false,
       showFirst: false,
       isFirst: false,
-      showHb: false
+      showHb: false,
+      sysParams: {}
     }
   },
   watch: {
@@ -355,6 +353,13 @@ export default {
     document.querySelector('.vux-tab').scrollLeft = this.tabLeft
     this.showHb = false
     this.isFirst = false
+    if (!SystemParams.get()) {
+      this.$util.getSystemParams(() => {
+        this.sysParams = SystemParams.get()
+      })
+    } else {
+      this.sysParams = SystemParams.get()
+    }
   },
   beforeRouteLeave (to, from, next) {
     this.pageTop = this.$refs.scrollContainer.scrollTop

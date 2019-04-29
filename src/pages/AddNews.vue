@@ -83,10 +83,7 @@
       <template v-if="showFirst">
         <firstTip @submitFirstTip="submitFirstTip">
           <div class="font15 bold txt">
-            <div class="flex_center">还在为没有好文章而发愁？</div>
-            <div class="flex_center mt5"><span>复制其他文章链接</span></div>
-            <div class="flex_center mt5"><span>在易采集中输入链接一键搜索</span></div>
-            <div class="flex_center mt5"><span>轻松采集别人的文章变自己的文章</span></div>
+            <div class="flex_center">{{sysParams.advance_addnews}}</div>
           </div>
         </firstTip>
       </template>
@@ -100,7 +97,7 @@
 import { Group, XInput, XTextarea, Cell, XButton } from 'vux'
 import ClipPopup from '@/components/ClipPopup'
 import ENV from 'env'
-import { User } from '#/storage'
+import { User, SystemParams } from '#/storage'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
@@ -129,7 +126,8 @@ export default {
       isFirst: false,
       showFirst: false,
       showHb: false,
-      newData: {}
+      newData: {},
+      sysParams: {}
     }
   },
   computed: {
@@ -413,6 +411,13 @@ export default {
   },
   activated () {
     this.$util.miniPost()
+    if (!SystemParams.get()) {
+      this.$util.getSystemParams(() => {
+        this.sysParams = SystemParams.get()
+      })
+    } else {
+      this.sysParams = SystemParams.get()
+    }
     this.refresh()
   }
 }

@@ -259,7 +259,7 @@
       <template v-if="showFirst">
         <firstTip @submitFirstTip="submitFirstTip">
           <div class="font15 bold txt">
-            <div class="flex_center">订单发货就是这么简单</div>
+            <div class="flex_center">{{sysParams.advance_orderdeliver}}</div>
           </div>
         </firstTip>
       </template>
@@ -283,7 +283,7 @@ import Time from '#/time'
 import jQuery from 'jquery'
 import ENV from 'env'
 // import { User, FirstInfo } from '#/storage'
-import { User } from '#/storage'
+import { User, SystemParams } from '#/storage'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
 import FirstTip from '@/components/FirstTip'
@@ -333,7 +333,8 @@ export default {
       showTip: false,
       showFirst: false,
       isFirst: false,
-      showHb: false
+      showHb: false,
+      sysParams: {}
     }
   },
   methods: {
@@ -715,6 +716,13 @@ export default {
   },
   activated () {
     this.refresh()
+    if (!SystemParams.get()) {
+      this.$util.getSystemParams(() => {
+        this.sysParams = SystemParams.get()
+      })
+    } else {
+      this.sysParams = SystemParams.get()
+    }
     this.$util.miniPost()
   }
 }

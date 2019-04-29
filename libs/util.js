@@ -715,9 +715,12 @@ Util.install = function (Vue, options) {
       }
       return params
     },
-    getSystermParams: () => {
-      Vue.http.get(`${ENV.BokaApi}/api/common/getSysParas`).then(res => {
-        let data = res.data
+    getSystemParams: (callback) => {
+      Vue.http.post(`${ENV.BokaApi}/api/common/getSysParas`).then(res => {
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        SystemParams.set(retdata)
+        callback && callback()
       })
     }
   }
