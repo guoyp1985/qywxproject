@@ -366,7 +366,7 @@ export default {
     },
     getProductData () {
       const self = this
-      let params = {pagestart: self.pagestart1, limit: self.limit}
+      let params = {from: 'activity', wid: this.loginUser.uid, pagestart: self.pagestart1, limit: self.limit}
       let keyword = self.searchword
       if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
         params.keyword = keyword
