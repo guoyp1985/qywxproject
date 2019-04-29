@@ -480,7 +480,7 @@
                 </div>
               </div>
               <div class="part2">
-                <div class="pt10 pb10">规格</div>
+                <div class="pt10">规格</div>
                 <div class="options-list">
                   <div v-for="(item,index) in productdata.options" :class="`options-item ${(selectedOptionIndex == index && item.storage > 0) ? 'active' : ''} ${item.storage <= 0 ? 'disabled' : ''}`" @click="clickOptions(item,index)">
                     <div class="flex_center">
@@ -1492,7 +1492,7 @@ export default {
           .options-item.active{border-color:#ff6a61;color:#ff6a61;}
           .options-item.disabled{background-color:#ccc;}
           .options-item{
-            border:#ccc 1px solid;border-radius:5px;padding:5px;
+            border:#ccc 1px solid;border-radius:5px;padding:5px;margin-top:10px;
             img{width:30px;height:30px;object-fit:cover;}
           }
         }
