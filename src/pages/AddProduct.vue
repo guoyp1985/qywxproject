@@ -128,7 +128,7 @@
                     <div class="flex_left con-item">
                       <div class="title-cell1 flex_left">规格名称</div>
                       <div class="border-cell flex_left flex_cell">
-                        <x-input v-model="item.title" class="input" @keyup="optionTitleChange(index)" type="text" placeholder="规格名称"></x-input>
+                        <x-input v-model="item.title" class="input" type="text" placeholder="规格名称"></x-input>
                       </div>
                     </div>
                     <div class="flex_left mt10 con-item">
@@ -337,7 +337,7 @@ export default {
       showRebate: false,
       classData: [],
       submitIng: false,
-      optionsData: [''],
+      optionsData: [{title: '', photo: '', storage: ''}],
       selectedOptionIndex: 0,
       optionsPhoto: []
     }
@@ -364,10 +364,6 @@ export default {
   methods: {
     addOption () {
       this.optionsData.push({})
-    },
-    optionTitleChange (index) {
-      let val = event.target.value
-      this.optionsData[index].title = val
     },
     optionStorageChange (index) {
       let val = event.target.value
@@ -496,7 +492,7 @@ export default {
       }
       this.photoarr = []
       this.photoarr1 = []
-      this.optionsData = ['']
+      this.optionsData = [{title: '', photo: '', storage: ''}]
       this.selectedOptionIndex = 0
       this.optionsPhoto = []
     },
