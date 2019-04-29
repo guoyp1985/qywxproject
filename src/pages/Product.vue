@@ -490,9 +490,12 @@
                 </div>
               </div>
             </div>
-            <div class="options-bottom" @click="buyOption">
-              <div class="w_100 h_100 flex_center">
-                <button class="bg-theme color-white flex_center btn">立即购买</button>
+            <div class="options-bottom flex_center">
+              <div class="flex_cell h_100 flex_center">
+                <div class="bg-theme color-white flex_center btn" @click="buyOption">立即购买</div>
+              </div>
+              <div class="flex_cell h_100 flex_center" v-if="activityInfo.id && activityInfo.type == 'groupbuy'">
+                <div class="bg-orange color-white flex_center btn" @click="buyOption('groupbuy')">一键拼团</div>
               </div>
             </div>
           </div>
@@ -758,7 +761,7 @@ export default {
         }
       })
     },
-    buyOption () {
+    buyOption (buytype) {
       if (!this.selectedOption.id) {
         this.$vux.toast.text('请选择商品规格', 'middle')
         return false
@@ -767,7 +770,7 @@ export default {
         this.$vux.toast.text('该规格商品库存不足', 'middle')
         return false
       }
-      this.addShop()
+      this.addShop(buytype)
     },
     clickSeller () {
       this.showSellerTip = true
