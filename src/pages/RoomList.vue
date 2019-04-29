@@ -372,13 +372,9 @@ export default {
     }
   },
   activated () {
-    if (!SystemParams.get()) {
-      this.$util.getSystemParams(() => {
-        this.sysParams = SystemParams.get()
-      })
-    } else {
+    this.$util.getSystemParams(() => {
       this.sysParams = SystemParams.get()
-    }
+    })
     this.refresh()
   }
 }

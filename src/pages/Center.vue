@@ -280,10 +280,7 @@ export default {
       if (!Reg.rPlatfrom.test(navigator.userAgent)) {
         this.showQuit = true
       }
-      console.log(SystemParams.get())
-      if (!SystemParams.get()) {
-        this.$util.getSystemParams()
-      }
+      this.$util.getSystemParams()
       this.getData()
     }
   },
