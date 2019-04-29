@@ -491,14 +491,12 @@ export default {
         return false
       }
       const priceval = parseFloat(self.selectproduct.price.replace(/,/g, ''))
-      const storage = parseInt(self.selectproduct.storage)
       if (self.activityType === 'bargainbuy') {
         let minprice = parseFloat(self.submitdata.param_minprice)
         let minval = parseFloat(self.submitdata.param_everymin)
         let maxval = parseFloat(self.submitdata.param_everymax)
-        let limitbuy = parseInt(self.submitdata.param_limitbuy)
         let finishtime = parseInt(self.submitdata.param_finishtime)
-        if (isNaN(self.submitdata.param_minprice) || isNaN(self.submitdata.param_limitbuy) || isNaN(self.submitdata.param_finishtime) || isNaN(self.submitdata.param_everymin) || isNaN(self.submitdata.param_everymax)) {
+        if (isNaN(self.submitdata.param_minprice) || isNaN(self.submitdata.param_finishtime) || isNaN(self.submitdata.param_everymin) || isNaN(self.submitdata.param_everymax)) {
           self.$vux.toast.show({
             text: '请输入正确的数字',
             type: 'warn',
@@ -533,22 +531,6 @@ export default {
             return false
           }
         }
-        if (isNaN(self.submitdata.param_limitbuy) || limitbuy <= 0 || self.submitdata.param_limitbuy.indexOf('.') > -1) {
-          self.$vux.toast.show({
-            text: '请输入正确的投放总数',
-            type: 'warn',
-            time: 1500
-          })
-          return false
-        }
-        if (limitbuy > storage) {
-          self.$vux.toast.show({
-            text: '投放总数不能大于商品库存',
-            type: 'warn',
-            time: 2000
-          })
-          return false
-        }
         if (isNaN(self.submitdata.param_finishtime) || finishtime <= 0) {
           self.$vux.toast.show({
             text: '请输入正确的砍价周期',
@@ -565,13 +547,20 @@ export default {
           })
           return false
         }
+        if (minval > maxval) {
+          self.$vux.toast.show({
+            text: '最大可砍金额应大于等于最小可砍金额',
+            type: 'warn',
+            time: 2000
+          })
+          return false
+        }
       } else if (self.activityType === 'groupbuy') {
         let groupprice = parseFloat(self.submitdata.param_groupprice)
         let numbers = parseInt(self.submitdata.param_numbers)
-        let limitbuy = parseInt(self.submitdata.param_limitbuy)
         let everybuy = parseInt(self.submitdata.param_everybuy)
         let finishtime = parseFloat(self.submitdata.param_finishtime)
-        if (isNaN(self.submitdata.param_groupprice) || isNaN(self.submitdata.param_numbers) || isNaN(self.submitdata.param_limitbuy) || isNaN(self.submitdata.param_everybuy) || isNaN(self.submitdata.param_finishtime)) {
+        if (isNaN(self.submitdata.param_groupprice) || isNaN(self.submitdata.param_numbers) || isNaN(self.submitdata.param_everybuy) || isNaN(self.submitdata.param_finishtime)) {
           self.$vux.toast.show({
             text: '请输入正确的数字',
             type: 'warn',
@@ -614,30 +603,6 @@ export default {
             text: '成团人数应大于1人',
             type: 'warn',
             time: 1500
-          })
-          return false
-        }
-        if (isNaN(self.submitdata.param_limitbuy) || limitbuy <= 0 || self.submitdata.param_limitbuy.indexOf('.') > -1) {
-          self.$vux.toast.show({
-            text: '请输入正确的投放总数',
-            type: 'warn',
-            time: 1500
-          })
-          return false
-        }
-        if (limitbuy > storage) {
-          self.$vux.toast.show({
-            text: '投放商品数量不能大于商品库存',
-            type: 'warn',
-            time: 2000
-          })
-          return false
-        }
-        if (limitbuy < numbers * everybuy) {
-          self.$vux.toast.show({
-            text: '投放商品数量应大于<br/>成团人数×限购件数',
-            type: 'warn',
-            time: 3000
           })
           return false
         }
@@ -755,7 +720,6 @@ export default {
               ...submitdata,
               param_groupprice: '',
               param_numbers: '',
-              param_limitbuy: '',
               param_finishtime: '',
               param_everybuy: ''
             }
@@ -763,7 +727,6 @@ export default {
             this.submitdata = {
               ...submitdata,
               param_minprice: '',
-              param_limitbuy: '',
               param_finishtime: '',
               param_everymin: '',
               param_everymax: ''

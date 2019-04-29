@@ -99,26 +99,6 @@
             </div>
           </div>
           <div class="form-item required bg-white">
-            <div class="flex_row">
-              <div class="flex_cell">
-                <div class="t-table">
-                  <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product') }}{{ $t('Storage') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
-                  <div class="t-cell input-cell v_middle" style="position:relative;">
-                    <x-input v-model="submitdata.storage" type="tel" class="input" name="storage" :placeholder="$t('Storage')" maxlength="5" size="5" ></x-input>
-                  </div>
-                </div>
-              </div>
-              <div style="width:30%;">
-                <div class="t-table">
-                  <div class="t-cell title-cell font14 v_middle">{{ $t('Storage unit') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
-                  <div class="t-cell input-cell v_middle" style="position:relative;">
-                    <x-input v-model="submitdata.unit" type="text" class="input align_right" name="unit" size="1" maxlength="1" :placeholder="$t('Storage unit')" ></x-input>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="form-item required bg-white">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Postage') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
@@ -142,7 +122,7 @@
               <div class="option-item" v-for="(item,index) in optionsData" :key="index">
                   <div class="option-title flex_left">
                     <div class="flex_cell flex_left">规格 {{index + 1}}</div>
-                    <div class="w60 flex_right color-theme" @click="deleteOption(index)">删除</div>
+                    <div v-if="index > 0" class="w60 flex_right color-theme" @click="deleteOption(index)">删除</div>
                   </div>
                   <div class="option-con">
                     <div class="flex_left con-item">
@@ -342,8 +322,6 @@ export default {
         title: '',
         price: '',
         oriprice: '',
-        storage: '',
-        unit: '件',
         postage: '0.00',
         rebate: '',
         photo: '',
@@ -355,11 +333,11 @@ export default {
         allowcard: false
       },
       allowsubmit: true,
-      requireddata: {'photo': '', classid: '', title: '', 'price': '', 'storage': '', 'unit': '', 'postage': ''},
+      requireddata: {'photo': '', classid: '', title: '', 'price': '', 'postage': ''},
       showRebate: false,
       classData: [],
       submitIng: false,
-      optionsData: [],
+      optionsData: [''],
       selectedOptionIndex: 0,
       optionsPhoto: []
     }
@@ -487,7 +465,7 @@ export default {
             maxnum: 1,
             handleCallback: (data) => {
               if (data.flag === 1) {
-                this.handleOptionPhoto(data.data)
+                self.handleOptionPhoto(data.data)
               } else if (data.error) {
                 self.$vux.toast.show({
                   text: data.error,
@@ -506,8 +484,6 @@ export default {
         title: '',
         oriprice: '',
         price: '',
-        storage: '',
-        unit: '件',
         postage: '0.00',
         rebate: '',
         photo: '',
@@ -520,7 +496,7 @@ export default {
       }
       this.photoarr = []
       this.photoarr1 = []
-      this.optionsData = []
+      this.optionsData = ['']
       this.selectedOptionIndex = 0
       this.optionsPhoto = []
     },
@@ -691,19 +667,6 @@ export default {
           self.$vux.toast.text('商品现价不能大于等于原价', 'middle')
           return false
         }
-        if (self.$util.trim(postdata.storage) === '') {
-          self.$vux.toast.text('请输入商品库存', 'middle')
-          return false
-        }
-        if (self.$util.trim(postdata.unit) === '') {
-          self.$vux.toast.text('请输入商品单位', 'middle')
-          return false
-        }
-        let reg = new RegExp('[0-9]+')
-        if (postdata.unit !== '' && reg.test(postdata.unit)) {
-          self.$vux.toast.text('请输入正确的单位', 'middle')
-          return false
-        }
         if (self.$util.trim(postdata.postage) === '') {
           self.$vux.toast.text('请输入运费', 'middle')
           return false
@@ -714,10 +677,6 @@ export default {
             self.$vux.toast.text(`返点佣金应小于${maxRebate}元`, 'middle')
             return false
           }
-        }
-        if (!this.optionsData.length && self.$util.trim(postdata.storage) === '') {
-          self.$vux.toast.text('请输入商品库存', 'middle')
-          return false
         }
         let iscontinue = true
         if (this.optionsData.length) {

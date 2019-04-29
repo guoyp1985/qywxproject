@@ -41,7 +41,7 @@
                       </div>
                     </div>
                     <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
-                      <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{ item.products }}</span></div>
+                      <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{ item.products }}</span><span v-if="item.options && item.options != ''">({{item.options}})</span></div>
                       <div class="clamp1 font14 color-gray">厂家佣金: +￥{{ item.special }}</div>
                       <div class="clamp1 font14 color-gray"><span class="db-in">返点佣金: -￥{{ item.income }}</span></div>
                     </div>
@@ -67,7 +67,7 @@
                     <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
                       <div class="clamp1 font14 color-999">
                         <span class="v_middle color-orange7 mr5">{{ item.content }}</span>
-                        <span class="v_middle">{{ item.products }}</span>
+                        <span class="v_middle">{{ item.products }}</span><span v-if="item.options && item.options != ''">({{item.options}})</span>
                       </div>
                     </div>
                     <div class="pl12 pr12 pt10 pb10 flex_right">
@@ -90,7 +90,7 @@
                       </div>
                     </div>
                     <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
-                      <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{ item.products }}</span></div>
+                      <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{ item.products }}</span><span v-if="item.options && item.options != ''">({{item.options}})</span></div>
                       <div class="clamp1 font14 color-gray">
                         <span class="v_middle">金额: ￥{{ item.special }}</span>
                         <template v-if="item.postage && item.postage != ''">
@@ -132,7 +132,7 @@
                       </div>
                     </div>
                     <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
-                      <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{ item.products }}</span></div>
+                      <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{ item.products }}</span><span v-if="item.options && item.options != ''">({{item.options}})</span></div>
                       <div class="clamp1 font14 color-gray">厂家佣金: +￥{{ item.special }}</div>
                       <div class="clamp1 font14 color-gray"><span class="db-in">返点佣金: -￥{{ item.income }}</span></div>
                     </div>
@@ -158,7 +158,7 @@
                     <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
                       <div class="clamp1 font14 color-999">
                         <span class="v_middle color-orange7 mr5">{{ item.content }}</span>
-                        <span class="v_middle">{{ item.products }}</span>
+                        <span class="v_middle">{{ item.products }}</span><span v-if="item.options && item.options != ''">({{item.options}})</span>
                       </div>
                     </div>
                     <div class="pl12 pr12 pt10 pb10 flex_right">
@@ -181,7 +181,7 @@
                       </div>
                     </div>
                     <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
-                      <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span class="color-999">{{ item.products }}</span></div>
+                      <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span class="color-999">{{ item.products }}</span><span v-if="item.options && item.options != ''">({{item.options}})</span></div>
                       <div class="clamp1 font14 color-gray">
                         <span class="v_middle">金额: ￥{{ item.special }}</span>
                         <template v-if="item.postage && item.postage != ''">
