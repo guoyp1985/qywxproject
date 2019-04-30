@@ -483,7 +483,8 @@ export default {
           self.showSos = true
         } else {
           self.showContainer = true
-          self.orderdata = data
+          let retdata = data.data ? data.data : data
+          self.orderdata = retdata
           self.curOrder = self.orderdata[0]
           self.maxQuantity = self.curOrder.storage
           let curpostage = self.curOrder.postage.replace(/,/g, '')
