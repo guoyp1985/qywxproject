@@ -78,7 +78,6 @@
                       <div class="t-cell align_left v_middle">
                         <div class="clamp1 font16 color-lightgray">{{item.title}}</div>
                         <div class="clamp1 font14 color-gray mt5">{{ $t('Min buy price') }} <span class="color-red"> {{ $t('RMB') }} {{ item.minprice }} </span></div>
-                        <div class="clamp1 font14 color-gray mt5">{{ $t('Delivery of goods') }} {{ item.limitbuy }}</div>
                       </div>
                       <div class="t-cell align_right v_middle font0" style="width:60px;">
                         <router-link class="qbtn bg-red color-white" :to="{path: '/stat', query:{id: item.id, module: 'activity'}}">{{ $t('Stat') }}</router-link>
