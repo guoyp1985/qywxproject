@@ -326,7 +326,7 @@ export default {
         title: '确定要购买吗？',
         onConfirm: () => {
           self.$vux.loading.show()
-          let params = { id: self.product.id, flag: 1, quantity: 1, activityid: self.data.id, wid: self.product.uploader }
+          let params = { id: self.product.id, flag: 1, quantity: 1, activityid: self.data.id, wid: self.product.wid }
           if (self.query.share_uid) {
             params.share_uid = self.query.share_uid
           }
