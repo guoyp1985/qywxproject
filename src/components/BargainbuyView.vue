@@ -144,7 +144,7 @@
                 </div>
                 <div class="flex_cell flex_left">
                   <div class="w_100">
-                    <div class="color-theme"><span>￥</span><span class="bold font16">{{product.price}}</span></div>
+                    <div class="color-theme"><span>￥</span><span class="bold font16">{{crowduser.leftmoney}}</span></div>
                     <div class="mt10 color-gray">库存{{selectedOption.storage}}{{product.unit}}</div>
                     <div class="mt10" v-if="selectedOption.title">已选: {{selectedOption.title}}</div>
                     <div class="mt10" v-else>请选择 规格</div>
