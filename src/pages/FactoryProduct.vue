@@ -58,7 +58,7 @@
         <div class="bg-page" style="height:10px;"></div>
         <div class="b_top_after"></div>
         <template v-if="productdata.options && productdata.options.length">
-          <div class="padding10 b_bottom_after levelarea flex_left">
+          <div class="pl10 pr10 pb10 b_bottom_after flex_left">
             <div class="w60 flex_left bold">规格</div>
             <div class="flex_cell">
               <div class="options-list">
@@ -573,7 +573,7 @@ export default {
     .options-item.active{border-color:#ff6a61;color:#ff6a61;}
     .options-item.disabled{background-color:#ccc;}
     .options-item{
-      border:#ccc 1px solid;border-radius:5px;padding:5px;
+      border:#ccc 1px solid;border-radius:5px;padding:5px;margin-top:10px;
       img{width:30px;height:30px;}
     }
   }
