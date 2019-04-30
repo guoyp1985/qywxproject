@@ -47,23 +47,26 @@
             <div class="t-cell align_right">￥{{ data.minprice }}</div>
           </div>
         </div>
-        <div v-if="data.leftstorage <= 0" class="btn">商品已售罄，本次活动结束</div>
+        <div v-if="data.finished" class="btn">本次活动已结束</div>
         <template v-else>
-          <div v-if="crowduser.isovertime && crowduser.isfull == 0" class="btn">指定时间内未完成砍价，砍价失败</div>
+          <div v-if="data.leftstorage <= 0" class="btn">商品已售罄，本次活动结束</div>
           <template v-else>
-            <div v-if="crowduser.isdeliver == 0 && crowduser.isfull == 1" class="btn" @click="buyevent">立即购买 {{  $t('RMB') }}{{ crowduser.leftmoney }}</div>
-            <div v-if="crowduser.isdeliver == 1" class="btn">已发起购买,砍价结束</div>
-            <template v-if="crowduser.isfull == 0">
-              <div class="btn db" @click="inviteevent">邀请好友砍价</div>
-              <div v-if="crowduser && crowduser.timeleft" class="pt10 pb10 align_center timeleftarea font13" style="color:#A87F35; ">
-                <span class="v_middle db-in">还剩</span>
-                <span class="v_middle db-in">{{ lefthour }}</span>
-                <span class="v_middle db-in">:</span>
-                <span class="v_middle db-in">{{ leftminute }}</span>
-                <span class="v_middle db-in">:</span>
-                <span class="v_middle db-in">{{ leftsecond }}</span>
-                <span class="v_middle db-in">结束，快让好友帮忙砍价吧~</span>
-              </div>
+            <div v-if="crowduser.isovertime && crowduser.isfull == 0" class="btn">指定时间内未完成砍价，砍价失败</div>
+            <template v-else>
+              <div v-if="crowduser.isdeliver == 0 && crowduser.isfull == 1" class="btn" @click="buyevent">立即购买 {{  $t('RMB') }}{{ crowduser.leftmoney }}</div>
+              <div v-if="crowduser.isdeliver == 1" class="btn">已发起购买,砍价结束</div>
+              <template v-if="crowduser.isfull == 0">
+                <div class="btn db" @click="inviteevent">邀请好友砍价</div>
+                <div v-if="crowduser && crowduser.timeleft" class="pt10 pb10 align_center timeleftarea font13" style="color:#A87F35; ">
+                  <span class="v_middle db-in">还剩</span>
+                  <span class="v_middle db-in">{{ lefthour }}</span>
+                  <span class="v_middle db-in">:</span>
+                  <span class="v_middle db-in">{{ leftminute }}</span>
+                  <span class="v_middle db-in">:</span>
+                  <span class="v_middle db-in">{{ leftsecond }}</span>
+                  <span class="v_middle db-in">结束，快让好友帮忙砍价吧~</span>
+                </div>
+              </template>
             </template>
           </template>
         </template>
