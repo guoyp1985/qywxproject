@@ -88,7 +88,7 @@
                 @on-cancel="onCancel"
                 ref="search">
               </search>
-              <div class="scroll_list">
+              <div class="scroll_list" v-if="disProductData">
                 <div v-if="!productdata || !productdata.length" class="scroll_item padding10 color-gray align_center">
                   <template v-if="searchresult">
                     <div class="flex_center" style="height:80px;">暂无搜索结果</div>
@@ -212,7 +212,8 @@ export default {
       showHb: false,
       newData: {},
       action: '',
-      sysParams: {}
+      sysParams: {},
+      disProductData: false
     }
   },
   watch: {
@@ -242,6 +243,7 @@ export default {
       this.selectproduct = {}
       this.selectpopupdata = null
       this.showpopup = false
+      this.disProductData = false
       this.productdata = []
       this.radiodata = []
       this.visibility1 = false
@@ -303,6 +305,10 @@ export default {
       const self = this
       if (!this.selectpopupdata || !this.selectpopupdata.id) {
         self.$vux.toast.text('请选择商品', 'middle')
+        return false
+      }
+      if (this.selectpopupdata.storage <= 0) {
+        self.$vux.toast.text('该商品库存为0，不能创建活动', 'middle')
         return false
       }
       if (this.selectpopupdata.fid > 0 && parseFloat(this.selectpopupdata.rebatein) <= 0) {
@@ -374,7 +380,7 @@ export default {
       }
       self.$http.get(`${ENV.BokaApi}/api/retailer/getRetailerProducts`, {
         params: params
-      }).then(function (res) {
+      }).then((res) => {
         let data = res.data
         self.$vux.loading.hide()
         if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
@@ -384,6 +390,7 @@ export default {
         }
         let retdata = data.data ? data.data : data
         self.productdata = self.productdata.concat(retdata)
+        this.disProductData = true
       })
     },
     selectevent () {

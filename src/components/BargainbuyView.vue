@@ -131,6 +131,49 @@
         </div>
       </popup>
     </div>
+    <div v-transfer-dom class="x-popup buy-popup-layer">
+      <popup v-model="showBuy" height="100%">
+        <div class="product-options-area columnarea">
+          <div class="column-content" @click="closeOptions"></div>
+          <div class="options-box columnarea">
+            <div class="close-area flex_center color-gray" @click="closeOptions"><span class="al al-close"></span></div>
+            <div class="column-content columnarea">
+              <div class="part1 flex_left">
+                <div class="pic flex_left">
+                  <img :src="selectedOption.photo" @click="viewBigImg(0)" />
+                </div>
+                <div class="flex_cell flex_left">
+                  <div class="w_100">
+                    <div class="color-theme"><span>￥</span><span class="bold font16">{{product.price}}</span></div>
+                    <div class="mt10 color-gray">库存{{product.storage}}{{product.unit}}</div>
+                    <div class="mt10" v-if="selectedOption.title">已选: {{selectedOption.title}}</div>
+                    <div class="mt10" v-else>请选择 规格</div>
+                  </div>
+                </div>
+              </div>
+              <div class="part2 column-content">
+                <div class="pt10">规格</div>
+                <div class="options-list">
+                  <div v-for="(item,index) in product.options" :class="`options-item ${(selectedOptionIndex == index && item.storage > 0) ? 'active' : ''} ${item.storage <= 0 ? 'disabled' : ''}`" @click="clickOptions(item,index)">
+                    <div class="flex_center">
+                      <img :src="item.photo" /><span class="ml5">{{item.title}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="options-bottom flex_center">
+              <div class="flex_cell h_100 flex_center">
+                <div class="bg-theme color-white flex_center btn" @click="buyOption">立即购买</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </popup>
+    </div>
+    <div v-transfer-dom>
+      <previewer :list="previewerOptionsPhoto" ref="previewerOption"></previewer>
+    </div>
   </div>
 </template>
 
@@ -138,7 +181,7 @@
 </i18n>
 
 <script>
-import { TransferDom, Popup, XImg } from 'vux'
+import { Previewer, TransferDom, Popup, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
@@ -148,7 +191,7 @@ export default {
     TransferDom
   },
   components: {
-    Popup, XImg
+    Previewer, Popup, XImg
   },
   props: {
     data: Object,
@@ -177,7 +220,11 @@ export default {
       leftminute: '',
       leftsecond: '',
       cutdata: [],
-      showViewPopup: false
+      showViewPopup: false,
+      showBuy: false,
+      selectedOption: {},
+      selectedOptionIndex: 0,
+      previewerOptionsPhoto: []
     }
   },
   created () {
@@ -200,6 +247,29 @@ export default {
   methods: {
     inviteevent () {
       this.showpopup = true
+    },
+    closeOptions () {
+      this.selectedOption = {}
+      this.showBuy = false
+    },
+    viewBigImg (index) {
+      const self = this
+      if (self.$util.isPC()) {
+        self.$refs.previewerOption.show(0)
+      } else {
+        window.WeixinJSBridge.invoke('imagePreview', {
+          current: this.selectedOption.photo,
+          urls: [this.selectedOption.photo]
+        })
+      }
+    },
+    clickOptions (item, index) {
+      this.selectedOption = item
+      this.selectedOptionIndex = index
+      this.previewerOptionsPhoto = this.$util.previewerImgdata([this.selectedOption.photo])
+    },
+    buyOption () {
+      this.ajaxBuy()
     },
     closeinvite () {
       this.showpopup = false
@@ -242,15 +312,18 @@ export default {
         }
       }, 1000)
     },
-    buyevent () {
+    ajaxBuy () {
       const self = this
       self.$vux.confirm.show({
         title: '确定要购买吗？',
-        onConfirm () {
+        onConfirm: () => {
           self.$vux.loading.show()
           let params = { id: self.product.id, flag: 1, quantity: 1, activityid: self.data.id, wid: self.product.uploader }
           if (self.query.share_uid) {
             params.share_uid = self.query.share_uid
+          }
+          if (this.product.options.length && this.selectedOption && this.selectedOption.id) {
+            params.poid = this.selectedOption.id
           }
           self.$http.post(`${ENV.BokaApi}/api/order/addShop`, params).then(function (res) {
             let data = res.data
@@ -266,6 +339,13 @@ export default {
           })
         }
       })
+    },
+    buyevent () {
+      if (this.product.options && this.product.options.length) {
+        this.showBuy = true
+      } else {
+        this.ajaxBuy()
+      }
     },
     viewRule () {
       this.showViewPopup = true
