@@ -762,7 +762,8 @@ export default {
         } else if (data.error) {
           this.$vux.toast.show({
             text: data.error,
-            time: self.$util.delay(data.error)
+            type: 'text',
+            time: this.$util.delay(data.error)
           })
         }
       })
