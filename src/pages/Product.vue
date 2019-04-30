@@ -472,7 +472,8 @@
                 </div>
                 <div class="flex_cell flex_left">
                   <div class="w_100">
-                    <div class="color-theme"><span>￥</span><span class="bold font16">{{productdata.price}}</span></div>
+                    <div class="color-theme" v-if="clickBuytype == 'groupbuy'"><span>￥</span><span class="bold font16">{{activityInfo.groupprice}}</span></div>
+                    <div class="color-theme" v-else><span>￥</span><span class="bold font16">{{productdata.price}}</span></div>
                     <div class="mt10 color-gray">库存{{selectedOption.storage}}{{productdata.unit}}</div>
                     <div class="mt10" v-if="selectedOption.title">已选: {{selectedOption.title}}</div>
                     <div class="mt10" v-else>请选择 规格</div>
@@ -492,11 +493,13 @@
             </div>
             <div class="options-bottom flex_center">
               <div class="flex_cell h_100 flex_center">
-                <div v-if="activityInfo.id && activityInfo.type == 'groupbuy'" class="bg-theme color-white flex_center btn" @click="buyOption">原价购买</div>
-                <div v-else class="bg-theme color-white flex_center btn" @click="buyOption">立即购买</div>
-              </div>
-              <div class="flex_cell h_100 flex_center" v-if="activityInfo.id && activityInfo.type == 'groupbuy'">
-                <div class="bg-orange color-white flex_center btn" @click="buyOption('groupbuy')">一键拼团</div>
+                <template v-if="clickBuytype == 'groupbuy'">
+                  <div class="bg-theme color-white flex_center btn" @click="buyOption('groupbuy')">一键拼团</div>
+                </template>
+                <template v-else>
+                  <div v-if="activityInfo.id && activityInfo.type == 'groupbuy'" class="bg-theme color-white flex_center btn" @click="buyOption">原价购买</div>
+                  <div v-else class="bg-theme color-white flex_center btn" @click="buyOption">立即购买</div>
+                </template>
               </div>
             </div>
           </div>
@@ -607,7 +610,8 @@ export default {
       showBuy: false,
       selectedOption: {},
       selectedOptionIndex: 0,
-      previewerOptionsPhoto: []
+      previewerOptionsPhoto: [],
+      clickBuytype: null
     }
   },
   watch: {
@@ -717,6 +721,7 @@ export default {
       this.selectedOption = {}
       this.selectedOptionIndex = 0
       this.previewerOptionsPhoto = []
+      this.clickBuytype = null
     },
     filterEmot (text) {
       return this.$util.emotPrase(text)
@@ -931,6 +936,11 @@ export default {
       this.isfavorite = !this.isfavorite
     },
     buyevent (buytype) {
+      if (buytype && buytype !== '') {
+        this.clickBuytype = buytype
+      } else {
+        this.clickBuytype = null
+      }
       if (this.productdata.options.length) {
         if (!this.selectedOption || !this.selectedOption.id) {
           this.selectedOption = this.productdata.options[0]
