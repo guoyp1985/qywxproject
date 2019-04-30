@@ -276,6 +276,7 @@ export default {
         this.$vux.toast.text('该规格商品库存不足', 'middle')
         return false
       }
+      this.showBuy = false
       this.ajaxBuy()
     },
     closeinvite () {
