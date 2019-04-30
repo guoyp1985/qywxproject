@@ -124,8 +124,8 @@
             </div>
           </div>
 
-          <div class="form-item bg-white">
-            <div class="flex_left">商品规格</div>
+          <div class="form-item required bg-white">
+            <div class="flex_left">商品规格<span class="al al-xing color-red font12 ricon" style="margin-top: -3px;"></span></div>
             <div class="option-list">
               <div class="option-item" v-for="(item,index) in optionsData" :key="index">
                 <div class="option-title flex_left">
