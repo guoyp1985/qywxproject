@@ -348,11 +348,16 @@ export default {
         element: scrollarea,
         callback: () => {
           console.log('in 滚动事件到底部了')
+          console.log(self.productdata.length)
+          console.log((self.pageStart + 1) * limit)
           if (self.productdata.length === (self.pageStart + 1) * limit) {
+            console.log(1)
+            self.scrollEnd = false
             self.pageStart++
             self.$vux.loading.show()
             self.getData1()
           } else {
+            console.log(2)
             self.scrollEnd = true
           }
         }
