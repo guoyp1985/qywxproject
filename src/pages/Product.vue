@@ -1469,45 +1469,4 @@ export default {
     .btnknow{padding:3px 25px;border:1px solid #fff;color:#fff;margin: 0 auto;border-radius:20px;font-size:14px;margin-top: 20px;}
   }
 }
-.buy-popup-layer{
-  .vux-popup-dialog{
-    background:rgba(0,0,0,0.5)
-  }
-  .product-options-area{
-    width:100%;height:100%;
-    .options-box{
-      width:100%;height:77%;position:relative;
-      background-color:#fff;border-top-left-radius:15px;border-top-right-radius:15px;
-      padding:20px 15px 0;box-sizing: border-box;
-      .close-area{
-        position:absolute;right:20px;top:20px;width:30px;height:30px;
-        .al{font-size:30px;}
-      }
-      .part1{
-        width:100%;height:150px;border-bottom:#ccc 1px solid;
-        .pic{
-          width:120px;
-          img{width:100px;height:100px;object-fit:cover;}
-        }
-      }
-      .part2{
-        overflow-y:auto;
-        .options-list{
-          display: flex;flex-wrap: wrap;
-          .options-item:not(:last-child){margin-right:10px;}
-          .options-item.active{border-color:#ff6a61;color:#ff6a61;}
-          .options-item.disabled{background-color:#ccc;}
-          .options-item{
-            border:#ccc 1px solid;border-radius:5px;padding:5px;margin-top:10px;
-            img{width:30px;height:30px;object-fit:cover;}
-          }
-        }
-      }
-      .options-bottom{
-        width:100%;height:60px;
-        .btn{width:90%;height:45px;border-radius:15px;font-size:16px;}
-      }
-    }
-  }
-}
 </style>

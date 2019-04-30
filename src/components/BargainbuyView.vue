@@ -145,7 +145,7 @@
                 <div class="flex_cell flex_left">
                   <div class="w_100">
                     <div class="color-theme"><span>￥</span><span class="bold font16">{{product.price}}</span></div>
-                    <div class="mt10 color-gray">库存{{product.storage}}{{product.unit}}</div>
+                    <div class="mt10 color-gray">库存{{selectedOption.storage}}{{product.unit}}</div>
                     <div class="mt10" v-if="selectedOption.title">已选: {{selectedOption.title}}</div>
                     <div class="mt10" v-else>请选择 规格</div>
                   </div>
@@ -154,7 +154,7 @@
               <div class="part2 column-content">
                 <div class="pt10">规格</div>
                 <div class="options-list">
-                  <div v-for="(item,index) in product.options" :class="`options-item ${(selectedOptionIndex == index && item.storage > 0) ? 'active' : ''} ${item.storage <= 0 ? 'disabled' : ''}`" @click="clickOptions(item,index)">
+                  <div v-for="(item,index) in data.productoptions" :class="`options-item ${(selectedOptionIndex == index && item.storage > 0) ? 'active' : ''} ${item.storage <= 0 ? 'disabled' : ''}`" @click="clickOptions(item,index)">
                     <div class="flex_center">
                       <img :src="item.photo" /><span class="ml5">{{item.title}}</span>
                     </div>
@@ -249,7 +249,6 @@ export default {
       this.showpopup = true
     },
     closeOptions () {
-      this.selectedOption = {}
       this.showBuy = false
     },
     viewBigImg (index) {
@@ -322,7 +321,7 @@ export default {
           if (self.query.share_uid) {
             params.share_uid = self.query.share_uid
           }
-          if (this.product.options.length && this.selectedOption && this.selectedOption.id) {
+          if (this.data.productoptions && this.data.productoptions.length && this.selectedOption && this.selectedOption.id) {
             params.poid = this.selectedOption.id
           }
           self.$http.post(`${ENV.BokaApi}/api/order/addShop`, params).then(function (res) {
@@ -341,7 +340,11 @@ export default {
       })
     },
     buyevent () {
-      if (this.product.options && this.product.options.length) {
+      if (this.data.productoptions && this.data.productoptions.length) {
+        if (!this.selectedOption || !this.selectedOption.id) {
+          this.selectedOption = this.data.productoptions[0]
+          this.selectedOptionIndex = 0
+        }
         this.showBuy = true
       } else {
         this.ajaxBuy()
