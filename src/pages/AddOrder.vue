@@ -486,11 +486,11 @@ export default {
           let retdata = data.data ? data.data : data
           self.orderdata = retdata
           self.curOrder = self.orderdata[0]
-          if (self.curOrder.activityinfo) {
-            self.maxQuantity = self.curOrder.activityinfo.everybuy
-          } else {
-            self.maxQuantity = self.curOrder.storage
+          let curstorage = self.curOrder.storage
+          if (self.curOrder.activityinfo && curstorage > self.curOrder.activityinfo.everybuy) {
+            curstorage = self.curOrder.activityinfo.everybuy
           }
+          self.maxQuantity = curstorage
           let curpostage = self.curOrder.postage.replace(/,/g, '')
           self.curOrder.postageNumber = parseFloat(curpostage).toFixed(2)
           self.curOrder.rebate = parseFloat(self.curOrder.rebate).toFixed(2)
