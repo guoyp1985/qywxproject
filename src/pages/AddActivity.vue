@@ -499,7 +499,7 @@ export default {
         let minprice = parseFloat(self.submitdata.param_minprice)
         let minval = parseFloat(self.submitdata.param_everymin)
         let maxval = parseFloat(self.submitdata.param_everymax)
-        let finishtime = parseInt(self.submitdata.param_finishtime)
+        let finishtime = parseFloat(self.submitdata.param_finishtime)
         if (isNaN(self.submitdata.param_minprice) || isNaN(self.submitdata.param_finishtime) || isNaN(self.submitdata.param_everymin) || isNaN(self.submitdata.param_everymax)) {
           self.$vux.toast.show({
             text: '请输入正确的数字',
