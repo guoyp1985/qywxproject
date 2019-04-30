@@ -268,6 +268,14 @@ export default {
       this.previewerOptionsPhoto = this.$util.previewerImgdata([this.selectedOption.photo])
     },
     buyOption () {
+      if (!this.selectedOption || !this.selectedOption.id) {
+        this.$vux.toast.text('请选择商品规格', 'middle')
+        return false
+      }
+      if (this.selectedOption.storage <= 0) {
+        this.$vux.toast.text('该规格商品库存不足', 'middle')
+        return false
+      }
       this.ajaxBuy()
     },
     closeinvite () {

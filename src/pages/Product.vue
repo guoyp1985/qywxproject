@@ -763,7 +763,7 @@ export default {
       })
     },
     buyOption (buytype) {
-      if (!this.selectedOption.id) {
+      if (!this.selectedOption || !this.selectedOption.id) {
         this.$vux.toast.text('请选择商品规格', 'middle')
         return false
       }
