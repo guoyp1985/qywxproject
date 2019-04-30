@@ -58,15 +58,14 @@
         <div class="bg-page" style="height:10px;"></div>
         <div class="b_top_after"></div>
         <template v-if="productdata.options && productdata.options.length">
-          <div class="pl10 pr10 pb10 b_bottom_after flex_left">
+          <div class="pl10 pr10 pb10 b_bottom_after flex_left" @click="clickOptionsArea">
             <div class="w60 flex_left bold">规格</div>
-            <div class="flex_cell">
-              <div class="options-list">
-                <div class="options-item" v-for="(item,index) in productdata.options" :key="index">
-                  <div class="flex_center">
-                    <img :src="item.photo" /><span class="ml5">{{item.title}}</span>
-                  </div>
-                </div>
+            <div class="flex_cell card-options">
+              <template v-for="(item,index) in productdata.options">
+                <img v-if="index < 5" :src="item.photo" />
+              </template>
+              <div class="flex_center txt-item">
+                <div class="btn flex_center">共{{productdata.options.length}}种规格可选</div>
               </div>
             </div>
           </div>
@@ -170,6 +169,44 @@
     <template v-if="showHb">
       <firstHb action="importproduct" @closeFirstHb="closeFirstHb"></firstHb>
     </template>
+    <div v-transfer-dom class="x-popup options-popup-layer">
+      <popup v-model="showOptions" height="100%">
+        <div class="product-options-area columnarea">
+          <div class="column-content" @click="closeOptions"></div>
+          <div class="options-box columnarea">
+            <div class="close-area flex_center color-gray" @click="closeOptions"><span class="al al-close"></span></div>
+            <div class="column-content columnarea">
+              <div class="part1 flex_left">
+                <div class="pic flex_left">
+                  <img :src="selectedOption.photo" @click="viewBigImg(0)" />
+                </div>
+                <div class="flex_cell flex_left">
+                  <div class="w_100">
+                    <div class="color-theme"><span>￥</span><span class="bold font16">{{productdata.price}}</span></div>
+                    <div class="mt10 color-gray">库存{{selectedOption.storage}}{{productdata.unit}}</div>
+                    <div class="mt10" v-if="selectedOption.title">规格: {{selectedOption.title}}</div>
+                    <div class="mt10" v-else>规格</div>
+                  </div>
+                </div>
+              </div>
+              <div class="part2 column-content">
+                <div class="pt10">规格</div>
+                <div class="options-list">
+                  <div v-for="(item,index) in productdata.options" :class="`options-item ${(selectedOptionIndex == index && item.storage > 0) ? 'active' : ''} ${item.storage <= 0 ? 'disabled' : ''}`" @click="clickOptions(item,index)">
+                    <div class="flex_center">
+                      <img :src="item.photo" /><span class="ml5">{{item.title}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </popup>
+    </div>
+    <div v-transfer-dom>
+      <previewer :list="previewerOptionsPhoto" ref="previewerOption"></previewer>
+    </div>
   </div>
 </template>
 
@@ -253,7 +290,11 @@ export default {
       showTip: false,
       WeixinName: ENV.WeixinName,
       isFirst: false,
-      showHb: false
+      showHb: false,
+      showOptions: false,
+      selectedOption: {},
+      selectedOptionIndex: 0,
+      previewerOptionsPhoto: []
     }
   },
   watch: {
@@ -329,6 +370,33 @@ export default {
     closeHelpModal () {
       this.showHelpModal = false
       this.showHelpModal1 = false
+    },
+    clickOptionsArea () {
+      if (!this.selectedOption || !this.selectedOption.id) {
+        this.selectedOption = this.productdata.options[0]
+        this.selectedOptionIndex = 0
+        this.previewerOptionsPhoto = this.$util.previewerImgdata([this.selectedOption.photo])
+      }
+      this.showOptions = true
+    },
+    closeOptions () {
+      this.showOptions = false
+    },
+    clickOptions (item, index) {
+      this.selectedOption = item
+      this.selectedOptionIndex = index
+      this.previewerOptionsPhoto = this.$util.previewerImgdata([this.selectedOption.photo])
+    },
+    viewBigImg (index) {
+      const self = this
+      if (self.$util.isPC()) {
+        self.$refs.previewerOption.show(0)
+      } else {
+        window.WeixinJSBridge.invoke('imagePreview', {
+          current: this.selectedOption.photo,
+          urls: [this.selectedOption.photo]
+        })
+      }
     },
     tofactoryDetail () {
       this.$router.push('/factoryDetail?fid=' + this.productdata.fid)
@@ -577,6 +645,12 @@ export default {
       img{width:30px;height:30px;}
     }
   }
+  .card-options{
+    display: flex;flex-wrap: wrap;
+    img{width:30px;height:30px;margin-right:10px;object-fit:cover;margin-top:10px;}
+    .txt-item{margin-top:10px;}
+    .btn{border-radius:10px;background-color:#ccc;color:#999;font-size:12px;height:22px;padding:0 10px;}
+  }
 
   .videobg{width:100%;height:100%;background-size:cover;background-position:center;position:relative;}
   .play-icon{
@@ -686,5 +760,46 @@ export default {
   .pagemiddle{bottom:50px;}
   .pagebottom{height:50px;}
   .levelarea .levelitem:not(:last-child){margin-bottom:12px;}
+}
+.options-popup-layer{
+  .vux-popup-dialog{
+    background:rgba(0,0,0,0.5)
+  }
+  .product-options-area{
+    width:100%;height:100%;
+    .options-box{
+      width:100%;height:77%;position:relative;
+      background-color:#fff;border-top-left-radius:15px;border-top-right-radius:15px;
+      padding:20px 15px 0;box-sizing: border-box;
+      .close-area{
+        position:absolute;right:20px;top:20px;width:30px;height:30px;
+        .al{font-size:30px;}
+      }
+      .part1{
+        width:100%;height:150px;border-bottom:#ccc 1px solid;
+        .pic{
+          width:120px;
+          img{width:100px;height:100px;object-fit:cover;}
+        }
+      }
+      .part2{
+        overflow-y:auto;
+        .options-list{
+          display: flex;flex-wrap: wrap;
+          .options-item:not(:last-child){margin-right:10px;}
+          .options-item.active{border-color:#ff6a61;color:#ff6a61;}
+          .options-item.disabled{background-color:#ccc;}
+          .options-item{
+            border:#ccc 1px solid;border-radius:5px;padding:5px;margin-top:10px;
+            img{width:30px;height:30px;object-fit:cover;}
+          }
+        }
+      }
+      .options-bottom{
+        width:100%;height:60px;
+        .btn{width:90%;height:45px;border-radius:15px;font-size:16px;}
+      }
+    }
+  }
 }
 </style>
