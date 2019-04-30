@@ -561,9 +561,9 @@ export default {
             if (self.cardPrice >= item.ordermoney && ((self.cardPrice - item.money - self.curOrder.rebate) >= 0 || (item.money > self.cardPrice && self.curOrder.rebate <= 0))) {
               self.selectedCard = item
               self.cardList[i].checked = true
-              let cha = parseFloat(self.orderPrice) - parseFloat(self.postage) - parseFloat(item.money)
+              let cha = parseFloat(self.orderPrice) - parseFloat(self.postage.replace(/,/g, '')) - parseFloat(item.money)
               cha = cha < 0 ? 0 : cha
-              self.payPrice = (cha + parseFloat(self.postage)).toFixed(2)
+              self.payPrice = (cha + parseFloat(self.postage.replace(/,/g, ''))).toFixed(2)
               break
             }
           }
