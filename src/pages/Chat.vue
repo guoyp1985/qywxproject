@@ -296,7 +296,6 @@ export default {
       selectNewsData: null,
       selectProductsData: null,
       showUserInfo: false,
-      fromProduct: {},
       showTip: true,
       recordCheck: false,
       allowChatModule: ['news', 'product', 'store', 'messagelist', 'retailer', 'order', 'factory'],
@@ -1049,24 +1048,6 @@ export default {
         })
       })
     },
-    getProduct () {
-      const self = this
-      if (self.query.fromModule === 'product' && self.query.fromId) {
-        self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
-          params: { id: self.query.fromId, module: self.query.fromModule }
-        }).then(function (res) {
-          if (res && res.status === 200) {
-            const data = res.data
-            const retdata = data.data
-            self.fromProduct = retdata
-            self.retailerInfo = retdata.retailerinfo
-            // setTimeout(function () {
-            //   self.showTip = false
-            // }, 10000)
-          }
-        })
-      }
-    },
     _getRetailerInfo () {
       const self = this
       if ((self.query.fromModule === 'store' || self.query.fromModule === 'news') && self.query.wid) {
@@ -1159,7 +1140,6 @@ export default {
         }
         this.setViewHeight()
         this.getData()
-        this.getProduct()
         this.getRetailerInfo()
         this.createSocket()
       } else if (this.loginUser.isretailer === 2) {
