@@ -30,7 +30,7 @@
               </div>
               <div class="scroll_list">
                 <div v-for="(item,index1) in tabdata1" :key="item.id" :class="`scroll_item ${item.type}item bg-white mb5 pl12 pr12 db`">
-                  <router-link :to="{path:'/product',query:{wid:item.wid,id:item.id}}" v-if="item.type == 'spring'" :key="item.id" class="db" style="position:relative;">
+                  <router-link :to="{path:'/product',query:{wid:item.uploader,id:item.id}}" v-if="item.type == 'spring'" :key="item.id" class="db" style="position:relative;">
                     <div v-if="item.isfinished === 1" class="ico finished"></div>
                     <div class="t-table">
                       <div class="t-cell align_left pr10 v_middle" style="width:100px;">
@@ -51,7 +51,7 @@
                     </div>
                     <div class="mt5 font12 color-gray">活动时间：{{ item.starttime | dateformat}} 至 {{ item.endtime | dateformat}}</div>
                   </router-link>
-                  <router-link :to="{path:'/product',query:{wid:item.wid,id:item.productid}}" v-if="item.type == 'groupbuy'" :key="item.id" class="db" style="position:relative;">
+                  <router-link :to="{path:'/product',query:{wid:item.uploader,id:item.productid}}" v-if="item.type == 'groupbuy'" :key="item.id" class="db" style="position:relative;">
                     <div v-if="item.isfinished === 1" class="ico finished"></div>
                     <div class="t-table">
                       <div class="t-cell align_left pr10 v_middle" style="width:100px;">
@@ -78,7 +78,6 @@
                       <div class="t-cell align_left v_middle">
                         <div class="clamp1 font16 color-lightgray">{{item.title}}</div>
                         <div class="clamp1 font14 color-gray mt5">{{ $t('Min buy price') }} <span class="color-red"> {{ $t('RMB') }} {{ item.minprice }} </span></div>
-                        <div class="clamp1 font14 color-gray mt5">{{ $t('Delivery of goods') }} {{ item.limitbuy }}</div>
                       </div>
                       <div class="t-cell align_right v_middle font0" style="width:60px;">
                         <router-link class="qbtn bg-red color-white" :to="{path: '/stat', query:{id: item.id, module: 'activity'}}">{{ $t('Stat') }}</router-link>

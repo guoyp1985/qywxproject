@@ -8,9 +8,11 @@
     <div @click="toStore" :to="{path:'/store',query:{wid:item.wid}}">
       <div class="store-info">
         <div class="info-cell">
-          <span :class="`al ${storeType} font22`"></span>
-          <span class="font14">{{item.retailertitle}}</span>
-          <span class="al al-mjiantou-copy font16"></span>
+          <template v-if="item.retailertitle && item.retailertitle != ''">
+            <span :class="`al ${storeType} font22`"></span>
+            <span class="font14">{{item.retailertitle}}</span>
+            <span class="al al-mjiantou-copy font16"></span>
+          </template>
         </div>
         <div class="status-cell font12 color-orange6" v-if="item.flagstr">
           <span>{{item.flagstr}}</span>
@@ -136,11 +138,13 @@ export default {
   },
   methods: {
     toStore () {
-      let params = {wid: this.item.wid}
-      if (this.$route.query.from) {
-        this.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.store}?wid=${this.item.wid}`})
-      } else {
-        this.$router.push({path: '/store', query: params})
+      if (this.item.retailertitle && this.item.retailertitle !== '') {
+        let params = {wid: this.item.wid}
+        if (this.$route.query.from) {
+          this.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.store}?wid=${this.item.wid}`})
+        } else {
+          this.$router.push({path: '/store', query: params})
+        }
       }
     },
     toDetail () {

@@ -4,7 +4,7 @@
       <Sos :title="sosTitle"></Sos>
     </template>
     <template v-if="showContainer">
-      <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
+      <div class="s-container scroll-container" style="top:0px;bottom:0;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
         <div class="tophead flex_right">
           <div class="flex_table" style="margin-right:auto;">
             <div class="inner">

@@ -4,7 +4,7 @@
       <Sos :title="sosTitle"></Sos>
     </template>
     <template v-if="showContainer">
-      <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
+      <div class="s-container scroll-container" style="top:0px;bottom:0;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
         <div class="adbg" v-if="addata && addata.length == 1">
           <router-link class="inner" :to="addata[0].url">
             <img :src="addata[0].photo" />

@@ -14,7 +14,7 @@
     <div class="boxarea">
       <div class="inner">
         <div class="innerbg">
-          <router-link class="t-table" style="color:inherit;" :to="{path:'/product',query:{wid:product.uploader,id:product.id}}">
+          <router-link class="t-table" style="color:inherit;" :to="{path:'/product',query:{wid:product.wid,id:product.id}}">
             <div class="t-cell v_middle w80">
               <img class="imgcover" :src="product.photo" style="width:70px;height:70px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
             </div>
@@ -47,23 +47,26 @@
             <div class="t-cell align_right">￥{{ data.minprice }}</div>
           </div>
         </div>
-        <div v-if="data.leftstorage <= 0" class="btn">商品已售罄，本次活动结束</div>
+        <div v-if="data.finished" class="btn">本次活动已结束</div>
         <template v-else>
-          <div v-if="crowduser.isovertime && crowduser.isfull == 0" class="btn">指定时间内未完成砍价，砍价失败</div>
+          <div v-if="data.leftstorage <= 0" class="btn">商品已售罄，本次活动结束</div>
           <template v-else>
-            <div v-if="crowduser.isdeliver == 0 && crowduser.isfull == 1" class="btn" @click="buyevent">立即购买 {{  $t('RMB') }}{{ crowduser.leftmoney }}</div>
-            <div v-if="crowduser.isdeliver == 1" class="btn">已发起购买,砍价结束</div>
-            <template v-if="crowduser.isfull == 0">
-              <div class="btn db" @click="inviteevent">邀请好友砍价</div>
-              <div v-if="crowduser && crowduser.timeleft" class="pt10 pb10 align_center timeleftarea font13" style="color:#A87F35; ">
-                <span class="v_middle db-in">还剩</span>
-                <span class="v_middle db-in">{{ lefthour }}</span>
-                <span class="v_middle db-in">:</span>
-                <span class="v_middle db-in">{{ leftminute }}</span>
-                <span class="v_middle db-in">:</span>
-                <span class="v_middle db-in">{{ leftsecond }}</span>
-                <span class="v_middle db-in">结束，快让好友帮忙砍价吧~</span>
-              </div>
+            <div v-if="crowduser.isovertime && crowduser.isfull == 0" class="btn">指定时间内未完成砍价，砍价失败</div>
+            <template v-else>
+              <div v-if="crowduser.isdeliver == 0 && crowduser.isfull == 1" class="btn" @click="buyevent">立即购买 {{  $t('RMB') }}{{ crowduser.leftmoney }}</div>
+              <div v-if="crowduser.isdeliver == 1" class="btn">已发起购买,砍价结束</div>
+              <template v-if="crowduser.isfull == 0">
+                <div class="btn db" @click="inviteevent">邀请好友砍价</div>
+                <div v-if="crowduser && crowduser.timeleft" class="pt10 pb10 align_center timeleftarea font13" style="color:#A87F35; ">
+                  <span class="v_middle db-in">还剩</span>
+                  <span class="v_middle db-in">{{ lefthour }}</span>
+                  <span class="v_middle db-in">:</span>
+                  <span class="v_middle db-in">{{ leftminute }}</span>
+                  <span class="v_middle db-in">:</span>
+                  <span class="v_middle db-in">{{ leftsecond }}</span>
+                  <span class="v_middle db-in">结束，快让好友帮忙砍价吧~</span>
+                </div>
+              </template>
             </template>
           </template>
         </template>
@@ -131,6 +134,49 @@
         </div>
       </popup>
     </div>
+    <div v-transfer-dom class="x-popup buy-popup-layer">
+      <popup v-model="showBuy" height="100%">
+        <div class="product-options-area columnarea">
+          <div class="column-content" @click="closeOptions"></div>
+          <div class="options-box columnarea">
+            <div class="close-area flex_center color-gray" @click="closeOptions"><span class="al al-close"></span></div>
+            <div class="column-content columnarea">
+              <div class="part1 flex_left">
+                <div class="pic flex_left">
+                  <img :src="selectedOption.photo" @click="viewBigImg(0)" />
+                </div>
+                <div class="flex_cell flex_left">
+                  <div class="w_100">
+                    <div class="color-theme"><span>￥</span><span class="bold font16">{{crowduser.leftmoney}}</span></div>
+                    <div class="mt10 color-gray">库存{{selectedOption.storage}}{{product.unit}}</div>
+                    <div class="mt10" v-if="selectedOption.title">已选: {{selectedOption.title}}</div>
+                    <div class="mt10" v-else>请选择 规格</div>
+                  </div>
+                </div>
+              </div>
+              <div class="part2 column-content">
+                <div class="pt10">规格</div>
+                <div class="options-list">
+                  <div v-for="(item,index) in data.productoptions" :class="`options-item ${(selectedOptionIndex == index && item.storage > 0) ? 'active' : ''} ${item.storage <= 0 ? 'disabled' : ''}`" @click="clickOptions(item,index)">
+                    <div class="flex_center">
+                      <img :src="item.photo" /><span class="ml5">{{item.title}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="options-bottom flex_center">
+              <div class="flex_cell h_100 flex_center">
+                <div class="bg-theme color-white flex_center btn" @click="buyOption">立即购买</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </popup>
+    </div>
+    <div v-transfer-dom>
+      <previewer :list="previewerOptionsPhoto" ref="previewerOption"></previewer>
+    </div>
   </div>
 </template>
 
@@ -138,7 +184,7 @@
 </i18n>
 
 <script>
-import { TransferDom, Popup, XImg } from 'vux'
+import { Previewer, TransferDom, Popup, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
@@ -148,7 +194,7 @@ export default {
     TransferDom
   },
   components: {
-    Popup, XImg
+    Previewer, Popup, XImg
   },
   props: {
     data: Object,
@@ -177,7 +223,11 @@ export default {
       leftminute: '',
       leftsecond: '',
       cutdata: [],
-      showViewPopup: false
+      showViewPopup: false,
+      showBuy: false,
+      selectedOption: {},
+      selectedOptionIndex: 0,
+      previewerOptionsPhoto: []
     }
   },
   created () {
@@ -200,6 +250,37 @@ export default {
   methods: {
     inviteevent () {
       this.showpopup = true
+    },
+    closeOptions () {
+      this.showBuy = false
+    },
+    viewBigImg (index) {
+      const self = this
+      if (self.$util.isPC()) {
+        self.$refs.previewerOption.show(0)
+      } else {
+        window.WeixinJSBridge.invoke('imagePreview', {
+          current: this.selectedOption.photo,
+          urls: [this.selectedOption.photo]
+        })
+      }
+    },
+    clickOptions (item, index) {
+      this.selectedOption = item
+      this.selectedOptionIndex = index
+      this.previewerOptionsPhoto = this.$util.previewerImgdata([this.selectedOption.photo])
+    },
+    buyOption () {
+      if (!this.selectedOption || !this.selectedOption.id) {
+        this.$vux.toast.text('请选择商品规格', 'middle')
+        return false
+      }
+      if (this.selectedOption.storage <= 0) {
+        this.$vux.toast.text('该规格商品库存不足', 'middle')
+        return false
+      }
+      this.showBuy = false
+      this.ajaxBuy()
     },
     closeinvite () {
       this.showpopup = false
@@ -242,15 +323,18 @@ export default {
         }
       }, 1000)
     },
-    buyevent () {
+    ajaxBuy () {
       const self = this
       self.$vux.confirm.show({
         title: '确定要购买吗？',
-        onConfirm () {
+        onConfirm: () => {
           self.$vux.loading.show()
-          let params = { id: self.product.id, flag: 1, quantity: 1, activityid: self.data.id, wid: self.product.uploader }
+          let params = { id: self.product.id, flag: 1, quantity: 1, activityid: self.data.id, wid: self.product.wid }
           if (self.query.share_uid) {
             params.share_uid = self.query.share_uid
+          }
+          if (this.data.productoptions && this.data.productoptions.length && this.selectedOption && this.selectedOption.id) {
+            params.poid = this.selectedOption.id
           }
           self.$http.post(`${ENV.BokaApi}/api/order/addShop`, params).then(function (res) {
             let data = res.data
@@ -266,6 +350,17 @@ export default {
           })
         }
       })
+    },
+    buyevent () {
+      if (this.data.productoptions && this.data.productoptions.length) {
+        if (!this.selectedOption || !this.selectedOption.id) {
+          this.selectedOption = this.data.productoptions[0]
+          this.selectedOptionIndex = 0
+        }
+        this.showBuy = true
+      } else {
+        this.ajaxBuy()
+      }
     },
     viewRule () {
       this.showViewPopup = true

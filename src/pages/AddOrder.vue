@@ -483,9 +483,14 @@ export default {
           self.showSos = true
         } else {
           self.showContainer = true
-          self.orderdata = data
+          let retdata = data.data ? data.data : data
+          self.orderdata = retdata
           self.curOrder = self.orderdata[0]
-          self.maxQuantity = self.curOrder.storage
+          let curstorage = self.curOrder.storage
+          if (self.curOrder.activityinfo && curstorage > self.curOrder.activityinfo.everybuy) {
+            curstorage = self.curOrder.activityinfo.everybuy
+          }
+          self.maxQuantity = curstorage
           let curpostage = self.curOrder.postage.replace(/,/g, '')
           self.curOrder.postageNumber = parseFloat(curpostage).toFixed(2)
           self.curOrder.rebate = parseFloat(self.curOrder.rebate).toFixed(2)
@@ -556,9 +561,9 @@ export default {
             if (self.cardPrice >= item.ordermoney && ((self.cardPrice - item.money - self.curOrder.rebate) >= 0 || (item.money > self.cardPrice && self.curOrder.rebate <= 0))) {
               self.selectedCard = item
               self.cardList[i].checked = true
-              let cha = parseFloat(self.orderPrice) - parseFloat(self.postage) - parseFloat(item.money)
+              let cha = parseFloat(self.orderPrice) - parseFloat(self.postage.replace(/,/g, '')) - parseFloat(item.money)
               cha = cha < 0 ? 0 : cha
-              self.payPrice = (cha + parseFloat(self.postage)).toFixed(2)
+              self.payPrice = (cha + parseFloat(self.postage.replace(/,/g, ''))).toFixed(2)
               break
             }
           }

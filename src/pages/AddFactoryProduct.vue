@@ -124,8 +124,8 @@
             </div>
           </div>
 
-          <div class="form-item bg-white">
-            <div class="flex_left">商品规格</div>
+          <div class="form-item required bg-white">
+            <div class="flex_left">商品规格<span class="al al-xing color-red font12 ricon" style="margin-top: -3px;"></span></div>
             <div class="option-list">
               <div class="option-item" v-for="(item,index) in optionsData" :key="index">
                 <div class="option-title flex_left">
@@ -136,7 +136,7 @@
                   <div class="flex_left con-item">
                     <div class="title-cell1 flex_left">规格名称</div>
                     <div class="border-cell flex_left flex_cell">
-                      <x-input v-model="item.title" type="text" class="input" placeholder="规格名称" ></x-input>
+                      <x-input v-model="item.title" :max="15" type="text" class="input" placeholder="规格名称" ></x-input>
                     </div>
                   </div>
                   <div class="flex_left mt10 con-item">

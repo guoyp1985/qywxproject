@@ -98,11 +98,11 @@
               <div class="flex_cell flex_left color-gray" v-if="selectedOption && selectedOption.id">{{selectedOption.title}}</div>
               <div class="flex_cell flex_left color-gray" v-else>请选择</div>
             </div>
-            <div class="card-options mt10">
+            <div class="card-options">
               <template v-for="(item,index) in productdata.options">
-                <img :src="item.photo" />
+                <img v-if="index < 5" :src="item.photo" />
               </template>
-              <div class="flex_center">
+              <div class="flex_center txt-item">
                 <div class="btn flex_center">共{{productdata.options.length}}种规格可选</div>
               </div>
             </div>
@@ -465,22 +465,23 @@
           <div class="column-content" @click="closeOptions"></div>
           <div class="options-box columnarea">
             <div class="close-area flex_center color-gray" @click="closeOptions"><span class="al al-close"></span></div>
-            <div class="column-content">
+            <div class="column-content columnarea">
               <div class="part1 flex_left">
                 <div class="pic flex_left">
                   <img :src="selectedOption.photo" @click="viewBigImg(0)" />
                 </div>
                 <div class="flex_cell flex_left">
                   <div class="w_100">
-                    <div class="color-theme"><span>￥</span><span class="bold font16">{{productdata.price}}</span></div>
+                    <div class="color-theme" v-if="clickBuytype == 'groupbuy'"><span>￥</span><span class="bold font16">{{activityInfo.groupprice}}</span></div>
+                    <div class="color-theme" v-else><span>￥</span><span class="bold font16">{{productdata.price}}</span></div>
                     <div class="mt10 color-gray">库存{{selectedOption.storage}}{{productdata.unit}}</div>
                     <div class="mt10" v-if="selectedOption.title">已选: {{selectedOption.title}}</div>
                     <div class="mt10" v-else>请选择 规格</div>
                   </div>
                 </div>
               </div>
-              <div class="part2">
-                <div class="pt10 pb10">规格</div>
+              <div class="part2 column-content">
+                <div class="pt10">规格</div>
                 <div class="options-list">
                   <div v-for="(item,index) in productdata.options" :class="`options-item ${(selectedOptionIndex == index && item.storage > 0) ? 'active' : ''} ${item.storage <= 0 ? 'disabled' : ''}`" @click="clickOptions(item,index)">
                     <div class="flex_center">
@@ -490,9 +491,15 @@
                 </div>
               </div>
             </div>
-            <div class="options-bottom" @click="buyOption">
-              <div class="w_100 h_100 flex_center">
-                <button class="bg-theme color-white flex_center btn">立即购买</button>
+            <div class="options-bottom flex_center">
+              <div class="flex_cell h_100 flex_center">
+                <template v-if="clickBuytype == 'groupbuy'">
+                  <div class="bg-theme color-white flex_center btn" @click="buyOption('groupbuy')">一键拼团</div>
+                </template>
+                <template v-else>
+                  <div v-if="activityInfo.id && activityInfo.type == 'groupbuy'" class="bg-theme color-white flex_center btn" @click="buyOption">原价购买</div>
+                  <div v-else class="bg-theme color-white flex_center btn" @click="buyOption">立即购买</div>
+                </template>
               </div>
             </div>
           </div>
@@ -603,7 +610,8 @@ export default {
       showBuy: false,
       selectedOption: {},
       selectedOptionIndex: 0,
-      previewerOptionsPhoto: []
+      previewerOptionsPhoto: [],
+      clickBuytype: null
     }
   },
   watch: {
@@ -713,6 +721,7 @@ export default {
       this.selectedOption = {}
       this.selectedOptionIndex = 0
       this.previewerOptionsPhoto = []
+      this.clickBuytype = null
     },
     filterEmot (text) {
       return this.$util.emotPrase(text)
@@ -753,13 +762,14 @@ export default {
         } else if (data.error) {
           this.$vux.toast.show({
             text: data.error,
-            time: self.$util.delay(data.error)
+            type: 'text',
+            time: this.$util.delay(data.error)
           })
         }
       })
     },
-    buyOption () {
-      if (!this.selectedOption.id) {
+    buyOption (buytype) {
+      if (!this.selectedOption || !this.selectedOption.id) {
         this.$vux.toast.text('请选择商品规格', 'middle')
         return false
       }
@@ -767,7 +777,7 @@ export default {
         this.$vux.toast.text('该规格商品库存不足', 'middle')
         return false
       }
-      this.addShop()
+      this.addShop(buytype)
     },
     clickSeller () {
       this.showSellerTip = true
@@ -927,6 +937,11 @@ export default {
       this.isfavorite = !this.isfavorite
     },
     buyevent (buytype) {
+      if (buytype && buytype !== '') {
+        this.clickBuytype = buytype
+      } else {
+        this.clickBuytype = null
+      }
       if (this.productdata.options.length) {
         if (!this.selectedOption || !this.selectedOption.id) {
           this.selectedOption = this.productdata.options[0]
@@ -1323,7 +1338,8 @@ export default {
 .product{
   .card-options{
     display: flex;flex-wrap: wrap;
-    img{width:30px;height:30px;margin-right:10px;object-fit:cover;}
+    img{width:30px;height:30px;margin-right:10px;object-fit:cover;margin-top:10px;}
+    .txt-item{margin-top:10px;}
     .btn{border-radius:10px;background-color:#ccc;color:#999;font-size:12px;height:22px;padding:0 10px;}
   }
 }
@@ -1462,46 +1478,6 @@ export default {
       .al{font-size:80px;margin-left:auto;margin-right: 100px;}
     }
     .btnknow{padding:3px 25px;border:1px solid #fff;color:#fff;margin: 0 auto;border-radius:20px;font-size:14px;margin-top: 20px;}
-  }
-}
-.buy-popup-layer{
-  .vux-popup-dialog{
-    background:rgba(0,0,0,0.5)
-  }
-  .product-options-area{
-    width:100%;height:100%;
-    .options-box{
-      width:100%;height:77%;position:relative;
-      background-color:#fff;border-top-left-radius:15px;border-top-right-radius:15px;
-      padding:20px 15px 0;box-sizing: border-box;
-      .close-area{
-        position:absolute;right:20px;top:20px;width:30px;height:30px;
-        .al{font-size:30px;}
-      }
-      .part1{
-        width:100%;height:150px;border-bottom:#ccc 1px solid;
-        .pic{
-          width:120px;
-          img{width:100px;height:100px;object-fit:cover;}
-        }
-      }
-      .part2{
-        .options-list{
-          display: flex;flex-wrap: wrap;
-          .options-item:not(:last-child){margin-right:10px;}
-          .options-item.active{border-color:#ff6a61;color:#ff6a61;}
-          .options-item.disabled{background-color:#ccc;}
-          .options-item{
-            border:#ccc 1px solid;border-radius:5px;padding:5px;
-            img{width:30px;height:30px;object-fit:cover;}
-          }
-        }
-      }
-      .options-bottom{
-        width:100%;height:60px;
-        .btn{width:90%;height:45px;border-radius:15px;font-size:16px;}
-      }
-    }
   }
 }
 </style>

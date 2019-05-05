@@ -360,13 +360,9 @@ export default {
     document.querySelector('.vux-tab').scrollLeft = this.tabLeft
     this.showHb = false
     this.isFirst = false
-    if (!SystemParams.get()) {
-      this.$util.getSystemParams(() => {
-        this.sysParams = SystemParams.get()
-      })
-    } else {
+    this.$util.getSystemParams(() => {
       this.sysParams = SystemParams.get()
-    }
+    })
   },
   beforeRouteLeave (to, from, next) {
     this.pageTop = this.$refs.scrollContainer.scrollTop

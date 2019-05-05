@@ -124,7 +124,7 @@ import TipLayer from '@/components/TipLayer'
 import ENV from 'env'
 import Time from '#/time'
 import Reg from '#/reg'
-import { Token, User, FirstInfo, SystemParams } from '#/storage'
+import { Token, User, FirstInfo } from '#/storage'
 let self = {}
 export default {
   components: {
@@ -280,10 +280,7 @@ export default {
       if (!Reg.rPlatfrom.test(navigator.userAgent)) {
         this.showQuit = true
       }
-      console.log(SystemParams.get())
-      if (!SystemParams.get()) {
-        this.$util.getSystemParams()
-      }
+      this.$util.getSystemParams()
       this.getData()
     }
   },

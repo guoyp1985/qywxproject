@@ -14,7 +14,7 @@
     <div class="boxarea">
       <div class="inner">
         <div class="innerbg">
-          <router-link class="t-table" style="color:inherit;" :to="{path:'/product',query:{wid:product.uploader,id:product.id}}">
+          <router-link class="t-table" style="color:inherit;" :to="{path:'/product',query:{wid:product.wid,id:product.id}}">
             <div class="t-cell v_middle w80">
               <img class="imgcover" :src="product.photo" style="width:70px;height:70px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
             </div>
@@ -58,11 +58,14 @@
             <span class="v_middle db-in">结束，快让好友帮忙砍价吧~</span>
           </div>
         </template>
-        <div v-if="data.leftstorage <= 0" class="align_center">
+        <div v-if="data.finished" class="align_center">
+          <div class="btn db">本次活动已结束</div>
+        </div>
+        <div v-else-if="data.leftstorage <= 0" class="align_center">
           <div class="btn db">商品已售罄，本次活动结束</div>
         </div>
         <div class="t-table">
-          <template v-if="data.leftstorage > 0">
+          <template v-if="data.leftstorage > 0 && !data.finished">
             <div v-if="crowduser.isovertime && !crowduser.isfull" class="t-cell">
               <div class="btn db">砍价失败</div>
             </div>
