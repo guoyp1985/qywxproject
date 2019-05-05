@@ -80,22 +80,22 @@
           <div class="popup0">
             <div class="list" v-if="clickdata">
               <div class="item">
-                <div class="inner" @click="clickpopup('tuijian')">设为推荐</div>
+                <div class="inner" @click="clickpopup('tuijian',2)">设为推荐</div>
               </div>
               <div class="item">
-                <div class="inner" @click="clickpopup('huiyuan')">设为会员</div>
+                <div class="inner" @click="clickpopup('huiyuan',4)">设为会员</div>
               </div>
               <div class="item">
-                <div class="inner" @click="clickpopup('yinliu')">设为引流</div>
+                <div class="inner" @click="clickpopup('yinliu',3)">设为引流</div>
               </div>
               <div class="item">
-                <div class="inner" @click="clickpopup('baokuan')">设为爆款</div>
+                <div class="inner" @click="clickpopup('baokuan',5)">设为爆款</div>
               </div>
               <div class="item">
-                <div class="inner" @click="clickpopup('jianhuo')">设为尖货</div>
+                <div class="inner" @click="clickpopup('jianhuo',7)">设为尖货</div>
               </div>
               <div class="item">
-                <div class="inner" @click="clickpopup('xinpin')">设为新品</div>
+                <div class="inner" @click="clickpopup('xinpin',6)">设为新品</div>
               </div>
               <div class="item close mt10" @click="clickpopup()">
                 <div class="inner">{{ $t('Cancel txt') }}</div>
@@ -443,7 +443,7 @@ export default {
     },
     getData2 (isone) {
       const self = this
-      let params = {pagestart: this.pageStart2, limit: limit, recommend: 2, wid: this.loginUser.uid}
+      let params = {pagestart: this.pageStart2, limit: limit, haverecommend: 1, wid: this.loginUser.uid}
       if (isone) {
         params.pagestart = this.tabData2.length
         params.limit = 1
