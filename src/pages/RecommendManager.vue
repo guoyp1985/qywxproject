@@ -30,8 +30,10 @@
                           </div>
                         </div>
                 			</div>
-                      <div class="t-cell v_middle w80 align_right">
-                        <div class="btnicon bg-theme color-white font12" @click="toRecommend(item,index)">设为推荐</div>
+                      <div class="t-cell v_middle w50 align_right">
+                        <div class="btnicon bg-red color-white font12" @click="clickControl(item,index)">
+                          <i class="al al-asmkticon0165 v_middle"></i>
+                        </div>
                       </div>
                 		</div>
                     <div class="flex_left mt5 font12" @click="toProduct(item)" v-if="item.sellingpoint && item.sellingpoint != ''"><span class="color-theme mr5 w60">商品优势: </span><span class="flex_cell">{{item.sellingpoint}}</span></div>
@@ -59,8 +61,10 @@
                           </div>
                         </div>
                 			</div>
-                      <div class="t-cell v_middle w80 align_right">
-                        <div class="btnicon bg-theme color-white font12" @click="cancelRecommend(item,index)">取消推荐</div>
+                      <div class="t-cell v_middle w50 align_right">
+                        <div class="btnicon bg-red color-white font12" @click="clickControl1(item,index)">
+                          <i class="al al-asmkticon0165 v_middle"></i>
+                        </div>
                       </div>
                 		</div>
                     <div class="flex_left mt5 font12" @click="toProduct(item)" v-if="item.sellingpoint && item.sellingpoint != ''"><span class="color-theme mr5 w60">商品优势: </span><span class="flex_cell">{{item.sellingpoint}}</span></div>
@@ -70,6 +74,64 @@
             </div>
           </swiper-item>
         </swiper>
+      </div>
+      <div v-transfer-dom>
+        <popup class="menuwrap" v-model="showPopup">
+          <div class="popup0">
+            <div class="list" v-if="clickdata">
+              <div class="item">
+                <div class="inner" @click="clickpopup('tuijian')">设为推荐</div>
+              </div>
+              <div class="item">
+                <div class="inner" @click="clickpopup('huiyuan')">设为会员</div>
+              </div>
+              <div class="item">
+                <div class="inner" @click="clickpopup('yinliu')">设为引流</div>
+              </div>
+              <div class="item">
+                <div class="inner" @click="clickpopup('baokuan')">设为爆款</div>
+              </div>
+              <div class="item">
+                <div class="inner" @click="clickpopup('jianhuo')">设为尖货</div>
+              </div>
+              <div class="item">
+                <div class="inner" @click="clickpopup('xinpin')">设为新品</div>
+              </div>
+              <div class="item close mt10" @click="clickpopup()">
+                <div class="inner">{{ $t('Cancel txt') }}</div>
+              </div>
+            </div>
+          </div>
+        </popup>
+      </div>
+      <div v-transfer-dom>
+        <popup class="menuwrap" v-model="showPopup1">
+          <div class="popup0">
+            <div class="list" v-if="clickdata">
+              <div class="item" v-if="clickdata.recommend == 2">
+                <div class="inner" @click="clickpopup1('tuijian')">取消推荐</div>
+              </div>
+              <div class="item" v-if="clickdata.recommend == 4">
+                <div class="inner" @click="clickpopup1('huiyuan')">取消会员</div>
+              </div>
+              <div class="item" v-if="clickdata.recommend == 3">
+                <div class="inner" @click="clickpopup1('yinliu')">取消引流</div>
+              </div>
+              <div class="item" v-if="clickdata.recommend == 5">
+                <div class="inner" @click="clickpopup1('baokuan')">取消爆款</div>
+              </div>
+              <div class="item" v-if="clickdata.recommend == 7">
+                <div class="inner" @click="clickpopup1('jianhuo')">取消尖货</div>
+              </div>
+              <div class="item" v-if="clickdata.recommend == 6">
+                <div class="inner" @click="clickpopup1('xinpin')">取消新品</div>
+              </div>
+              <div class="item close mt10" @click="clickpopup()">
+                <div class="inner">{{ $t('Cancel txt') }}</div>
+              </div>
+            </div>
+          </div>
+        </popup>
       </div>
     </template>
   </div>
@@ -85,7 +147,7 @@ Back go shop:
 </i18n>
 
 <script>
-import { TransferDom, Tab, TabItem, Swiper, SwiperItem } from 'vux'
+import { TransferDom, Popup, Tab, TabItem, Swiper, SwiperItem } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 
@@ -95,7 +157,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem
+    Popup, Tab, TabItem, Swiper, SwiperItem
   },
   data () {
     return {
@@ -106,14 +168,15 @@ export default {
       showSos: false,
       showContainer: false,
       showTitle: '',
-      tabtxts: ['待推荐', '推荐中'],
+      tabtxts: ['待上架', '已上架'],
       disList1: false,
       disList2: false,
       tabData1: [],
       tabData2: [],
       pageStart1: 0,
       pageStart2: 0,
-      showpopup1: false,
+      showPopup: false,
+      showPopup1: false,
       clickdata: {},
       clickindex: 0,
       limit: 10
@@ -125,6 +188,131 @@ export default {
     }
   },
   methods: {
+    clickControl (item, index) {
+      this.clickdata = item
+      this.clickindex = index
+      this.showPopup = true
+    },
+    clickControl1 (item, index) {
+      this.clickdata = item
+      this.clickindex = index
+      this.showPopup1 = true
+    },
+    clickpopup (type, val) {
+      let newval = val
+      let errorTxt = '设置成功'
+      this.showPopup = false
+      this.showPopup1 = false
+      if (type && type !== '') {
+        let con = ''
+        switch (type) {
+          case 'tuijian':
+            con = '确定要设为推荐商品吗？'
+            break
+          case 'yinliu':
+            con = '确定要设为引流商品吗？'
+            break
+          case 'huiyuan':
+            con = '确定要设为会员商品吗？'
+            break
+          case 'baokuan':
+            con = '确定要设为爆款商品吗？'
+            break
+          case 'xinpin':
+            con = '确定要设为新品吗？'
+            break
+          case 'jianhuo':
+            con = '确定要设为尖货吗？'
+            break
+        }
+        this.$vux.confirm.show({
+          content: con,
+          onConfirm: () => {
+            this.$vux.loading.show()
+            this.$http.post(`${ENV.BokaApi}/api/setModulePara/factoryproduct`, {
+              id: this.clickdata.id, param: 'recommend', paramvalue: newval
+            }).then((res) => {
+              this.$vux.loading.hide()
+              const data = res.data
+              let error = data.flag ? errorTxt : data.error
+              this.$vux.toast.show({
+                text: error,
+                type: (data.flag !== 1 ? 'warn' : 'success'),
+                time: this.$util.delay(error)
+              })
+              if (data.flag) {
+                this.clickdata.recommend = newval
+                this.tabData1.splice(this.clickindex, 1)
+                this.getData1(true)
+                if (this.tabData2.length) {
+                  if (this.tabData2.length && this.tabData2.length === (this.pageStart2 + 1) * this.limit) {
+                    this.tabData2.splice(this.tabData2.length - 1, 1)
+                  }
+                  this.tabData2 = [this.clickdata].concat(this.tabData2)
+                }
+              }
+            })
+          }
+        })
+      }
+    },
+    clickpopup1 (type) {
+      let newval = 1
+      let errorTxt = '取消成功'
+      this.showPopup1 = false
+      if (type && type !== '') {
+        let con = ''
+        switch (type) {
+          case 'tuijian':
+            con = '确定要取消推荐该商品吗？'
+            break
+          case 'yinliu':
+            con = '确定要取消该引流商品吗？'
+            break
+          case 'huiyuan':
+            con = '确定要取消该会员商品吗？'
+            break
+          case 'baokuan':
+            con = '确定要取消该爆款商品吗？'
+            break
+          case 'xinpin':
+            con = '确定要取消该新品吗？'
+            break
+          case 'jianhuo':
+            con = '确定要取消该尖货商品吗？'
+            break
+        }
+        this.$vux.confirm.show({
+          content: con,
+          onConfirm: () => {
+            this.$vux.loading.show()
+            this.$http.post(`${ENV.BokaApi}/api/setModulePara/factoryproduct`, {
+              id: this.clickdata.id, param: 'recommend', paramvalue: newval
+            }).then((res) => {
+              this.$vux.loading.hide()
+              const data = res.data
+              let error = data.flag ? errorTxt : data.error
+              this.$vux.toast.show({
+                text: error,
+                type: (data.flag !== 1 ? 'warn' : 'success'),
+                time: this.$util.delay(error)
+              })
+              if (data.flag) {
+                this.clickdata.recommend = newval
+                this.tabData2.splice(this.clickindex, 1)
+                this.getData2(true)
+                if (this.tabData1.length) {
+                  if (this.tabData1.length && this.tabData1.length === (this.pageStart1 + 1) * this.limit) {
+                    this.tabData1.splice(this.tabData1.length - 1, 1)
+                  }
+                  this.tabData1 = [this.clickdata].concat(this.tabData1)
+                }
+              }
+            })
+          }
+        })
+      }
+    },
     toProduct (item) {
       let params = this.$util.handleAppParams(this.query, {id: item.id, fid: item.fid})
       this.$router.push({path: '/factoryProduct', query: params})
@@ -332,7 +520,7 @@ export default {
     border-radius: 30px;
     letter-spacing: 0px;
     height: 21px;
-    width: 65px;
+    width: 41px;
     line-height: 21px;
   }
   .l-line{
