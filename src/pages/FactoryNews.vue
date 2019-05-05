@@ -4,7 +4,7 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div class="containerarea font14 bg-white news notop nobottom">
+  <div :class="`containerarea font14 bg-white news notop ${loginUser.isretailer ? '' : 'nobottom'}`">
     <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
     </template>
@@ -40,9 +40,10 @@
           </div>
         </div>
       </div>
-      <div v-if="article.identity == 'retailer'" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
+      <div v-if="loginUser.isretailer" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
         <div class="align_center flex_center flex_cell">
-          <div class="flex_cell flex_center btn-bottom-red" @click="importEvent">引入到我的文章</div>
+          <div class="flex_cell flex_center btn-bottom-red" v-if="article.haveimport" >已导入</div>
+          <div class="flex_cell flex_center btn-bottom-red" v-else @click="importEvent">导入到我的文章</div>
         </div>
       </div>
       <share-success
@@ -163,7 +164,7 @@ export default {
     importNews () {
       const self = this
       self.$vux.confirm.show({
-        content: '确定要引入到我的文章吗？',
+        content: '确定要导入到我的文章吗？',
         onConfirm () {
           self.$vux.loading.show()
           let params = {id: self.query.id}
