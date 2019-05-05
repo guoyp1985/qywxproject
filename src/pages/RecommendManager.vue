@@ -46,6 +46,12 @@
                 <div v-if="!tabData2 || !tabData2.length" class="flex_center padding20 color-gray">暂无相关数据</div>
                 <div v-else class="scroll_list ">
                   <div :to="{path:'/product',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData2" :key="index" style="color:inherit;">
+                    <div v-if="item.recommend == 2" class="ico tuijian"></div>
+                    <div v-if="item.recommend == 3" class="ico yinliu"></div>
+                    <div v-if="item.recommend == 4" class="ico huiyuan"></div>
+                    <div v-if="item.recommend == 5" class="ico baokuan"></div>
+                    <div v-if="item.recommend == 6" class="ico xinpin"></div>
+                    <div v-if="item.recommend == 7" class="ico jianhuo"></div>
                     <div class="t-table bg-white">
                 			<div class="t-cell v_middle pic" @click="toProduct(item)">
                         <img class="imgcover v_middle" :src="getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
@@ -511,15 +517,19 @@ export default {
       img{width:70px;height:70px;}
     }
   }
-  .scroll_item .ico{display:none;}
-  .scroll_item .down.ico{
-    display:block;
-    position:absolute;right:0;top:0;width:96px;height:25px;line-height:25px;
-    background-color:#8a8a8a;color:#fff;text-align:center;font-size: 12px;
-    -webkit-transform: translate(30px,5px) rotate(45deg);
-    transform: translate(30px,5px) rotate(45deg);
+  .scroll_item .ico{
+    position:absolute;left:0;top:0;width:96px;height:25px;line-height:25px;
+    background-color:#ff9f9f;color:#fff;text-align:center;font-size: 12px;
+    -webkit-transform: translate(-28px,6px) rotate(-45deg);
+    transform: translate(-28px,6px) rotate(-45deg);background-color:#ff6a61;
+    color:#fff;
   }
-  .scroll_item .down.ico:after{content:"已下架";}
+  .scroll_item .ico.tuijian:after{content:"推荐";}
+  .scroll_item .ico.yinliu:after{content:"引流";}
+  .scroll_item .ico.huiyuan:after{content:"会员";}
+  .scroll_item .ico.baokuan:after{content:"爆款";}
+  .scroll_item .ico.xinpin:after{content:"新品";}
+  .scroll_item .ico.jianhuo:after{content:"尖货";}
   .btnicon{
     display: inline-block;
     color: #ea3a3a;
