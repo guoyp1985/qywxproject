@@ -168,7 +168,7 @@ export default {
       showSos: false,
       showContainer: false,
       showTitle: '',
-      tabtxts: ['待上架', '已上架'],
+      tabtxts: ['待审核', '已审核'],
       disList1: false,
       disList2: false,
       tabData1: [],
