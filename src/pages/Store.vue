@@ -423,8 +423,8 @@ export default {
     },
     getSuggestData () {
       const self = this
-      self.$http.post(`${ENV.BokaApi}/api/list/factoryproduct`, {
-        pagestart: 0, limit: 2, recommend: 2, wid: this.retailerInfo.uid
+      self.$http.get(`${ENV.BokaApi}/disrebate`, {
+        params: {pagestart: 0, limit: 2, recommend: 2, wid: this.retailerInfo.uid}
       }).then(function (res) {
         const data = res.data
         const retdata = data.data ? data.data : data
