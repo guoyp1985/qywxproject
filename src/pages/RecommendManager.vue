@@ -57,7 +57,7 @@
                         <img class="imgcover v_middle" :src="getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                       </div>
                 			<div class="t-cell v_middle" @click="toProduct(item)">
-                        <div class="clamp1">
+                        <!-- <div class="clamp1">
                           <span v-if="item.recommend == 2" class="color-theme">【推荐商品】</span>
                           <span v-if="item.recommend == 3" class="color-theme">【引流商品】</span>
                           <span v-if="item.recommend == 4" class="color-theme">【会员商品】</span>
@@ -65,7 +65,8 @@
                           <span v-if="item.recommend == 6" class="color-theme">【新品】</span>
                           <span v-if="item.recommend == 7" class="color-theme">【尖货】</span>
                           {{item.title}}
-                        </div>
+                        </div> -->
+                        <div class="clamp1">{{item.title}}</div>
                         <div class="font12 color-gray">
                           <div class="clamp1 color-red">售价: {{ $t('RMB') }}{{ item.price }}</div>
                           <div class="clamp1">佣金:<span class="color-red"> {{ $t('RMB') }}{{ item.levelagent }}</span></div>
