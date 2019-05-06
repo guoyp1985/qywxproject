@@ -277,6 +277,9 @@ export default {
     },
     getData1 (type) {
       let params = {pagestart: pageStart, limit: limit, wid: this.loginUser.uid}
+      if (this.loginUser.fid) {
+        params.fid = this.loginUser.fid
+      }
       if (this.selectedIndex === 0) {
         params.recommend = 2
         if (this.sort === 'dateline') {
