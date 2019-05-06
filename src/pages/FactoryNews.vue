@@ -165,15 +165,18 @@ export default {
       const self = this
       self.$vux.confirm.show({
         content: '确定要导入到我的文章吗？',
-        onConfirm () {
+        onConfirm: () => {
           self.$vux.loading.show()
           let params = {id: self.query.id}
           if (self.query.wid) {
             params.wid = self.query.wid
           }
-          self.$http.post(`${ENV.BokaApi}/api/factory/importFactoryNews`, params).then(function (res) {
+          self.$http.post(`${ENV.BokaApi}/api/factory/importFactoryNews`, params).then(res => {
             let data = res.data
             self.$vux.loading.hide()
+            if (data.flag) {
+              self.article.haveimport = 1
+            }
             self.$vux.toast.show({
               text: data.error,
               type: data.flag === 1 ? 'success' : 'warn',
