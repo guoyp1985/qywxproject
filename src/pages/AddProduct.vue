@@ -164,7 +164,7 @@
               <div class="t-cell title-cell font14 v_middle" style="width:120px;">是否允许使用卡券</div>
             -->
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <x-switch title='是否允许使用卡券' v-model="submitdata.allowcard"></x-switch>
+                <x-switch title='是否允许使用优惠券' v-model="submitdata.allowcard"></x-switch>
               </div>
             </div>
           </div>

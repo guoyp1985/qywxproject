@@ -54,8 +54,7 @@
     <div v-if="showModal" class="modal-layer flex_center">
       <div class="modal">
         <div class="txt1 pb10">生成优惠码</div>
-        <div class="mt10 flex_left"><span>数量:</span><x-input class="input flex_cell" type="number" v-model="quantity"></x-input><span>个</span></div>
-        <div class="font12 mt5 ml20"><span style="color:red;">*</span>每个优惠码{{codefee}}元</div>
+        <div class="mt10 flex_left"><span>可用次数:</span><x-input class="input flex_cell" type="number" v-model="quantity"></x-input><span>次</span></div>
         <div class="bom mt25">
           <div class="close" @click="btnclose">取消</div>
           <div class="close color-white" style="background-color:#F85B52;" @click="createCode">立即生成</div>

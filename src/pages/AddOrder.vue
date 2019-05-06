@@ -52,25 +52,27 @@
     						</div>
     					</div>
             </div>
-            <div class="b_bottom_after pl10 pr10 color-orange" v-if="cardList && cardList.length && allowCard">
-              <div class="t-table">
-                <div class="t-cell v_middle" style="width:60px;">{{ $t('Card') }}</div>
-                <div class="t-cell v_middle align_right" @click="checkCard">
-                  <template v-if="!selectedCard">
-                    <span class="v_middle">请选择</span><i class="al al-mjiantou-copy2 v_middle"></i>
-                  </template>
-                  <template v-else>
-                    <span class="v_middle">满{{selectedCard.ordermoney}}减{{selectedCard.money}}</span><i class="al al-mjiantou-copy2 v_middle"></i>
-                  </template>
+            <template v-if="curOrder.allowCard">
+              <div class="b_bottom_after pl10 pr10 color-orange" v-if="cardList && cardList.length">
+                <div class="t-table">
+                  <div class="t-cell v_middle" style="width:60px;">{{ $t('Card') }}</div>
+                  <div class="t-cell v_middle align_right" @click="checkCard">
+                    <template v-if="!selectedCard">
+                      <span class="v_middle">请选择</span><i class="al al-mjiantou-copy2 v_middle"></i>
+                    </template>
+                    <template v-else>
+                      <span class="v_middle">满{{selectedCard.ordermoney}}减{{selectedCard.money}}</span><i class="al al-mjiantou-copy2 v_middle"></i>
+                    </template>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="b_bottom_after padding10" v-else>
-              <div class="t-table">
-                <div class="t-cell v_middle color-orange w60">{{ $t('Card') }}</div>
-                <div class="t-cell v_middle align_right color-gray">暂无可用优惠券</div>
+              <div class="b_bottom_after padding10" v-else>
+                <div class="t-table">
+                  <div class="t-cell v_middle color-orange w60">{{ $t('Card') }}</div>
+                  <div class="t-cell v_middle align_right color-gray">暂无可用优惠券</div>
+                </div>
               </div>
-            </div>
+            </template>
             <div class="b_bottom_after padding10">
               <div class="t-table">
                 <div class="t-cell v_middle w100">收货方式</div>
@@ -272,7 +274,6 @@ export default {
       showCard: false,
       cardList: [],
       selectedCard: null,
-      allowCard: false,
       curOrder: {postageNumber: 0, rebate: 0},
       buyType: 'online',
       onlineVal: true,
@@ -512,16 +513,6 @@ export default {
               postd.shopinfo.push(p)
               total += parseFloat(info.special) * info.quantity
               total1 += parseFloat(info.special) * info.quantity
-              // if (self.query.activityid || info.fid > 0) {
-              //   self.allowCard = false
-              // } else {
-              //   self.allowCard = true
-              // }
-              if (info.fid > 0) {
-                self.allowCard = false
-              } else {
-                self.allowCard = true
-              }
             }
             if (order.postage) {
               total += parseFloat(order.postage.replace(/,/g, ''))
