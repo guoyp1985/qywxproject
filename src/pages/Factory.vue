@@ -343,7 +343,7 @@ export default {
         }
       })
     },
-    refresh () {
+    init () {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.initData()
@@ -364,7 +364,12 @@ export default {
         self.viewData = retdata
         self.swiperChange()
       })
+    },
+    refresh () {
     }
+  },
+  created () {
+    this.init()
   },
   activated () {
     this.refresh()

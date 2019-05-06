@@ -478,10 +478,6 @@ export default {
   activated () {
     this.refresh(this.$route.query)
   }
-  // beforeRouteLeave (to, from, next) {
-  //   Socket.destory(room)
-  //   next()
-  // }
 }
 </script>
 <style lang="less">
