@@ -65,6 +65,12 @@
                 </div>
               </div>
             </div>
+            <div class="b_bottom_after padding10" v-else>
+              <div class="t-table">
+                <div class="t-cell v_middle color-orange w60">{{ $t('Card') }}</div>
+                <div class="t-cell v_middle align_right color-gray">暂无可用优惠券</div>
+              </div>
+            </div>
             <div class="b_bottom_after padding10">
               <div class="t-table">
                 <div class="t-cell v_middle w100">收货方式</div>
