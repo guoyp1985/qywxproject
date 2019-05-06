@@ -651,6 +651,7 @@ export default {
         }
         let price = postdata.price.toString().replace(/,/g, '')
         let oriprice = postdata.oriprice.toString().replace(/,/g, '')
+        let postage = postdata.postage.toString().replace(/,/g, '')
         let rebate = postdata.rebate
         if (self.$util.trim(rebate) !== '') {
           rebate = rebate.toString().replace(/,/g, '')
@@ -665,6 +666,10 @@ export default {
         }
         if (self.$util.trim(postdata.postage) === '') {
           self.$vux.toast.text('请输入运费', 'middle')
+          return false
+        }
+        if (isNaN(postage) || postage < 0) {
+          self.$vux.toast.text('请输入正确的运费', 'middle')
           return false
         }
         if (!isNaN(rebate)) {
