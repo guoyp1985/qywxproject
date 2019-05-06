@@ -82,6 +82,7 @@
           <div class="align_right padding10 flex_right">
             <div>合计:{{ $t('RMB') }} <span class="font16">{{ totalPrice }}</span></div>
           </div>
+          <div class="pl10 pr10 pb10 flex_right color-gray font12" v-if="data.delivertype == 2">到店自提</div>
         </div>
         <div class="align_right">
           <div v-if="!data.payorder && data.flag != 1" class="b_bottom_after pl10 pr10 pb10 bg-white">

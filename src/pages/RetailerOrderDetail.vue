@@ -89,6 +89,9 @@
             </div>
           </div>
         </div>
+        <div v-if="data && data.delivertype ==2"  class="padding10 b_top_after bg-white">
+          <div class="flex_right font12 color-gray">到店自提</div>
+        </div>
         <div v-if="data && data.content != ''"  class="padding10 b_top_after bg-white">
           <div class="flex_left font12">
             <div class="w40">留言: </div>
