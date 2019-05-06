@@ -36,7 +36,6 @@
         :retailerInfo="retailerInfo"
         :showqrcode="showqrcode"
         :showSwiper="showSwiper"
-        :showdot="showdot"
         :addata="addata"
         :activitydata="activitydata"
         :disproductdata="disproductdata"
@@ -77,7 +76,6 @@
         :retailerInfo="retailerInfo"
         :showqrcode="showqrcode"
         :showSwiper="showSwiper"
-        :showdot="showdot"
         :addata="addata"
         :activitydata="activitydata"
         :disproductdata="disproductdata"
@@ -119,7 +117,6 @@
         :retailerInfo="retailerInfo"
         :showqrcode="showqrcode"
         :showSwiper="showSwiper"
-        :showdot="showdot"
         :addata="addata"
         :activitydata="activitydata"
         :disproductdata="disproductdata"
@@ -161,7 +158,6 @@
         :retailerInfo="retailerInfo"
         :showqrcode="showqrcode"
         :showSwiper="showSwiper"
-        :showdot="showdot"
         :addata="addata"
         :activitydata="activitydata"
         :disproductdata="disproductdata"
@@ -244,7 +240,6 @@ export default {
       retailerInfo: { avatar: 'https://tossharingsales.boka.cn/images/user.jpg' },
       showqrcode: false,
       showSwiper: false,
-      showdot: true,
       addata: [],
       activitydata: [],
       disproductdata: false,
@@ -283,16 +278,6 @@ export default {
         this.favoritecss = 'none'
       }
       return this.isfavorite
-    }
-  },
-  computed: {
-    isshowdot () {
-      if (this.addata.length > 1) {
-        this.showdot = true
-      } else {
-        this.showdot = false
-      }
-      return this.showdot
     }
   },
   methods: {

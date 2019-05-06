@@ -314,10 +314,6 @@ export default {
       type: Boolean,
       default: false
     },
-    showdot: {
-      type: Boolean,
-      default: false
-    },
     addata: {
       type: Array,
       default: []
