@@ -457,7 +457,7 @@ export default {
     },
     getSuggestData () {
       const self = this
-      self.$http.get(`${ENV.BokaApi}/api/list/product?uploader=-1`, {
+      self.$http.get(`${ENV.BokaApi}/api/list/product?uploader=-13`, {
         params: {pagestart: 0, limit: 2}
       }).then(function (res) {
         const data = res.data

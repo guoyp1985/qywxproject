@@ -175,7 +175,7 @@ export default {
       })
     },
     getData1 () {
-      let params = { pagestart: pageStart1, limit: limit, used: 0, fid: self.query.id }
+      let params = { pagestart: pageStart1, limit: limit, used: 0, type: 'special' }
       self.$http.get(`${ENV.BokaApi}/api/factory/listRetailerCode`, {
         params: params
       }).then((res) => {
@@ -188,7 +188,7 @@ export default {
       })
     },
     getData2 () {
-      let params = { pagestart: pageStart2, limit: limit, used: 1, fid: self.query.id }
+      let params = { pagestart: pageStart2, limit: limit, used: 1, type: 'special' }
       self.$http.get(`${ENV.BokaApi}/api/factory/listRetailerCode`, {
         params: params
       }).then((res) => {
@@ -234,26 +234,15 @@ export default {
       self.showModal = false
       self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/factory/createRetailerCode`, {
-        fid: self.query.id,
-        quantity: self.quantity
+        quantity: self.quantity, type: 'special'
       }).then((res) => {
         const data = res.data
         self.$vux.loading.hide()
         if (data.flag) {
-          if (data.orderid) {
-            if (self.query.from) {
-              let weburl = encodeURIComponent(`concession?id=${self.query.id}&type=pay`)
-              self.$wechat.miniProgram.navigateTo({url: `/packageB/pages/pay?id=${data.orderid}&module=${data.ordermodule}&weburl=${weburl}`})
-            } else {
-              let backurl = encodeURIComponent(`concession?id=${self.query.id}&type=pay`)
-              location.replace(`${ENV.Host}/#/pay?id=${data.orderid}&module=${data.ordermodule}&backurl=${backurl}`)
-            }
-          } else {
-            self.disList1 = false
-            self.tabdata1 = []
-            pageStart1 = 0
-            self.getData1()
-          }
+          self.disList1 = false
+          self.tabdata1 = []
+          pageStart1 = 0
+          self.getData1()
         } else {
           self.$vux.toast.show({
             text: data.error,
