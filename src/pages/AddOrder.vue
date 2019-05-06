@@ -52,7 +52,7 @@
     						</div>
     					</div>
             </div>
-            <template v-if="curOrder.allowCard">
+            <template v-if="item.allowcard">
               <div class="b_bottom_after pl10 pr10 color-orange" v-if="cardList && cardList.length">
                 <div class="t-table">
                   <div class="t-cell v_middle" style="width:60px;">{{ $t('Card') }}</div>
