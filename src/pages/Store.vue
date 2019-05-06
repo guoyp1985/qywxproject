@@ -7,6 +7,9 @@
       img{vertical-align:middle;width:100%;height:100%;object-fit: cover;}
       .btn{width:150px;height:35px;border-radius:20px;}
     }
+    .pic-swiper{
+      position:absolute;left:0;top:0;right:0;bottom:0;
+    }
   }
   .vline{position:relative;}
   .vline:after {
@@ -19,6 +22,15 @@
     margin: auto 0;
     left: -1px;
     background-color: #ff6600;
+  }
+  .fix-swiper{
+    position:absolute;right:0;top:20px;
+    width:75px;height:35px;
+    .btn{
+      width:75px;height:35px;border-top-left-radius:20px;border-bottom-left-radius:20px;
+      background-color:#ff6a61;color:#fff;
+      display:flex;justify-content: center; align-items: center;
+    }
   }
 }
 </style>

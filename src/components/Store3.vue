@@ -33,22 +33,21 @@
                 <img :src="addata[0].photo" />
               </router-link>
             </div>
-            <swiper
-              v-else
-              class="pic-swiper notitle"
-              :list="addata"
-              dots-position="center"
-              :interval="6000"
-              :aspect-ratio="500/900"
-              auto
-              loop>
-            </swiper>
+            <div v-else class="adbg">
+              <swiper
+                class="pic-swiper notitle"
+                :list="addata"
+                dots-position="center"
+                :interval="6000"
+                :aspect-ratio="500/900"
+                auto
+                loop>
+              </swiper>
+              <div v-if="loginUser.uid == retailerInfo.uid" class="fix-swiper"  @click="clickDecoration">
+                <div class="btn">滚动展示</div>
+              </div>
+            </div>
           </template>
-        </template>
-        <template v-if="loginUser.uid == retailerInfo.uid && addata.length">
-          <div class="bg-white padding10 b_bottom_after flex_right mb5">
-            <div class="btn-border flex_center" @click="clickDecoration">滚动展示</div>
-      		</div>
         </template>
         <!-- 超值优惠 -->
         <template v-if="showSuggest && suggestData.length">
@@ -439,6 +438,9 @@ export default {
   .color-store3{color:#000000 !important;}
   .bg-store3{background-color:#000000;}
   .btn-border{border:#000 1px solid;color:#000;width:70px;height:25px;border-radius:30px;font-size:12px;}
+  .fix-swiper{
+    .btn{background-color:#000 !important;}
+  }
   .suggest-area{
     .btn{border:#000 1px solid;color:#000;width:70px;height:25px;border-radius:30px;font-size:12px;}
   }

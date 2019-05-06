@@ -19,16 +19,20 @@
                 <img :src="addata[0].photo" />
               </router-link>
             </div>
-            <swiper
-              v-else
-              class="pic-swiper notitle"
-              :list="addata"
-              dots-position="center"
-              :interval="6000"
-              :aspect-ratio="500/900"
-              auto
-              loop>
-            </swiper>
+            <div v-else class="adbg">
+              <swiper
+                class="pic-swiper notitle"
+                :list="addata"
+                dots-position="center"
+                :interval="6000"
+                :aspect-ratio="500/900"
+                auto
+                loop>
+              </swiper>
+              <div v-if="loginUser.uid == retailerInfo.uid" class="fix-swiper"  @click="clickDecoration">
+                <div class="btn">滚动展示</div>
+              </div>
+            </div>
           </template>
         </template>
         <template v-if="retailerInfo.uid">
@@ -40,7 +44,6 @@
             <div class="flex_cell h_100 flex_left font14">
               <div class="w_100 clamp1">{{retailerInfo.title}}</div>
             </div>
-            <div v-if="addata.length && loginUser.uid == retailerInfo.uid" class="icon-cell flex_center color-theme" @click="clickDecoration">滚动展示</div>
           </div>
         </template>
         <!-- 超值优惠 -->

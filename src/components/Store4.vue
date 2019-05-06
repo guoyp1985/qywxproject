@@ -9,7 +9,7 @@
           <template v-if="!addata.length">
             <div class="adbg" v-if="loginUser.uid == retailerInfo.uid">
               <div class="inner flex_center">
-                <div class="bg-theme color-white flex_center btn"@click="clickDecoration">滚动展示</div>
+                <div class="bg-theme color-white flex_center btn" @click="clickDecoration">滚动展示</div>
               </div>
             </div>
           </template>
@@ -19,16 +19,20 @@
                 <img :src="addata[0].photo" />
               </router-link>
             </div>
-            <swiper
-              v-else
-              class="pic-swiper notitle"
-              :list="addata"
-              dots-position="center"
-              :interval="6000"
-              :aspect-ratio="500/900"
-              auto
-              loop>
-            </swiper>
+            <div v-else class="adbg">
+              <swiper
+                class="pic-swiper notitle"
+                :list="addata"
+                dots-position="center"
+                :interval="6000"
+                :aspect-ratio="500/900"
+                auto
+                loop>
+              </swiper>
+              <div v-if="loginUser.uid == retailerInfo.uid" class="fix-swiper"  @click="clickDecoration">
+                <div class="btn">滚动展示</div>
+              </div>
+            </div>
           </template>
         </template>
         <div v-if="!addata.length" style="margin-top:35px;"></div>
@@ -55,12 +59,6 @@
             </div>
           </div>
         </div>
-        <template v-if="addata.length && loginUser.uid == retailerInfo.uid">
-          <div class="bg-white padding10 b_top_after flex_right mt20">
-            <div class="flex_center btn-border" @click="clickDecoration">滚动展示</div>
-      		</div>
-          <div class="b_top_after"></div>
-        </template>
         <!-- 超值优惠 -->
         <template v-if="showSuggest && suggestData.length">
           <div class="bg-white padding10 b_top_after db-flex suggest-area mt20">
