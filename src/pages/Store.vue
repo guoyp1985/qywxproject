@@ -1,5 +1,29 @@
+<style lang="less">
+.store-page{
+  .adbg{
+    position:relative;padding-bottom: 55.555%;
+    .inner{
+      position:absolute;left:0;top:0;right:0;bottom:0;
+      img{vertical-align:middle;width:100%;height:100%;object-fit: cover;}
+      .btn{width:150px;height:35px;border-radius:20px;}
+    }
+  }
+  .vline{position:relative;}
+  .vline:after {
+    content: " ";
+    display: block;
+    position: absolute;
+    width: 2px;
+    top: 4px;
+    bottom: 4px;
+    margin: auto 0;
+    left: -1px;
+    background-color: #ff6600;
+  }
+}
+</style>
 <template>
-  <div class="containerarea font14">
+  <div class="containerarea font14 store-page">
     <template v-if="showTemplate1">
       <Storeview1
         :showSos="showSos"
@@ -11,6 +35,7 @@
         :showShareSuccess="showShareSuccess"
         :retailerInfo="retailerInfo"
         :showqrcode="showqrcode"
+        :showSwiper="showSwiper"
         :showdot="showdot"
         :addata="addata"
         :activitydata="activitydata"
@@ -28,6 +53,7 @@
         :showHelpModal="showHelpModal"
         :pageStart="pageStart"
         :newPageStart="newPageStart"
+        @clickDecoration="toDecoration"
         @clickSuggest="clickSuggest"
         @handleScroll="handleScroll"
         @toCenterSales="toCenterSales"
@@ -50,6 +76,7 @@
         :showShareSuccess="showShareSuccess"
         :retailerInfo="retailerInfo"
         :showqrcode="showqrcode"
+        :showSwiper="showSwiper"
         :showdot="showdot"
         :addata="addata"
         :activitydata="activitydata"
@@ -67,6 +94,7 @@
         :showHelpModal="showHelpModal"
         :pageStart="pageStart"
         :newPageStart="newPageStart"
+        @clickDecoration="toDecoration"
         @clickSuggest="clickSuggest"
         @handleScroll="handleScroll"
         @toCenterSales="toCenterSales"
@@ -90,6 +118,7 @@
         :showShareSuccess="showShareSuccess"
         :retailerInfo="retailerInfo"
         :showqrcode="showqrcode"
+        :showSwiper="showSwiper"
         :showdot="showdot"
         :addata="addata"
         :activitydata="activitydata"
@@ -107,6 +136,7 @@
         :showHelpModal="showHelpModal"
         :pageStart="pageStart"
         :newPageStart="newPageStart"
+        @clickDecoration="toDecoration"
         @clickSuggest="clickSuggest"
         @handleScroll="handleScroll"
         @toCenterSales="toCenterSales"
@@ -130,6 +160,7 @@
         :showShareSuccess="showShareSuccess"
         :retailerInfo="retailerInfo"
         :showqrcode="showqrcode"
+        :showSwiper="showSwiper"
         :showdot="showdot"
         :addata="addata"
         :activitydata="activitydata"
@@ -146,6 +177,7 @@
         :suggestData="suggestData"
         :showHelpModal="showHelpModal"
         :pageStart="pageStart"
+        @clickDecoration="toDecoration"
         @clickSuggest="clickSuggest"
         @handleScroll="handleScroll"
         @toCenterSales="toCenterSales"
@@ -211,6 +243,7 @@ export default {
       showShareSuccess: false,
       retailerInfo: { avatar: 'https://tossharingsales.boka.cn/images/user.jpg' },
       showqrcode: false,
+      showSwiper: false,
       showdot: true,
       addata: [],
       activitydata: [],
@@ -287,6 +320,10 @@ export default {
       this.showTemplate2 = false
       this.showTemplate3 = false
       this.showTemplate4 = false
+    },
+    toDecoration () {
+      let params = this.$util.handleAppParams(this.query, {})
+      this.$router.push({path: '/decorationShop', query: params})
     },
     clickHelp () {
       this.showHelpModal = true
@@ -423,8 +460,8 @@ export default {
     },
     getSuggestData () {
       const self = this
-      self.$http.get(`${ENV.BokaApi}/disrebate`, {
-        params: {pagestart: 0, limit: 2, recommend: 2, wid: this.retailerInfo.uid}
+      self.$http.get(`${ENV.BokaApi}/api/list/product?uploader=-1`, {
+        params: {pagestart: 0, limit: 2}
       }).then(function (res) {
         const data = res.data
         const retdata = data.data ? data.data : data
@@ -594,6 +631,7 @@ export default {
             p.url = `/product?id=${p.moduleid}&wid=${self.retailerInfo.uid}`
           }
           self.addata = retdata
+          self.showSwiper = true
           const params = { params: { do: 'store', pagestart: 0, limit: 20, wid: self.query.wid } }
           return self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params)
         }

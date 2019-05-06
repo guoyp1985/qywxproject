@@ -5,7 +5,7 @@
     </template>
     <template v-if="showContainer">
       <div class="s-container scroll-container" style="top:0px;bottom:0;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
-        <div class="tophead flex_right">
+        <div class="tophead flex_right b_bottom_after">
           <div class="flex_table" style="margin-right:auto;">
             <div class="inner">
               <img :src="retailerInfo.avatar" />
@@ -19,25 +19,41 @@
             <span class="al al-weixin color-weixi pr10 font16" style="color:#3cb034;"></span>加微信
           </div>
         </div>
-        <div class="adbg" v-if="addata && addata.length == 1">
-          <router-link class="inner" :to="addata[0].url">
-            <img :src="addata[0].photo" />
-          </router-link>
-        </div>
-        <swiper
-          class="pic-swiper notitle"
-          v-if="addata && addata.length > 1"
-          :list="addata"
-          dots-position="center"
-          :interval="6000"
-          :aspect-ratio="500/900"
-          auto
-          loop>
-        </swiper>
+        <template v-if="showSwiper">
+          <template v-if="!addata.length">
+            <div class="adbg" v-if="loginUser.uid == retailerInfo.uid">
+              <div class="inner flex_center">
+                <div class="bg-black color-white flex_center btn"@click="clickDecoration">滚动展示</div>
+              </div>
+            </div>
+          </template>
+          <template v-else>
+            <div class="adbg" v-if="addata.length == 1">
+              <router-link class="inner" :to="addata[0].url">
+                <img :src="addata[0].photo" />
+              </router-link>
+            </div>
+            <swiper
+              v-else
+              class="pic-swiper notitle"
+              :list="addata"
+              dots-position="center"
+              :interval="6000"
+              :aspect-ratio="500/900"
+              auto
+              loop>
+            </swiper>
+          </template>
+        </template>
+        <template v-if="loginUser.uid == retailerInfo.uid && addata.length">
+          <div class="bg-white padding10 b_bottom_after flex_right mb5">
+            <div class="btn-border flex_center" @click="clickDecoration">滚动展示</div>
+      		</div>
+        </template>
         <!-- 超值优惠 -->
         <template v-if="showSuggest && suggestData.length">
           <div class="bg-white padding10 b_top_after db-flex suggest-area">
-            <div class="flex_left flex_cell pl5 font16 vline"><span>超值优惠</span><i v-if="retailerInfo.uid == loginUser.uid" class="al al-wenhao font20 color-theme ml5" @click="clickHelp"></i></div>
+            <div class="flex_left flex_cell pl5 font16 vline"><span>超值优惠</span><i v-if="retailerInfo.uid == loginUser.uid" class="al al-wenhao font20 color-black ml5" @click="clickHelp"></i></div>
             <div class="w80 flex_right" v-if="retailerInfo.uid == loginUser.uid" @click="clickSuggest">
               <div class="btn flex_center">不再显示</div>
             </div>
@@ -286,9 +302,13 @@ export default {
       type: Boolean,
       default: ''
     },
+    showSwiper: {
+      type: Boolean,
+      default: false
+    },
     showdot: {
       type: Boolean,
-      default: ''
+      default: false
     },
     addata: {
       type: Array,
@@ -383,6 +403,9 @@ export default {
       const scrollarea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
       this.$emit('handleScroll', scrollarea)
     },
+    clickDecoration () {
+      this.$emit('clickDecoration')
+    },
     favoriteevent () {
       this.$emit('favoriteevent')
     },
@@ -414,114 +437,105 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .store3{
   background-color:#f2f3f2;
   .color-store3{color:#000000 !important;}
   .bg-store3{background-color:#000000;}
+  .btn-border{border:#000 1px solid;color:#000;width:70px;height:25px;border-radius:30px;font-size:12px;}
   .suggest-area{
-    .btn{border:#ff6a61 1px solid;color:#ff6a61;width:70px;height:25px;border-radius:30px;font-size:12px;}
+    .btn{border:#000 1px solid;color:#000;width:70px;height:25px;border-radius:30px;font-size:12px;}
   }
-}
-.store3-color{color:#f9382c;}
-.store3 .adbg{position:relative;padding-bottom: 55.555%;}
-.store3 .adbg .inner{position:absolute;left:0;top:0;right:0;bottom:0;}
-.store3 .adbg .inner img{vertical-align:middle;width:100%;height:100%;object-fit: cover;}
-.vline{position:relative;}
-.vline:after {
-  content: " ";
-  display: block;
-  position: absolute;
-  width: 2px;
-  top: 4px;
-  bottom: 4px;
-  margin: auto 0;
-  left: -1px;
-  background-color: #ff6600;
-}
-
-.store3 .collect{
-  display:inline-block;vertical-align:middle;width:80px;box-sizing: border-box;font-size:13px;
-  padding: 2px 0; background: #8e8e8e;color: #fff;border-radius: 50px;text-align: center;
-}
-.store3 .collect.have{background: #67cccc;}
-.store3 .collect .txt:after{content:"收藏";}
-.store3 .collect.have .txt:after{content:"已收藏"}
-.store3 .staricon{margin-top:-2px;display:inline-block;}
-.store3 .btn-open{
-  background-color: #e10c00;
-  color: #fff;
-  font-size: 14px;
-  text-align: center;
-  border-radius: 4px;
-  padding:8px;
-  letter-spacing: 2px;
-}
-.store3 .topbox{
-  width:100%;height:45px;position:relative;z-index:1;background:#fff;
-  .pic-cell{
-    width:80px;height:100%;padding-right:5px;
-    img{width:60px;height:60px;border-radius:50%;margin-top:-30px;border:3px solid #fff;z-index:10;}
+  .store3-color{color:#f9382c;}
+  .vline:after {background-color: #000 !important;}
+  .collect{
+    display:inline-block;vertical-align:middle;width:80px;box-sizing: border-box;font-size:13px;
+    padding: 2px 0; background: #8e8e8e;color: #fff;border-radius: 50px;text-align: center;
   }
-  .icon-cell{width:50px;height:100%;}
-}
-.store3 .part-area{
-  padding-top:30px;width:100%;
-  .title-area{
-    width:100%;
-    .line-area{
-      width:100%;height:30px;position:relative;
-      .line{width:80%;height:2px;background-color:#000000;}
-      .txt{
-        width:140px;height:30px;background-color:#000;color:#fff;z-index:1;
-        position:absolute;left:50%;top:0;margin-left:-70px;
+  .collect.have{background: #67cccc;}
+  .collect .txt:after{content:"收藏";}
+  .collect.have .txt:after{content:"已收藏"}
+  .staricon{margin-top:-2px;display:inline-block;}
+  .btn-open{
+    background-color: #e10c00;
+    color: #fff;
+    font-size: 14px;
+    text-align: center;
+    border-radius: 4px;
+    padding:8px;
+    letter-spacing: 2px;
+  }
+  .topbox{
+    width:100%;height:45px;position:relative;z-index:1;background:#fff;
+    .pic-cell{
+      width:80px;height:100%;padding-right:5px;
+      img{width:60px;height:60px;border-radius:50%;margin-top:-30px;border:3px solid #fff;z-index:10;}
+    }
+    .icon-cell{width:50px;height:100%;}
+  }
+  .part-area{
+    padding-top:30px;width:100%;
+    .title-area{
+      width:100%;
+      .line-area{
+        width:100%;height:30px;position:relative;
+        .line{width:80%;height:2px;background-color:#000000;}
+        .txt{
+          width:140px;height:30px;background-color:#000;color:#fff;z-index:1;
+          position:absolute;left:50%;top:0;margin-left:-70px;
+        }
+      }
+      .txt1{font-size:12px;font-weight:bold;padding:10px 0;text-align:center;}
+    }
+  }
+  .bk-productitem{
+    display:block;box-sizing: border-box;
+    .inner{box-shadow:0px 0px 3px 1px #e6ebed;}
+    .pic{
+      .yhq{
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 30% !important;
+        height: 30% !important;
       }
     }
-    .txt1{font-size:12px;font-weight:bold;padding:10px 0;text-align:center;}
-  }
-}
-.store3 .bk-productitem{
-  display:block;box-sizing: border-box;
-  .inner{box-shadow:0px 0px 3px 1px #e6ebed;}
-  .pic{
-    .yhq{
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 30% !important;
-      height: 30% !important;
+    .ico{
+      position:absolute;left:0;top:0;width:145px;height:25px;line-height:25px;
+      color:#fff;text-align:center;font-size:12px;
+      -webkit-transform: translate(-50px,10px) rotate(-45deg);
+      transform: translate(-50px,10px) rotate(-45deg);z-index:1;
+      background-color:#000;
+    }
+    .ico:after{content:"优惠券";}
+    .desbox{
+      overflow:hidden;box-sizing: border-box;width:100%;
+      .title{height:36px;line-height:18px;text-align:left;}
+      .jsxuan{padding:0 5px;height:20px;text-align:center;line-height:20px;background-color:#fd8c2c;color:#fff;border-radius:2px;margin-right:5px;}
+      .txt1{padding-right:5px;box-sizing: border-box;color:#d81e07;}
+      .txt2{padding-right:5px;box-sizing: border-box;color:#999;}
     }
   }
-  .ico{
-    position:absolute;left:0;top:0;width:145px;height:25px;line-height:25px;
-    color:#fff;text-align:center;font-size:12px;
-    -webkit-transform: translate(-50px,10px) rotate(-45deg);
-    transform: translate(-50px,10px) rotate(-45deg);z-index:1;
-    background-color:#d81e07;
+  .bk-productitem .desbox .storebuy{width:50px;height:22px;background-color:#000000;color:#fff;text-align:center;line-height:22px;}
+  .tophead{
+    padding:5px 10px;box-sizing:border-box;background-color:#f2f3f2;
+    .inner{
+      width:30px;height:30px;
+      img{width:100%;height:100%;border-radius:50%;}
+    }
   }
-  .ico:after{content:"优惠券";}
-  .desbox{
-    overflow:hidden;box-sizing: border-box;width:100%;
-    .title{height:36px;line-height:18px;text-align:left;}
-    .jsxuan{padding:0 5px;height:20px;text-align:center;line-height:20px;background-color:#fd8c2c;color:#fff;border-radius:2px;margin-right:5px;}
-    .txt1{padding-right:5px;box-sizing: border-box;color:#d81e07;}
-    .txt2{padding-right:5px;box-sizing: border-box;color:#999;}
+  .template3-fixed-icon{
+    position:fixed;right:20px;bottom:20px;z-index:10;
+    .radius-item{
+      width:45px;height:45px;border-radius:50%;border:#000 1px solid;
+      background-color:#fff;
+    }
+    .radius-item:not(:first-child){margin-top:20px;}
   }
-}
-.store3 .bk-productitem .desbox .storebuy{width:50px;height:22px;background-color:#000000;color:#fff;text-align:center;line-height:22px;}
-.store3 .tophead{
-  padding:5px 10px;box-sizing:border-box;background-color:#f2f3f2;
-  .inner{
-    width:30px;height:30px;
-    img{width:100%;height:100%;border-radius:50%;}
+  .qbtn5{background-color:#000 !important;}
+  .activitylist{
+    .color-red{color:#000 !important;}
   }
-}
-.store3 .template3-fixed-icon{
-  position:fixed;right:20px;bottom:20px;z-index:10;
-  .radius-item{
-    width:45px;height:45px;border-radius:50%;border:#000 1px solid;
-    background-color:#fff;
-  }
-  .radius-item:not(:first-child){margin-top:20px;}
+  .qbtn6{border-color:#000 !important;color:#000 !important;}
 }
 </style>

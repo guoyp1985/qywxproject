@@ -1,25 +1,36 @@
 <template>
-  <div class="containerarea bg-page font14 s-havebottom store">
+  <div class="containerarea bg-page font14 s-havebottom store1">
     <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
     </template>
     <template v-if="showContainer">
       <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
-        <div class="adbg" v-if="addata && addata.length == 1">
-          <router-link class="inner" :to="addata[0].url">
-            <img :src="addata[0].photo" />
-          </router-link>
-        </div>
-        <swiper
-          class="pic-swiper notitle"
-          v-if="addata && addata.length > 1"
-          :list="addata"
-          dots-position="center"
-          :interval="6000"
-          :aspect-ratio="500/900"
-          auto
-          loop>
-        </swiper>
+        <template v-if="showSwiper">
+          <template v-if="!addata.length">
+            <div class="adbg" v-if="loginUser.uid == retailerInfo.uid">
+              <div class="inner flex_center">
+                <div class="bg-theme color-white flex_center btn"@click="clickDecoration">滚动展示</div>
+              </div>
+            </div>
+          </template>
+          <template v-else>
+            <div class="adbg" v-if="addata.length == 1">
+              <router-link class="inner" :to="addata[0].url">
+                <img :src="addata[0].photo" />
+              </router-link>
+            </div>
+            <swiper
+              v-else
+              class="pic-swiper notitle"
+              :list="addata"
+              dots-position="center"
+              :interval="6000"
+              :aspect-ratio="500/900"
+              auto
+              loop>
+            </swiper>
+          </template>
+        </template>
         <template v-if="retailerInfo.uid">
           <div class="pt12 pb12 bg-white pl10 pr10 b_bottom_after">
         		<div class="t-table">
@@ -30,7 +41,7 @@
         				<div class="clamp1 font16">{{ retailerInfo.title }}</div>
         			</router-link>
       				<div v-if="retailerInfo.uid == loginUser.uid" class="t-cell v_middle align_right" style="width:160px;">
-                <router-link class="font12 color-gray5 mr5 v_middle" to="/decorationShop"><i class="al al-dianpu font18 color-red"></i>{{$t('Rolling display')}}</router-link>
+                <router-link v-if="addata.length" class="font12 color-gray5 mr5 v_middle" to="/decorationShop"><i class="al al-dianpu font18 color-red"></i>{{$t('Rolling display')}}</router-link>
                 <router-link class="font12 color-gray5 v_middle" to="/centerSales"><i class="al al-xiaoshou font18 color-red"></i>{{$t('Manage center')}}</router-link>
       				</div>
               <div v-else class="t-cell v_middle align_right" style="width:90px;padding-left:10px;box-sizing:border-box;">
@@ -262,9 +273,13 @@ export default {
       type: Boolean,
       default: ''
     },
+    showSwiper: {
+      type: Boolean,
+      default: false
+    },
     showdot: {
       type: Boolean,
-      default: ''
+      default: false
     },
     addata: {
       type: Array,
@@ -342,6 +357,9 @@ export default {
       const scrollarea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
       this.$emit('handleScroll', scrollarea)
     },
+    clickDecoration () {
+      this.$emit('clickDecoration')
+    },
     closeHelpModal () {
       this.$emit('closeHelpModal')
     },
@@ -371,42 +389,26 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.store{
+.store1{
   .suggest-area{
     .btn{border:#ff6a61 1px solid;color:#ff6a61;width:70px;height:25px;border-radius:30px;font-size:12px;}
   }
-}
-.store .adbg{position:relative;padding-bottom: 55.555%;}
-.store .adbg .inner{position:absolute;left:0;top:0;right:0;bottom:0;}
-.store .adbg .inner img{vertical-align:middle;width:100%;height:100%;object-fit: cover;}
-.vline{position:relative;}
-.vline:after {
-  content: " ";
-  display: block;
-  position: absolute;
-  width: 2px;
-  top: 4px;
-  bottom: 4px;
-  margin: auto 0;
-  left: -1px;
-  background-color: #ff6600;
-}
-
-.store .collect{
-  display:inline-block;vertical-align:middle;width:80px;box-sizing: border-box;font-size:13px;
-  padding: 2px 0; background: #8e8e8e;color: #fff;border-radius: 50px;text-align: center;
-}
-.store .collect.have{background: #67cccc;}
-.store .collect .txt:after{content:"收藏";}
-.store .collect.have .txt:after{content:"已收藏"}
-.store .staricon{margin-top:-2px;display:inline-block;}
-.store .btn-open{
-  background-color: #e10c00;
-  color: #fff;
-  font-size: 14px;
-  text-align: center;
-  border-radius: 4px;
-  padding:8px;
-  letter-spacing: 2px;
+  .collect{
+    display:inline-block;vertical-align:middle;width:80px;box-sizing: border-box;font-size:13px;
+    padding: 2px 0; background: #8e8e8e;color: #fff;border-radius: 50px;text-align: center;
+  }
+  .collect.have{background: #67cccc;}
+  .collect .txt:after{content:"收藏";}
+  .collect.have .txt:after{content:"已收藏"}
+  .staricon{margin-top:-2px;display:inline-block;}
+  .btn-open{
+    background-color: #e10c00;
+    color: #fff;
+    font-size: 14px;
+    text-align: center;
+    border-radius: 4px;
+    padding:8px;
+    letter-spacing: 2px;
+  }
 }
 </style>
