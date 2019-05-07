@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea font14 bg-page concession s-havebottom">
+  <div class="containerarea font14 bg-page code-page s-havebottom">
     <div class="s-topbanner s-topbanner1">
       <div class="row">
         <tab v-model="selectedIndex" active-color="#ea3a3a" default-color="#666666">
@@ -14,14 +14,23 @@
             <template v-if="disList1">
               <div v-if="!tabdata1.length" class="w_100 h_100 flex_center color-gray">暂无有效的优惠码</div>
               <div v-else class="scroll_list">
-                <div v-for="(item,index1) in tabdata1" :key="index1" :class="`scroll_item bg-white flex_left item-${item.id}`">
-                  <div class="flex_cell padding10">
-                    <div class="bold">{{item.code}}</div>
-                    <div class="color-gray font12">生成时间: {{item.dateline | dateFormat}}</div>
+                <div v-for="(item,index1) in tabdata1" :key="index1" :class="`scroll_item bg-white item-${item.id}`">
+                  <div class="flex_left">
+                    <div class="flex_cell padding10">
+                      <div class="bold">{{item.code}}</div>
+                      <div class="color-gray font12">使用次数: {{item.quantity}}</div>
+                      <div class="color-gray font12">已用次数: {{item.haveused}}</div>
+                      <div class="color-gray font12">生成时间: {{item.dateline | dateFormat}}</div>
+                    </div>
+                    <div class="w100 flex_center">
+                      <div class="btncopy" @click="copyTxt(item)">复制
+                        <div class="copy_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.code }}</div>
+                      </div>
+                    </div>
                   </div>
-                  <div class="w100 flex_center">
-                    <div class="btncopy" @click="copyTxt(item)">复制
-                      <div class="copy_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.code }}</div>
+                  <div class="pic-list">
+                    <div v-for="(user,index2) in item.users" :key="index2" class="pic-item">
+                      <img class="pic" :src="user.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" /><span class="txt">{{user.linkman}}</span>
                     </div>
                   </div>
                 </div>
@@ -32,14 +41,22 @@
             <template v-if="disList2">
               <div v-if="!tabdata2.length" class="w_100 h_100 flex_center color-gray">暂无已使用的优惠码</div>
               <div v-else class="scroll_list">
-                <div v-for="(item,index1) in tabdata2" :key="index1" class="scroll_item bg-white flex_left">
-                  <div class="pic flex_center" style="width:70px;" v-if="item.avatar && item.avatar != ''">
-                    <img class="v_middle imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" style="width:50px;height:50px;" />
+                <div v-for="(item,index1) in tabdata2" :key="index1" class="scroll_item bg-white">
+                  <div class="flex_left">
+                    <div class="pic flex_center" style="width:70px;" v-if="item.avatar && item.avatar != ''">
+                      <img class="v_middle imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" style="width:50px;height:50px;" />
+                    </div>
+                    <div class="flex_cell padding10">
+                      <div class="bold">{{item.code}}</div>
+                      <div class="color-gray font12">{{item.linkman}}</div>
+                      <div class="color-gray font12">使用次数: {{item.quantity}}</div>
+                      <div class="color-gray font12">使用时间: {{item.usedateline | dateFormat}}</div>
+                    </div>
                   </div>
-                  <div class="flex_cell padding10">
-                    <div class="bold">{{item.code}}</div>
-                    <div class="color-gray font12">{{item.linkman}}</div>
-                    <div class="color-gray font12">使用时间: {{item.usedateline | dateFormat}}</div>
+                  <div class="pic-list">
+                    <div v-for="(user,index2) in item.users" :key="index2" class="pic-item">
+                      <img class="pic" :src="user.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" /><span class="txt">{{user.linkman}}</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -123,7 +140,7 @@ export default {
       this.showModal = false
     },
     copyTxt (item) {
-      const className = `.concession .item-${item.id} .copy_txt`
+      const className = `.item-${item.id} .copy_txt`
       const eleobj = jQuery(className)[0]
       let range = null
       let save = function (e) {
@@ -274,19 +291,31 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.concession .btncopy{
-  position:relative;background-color:#F85B52;color:#fff;width:60px;height:25px;text-align:center;line-height:25px;border-radius:20px;
-}
-.concession .modal{
-  width:70%;padding:15px 10px;border:1px solid #e5e5e5;margin:0 auto;background-color:#fff;text-align:center;
-  position:relative;z-index:1;border-radius:10px;
-}
-.concession .modal .txt1{text-align:center;border-bottom:1px solid #e5e5e5;}
-.concession .modal .input{width:150px;height:25px;border:1px solid #e5e5e5;border-radius:5px;margin-left:10px;margin-right:5px;padding:5px;box-sizing: border-box;}
-.concession .modal .input:before{display:none;}
-.concession .modal .bom{display:flex;flex-direction:row;}
-.concession .modal .close{width:100px;height:30px;background-color:#e5e5e5;text-align:center;line-height:30px;border-radius:5px;margin:0 auto;}
+.code-page{
+  .btncopy{
+    position:relative;background-color:#F85B52;color:#fff;width:60px;height:25px;text-align:center;line-height:25px;border-radius:20px;
+  }
+  .pic-list{
+    display:flex;flex-wrap:wrap;padding:0 10px;
+    .pic-item:not(:last-child){margin-right:5px;}
+    .pic-item{
+      margin-bottom:10px;
+      display:flex;justify-content: flex-start; align-items: center;
+      .pic{width:30px;height:30px;border-radius:50%;margin-right:5px;}
+      .txt{color:#999;font-size:12px;}
+    }
+  }
+  .modal{
+    width:70%;padding:15px 10px;border:1px solid #e5e5e5;margin:0 auto;background-color:#fff;text-align:center;
+    position:relative;z-index:1;border-radius:10px;
+  }
+  .modal .txt1{text-align:center;border-bottom:1px solid #e5e5e5;}
+  .modal .input{width:150px;height:25px;border:1px solid #e5e5e5;border-radius:5px;margin-left:10px;margin-right:5px;padding:5px;box-sizing: border-box;}
+  .modal .input:before{display:none;}
+  .modal .bom{display:flex;flex-direction:row;}
+  .modal .close{width:100px;height:30px;background-color:#e5e5e5;text-align:center;line-height:30px;border-radius:5px;margin:0 auto;}
 
-.concession .modal-layer{position:absolute;left:0;top:0;right:0;bottom:0;z-index:10;}
-.concession .modal-layer .mceng{position:absolute;top:0;bottom:0;left:0;right:0;background-color: rgba(0, 0, 0, 0.6);overflow: hidden;}
+  .modal-layer{position:absolute;left:0;top:0;right:0;bottom:0;z-index:10;}
+  .modal-layer .mceng{position:absolute;top:0;bottom:0;left:0;right:0;background-color: rgba(0, 0, 0, 0.6);overflow: hidden;}
+}
 </style>
