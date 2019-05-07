@@ -123,12 +123,12 @@
               <div class="t-cell align_right color-gray">{{ viewuser.uploadname }}</div>
             </div>
           </div>
-          <!-- <div class="item padding10 b_bottom_after">
+          <div class="item padding10 b_bottom_after">
             <div class="t-table">
               <div class="t-cell align_left w100">来源</div>
               <div class="t-cell align_right color-gray">{{ viewuser.comefrom }}</div>
             </div>
-          </div> -->
+          </div>
           <div class="item padding10 b_bottom_after">
             <div class="t-table">
               <div class="t-cell align_left w100">成为客户时间</div>
