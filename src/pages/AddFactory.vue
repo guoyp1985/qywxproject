@@ -401,7 +401,14 @@ export default {
       this.loginUser = User.get()
       self.query = self.$route.query
       self.initData()
-      if (this.loginUser.ismanager) {
+      let ismanager = false
+      for (let i = 0; i < this.loginUser.usergroup.length; i++) {
+        if (this.loginUser.usergroup[i] === 1) {
+          ismanager = true
+          break
+        }
+      }
+      if (ismanager) {
         self.disClassData = true
         self.requireddata.productclass = ''
       }
@@ -413,7 +420,7 @@ export default {
         isEdit = true
         this.fid = parseInt(this.query.fid)
       }
-      if (this.loginUser.ismanager || (isEdit && this.fid === this.loginUser.fid)) {
+      if (ismanager || (isEdit && this.fid === this.loginUser.fid)) {
         self.showSos = false
         self.showContainer = true
         this.$vux.loading.hide()
