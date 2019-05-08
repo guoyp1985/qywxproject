@@ -22,7 +22,7 @@
               </template>
               <div v-else class="scroll_list ">
                 <router-link :to="{path:'/product',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData1" :key="index" style="color:inherit;">
-                  <div v-if="item.moderate == 0" class="ico down"></div>
+                  <div v-if="item.fpid" class="ico1">货源</div>
               		<div class="t-table bg-white pt10 pb10">
               			<div class="t-cell pl12 v_middle" style="width:110px;">
                       <img class="imgcover v_middle" :src="getPhoto(item.photo)" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
@@ -64,6 +64,7 @@
               <div v-if="!tabData2 || !tabData2.length" class="flex_center padding20 color-gray">暂无下架商品！</div>
               <div v-else class="scroll_list ">
                 <router-link :to="{path:'/product',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData2" :key="index" style="color:inherit;">
+                  <div v-if="item.fpid" class="ico1">货源</div>
                   <div v-if="item.moderate == 0" class="ico down"></div>
               		<div class="t-table bg-white pt10 pb10">
               			<div class="t-cell pl12 v_middle" style="width:110px;">
@@ -796,6 +797,12 @@ export default {
   transform: translate(30px,5px) rotate(45deg);
 }
 .rproductlist .scroll_item .down.ico:after{content:"已下架";}
+.rproductlist .scroll_item .ico1{
+  position:absolute;left:0;top:0;width:96px;height:25px;line-height:25px;
+  background-color:#ea3a3a;color:#fff;text-align:center;font-size: 12px;
+  -webkit-transform: translate(-40px,-2px) rotate(-45deg);
+  transform: translate(-26px,9px) rotate(-45deg);
+}
 .rproductlist .btnicon{
   display: inline-block;
   color: #ea3a3a;
