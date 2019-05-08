@@ -349,33 +349,33 @@ export default {
         }
       })
     },
-    init () {
+    refresh () {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.initData()
-      this.loginUser = User.get()
-      if (!self.loginUser.isretailer) {
-        self.showBottom = true
-      } else {
-        self.showBottom = false
+      console.log(this.query)
+      if (!this.query.id || this.query.id !== parseInt(this.$route.query.id)) {
+        this.initData()
+        this.loginUser = User.get()
+        if (!self.loginUser.isretailer) {
+          self.showBottom = true
+        } else {
+          self.showBottom = false
+        }
+        this.query = this.$route.query
+        self.$vux.loading.show()
+        self.$http.get(`${ENV.BokaApi}/api/factory/info`, {
+          params: { fid: self.query.id }
+        }).then(function (res) {
+          self.$vux.loading.hide()
+          let data = res.data
+          let retdata = data.data ? data.data : data
+          self.viewData = retdata
+          self.swiperChange()
+        })
       }
-      this.query = this.$route.query
-      self.$vux.loading.show()
-      self.$http.get(`${ENV.BokaApi}/api/factory/info`, {
-        params: { fid: self.query.id }
-      }).then(function (res) {
-        self.$vux.loading.hide()
-        let data = res.data
-        let retdata = data.data ? data.data : data
-        self.viewData = retdata
-        self.swiperChange()
-      })
-    },
-    refresh () {
     }
   },
   created () {
-    this.init()
   },
   activated () {
     this.refresh()

@@ -13,6 +13,9 @@
         <div class="article-view">
           <div class="article-title">
             <h2>{{article.title}}</h2>
+            <div class="flex_right mt5 mb5" v-if="editIng && article.uploader == reward.uid">
+              <router-link :to="{path:'/addFactoryNews',query:{id: query.id}}" class="flex_center bg-theme color-white" style="border-radius:20px;height:25px;width:90px;">修改标题</router-link>
+            </div>
           </div>
           <div class="article-vice-title">
             <h4>{{article.vicetitle}}</h4>
@@ -26,7 +29,7 @@
           <template v-if="showArticle">
             <template v-if="article.uploader == reward.uid">
               <div id="editor-content" :class="`article-content ${article.content == '' ? 'color-gray font16' : ''}`">
-                <p v-if="article.content == ''">文章内容为空，点击【编辑】按钮可修改内容哦！</p>
+                <p v-if="article.content == '' && !afterEdit">文章内容为空，点击【编辑】按钮可修改内容哦！</p>
                 <div v-else v-html="article.content"></div>
               </div>
             </template>
@@ -54,7 +57,7 @@
         :module="module"
         :on-close="closeShareSuccess">
       </share-success>
-      <editor v-if="reward.uid == article.uploader && showEditor" elem="#editor-content" module="factorynews" :query="query" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
+      <editor v-if="reward.uid == article.uploader && showEditor" elem="#editor-content" module="factorynews" :loginUser="loginUser" :query="query" @on-edit="clickEdit" @on-auto-save="autoSave" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
       <div v-transfer-dom class="x-popup">
         <popup v-model="showSubscribe" height="100%">
           <div class="popup1">
@@ -118,7 +121,9 @@ export default {
       messages: 0,
       topcss: '',
       showEditor: false,
-      showArticle: false
+      showArticle: false,
+      editIng: false,
+      afterEdit: false
     }
   },
   filters: {
@@ -137,6 +142,9 @@ export default {
   methods: {
     access () {
       this.$util.wxAccess()
+    },
+    clickEdit () {
+      this.editIng = true
     },
     clickInsertProduct (url) {
       this.$router.push(url)
@@ -335,13 +343,13 @@ export default {
     },
     onShare () {
     },
-    editSave () {
-      const self = this
+    save (callback) {
       let editorContent = document.querySelector('#editor-content')
       self.$vux.loading.show()
+      let con = editorContent.innerHTML.replace('文章内容为空，点击【编辑】按钮可修改内容哦！', '')
       self.$http.post(`${ENV.BokaApi}/api/editContent/factorynews`, {
         id: self.query.id,
-        content: editorContent.innerHTML
+        content: con
       }).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
@@ -352,11 +360,20 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
+              self.afterEdit = true
               self.handleImg()
+              callback && callback()
             }
           }
         })
       })
+    },
+    autoSave () {
+      this.save()
+    },
+    editSave () {
+      this.editIng = false
+      this.save()
     },
     editSetting () {
       this.$router.push({name: 'tAddFacotryNews', params: {id: this.article.id, fid: this.article.fid}})
@@ -462,6 +479,7 @@ export default {
       this.loginUser = User.get()
       this.showArticle = false
       this.showEditor = false
+      this.editIng = false
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       if (this.query.id !== query.id) {
         self.showSos = false
