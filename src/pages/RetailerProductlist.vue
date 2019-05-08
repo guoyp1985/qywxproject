@@ -61,51 +61,9 @@
               </div>
             </div>
             <template v-if="disList2">
-              <div v-if="!tabData2 || !tabData2.length" class="flex_center padding20 color-gray">暂无厂家商品，快去货源里看看吧！</div>
+              <div v-if="!tabData2 || !tabData2.length" class="flex_center padding20 color-gray">暂无下架商品！</div>
               <div v-else class="scroll_list ">
                 <router-link :to="{path:'/product',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData2" :key="index" style="color:inherit;">
-                  <div v-if="item.moderate == 0" class="ico down"></div>
-              		<div class="t-table bg-white pt10 pb10">
-              			<div class="t-cell pl12 v_middle" style="width:110px;">
-                      <img class="imgcover v_middle" :src="getPhoto(item.photo)" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
-                    </div>
-              			<div class="t-cell v_middle">
-                      <div class="clamp1 font16 pr10 color-lightgray"><span v-if="item.priority == 1" style="color:#fd8c2c;">【精选】</span>{{item.title}}</div>
-                      <div class="t-table pr12 border-box mt15">
-                        <div class="t-cell color-999 font14">
-                          <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ item.price }}</span></div>
-                          <div class="clamp1 mt5" v-if="item.fpid > 0">厂家佣金:<span class="color-red"> {{ $t('RMB') }}{{ item.rebatein }}</span></div>
-                          <div class="clamp1 mt5 font12">
-                              <span class="v_middle db-in mr5" v-if="item.fpid == 0">库存: {{ item.storage }}{{item.unit}}</span>
-                              <span class="v_middle db-in">已售: {{ item.saled }}{{item.unit}}</span>
-                          </div>
-                        </div>
-                        <div class="align_right t-cell v_bottom w50">
-                          <div class="btnicon bg-red color-white font12" @click="controlpopup1(item,index)">
-                            <i class="al al-asmkticon0165 v_middle"></i>
-                          </div>
-                        </div>
-                      </div>
-              			</div>
-              		</div>
-                </router-link>
-              </div>
-            </template>
-          </div>
-          <div v-show="(selectedIndex == 2)" class="swiper-inner" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3', 2)">
-            <div class="pro_box bg-page list_shadow pl12 pr12 pb15 border-box">
-              <div class="pro_list_top"></div>
-              <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white font12" style="margin-top: -4px;">
-                <div>悄悄告诉你，立即分享新发布的商品可以：</div>
-                <div>1. 接收好友查看商品的通知；</div>
-                <div>2. 监控谁看过、分享过以及多次浏览过你的商品；</div>
-                <div>3. 获得到更多潜在客户及销售机会。</div>
-              </div>
-            </div>
-            <template v-if="disList3">
-              <div v-if="!tabData3 || !tabData3.length" class="flex_center padding20 color-gray">暂无下架商品！</div>
-              <div v-else class="scroll_list ">
-                <router-link :to="{path:'/product',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData3" :key="index" style="color:inherit;">
                   <div v-if="item.moderate == 0" class="ico down"></div>
               		<div class="t-table bg-white pt10 pb10">
               			<div class="t-cell pl12 v_middle" style="width:110px;">
@@ -157,12 +115,12 @@
       <popup class="menuwrap" v-model="showpopup1">
         <div class="popup0">
           <div class="list" v-if="clickdata">
-            <div class="item" v-if="clickdata.moderate == 1 && !clickdata.fid">
+            <div class="item" v-if="clickdata.moderate == 1">
               <div class="inner" @click="clickpopup('activity')">创建活动</div>
             </div>
-            <div class="item" v-if="clickdata.activityid == 0">
+            <div class="item">
               <div v-if="clickdata.fpid > 0" class="inner" @click="clickpopup('fee')">设置返点佣金</div>
-              <router-link v-else class="inner" :to="{path: '/addProduct', query: {id: clickdata.id}}">编辑</router-link>
+              <div v-else class="inner" :to="{path: '/addProduct', query: {id: clickdata.id}}" @click="clickpopup('edit')">编辑</div>
             </div>
             <div class="item" v-if="clickdata.moderate == 0">
               <div class="inner" @click="clickpopup('up')">上架</div>
@@ -319,16 +277,13 @@ export default {
       ],
       selectedIndex: 0,
       showTitle: '',
-      tabtxts: [ '我的商品', '厂家商品', '下架商品' ],
+      tabtxts: [ '已上架', '已下架' ],
       disList1: false,
       disList2: false,
-      disList3: false,
       tabData1: [],
       tabData2: [],
-      tabData3: [],
       pageStart1: 0,
       pageStart2: 0,
-      pageStart3: 0,
       pageStart4: 0,
       showpopup1: false,
       clickdata: {},
@@ -373,14 +328,6 @@ export default {
             this.disList2 = false
             this.tabData2 = []
             this.getData2()
-          }
-          break
-        case 2:
-          if (this.tabData3.length < limit) {
-            this.pageStart3 = 0
-            this.disList3 = false
-            this.tabData3 = []
-            this.getData3()
           }
           break
       }
@@ -456,12 +403,6 @@ export default {
               self.$vux.loading.show()
               self.getData2()
             }
-          } else if (index === 2) {
-            if (self.tabData3.length === (self.pageStart3 + 1) * limit) {
-              self.pageStart3++
-              self.$vux.loading.show()
-              self.getData3()
-            }
           }
         }
       })
@@ -500,16 +441,7 @@ export default {
           onHide: function () {
             if (data.flag === 1) {
               self.clickdata.moderate = 1
-              if (self.selectedIndex === 2) {
-                self.tabData3.splice(self.clickindex, 1)
-                self.getData3(true)
-                if (self.tabData1.length === (self.pageStart1 + 1) * limit) {
-                  self.tabData1.splice(self.tabData1.length - 1, 1)
-                  self.tabData1 = [self.clickdata].concat(self.tabData1)
-                } else if (self.tabData1.length) {
-                  self.tabData1 = [self.clickdata].concat(self.tabData1)
-                }
-              } else if (self.selectedIndex === 1) {
+              if (self.selectedIndex === 1) {
                 self.tabData2[self.clickindex].moderate = 1
               }
             }
@@ -534,11 +466,11 @@ export default {
               if (self.selectedIndex === 0) {
                 self.tabData1.splice(self.clickindex, 1)
                 self.getData1(true)
-                if (self.tabData3.length === (self.pageStart3 + 1) * limit) {
-                  self.tabData3.splice(self.tabData3.length - 1, 1)
-                  self.tabData3 = [self.clickdata].concat(self.tabData3)
-                } else if (self.tabData3.length) {
-                  self.tabData3 = [self.clickdata].concat(self.tabData3)
+                if (self.tabData2.length === (self.pageStart2 + 1) * limit) {
+                  self.tabData2.splice(self.tabData2.length - 1, 1)
+                  self.tabData2 = [self.clickdata].concat(self.tabData2)
+                } else if (self.tabData2.length) {
+                  self.tabData2 = [self.clickdata].concat(self.tabData2)
                 }
               } else if (self.selectedIndex === 1) {
                 self.tabData2[self.clickindex].moderate = 0
@@ -561,9 +493,6 @@ export default {
         })
       } else if (key === 'down') {
         let content = '确定要下架该商品吗？'
-        // if (self.selectedIndex === 1) {
-        //   content = '确定要下架该商品吗？下架后的商品将不会出现在厂家列表中'
-        // }
         self.$vux.confirm.show({
           title: '',
           content: content,
@@ -633,16 +562,34 @@ export default {
           }
         })
       } else if (key === 'edit') {
-        self.$router.push({ path: '/addProduct', query: { id: self.clickdata.id } })
+        if (self.clickdata.activityid) {
+          self.$vux.toast.show({
+            text: '该商品正在活动中，不能编辑！',
+            type: 'text',
+            time: 3000,
+            width: '200px'
+          })
+        } else {
+          self.$router.push({ path: '/addProduct', query: { id: self.clickdata.id } })
+        }
       } else if (key === 'push') {
         self.showpush = true
         if (self.customerdata.length === 0) {
           self.getCustomerdata()
         }
       } else if (key === 'fee') {
-        self.showFeePopup = true
-        self.feeData = self.clickdata
-        self.postFee = self.feeData.rebate
+        if (self.clickdata.activityid) {
+          self.$vux.toast.show({
+            text: '该商品正在活动中，不能设置佣金！',
+            type: 'text',
+            time: 3000,
+            width: '200px'
+          })
+        } else {
+          self.showFeePopup = true
+          self.feeData = self.clickdata
+          self.postFee = self.feeData.rebate
+        }
       } else if (key === 'activity') {
         if (this.clickdata.activityid) {
           self.$vux.toast.show({
@@ -713,9 +660,6 @@ export default {
                 case 1:
                   self.tabData2[self.clickindex] = retdata
                   break
-                case 2:
-                  self.tabData3[self.clickindex] = retdata
-                  break
               }
             }
           }
@@ -783,12 +727,12 @@ export default {
     },
     getData1 (isone) {
       const self = this
-      const params = {moderate: 1, pagestart: this.pageStart1, limit: limit}
+      const params = {moderate: 1, pagestart: this.pageStart1, limit: limit, wid: this.loginUser.uid}
       if (isone) {
         params.pagestart = this.tabData1.length
         params.limit = 1
       }
-      this.$http.get(`${ENV.BokaApi}/api/list/product?from=retailernew`, {
+      this.$http.get(`${ENV.BokaApi}/api/retailer/getRetailerProducts`, {
         params: params
       })
       .then(res => {
@@ -801,12 +745,12 @@ export default {
     },
     getData2 (isone) {
       const self = this
-      const params = {agent: 1, pagestart: this.pageStart2, limit: limit}
+      const params = {moderate: 0, pagestart: this.pageStart2, limit: limit, wid: this.loginUser.uid}
       if (isone) {
         params.pagestart = this.tabData2.length
         params.limit = 1
       }
-      this.$http.get(`${ENV.BokaApi}/api/list/product?from=retailernew`, {
+      this.$http.get(`${ENV.BokaApi}/api/retailer/getRetailerProducts`, {
         params: params
       })
       .then(res => {
@@ -815,24 +759,6 @@ export default {
         const retdata = data.data ? data.data : data
         this.tabData2 = this.tabData2.concat(retdata)
         this.disList2 = true
-      })
-    },
-    getData3 (isone) {
-      const self = this
-      const params = {moderate: 0, pagestart: this.pageStart3, limit: limit}
-      if (isone) {
-        params.pagestart = this.tabData3.length
-        params.limit = 1
-      }
-      this.$http.get(`${ENV.BokaApi}/api/list/product?from=retailernew`, {
-        params: params
-      })
-      .then(res => {
-        self.$vux.loading.hide()
-        const data = res.data
-        const retdata = data.data ? data.data : data
-        this.tabData3 = this.tabData3.concat(retdata)
-        this.disList3 = true
       })
     },
     init () {
