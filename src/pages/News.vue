@@ -24,7 +24,7 @@
           <div class="article-title">
             <h2>{{article.title}}</h2>
             <div class="flex_right mt5 mb5" v-if="editIng && article.uploader == reward.uid">
-              <router-link :to="{path:'/addNews',query:{id: query.id}}" class="flex_center bg-theme color-white" style="border-radius:20px;height:25px;width:90px;">修改标题</router-link>
+              <router-link :to="{path:'/addNews',query:{id: query.id, callback: 'edit'}}" class="flex_center bg-theme color-white" style="border-radius:20px;height:25px;width:90px;">修改标题</router-link>
             </div>
           </div>
           <div class="article-vice-title">
