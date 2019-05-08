@@ -356,6 +356,7 @@ export default {
       this.messages = 0
       this.isFirst = false
       this.showHb = false
+      this.selectedOption = {}
     },
     closeFirstHb () {
       this.isFirst = false
@@ -384,6 +385,7 @@ export default {
     },
     clickOptions (item, index) {
       this.selectedOption = item
+      console.log(this.selectedOption)
       this.selectedOptionIndex = index
       this.previewerOptionsPhoto = this.$util.previewerImgdata([this.selectedOption.photo])
     },
