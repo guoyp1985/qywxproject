@@ -73,7 +73,8 @@
         @closepopup="closepopup"
         @closeShareSuccess="closeShareSuccess"
         @clickHelp="clickHelp"
-        @closeHelpModal="closeHelpModal">
+        @closeHelpModal="closeHelpModal"
+        @favoriteevent="favoriteevent">
       </Storeview1>
     </template>
     <template v-if="showTemplate2">

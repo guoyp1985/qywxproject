@@ -181,7 +181,7 @@
             </newsitemplate>
           </div>
         </template>
-        <div v-if="query.wid && query.wid != loginUser.uid" class="pb10 pl10 pr10">
+        <div v-if="query.wid && query.wid != loginUser.uid && !loginUser.isretailer" class="pb10 pl10 pr10">
           <router-link to="/centerSales" class="btn-open db" style="background-color: #e10c00">我也要开店</router-link>
         </div>
         <div style="text-align: center;color:#999;height: 30px;line-height:30px;font-size: 14px;" v-if="scrollEnd">没有更多商品了！</div>
