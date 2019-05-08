@@ -120,7 +120,7 @@
             </div>
             <div class="item">
               <div v-if="clickdata.fpid > 0" class="inner" @click="clickpopup('fee')">设置返点佣金</div>
-              <div v-else class="inner" :to="{path: '/addProduct', query: {id: clickdata.id}}" @click="clickpopup('edit')">编辑</div>
+              <div v-else class="inner"  @click="clickpopup('edit')">编辑</div>
             </div>
             <div class="item" v-if="clickdata.moderate == 0">
               <div class="inner" @click="clickpopup('up')">上架</div>
@@ -441,8 +441,13 @@ export default {
           onHide: function () {
             if (data.flag === 1) {
               self.clickdata.moderate = 1
-              if (self.selectedIndex === 1) {
-                self.tabData2[self.clickindex].moderate = 1
+              self.tabData2.splice(self.clickindex, 1)
+              self.getData2(true)
+              if (self.tabData1.length === (self.pageStart1 + 1) * limit) {
+                self.tabData1.splice(self.tabData1.length - 1, 1)
+                self.tabData1 = [self.clickdata].concat(self.tabData1)
+              } else if (self.tabData1.length) {
+                self.tabData1 = [self.clickdata].concat(self.tabData1)
               }
             }
           }
