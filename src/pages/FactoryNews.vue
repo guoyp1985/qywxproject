@@ -344,13 +344,14 @@ export default {
     onShare () {
     },
     save (callback) {
+      const self = this
       let editorContent = document.querySelector('#editor-content')
       self.$vux.loading.show()
       let con = editorContent.innerHTML.replace('文章内容为空，点击【编辑】按钮可修改内容哦！', '')
       self.$http.post(`${ENV.BokaApi}/api/editContent/factorynews`, {
         id: self.query.id,
         content: con
-      }).then(function (res) {
+      }).then(res => {
         let data = res.data
         self.$vux.loading.hide()
         let toasttype = data.flag !== 1 ? 'warn' : 'success'
