@@ -23,14 +23,12 @@
                       <div class="color-gray font12">生成时间: {{item.dateline | dateFormat}}</div>
                     </div>
                     <div class="w100 flex_center">
-                      <div class="btncopy" @click="copyTxt(item)">复制
-                        <div class="copy_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.code }}</div>
+                      <div>
+                        <div class="btncopy" @click="copyTxt(item)">复制
+                          <div class="copy_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.code }}</div>
+                        </div>
+                        <div class="btncopy bg-orange mt5" @click="toStat(item)">统计</div>
                       </div>
-                    </div>
-                  </div>
-                  <div class="pic-list">
-                    <div v-for="(user,index2) in item.users" :key="index2" class="pic-item">
-                      <img class="pic" :src="user.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" /><span class="txt">{{user.linkman}}</span>
                     </div>
                   </div>
                 </div>
@@ -43,8 +41,8 @@
               <div v-else class="scroll_list">
                 <div v-for="(item,index1) in tabdata2" :key="index1" class="scroll_item bg-white">
                   <div class="flex_left">
-                    <div class="pic flex_center" style="width:70px;" v-if="item.avatar && item.avatar != ''">
-                      <img class="v_middle imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" style="width:50px;height:50px;" />
+                    <div class="pic flex_center" v-if="item.avatar && item.avatar != ''">
+                      <img :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                     </div>
                     <div class="flex_cell padding10">
                       <div class="bold">{{item.code}}</div>
@@ -52,10 +50,8 @@
                       <div class="color-gray font12">使用次数: {{item.quantity}}</div>
                       <div class="color-gray font12">使用时间: {{item.usedateline | dateFormat}}</div>
                     </div>
-                  </div>
-                  <div class="pic-list">
-                    <div v-for="(user,index2) in item.users" :key="index2" class="pic-item">
-                      <img class="pic" :src="user.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" /><span class="txt">{{user.linkman}}</span>
+                    <div class="w100 flex_center">
+                      <div class="btncopy bg-orange mt5" @click="toStat(item)">统计</div>
                     </div>
                   </div>
                 </div>
@@ -85,11 +81,33 @@
         title="优惠码生成成功">
       </tip-button-layer>
     </template>
+    <div v-transfer-dom class="x-popup">
+      <popup v-model="showStat" height="100%" class="stat-popup">
+        <div class="popup1">
+          <div class="popup-top flex_center">使用用户</div>
+          <div class="popup-middle font14 scroll_list">
+            <div v-if="!clickData.users || !clickData.users.length" class="flex_empty">暂时使用用户</div>
+            <div v-else class="scroll_item flex_left pt10 pb10" v-for="(item,index) in clickData.users">
+              <div class="pic flex_center" v-if="item.avatar && item.avatar != ''">
+                <img :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+              </div>
+              <div class="flex_cell padding10">
+                <div class="color-gray font12">{{item.linkman}}</div>
+                <div class="color-gray font12">使用时间: {{item.dateline | dateFormat}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="popup-bottom flex_center">
+            <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeStat">{{ $t('Close') }}</div>
+          </div>
+        </div>
+      </popup>
+    </div>
   </div>
 </template>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, TransferDom, XInput } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, TransferDom, XInput, Popup } from 'vux'
 import ENV from 'env'
 import Time from '#/time'
 import { User } from '#/storage'
@@ -106,7 +124,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, TipButtonLayer, XInput
+    Tab, TabItem, Swiper, SwiperItem, TipButtonLayer, XInput, Popup
   },
   data () {
     return {
@@ -121,7 +139,9 @@ export default {
       showModal: false,
       quantity: '',
       codefee: 0,
-      showTipModal: false
+      showTipModal: false,
+      clickData: {},
+      showStat: false
     }
   },
   filters: {
@@ -130,6 +150,14 @@ export default {
     }
   },
   methods: {
+    toStat (item) {
+      this.clickData = item
+      this.showStat = true
+    },
+    closeStat () {
+      this.showStat = false
+      this.clickData = {}
+    },
     closeTipModal () {
       this.showTipModal = false
     },
@@ -291,6 +319,14 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.code-page,.stat-popup{
+  .scroll_item{
+    .pic{
+      width:70px;
+      img{border-radius:50%;width:50px;height:50px;object-fit:cover;vertical-align: middle;}
+    }
+  }
+}
 .code-page{
   .btncopy{
     position:relative;background-color:#F85B52;color:#fff;width:60px;height:25px;text-align:center;line-height:25px;border-radius:20px;
