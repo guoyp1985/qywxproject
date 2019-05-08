@@ -38,7 +38,10 @@
       <div style="overflow-y:auto;position:absolute;left:0;top:0;right:0;bottom:0;top:43px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
         <div v-if="disProductData">
           <div class="productlist squarepic">
-            <div v-if="productData.length == 0" class="emptyitem flex_center align_center w_100">该分类下暂无货源数据</div>
+            <template v-if="!productData.length">
+              <div v-if="!afterSearch" class="emptyitem flex_center align_center w_100">该分类下暂无货源数据</div>
+              <div v-else class="emptyitem flex_center align_center w_100">当前分类下没有该商品</div>
+            </template>
             <div v-else @click="toFProduct(item)" v-for="(item,index) in productData" :key="index" class="bk-productitem scroll_item font14 db ">
           		<div class="inner list-shadow">
           			<div class="picarea">
@@ -63,7 +66,7 @@
           		</div>
             </div>
           </div>
-          <div style="text-align:center;color:#999;height:30px;line-height:30px;font-size:14px;" v-if="scrollEnd">没有更多商品啦</div>
+          <div style="text-align:center;color:#999;height:30px;line-height:30px;font-size:14px;" v-if="scrollEnd && productData.length">没有更多商品啦</div>
         </div>
       </div>
       <template v-if="showTip">
@@ -134,7 +137,8 @@ export default {
       showHb: false,
       sysParams: {},
       clickData: null,
-      clickIndex: 0
+      clickIndex: 0,
+      afterSearch: false
     }
   },
   watch: {
@@ -307,12 +311,17 @@ export default {
       if (this.searchword !== '') {
         params.keyword = this.searchword
       }
-      self.$http.post(`${ENV.BokaApi}/api/list/factoryproduct`, params).then(function (res) {
+      self.$http.post(`${ENV.BokaApi}/api/list/factoryproduct`, params).then((res) => {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
         self.productData = self.productData.concat(retdata)
         self.disProductData = true
+        if (this.searchword !== '') {
+          self.afterSearch = true
+        } else {
+          self.afterSearch = false
+        }
       })
     },
     onItemClick (index) {
