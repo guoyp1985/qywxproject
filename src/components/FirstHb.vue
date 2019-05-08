@@ -140,7 +140,8 @@ export default {
       showModal: true,
       showResult: false,
       typeObject: {vip: 'VIP', hb: '红包'},
-      moneyParams: {awardtype: '', awardmoney: ''}
+      moneyParams: {awardtype: '', awardmoney: ''},
+      submitIng: false
     }
   },
   methods: {
@@ -151,32 +152,36 @@ export default {
       this.$emit('submitFirstTip')
     },
     clickOpen () {
-      this.$vux.loading.show()
-      let params = {actions: this.action}
-      if (this.$route.query.appid) {
-        params.appid = this.$route.query.appid
-      }
-      this.$http.post(`${ENV.BokaApi}/api/retailer/firstReward`, params).then(res => {
-        this.$vux.loading.hide()
-        const data = res.data
-        if (data.flag) {
-          if (data.data <= 3) {
-            this.moneyParams.awardtype = 'hb'
-          } else {
-            this.moneyParams.awardtype = 'vip'
-          }
-          this.moneyParams.awardmoney = data.datadesc
-          this.showResult = true
-        } else {
-          this.$vux.toast.show({
-            text: data.error,
-            type: data.flag !== 1 ? 'warn' : 'success',
-            time: this.$util.delay(data.error)
-          })
+      if (!this.submitIng) {
+        this.submitIng = true
+        this.$vux.loading.show()
+        let params = {actions: this.action}
+        if (this.$route.query.appid) {
+          params.appid = this.$route.query.appid
         }
-        this.showModal = false
-        this.$emit('afterOpen', data)
-      })
+        this.$http.post(`${ENV.BokaApi}/api/retailer/firstReward`, params).then(res => {
+          this.$vux.loading.hide()
+          const data = res.data
+          if (data.flag) {
+            if (data.data <= 3) {
+              this.moneyParams.awardtype = 'hb'
+            } else {
+              this.moneyParams.awardtype = 'vip'
+            }
+            this.moneyParams.awardmoney = data.datadesc
+            this.showResult = true
+          } else {
+            this.$vux.toast.show({
+              text: data.error,
+              type: data.flag !== 1 ? 'warn' : 'success',
+              time: this.$util.delay(data.error)
+            })
+          }
+          this.showModal = false
+          this.submitIng = false
+          this.$emit('afterOpen', data)
+        })
+      }
     },
     closeHbModal (e) {
       this.showResult = false
