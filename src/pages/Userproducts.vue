@@ -64,14 +64,6 @@ Selection promotion:
   zh-CN: 精选促销
 New products:
   zh-CN: 精选新品
-Online consulting:
-  zh-CN: 在线咨询
-Wechat contact:
-  zh-CN: 微信联系
-Shop topline:
-  zh-CN: 店铺头条
-Another batch:
-  zh-CN: 换一批
 View more promotion:
   zh-CN: 查看更多促销
 </i18n>

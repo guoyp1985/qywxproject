@@ -479,6 +479,9 @@ export default {
       }
     },
     clickWetchat () {
+      if (!this.retailerInfo.qrcode || this.retailerInfo.qrcode === '') {
+        this.$util.remindQrcode(this.retailerInfo.uid)
+      }
       this.showqrcode = true
     },
     closepopup () {

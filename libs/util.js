@@ -722,6 +722,11 @@ Util.install = function (Vue, options) {
         SystemParams.set(retdata)
         callback && callback()
       })
+    },
+    remindQrcode: (wid) => {
+      Vue.http.post(`${ENV.BokaApi}/api/retailer/remindQrCode`, {
+        wid: wid
+      })
     }
   }
 }

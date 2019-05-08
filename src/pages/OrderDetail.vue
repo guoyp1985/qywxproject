@@ -234,6 +234,9 @@ export default {
       this.$router.push({path: '/evaluation', query: {id: this.data.id}})
     },
     wxContact () {
+      if (!this.retailerInfo.qrcode || this.retailerInfo.qrcode === '') {
+        this.$util.remindQrcode(this.retailerInfo.uid)
+      }
       this.wxCardShow = true
     },
     confirm (order) {

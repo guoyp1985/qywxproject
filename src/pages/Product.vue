@@ -512,21 +512,6 @@
   </div>
 </template>
 
-<i18n>
-Selection promotion:
-  zh-CN: 精选促销
-All products:
-  zh-CN: 全部商品
-Online consulting:
-  zh-CN: 在线咨询
-Wechat contact:
-  zh-CN: 微信联系
-Shop topline:
-  zh-CN: 店铺头条
-Another batch:
-  zh-CN: 换一批
-</i18n>
-
 <script>
 import { Previewer, Swiper, SwiperItem, TransferDom, Popup, Marquee, MarqueeItem, XImg } from 'vux'
 import Groupbuyitemplate from '@/components/Groupbuyitemplate'
