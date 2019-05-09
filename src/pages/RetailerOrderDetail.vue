@@ -424,9 +424,13 @@ export default {
       self.$http.post(`${ENV.BokaApi}/api/order/deliver`, self.deliverdata).then((res) => {
         let data = res.data
         self.$vux.loading.hide()
+        let error = data.error
+        if (self.data.flag === 3 && data.flag) {
+          error = '修改成功'
+        }
         self.$vux.toast.show({
-          text: data.error,
-          time: self.$util.delay(data.error),
+          text: error,
+          time: self.$util.delay(error),
           onHide: () => {
             if (data.flag === 1) {
               self.showpopup = false
