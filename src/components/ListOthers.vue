@@ -7,7 +7,6 @@
       <div class="info flex_left flex_cell" @click="toItem(item)">
         <div class="w_100">
           <div class="font14 clamp1">{{item.title}}</div>
-          <div>{{error}}</div>
           <div class="price" v-if="module === 'product'">¥ {{item.price}}</div>
         </div>
       </div>
@@ -169,7 +168,6 @@ export default {
           this.submitIng = false
           console.log(res)
           const data = res.data
-          this.error = `${data.error}${data.flag}`
           if (data.flag) {
             this.data[index].haveimport = 1
             _this.$vux.toast.show({
