@@ -32,7 +32,8 @@ export default {
       data: [],
       pagestart: 0,
       limit: 5,
-      loaded: false
+      loaded: false,
+      submitIng: false
     }
   },
   props: {
@@ -153,27 +154,31 @@ export default {
     },
     importData (itemid, index) {
       const _this = this
-      _this.$http({
-        url: `${Env.BokaApi}/api/team/copy`,
-        method: 'POST',
-        data: {
-          id: itemid,
-          module: _this.module
-        }
-      }).then(res => {
-        console.log(res)
-        const data = res.data
-        if (data.flag) {
-          this.data[index].haveimport = 1
-          _this.$vux.toast.show({
-            text: `导入${_this.moduleTransfer}成功！`
-          })
-        } else {
-          _this.$vux.toast.show({
-            text: data.error
-          })
-        }
-      })
+      if (!this.submitIng) {
+        this.submitIng = true
+        _this.$http({
+          url: `${Env.BokaApi}/api/team/copy`,
+          method: 'POST',
+          data: {
+            id: itemid,
+            module: _this.module
+          }
+        }).then(res => {
+          this.submitIng = false
+          console.log(res)
+          const data = res.data
+          if (data.flag) {
+            this.data[index].haveimport = 1
+            _this.$vux.toast.show({
+              text: `导入${_this.moduleTransfer}成功！`
+            })
+          } else {
+            _this.$vux.toast.show({
+              text: data.error
+            })
+          }
+        })
+      }
     },
     onImport (itemid, index) {
       let _this = this
