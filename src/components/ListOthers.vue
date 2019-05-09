@@ -169,7 +169,7 @@ export default {
           this.submitIng = false
           console.log(res)
           const data = res.data
-          this.error = data.error
+          this.error = `${data.error}${data.flag}`
           if (data.flag) {
             this.data[index].haveimport = 1
             _this.$vux.toast.show({
