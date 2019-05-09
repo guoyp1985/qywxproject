@@ -213,13 +213,6 @@
               <div class="t-cell title-cell w80 font14 v_middle">视频</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
                 <div class="q_photolist align_left" style="overflow:hidden;">
-                  <!--
-                  <div v-if="videoarr.length == 0" @click="uploadPhoto('videoInput','video')">
-                    <div class="button_video flex_center">
-                      <i class="al al-ai-video color-white"></i>
-                    </div>
-                  </div>
-                -->
                   <form ref="videoForm" class="db" enctype="multipart/form-data" v-if="videoarr.length == 0">
                     <div class="button_video flex_center">
                       <i class="al al-ai-video color-white"></i>
