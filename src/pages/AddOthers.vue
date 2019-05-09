@@ -133,7 +133,7 @@ export default {
           }
           this.$http({
             url: url,
-            method: 'POST',
+            method: type,
             data: params
           }).then(res => {
             console.log(res)
