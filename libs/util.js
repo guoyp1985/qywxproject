@@ -713,6 +713,15 @@ Util.install = function (Vue, options) {
       if (query.appid) {
         params.appid = query.appid
       }
+      if (query.minibackurl) {
+        params.minibackurl = query.minibackurl
+      }
+      if (query.backtype) {
+        params.backtype = query.backtype
+      }
+      if (query.control) {
+        params.control = query.control
+      }
       return params
     },
     getSystemParams: (callback) => {

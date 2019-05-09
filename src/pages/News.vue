@@ -24,7 +24,7 @@
           <div class="article-title">
             <h2>{{article.title}}</h2>
             <div class="flex_right mt5 mb5" v-if="editIng && article.uploader == reward.uid">
-              <router-link :to="{path:'/addNews',query:{id: query.id, callback: 'edit'}}" class="flex_center bg-theme color-white" style="border-radius:20px;height:25px;width:90px;">修改标题</router-link>
+              <div @click="toEditTitle" class="flex_center bg-theme color-white" style="border-radius:20px;height:25px;width:90px;">修改标题</div>
             </div>
           </div>
           <div class="article-vice-title">
@@ -433,7 +433,7 @@ export default {
             }
           }
           self.handleImg()
-          if (self.query.control === 'edit') {
+          if (self.query.control === 'edit' && parseInt(self.reward.uid) === parseInt(self.article.uploader)) {
             jQuery('.news .edit-btn')[0].click()
           }
           const data = res.data
@@ -546,6 +546,10 @@ export default {
           }
         }
       })
+    },
+    toEditTitle () {
+      let params = this.$util.handleAppParams(this.query, {id: this.query.id, callback: 'edit'})
+      this.$router.push({path: 'addNews', query: params})
     },
     editSetting () {
       this.$router.push({name: 'tAddNews', params: {id: this.article.id}})
