@@ -92,6 +92,10 @@ export default {
     }
   },
   methods: {
+    initData () {
+      this.room = {}
+      this.product = {}
+    },
     showProtocol () {
       this.showDialog = true
     },
@@ -171,6 +175,7 @@ export default {
   activated () {
     this.query = this.$route.query
     this.routePath = this.$route.path
+    this.initData()
     this.loadData()
   }
 }
