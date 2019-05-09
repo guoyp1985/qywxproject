@@ -713,6 +713,15 @@ Util.install = function (Vue, options) {
       if (query.appid) {
         params.appid = query.appid
       }
+      if (query.minibackurl) {
+        params.minibackurl = query.minibackurl
+      }
+      if (query.backtype) {
+        params.backtype = query.backtype
+      }
+      if (query.control) {
+        params.control = query.control
+      }
       return params
     },
     getSystemParams: (callback) => {
@@ -721,6 +730,11 @@ Util.install = function (Vue, options) {
         const retdata = data.data ? data.data : data
         SystemParams.set(retdata)
         callback && callback()
+      })
+    },
+    remindQrcode: (wid) => {
+      Vue.http.post(`${ENV.BokaApi}/api/retailer/remindQrCode`, {
+        wid: wid
       })
     }
   }

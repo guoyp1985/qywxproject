@@ -273,10 +273,7 @@ export default {
       const self = this
       const data = this.newData
       if (self.query.callback === 'edit') {
-        let params = {id: data.data, control: 'edit'}
-        if (self.query.minibackurl) {
-          params.minibackurl = self.query.minibackurl
-        }
+        let params = this.$util.handleAppParams(this.query, {id: data.data})
         self.$router.push({ path: '/news', query: params })
       } else {
         if (self.query.minibackurl) {

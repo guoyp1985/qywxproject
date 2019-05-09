@@ -24,7 +24,7 @@
           <div class="article-title">
             <h2>{{article.title}}</h2>
             <div class="flex_right mt5 mb5" v-if="editIng && article.uploader == reward.uid">
-              <router-link :to="{path:'/addNews',query:{id: query.id}}" class="flex_center bg-theme color-white" style="border-radius:20px;height:25px;width:90px;">修改标题</router-link>
+              <div @click="toEditTitle" class="flex_center bg-theme color-white" style="border-radius:20px;height:25px;width:90px;">修改标题</div>
             </div>
           </div>
           <div class="article-vice-title">
@@ -44,7 +44,7 @@
           <template v-if="showArticle">
             <template v-if="article.uploader == reward.uid">
               <div id="editor-content" :class="`article-content ${article.content == '' ? 'color-gray font16' : ''}`">
-                <p v-if="article.content == ''">文章内容为空，点击【编辑】按钮可修改内容哦！</p>
+                <p v-if="article.content == '' && !afterEdit">文章内容为空，点击【编辑】按钮可修改内容哦！</p>
                 <div v-else v-html="article.content"></div>
               </div>
             </template>
@@ -105,7 +105,7 @@
         :module="module"
         :on-close="closeShareSuccess">
       </share-success>
-      <editor v-if="reward.uid == article.uploader && showEditor && !(article.fid > 0)" elem="#editor-content" :loginUser="loginUser" :query="query" @on-edit="clickEdit" @on-auto-save="autoSave" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
+      <editor v-if="reward.uid == article.uploader && showEditor" elem="#editor-content" :loginUser="loginUser" :query="query" @on-edit="clickEdit" @on-auto-save="autoSave" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
       <comment-popup :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-cancel="commentPopupCancel"></comment-popup>
       <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
       <div v-transfer-dom class="x-popup">
@@ -182,7 +182,8 @@ export default {
       messages: 0,
       showEditor: false,
       showArticle: false,
-      editIng: false
+      editIng: false,
+      afterEdit: false
     }
   },
   filters: {
@@ -432,7 +433,7 @@ export default {
             }
           }
           self.handleImg()
-          if (self.query.control === 'edit') {
+          if (self.query.control === 'edit' && parseInt(self.reward.uid) === parseInt(self.article.uploader)) {
             jQuery('.news .edit-btn')[0].click()
           }
           const data = res.data
@@ -501,10 +502,11 @@ export default {
     save (callback) {
       let editorContent = document.querySelector('#editor-content')
       self.$vux.loading.show()
+      let con = editorContent.innerHTML.replace('文章内容为空，点击【编辑】按钮可修改内容哦！', '')
       self.$http.post(`${ENV.BokaApi}/api/editContent/news`, {
         id: self.query.id,
-        content: editorContent.innerHTML
-      }).then(function (res) {
+        content: con
+      }).then((res) => {
         let data = res.data
         self.$vux.loading.hide()
         let toasttype = data.flag !== 1 ? 'warn' : 'success'
@@ -512,8 +514,9 @@ export default {
           text: data.error,
           type: toasttype,
           time: self.$util.delay(data.error),
-          onHide: function () {
+          onHide: () => {
             if (data.flag === 1) {
+              self.afterEdit = true
               self.handleImg()
               callback && callback()
             }
@@ -543,6 +546,10 @@ export default {
           }
         }
       })
+    },
+    toEditTitle () {
+      let params = this.$util.handleAppParams(this.query, {id: this.query.id, callback: 'edit'})
+      this.$router.push({path: 'addNews', query: params})
     },
     editSetting () {
       this.$router.push({name: 'tAddNews', params: {id: this.article.id}})

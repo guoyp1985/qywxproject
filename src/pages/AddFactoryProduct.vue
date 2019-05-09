@@ -230,12 +230,12 @@
               <div class="t-cell title-cell w80 font14 v_middle">视频</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
                 <div class="q_photolist align_left" style="overflow:hidden;">
-                  <div ref="videoForm" class="db" enctype="multipart/form-data" v-if="videoarr.length == 0">
+                  <form ref="videoForm" class="db" enctype="multipart/form-data" v-if="videoarr.length == 0">
                     <div class="button_video flex_center">
                       <i class="al al-ai-video color-white"></i>
                       <input ref="videoInput" type="file" name="files" @change="fileChange('videoForm', 'video')" />
                     </div>
-                  </div>
+                  </form>
                   <div v-else v-for="(item,index) in videoarr" :key="index" class="videoitem photoitem">
                     <div class="inner photo imgcover" :photo="item" style="border:#ccc 1px solid;">
                       <div class="flex_center" style="position:absolute;left:0;top:0;bottom:0;right:0;">
@@ -594,8 +594,8 @@ export default {
         const filedata = new FormData(fileForm)
         self.$vux.loading.show()
         self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
-          let data = res.data
           self.$vux.loading.hide()
+          let data = res.data
           self.photoCallback(data, type)
         })
       }

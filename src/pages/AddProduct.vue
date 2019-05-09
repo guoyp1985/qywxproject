@@ -164,7 +164,7 @@
               <div class="t-cell title-cell font14 v_middle" style="width:120px;">是否允许使用卡券</div>
             -->
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <x-switch title='是否允许使用卡券' v-model="submitdata.allowcard"></x-switch>
+                <x-switch title='是否允许使用优惠券' v-model="submitdata.allowcard"></x-switch>
               </div>
             </div>
           </div>
@@ -213,13 +213,6 @@
               <div class="t-cell title-cell w80 font14 v_middle">视频</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
                 <div class="q_photolist align_left" style="overflow:hidden;">
-                  <!--
-                  <div v-if="videoarr.length == 0" @click="uploadPhoto('videoInput','video')">
-                    <div class="button_video flex_center">
-                      <i class="al al-ai-video color-white"></i>
-                    </div>
-                  </div>
-                -->
                   <form ref="videoForm" class="db" enctype="multipart/form-data" v-if="videoarr.length == 0">
                     <div class="button_video flex_center">
                       <i class="al al-ai-video color-white"></i>
@@ -651,6 +644,7 @@ export default {
         }
         let price = postdata.price.toString().replace(/,/g, '')
         let oriprice = postdata.oriprice.toString().replace(/,/g, '')
+        let postage = postdata.postage.toString().replace(/,/g, '')
         let rebate = postdata.rebate
         if (self.$util.trim(rebate) !== '') {
           rebate = rebate.toString().replace(/,/g, '')
@@ -665,6 +659,10 @@ export default {
         }
         if (self.$util.trim(postdata.postage) === '') {
           self.$vux.toast.text('请输入运费', 'middle')
+          return false
+        }
+        if (isNaN(postage) || postage < 0) {
+          self.$vux.toast.text('请输入正确的运费', 'middle')
           return false
         }
         if (!isNaN(rebate)) {

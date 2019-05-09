@@ -5,21 +5,36 @@
     </template>
     <template v-if="showContainer">
       <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
-        <div class="adbg" v-if="addata && addata.length == 1">
-          <router-link class="inner" :to="addata[0].url">
-            <img :src="addata[0].photo" />
-          </router-link>
-        </div>
-        <swiper
-          class="pic-swiper notitle"
-          v-if="addata && addata.length > 1"
-          :list="addata"
-          dots-position="center"
-          :interval="6000"
-          :aspect-ratio="500/900"
-          auto
-          loop>
-        </swiper>
+        <template v-if="showSwiper">
+          <template v-if="!addata.length">
+            <div class="adbg" v-if="loginUser.uid == retailerInfo.uid">
+              <div class="inner flex_center">
+                <div class="bg-theme color-white flex_center btn" @click="clickDecoration">滚动展示</div>
+              </div>
+            </div>
+          </template>
+          <template v-else>
+            <div class="adbg" v-if="addata.length == 1">
+              <router-link class="inner" :to="addata[0].url">
+                <img :src="addata[0].photo" />
+              </router-link>
+            </div>
+            <div v-else class="adbg">
+              <swiper
+                class="pic-swiper notitle"
+                :list="addata"
+                dots-position="center"
+                :interval="6000"
+                :aspect-ratio="500/900"
+                auto
+                loop>
+              </swiper>
+              <div v-if="loginUser.uid == retailerInfo.uid" class="fix-swiper"  @click="clickDecoration">
+                <div class="btn">滚动展示</div>
+              </div>
+            </div>
+          </template>
+        </template>
         <template v-if="retailerInfo.uid">
           <div v-if="addata.length == 0" style="margin-top:26px;"></div>
           <div class="topbox flex_left b_top_after">
@@ -29,14 +44,6 @@
             <div class="flex_cell h_100 flex_left font14">
               <div class="w_100 clamp1">{{retailerInfo.title}}</div>
             </div>
-            <!-- <div class="icon-cell flex_center">
-              <div class="w_100 h_100 flex_center">
-                <div class="w_100 align_center">
-                  <div class="al al-fenxiang store2-color font16"></div>
-                  <div class="font14 store2-color">分享</div>
-                </div>
-              </div>
-            </div> -->
           </div>
         </template>
         <!-- 超值优惠 -->
@@ -143,7 +150,7 @@
             </newsitemplate>
           </div>
         </template>
-        <div v-if="query.wid && query.wid != loginUser.uid" class="pb10 pl10 pr10">
+        <div v-if="query.wid && query.wid != loginUser.uid && !loginUser.isretailer" class="pb10 pl10 pr10">
           <router-link to="/centerSales" class="btn-open db" style="background-color: #e10c00">我也要开店</router-link>
         </div>
         <div style="text-align: center;color:#999;height: 30px;line-height:30px;font-size: 14px;" v-if="scrollEnd">没有更多商品了！</div>
@@ -266,9 +273,9 @@ export default {
       type: Boolean,
       default: ''
     },
-    showdot: {
+    showSwiper: {
       type: Boolean,
-      default: ''
+      default: false
     },
     addata: {
       type: Array,
@@ -346,6 +353,9 @@ export default {
       const scrollarea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
       this.$emit('handleScroll', scrollarea)
     },
+    clickDecoration () {
+      this.$emit('clickDecoration')
+    },
     favoriteevent () {
       this.$emit('favoriteevent')
     },
@@ -380,68 +390,53 @@ export default {
 <style lang="less" scoped>
 .store2{
   background-color:#f2f3f2;
+  .store2-color{color:#f9382c;}
   .suggest-area{
     .btn{border:#ff6a61 1px solid;color:#ff6a61;width:70px;height:25px;border-radius:30px;font-size:12px;}
   }
+  .collect{
+    display:inline-block;vertical-align:middle;width:80px;box-sizing: border-box;font-size:13px;
+    padding: 2px 0; background: #8e8e8e;color: #fff;border-radius: 50px;text-align: center;
+  }
+  .collect.have{background: #67cccc;}
+  .store2store2 .collect .txt:after{content:"收藏";}
+  .collect.have .txt:after{content:"已收藏"}
+  .staricon{margin-top:-2px;display:inline-block;}
+  .btn-open{
+    background-color: #e10c00;
+    color: #fff;
+    font-size: 14px;
+    text-align: center;
+    border-radius: 4px;
+    padding:8px;
+    letter-spacing: 2px;
+  }
+  .topbox{
+    width:100%;height:45px;position:relative;z-index:1;background:#fff;
+    .pic-cell{
+      width:80px;height:100%;padding-right:5px;
+      img{width:60px;height:60px;border-radius:50%;margin-top:-30px;border:3px solid #fff;z-index:10;}
+    }
+    .icon-cell{width:60px;height:100%;font-size:12px;}
+  }
+  .product-list{
+    padding:10px;box-sizing:border-box;
+    .list-item{
+      width:100%;padding-bottom:100%;position:relative;display:block;
+      .inner{
+        position:absolute;left:0;top:0;right:0;bottom:0;
+        img{width:100%;height:100%;border-radius:10px;}
+      }
+      .txt-area{
+        position:absolute;left:0;bottom:0;right:0;
+        padding:0 10px;height:45px;font-size:14px;
+        box-sizing:border-box;background-color:rgba(0,0,0,0.5);color:white;
+        border-bottom-left-radius:10px;border-bottom-right-radius:10px;
+      }
+    }
+    .fginner:not(:first-child){margin-top:10px;}
+  }
 }
-.store2 .notop{margin-top:26px !important;}
-.store2-color{color:#f9382c;}
-.store2 .adbg{position:relative;padding-bottom: 55.555%;}
-.store2 .adbg .inner{position:absolute;left:0;top:0;right:0;bottom:0;}
-.store2 .adbg .inner img{vertical-align:middle;width:100%;height:100%;object-fit: cover;}
-.vline{position:relative;}
-.vline:after {
-  content: " ";
-  display: block;
-  position: absolute;
-  width: 2px;
-  top: 4px;
-  bottom: 4px;
-  margin: auto 0;
-  left: -1px;
-  background-color: #ff6600;
-}
+.notop{margin-top:26px !important;}
 
-.store2 .collect{
-  display:inline-block;vertical-align:middle;width:80px;box-sizing: border-box;font-size:13px;
-  padding: 2px 0; background: #8e8e8e;color: #fff;border-radius: 50px;text-align: center;
-}
-.store2 .collect.have{background: #67cccc;}
-.store2store2 .collect .txt:after{content:"收藏";}
-.store2 .collect.have .txt:after{content:"已收藏"}
-.store2 .staricon{margin-top:-2px;display:inline-block;}
-.store2 .btn-open{
-  background-color: #e10c00;
-  color: #fff;
-  font-size: 14px;
-  text-align: center;
-  border-radius: 4px;
-  padding:8px;
-  letter-spacing: 2px;
-}
-.store2 .topbox{
-  width:100%;height:45px;position:relative;z-index:1;background:#fff;
-  .pic-cell{
-    width:80px;height:100%;padding-right:5px;
-    img{width:60px;height:60px;border-radius:50%;margin-top:-30px;border:3px solid #fff;z-index:10;}
-  }
-  .icon-cell{width:50px;height:100%;}
-}
-.store2 .product-list{
-  padding:10px;box-sizing:border-box;
-  .list-item{
-    width:100%;padding-bottom:100%;position:relative;display:block;
-    .inner{
-      position:absolute;left:0;top:0;right:0;bottom:0;
-      img{width:100%;height:100%;border-radius:10px;}
-    }
-    .txt-area{
-      position:absolute;left:0;bottom:0;right:0;
-      padding:0 10px;height:45px;font-size:14px;
-      box-sizing:border-box;background-color:rgba(0,0,0,0.5);color:white;
-      border-bottom-left-radius:10px;border-bottom-right-radius:10px;
-    }
-  }
-  .fginner:not(:first-child){margin-top:10px;}
-}
 </style>

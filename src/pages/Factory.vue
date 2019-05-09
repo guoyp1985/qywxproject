@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea bg-white font14 notop">
+  <div :class="`containerarea bg-white font14 notop ${(!tabData2.length || (loginUser.retailerinfo.fid && loginUser.retailerinfo.fid != query.id)) ? 'nobottom' : ''}`">
     <div class="s-topbanner">
       <div class="flex_left border-box padding10 color-white" style="height:88px;">
         <div v-if="viewData.photo && viewData.photo != ''" class="w70">
@@ -63,20 +63,26 @@
       </template>
     </div>
     <template v-if="showBottom">
-      <div v-if="loginUser.isretailer" class="s-bottom list-shadow flex_center bg-white pl12 pr12">
+      <template v-if="loginUser.isretailer">
         <template v-if="selectedIndex == 0">
-          <div v-if="tabData1 && tabData1.length > 0" class="align_center flex_center flex_cell">
-            <div class="flex_center btn-bottom-red" style="width:85%;" @click="upAll('product')">一键上架商品</div>
-          </div>
-          <div class="align_center flex_center flex_cell">
-            <div class="flex_center btn-bottom-orange" style="width:85%;" @click="toStore">我的店铺</div>
+          <div class="s-bottom list-shadow flex_center bg-white pl12 pr12">
+            <div v-if="tabData1 && tabData1.length > 0 && (!loginUser.retailerinfo.fid || loginUser.retailerinfo.fid == query.id)" class="align_center flex_center flex_cell">
+              <div class="flex_center btn-bottom-red" style="width:85%;" @click="upAll('product')">一键上架商品</div>
+            </div>
+            <div class="align_center flex_center flex_cell">
+              <div class="flex_center btn-bottom-orange" style="width:85%;" @click="toStore">我的店铺</div>
+            </div>
           </div>
         </template>
-        <div v-if="tabData2 && tabData2.length > 0 && selectedIndex == 1" class="align_center flex_center flex_cell">
-          <div class="flex_center btn-bottom-red" style="width:85%;" @click="upAll('factorynews')">导入文章</div>
-        </div>
-      </div>
-      <div v-if="!loginUser.isretailer" class="s-bottom list-shadow flex_center bg-white pl12 pr12">
+        <template v-else>
+          <div v-if="tabData2 && tabData2.length > 0 && (!loginUser.retailerinfo.fid || loginUser.retailerinfo.fid == query.id)" class="s-bottom list-shadow flex_center bg-white pl12 pr12">
+            <div class="align_center flex_center flex_cell">
+              <div class="flex_center btn-bottom-red" style="width:85%;" @click="upAll('factorynews')">导入文章</div>
+            </div>
+          </div>
+        </template>
+      </template>
+      <div v-else class="s-bottom list-shadow flex_center bg-white pl12 pr12">
         <div class="align_center flex_center flex_cell">
           <router-link class="flex_center btn-bottom-red" style="width:85%;" to="/centerSales">入驻共销客</router-link>
         </div>
@@ -346,25 +352,30 @@ export default {
     refresh () {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.initData()
-      this.loginUser = User.get()
-      if (!self.loginUser.isretailer) {
-        self.showBottom = true
-      } else {
-        self.showBottom = false
+      console.log(this.query)
+      if (!this.query.id || this.query.id !== parseInt(this.$route.query.id)) {
+        this.initData()
+        this.loginUser = User.get()
+        if (!self.loginUser.isretailer) {
+          self.showBottom = true
+        } else {
+          self.showBottom = false
+        }
+        this.query = this.$route.query
+        self.$vux.loading.show()
+        self.$http.get(`${ENV.BokaApi}/api/factory/info`, {
+          params: { fid: self.query.id }
+        }).then(function (res) {
+          self.$vux.loading.hide()
+          let data = res.data
+          let retdata = data.data ? data.data : data
+          self.viewData = retdata
+          self.swiperChange()
+        })
       }
-      this.query = this.$route.query
-      self.$vux.loading.show()
-      self.$http.get(`${ENV.BokaApi}/api/factory/info`, {
-        params: { fid: self.query.id }
-      }).then(function (res) {
-        self.$vux.loading.hide()
-        let data = res.data
-        let retdata = data.data ? data.data : data
-        self.viewData = retdata
-        self.swiperChange()
-      })
     }
+  },
+  created () {
   },
   activated () {
     this.refresh()

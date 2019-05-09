@@ -125,7 +125,7 @@
         </div>
       </div>
       <div v-if="loginUser.isretailer" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
-        <div class="align_center flex_center flex_cell">
+        <div class="align_center flex_center flex_cell" v-if="!loginUser.retailerinfo.fid || loginUser.retailerinfo.fid == query.fid">
           <div class="btn-bottom-red flex_center" style="width:80%;" v-if="productdata.haveimport">已上架</div>
           <div class="btn-bottom-red flex_center" style="width:80%;" v-else @click="importEvent">上架到店铺</div>
         </div>
@@ -209,21 +209,6 @@
     </div>
   </div>
 </template>
-
-<i18n>
-Selection promotion:
-  zh-CN: 精选促销
-All products:
-  zh-CN: 全部商品
-Online consulting:
-  zh-CN: 在线咨询
-Wechat contact:
-  zh-CN: 微信联系
-Shop topline:
-  zh-CN: 店铺头条
-Another batch:
-  zh-CN: 换一批
-</i18n>
 
 <script>
 import { Previewer, Swiper, SwiperItem, TransferDom, Popup, XImg } from 'vux'
@@ -356,6 +341,7 @@ export default {
       this.messages = 0
       this.isFirst = false
       this.showHb = false
+      this.selectedOption = {}
     },
     closeFirstHb () {
       this.isFirst = false
@@ -384,6 +370,7 @@ export default {
     },
     clickOptions (item, index) {
       this.selectedOption = item
+      console.log(this.selectedOption)
       this.selectedOptionIndex = index
       this.previewerOptionsPhoto = this.$util.previewerImgdata([this.selectedOption.photo])
     },

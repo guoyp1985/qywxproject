@@ -89,6 +89,9 @@
             </div>
           </div>
         </div>
+        <div v-if="data && data.delivertype ==2"  class="padding10 b_top_after bg-white">
+          <div class="flex_right font12 color-gray">到店自提</div>
+        </div>
         <div v-if="data && data.content != ''"  class="padding10 b_top_after bg-white">
           <div class="flex_left font12">
             <div class="w40">留言: </div>
@@ -107,7 +110,7 @@
           </div>
           <div v-if="data.nexttime" class="align_left padding10 color-gray2 font12">回访时间：{{ data.nexttime | dateformat }}</div>
         </div>
-        <div class="padding10" v-if="data.flag == 2 && data.backflag == 20">
+        <div class="padding10" v-if="data.cancensorback == 1">
           <div class="flex_right font12">
             <div class="flex_center mr10" @click="agreeEvent(0)" style="border:#999 1px solid;height:25px;border-radius:5px;color:#999;width:75px;">拒绝退款</div>
             <div class="flex_center" @click="agreeEvent(1)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">同意退款</div>
@@ -301,6 +304,7 @@ export default {
                 time: self.$util.delay(data.error),
                 onHide: () => {
                   if (data.flag === 1) {
+                    this.data.cancensorback = 0
                     this.data.backflag = 0
                     this.data.flag = 0
                     this.data.flagstr = '已退款'
@@ -420,9 +424,13 @@ export default {
       self.$http.post(`${ENV.BokaApi}/api/order/deliver`, self.deliverdata).then((res) => {
         let data = res.data
         self.$vux.loading.hide()
+        let error = data.error
+        if (self.data.flag === 3 && data.flag) {
+          error = '修改成功'
+        }
         self.$vux.toast.show({
-          text: data.error,
-          time: self.$util.delay(data.error),
+          text: error,
+          time: self.$util.delay(error),
           onHide: () => {
             if (data.flag === 1) {
               self.showpopup = false

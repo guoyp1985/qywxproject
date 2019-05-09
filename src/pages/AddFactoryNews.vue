@@ -232,6 +232,9 @@ export default {
                 if (self.query.id) {
                   params.newadd = 1
                 }
+                if (self.query.callback === 'edit') {
+                  params.control = 'edit'
+                }
                 self.$router.push({ path: '/factoryNews', query: params })
               }
             }

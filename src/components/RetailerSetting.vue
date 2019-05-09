@@ -657,6 +657,10 @@ export default {
       if (!iscontinue) {
         return false
       }
+      if (!self.productClass.length) {
+        self.$vux.toast.text('请选择经营范围', 'middle')
+        return false
+      }
       self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/retailer/changeInfo`, self.submitdata).then(function (res) {
         let data = res.data

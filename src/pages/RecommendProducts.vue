@@ -1,11 +1,19 @@
 <template>
   <div class="containerarea columnarea bg-white font14 notop nobottom rproducts">
+    <search
+      class="v-search bg-white"
+      v-model='searchword'
+      :auto-fixed="autofixed"
+      @on-submit="onSubmit"
+      @on-change="onChange"
+      @on-cancel="onCancel"
+      ref="search">
+    </search>
     <tab class="w_100 v-tab">
       <tab-item v-for="(item,index) in classData" :selected="selectedIndex == index" :key="index"  @on-item-click="onItemClick">{{item.title}}</tab-item>
     </tab>
     <div class="column-content" style="padding-bottom:10px;box-sizing:border-box;position:relative;">
-      <template v-if="selectedIndex == 0">
-        <div>
+        <!-- <div>
           <search
             class="v-search bg-white"
             v-model='searchword'
@@ -15,23 +23,25 @@
             @on-cancel="onCancel"
             ref="search">
           </search>
-        </div>
-        <div class="b_top_after pt10 pb10">
-          <div class="flex_center">
-            <div :class="`flex_cell flex_center b_right_after sort-icon ${sort == 'dateline' ? 'active' : ''}`" @click="sortEvent('dateline')">
-              <div class="txt">最新上架<span :class="`al sort ${datecss}`"></span></div>
-            </div>
-            <div :class="`flex_cell flex_center sort-icon ${sort == 'profit' ? 'active' : ''}`" @click="sortEvent('profit')">
-              <div class="txt">利润最高<span :class="`al sort ${pricecss}`"></span></div>
-            </div>
+        </div> -->
+      <div class="b_top_after pt10 pb10">
+        <div class="flex_center">
+          <div :class="`flex_cell flex_center b_right_after sort-icon ${sort == 'dateline' ? 'active' : ''}`" @click="sortEvent('dateline')">
+            <div class="txt">最新上架<span :class="`al sort ${datecss}`"></span></div>
+          </div>
+          <div :class="`flex_cell flex_center sort-icon ${sort == 'profit' ? 'active' : ''}`" @click="sortEvent('profit')">
+            <div class="txt">利润最高<span :class="`al sort ${pricecss}`"></span></div>
           </div>
         </div>
-        <div class="b_top_after"></div>
-      </template>
-      <div :style="`overflow-y:auto;position:absolute;left:0;top:0;right:0;bottom:0;${selectedIndex == 0 ? 'top:100px;' : 'top:0;'}`" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
+      </div>
+      <div class="b_top_after"></div>
+      <div style="overflow-y:auto;position:absolute;left:0;top:0;right:0;bottom:0;top:43px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
         <div v-if="disProductData">
           <div class="productlist squarepic">
-            <div v-if="productData.length == 0" class="emptyitem flex_center align_center w_100">该分类下暂无货源数据</div>
+            <template v-if="!productData.length">
+              <div v-if="!afterSearch" class="emptyitem flex_center align_center w_100">该分类下暂无货源数据</div>
+              <div v-else class="emptyitem flex_center align_center w_100">当前分类下没有该商品</div>
+            </template>
             <div v-else @click="toFProduct(item)" v-for="(item,index) in productData" :key="index" class="bk-productitem scroll_item font14 db ">
           		<div class="inner list-shadow">
           			<div class="picarea">
@@ -56,7 +66,7 @@
           		</div>
             </div>
           </div>
-          <div style="text-align:center;color:#999;height:30px;line-height:30px;font-size:14px;" v-if="scrollEnd">没有更多商品啦</div>
+          <div style="text-align:center;color:#999;height:30px;line-height:30px;font-size:14px;" v-if="scrollEnd && productData.length">没有更多商品啦</div>
         </div>
       </div>
       <template v-if="showTip">
@@ -127,7 +137,8 @@ export default {
       showHb: false,
       sysParams: {},
       clickData: null,
-      clickIndex: 0
+      clickIndex: 0,
+      afterSearch: false
     }
   },
   watch: {
@@ -277,34 +288,40 @@ export default {
     },
     getData1 (type) {
       let params = {pagestart: pageStart, limit: limit, wid: this.loginUser.uid}
+      if (this.loginUser.retailerinfo.fid) {
+        params.fid = this.loginUser.retailerinfo.fid
+      }
+      if (this.sort === 'dateline') {
+        params.orderby = 'recommendtime'
+        params.ascdesc = this.datecss
+      } else {
+        params.orderby = 'salesrebate'
+        params.ascdesc = this.pricecss
+      }
       if (this.selectedIndex === 0) {
         params.recommend = 2
-        if (this.sort === 'dateline') {
-          params.orderby = 'recommendtime'
-          params.ascdesc = this.datecss
-        } else {
-          params.orderby = 'salesrebate'
-          params.ascdesc = this.pricecss
-        }
       } else if (this.selectedIndex === 1) {
-        params.orderby = 'saled'
+        // params.orderby = 'saled'
         params.from = 'origin'
       } else {
-        params.orderby = 'saled'
+        // params.orderby = 'saled'
         params.from = 'origin'
         params.classid = self.classData[self.selectedIndex].id
       }
-      if (this.selectedIndex === 0) {
-        if (this.searchword !== '') {
-          params.keyword = this.searchword
-        }
+      if (this.searchword !== '') {
+        params.keyword = this.searchword
       }
-      self.$http.post(`${ENV.BokaApi}/api/list/factoryproduct`, params).then(function (res) {
+      self.$http.post(`${ENV.BokaApi}/api/list/factoryproduct`, params).then((res) => {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
         self.productData = self.productData.concat(retdata)
         self.disProductData = true
+        if (this.searchword !== '') {
+          self.afterSearch = true
+        } else {
+          self.afterSearch = false
+        }
       })
     },
     onItemClick (index) {

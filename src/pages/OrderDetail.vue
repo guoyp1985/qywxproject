@@ -98,7 +98,10 @@
         </cell>
       </group>
       <group>
-        <div class="padding10 font12 color-gray">创建时间: {{ data.dateline | dateformat }}</div>
+        <div class="padding10 font12 color-gray flex_left">
+          <div class="flex_cell flex_left">创建时间: {{ data.dateline | dateformat }}</div>
+          <div class="flex_right w60" v-if="data.delivertype == 2">到店自提</div>
+        </div>
         <div class="pl10 pr10 pb10 font12 color-gray" v-if="data.flag == 3">发货时间: {{ data.delivertime | dateformat }}</div>
         <div v-if="data && data.content != ''"  class="pl10 pr10 pb10 color-gray">
           <div class="flex_left font12">
@@ -231,6 +234,9 @@ export default {
       this.$router.push({path: '/evaluation', query: {id: this.data.id}})
     },
     wxContact () {
+      if (!this.retailerInfo.qrcode || this.retailerInfo.qrcode === '') {
+        this.$util.remindQrcode(this.retailerInfo.uid)
+      }
       this.wxCardShow = true
     },
     confirm (order) {

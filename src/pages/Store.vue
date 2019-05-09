@@ -1,5 +1,41 @@
+<style lang="less">
+.store-page{
+  .adbg{
+    position:relative;padding-bottom: 55.555%;
+    .inner{
+      position:absolute;left:0;top:0;right:0;bottom:0;
+      img{vertical-align:middle;width:100%;height:100%;object-fit: cover;}
+      .btn{width:150px;height:35px;border-radius:20px;}
+    }
+    .pic-swiper{
+      position:absolute;left:0;top:0;right:0;bottom:0;
+    }
+  }
+  .vline{position:relative;}
+  .vline:after {
+    content: " ";
+    display: block;
+    position: absolute;
+    width: 2px;
+    top: 4px;
+    bottom: 4px;
+    margin: auto 0;
+    left: -1px;
+    background-color: #ff6600;
+  }
+  .fix-swiper{
+    position:absolute;right:0;top:20px;
+    width:75px;height:35px;
+    .btn{
+      width:75px;height:35px;border-top-left-radius:20px;border-bottom-left-radius:20px;
+      background-color:#ff6a61;color:#fff;
+      display:flex;justify-content: center; align-items: center;
+    }
+  }
+}
+</style>
 <template>
-  <div class="containerarea font14">
+  <div class="containerarea font14 store-page">
     <template v-if="showTemplate1">
       <Storeview1
         :showSos="showSos"
@@ -11,7 +47,7 @@
         :showShareSuccess="showShareSuccess"
         :retailerInfo="retailerInfo"
         :showqrcode="showqrcode"
-        :showdot="showdot"
+        :showSwiper="showSwiper"
         :addata="addata"
         :activitydata="activitydata"
         :disproductdata="disproductdata"
@@ -28,6 +64,7 @@
         :showHelpModal="showHelpModal"
         :pageStart="pageStart"
         :newPageStart="newPageStart"
+        @clickDecoration="toDecoration"
         @clickSuggest="clickSuggest"
         @handleScroll="handleScroll"
         @toCenterSales="toCenterSales"
@@ -36,7 +73,8 @@
         @closepopup="closepopup"
         @closeShareSuccess="closeShareSuccess"
         @clickHelp="clickHelp"
-        @closeHelpModal="closeHelpModal">
+        @closeHelpModal="closeHelpModal"
+        @favoriteevent="favoriteevent">
       </Storeview1>
     </template>
     <template v-if="showTemplate2">
@@ -50,7 +88,7 @@
         :showShareSuccess="showShareSuccess"
         :retailerInfo="retailerInfo"
         :showqrcode="showqrcode"
-        :showdot="showdot"
+        :showSwiper="showSwiper"
         :addata="addata"
         :activitydata="activitydata"
         :disproductdata="disproductdata"
@@ -67,6 +105,7 @@
         :showHelpModal="showHelpModal"
         :pageStart="pageStart"
         :newPageStart="newPageStart"
+        @clickDecoration="toDecoration"
         @clickSuggest="clickSuggest"
         @handleScroll="handleScroll"
         @toCenterSales="toCenterSales"
@@ -90,7 +129,7 @@
         :showShareSuccess="showShareSuccess"
         :retailerInfo="retailerInfo"
         :showqrcode="showqrcode"
-        :showdot="showdot"
+        :showSwiper="showSwiper"
         :addata="addata"
         :activitydata="activitydata"
         :disproductdata="disproductdata"
@@ -107,6 +146,7 @@
         :showHelpModal="showHelpModal"
         :pageStart="pageStart"
         :newPageStart="newPageStart"
+        @clickDecoration="toDecoration"
         @clickSuggest="clickSuggest"
         @handleScroll="handleScroll"
         @toCenterSales="toCenterSales"
@@ -130,7 +170,7 @@
         :showShareSuccess="showShareSuccess"
         :retailerInfo="retailerInfo"
         :showqrcode="showqrcode"
-        :showdot="showdot"
+        :showSwiper="showSwiper"
         :addata="addata"
         :activitydata="activitydata"
         :disproductdata="disproductdata"
@@ -146,6 +186,7 @@
         :suggestData="suggestData"
         :showHelpModal="showHelpModal"
         :pageStart="pageStart"
+        @clickDecoration="toDecoration"
         @clickSuggest="clickSuggest"
         @handleScroll="handleScroll"
         @toCenterSales="toCenterSales"
@@ -211,7 +252,7 @@ export default {
       showShareSuccess: false,
       retailerInfo: { avatar: 'https://tossharingsales.boka.cn/images/user.jpg' },
       showqrcode: false,
-      showdot: true,
+      showSwiper: false,
       addata: [],
       activitydata: [],
       disproductdata: false,
@@ -252,16 +293,6 @@ export default {
       return this.isfavorite
     }
   },
-  computed: {
-    isshowdot () {
-      if (this.addata.length > 1) {
-        this.showdot = true
-      } else {
-        this.showdot = false
-      }
-      return this.showdot
-    }
-  },
   methods: {
     initData () {
       initNewsData = []
@@ -287,6 +318,10 @@ export default {
       this.showTemplate2 = false
       this.showTemplate3 = false
       this.showTemplate4 = false
+    },
+    toDecoration () {
+      let params = this.$util.handleAppParams(this.query, {})
+      this.$router.push({path: '/decorationShop', query: params})
     },
     clickHelp () {
       this.showHelpModal = true
@@ -423,7 +458,7 @@ export default {
     },
     getSuggestData () {
       const self = this
-      self.$http.get(`${ENV.BokaApi}/api/list/product?uploader=-1`, {
+      self.$http.get(`${ENV.BokaApi}/api/list/product?uploader=-13`, {
         params: {pagestart: 0, limit: 2}
       }).then(function (res) {
         const data = res.data
@@ -445,6 +480,9 @@ export default {
       }
     },
     clickWetchat () {
+      if (!this.retailerInfo.qrcode || this.retailerInfo.qrcode === '') {
+        this.$util.remindQrcode(this.retailerInfo.uid)
+      }
       this.showqrcode = true
     },
     closepopup () {
@@ -594,6 +632,7 @@ export default {
             p.url = `/product?id=${p.moduleid}&wid=${self.retailerInfo.uid}`
           }
           self.addata = retdata
+          self.showSwiper = true
           const params = { params: { do: 'store', pagestart: 0, limit: 20, wid: self.query.wid } }
           return self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params)
         }
