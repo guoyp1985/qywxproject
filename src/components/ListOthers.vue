@@ -17,6 +17,8 @@
       </div>
   </div>
     <div class="tip-message" v-if="!data.length && loaded"><span>暂无{{moduleTransfer}}</span></div>
+    <!-- 数据加载完毕提示 -->
+    <div class="end-area" v-if="data.length && endShow"><span>--没有更多数据啦--</span></div>
   </div>
 </template>
 
@@ -34,7 +36,8 @@ export default {
       limit: 5,
       loaded: false,
       submitIng: false,
-      error: ''
+      error: '',
+      endShow: false
     }
   },
   props: {
@@ -113,6 +116,9 @@ export default {
             this.data = res.data.data
           } else {
             this.data.push(...res.data.data)
+          }
+          if (res.data.data.length < this.limit) {
+            this.endShow = true
           }
           this.$nextTick(() => {
             this.$parent.refresh()
@@ -300,5 +306,6 @@ export default {
       color: #c9c9c9;
       margin-top: 30px;
     }
+    .end-area{width:100%;height:50px;color:#ccc;display:flex;align-items:center;justify-content: center;}
   }
 </style>

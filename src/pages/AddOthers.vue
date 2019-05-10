@@ -116,13 +116,16 @@ export default {
             })
           })
         } else {
-          // if (module === 'news') {
-          //   url = `${Env.BokaApi}/api/list/news?from=retaile`
-          // } else if (module === 'product') {
-          //   url = `${Env.BokaApi}/api/retailer/getRetailerProducts`
-          // } else {
-          url = `${Env.BokaApi}/api/list/${module}`
-          // }
+          let type = 'POST'
+          if (module === 'news') {
+            url = `${Env.BokaApi}/api/list/news?from=retaile`
+            type = 'GET'
+          } else if (module === 'product') {
+            url = `${Env.BokaApi}/api/retailer/getRetailerProducts`
+            type = 'GET'
+          } else {
+            url = `${Env.BokaApi}/api/list/${module}`
+          }
           params = {
             ...params,
             uploader: this.userInfo.uid,
@@ -130,7 +133,7 @@ export default {
           }
           this.$http({
             url: url,
-            method: 'POST',
+            method: type,
             data: params
           }).then(res => {
             console.log(res)

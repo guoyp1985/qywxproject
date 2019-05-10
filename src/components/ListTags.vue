@@ -27,6 +27,8 @@
       </div>
     </div>
     <div class="tip-message" v-if="!tags.length && loaded"><span>暂无素材</span></div>
+    <!-- 数据加载完毕提示 -->
+    <div class="end-area" v-if="tags.length && endShow"><span>--没有更多数据啦--</span></div>
   </div>
 </template>
 
@@ -42,7 +44,8 @@ export default {
       pagestart: 0,
       limit: 5,
       currentPhotos: [],
-      loaded: false
+      loaded: false,
+      endShow: false
     }
   },
   props: {
@@ -92,6 +95,9 @@ export default {
               this.$parent.refresh()
             })
             this.pagestart++
+          }
+          if (data.length < this.limit) {
+            this.endShow = true
           }
           this.loaded = true
         })
@@ -298,5 +304,6 @@ export default {
       color: #c9c9c9;
       margin-top: 30px;
     }
+    .end-area{width:100%;height:50px;color:#ccc;display:flex;align-items:center;justify-content: center;}
   }
 </style>
