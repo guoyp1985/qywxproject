@@ -27,8 +27,8 @@
       </div>
     </div>
     <div class="tip-message" v-if="!tags.length && loaded"><span>暂无素材</span></div>
-    <!-- 商品加载完毕提示 -->
-    <div class="end-area" v-if="tags.length && endShow"><span>--没有更多商品啦--</span></div>
+    <!-- 数据加载完毕提示 -->
+    <div class="end-area" v-if="tags.length && endShow"><span>--没有更多数据啦--</span></div>
   </div>
 </template>
 
@@ -85,9 +85,6 @@ export default {
             data.data[i].photosSplited = data.data[i].photo.split(',')
             data.data[i].time = new Time(data.data[i].dateline * 1000).format()
           }
-          if (data.length < this.limit) {
-            this.endShow = true
-          }
           if (data.flag) {
             if (this.pagestart === 0) {
               this.tags = data.data
@@ -98,6 +95,9 @@ export default {
               this.$parent.refresh()
             })
             this.pagestart++
+          }
+          if (data.length < this.limit) {
+            this.endShow = true
           }
           this.loaded = true
         })

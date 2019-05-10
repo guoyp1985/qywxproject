@@ -17,8 +17,8 @@
       </div>
   </div>
     <div class="tip-message" v-if="!data.length && loaded"><span>暂无{{moduleTransfer}}</span></div>
-    <!-- 商品加载完毕提示 -->
-    <div class="end-area" v-if="data.length && endShow"><span>--没有更多商品啦--</span></div>
+    <!-- 数据加载完毕提示 -->
+    <div class="end-area" v-if="data.length && endShow"><span>--没有更多数据啦--</span></div>
   </div>
 </template>
 
