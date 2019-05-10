@@ -36,6 +36,7 @@ export default {
   },
   data () {
     return {
+      userInfo: {},
       module: '',
       data: [],
       pagestart: 0,
@@ -99,21 +100,8 @@ export default {
             params: params
           }).then(res => {
             console.log(res)
-            const data = res.data.data
-            for (let i = 0; i < data.length; i++) {
-              data[i].isChecked = false
-            }
-            if (!this.pagestart) {
-              this.data = data
-            } else {
-              this.data.push(...data)
-            }
-            console.log(data)
-            this.pagestart++
-            this.loaded = true
-            this.$nextTick(() => {
-              this.$refs.wraper.bscroll.refresh()
-            })
+            const data = res.data
+            this.handleModuleData(data)
           })
         } else {
           let type = 'POST'
@@ -131,34 +119,41 @@ export default {
             uploader: this.userInfo.uid,
             wid: this.userInfo.uid
           }
-          this.$http({
-            url: url,
-            method: type,
-            data: params
-          }).then(res => {
-            console.log(res)
-            const data = res.data
-            let retdata = data.data ? data.data : data
-            for (let i = 0; i < retdata.length; i++) {
-              retdata[i].isChecked = false
-            }
-            if (!this.pagestart) {
-              this.data = retdata
-            } else {
-              this.data.push(...retdata)
-            }
-            console.log(retdata)
-            console.log(this)
-            this.pagestart++
-            this.loaded = true
-            this.$nextTick(() => {
-              this.$refs.wraper.bscroll.refresh()
+          console.log('进入请求')
+          console.log(params)
+          if (type === 'POST') {
+            this.$http.post(url, params).then(res => {
+              const data = res.data
+              this.handleModuleData(data)
             })
-          })
+          } else {
+            this.$http.get(url, {params: params}).then(res => {
+              const data = res.data
+              this.handleModuleData(data)
+            })
+          }
         }
       } else {
         console.log('没有更多数据了！')
       }
+    },
+    handleModuleData (data) {
+      let retdata = data.data ? data.data : data
+      for (let i = 0; i < retdata.length; i++) {
+        retdata[i].isChecked = false
+      }
+      if (!this.pagestart) {
+        this.data = retdata
+      } else {
+        this.data.push(...retdata)
+      }
+      console.log(retdata)
+      console.log(this)
+      this.pagestart++
+      this.loaded = true
+      this.$nextTick(() => {
+        this.$refs.wraper.bscroll.refresh()
+      })
     },
     onCheck (item) {
       if (!item.isChecked) {
