@@ -72,7 +72,8 @@ export default {
       pageStart: 0,
       searchWord: '',
       searchResult: false,
-      products: []
+      products: [],
+      checkData: {}
     }
   },
   methods: {
@@ -92,6 +93,9 @@ export default {
       })
     },
     handleCheck (data, index) {
+      console.log('选中的数据')
+      console.log(data)
+      this.checkData = data
       if (data.checked) {
         this.selectProdcut = data
         this.selectProductIndex = index
@@ -193,6 +197,11 @@ export default {
   created () {
     this.loginUser = User.get()
     this.getProductData()
+  },
+  watch: {
+    '$route' () {
+      this.checkData.checked = false
+    }
   }
 }
 </script>
