@@ -199,11 +199,17 @@ export default {
       })
     }
   },
-  activated () {
+  created () {
     this.query = this.$route.query
     this.pageStart = 0
     this.rooms = []
     this.refresh()
+  },
+  activated () {
+    // this.query = this.$route.query
+    // this.pageStart = 0
+    // this.rooms = []
+    // this.refresh()
   }
 }
 </script>
