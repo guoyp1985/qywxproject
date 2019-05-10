@@ -516,6 +516,7 @@ export default {
           time: self.$util.delay(data.error),
           onHide: () => {
             if (data.flag === 1) {
+              self.article.content = con
               self.afterEdit = true
               self.handleImg()
               callback && callback()
@@ -648,6 +649,7 @@ export default {
       this.showArticle = false
       this.showEditor = false
       this.showsharetip = false
+      this.afterEdit = false
       this.editIng = false
       if (query.edit === 'control') {
         this.editIng = true
