@@ -233,7 +233,7 @@ export default {
       const self = this
       if (this.notFavorite) {
         this.notFavorite = false
-        this.$http.post(`${ENV.BokaApi}/api/user/favorite/add`, {id: this.article.id, module: this.module})
+        this.$http.post(`${ENV.BokaApi}/api/user/favorite/add`, {id: this.article.id, module: this.module, wid: this.article.uploader})
         .then(res => {
           if (res.data.flag) {
             self.$vux.toast.text(self.$t('Favorite Success'))

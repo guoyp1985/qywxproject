@@ -93,7 +93,8 @@
             <img src="https://tossharingsales.boka.cn/minigxk/luck/hb2.png" />
           </div>
         </div>
-        <div class="top-txt flex_center">恭喜你获得<text class="big">{{typeObject[moneyParams.awardtype]}}</text>奖励</div>
+        <!-- <div class="top-txt flex_center">恭喜你获得<text class="big">{{typeObject[moneyParams.awardtype]}}</text>奖励</div> -->
+        <div class="top-txt flex_center">恭喜你获得奖励</div>
         <div class="con-txt flex_center">
           <div class="w_100 align_center">
             <template v-if="moneyParams.awardtype == 'hb'">

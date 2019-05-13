@@ -44,8 +44,8 @@
           <template v-if="showArticle">
             <template v-if="article.uploader == reward.uid">
               <div id="editor-content" :class="`article-content ${article.content == '' ? 'color-gray font16' : ''}`">
-                <p v-if="article.content == '' && !afterEdit">文章内容为空，点击【编辑】按钮可修改内容哦！</p>
-                <div v-else v-html="article.content"></div>
+                <p class="class111" v-if="article.content == '' && !afterEdit">文章内容为空，点击【编辑】按钮可修改内容哦！</p>
+                <div class="class222" v-else v-html="article.content"></div>
               </div>
             </template>
             <template v-else>
@@ -460,7 +460,7 @@ export default {
         if (self.query.wid) {
           cururl = `${cururl}&wid=${self.query.wid}`
         }
-        this.$http.post(`${ENV.BokaApi}/api/user/favorite/add`, {id: this.article.id, module: self.module, currenturl: encodeURIComponent(cururl)})
+        this.$http.post(`${ENV.BokaApi}/api/user/favorite/add`, {id: this.article.id, module: self.module, wid: this.article.uploader, currenturl: encodeURIComponent(cururl)})
         .then(res => {
           if (res.data.flag) {
             self.$vux.toast.text(self.$t('Favorite Success'))
@@ -502,7 +502,7 @@ export default {
     save (callback) {
       let editorContent = document.querySelector('#editor-content')
       self.$vux.loading.show()
-      let con = editorContent.innerHTML.replace('文章内容为空，点击【编辑】按钮可修改内容哦！', '')
+      let con = editorContent.innerHTML.replace('<p>文章内容为空，点击【编辑】按钮可修改内容哦！</p>', '').replace('<p class="Eleditor-active">文章内容为空，点击【编辑】按钮可修改内容哦！</p>', '')
       self.$http.post(`${ENV.BokaApi}/api/editContent/news`, {
         id: self.query.id,
         content: con
@@ -516,8 +516,10 @@ export default {
           time: self.$util.delay(data.error),
           onHide: () => {
             if (data.flag === 1) {
-              self.article.content = con
-              self.afterEdit = true
+              if (con !== '') {
+                self.article.content = con
+                self.afterEdit = true
+              }
               self.handleImg()
               callback && callback()
             }
