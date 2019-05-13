@@ -457,7 +457,7 @@
       </div>
     </div>
     <template v-if="showSellerTip">
-      <tip-layer title="什么是返点客佣金" content="当你成为某个卖家的返点客用户时，你销售该卖家的某件商品所得到的佣金，返点客佣金只有返点客才能看到。" @clickClose="closeSellerTip"></tip-layer>
+      <tip-layer title="返点客佣金" content="当你成为某个卖家的返点客用户时，你销售该卖家的某件商品所得到的佣金，返点客佣金只有返点客才能看到。" @clickClose="closeSellerTip"></tip-layer>
     </template>
     <div v-transfer-dom class="x-popup buy-popup-layer">
       <popup v-model="showBuy" height="100%">
