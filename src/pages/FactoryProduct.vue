@@ -155,14 +155,14 @@
     <template v-if="showHelpModal">
       <tip-layer
         @clickClose="closeHelpModal"
-        title="什么是推荐人佣金？"
+        title="推荐人佣金"
         content="推荐人佣金是指销售该商品的上级推荐人所得的佣金。">
       </tip-layer>
     </template>
     <template v-if="showHelpModal1">
       <tip-layer
         @clickClose="closeHelpModal"
-        title="什么是销售佣金？"
+        title="销售佣金"
         content="销售佣金是指卖家销售厂家的商品后，卖家所得到的佣金。">
       </tip-layer>
     </template>
