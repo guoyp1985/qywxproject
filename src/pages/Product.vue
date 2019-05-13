@@ -905,7 +905,7 @@ export default {
         }
         self.$vux.loading.show()
         self.$http.get(`${ENV.BokaApi}/api/user/favorite/add`,
-          { params: { module: self.module, id: self.productid, currenturl: encodeURIComponent(cururl) } }
+          { params: { module: self.module, id: self.productid, wid: self.retailerInfo.uid, currenturl: encodeURIComponent(cururl) } }
         ).then(function (res) {
           let data = res.data
           self.$vux.loading.hide()

@@ -312,7 +312,7 @@ export default {
         if (self.query.wid) {
           cururl = `${cururl}&wid=${self.query.wid}`
         }
-        this.$http.post(`${ENV.BokaApi}/api/user/favorite/add`, {id: this.article.id, module: self.module, currenturl: encodeURIComponent(cururl)})
+        this.$http.post(`${ENV.BokaApi}/api/user/favorite/add`, {id: this.article.id, module: self.module, wid: this.article.uploader, currenturl: encodeURIComponent(cururl)})
         .then(res => {
           if (res.data.flag) {
             self.$vux.toast.text(self.$t('Favorite Success'))
