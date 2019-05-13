@@ -88,6 +88,13 @@
                   <check-icon class="red-check" :value.sync="template4" @click.native.stop="clickTemplate(4)">清新蓝</check-icon>
                 </div>
               </forminputplate>
+              <forminputplate class="required" v-if="query.from != 'miniprogram'">
+                <span slot="title">到账方式</span>
+                <div>
+                  <check-icon class="red-check" :value.sync="accountPlat" @click.native.stop="setAccounttype(0)">平台担保</check-icon>
+                  <check-icon class="red-check" :value.sync="accountQuick" @click.native.stop="setAccounttype(1)">立即到账</check-icon>
+                </div>
+              </forminputplate>
               <div v-show="showmore">
                 <forminputplate>
                   <span slot="title">{{ $t('Shop description') }}</span>
@@ -352,7 +359,7 @@ export default {
     },
     submitdata: {
       type: Object,
-      default: { title: '', qrcode: '', buyonline: 1, shopmodel: '1', content: '', fastreply: '你好，请稍等，一会为你服务' }
+      default: { title: '', qrcode: '', buyonline: 1, shopmodel: '1', accounttype: 0, content: '', fastreply: '你好，请稍等，一会为你服务' }
     },
     submitdata1: {
       type: Object,
@@ -419,7 +426,11 @@ export default {
       template1: false,
       template2: false,
       template3: false,
-      template4: false
+      template4: false,
+      haveSelected: true,
+      noSelected: false,
+      accountPlat: false,
+      accountQuick: false
     }
   },
   watch: {
@@ -432,9 +443,11 @@ export default {
       return this.photoarr
     },
     submitdata: function () {
+      console.log('监控到submitdata的变化')
       console.log('in watch sumitdata')
-      this.watchBuyline()
-      this.watchTemplate()
+      // this.watchBuyline()
+      // this.watchTemplate()
+      this.watchAccount()
       return this.submitdata
     },
     buyonline: function () {
@@ -501,6 +514,15 @@ export default {
       } else {
         this.template1 = true
         this.submitdata.shopmodel = 1
+      }
+    },
+    watchAccount () {
+      if (this.submitdata.accounttype) {
+        this.accountPlat = false
+        this.accountQuick = true
+      } else {
+        this.accountPlat = true
+        this.accountQuick = false
       }
     },
     textareaChange (refname) {
@@ -614,6 +636,12 @@ export default {
             this.oldSuggestClose = this.suggestClose
           })
         }
+      })
+    },
+    setAccounttype (val) {
+      console.log(val)
+      this.$emit('clickAccount', val, () => {
+        this.watchAccount()
       })
     },
     clickTemplate (val) {
@@ -830,6 +858,7 @@ export default {
     console.log('in mounted')
     this.watchBuyline()
     this.watchSuggest()
+    this.watchAccount()
   }
 }
 </script>

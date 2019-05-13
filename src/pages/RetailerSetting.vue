@@ -17,6 +17,7 @@
         :buyoffline="buyoffline"
         :submitSuggest="submitSuggest"
         @clickSuggest="clickSuggest"
+        @clickAccount="clickAccount"
         :submitShopModel="submitShopModel">
       </retailer-setting>
     </template>
@@ -47,7 +48,7 @@ export default {
       showSetting: false,
       showApply: false,
       retailerInfo: {},
-      submitdata: { title: '', productclass: '', qrcode: '', buyonline: 1, shopmodel: '1', content: '', fastreply: '你好，请稍等，一会为你服务' },
+      submitdata: { title: '', productclass: '', qrcode: '', buyonline: 1, shopmodel: '1', accounttype: 0, content: '', fastreply: '你好，请稍等，一会为你服务' },
       submitdata1: { showphoto: '', slogan: '', tags: '' },
       photoarr: [],
       showphotoArr: [],
@@ -133,6 +134,20 @@ export default {
           }
         }
       })
+    },
+    clickAccount (val, callback) {
+      console.log('in 点击到账方式')
+      console.log(val)
+      console.log(this.submitdata.accounttype)
+      if (val !== this.submitdata.accounttype) {
+        delete this.submitdata.accounttype
+        this.submitdata.accounttype = val
+        console.log('进入到了删除')
+        console.log(this.submitdata)
+      }
+      if (callback) {
+        callback()
+      }
     },
     init () {
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
