@@ -93,8 +93,10 @@ export default {
       const self = this
       this.$http.get(`${ENV.BokaApi}/api/user/address/list`)
       .then(res => {
-        if (res.data.length) {
-          self.items = res.data
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        if (retdata.length) {
+          self.items = retdata
         }
         this.disList = true
       })
