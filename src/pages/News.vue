@@ -43,10 +43,10 @@
           </div>
           <template v-if="showArticle">
             <template v-if="article.uploader == reward.uid">
-              <div id="editor-content" :class="`article-content ${article.content == '' ? 'color-gray font16' : ''}`">
-                <p class="class111" v-if="article.content == '' && !afterEdit">文章内容为空，点击【编辑】按钮可修改内容哦！</p>
-                <div class="class222" v-else v-html="article.content"></div>
+              <div v-if="article.content == '' && !afterEdit" id="editor-content" class="article-content color-gray font16">
+                <p>文章内容为空，点击【编辑】按钮可修改内容哦！</p>
               </div>
+              <div v-else id="editor-content" class="article-content" v-html="article.content"></div>
             </template>
             <template v-else>
               <div class="article-content" v-html="article.content"></div>
@@ -500,30 +500,36 @@ export default {
     onShare () {
     },
     save (callback) {
-      let editorContent = document.querySelector('#editor-content')
+      let editorContent = document.querySelector('#editor-content .post-content-area')
+      if (!editorContent) {
+        editorContent = document.querySelector('#editor-content')
+      }
       self.$vux.loading.show()
-      let con = editorContent.innerHTML.replace('<p>文章内容为空，点击【编辑】按钮可修改内容哦！</p>', '').replace('<p class="Eleditor-active">文章内容为空，点击【编辑】按钮可修改内容哦！</p>', '')
+      let con = editorContent.innerHTML.replace(/Eleditor-active/g, '')
+        .replace('<p class="">文章内容为空，点击【编辑】按钮可修改内容哦！</p>', '')
+        .replace('<p>文章内容为空，点击【编辑】按钮可修改内容哦！</p>', '')
+        .replace('<p class="Eleditor-active">文章内容为空，点击【编辑】按钮可修改内容哦！</p>', '')
       self.$http.post(`${ENV.BokaApi}/api/editContent/news`, {
         id: self.query.id,
         content: con
       }).then((res) => {
         let data = res.data
         self.$vux.loading.hide()
+        if (data.flag === 1) {
+          console.log('编辑完成后的商品内容')
+          console.log(con)
+          if (con !== '') {
+            self.article.content = con
+            self.afterEdit = true
+          }
+          self.handleImg()
+          callback && callback()
+        }
         let toasttype = data.flag !== 1 ? 'warn' : 'success'
         self.$vux.toast.show({
           text: data.error,
           type: toasttype,
-          time: self.$util.delay(data.error),
-          onHide: () => {
-            if (data.flag === 1) {
-              if (con !== '') {
-                self.article.content = con
-                self.afterEdit = true
-              }
-              self.handleImg()
-              callback && callback()
-            }
-          }
+          time: self.$util.delay(data.error)
         })
       })
     },
@@ -778,7 +784,7 @@ export default {
 
 .news .insertproduct{
   display:block;padding:5px !important;position:relative;text-indent: 0 !important;text-align:center;
-  color:inherit !important;border:#e3e3e3 1px solid !important;border-radius:5px !important;
+  color:inherit !important;border:#e3e3e3 1px solid !important;border-radius:5px !important;margin:10px auto;
 }
 .news .insertproduct img{vertical-align: middle !important;}
 .news .insertproduct .iteminfo{

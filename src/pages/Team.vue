@@ -223,6 +223,7 @@ export default {
       switch (index) {
         case 0:
           this.$nextTick(() => {
+            this.isloading = false
             this.$refs.listTags.tags = []
             this.$refs.listTags.pagestart = 0
             this.$refs.listTags.getTags()

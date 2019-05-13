@@ -45,7 +45,8 @@ export default {
       limit: 5,
       currentPhotos: [],
       loaded: false,
-      endShow: false
+      endShow: false,
+      isloading: false
     }
   },
   props: {
@@ -68,7 +69,8 @@ export default {
   methods: {
     getTags () {
       console.log('in listtags getTags')
-      if (this.tags.length === this.pagestart * this.limit) {
+      if (this.tags.length === this.pagestart * this.limit && !this.isloading) {
+        this.isloading = true
         this.$http({
           url: `${Env.BokaApi}/api/team/link`,
           method: 'post',
@@ -80,6 +82,7 @@ export default {
           }
         }).then(res => {
           console.log(res)
+          this.isloading = false
           let data = res.data
           for (let i = 0; i < data.data.length; i++) {
             data.data[i].photosSplited = data.data[i].photo.split(',')

@@ -6,31 +6,33 @@
 <template>
   <div id="personal-address">
     <view-box class="view-box" body-padding-bottom="65px">
-      <group v-if="!items.length">
-        <cell-box><span class="font14 color-gray">{{$t('No Address')}}</span></cell-box>
-      </group>
-      <swipeout v-else>
-        <!-- <cell  :title="`${item.linkman} ${item.telephone}`" :link="{name:'tNewAddress',params:{data:item}}" :inline-desc='item | addressFormat'></cell> -->
-        <swipeout-item v-for="(item, index) in items" :key="item.id" @click.native.stop="onNav(item)" transition-mode="follow">
-          <div slot="right-menu">
-            <swipeout-button @click.native.stop="onDelete(item)" type="warn">{{$t('Delete')}}</swipeout-button>
-          </div>
-          <div slot="content" class="flex-box vux-1px-t">
-            <div class="check-cell">
-              <check-icon :value.sync="item.isdefault === 1" @click.native.stop="setDefault(item)"></check-icon>
+      <template v-if="disList">
+        <group v-if="!items.length">
+          <cell-box><span class="font14 color-gray">{{$t('No Address')}}</span></cell-box>
+        </group>
+        <swipeout v-else>
+          <!-- <cell  :title="`${item.linkman} ${item.telephone}`" :link="{name:'tNewAddress',params:{data:item}}" :inline-desc='item | addressFormat'></cell> -->
+          <swipeout-item v-for="(item, index) in items" :key="item.id" @click.native.stop="onNav(item)" transition-mode="follow">
+            <div slot="right-menu">
+              <swipeout-button @click.native.stop="onDelete(item)" type="warn">{{$t('Delete')}}</swipeout-button>
             </div>
-            <div class="content-cell">
-              <div class="name-cell font16">
-                {{item.linkman}} {{item.telephone}}
+            <div slot="content" class="flex-box vux-1px-t">
+              <div class="check-cell">
+                <check-icon :value.sync="item.isdefault === 1" @click.native.stop="setDefault(item)"></check-icon>
               </div>
-              <div class="addr-cell font14 color-gray">
-                {{item.fulladdress}}
+              <div class="content-cell">
+                <div class="name-cell font16">
+                  {{item.linkman}} {{item.telephone}}
+                </div>
+                <div class="addr-cell font14 color-gray">
+                  {{item.fulladdress}}
+                </div>
               </div>
+              <div class="link-cell"></div>
             </div>
-            <div class="link-cell"></div>
-          </div>
-        </swipeout-item>
-      </swipeout>
+          </swipeout-item>
+        </swipeout>
+      </template>
       <box slot="bottom" class="bottom-area">
         <x-button type="primary" :link="{name:'tNewAddress'}">{{$t('New Address')}}</x-button>
       </box>
@@ -51,7 +53,8 @@ export default {
   },
   data () {
     return {
-      items: []
+      items: [],
+      disList: false
     }
   },
   filters: {
@@ -90,9 +93,12 @@ export default {
       const self = this
       this.$http.get(`${ENV.BokaApi}/api/user/address/list`)
       .then(res => {
-        if (res.data.length) {
-          self.items = res.data
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        if (retdata.length) {
+          self.items = retdata
         }
+        this.disList = true
       })
     },
     refresh () {
