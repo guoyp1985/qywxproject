@@ -48,7 +48,9 @@ export default {
       showSetting: false,
       showApply: false,
       retailerInfo: {},
-      submitdata: { title: '', productclass: '', qrcode: '', buyonline: 1, shopmodel: '1', accounttype: 0, content: '', fastreply: '你好，请稍等，一会为你服务' },
+      submitkey: { title: '', productclass: '', qrcode: '', buyonline: 1, shopmodel: '1', accounttype: 0, content: '', fastreply: '你好，请稍等，一会为你服务' },
+      // submitdata: { title: '', productclass: '', qrcode: '', buyonline: 1, shopmodel: '1', accounttype: 0, content: '', fastreply: '你好，请稍等，一会为你服务' },
+      submitdata: {},
       submitdata1: { showphoto: '', slogan: '', tags: '' },
       photoarr: [],
       showphotoArr: [],
@@ -78,7 +80,8 @@ export default {
           self.$vux.loading.hide()
           self.retailerInfo = data.data ? data.data : data
           self.submitShopModel = self.retailerInfo.shopmodel
-          for (let key in self.submitdata) {
+          self.submitdata = {}
+          for (let key in self.submitkey) {
             self.submitdata[key] = self.retailerInfo[key]
           }
           if (self.submitdata.buyonline) {
