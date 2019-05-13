@@ -502,7 +502,7 @@ export default {
     save (callback) {
       let editorContent = document.querySelector('#editor-content')
       self.$vux.loading.show()
-      let con = editorContent.innerHTML.replace('<p>文章内容为空，点击【编辑】按钮可修改内容哦！</p>', '')
+      let con = editorContent.innerHTML.replace('<p>文章内容为空，点击【编辑】按钮可修改内容哦！</p>', '').replace('<p class="Eleditor-active">文章内容为空，点击【编辑】按钮可修改内容哦！</p>', '')
       self.$http.post(`${ENV.BokaApi}/api/editContent/news`, {
         id: self.query.id,
         content: con
