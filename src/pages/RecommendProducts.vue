@@ -66,7 +66,7 @@
           		</div>
             </div>
           </div>
-          <div style="text-align:center;color:#999;height:30px;line-height:30px;font-size:14px;" v-if="scrollEnd && productData.length">没有更多商品啦</div>
+          <div style="span-align:center;color:#999;height:30px;line-height:30px;font-size:14px;text-align:center;" v-if="scrollEnd && productData.length">没有更多商品啦</div>
         </div>
       </div>
       <template v-if="showTip">
@@ -83,6 +83,27 @@
         <firstHb action="importproduct" @closeFirstHb="closeFirstHb" @afterOpen="afterClickOpen"></firstHb>
       </template>
     </div>
+    <!-- 新增按钮 -->
+    <!-- <div class="btn-bottom" @click="closeChat">
+      <div class="btn font14">我也要提供货源</div>
+    </div>
+    <div class="auto-modal flex_center wechat-modal" v-if="showRetailerWechat">
+      <div class="modal-inner padding20 border-box" style="width:80%;">
+        <div class="align_center font18 bold pb10">成为厂家即可提供货源</div>
+        <div class="align_center font16">在客服会话回复【<span class="bold color-theme">2</span>】长按扫码关注公众号，点击菜单中的【申请厂家】提交申请即可。</div>
+        <div class="align_center pt20 pb20 wechat-pic">
+          <img src="https://tossharingsales.boka.cn/minigxk/gxk_wechat.png" style="height:260px;" />
+          <span class="txt1">2</span>
+          <span class="txt2">2</span>
+        </div>
+        <div class="modal-bottom">
+          <div class="w_100 h_100 bg-theme color-white font16 flex_center" style="border-radius:5px;">点击回复2获取公众号二维码</div>
+        </div>
+        <div class="close-area flex_center" @click="closeChat">
+          <span class="al al-close"></span>
+        </div>
+      </div>
+    </div> -->
   </div>
 </template>
 
@@ -117,7 +138,7 @@ export default {
     return {
       query: {},
       loginUser: {},
-      viewData: {},
+      divData: {},
       disProductData: false,
       productData: [],
       classData: [],
@@ -138,7 +159,8 @@ export default {
       sysParams: {},
       clickData: null,
       clickIndex: 0,
-      afterSearch: false
+      afterSearch: false,
+      showRetailerWechat: false
     }
   },
   watch: {
@@ -147,6 +169,9 @@ export default {
     }
   },
   methods: {
+    closeChat () {
+      this.showRetailerWechat = !this.showRetailerWechat
+    },
     initData () {
       this.isFirst = false
       this.showFirst = false
@@ -194,7 +219,7 @@ export default {
               this.productData[this.clickIndex].haveimport = 1
             }
             self.$vux.toast.show({
-              text: error,
+              span: error,
               type: data.flag === 1 ? 'success' : 'warn',
               time: self.$util.delay(error),
               onHide: () => {
@@ -407,13 +432,31 @@ export default {
   .sort-icon.active{color:#ff6a61;}
   .sort-icon{
     .txt{
-      width:86px;text-align:left;position:relative;
+      width:86px;span-align:left;position:relative;
       .al{position:absolute;right:0;top:50%;}
       .sort.desc{margin-top:-25px;}
       .sort.asc{margin-top:-22px;}
     }
     .sort.desc:before {content: "\e7d4";}
     .sort.asc:before {content: "\e7d5";}
+  }
+  .btn-bottom{
+    width:100%;background-color:#fff;padding:10px 0;box-sizing:border-box;
+    .btn{width:80%;height:35px;margin:0 auto;color:#fff;background-color:#ff6a61;border-radius:20px;text-align:center;line-height:35px;}
+  }
+  .wechat-modal{
+    .wechat-pic {
+      position:relative;
+      width:80%;
+      margin:0 auto;
+      img{width:100%;}
+  }
+    .modal-bottom {
+      width:100%;
+      height:45px;
+    }
+  .txt1{position:absolute;top:26%;left:67%;}
+  .txt2{position:absolute;bottom:6.6%;left:6%;}
   }
 }
 </style>
