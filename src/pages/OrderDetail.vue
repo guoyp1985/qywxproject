@@ -222,7 +222,7 @@ export default {
       if (this.query.from) {
         console.log('in click wechate')
         console.log(this.$wechat.miniProgram)
-        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.store}?wid=${this.loginUser.uid}`})
+        this.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.store}?wid=${this.loginUser.uid}`})
       } else {
         this.$router.push({path: '/center'})
       }
