@@ -220,7 +220,7 @@ export default {
   methods: {
     toCenter () {
       if (this.query.from) {
-        this.$wechat.miniProgram.navigateTo({url: `/pages/user`})
+        this.$wechat.miniProgram.navigateTo({url: '/pages/user'})
       } else {
         this.$router.push({path: '/center'})
       }
