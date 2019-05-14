@@ -16,6 +16,7 @@
         :buyonline="buyonline"
         :buyoffline="buyoffline"
         :submitSuggest="submitSuggest"
+        @clickBuyline="clickBuyline"
         @clickSuggest="clickSuggest"
         @clickAccount="clickAccount"
         @clickTemplate="clickTemplate">
@@ -119,6 +120,15 @@ export default {
           }
         }
       })
+    },
+    clickBuyline (val, callback) {
+      if (val !== this.submitdata.buyonline) {
+        delete this.submitdata.buyonline
+        this.submitdata.buyonline = val
+      }
+      if (callback) {
+        callback()
+      }
     },
     clickSuggest (val, callback) {
       this.$http.post(`${ENV.BokaApi}/api/card/setParas`, {

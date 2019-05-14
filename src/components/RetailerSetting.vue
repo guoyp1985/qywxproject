@@ -397,14 +397,6 @@ export default {
       type: Array,
       default: []
     },
-    buyonline: {
-      type: Boolean,
-      default: true
-    },
-    buyoffline: {
-      type: Boolean,
-      default: false
-    },
     submitSuggest: {
       type: Boolean,
       default: true
@@ -423,22 +415,18 @@ export default {
       showmore: false,
       requireddata: {title: '', 'qrcode': ''},
       requireddata1: {showphoto: '', slogan: ''},
-      showonline: false,
-      showoffline: false,
       showqrcode: false,
       selectedIndex: 0,
       tabtxts: [ '基本设置', '卖家秀设置' ],
       classDataShow: false,
-      online: true,
+      online: false,
       offline: false,
+      showonline: false,
+      showoffline: false,
       isFirst: true,
       isFirst1: true,
-      suggestOpen: true,
+      suggestOpen: false,
       suggestClose: false,
-      isFirst2: true,
-      isFirst3: true,
-      oldSuggestOpen: true,
-      oldSuggestClose: false,
       template1: false,
       template2: false,
       template3: false,
@@ -462,24 +450,10 @@ export default {
     submitdata: function () {
       console.log('监控到submitdata的变化')
       console.log('in watch sumitdata')
-      // this.watchBuyline()
+      this.watchBuyline()
       this.watchTemplate()
       this.watchAccount()
       return this.submitdata
-    },
-    buyonline: function () {
-      if (this.isFirst) {
-        this.online = this.buyonline
-        this.isFirst = false
-      }
-      return this.buyonline
-    },
-    buyoffline: function () {
-      if (this.isFirst1) {
-        this.offline = this.buyoffline
-        this.isFirst1 = false
-      }
-      return this.buyoffline
     },
     submitSuggest: function () {
       console.log('in watch submitSuggest')
@@ -644,14 +618,15 @@ export default {
     setbuyonline (val) {
       if (val === 1) {
         this.showonline = true
-        this.submitdata.buyonline = 1
-        this.online = true
-        this.offline = false
       } else {
         this.showoffline = true
-        this.submitdata.buyonline = 0
-        this.online = false
-        this.offline = true
+      }
+      if (parseInt(val) !== this.submitdata.buyonline) {
+        this.$emit('clickBuyline', val, () => {
+          this.watchBuyline()
+        })
+      } else {
+        this.watchBuyline()
       }
     },
     clickSuggest (val) {
