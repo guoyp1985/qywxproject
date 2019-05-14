@@ -562,8 +562,18 @@ export default {
           self.cardPrice = total1
           self.payPrice = total.toFixed(2)
           self.orderPrice = self.payPrice
-          return self.$http.get(`${ENV.BokaApi}/api/user/address/list`)
+          return self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
+            uid: this.curOrder.wid
+          })
         }
+      }).then(res => {
+        if (res) {
+          const data = res.data
+          if (data.flag) {
+            this.retailerInfo = data.data
+          }
+        }
+        return self.$http.get(`${ENV.BokaApi}/api/user/address/list`)
       }).then(function (res) {
         if (res) {
           let data = res.data
@@ -604,14 +614,6 @@ export default {
               break
             }
           }
-        }
-        return self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
-          uid: this.curOrder.wid
-        })
-      }).then(res => {
-        const data = res.data
-        if (data.flag) {
-          this.retailerInfo = data.data
         }
       })
     },

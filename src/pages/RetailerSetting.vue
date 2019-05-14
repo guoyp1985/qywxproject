@@ -18,7 +18,7 @@
         :submitSuggest="submitSuggest"
         @clickSuggest="clickSuggest"
         @clickAccount="clickAccount"
-        :submitShopModel="submitShopModel">
+        @clickTemplate="clickTemplate">
       </retailer-setting>
     </template>
     <template v-if="showApply">
@@ -58,8 +58,7 @@ export default {
       productClass: [],
       buyonline: true,
       buyoffline: false,
-      submitSuggest: true,
-      submitShopModel: '1'
+      submitSuggest: true
     }
   },
   methods: {
@@ -79,7 +78,6 @@ export default {
           let data = res.data
           self.$vux.loading.hide()
           self.retailerInfo = data.data ? data.data : data
-          self.submitShopModel = self.retailerInfo.shopmodel
           self.submitdata = {}
           for (let key in self.submitkey) {
             self.submitdata[key] = self.retailerInfo[key]
@@ -123,7 +121,6 @@ export default {
       })
     },
     clickSuggest (val, callback) {
-      console.log(val)
       this.$http.post(`${ENV.BokaApi}/api/card/setParas`, {
         params: {suggest_open: val}
       }).then(res => {
@@ -132,11 +129,27 @@ export default {
           this.loginUser.retailerinfo.params = data.data
           this.retailerInfo.params = data.data
           User.set(this.loginUser)
+          if (val === '1' || val === 1) {
+            this.submitSuggest = true
+          } else {
+            this.submitSuggest = false
+          }
           if (callback) {
             callback()
           }
         }
       })
+    },
+    clickTemplate (val, callback) {
+      if (parseInt(val) !== parseInt(this.submitdata.shopmodel)) {
+        delete this.submitdata.shopmodel
+        this.submitdata.shopmodel = val
+        console.log('进入到了删除')
+        console.log(this.submitdata)
+      }
+      if (callback) {
+        callback()
+      }
     },
     clickAccount (val, callback) {
       console.log('in 点击到账方式')
