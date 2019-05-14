@@ -224,7 +224,7 @@ export default {
         console.log('in click wechate')
         console.log(this.$wechat.miniProgram)
         this.clickTxt = '正在点击中'
-        this.$wechat.miniProgram.navigateTo({url: `pages/user`})
+        this.$wechat.miniProgram.reLaunch({url: `/pages/user`})
       } else {
         this.$router.push({path: '/center'})
       }

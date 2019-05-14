@@ -22,7 +22,6 @@ var ENV = {
   ],
   MiniRouter: {
     activity: '/packageB/pages/activity',
-    userCenter: '/pages/user',
     contentsNews: '/package/pages/contentsNews',
     knowledgeList: '/package/pages/contentsKnowledge',
     news: '/packageB/pages/news',
