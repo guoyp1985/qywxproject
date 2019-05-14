@@ -286,7 +286,7 @@ export default {
             self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
           }
         } else {
-          let params = this.$util.handleAppParams(this.query, {id: data.data, control: 'edit'})
+          let params = this.$util.handleAppParams(this.query, {wid: this.loginUser.uid, id: data.data, control: 'edit'})
           if (!self.query.id) {
             params.newadd = 1
           }
