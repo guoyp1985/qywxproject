@@ -199,6 +199,21 @@
         @favoriteevent="favoriteevent">
       </Storeview4>
     </template>
+    <share-success
+      v-show="showShareSuccess"
+      v-if="retailerInfo.uploader == loginUser.uid || retailerInfo.identity != 'user'"
+      :data="retailerInfo"
+      :loginUser="loginUser"
+      module="store"
+      :on-close="closeShareSuccess">
+    </share-success>
+    <template v-if="showHelpModal">
+      <tip-layer
+        @clickClose="closeHelpModal"
+        title="超值优惠"
+        content="超值优惠商品是官方为你提供的爆款低价商品，帮助你转化客户，促进用户购买，用户购买完成后，你还可以获得商品的佣金奖励哦！">
+      </tip-layer>
+    </template>
   </div>
 </template>
 
@@ -224,6 +239,8 @@ import Storeview1 from '@/components/Store1'
 import Storeview2 from '@/components/Store2'
 import Storeview3 from '@/components/Store3'
 import Storeview4 from '@/components/Store4'
+import ShareSuccess from '@/components/ShareSuccess'
+import TipLayer from '@/components/TipLayer'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
@@ -234,7 +251,7 @@ let initNewsData = []
 
 export default {
   components: {
-    Storeview1, Storeview2, Storeview3, Storeview4
+    Storeview1, Storeview2, Storeview3, Storeview4, ShareSuccess, TipLayer
   },
   filters: {
     dateformat: function (value) {

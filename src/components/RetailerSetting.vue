@@ -88,13 +88,19 @@
                   <check-icon class="red-check" :value.sync="template4" @click.native.stop="clickTemplate(4)">清新蓝</check-icon>
                 </div>
               </forminputplate>
-              <forminputplate class="required" v-if="query.from != 'miniprogram'">
-                <span slot="title">到账方式</span>
-                <div>
-                  <check-icon class="red-check" :value.sync="accountPlat" @click.native.stop="setAccounttype(0)">平台担保</check-icon>
-                  <check-icon class="red-check" :value.sync="accountQuick" @click.native.stop="setAccounttype(1)">立即到账</check-icon>
+              <div class="form-item">
+                <div class="t-table">
+                  <div class="t-cell title-cell font14 v_middle">
+                    <span>到账方式</span><span class="al al-wenhao font20 color-theme" style="vertical-align:-2px;" @click="clickHelp"></span>
+                  </div>
+                  <div class="t-cell input-cell v_middle" style="position:relative;">
+                    <div>
+                      <check-icon class="red-check" :value.sync="accountPlat" @click.native.stop="setAccounttype(0)">平台担保</check-icon>
+                      <check-icon class="red-check" :value.sync="accountQuick" @click.native.stop="setAccounttype(1)">立即到账</check-icon>
+                    </div>
+                  </div>
                 </div>
-              </forminputplate>
+              </div>
               <div v-show="showmore">
                 <forminputplate>
                   <span slot="title">{{ $t('Shop description') }}</span>
@@ -301,6 +307,22 @@
         </div>
       </popup>
     </div>
+    <div class="auto-modal flex_center" v-if="showHelpModal">
+      <div class="modal-inner border-box" style="width:85%;">
+        <div class="flex_center padding10 b_bottom_after font16">到账方式</div>
+        <div class="middle-con flex_center">
+          <div class="w_100 padding10">
+            <div class="color-theme">什么是平台担保</div>
+            <div>平台担保是指用户购买商品后，订单金额需要等待你发货并且买家进行确认收货后，这笔订单金额才可进行提现。</div>
+            <div class="color-theme mt10">什么是立即到账</div>
+            <div>立即到账是指用户购买商品后，订单金额只需等待你进行发货后便可直接进行提现，无需等待买家确认收货。</div>
+          </div>
+        </div>
+        <div class="close-area flex_center" @click="closeModal">
+          <i class="al al-close"></i>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -430,7 +452,8 @@ export default {
       haveSelected: true,
       noSelected: false,
       accountPlat: false,
-      accountQuick: false
+      accountQuick: false,
+      showHelpModal: false
     }
   },
   watch: {
@@ -475,6 +498,12 @@ export default {
     }
   },
   methods: {
+    clickHelp () {
+      this.showHelpModal = true
+    },
+    closeModal () {
+      this.showHelpModal = false
+    },
     watchBuyline () {
       if (this.submitdata.buyonline) {
         this.online = true

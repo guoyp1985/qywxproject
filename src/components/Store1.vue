@@ -192,21 +192,6 @@
           </div>
         </popup>
       </div>
-      <share-success
-        v-show="showShareSuccess"
-        v-if="retailerInfo.uploader == loginUser.uid || retailerInfo.identity != 'user'"
-        :data="retailerInfo"
-        :loginUser="loginUser"
-        module="store"
-        :on-close="closeShareSuccess">
-      </share-success>
-      <template v-if="showHelpModal">
-        <tip-layer
-          @clickClose="closeHelpModal"
-          title="超值优惠"
-          content="超值优惠商品是官方为你提供的爆款低价商品，帮助你转化客户，促进用户购买，用户购买完成后，你还可以获得商品的佣金奖励哦！">
-        </tip-layer>
-      </template>
     </template>
   </div>
 </template>
@@ -234,8 +219,6 @@ import Groupbuyitemplate from '@/components/Groupbuyitemplate'
 import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
 import Productitemplate from '@/components/Productitemplate'
 import Newsitemplate from '@/components/Newsitemplate'
-import ShareSuccess from '@/components/ShareSuccess'
-import TipLayer from '@/components/TipLayer'
 import Sos from '@/components/Sos'
 
 export default {
@@ -350,7 +333,7 @@ export default {
     TransferDom
   },
   components: {
-    Swiper, Popup, Groupbuyitemplate, Bargainbuyitemplate, Productitemplate, Newsitemplate, ShareSuccess, XImg, Sos, TipLayer
+    Swiper, Popup, Groupbuyitemplate, Bargainbuyitemplate, Productitemplate, Newsitemplate, XImg, Sos
   },
   methods: {
     handleScroll (refname) {
