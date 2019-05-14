@@ -489,7 +489,7 @@ export default {
               let postData = self.submitdata
               postData.delivertype = 2
               this.payData = postData
-              if (this.retailerInfo.accounttype === 1 && !this.curOrder.info[0].fid) {
+              if (this.curOrder.accounttype === 1 && !this.curOrder.info[0].fid) {
                 this.showModal = true
               } else {
                 this.clickPay()
@@ -505,7 +505,7 @@ export default {
           }
           self.submitdata.addressid = self.selectaddress.id
           this.payData = this.submitdata
-          if (this.retailerInfo.accounttype === 1 && !this.curOrder.info[0].fid) {
+          if (this.curOrder.accounttype === 1 && !this.curOrder.info[0].fid) {
             this.showModal = true
           } else {
             this.clickPay()
@@ -562,19 +562,9 @@ export default {
           self.cardPrice = total1
           self.payPrice = total.toFixed(2)
           self.orderPrice = self.payPrice
-          return self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
-            uid: this.curOrder.wid
-          })
+          return self.$http.get(`${ENV.BokaApi}/api/user/address/list`)
         }
       }).then(res => {
-        if (res) {
-          const data = res.data
-          if (data.flag) {
-            this.retailerInfo = data.data
-          }
-        }
-        return self.$http.get(`${ENV.BokaApi}/api/user/address/list`)
-      }).then(function (res) {
         if (res) {
           let data = res.data
           let retdata = data.data ? data.data : data
