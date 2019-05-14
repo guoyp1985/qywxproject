@@ -434,7 +434,9 @@ export default {
           }
           self.handleImg()
           if (self.query.control === 'edit' && parseInt(self.reward.uid) === parseInt(self.article.uploader)) {
-            jQuery('.news .edit-btn')[0].click()
+            setTimeout(() => {
+              jQuery('.news .edit-btn')[0].click()
+            }, 100)
           }
           const data = res.data
           if (data.flag === 1) {
