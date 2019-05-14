@@ -28,7 +28,7 @@
                       <img class="imgcover v_middle" :src="getPhoto(item.photo)" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                     </div>
               			<div class="t-cell v_middle">
-                      <div class="clamp1 font16 pr10 color-lightgray"><span v-if="item.priority == 1" style="color:#fd8c2c;">【精选】</span>{{item.title}}</div>
+                      <div class="clamp1 font16 pr10 color-lightgray"><span v-if="item.priority" style="color:#fd8c2c;">【精选】</span>{{item.title}}</div>
                       <div class="t-table pr12 border-box mt15">
                         <div class="t-cell color-999 font14">
                           <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ item.price }}</span></div>
@@ -70,7 +70,7 @@
                       <img class="imgcover v_middle" :src="getPhoto(item.photo)" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                     </div>
               			<div class="t-cell v_middle">
-                      <div class="clamp1 font16 pr10 color-lightgray"><span v-if="item.priority == 1" style="color:#fd8c2c;">【精选】</span>{{item.title}}</div>
+                      <div class="clamp1 font16 pr10 color-lightgray"><span v-if="item.priority" style="color:#fd8c2c;">【精选】</span>{{item.title}}</div>
                       <div class="t-table pr12 border-box mt15">
                         <div class="t-cell color-999 font14">
                           <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ item.price }}</span></div>
