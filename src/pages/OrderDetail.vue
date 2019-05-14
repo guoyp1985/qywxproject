@@ -60,21 +60,24 @@
         </div>
       -->
       </div>
-      <group>
-        <cell class="order-list font12" v-for="(order, index) in orders" :key="index" :link="`/product?id=${order.pid}&wid=${order.wid}`">
-          <template v-if="order.options && order.options.id">
-            <img slot="icon" class="imgcover" :src="order.options.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-          </template>
-          <template v-else>
-            <img slot="icon" class="imgcover" :src="order.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-          </template>
-          <div slot="title">{{order.name}}</div>
-          <div slot="after-title" class="color-gray" v-if="order.options && order.options.id">{{order.options.title}}</div>
-          <div slot="inline-desc">
-            <span>¥{{order.special}}</span><span class="color-gray ml5 font12">× {{order.quantity}}</span>
+      <div class="mt10 b_top_after bg-white font12">
+        <div class="flex_left b_bottom_after padding10" v-for="(order, index) in orders" :key="index" @click="toProduct(order)">
+          <div class="flex_left w70">
+            <img v-if="order.options && order.options.id" style="width:60px;height:60px;border: 1px solid #f7f7f7;" class="imgcover" :src="order.options.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+            <img v-else style="width:60px;height:60px;border: 1px solid #f7f7f7;" class="imgcover" :src="order.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
           </div>
-        </cell>
-      </group>
+          <div class="flex_left flex_cell">
+            <div class="w_100">
+              <div>{{order.name}}</div>
+              <div class="color-gray" v-if="order.options && order.options.id">{{order.options.title}}</div>
+              <div><span>¥{{order.special}}</span><span class="color-gray ml5 font12">× {{order.quantity}}</span></div>
+            </div>
+          </div>
+          <div class="w30 flex_right">
+            <span class="al al-mjiantou-copy color-gray font14 bold"></span>
+          </div>
+        </div>
+      </div>
       <group>
         <cell-form-preview v-if="priceInfos.length" :list="priceInfos"></cell-form-preview>
         <cell>
@@ -215,6 +218,13 @@ export default {
     }
   },
   methods: {
+    toProduct (item) {
+      if (this.query.from) {
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&wid=${item.wid}`})
+      } else {
+        this.$router.push({path: '/product', query: {id: item.pid, wid: item.wid}})
+      }
+    },
     toChat () {
       let params = this.$util.handleAppParams(this.query, {uid: this.retailerInfo.uid, fromModule: 'order'})
       this.$router.push({path: '/chat', query: params})
