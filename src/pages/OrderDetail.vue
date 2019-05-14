@@ -220,7 +220,9 @@ export default {
   methods: {
     toCenter () {
       if (this.query.from) {
-        this.$wechat.miniProgram.navigateTo({url: '/pages/user'})
+        console.log('in click wechate')
+        console.log(this.$wechat.miniProgram)
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.store}?wid=${this.loginUser.uid}`})
       } else {
         this.$router.push({path: '/center'})
       }
