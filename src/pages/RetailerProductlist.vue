@@ -129,10 +129,10 @@
               <div class="inner" @click="clickpopup('down')">下架</div>
             </div>
             <template v-if="clickdata.moderate == 1">
-              <div class="item" v-if="clickdata.priority == 0">
+              <div class="item" v-if="!clickdata.priority">
                 <div class="inner" @click="clickpopup('top')">设置为精选</div>
               </div>
-              <div class="item" v-else-if="clickdata.priority == 1">
+              <div class="item" v-else>
                 <div class="inner" @click="clickpopup('bottom')">取消精选</div>
               </div>
             </template>
