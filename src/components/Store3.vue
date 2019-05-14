@@ -27,13 +27,13 @@
               </div>
             </div>
           </template>
-          <template v-else>
-            <div class="adbg" v-if="addata.length == 1">
+          <div v-else class="adbg">
+            <template v-if="addata.length == 1">
               <router-link class="inner" :to="addata[0].url">
                 <img :src="addata[0].photo" />
               </router-link>
-            </div>
-            <div v-else class="adbg">
+            </template>
+            <template v-else>
               <swiper
                 class="pic-swiper notitle"
                 :list="addata"
@@ -43,11 +43,11 @@
                 auto
                 loop>
               </swiper>
-              <div v-if="loginUser.uid == retailerInfo.uid" class="fix-swiper"  @click="clickDecoration">
-                <div class="btn">滚动展示</div>
-              </div>
+            </template>
+            <div v-if="loginUser.uid == retailerInfo.uid" class="fix-swiper"  @click="clickDecoration">
+              <div class="btn">滚动展示</div>
             </div>
-          </template>
+          </div>
         </template>
         <!-- 超值优惠 -->
         <template v-if="showSuggest && suggestData.length">

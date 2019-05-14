@@ -9,27 +9,31 @@
           <template v-if="!addata.length">
             <div class="adbg" v-if="loginUser.uid == retailerInfo.uid">
               <div class="inner flex_center">
-                <div class="bg-theme color-white flex_center btn"@click="clickDecoration">滚动展示</div>
+                <div class="bg-black color-white flex_center btn"@click="clickDecoration">滚动展示</div>
               </div>
             </div>
           </template>
-          <template v-else>
-            <div class="adbg" v-if="addata.length == 1">
+          <div v-else class="adbg">
+            <template v-if="addata.length == 1">
               <router-link class="inner" :to="addata[0].url">
                 <img :src="addata[0].photo" />
               </router-link>
+            </template>
+            <template v-else>
+              <swiper
+                class="pic-swiper notitle"
+                :list="addata"
+                dots-position="center"
+                :interval="6000"
+                :aspect-ratio="500/900"
+                auto
+                loop>
+              </swiper>
+            </template>
+            <div v-if="loginUser.uid == retailerInfo.uid" class="fix-swiper"  @click="clickDecoration">
+              <div class="btn">滚动展示</div>
             </div>
-            <swiper
-              v-else
-              class="pic-swiper notitle"
-              :list="addata"
-              dots-position="center"
-              :interval="6000"
-              :aspect-ratio="500/900"
-              auto
-              loop>
-            </swiper>
-          </template>
+          </div>
         </template>
         <template v-if="retailerInfo.uid">
           <div class="pt12 pb12 bg-white pl10 pr10 b_bottom_after">
