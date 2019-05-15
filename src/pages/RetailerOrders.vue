@@ -590,19 +590,21 @@ export default {
           time: self.$util.delay(data.error),
           onHide: () => {
             if (data.flag === 1) {
-              self.deliveritem.flag = 3
-              self.deliveritem.delivercompany = self.deliverdata.delivercompany
-              self.deliveritem.delivercode = self.deliverdata.delivercode
-              self.$util.deleteItem(self.tabdata3, self.deliveritem.id)
-              self.tabdata4.push(self.deliveritem)
-
               self.showpopup = false
-              self.deliveritem = null
-              self.deliverindex = 0
-              self.deliverdata = { delivercompany: '-1', delivercode: '' }
-              if (this.isFirst) {
-                this.showHb = true
-              }
+              self.refresh()
+              // self.deliveritem.flag = 3
+              // self.deliveritem.delivercompany = self.deliverdata.delivercompany
+              // self.deliveritem.delivercode = self.deliverdata.delivercode
+              // self.$util.deleteItem(self.tabdata3, self.deliveritem.id)
+              // self.tabdata4.push(self.deliveritem)
+              //
+              // self.showpopup = false
+              // self.deliveritem = null
+              // self.deliverindex = 0
+              // self.deliverdata = { delivercompany: '-1', delivercode: '' }
+              // if (this.isFirst) {
+              //   this.showHb = true
+              // }
             }
           }
         })
@@ -649,9 +651,21 @@ export default {
       this.getData()
     },
     initContainer () {
-      const self = this
-      self.showApply = false
-      self.showContainer = false
+      this.showApply = false
+      this.showContainer = false
+      this.selectedIndex = 0
+      this.distabdata1 = 0
+      this.distabdata2 = 0
+      this.distabdata3 = 0
+      this.distabdata4 = 0
+      this.tabdata1 = []
+      this.tabdata2 = []
+      this.tabdata3 = []
+      this.tabdata4 = []
+      this.pagestart1 = 0
+      this.pagestart2 = 0
+      this.pagestart3 = 0
+      this.pagestart4 = 0
     },
     refresh () {
       const self = this
