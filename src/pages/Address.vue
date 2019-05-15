@@ -106,8 +106,7 @@ export default {
             onConfirm: () => {
               this.$wechat.openAddress({
                 success: res => {
-                  alert(JSON.stringify(res))
-                  if (res.errMsg === 'chooseAddress:ok') {
+                  if (res.errMsg === 'openAddress:ok') {
                     let postData = {isdefault: 1}
                     postData.province = res.provinceName
                     postData.city = (res.provinceName !== res.cityName) ? res.cityName : ''
