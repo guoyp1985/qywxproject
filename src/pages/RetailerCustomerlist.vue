@@ -766,10 +766,13 @@ export default {
             self.pagestart1 = 0
             self.distabdata1 = false
             this.tabdata1 = []
-            self.orderbyParams = {}
-            if (self.dateClass.indexOf('active') > -1) {
-              self.orderbyParams = { orderby: 'dateline' }
+            if (!self.orderbyParams || !self.orderbyParams.orderby) {
+              self.orderbyParams = {orderby: 'dateline'}
             }
+            // self.orderbyParams = {}
+            // if (self.dateClass.indexOf('active') > -1) {
+            //   self.orderbyParams = { orderby: 'dateline' }
+            // }
             self.getData1()
           }
           break
