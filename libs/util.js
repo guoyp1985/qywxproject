@@ -752,6 +752,9 @@ Util.install = function (Vue, options) {
               const data1 = res1.data
               if (callback) {
                 let newData = postData
+                if (data1.flag) {
+                  newData = data1.data
+                }
                 newData.fulladdress = `${postData.province}${postData.city}${postData.counties}${postData.address}`
                 callback(res1.data, newData)
               }
