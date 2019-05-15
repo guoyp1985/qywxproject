@@ -484,7 +484,7 @@ export default {
   background-color:#ff6a61;border:0;color:#fff;border-radius:5px;width:120px;
   height:30px;text-align:center;line-height:30px;outline:none;
 }
-.disabled{background-color: #ccc;color: #000;}
+.disabled{background-color:#ccc;color:#000;pointer-events:none;}
 .photoitem{float:right !important;}
 .weui-input{text-align:right;}
 .weui-textarea{text-align:right;}
