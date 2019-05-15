@@ -101,10 +101,32 @@ export default {
         this.disList = true
         console.log(this.$wechat)
         this.$wechat.ready(() => {
-          this.$wechat.openAddress({
-            success: res => {
-              alert('获取到了地址')
-              alert(JSON.stringify(res))
+          this.$vux.confirm.show({
+            content: '是否使用微信地址？',
+            onConfirm: () => {
+              this.$wechat.openAddress({
+                success: res => {
+                  if (res.errMsg === 'chooseAddress:ok') {
+                    let postData = {isdefault: 1}
+                    postData.province = res.provinceName
+                    postData.city = (res.provinceName !== res.cityName) ? res.cityName : ''
+                    postData.counties = res.countyName
+                    postData.address = res.detailInfo
+                    postData.linkman = res.userName
+                    postData.telephone = res.telNumber
+                    this.$http.post(`${ENV.BokaApi}/api/user/address/add`, postData).then(res1 => {
+                      const data1 = res1.data
+                      if (data1.flag) {
+                        const retdata1 = data1.data
+                        if (this.inner) {
+                        } else {
+                          this.items = [retdata1].concat(this.items)
+                        }
+                      }
+                    })
+                  }
+                }
+              })
             }
           })
         })
