@@ -736,6 +736,27 @@ Util.install = function (Vue, options) {
       Vue.http.post(`${ENV.BokaApi}/api/retailer/remindQrCode`, {
         wid: wid
       })
+    },
+    wxAddress: (callback) => {
+      Vue.wechat.openAddress({
+        success: res => {
+          if (res.errMsg === 'openAddress:ok') {
+            let postData = {isdefault: 1}
+            postData.province = res.provinceName
+            postData.city = (res.provinceName !== res.cityName) ? res.cityName : ''
+            postData.counties = res.countryName
+            postData.address = res.detailInfo
+            postData.linkman = res.userName
+            postData.telephone = res.telNumber
+            Vue.http.post(`${ENV.BokaApi}/api/user/address/add`, postData).then(res1 => {
+              const data1 = res1.data
+              if (callback) {
+                callback(res1.data)
+              }
+            })
+          }
+        }
+      })
     }
   }
 }

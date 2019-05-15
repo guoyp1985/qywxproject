@@ -521,6 +521,24 @@ export default {
       this.showModal = false
       this.payData = {}
     },
+    handleAddress () {
+      const self = this
+      for (let i = 0; i < self.addressdata.length; i++) {
+        let a = self.addressdata[i]
+        if (a.isdefault) {
+          self.selectaddress = a
+          self.addressdata[i].checked = true
+          break
+        }
+      }
+      if (!self.selectaddress && self.addressdata.length > 0) {
+        self.selectaddress = self.addressdata[0]
+        self.addressdata[0].checked = true
+      }
+      if (self.selectaddress) {
+        self.submitdata.addressid = self.selectaddress.id
+      }
+    },
     getData () {
       const self = this
       self.$http.get(`${ENV.BokaApi}/api/order/shopShow`).then((res) => {
@@ -569,21 +587,25 @@ export default {
           let data = res.data
           let retdata = data.data ? data.data : data
           if (retdata) {
-            self.addressdata = retdata
-            for (let i = 0; i < self.addressdata.length; i++) {
-              let a = self.addressdata[i]
-              if (a.isdefault) {
-                self.selectaddress = a
-                self.addressdata[i].checked = true
-                break
-              }
-            }
-            if (!self.selectaddress && self.addressdata.length > 0) {
-              self.selectaddress = self.addressdata[0]
-              self.addressdata[0].checked = true
-            }
-            if (self.selectaddress) {
-              self.submitdata.addressid = self.selectaddress.id
+            if (retdata.length) {
+              self.addressdata = retdata
+              self.handleAddress()
+            } else {
+              this.$wechat.ready(() => {
+                this.$vux.confirm.show({
+                  content: '是否使用微信地址？',
+                  onConfirm: () => {
+                    this.$util.wxAddress((data1) => {
+                      if (data1.flag) {
+                        let retdata1 = data1.data
+                        retdata1.fulladdress = `${postData.province}${postData.city}${postData.counties}${postData.address}`
+                        this.addressdata = retdata1
+                        this.handleAddress()
+                      }
+                    })
+                  }
+                })
+              })
             }
           }
           return self.$http.post(`${ENV.BokaApi}/api/card/canUse`, {
