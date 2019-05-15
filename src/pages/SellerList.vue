@@ -175,7 +175,7 @@
               <div class="item" >
                 <div class="inner" @click="clickPopup('uploader')">更改推荐人</div>
               </div>
-              <div class="item" >
+              <div class="item" v-if="clickData.fulltime">
                 <div class="inner" @click="clickPopup('fulltime')">设置为兼职卖家</div>
               </div>
               <router-link class="item" :to="{path:'/store',query:{wid:clickData.wid}}">
@@ -483,8 +483,8 @@ export default {
           content: '确定将该用户设置为兼职卖家吗？',
           onConfirm: () => {
             self.$vux.loading.show()
-            self.$http.post(`${ENV.BokaApi}/api/`, {
-              uid: self.clickData.uid
+            self.$http.post(`${ENV.BokaApi}/api/factory/changeFulltime`, {
+              wid: self.clickData.uid, fid: self.clickData.fid, fulltime: 0
             }).then((res) => {
               self.$vux.loading.hide()
               self.clickData.fulltime = 0

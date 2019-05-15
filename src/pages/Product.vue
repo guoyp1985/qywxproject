@@ -62,6 +62,7 @@
             </span>
             <span v-if="loginUser && loginUser.groupid == 1" class="v_middle db-in color-gray font12">分享次数:{{ productdata.shares }}</span>
           </div>
+          <div v-if="productdata.sellingpoint && productdata.sellingpoint != ''" class="color-theme">{{productdata.sellingpoint}}</div>
           <div class="color-red">
             <span class="font18 mr3 v_middle">{{ $t('RMB') }}</span>
             <span class="font18 mr5 v_middle">{{ productdata.price }}</span>
