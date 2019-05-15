@@ -97,40 +97,40 @@ export default {
         const retdata = data.data ? data.data : data
         if (retdata.length) {
           self.items = retdata
+        } else {
+          this.$wechat.ready(() => {
+            this.$vux.confirm.show({
+              content: '是否使用微信地址？',
+              onConfirm: () => {
+                this.$wechat.openAddress({
+                  success: res => {
+                    if (res.errMsg === 'openAddress:ok') {
+                      let postData = {isdefault: 1}
+                      postData.province = res.provinceName
+                      postData.city = (res.provinceName !== res.cityName) ? res.cityName : ''
+                      postData.counties = res.countryName
+                      postData.address = res.detailInfo
+                      postData.linkman = res.userName
+                      postData.telephone = res.telNumber
+                      this.$http.post(`${ENV.BokaApi}/api/user/address/add`, postData).then(res1 => {
+                        const data1 = res1.data
+                        if (data1.flag) {
+                          let retdata1 = data1.data
+                          retdata1.fulladdress = `${postData.province}${postData.city}${postData.counties}${postData.address}`
+                          if (this.inner) {
+                          } else {
+                            this.items = [retdata1].concat(this.items)
+                          }
+                        }
+                      })
+                    }
+                  }
+                })
+              }
+            })
+          })
         }
         this.disList = true
-        console.log(this.$wechat)
-        this.$wechat.ready(() => {
-          this.$vux.confirm.show({
-            content: '是否使用微信地址？',
-            onConfirm: () => {
-              this.$wechat.openAddress({
-                success: res => {
-                  if (res.errMsg === 'openAddress:ok') {
-                    let postData = {isdefault: 1}
-                    postData.province = res.provinceName
-                    postData.city = (res.provinceName !== res.cityName) ? res.cityName : ''
-                    postData.counties = res.countryName
-                    postData.address = res.detailInfo
-                    postData.linkman = res.userName
-                    postData.telephone = res.telNumber
-                    this.$http.post(`${ENV.BokaApi}/api/user/address/add`, postData).then(res1 => {
-                      const data1 = res1.data
-                      if (data1.flag) {
-                        let retdata1 = data1.data
-                        retdata1.fulladdress = `${postData.province}${postData.city}${postData.counties}${postData.address}`
-                        if (this.inner) {
-                        } else {
-                          this.items = [retdata1].concat(this.items)
-                        }
-                      }
-                    })
-                  }
-                }
-              })
-            }
-          })
-        })
       })
     },
     refresh () {
