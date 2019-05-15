@@ -449,33 +449,35 @@ export default {
     },
     ajaxOrder (postData) {
       const self = this
-      self.submiting = true
-      if (self.selectedCard) {
-        postData.cardid = self.selectedCard.id
-      }
-      self.$http.post(`${ENV.BokaApi}/api/order/addOrder`, postData).then(function (res) {
-        let data = res.data
-        self.isShowLoading = false
-        self.$vux.toast.show({
-          text: data.error,
-          time: self.$util.delay(data.error),
-          onHide: function () {
-            if (data.flag === 1) {
-              if (self.isMiniInvoke) {
-                self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.pay}?id=${data.id}`})
-              } else {
-                if (data.id) {
-                  location.replace(`${ENV.Host}/#/pay?id=${data.id}`)
+      if (!self.submiting) {
+        self.submiting = true
+        if (self.selectedCard) {
+          postData.cardid = self.selectedCard.id
+        }
+        self.$http.post(`${ENV.BokaApi}/api/order/addOrder`, postData).then(function (res) {
+          let data = res.data
+          self.isShowLoading = false
+          self.$vux.toast.show({
+            text: data.error,
+            time: self.$util.delay(data.error),
+            onHide: function () {
+              if (data.flag === 1) {
+                if (self.isMiniInvoke) {
+                  self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.pay}?id=${data.id}`})
                 } else {
-                  self.$router.push({path: `/payment?wid=${self.curOrder.wid}`})
+                  if (data.id) {
+                    location.replace(`${ENV.Host}/#/pay?id=${data.id}`)
+                  } else {
+                    self.$router.push({path: `/payment?wid=${self.curOrder.wid}`})
+                  }
                 }
+              } else {
+                self.submiting = false
               }
-            } else {
-              self.submiting = false
             }
-          }
+          })
         })
-      })
+      }
     },
     submitOrder () {
       const self = this
