@@ -336,7 +336,7 @@ export default {
     getXcode () {
       console.log('手机号')
       console.log(this.submitData.mobile)
-      clearInterval(this.intervalId)
+      // clearInterval(this.intervalId)
       if (!Reg.rPhone.test(this.submitData.mobile)) {
         this.$vux.toast.text('手机号码格式错误', 'middle')
         return false
