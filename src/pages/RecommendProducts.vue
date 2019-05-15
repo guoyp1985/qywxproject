@@ -84,10 +84,10 @@
       </template>
     </div>
     <!-- 新增按钮 -->
-    <!-- <div class="btn-bottom" @click="closeChat">
+    <div class="btn-bottom" @click="closeChat">
       <div class="btn font14">我也要提供货源</div>
     </div>
-    <div class="auto-modal flex_center wechat-modal" v-if="showRetailerWechat">
+    <!--<div class="auto-modal flex_center wechat-modal" v-if="showRetailerWechat">
       <div class="modal-inner padding20 border-box" style="width:80%;">
         <div class="align_center font18 bold pb10">成为厂家即可提供货源</div>
         <div class="align_center font16">在客服会话回复【<span class="bold color-theme">2</span>】长按扫码关注公众号，点击菜单中的【申请厂家】提交申请即可。</div>
@@ -170,7 +170,7 @@ export default {
   },
   methods: {
     closeChat () {
-      this.showRetailerWechat = !this.showRetailerWechat
+      this.$router.push({path: '/ApplyFactory'})
     },
     initData () {
       this.isFirst = false

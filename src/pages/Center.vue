@@ -95,6 +95,11 @@
               <span class="al al-shouhouwuyou font20"></span>
             </div>
           </grid-item>
+          <grid-item label="申请厂家" @click.native="toLink('/ApplyFactory')">
+            <div slot="icon" class="circle-icon-bg rgba07 color-white flex_center mb10">
+              <span class="al al-shouhouwuyou font20"></span>
+            </div>
+          </grid-item>
           <grid-item v-if="showManager" label="管理后台" @click.native="clickManager">
             <div slot="icon" class="circle-icon-bg rgba06 color-white flex_center mb10">
               <span class="al al-set font20"></span>

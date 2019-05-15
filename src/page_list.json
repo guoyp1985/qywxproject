@@ -14,6 +14,7 @@
   "AddOrder",
   "Auth",
   "AuthPhoto",
+  "ApplyFactory",
   "BindingBank",
   "BringCustomer",
   "BusinessSchool",
