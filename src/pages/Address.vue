@@ -107,6 +107,7 @@ export default {
               this.$wechat.openAddress({
                 success: res => {
                   if (res.errMsg === 'openAddress:ok') {
+                    alert(JSON.stringify(res))
                     let postData = {isdefault: 1}
                     postData.province = res.provinceName
                     postData.city = (res.provinceName !== res.cityName) ? res.cityName : ''
