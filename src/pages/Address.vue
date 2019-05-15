@@ -100,10 +100,13 @@ export default {
         }
         this.disList = true
         console.log(this.$wechat)
-        this.$wechat.openAddress({
-          success: res => {
-            alert(JSON.stringify(res))
-          }
+        this.$wechat.ready(() => {
+          this.$wechat.openAddress({
+            success: res => {
+              alert('获取到了地址')
+              alert(JSON.stringify(res))
+            }
+          })
         })
       })
     },
