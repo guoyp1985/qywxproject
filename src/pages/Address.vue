@@ -99,6 +99,11 @@ export default {
           self.items = retdata
         }
         this.disList = true
+        this.$wechat.openAddress({
+          success: res => {
+            alert(JSON.stringify(res))
+          }
+        })
       })
     },
     refresh () {

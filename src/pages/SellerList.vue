@@ -172,14 +172,11 @@
         <popup class="menuwrap" v-model="showPopup1">
           <div class="popup0">
             <div class="list" v-if="clickData">
-              <!-- <div class="item">
-                <div class="inner" @click="clickPopup('level')">设置代理级别</div>
-              </div> -->
-              <!-- <div class="item" v-if="clickData.fulltime === 1">
-                <div class="inner" @click="clickPopup('uploader')">更改推荐人</div>
-              </div> -->
               <div class="item" >
                 <div class="inner" @click="clickPopup('uploader')">更改推荐人</div>
+              </div>
+              <div class="item" >
+                <div class="inner" @click="clickPopup('fulltime')">设置为兼职卖家</div>
               </div>
               <router-link class="item" :to="{path:'/store',query:{wid:clickData.wid}}">
                 <div class="inner">进入店铺</div>
@@ -464,9 +461,9 @@ export default {
     },
     clickPopup (key) {
       const self = this
+      self.showPopup1 = false
       if (key === 'level') {
         self.showLevelPopup = true
-        self.showPopup1 = false
         for (let i = 0; i < self.levelData.length; i++) {
           if (self.clickData.level.toString() === self.levelData[i].id.toString()) {
             self.selectLevel = self.levelData[i]
@@ -481,9 +478,29 @@ export default {
           self.searchword2 = ''
           self.searchUser()
         }
-        self.showPopup1 = false
-      } else {
-        self.showPopup1 = false
+      } else if (key === 'fulltime') {
+        self.$vux.confirm.show({
+          content: '确定将该用户设置为兼职卖家吗？',
+          onConfirm: () => {
+            self.$vux.loading.show()
+            self.$http.post(`${ENV.BokaApi}/api/`, {
+              uid: self.clickData.uid
+            }).then((res) => {
+              self.$vux.loading.hide()
+              self.clickData.fulltime = 0
+              self.tabData1.splice(self.clickIndex, 1)
+              if (self.tabData1.length + 1 === (self.pageStart1 + 1) * self.limit) {
+                self.getData1(true)
+              }
+              if (self.tabData2.length) {
+                self.tabData2 = [self.clickData].concat(self.tabData2)
+                if (self.tabData2.length - 1 === (self.pageStart2 + 1) * self.limit) {
+                  self.tabData2.splice(self.tabData2.length - 1, 1)
+                }
+              }
+            })
+          }
+        })
       }
     },
     closeLevelPopup () {
@@ -588,9 +605,13 @@ export default {
         })
       })
     },
-    getData1 () {
+    getData1 (isone) {
       const self = this
-      const params = {fid: self.query.id, fulltime: 1, pagestart: self.pageStart1, limit: self.limit}
+      let params = {fid: self.query.id, fulltime: 1, pagestart: self.pageStart1, limit: self.limit}
+      if (isone) {
+        params.pagestart = self.tabData1.length
+        params.limit = 1
+      }
       this.$http.get(`${ENV.BokaApi}/api/factory/retailerList`, {
         params: params
       })
@@ -602,9 +623,13 @@ export default {
         self.disTabData1 = true
       })
     },
-    getData2 () {
+    getData2 (isone) {
       const self = this
-      const params = {fid: self.query.id, fulltime: 2, pagestart: self.pageStart2, limit: self.limit}
+      let params = {fid: self.query.id, fulltime: 2, pagestart: self.pageStart2, limit: self.limit}
+      if (isone) {
+        params.pagestart = self.tabData2.length
+        params.limit = 1
+      }
       this.$http.get(`${ENV.BokaApi}/api/factory/retailerList`, {
         params: params
       })
