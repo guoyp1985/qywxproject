@@ -38,8 +38,9 @@
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">验证码<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
               <div class="t-cell input-cell v_middle flex_table" style="position:relative;">
-                <x-input style="padding-right:5px;" type="text" class="input" placeholder="请输入验证码" ></x-input>
-                <button class="font14 yzmcode" :class="`${count !== countNum} ? disabled : ''`" @click="getXcode" :disabled="count !== countNum">{{message}}</button>
+                <x-input style="padding-right:5px;" v-model="yzmcode" type="text" class="input" placeholder="请输入验证码" ></x-input>
+                <button class="font14 yzmcode disabled" v-if="count !== countNum" @click="getXcode" :disabled="count !== countNum">{{message}}</button>
+                <button class="font14 yzmcode" v-else @click="getXcode" :disabled="count !== countNum">{{message}}</button>
               </div>
             </div>
           </div>
@@ -156,6 +157,7 @@ export default {
       infoData: {},
       allowsubmit: true,
       yzmcode: '',
+      hqyzm: '',
       submitData: { title: '', mobile: '', company: '', licensephoto: '', licensecode: '', superiorrate: '20', salesrate: '80' },
       requireddata: { title: '' },
       classData: [],
@@ -249,6 +251,7 @@ export default {
     saveEvent () {
       const self = this
       let postData = self.submitData
+      console.log(this.yzmcode)
       console.log(postData)
       if (self.productClass) {
         postData.productclass = self.productClass
@@ -277,7 +280,7 @@ export default {
         this.$vux.toast.text('请填写验证码！')
         return false
       }
-      if (this.yzmcode !== this.yzmcode) {
+      if (this.yzmcode !== this.hqyzm) {
         this.$vux.toast.text('验证码错误！')
         return false
       }
@@ -347,7 +350,7 @@ export default {
           if (data.flag) {
             this.$vux.toast.text('验证码发送成功！')
             const yzm = data
-            this.yzmcode = data.data
+            this.hqyzm = data.data
             console.log('验证码')
             console.log(yzm)
             this.intervalId = setInterval(() => {
