@@ -595,11 +595,9 @@ export default {
                 this.$vux.confirm.show({
                   content: '是否使用微信地址？',
                   onConfirm: () => {
-                    this.$util.wxAddress((data1) => {
+                    this.$util.wxAddress((data1, newData) => {
                       if (data1.flag) {
-                        let retdata1 = data1.data
-                        retdata1.fulladdress = `${postData.province}${postData.city}${postData.counties}${postData.address}`
-                        this.addressdata = retdata1
+                        this.addressdata = newData
                         this.handleAddress()
                       }
                     })

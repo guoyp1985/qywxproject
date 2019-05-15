@@ -751,7 +751,9 @@ Util.install = function (Vue, options) {
             Vue.http.post(`${ENV.BokaApi}/api/user/address/add`, postData).then(res1 => {
               const data1 = res1.data
               if (callback) {
-                callback(res1.data)
+                let newData = postData
+                newData.fulladdress = `${postData.province}${postData.city}${postData.counties}${postData.address}`
+                callback(res1.data, newData)
               }
             })
           }
