@@ -117,8 +117,8 @@ export default {
                     this.$http.post(`${ENV.BokaApi}/api/user/address/add`, postData).then(res1 => {
                       const data1 = res1.data
                       if (data1.flag) {
-                        const retdata1 = data1.data
-                        alert(JSON.stringify(retdata1))
+                        let retdata1 = data1.data
+                        retdata1.fulladdress = `${postData.province}${postData.city}${postData.counties}${postData.address}`
                         if (this.inner) {
                         } else {
                           this.items = [retdata1].concat(this.items)
