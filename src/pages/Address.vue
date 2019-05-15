@@ -97,6 +97,19 @@ export default {
         const retdata = data.data ? data.data : data
         if (retdata.length) {
           self.items = retdata
+        } else {
+          this.$wechat.ready(() => {
+            this.$vux.confirm.show({
+              content: '是否使用微信地址？',
+              onConfirm: () => {
+                this.$util.wxAddress((data1, newData) => {
+                  if (data1.flag) {
+                    this.items = [newData].concat(this.items)
+                  }
+                })
+              }
+            })
+          })
         }
         this.disList = true
       })

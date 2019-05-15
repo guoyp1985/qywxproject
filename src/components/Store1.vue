@@ -9,27 +9,31 @@
           <template v-if="!addata.length">
             <div class="adbg" v-if="loginUser.uid == retailerInfo.uid">
               <div class="inner flex_center">
-                <div class="bg-theme color-white flex_center btn"@click="clickDecoration">滚动展示</div>
+                <div class="bg-black color-white flex_center btn"@click="clickDecoration">滚动展示</div>
               </div>
             </div>
           </template>
-          <template v-else>
-            <div class="adbg" v-if="addata.length == 1">
+          <div v-else class="adbg">
+            <template v-if="addata.length == 1">
               <router-link class="inner" :to="addata[0].url">
                 <img :src="addata[0].photo" />
               </router-link>
+            </template>
+            <template v-else>
+              <swiper
+                class="pic-swiper notitle"
+                :list="addata"
+                dots-position="center"
+                :interval="6000"
+                :aspect-ratio="500/900"
+                auto
+                loop>
+              </swiper>
+            </template>
+            <div v-if="loginUser.uid == retailerInfo.uid" class="fix-swiper"  @click="clickDecoration">
+              <div class="btn">滚动展示</div>
             </div>
-            <swiper
-              v-else
-              class="pic-swiper notitle"
-              :list="addata"
-              dots-position="center"
-              :interval="6000"
-              :aspect-ratio="500/900"
-              auto
-              loop>
-            </swiper>
-          </template>
+          </div>
         </template>
         <template v-if="retailerInfo.uid">
           <div class="pt12 pb12 bg-white pl10 pr10 b_bottom_after">
@@ -188,21 +192,6 @@
           </div>
         </popup>
       </div>
-      <share-success
-        v-show="showShareSuccess"
-        v-if="retailerInfo.uploader == loginUser.uid || retailerInfo.identity != 'user'"
-        :data="retailerInfo"
-        :loginUser="loginUser"
-        module="store"
-        :on-close="closeShareSuccess">
-      </share-success>
-      <template v-if="showHelpModal">
-        <tip-layer
-          @clickClose="closeHelpModal"
-          title="超值优惠"
-          content="超值优惠商品是官方为你提供的爆款低价商品，帮助你转化客户，促进用户购买，用户购买完成后，你还可以获得商品的佣金奖励哦！">
-        </tip-layer>
-      </template>
     </template>
   </div>
 </template>
@@ -230,8 +219,6 @@ import Groupbuyitemplate from '@/components/Groupbuyitemplate'
 import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
 import Productitemplate from '@/components/Productitemplate'
 import Newsitemplate from '@/components/Newsitemplate'
-import ShareSuccess from '@/components/ShareSuccess'
-import TipLayer from '@/components/TipLayer'
 import Sos from '@/components/Sos'
 
 export default {
@@ -346,7 +333,7 @@ export default {
     TransferDom
   },
   components: {
-    Swiper, Popup, Groupbuyitemplate, Bargainbuyitemplate, Productitemplate, Newsitemplate, ShareSuccess, XImg, Sos, TipLayer
+    Swiper, Popup, Groupbuyitemplate, Bargainbuyitemplate, Productitemplate, Newsitemplate, XImg, Sos
   },
   methods: {
     handleScroll (refname) {

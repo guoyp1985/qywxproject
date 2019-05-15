@@ -186,6 +186,25 @@
           </div>
         </popup>
       </div>
+      <div class="auto-modal flex_center" v-if="showModal">
+        <div class="modal-inner border-box" style="width:85%;">
+          <div class="flex_center padding10 b_bottom_after font16">免责说明</div>
+          <div class="middle-con flex_center">
+            <div class="w_100 padding10">
+              <div>当前交易非平台担保模式，交易完成后，店主发货成功即可对订单收入提现，是否继续购买？</div>
+              <div class="color-theme mt10">*注意: 当前交易所产生的纠纷与{{WeixinName}}平台无关</div>
+              <div class="mt20 flex_center">
+                <div class="flex_left flex_cell">
+                  <div class="flex_center" style="width:80%;border:#ccc 1px solid;border-radius:20px;height:35px;" @click="closeModal">取消</div>
+                </div>
+                <div class="flex_right flex_cell">
+                  <div class="flex_center bg-theme color-white" style="width:80%;border-radius:20px;height:35px;" @click="clickPay">确认购买</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </template>
   </div>
 </template>
@@ -252,6 +271,7 @@ export default {
   data () {
     return {
       loginUser: {},
+      retailerInfo: {},
       showSos: false,
       sosTitle: '无效订单',
       showContainer: false,
@@ -278,7 +298,10 @@ export default {
       buyType: 'online',
       onlineVal: true,
       offlineVal: false,
-      maxQuantity: 1
+      maxQuantity: 1,
+      WeixinName: ENV.WeixinName,
+      showModal: false,
+      payData: {}
     }
   },
   watch: {
@@ -462,10 +485,15 @@ export default {
             content: '你当前选择的收货方式是到店自提，需自己去卖家实体店进行提货！',
             confirmText: '立即购买',
             cancelText: '更换收货方式',
-            onConfirm () {
+            onConfirm: () => {
               let postData = self.submitdata
               postData.delivertype = 2
-              self.ajaxOrder(postData)
+              this.payData = postData
+              if (this.curOrder.accounttype === 1 && !this.curOrder.info[0].fid) {
+                this.showModal = true
+              } else {
+                this.clickPay()
+              }
             }
           })
         } else {
@@ -475,10 +503,40 @@ export default {
             })
             return false
           }
-          self.isShowLoading = true
           self.submitdata.addressid = self.selectaddress.id
-          self.ajaxOrder(this.submitdata)
+          this.payData = this.submitdata
+          if (this.curOrder.accounttype === 1 && !this.curOrder.info[0].fid) {
+            this.showModal = true
+          } else {
+            this.clickPay()
+          }
         }
+      }
+    },
+    clickPay () {
+      this.isShowLoading = true
+      this.ajaxOrder(this.payData)
+    },
+    closeModal () {
+      this.showModal = false
+      this.payData = {}
+    },
+    handleAddress () {
+      const self = this
+      for (let i = 0; i < self.addressdata.length; i++) {
+        let a = self.addressdata[i]
+        if (a.isdefault) {
+          self.selectaddress = a
+          self.addressdata[i].checked = true
+          break
+        }
+      }
+      if (!self.selectaddress && self.addressdata.length > 0) {
+        self.selectaddress = self.addressdata[0]
+        self.addressdata[0].checked = true
+      }
+      if (self.selectaddress) {
+        self.submitdata.addressid = self.selectaddress.id
       }
     },
     getData () {
@@ -524,26 +582,28 @@ export default {
           self.orderPrice = self.payPrice
           return self.$http.get(`${ENV.BokaApi}/api/user/address/list`)
         }
-      }).then(function (res) {
+      }).then(res => {
         if (res) {
           let data = res.data
           let retdata = data.data ? data.data : data
           if (retdata) {
-            self.addressdata = retdata
-            for (let i = 0; i < self.addressdata.length; i++) {
-              let a = self.addressdata[i]
-              if (a.isdefault) {
-                self.selectaddress = a
-                self.addressdata[i].checked = true
-                break
-              }
-            }
-            if (!self.selectaddress && self.addressdata.length > 0) {
-              self.selectaddress = self.addressdata[0]
-              self.addressdata[0].checked = true
-            }
-            if (self.selectaddress) {
-              self.submitdata.addressid = self.selectaddress.id
+            if (retdata.length) {
+              self.addressdata = retdata
+              self.handleAddress()
+            } else {
+              this.$wechat.ready(() => {
+                this.$vux.confirm.show({
+                  content: '是否使用微信地址？',
+                  onConfirm: () => {
+                    this.$util.wxAddress((data1, newData) => {
+                      if (data1.flag) {
+                        this.addressdata = [newData]
+                        this.handleAddress()
+                      }
+                    })
+                  }
+                })
+              })
             }
           }
           return self.$http.post(`${ENV.BokaApi}/api/card/canUse`, {

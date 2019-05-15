@@ -264,16 +264,10 @@ export default {
     toProduct (item) {
       console.log(item)
       console.log(this.query)
-      if (this.query.from === 'miniprogram') {
-        this.$wechat.miniProgram.reLaunch({url: `${ENV.MiniRouter.product}?id=${item.pid}&wid=${item.wid}`})
+      if (this.query.from) {
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&wid=${item.wid}`})
       } else {
-        this.$router.push({
-          path: '/product',
-          query: {
-            id: item.pid,
-            wid: item.wid
-          }
-        })
+        this.$router.push({path: '/product', query: {id: item.pid, wid: item.wid}})
       }
     },
     textareaChange (refname) {

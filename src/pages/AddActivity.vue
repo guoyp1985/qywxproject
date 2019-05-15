@@ -324,7 +324,7 @@ export default {
             self.$vux.loading.show()
             self.$http.post(`${ENV.BokaApi}/api/setModulePara/product`, {
               module: 'product', id: self.selectpopupdata.id, param: 'allowcard', paramvalue: 0
-            }).then(function (res) {
+            }).then((res) => {
               self.$vux.loading.hide()
               self.selectpopupdata.allowcard = 0
               self.productdata[self.selectProductIndex].allowcard = 0

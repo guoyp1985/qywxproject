@@ -65,7 +65,7 @@
     </div>
     <div class="s-bottom flex_center pl12 pr12 list-shadow02" v-if="loginUser.isretailer">
       <div class="flex_cell flex_center">
-        <router-link class="color-white flex_center btn-bottom-red" to="/retailerOrders" style="width:85%;">我的销售订单</router-link>
+        <div class="color-white flex_center btn-bottom-red" @click="toRetailerOrders" style="width:85%;">我的销售订单</div>
       </div>
     </div>
     <div v-if="showRefundModal" class="auto-modal refund-modal flex_center">
@@ -153,6 +153,10 @@ export default {
     }
   },
   methods: {
+    toRetailerOrders () {
+      let params = this.$util.handleAppParams(this.query, {})
+      this.$router.push({path: '/retailerOrders', query: params})
+    },
     textareaChange (refname) {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
       curArea.updateAutosize()

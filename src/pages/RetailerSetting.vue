@@ -16,8 +16,10 @@
         :buyonline="buyonline"
         :buyoffline="buyoffline"
         :submitSuggest="submitSuggest"
+        @clickBuyline="clickBuyline"
         @clickSuggest="clickSuggest"
-        :submitShopModel="submitShopModel">
+        @clickAccount="clickAccount"
+        @clickTemplate="clickTemplate">
       </retailer-setting>
     </template>
     <template v-if="showApply">
@@ -47,7 +49,9 @@ export default {
       showSetting: false,
       showApply: false,
       retailerInfo: {},
-      submitdata: { title: '', productclass: '', qrcode: '', buyonline: 1, shopmodel: '1', content: '', fastreply: '你好，请稍等，一会为你服务' },
+      submitkey: { title: '', productclass: '', qrcode: '', buyonline: 1, shopmodel: '1', accounttype: 0, content: '', fastreply: '你好，请稍等，一会为你服务' },
+      // submitdata: { title: '', productclass: '', qrcode: '', buyonline: 1, shopmodel: '1', accounttype: 0, content: '', fastreply: '你好，请稍等，一会为你服务' },
+      submitdata: {},
       submitdata1: { showphoto: '', slogan: '', tags: '' },
       photoarr: [],
       showphotoArr: [],
@@ -55,8 +59,7 @@ export default {
       productClass: [],
       buyonline: true,
       buyoffline: false,
-      submitSuggest: true,
-      submitShopModel: '1'
+      submitSuggest: true
     }
   },
   methods: {
@@ -76,8 +79,8 @@ export default {
           let data = res.data
           self.$vux.loading.hide()
           self.retailerInfo = data.data ? data.data : data
-          self.submitShopModel = self.retailerInfo.shopmodel
-          for (let key in self.submitdata) {
+          self.submitdata = {}
+          for (let key in self.submitkey) {
             self.submitdata[key] = self.retailerInfo[key]
           }
           if (self.submitdata.buyonline) {
@@ -118,8 +121,16 @@ export default {
         }
       })
     },
+    clickBuyline (val, callback) {
+      if (val !== this.submitdata.buyonline) {
+        delete this.submitdata.buyonline
+        this.submitdata.buyonline = val
+      }
+      if (callback) {
+        callback()
+      }
+    },
     clickSuggest (val, callback) {
-      console.log(val)
       this.$http.post(`${ENV.BokaApi}/api/card/setParas`, {
         params: {suggest_open: val}
       }).then(res => {
@@ -128,11 +139,41 @@ export default {
           this.loginUser.retailerinfo.params = data.data
           this.retailerInfo.params = data.data
           User.set(this.loginUser)
+          if (val === '1' || val === 1) {
+            this.submitSuggest = true
+          } else {
+            this.submitSuggest = false
+          }
           if (callback) {
             callback()
           }
         }
       })
+    },
+    clickTemplate (val, callback) {
+      if (parseInt(val) !== parseInt(this.submitdata.shopmodel)) {
+        delete this.submitdata.shopmodel
+        this.submitdata.shopmodel = val
+        console.log('进入到了删除')
+        console.log(this.submitdata)
+      }
+      if (callback) {
+        callback()
+      }
+    },
+    clickAccount (val, callback) {
+      console.log('in 点击到账方式')
+      console.log(val)
+      console.log(this.submitdata.accounttype)
+      if (val !== this.submitdata.accounttype) {
+        delete this.submitdata.accounttype
+        this.submitdata.accounttype = val
+        console.log('进入到了删除')
+        console.log(this.submitdata)
+      }
+      if (callback) {
+        callback()
+      }
     },
     init () {
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {

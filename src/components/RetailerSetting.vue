@@ -73,8 +73,6 @@
               <forminputplate class="required" v-if="query.miniconfig != 'wechat.mini_program.tljk'">
                 <span slot="title">超值优惠</span>
                 <div>
-                  <!-- <check-icon class="red-check" :value.sync="suggestOpen" @click.native.stop="clickSuggest(1)">开启</check-icon>
-                  <check-icon class="red-check" :value.sync="suggestClose" @click.native.stop="clickSuggest(0)">关闭</check-icon> -->
                   <check-icon class="red-check" :value.sync="suggestOpen" @click.native.stop="clickSuggest(1)">开启</check-icon>
                   <check-icon class="red-check" :value.sync="suggestClose" @click.native.stop="clickSuggest(0)">关闭</check-icon>
                 </div>
@@ -88,6 +86,19 @@
                   <check-icon class="red-check" :value.sync="template4" @click.native.stop="clickTemplate(4)">清新蓝</check-icon>
                 </div>
               </forminputplate>
+              <div class="form-item">
+                <div class="t-table">
+                  <div class="t-cell title-cell font14 v_middle">
+                    <span>到账方式</span><span class="al al-wenhao font20 color-theme" style="vertical-align:-2px;" @click="clickHelp"></span>
+                  </div>
+                  <div class="t-cell input-cell v_middle" style="position:relative;">
+                    <div>
+                      <check-icon class="red-check" :value.sync="accountPlat" @click.native.stop="setAccounttype(0)">平台担保</check-icon>
+                      <check-icon class="red-check" :value.sync="accountQuick" @click.native.stop="setAccounttype(1)">立即到账</check-icon>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div v-show="showmore">
                 <forminputplate>
                   <span slot="title">{{ $t('Shop description') }}</span>
@@ -294,6 +305,22 @@
         </div>
       </popup>
     </div>
+    <div class="auto-modal flex_center" v-if="showHelpModal">
+      <div class="modal-inner border-box" style="width:85%;">
+        <div class="flex_center padding10 b_bottom_after font16">到账方式</div>
+        <div class="middle-con flex_center">
+          <div class="w_100 padding10">
+            <div class="color-theme">什么是平台担保</div>
+            <div>平台担保是指用户购买商品后，订单金额需要等待你发货并且买家进行确认收货后，这笔订单金额才可进行提现。</div>
+            <div class="color-theme mt10">什么是立即到账</div>
+            <div>立即到账是指用户购买商品后，订单金额只需等待你进行发货后便可直接进行提现，无需等待买家确认收货。</div>
+          </div>
+        </div>
+        <div class="close-area flex_center" @click="closeModal">
+          <i class="al al-close"></i>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -352,7 +379,7 @@ export default {
     },
     submitdata: {
       type: Object,
-      default: { title: '', qrcode: '', buyonline: 1, shopmodel: '1', content: '', fastreply: '你好，请稍等，一会为你服务' }
+      default: { title: '', qrcode: '', buyonline: 1, shopmodel: '1', accounttype: 0, content: '', fastreply: '你好，请稍等，一会为你服务' }
     },
     submitdata1: {
       type: Object,
@@ -370,21 +397,9 @@ export default {
       type: Array,
       default: []
     },
-    buyonline: {
-      type: Boolean,
-      default: true
-    },
-    buyoffline: {
-      type: Boolean,
-      default: false
-    },
     submitSuggest: {
       type: Boolean,
       default: true
-    },
-    submitShopModel: {
-      type: String,
-      default: '1'
     }
   },
   directives: {
@@ -400,26 +415,27 @@ export default {
       showmore: false,
       requireddata: {title: '', 'qrcode': ''},
       requireddata1: {showphoto: '', slogan: ''},
-      showonline: false,
-      showoffline: false,
       showqrcode: false,
       selectedIndex: 0,
       tabtxts: [ '基本设置', '卖家秀设置' ],
       classDataShow: false,
-      online: true,
+      online: false,
       offline: false,
+      showonline: false,
+      showoffline: false,
       isFirst: true,
       isFirst1: true,
-      suggestOpen: true,
+      suggestOpen: false,
       suggestClose: false,
-      isFirst2: true,
-      isFirst3: true,
-      oldSuggestOpen: true,
-      oldSuggestClose: false,
       template1: false,
       template2: false,
       template3: false,
-      template4: false
+      template4: false,
+      haveSelected: true,
+      noSelected: false,
+      accountPlat: false,
+      accountQuick: false,
+      showHelpModal: false
     }
   },
   watch: {
@@ -432,75 +448,99 @@ export default {
       return this.photoarr
     },
     submitdata: function () {
+      console.log('监控到submitdata的变化')
       console.log('in watch sumitdata')
       this.watchBuyline()
       this.watchTemplate()
+      this.watchAccount()
       return this.submitdata
-    },
-    buyonline: function () {
-      if (this.isFirst) {
-        this.online = this.buyonline
-        this.isFirst = false
-      }
-      return this.buyonline
-    },
-    buyoffline: function () {
-      if (this.isFirst1) {
-        this.offline = this.buyoffline
-        this.isFirst1 = false
-      }
-      return this.buyoffline
     },
     submitSuggest: function () {
       console.log('in watch submitSuggest')
       this.watchSuggest()
       return this.submitSuggest
-    },
-    submitShopModel () {
-      this.watchTemplate(`${this.submitShopModel}`)
-      return this.submitShopModel
     }
   },
   methods: {
+    clickHelp () {
+      this.showHelpModal = true
+    },
+    closeModal () {
+      this.showHelpModal = false
+    },
     watchBuyline () {
-      if (this.submitdata.buyonline) {
-        this.online = true
+      if (this.submitdata.buyonline === undefined || this.submitdata.buyonline === 'undefined') {
+        this.online = false
         this.offline = false
       } else {
-        this.online = false
-        this.offline = true
+        if (this.submitdata.buyonline) {
+          this.online = true
+          this.offline = false
+        } else {
+          this.online = false
+          this.offline = true
+        }
       }
     },
     watchSuggest () {
-      if (this.submitSuggest) {
-        this.suggestOpen = true
+      if (this.submitSuggest === undefined || this.submitSuggest === 'undefined') {
+        this.suggestOpen = false
         this.suggestClose = false
       } else {
-        this.suggestOpen = false
-        this.suggestClose = true
+        if (this.submitSuggest) {
+          this.suggestOpen = true
+          this.suggestClose = false
+        } else {
+          this.suggestOpen = false
+          this.suggestClose = true
+        }
       }
-      this.oldSuggestOpen = this.suggestOpen
-      this.oldSuggestClose = this.suggestClose
     },
     watchTemplate (val) {
-      console.log('in watchtemplate')
-      console.log(val)
-      this.template1 = false
-      this.template2 = false
-      this.template3 = false
-      this.template4 = false
-      if (val === '2') {
-        this.template2 = true
-        this.submitdata.shopmodel = 2
-      } else if (val === '3') {
-        this.template3 = true
-        this.submitdata.shopmodel = 3
-      } else if (val === '4') {
-        this.template4 = true
-        this.submitdata.shopmodel = 4
+      let param = val
+      if (val === undefined || val === 'undefined') {
+        param = this.retailerInfo.shopmodel
+      }
+      if (param === undefined || param === 'undefined') {
+        this.template1 = false
+        this.template2 = false
+        this.template3 = false
+        this.template4 = false
       } else {
-        this.template1 = true
-        this.submitdata.shopmodel = 1
+        param = parseInt(param)
+        console.log('in watchtemplate')
+        console.log(param)
+        this.template1 = false
+        this.template2 = false
+        this.template3 = false
+        this.template4 = false
+        if (param === 2) {
+          this.template2 = true
+          this.submitdata.shopmodel = 2
+        } else if (param === 3) {
+          this.template3 = true
+          this.submitdata.shopmodel = 3
+        } else if (param === 4) {
+          this.template4 = true
+          this.submitdata.shopmodel = 4
+        } else {
+          this.template1 = true
+          this.submitdata.shopmodel = 1
+        }
+      }
+    },
+    watchAccount () {
+      if (this.submitdata.accounttype === undefined || this.submitdata.accounttype === 'undefined') {
+        this.accountPlat = false
+        this.accountQuick = false
+      } else {
+        if (this.submitdata.accounttype) {
+          this.accountPlat = false
+          this.accountQuick = true
+        } else {
+          this.accountPlat = true
+          this.accountQuick = false
+        }
       }
     },
     textareaChange (refname) {
@@ -578,48 +618,55 @@ export default {
     setbuyonline (val) {
       if (val === 1) {
         this.showonline = true
-        this.submitdata.buyonline = 1
-        // this.buyonline = true
-        // this.buyoffline = false
-        this.online = true
-        this.offline = false
       } else {
         this.showoffline = true
-        this.submitdata.buyonline = 0
-        // this.buyonline = false
-        // this.buyoffline = true
-        this.online = false
-        this.offline = true
+      }
+      if (parseInt(val) !== this.submitdata.buyonline) {
+        this.$emit('clickBuyline', val, () => {
+          this.watchBuyline()
+        })
+      } else {
+        this.watchBuyline()
       }
     },
     clickSuggest (val) {
       console.log(val)
-      let con = (val === 1 ? '确认要展示超值优惠商品？' : '确认要取消展示超值优惠商品？')
-      if (val === 1) {
-        this.suggestOpen = true
-        this.suggestClose = false
-      } else {
-        this.suggestOpen = false
-        this.suggestClose = true
-      }
-      this.$vux.confirm.show({
-        content: con,
-        onCancel: () => {
-          this.suggestOpen = this.oldSuggestOpen
-          this.suggestClose = this.oldSuggestClose
-        },
-        onConfirm: () => {
-          this.$emit('clickSuggest', val, () => {
-            this.oldSuggestOpen = this.suggestOpen
-            this.oldSuggestClose = this.suggestClose
-          })
+      if ((val === 1 && this.suggestClose) || (val === 0 && this.suggestOpen)) {
+        let con = (val === 1 ? '确认要展示超值优惠商品？' : '确认要取消展示超值优惠商品？')
+        if (val === 1) {
+          this.suggestOpen = false
+        } else {
+          this.suggestClose = false
         }
+        this.$vux.confirm.show({
+          content: con,
+          onConfirm: () => {
+            this.$emit('clickSuggest', val, () => {
+              this.watchSuggest()
+            })
+          }
+        })
+      } else {
+        if (val === 1) {
+          this.suggestOpen = true
+        } else {
+          this.suggestClose = true
+        }
+      }
+    },
+    setAccounttype (val) {
+      this.$emit('clickAccount', val, () => {
+        this.watchAccount()
       })
     },
     clickTemplate (val) {
-      console.log('in clickTemplate')
-      console.log(val)
-      this.watchTemplate(`${val}`)
+      if (parseInt(val) !== this.submitdata.shopmodel) {
+        this.$emit('clickTemplate', val, () => {
+          this.watchTemplate(`${val}`)
+        })
+      } else {
+        this.watchTemplate(`${val}`)
+      }
     },
     closeOnPopup () {
       this.showonline = false
@@ -830,6 +877,8 @@ export default {
     console.log('in mounted')
     this.watchBuyline()
     this.watchSuggest()
+    this.watchTemplate()
+    this.watchAccount()
   }
 }
 </script>
