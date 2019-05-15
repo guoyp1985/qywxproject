@@ -39,8 +39,8 @@
               <div class="t-cell title-cell w80 font14 v_middle">验证码<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
               <div class="t-cell input-cell v_middle flex_table" style="position:relative;">
                 <x-input style="padding-right:5px;" v-model="yzmcode" type="text" class="input" placeholder="请输入验证码" ></x-input>
-                <button class="font14 yzmcode disabled" v-if="count !== countNum" @click="getXcode" :disabled="count !== countNum">{{message}}</button>
-                <button class="font14 yzmcode" v-else @click="getXcode" :disabled="count !== countNum">{{message}}</button>
+                <div class="font14 yzmcode disabled" v-if="count !== countNum" @click="getXcode" :disabled="count !== countNum">{{message}}</div>
+                <div class="font14 yzmcode" v-else @click="getXcode" :disabled="count !== countNum">{{message}}</div>
               </div>
             </div>
           </div>
