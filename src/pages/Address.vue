@@ -118,6 +118,7 @@ export default {
                       const data1 = res1.data
                       if (data1.flag) {
                         const retdata1 = data1.data
+                        alert(JSON.stringify(retdata1))
                         if (this.inner) {
                         } else {
                           this.items = [retdata1].concat(this.items)
