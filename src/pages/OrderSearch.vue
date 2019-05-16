@@ -153,6 +153,25 @@ export default {
     }
   },
   methods: {
+    initData () {
+      this.selectedIndex = 0
+      this.distabdata1 = false
+      this.distabdata2 = false
+      this.distabdata3 = false
+      this.distabdata4 = false
+      this.tabdata1 = []
+      this.tabdata2 = []
+      this.tabdata3 = []
+      this.tabdata4 = []
+      this.pagestart1 = 1
+      this.pagestart2 = 1
+      this.pagestart3 = 1
+      this.pagestart4 = 1
+      this.showRefundModal = false
+      this.refundContent = ''
+      this.clickOrder = {}
+      this.clickIndex = 0
+    },
     toRetailerOrders () {
       let params = this.$util.handleAppParams(this.query, {})
       this.$router.push({path: '/retailerOrders', query: params})
@@ -467,25 +486,26 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
-      if ((this.query.flag === undefined && this.$route.query.flag === undefined) || this.query.flag !== this.$route.query.flag) {
-        this.query = this.$route.query
-        let flag = parseInt(this.query.flag)
-        switch (flag) {
-          case 2:
-            this.selectedIndex = 1
-            break
-          case 3:
-            this.selectedIndex = 2
-            break
-          case 4:
-            this.selectedIndex = 3
-            break
-          default :
-            this.selectedIndex = 0
-            break
-        }
-        this.toggleTab()
+      this.initData()
+      // if ((this.query.flag === undefined && this.$route.query.flag === undefined) || this.query.flag !== this.$route.query.flag) {
+      this.query = this.$route.query
+      let flag = parseInt(this.query.flag)
+      switch (flag) {
+        case 2:
+          this.selectedIndex = 1
+          break
+        case 3:
+          this.selectedIndex = 2
+          break
+        case 4:
+          this.selectedIndex = 3
+          break
+        default :
+          this.selectedIndex = 0
+          break
       }
+      this.toggleTab()
+      // }
     }
   },
   created () {

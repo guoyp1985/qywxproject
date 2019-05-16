@@ -99,6 +99,18 @@
             </div>
           </div>
           <div class="form-item required bg-white">
+            <div class="flex_row">
+              <div class="flex_cell">
+                <div class="t-table">
+                  <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product') }}{{ $t('Storage') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+                  <div class="t-cell input-cell v_middle" style="position:relative;">
+                    <x-input v-model="submitdata.storage" type="tel" class="input" name="storage" :placeholder="$t('Storage')" maxlength="5" size="5" ></x-input>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-item required bg-white">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Postage') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
@@ -122,7 +134,7 @@
               <div class="option-item" v-for="(item,index) in optionsData" :key="index">
                   <div class="option-title flex_left">
                     <div class="flex_cell flex_left">规格 {{index + 1}}</div>
-                    <div v-if="index > 0" class="w60 flex_right color-theme" @click="deleteOption(index)">删除</div>
+                    <div class="w60 flex_right color-theme" @click="deleteOption(index)">删除</div>
                   </div>
                   <div class="option-con">
                     <div class="flex_left con-item">
@@ -315,6 +327,7 @@ export default {
         title: '',
         price: '',
         oriprice: '',
+        storage: '',
         postage: '0.00',
         rebate: '',
         photo: '',
@@ -326,11 +339,12 @@ export default {
         allowcard: false
       },
       allowsubmit: true,
-      requireddata: {'photo': '', classid: '', title: '', 'price': '', 'postage': ''},
+      requireddata: {'photo': '', classid: '', title: '', 'price': '', 'storage': '', 'postage': ''},
       showRebate: false,
       classData: [],
       submitIng: false,
-      optionsData: [{title: '', photo: '', storage: ''}],
+      // optionsData: [{title: '', photo: '', storage: ''}],
+      optionsData: [],
       selectedOptionIndex: 0,
       optionsPhoto: []
     }
@@ -473,6 +487,7 @@ export default {
         title: '',
         oriprice: '',
         price: '',
+        storage: '',
         postage: '0.00',
         rebate: '',
         photo: '',
@@ -485,7 +500,8 @@ export default {
       }
       this.photoarr = []
       this.photoarr1 = []
-      this.optionsData = [{title: '', photo: '', storage: ''}]
+      // this.optionsData = [{title: '', photo: '', storage: ''}]
+      this.optionsData = []
       this.selectedOptionIndex = 0
       this.optionsPhoto = []
     },
@@ -655,6 +671,10 @@ export default {
         }
         if (self.$util.trim(oriprice) !== '' && parseFloat(oriprice) <= parseFloat(price)) {
           self.$vux.toast.text('商品现价不能大于等于原价', 'middle')
+          return false
+        }
+        if (!self.optionsData.length && self.$util.trim(postdata.storage) === '') {
+          self.$vux.toast.text('请输入商品库存', 'middle')
           return false
         }
         if (self.$util.trim(postdata.postage) === '') {

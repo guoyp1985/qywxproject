@@ -473,8 +473,8 @@
                 </div>
                 <div class="flex_cell flex_left">
                   <div class="w_100">
-                    <div class="color-theme" v-if="clickBuytype == 'groupbuy'"><span>￥</span><span class="bold font16">{{activityInfo.groupprice}}</span></div>
-                    <div class="color-theme" v-else><span>￥</span><span class="bold font16">{{productdata.price}}</span></div>
+                    <div class="color-theme" v-if="!clickBuytype || clickBuytype == ''"><span>￥</span><span class="bold font16">{{productdata.price}}</span></div>
+                    <div class="color-theme" v-else><span>￥</span><span class="bold font16">{{activityInfo.groupprice}}</span></div>
                     <div class="mt10 color-gray">库存{{selectedOption.storage}}{{productdata.unit}}</div>
                     <div class="mt10" v-if="selectedOption.title">已选: {{selectedOption.title}}</div>
                     <div class="mt10" v-else>请选择 规格</div>
@@ -496,6 +496,9 @@
               <div class="flex_cell h_100 flex_center">
                 <template v-if="clickBuytype == 'groupbuy'">
                   <div class="bg-theme color-white flex_center btn" @click="buyOption('groupbuy')">一键拼团</div>
+                </template>
+                <template v-else-if="clickBuytype == 'group'">
+                  <div class="bg-theme color-white flex_center btn" @click="buyOption('group')">去参团</div>
                 </template>
                 <template v-else>
                   <div v-if="activityInfo.id && activityInfo.type == 'groupbuy'" class="bg-theme color-white flex_center btn" @click="buyOption">原价购买</div>
@@ -597,7 +600,8 @@ export default {
       selectedOption: {},
       selectedOptionIndex: 0,
       previewerOptionsPhoto: [],
-      clickBuytype: null
+      clickBuytype: null,
+      clickGoupData: null
     }
   },
   watch: {
@@ -708,6 +712,7 @@ export default {
       this.selectedOptionIndex = 0
       this.previewerOptionsPhoto = []
       this.clickBuytype = null
+      this.clickGoupData = null
     },
     filterEmot (text) {
       return this.$util.emotPrase(text)
@@ -724,6 +729,9 @@ export default {
       let isActivity = false
       this.$vux.loading.show()
       let postData = this.submitdata
+      if (buytype === 'group') {
+        postData.crowdowner = this.clickGoupData.uid
+      }
       if (buytype === 'groupbuy' && this.activityInfo.id) {
         postData.activityid = this.activityInfo.id
         isActivity = true
@@ -1047,24 +1055,20 @@ export default {
       }, 1000)
     },
     addGroup (item) {
-      const self = this
-      self.$vux.loading.show()
-      let postdata = self.submitdata
-      postdata.crowdowner = item.uid
-      postdata.activityid = item.activityid
-      postdata.id = self.productdata.id
-      self.$http.post(`${ENV.BokaApi}/api/order/addShop`, postdata).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        if (data.flag === 1) {
-          self.$router.push({ path: '/addOrder', query: { id: data.data } })
-        } else if (data.error) {
-          self.$vux.toast.show({
-            text: data.error,
-            time: self.$util.delay(data.error)
-          })
-        }
-      })
+      this.clickGoupData = item
+      this.buyevent('group')
+      // self.$http.post(`${ENV.BokaApi}/api/order/addShop`, postdata).then(function (res) {
+      //   let data = res.data
+      //   self.$vux.loading.hide()
+      //   if (data.flag === 1) {
+      //     self.$router.push({ path: '/addOrder', query: { id: data.data } })
+      //   } else if (data.error) {
+      //     self.$vux.toast.show({
+      //       text: data.error,
+      //       time: self.$util.delay(data.error)
+      //     })
+      //   }
+      // })
     },
     onReply (item) {
       this.replyData = item
