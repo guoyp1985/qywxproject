@@ -66,7 +66,8 @@
           		</div>
             </div>
           </div>
-          <div style="span-align:center;color:#999;height:30px;line-height:30px;font-size:14px;text-align:center;" v-if="scrollEnd && productData.length">没有更多商品啦</div>
+          <div style="span-align:center;color:#999;height:30px;line-height:30px;font-size:14px;text-align:center;" v-if="isLoading">数据加载中</div>
+          <div style="span-align:center;color:#999;height:30px;line-height:30px;font-size:14px;text-align:center;" v-else-if="scrollEnd && productData.length">没有更多商品啦</div>
         </div>
       </div>
       <template v-if="showTip">
@@ -160,7 +161,8 @@ export default {
       clickData: null,
       clickIndex: 0,
       afterSearch: false,
-      showRetailerWechat: false
+      showRetailerWechat: false,
+      isLoading: false
     }
   },
   watch: {
@@ -304,6 +306,7 @@ export default {
           if (self.productData.length === (pageStart + 1) * limit) {
             pageStart++
             self.$vux.loading.show()
+            self.isLoading = true
             self.getData1()
           } else {
             self.scrollEnd = true
@@ -342,6 +345,7 @@ export default {
         const retdata = data.data ? data.data : data
         self.productData = self.productData.concat(retdata)
         self.disProductData = true
+        self.isLoading = false
         if (this.searchword !== '') {
           self.afterSearch = true
         } else {
