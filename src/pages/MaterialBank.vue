@@ -8,8 +8,8 @@
           <div class="txt no_bold">{{item.uploadername}}</div>
           <div>{{item.title}}</div>
           <div class="piclist">
-            <div class="picitem more">
-              <div class="inner" v-for="(items,index) in item.contentphoto">
+            <div class="picitem more" v-for="(items,index) in item.photoarr">
+              <div class="inner">
                 <img :src="items" />
               </div>
             </div>
@@ -53,7 +53,7 @@ export default {
     return {
       tlData: [],
       id: 0,
-      photoarr: []
+      photoarr1: []
     }
   },
   methods: {
@@ -79,12 +79,15 @@ export default {
         const data = res.data
         const retdata = data.data ? data.data : data
         for (var i = 0; i < retdata.length; i++) {
+          let photoarr = []
+          let photo = retdata[i].contentphoto
           retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd')
+          if (photo && this.$util.trim(photo) !== '') {
+            photoarr = photo.split(',')
+          }
+          retdata[i].photoarr = photoarr
         }
         this.tlData = retdata
-        for (var i = 0; i < this.tlData.length; i++) {
-          this.photoarr = this.tlData[i].contentphoto
-        }
         console.log('素材数据')
         console.log(this.photoarr)
       })
