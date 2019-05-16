@@ -601,7 +601,7 @@ export default {
       selectedOptionIndex: 0,
       previewerOptionsPhoto: [],
       clickBuytype: null,
-      clickGoupData: {}
+      clickGoupData: null
     }
   },
   watch: {
@@ -712,7 +712,7 @@ export default {
       this.selectedOptionIndex = 0
       this.previewerOptionsPhoto = []
       this.clickBuytype = null
-      this.clickGoupData = {}
+      this.clickGoupData = null
     },
     filterEmot (text) {
       return this.$util.emotPrase(text)
