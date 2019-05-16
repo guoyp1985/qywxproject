@@ -115,6 +115,9 @@
       <popup class="menuwrap" v-model="showpopup1">
         <div class="popup0">
           <div class="list" v-if="clickdata">
+            <div class="item" v-if="clickdata.fpid > 0">
+              <router-link class="inner" :to="{path: '/materialbank', query: {pid: clickdata.id}}">素材库</router-link>
+            </div>
             <div class="item" v-if="clickdata.moderate == 1">
               <div class="inner" @click="clickpopup('activity')">创建活动</div>
             </div>
@@ -305,6 +308,9 @@ export default {
     }
   },
   methods: {
+    toMater () {
+      this.$router.push({path: '/MaterialBank'})
+    },
     clickTab (index) {
       this.selectedIndex = index
       this.swiperChange()
