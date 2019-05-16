@@ -57,6 +57,9 @@
         <popup class="menuwrap" v-model="showpopup1">
           <div class="popup0">
             <div class="list" v-if="clickdata">
+              <div class="item">
+                <router-link class="inner" :to="{path: '/materialbank', query: {pid: clickdata.id}}">素材库</router-link>
+              </div>
               <div class="item" v-if="clickdata.moderate == 1">
                 <div class="inner" @click="clickpopup('recommend')" v-if="clickdata.recommend == 0">商品推荐</div>
                 <div class="inner" @click="clickpopup('recommend')" v-else>取消推荐</div>
