@@ -116,7 +116,7 @@
         <div class="popup0">
           <div class="list" v-if="clickdata">
             <div class="item" v-if="clickdata.fpid > 0">
-              <router-link class="inner" :to="{path: '/materialbank', query: {pid: clickdata.id}}">素材库</router-link>
+              <router-link class="inner" :to="{path: '/materialbank', query: {pid: clickdata.fpid}}">素材库</router-link>
             </div>
             <div class="item" v-if="clickdata.moderate == 1">
               <div class="inner" @click="clickpopup('activity')">创建活动</div>

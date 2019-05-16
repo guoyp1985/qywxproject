@@ -5,7 +5,10 @@
       <div class="tlitem">
         <div class="avatar"><img :src="item.uploaderavatar" /></div>
         <div class="con">
-          <div class="txt no_bold">{{item.uploadername}}</div>
+          <div class="flex_left">
+            <div class="txt no_bold">{{item.uploadername}}</div>
+            <div style="margin-left:auto;" @click="copyTxt">复制</div>
+          </div>
           <div>{{item.title}}</div>
           <div class="piclist">
             <div class="picitem more" v-for="(items,index) in item.photoarr">
@@ -57,6 +60,44 @@ export default {
     }
   },
   methods: {
+    copyTxt (e) {
+      const self = this
+      let eleobj = null
+      let elem = e.target.parentNode.parentNode
+      console.log(elem)
+      while ((elem = elem.nextSibling)) {
+        if (elem.nodeType === 1) {
+          eleobj = elem
+          break
+        }
+      }
+      if (eleobj.innerHTML.length > 0) {
+        let range = null
+        let save = function (e) {
+          e.clipboardData.setData('text/plain', eleobj.innerHTML)
+          e.preventDefault()
+        }
+        if (self.$util.isIOS()) { // ios设备
+          window.getSelection().removeAllRanges()
+          range = document.createRange()
+          range.selectNode(eleobj)
+          window.getSelection().addRange(range)
+          document.execCommand('copy')
+          window.getSelection().removeAllRanges()
+        } else { // 安卓设备
+          console.log('in android')
+          document.addEventListener('copy', save)
+          document.execCommand('copy')
+          document.removeEventListener('copy', save)
+        }
+        setTimeout(function () {
+          self.$vux.toast.show({
+            text: '复制成功',
+            time: 1500
+          })
+        }, 200)
+      }
+    },
     clickPlay (refname) {
       const self = this
       this.playVideo = true
