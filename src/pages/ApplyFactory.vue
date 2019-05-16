@@ -46,7 +46,7 @@
           </div>
           <div class="form-item bg-white fg b-top">
             <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">营业执照</div>
+              <div class="t-cell title-cell w80 font14 v_middle">营业执照<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
                 <div class="q_photolist align_left bg-white">
                   <template v-if="photoarr.length > 0">
@@ -159,7 +159,7 @@ export default {
       yzmcode: '',
       hqyzm: '',
       submitData: { title: '', mobile: '', company: '', licensephoto: '', licensecode: '', superiorrate: '20', salesrate: '80' },
-      requireddata: { title: '' },
+      requireddata: { title: '', company: '', licensephoto: '', licensecode: '' },
       classData: [],
       productClass: [],
       disClassData: false,
@@ -324,7 +324,7 @@ export default {
               //   self.$router.go(-1)
               // }, timeout)
               self.$vux.toast.text('申请成功！')
-              // self.btnSubmit = '审核中...'
+              self.btnSubmit = '审核中...'
             } else {
               self.$vux.toast.show({
                 text: error,
@@ -429,7 +429,7 @@ export default {
       clearInterval(this.intervalId)
       this.intervalId = null
       self.submitData = { title: '', mobile: '', company: '', licensephoto: '', licensecode: '', superiorrate: '20', salesrate: '80' }
-      self.requireddata = { title: '' }
+      self.requireddata = { title: '', company: '', licensephoto: '', licensecode: '' }
     },
     refresh () {
       const self = this
