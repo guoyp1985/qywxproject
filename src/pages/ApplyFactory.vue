@@ -46,7 +46,7 @@
           </div>
           <div class="form-item bg-white fg b-top">
             <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">营业执照</div>
+              <div class="t-cell title-cell w80 font14 v_middle">营业执照<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
                 <div class="q_photolist align_left bg-white">
                   <template v-if="photoarr.length > 0">
@@ -104,7 +104,7 @@
       </div>
       <!-- <div class="s-bottom flex_center bg-orange color-white" @click="saveEvent">{{ $t('Submit') }}</div> -->
       <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
-        <div class="flex_cell flex_center btn-bottom-red" @click="saveEvent">{{btnSubmit}}</div>
+        <div :class="`flex_cell flex_center btn-bottom-red ${this.flags ? 'disable' : ''}`" @click="saveEvent">{{btnSubmit}}</div>
       </div>
       <div v-if="showTip" class="auto-modal flex_center">
         <div class="modal-inner border-box" style="width:80%;">
@@ -144,6 +144,7 @@ export default {
   },
   data () {
     return {
+      flags: null,
       btnSubmit: '提交申请',
       message: '获取验证码',
       count: 60,
@@ -159,7 +160,7 @@ export default {
       yzmcode: '',
       hqyzm: '',
       submitData: { title: '', mobile: '', company: '', licensephoto: '', licensecode: '', superiorrate: '20', salesrate: '80' },
-      requireddata: { title: '' },
+      requireddata: { title: '', company: '', licensephoto: '', licensecode: '' },
       classData: [],
       productClass: [],
       disClassData: false,
@@ -323,8 +324,9 @@ export default {
               // setTimeout(() => {
               //   self.$router.go(-1)
               // }, timeout)
+              this.flags = data.flag
               self.$vux.toast.text('申请成功！')
-              // self.btnSubmit = '审核中...'
+              self.btnSubmit = '审核中...'
             } else {
               self.$vux.toast.show({
                 text: error,
@@ -337,6 +339,10 @@ export default {
       })
     },
     getXcode () {
+      if (this.submitData.mobile === '') {
+        this.$vux.toast.text('手机号码不能为空！')
+        return false
+      }
       if (!Reg.rPhone.test(this.submitData.mobile)) {
         this.$vux.toast.text('手机号码格式错误', 'middle')
         return false
@@ -429,7 +435,7 @@ export default {
       clearInterval(this.intervalId)
       this.intervalId = null
       self.submitData = { title: '', mobile: '', company: '', licensephoto: '', licensecode: '', superiorrate: '20', salesrate: '80' }
-      self.requireddata = { title: '' }
+      self.requireddata = { title: '', company: '', licensephoto: '', licensecode: '' }
     },
     refresh () {
       const self = this
@@ -485,6 +491,7 @@ export default {
   height:30px;text-align:center;line-height:30px;outline:none;
 }
 .disabled{background-color:#ccc;color:#000;pointer-events:none;}
+.disable{pointer-events:none;}
 .photoitem{float:right !important;}
 .weui-input{text-align:right;}
 .weui-textarea{text-align:right;}
