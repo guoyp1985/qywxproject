@@ -63,7 +63,7 @@ export default {
     copyTxt (e) {
       const self = this
       let eleobj = null
-      let elem = e.target.parentNode.parentNode
+      let elem = e.target.parentNode
       console.log(elem)
       while ((elem = elem.nextSibling)) {
         if (elem.nodeType === 1) {

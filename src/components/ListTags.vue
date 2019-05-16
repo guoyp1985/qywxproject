@@ -162,8 +162,6 @@ export default {
           break
         }
       }
-      console.log('复制方法')
-      console.log(eleobj)
       if (eleobj.innerHTML.length > 0) {
         let range = null
         let save = function (e) {
