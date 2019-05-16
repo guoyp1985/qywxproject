@@ -166,6 +166,7 @@ export default {
           }
           if (res.data.flag) {
             self.article = res.data.data
+            self.createSocket()
             document.title = self.article.title
             self.reward = User.get()
             self.factoryinfo = self.article.factoryinfo
@@ -323,7 +324,7 @@ export default {
       const uid = this.loginUser.uid
       const linkman = this.loginUser.linkman
       // const fromId = this.query.fromId
-      room = `${this.module}-${this.query.id}`
+      room = `${this.module}-${this.query.id}-${this.article.wid}`
       Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module, fromId: this.query.id})
     },
     init () {
@@ -340,7 +341,6 @@ export default {
         this.getData()
       }
       this.loginUser = User.get()
-      this.createSocket()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
         let data = res.data

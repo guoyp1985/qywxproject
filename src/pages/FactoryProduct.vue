@@ -219,11 +219,9 @@ import TitleTip from '@/components/TitleTip'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
-import Socket from '#/socket'
 import OpenVip from '@/components/OpenVip'
 import FirstHb from '@/components/FirstHb'
 
-let room = ''
 export default {
   directives: {
     TransferDom
@@ -578,15 +576,7 @@ export default {
         }
       })
     },
-    createSocket () {
-      const uid = this.loginUser.uid
-      const linkman = this.loginUser.linkman
-      // const fromId = this.query.fromId
-      room = `${this.module}-${this.query.id}`
-      Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module, fromId: this.query.id})
-    },
     init () {
-      this.$util.wxAccessListening()
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
@@ -603,7 +593,6 @@ export default {
           this.isFirst = false
         }
         this.getData()
-        this.createSocket()
       })
     }
   },

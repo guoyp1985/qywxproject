@@ -1127,6 +1127,7 @@ export default {
           } else {
             self.showcontainer = true
             self.productdata = data.data
+            this.createSocket()
             if (this.productdata.options.length) {
               this.selectedOption = {storage: this.productdata.storage, photo: this.productdata.options[0].photo}
               this.previewerOptionsPhoto = this.$util.previewerImgdata([this.productdata.options[0].photo])
@@ -1227,7 +1228,7 @@ export default {
       const uid = this.loginUser.uid
       const linkman = this.loginUser.linkman
       // const fromId = this.query.fromId
-      room = `${this.module}-${this.query.id}`
+      room = `${this.module}-${this.query.id}-${this.productdata.wid}`
       Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module, fromId: this.query.id})
     },
     handleScroll2 (refname) {
@@ -1300,7 +1301,6 @@ export default {
         }
         this.$vux.loading.show()
         this.getData()
-        this.createSocket()
       }
       window.onresize = function () {
         if (self.buyuserdata.length > 0) {

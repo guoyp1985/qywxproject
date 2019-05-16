@@ -155,6 +155,7 @@ export default {
           self.sosTitle = ''
           self.showContainer = true
           self.data = data.data ? data.data : data
+          self.createSocket()
           if (self.data.title) {
             document.title = self.data.title
           }
@@ -247,7 +248,7 @@ export default {
       const uid = this.loginUser.uid
       const linkman = this.loginUser.linkman
       // const fromId = this.query.fromId
-      room = `${this.module}-${this.query.id}`
+      room = `${this.module}-${this.query.id}-${this.data.wid}`
       Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module, fromId: this.query.id})
     },
     init () {
@@ -264,7 +265,6 @@ export default {
       this.$vux.loading.show()
       this.getData()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.createSocket()
     }
   },
   created () {
