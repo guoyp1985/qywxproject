@@ -11,7 +11,7 @@
           v-model="submitdata.title"
           name="title"
           class="x-textarea"
-          :placeholder="$t('Product description')"
+          placeholder="请输入宣传内容"
           :show-counter="false"
           :rows="1"
           @on-change="textareaChange('contentTextarea')"
@@ -69,7 +69,7 @@
       </div>
     </div>
     <div class="sc-bottom" @click="saveupevent">
-      <div class="btnadd">发布素材</div>
+      <div class="btnadd">立即发布</div>
     </div>
   </div>
 </template>
@@ -114,12 +114,8 @@ export default {
       postdata.pid = this.id
       console.log('提交')
       console.log(postdata)
-      if (postdata.title === '') {
-        self.$vux.toast.text('文字介绍不能为空')
-        return false
-      }
-      if (postdata.contentphoto === '' && postdata.video === '') {
-        self.$vux.toast.text('图片和视频请选择一种上传')
+      if (postdata.contentphoto === '' && postdata.video === '' && postdata.title === '') {
+        self.$vux.toast.text('文字图片与视频至少填写一项')
         return false
       }
       self.$http.post(`${ENV.BokaApi}/api/add/productmaterial`, postdata).then(res => {
@@ -252,8 +248,11 @@ export default {
       }
     }
   },
-  created () {
+  activated () {
     this.id = this.$route.query.pid
+    this.submitdata = {}
+    this.photoarr1 = []
+    this.videoarr = []
     console.log('PID:')
     console.log(this.id)
   }

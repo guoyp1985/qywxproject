@@ -63,7 +63,7 @@ export default {
     copyTxt (e) {
       const self = this
       let eleobj = null
-      let elem = e.target.parentNode.parentNode
+      let elem = e.target.parentNode
       console.log(elem)
       while ((elem = elem.nextSibling)) {
         if (elem.nodeType === 1) {
@@ -122,7 +122,7 @@ export default {
         for (var i = 0; i < retdata.length; i++) {
           let photoarr = []
           let photo = retdata[i].contentphoto
-          retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd')
+          retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd hh:mm')
           if (photo && this.$util.trim(photo) !== '') {
             photoarr = photo.split(',')
           }
@@ -172,5 +172,6 @@ export default {
   .videoarea video{position: absolute;width: 100%;height: 100%;}
   .videoarea .close-icon{position:absolute;left:50%;top:7px;width:60px;height:30px;margin-left:-30px;background-color:#232323;color:#fff;border-radius:10px;}
   .picitem video{width:100px;height:100px;}
+  .timelinelist:last-child{margin-bottom:50px;}
 }
 </style>
