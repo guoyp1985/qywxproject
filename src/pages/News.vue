@@ -382,6 +382,7 @@ export default {
           if (res.data.flag) {
             self.reward = User.get()
             self.article = res.data.data
+            self.createSocket()
             self.article.content = this.article.content ? self.article.content
               .replace(/[\r\n]/g, '')
               .replace(/\s{2,}/g, '')
@@ -648,7 +649,7 @@ export default {
       const uid = this.loginUser.uid
       const linkman = this.loginUser.linkman
       // const fromId = this.query.fromId
-      room = `${this.module}-${this.query.id}`
+      room = `${this.module}-${this.query.id}-${this.article.wid}`
       Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module, fromId: this.query.id})
     },
     init () {
@@ -674,7 +675,6 @@ export default {
       }
       this.getData()
       this.loginUser = User.get()
-      this.createSocket()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
         let data = res.data

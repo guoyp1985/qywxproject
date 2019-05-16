@@ -90,9 +90,7 @@ import Time from '#/time'
 import ENV from 'env'
 import jQuery from 'jquery'
 import { User } from '#/storage'
-import Socket from '#/socket'
 
-let room = ''
 export default {
   directives: {
     TransferDom
@@ -465,13 +463,6 @@ export default {
       const self = this
       self.$router.push({path: '/store', query: {wid: self.retailerInfo.uid}})
     },
-    createSocket () {
-      const uid = this.loginUser.uid
-      const linkman = this.loginUser.linkman
-      // const fromId = this.query.fromId
-      room = `${this.module}-${this.query.id}`
-      Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module, fromId: this.query.id})
-    },
     init () {
       this.$util.wxAccessListening()
     },
@@ -485,7 +476,6 @@ export default {
       if (this.query.id !== query.id) {
         self.showSos = false
         self.showContainer = false
-        room = ''
         this.query = query
       }
       this.getData()
