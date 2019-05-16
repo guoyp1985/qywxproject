@@ -9,8 +9,26 @@
           <div>{{item.title}}</div>
           <div class="piclist">
             <div class="picitem more">
+              <div class="inner" v-for="(items,index) in item.contentphoto">
+                <img :src="items" />
+              </div>
+            </div>
+            <div v-if="item.video" class="picitem more">
               <div class="inner">
-                <img :src="item.contentphoto" />
+                <video
+                  ref="productVideo"
+                  :src="item.video"
+                  controls
+                  autoplay="true"
+                  webkit-playsinline=""
+                  playsinline="true"
+                  x-webkit-airplay="true"
+                  raw-controls=""
+                  x5-video-player-type="h5"
+                  x5-video-player-fullscreen="true"
+                  x5-video-orientation="portrait">
+                </video>
+                <!-- <div class="close-icon flex_center" @click="stopPlay('productVideo')">关闭</div> -->
               </div>
             </div>
           </div>
@@ -35,13 +53,20 @@ export default {
     return {
       tlData: [],
       id: 0,
-      photo: []
+      photoarr: []
     }
   },
   methods: {
-    // addSucai () {
-    //   this.$router.push({path: `'/AddMaterial'`})
-    // },
+    clickPlay (refname) {
+      const self = this
+      this.playVideo = true
+      setTimeout(function () {
+        self.$refs[refname].play()
+      }, 100)
+    },
+    stopPlay (refname) {
+      this.playVideo = false
+    },
     refresh () {
       this.tlData = []
     },
@@ -57,9 +82,11 @@ export default {
           retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd')
         }
         this.tlData = retdata
-        this.photo = this.tlData.contentphoto
+        for (var i = 0; i < this.tlData.length; i++) {
+          this.photoarr = this.tlData[i].contentphoto
+        }
         console.log('素材数据')
-        console.log(this.tlData)
+        console.log(this.photoarr)
       })
     },
     delScai (item, index) {
@@ -97,5 +124,9 @@ export default {
   }
   .addsucai{width:100%;height:30px;background-color:#ff6a61;color:#fff;text-align:center;border-radius:20px;line-height:30px;}
   .tlitem{border-bottom:1px solid #e5e5e5;}
+  .videoarea{position:absolute;left:0;top:0;right:0;bottom:0;z-index:9999;background-color:#000;color:#fff;}
+  .videoarea video{position: absolute;width: 100%;height: 100%;}
+  .videoarea .close-icon{position:absolute;left:50%;top:7px;width:60px;height:30px;margin-left:-30px;background-color:#232323;color:#fff;border-radius:10px;}
+  .picitem video{width:100px;height:100px;}
 }
 </style>
