@@ -20,10 +20,10 @@
           <div class="form-item fg bg-white b-top b-bottom">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">公司简称<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
-              <div class="t-cell input-cell v_middle flex_table" style="position:relative;">
-                <x-input style="width:80%;padding-right:5px;" v-model="submitData.company" type="text" class="input" placeholder="请输入公司简称" ></x-input>
-                <span class="font14">旗舰店</span>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <x-input style="padding-right:5px;" v-model="submitData.company" type="text" class="input" placeholder="请输入公司简称" ></x-input>
               </div>
+              <div class="t-cell v_middle font14 w50 align_right">旗舰店</div>
             </div>
           </div>
           <div class="form-item fg bg-white b-top b-bottom">
@@ -167,7 +167,8 @@ export default {
       photoarr: [],
       maxnum: 1,
       showTip: false,
-      fid: 0
+      fid: 0,
+      getCodeIng: false
     }
   },
   watch: {
@@ -337,38 +338,42 @@ export default {
       })
     },
     getXcode () {
-      if (this.submitData.mobile === '') {
-        this.$vux.toast.text('手机号码不能为空！')
-        return false
-      }
-      if (!Reg.rPhone.test(this.submitData.mobile)) {
-        this.$vux.toast.text('手机号码格式错误', 'middle')
-        return false
-      }
-      if (Reg.rPhone.test(this.submitData.mobile)) {
-        this.$http.get(`${ENV.BokaApi}/api/verifyMobile`, { params: { phone: this.submitData.mobile } }).then(res => {
-          const data = res.data
-          if (data.flag) {
-            this.$vux.toast.text('验证码发送成功！')
-            const yzm = data
-            this.hqyzm = data.data
-            console.log('验证码')
-            console.log(yzm)
-            this.intervalId = setInterval(() => {
-              console.log('进入到了倒计时方法')
-              this.count--
-              if (!this.count) {
-                this.count = TimeCount
-                this.message = '获取验证码'
-                clearInterval(this.intervalId)
-              } else {
-                this.message = `${this.count}秒`
-              }
-            }, 1000)
-          } else {
-            this.$vux.toast.text(data.error)
-          }
-        })
+      if (!this.getCodeIng) {
+        if (this.submitData.mobile === '') {
+          this.$vux.toast.text('手机号码不能为空！')
+          return false
+        }
+        if (!Reg.rPhone.test(this.submitData.mobile)) {
+          this.$vux.toast.text('手机号码格式错误', 'middle')
+          return false
+        }
+        if (Reg.rPhone.test(this.submitData.mobile)) {
+          this.getCodeIng = true
+          this.$http.get(`${ENV.BokaApi}/api/verifyMobile`, { params: { phone: this.submitData.mobile } }).then(res => {
+            const data = res.data
+            if (data.flag) {
+              this.$vux.toast.text('验证码发送成功！')
+              const yzm = data
+              this.hqyzm = data.data
+              console.log('验证码')
+              console.log(yzm)
+              this.intervalId = setInterval(() => {
+                console.log('进入到了倒计时方法')
+                this.count--
+                if (!this.count) {
+                  this.count = TimeCount
+                  this.message = '获取验证码'
+                  this.getCodeIng = false
+                  clearInterval(this.intervalId)
+                } else {
+                  this.message = `${this.count}秒`
+                }
+              }, 1000)
+            } else {
+              this.$vux.toast.text(data.error)
+            }
+          })
+        }
       }
     },
     getData () {
