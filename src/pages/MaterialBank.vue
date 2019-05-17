@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea font14 bg-white materialbank">
+  <div class="containerarea font14 bg-white materialbank" v-if="disShow">
     <div v-if="!tlData || tlData.length == 0" class="flex_center font16 mt20">暂无素材数据</div>
     <div v-else class="timelinelist" v-for="(item, index) in tlData" :key="index">
       <div class="tlitem">
@@ -7,9 +7,9 @@
         <div class="con">
           <div class="flex_left">
             <div class="txt no_bold">{{item.uploadername}}</div>
-            <div style="margin-left:auto;" @click="copyTxt">复制</div>
+            <div v-if="item.title !== ''" style="margin-left:auto;color:#7d7979;" @click="copyTxt"><span class="al al-copy mr3 font14"></span>复制</div>
           </div>
-          <div>{{item.title}}</div>
+          <div v-if="item.title && item.title != ''" v-html="filterEmot(item.title)"></div>
           <div class="piclist">
             <div class="picitem more" v-for="(items,index1) in item.photoarr">
               <div class="inner">
@@ -69,10 +69,14 @@ export default {
       tlData: [],
       id: 0,
       photoarr1: [],
-      userInfo: {}
+      userInfo: {},
+      disShow: false
     }
   },
   methods: {
+    filterEmot (text) {
+      return this.$util.emotPrase(text)
+    },
     showBigimg1 (src, arr, refname, index) {
       const self = this
       if (self.$util.isPC()) {
@@ -155,6 +159,7 @@ export default {
           retdata[i].previewerPhoto = this.$util.previewerImgdata(photoarr)
         }
         this.tlData = retdata
+        this.disShow = true
       })
     },
     getData2 () {
