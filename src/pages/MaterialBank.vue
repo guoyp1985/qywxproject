@@ -11,11 +11,16 @@
           </div>
           <div>{{item.title}}</div>
           <div class="piclist">
-            <div class="picitem more" v-for="(items,index) in item.photoarr">
+            <div class="picitem more" v-for="(items,index1) in item.photoarr">
               <div class="inner">
-                <img :src="items" />
+                <img :src="items" @click="showBigimg1(items,item.photoarr,`previewer${index}`,index1)" />
               </div>
             </div>
+            <template v-if="item.photoarr.length > 0">
+              <div v-transfer-dom>
+                <previewer :list="item.previewerPhoto" :ref="`previewer${index}`"></previewer>
+              </div>
+            </template>
             <div v-if="item.video" class="picitem more">
               <div class="inner">
                 <video
@@ -48,10 +53,17 @@
   </div>
 </template>
 <script>
+import { TransferDom, Previewer } from 'vux'
 import ENV from 'env'
 import Time from '#/time'
 
 export default {
+  directives: {
+    TransferDom
+  },
+  components: {
+    Previewer
+  },
   data () {
     return {
       tlData: [],
@@ -61,6 +73,18 @@ export default {
     }
   },
   methods: {
+    showBigimg1 (src, arr, refname, index) {
+      const self = this
+      if (self.$util.isPC()) {
+        let view = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+        view.show(index)
+      } else {
+        window.WeixinJSBridge.invoke('imagePreview', {
+          current: src,
+          urls: arr
+        })
+      }
+    },
     copyTxt (e) {
       const self = this
       let eleobj = null
@@ -128,6 +152,7 @@ export default {
             photoarr = photo.split(',')
           }
           retdata[i].photoarr = photoarr
+          retdata[i].previewerPhoto = this.$util.previewerImgdata(photoarr)
         }
         this.tlData = retdata
       })
