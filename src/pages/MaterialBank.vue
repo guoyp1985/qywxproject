@@ -210,7 +210,7 @@ export default {
 .materialbank{
   .bg-sucai{
     width:100%;padding:10px 20px;box-sizing:border-box;background-color:#fff;
-    border-top:1px solid #e5e5e5;position:fixed;bottom:0;
+    border-top:1px solid #e5e5e5;position:fixed;bottom:0;z-index:1000;
   }
   .addsucai{width:100%;height:30px;background-color:#ff6a61;color:#fff;text-align:center;border-radius:20px;line-height:30px;}
   .tlitem{border-bottom:1px solid #e5e5e5;}

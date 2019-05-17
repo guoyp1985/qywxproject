@@ -66,8 +66,8 @@
         </div>
       </div>
     </div>
-    <div class="sc-bottom" @click="saveupevent">
-      <div class="btnadd">立即发布</div>
+    <div class="sc-bottom">
+      <button  @click="saveupevent" class="btnadd" :disabled="flags">立即发布</button>
     </div>
   </div>
 </template>
@@ -90,7 +90,8 @@ export default {
       video: '',
       submitdata: { title: '', contentphoto: '', video: '' },
       id: 0,
-      modules: 'factoryproduct'
+      modules: 'factoryproduct',
+      flags: false
     }
   },
   methods: {
@@ -133,7 +134,7 @@ export default {
         const data = res.data
         self.$vux.loading.hide()
         self.$vux.toast.show({
-          text: data.error,
+          text: '发布成功',
           type: (data.flag !== 1 ? 'warn' : 'success'),
           time: self.$util.delay(data.error),
           onHide: function () {
@@ -266,7 +267,10 @@ export default {
     width:100%;padding:10px 20px;box-sizing:border-box;background-color:#fff;
     border-top:1px solid #e5e5e5;position:fixed;bottom:0;
   }
-  .btnadd{width:100%;height:30px;background-color:#ff6a61;color:#fff;text-align:center;border-radius:20px;line-height:30px;}
+  .btnadd{
+    width:100%;height:30px;background-color:#ff6a61;color:#fff;text-align:center;
+    border-radius:20px;line-height:30px;border:0;outline:none;
+  }
   .button_video{
     position:relative;
     width:60px;
