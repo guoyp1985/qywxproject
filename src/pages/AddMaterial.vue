@@ -99,6 +99,7 @@ export default {
       this.photoarr1 = []
       this.videoarr = []
       this.submitdata.title = ''
+      this.submitdata.contentphoto = ''
     },
     // textareaChange (refname) {
     //   let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
