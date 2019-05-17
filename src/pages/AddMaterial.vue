@@ -115,35 +115,39 @@ export default {
       this.submitdata.title = val
     },
     saveupevent () {
-      const self = this
-      let postdata = self.submitdata
-      let newString = postdata.title
-      newString = newString.replace(/\n/g, '_@').replace(/\r/g, '_#')
-      newString = newString.replace(/_@/g, '<br/>')
-      postdata.title = newString
-      postdata.modules = self.modules
-      postdata.pid = self.id
-      console.log('提交')
-      console.log(self.submitdata)
-      if (postdata.contentphoto === '' && postdata.video === '' && postdata.title === '') {
-        self.$vux.toast.text('文字图片与视频至少填写一项')
-        return false
-      }
-      self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/add/productmaterial`, postdata).then(res => {
-        const data = res.data
-        self.$vux.loading.hide()
-        self.$vux.toast.show({
-          text: '发布成功',
-          type: (data.flag !== 1 ? 'warn' : 'success'),
-          time: self.$util.delay(data.error),
-          onHide: function () {
-            if (data.flag === 1) {
-              self.$router.push({ path: `/MaterialBank`, query: {pid: self.id} })
+      if (!this.flags) {
+        const self = this
+        let postdata = self.submitdata
+        // let newString = postdata.title
+        // newString = newString.replace(/\n/g, '_@').replace(/\r/g, '_#')
+        // newString = newString.replace(/_@/g, '<br/>')
+        // postdata.title = newString
+        postdata.modules = self.modules
+        postdata.pid = self.id
+        console.log('提交')
+        console.log(self.submitdata)
+        if (postdata.contentphoto === '' && postdata.video === '' && postdata.title === '') {
+          self.$vux.toast.text('文字图片与视频至少填写一项')
+          return false
+        }
+        this.flags = true
+        self.$vux.loading.show()
+        self.$http.post(`${ENV.BokaApi}/api/add/productmaterial`, postdata).then(res => {
+          const data = res.data
+          self.$vux.loading.hide()
+          self.$vux.toast.show({
+            text: '发布成功',
+            type: (data.flag !== 1 ? 'warn' : 'success'),
+            time: self.$util.delay(data.error),
+            onHide: function () {
+              if (data.flag === 1) {
+                self.$router.push({ path: `/MaterialBank`, query: {pid: self.id} })
+              }
+              self.flags = false
             }
-          }
+          })
         })
-      })
+      }
     },
     uploadPhoto (refname, type) {
       const self = this
