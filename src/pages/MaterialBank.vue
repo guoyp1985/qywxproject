@@ -135,7 +135,7 @@ export default {
       const self = this
       this.playVideo = true
       setTimeout(function () {
-        self.$refs[refname].play()
+        self.$refs[refname][0].play()
       }, 100)
     },
     stopPlay (refname) {
