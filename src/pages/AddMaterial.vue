@@ -116,11 +116,12 @@ export default {
     saveupevent () {
       const self = this
       let postdata = self.submitdata
+      let newString = postdata.title
+      newString = newString.replace(/\n/g, '_@').replace(/\r/g, '_#')
+      newString = newString.replace(/_@/g, '<br/>')
+      postdata.title = newString
       postdata.modules = self.modules
       postdata.pid = self.id
-      const textarea = self.$refs.textarea.$refs.textarea[0] ? self.$refs.textarea.$refs.textarea[0] : self.$refs.textarea.$refs.textarea
-      let subTitle = textarea.value
-      postdata.title = subTitle
       console.log('提交')
       console.log(self.submitdata)
       if (postdata.contentphoto === '' && postdata.video === '' && postdata.title === '') {
