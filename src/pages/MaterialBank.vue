@@ -52,7 +52,7 @@
         </div>
       </div>
     </div>
-    <div style="width:100%;height:50px;"></div>
+    <div style="width:100%;height:50px;z-index:-1;"></div>
     <router-link class="bg-sucai" :to="{path: '/AddMaterial', query: {pid: this.id}}">
       <div class="addsucai">发布素材</div>
     </router-link>
