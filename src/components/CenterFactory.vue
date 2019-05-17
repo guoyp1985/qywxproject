@@ -108,6 +108,13 @@
             </div>
           </grid-item>
         </div>
+        <div class="gridlist">
+          <grid-item label="客户管理" :link="{path:'/factoryCustomer'}" style="position:relative;">
+            <div slot="icon">
+              <i class="al al-lianxiren"></i>
+            </div>
+          </grid-item>
+        </div>
       </grid>
     </div>
     <group class="list-shadow02 order_list_show posi_r">
@@ -344,6 +351,7 @@ export default {
 .centersales .weui-grids .gridlist:nth-child(4) .weui-grid{background: linear-gradient(#3eb4f1, #099ded);}
 .centersales .weui-grids .gridlist:nth-child(5) .weui-grid{background: linear-gradient(#f25c7d, #ed2d5a);}
 .centersales .weui-grids .gridlist:nth-child(6) .weui-grid{background: linear-gradient(#7974f6, #615aec);}
+.centersales .weui-grids .gridlist:nth-child(7) .weui-grid{background: linear-gradient(#f6d6a5, #ee9f25);}
 .centersales .weui-grids .gridlist.disabled .weui-grid{background: linear-gradient(#b9b9b9, #afafaf);}
 .listitem.disabled {position:relative;background-color:#d8d8d8;}
 
