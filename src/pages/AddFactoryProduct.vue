@@ -682,6 +682,7 @@ export default {
         }
         let price = postdata.price.toString().replace(/,/g, '')
         let oriprice = postdata.oriprice.toString().replace(/,/g, '')
+        let postage = postdata.postage.toString().replace(/,/g, '')
         let profit = postdata.profit.toString().replace(/,/g, '')
         if ((self.$util.trim(oriprice) !== '' && (isNaN(parseFloat(oriprice)) || parseFloat(oriprice) < 0)) || isNaN(parseFloat(price)) || parseFloat(price) <= 0) {
           self.$vux.alert.show({
