@@ -35,6 +35,7 @@
   "Factory",
   "FactoryAgentFee",
   "FactoryBank",
+  "FactoryCustomer",
   "FactoryDetail",
   "FactoryGoodeazy",
   "FactoryIncome",
