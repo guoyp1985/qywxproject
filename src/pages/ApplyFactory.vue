@@ -12,16 +12,18 @@
           <div class="form-item fg bg-white b-top b-bottom">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">公司名称<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
-              <div class="t-cell input-cell v_middle flex_table" style="position:relative;">
-                <x-input style="padding-right:5px;" v-model="submitData.title" type="text" class="input" placeholder="请输入公司名称" ></x-input>
+              <div class="t-cell input-cell v_middle flex_right" style="position:relative;">
+                <template v-if="factoryInfo && factoryInfo.id">{{factoryInfo.title}}</template>
+                <x-input v-else style="padding-right:5px;" v-model="submitData.title" type="text" class="input" placeholder="请输入公司名称" ></x-input>
               </div>
             </div>
           </div>
           <div class="form-item fg bg-white b-top b-bottom">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">公司简称<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
-              <div class="t-cell input-cell v_middle" style="position:relative;">
-                <x-input style="padding-right:5px;" v-model="submitData.company" type="text" class="input" placeholder="请输入公司简称" ></x-input>
+              <div class="t-cell input-cell v_middle flex_right" style="position:relative;">
+                <template v-if="factoryInfo && factoryInfo.id">{{factoryInfo.company}}</template>
+                <x-input v-else style="padding-right:5px;" v-model="submitData.company" type="text" class="input" placeholder="请输入公司简称" ></x-input>
               </div>
               <div class="t-cell v_middle font14 w50 align_right">旗舰店</div>
             </div>
@@ -29,15 +31,16 @@
           <div class="form-item fg bg-white b-top b-bottom">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">手机号<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
-              <div class="t-cell input-cell v_middle flex_table" style="position:relative;">
-                <x-input style="padding-right:5px;" v-model="submitData.mobile" type="text" class="input" placeholder="请输入手机号" ></x-input>
+              <div class="t-cell input-cell v_middle flex_right" style="position:relative;">
+                <template v-if="factoryInfo && factoryInfo.id">{{factoryInfo.mobile}}</template>
+                <x-input v-else style="padding-right:5px;" v-model="submitData.mobile" type="text" class="input" placeholder="请输入手机号" ></x-input>
               </div>
             </div>
           </div>
-          <div class="form-item fg bg-white b-top b-bottom">
+          <div class="form-item fg bg-white b-top b-bottom" v-if="!factoryInfo || !factoryInfo.id">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">验证码<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
-              <div class="t-cell input-cell v_middle flex_table" style="position:relative;">
+              <div class="t-cell input-cell v_middle flex_right" style="position:relative;">
                 <x-input style="padding-right:5px;" v-model="yzmcode" type="text" class="input" placeholder="请输入验证码" ></x-input>
                 <div class="font14 yzmcode disabled" v-if="count !== countNum" @click="getXcode" :disabled="count !== countNum">{{message}}</div>
                 <div class="font14 yzmcode" v-else @click="getXcode" :disabled="count !== countNum">{{message}}</div>
@@ -47,8 +50,15 @@
           <div class="form-item bg-white fg b-top">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">营业执照<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
-              <div class="t-cell input-cell v_middle" style="position:relative;">
-                <div class="q_photolist align_left bg-white">
+              <div class="t-cell input-cell v_middle align_right" style="position:relative;">
+                <template v-if="factoryInfo && factoryInfo.id">
+                  <div class="q_photolist align_left bg-white">
+                    <div class="photoitem">
+                      <div class="inner photo imgcover" :photo="factoryInfo.licensephoto" :style="`background-image: url('${factoryInfo.licensephoto}');`"></div>
+                    </div>
+                  </div>
+                </template>
+                <div v-else class="q_photolist align_left bg-white">
                   <template v-if="photoarr.length > 0">
                     <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
                       <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
@@ -66,8 +76,9 @@
           <div class="form-item fg bg-white b-top b-bottom">
             <div class="t-table">
               <div class="t-cell title-cell font14 v_middle" style="width:100px;">社会信用代码<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
-              <div class="t-cell input-cell v_middle flex_table" style="position:relative;">
-                <x-input style="padding-right:5px;" v-model="submitData.licensecode" type="text" class="input" placeholder="请输入营业执照上的信用代码" ></x-input>
+              <div class="t-cell input-cell v_middle flex_right" style="position:relative;">
+                <template v-if="factoryInfo && factoryInfo.id">{{factoryInfo.licensecode}}</template>
+                <x-input v-else style="padding-right:5px;" v-model="submitData.licensecode" type="text" class="input" placeholder="请输入营业执照上的信用代码" ></x-input>
               </div>
             </div>
           </div>
@@ -75,18 +86,28 @@
           <!-- 分润比例设置 -->
           <div class="form-item bg-white fg b-top">
             <div class=""><span>分润比例设置</span><span @click="clickTip"><i class="al al-wenhao color-red ml5 font24" style="vertical-align:-4px;"></i></span></div>
-            <div class="profit-level b_bottom_after">
+            <div class="profit-level b_bottom_after flex_left">
               <span>推荐人佣金</span>
-              <x-input class="input" type="tel" v-model="submitData.superiorrate" placeholder="输入百分比，例如10%则填写10"></x-input>
+              <div v-if="factoryInfo && factoryInfo.id" class="input align_right">{{factoryInfo.superiorrate}}</div>
+              <x-input v-else class="input" type="tel" v-model="submitData.superiorrate" placeholder="输入百分比，例如10%则填写10"></x-input>
               <div class="color-gray">%</div>
             </div>
-            <div class="profit-level">
+            <div class="profit-level flex_left">
               <span>销售佣金</span>
-              <x-input class="input" type="tel" v-model="submitData.salesrate" placeholder="输入百分比，例如10%则填写10"></x-input>
+              <div v-if="factoryInfo && factoryInfo.id" class="input align_right">{{factoryInfo.salesrate}}</div>
+              <x-input v-else class="input" type="tel" v-model="submitData.salesrate" placeholder="输入百分比，例如10%则填写10"></x-input>
               <div class="color-gray">%</div>
             </div>
           </div>
-          <template>
+          <template v-if="factoryInfo.id">
+            <div class="form-item fg bg-white b-top b-bottom">
+              <div class="t-table">
+                <div class="t-cell title-cell font14 v_middle" style="width:100px;">经营产品<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
+                <div class="t-cell input-cell v_middle flex_table" style="position:relative;">{{disProductClass}}</div>
+              </div>
+            </div>
+          </template>
+          <template v-else>
             <div class="form-item required border-box bg-white padding10 fg b-top" v-if="classData.length > 0">
               <div class="pb10">经营产品<span class="color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
               <checker
@@ -104,7 +125,8 @@
       </div>
       <!-- <div class="s-bottom flex_center bg-orange color-white" @click="saveEvent">{{ $t('Submit') }}</div> -->
       <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
-        <div :class="`flex_cell flex_center btn-bottom-red ${this.flags ? 'disable' : ''}`" @click="saveEvent">{{btnSubmit}}</div>
+        <div v-if="!factoryInfo || !factoryInfo.id" :class="`flex_cell flex_center btn-bottom-red ${this.flags ? 'disable' : ''}`" @click="saveEvent">提交申请</div>
+        <div v-else="factoryInfo.moderate == 0" class="flex_cell flex_center btn-bottom-red disable">审核中...</div>
       </div>
       <div v-if="showTip" class="auto-modal flex_center">
         <div class="modal-inner border-box" style="width:80%;">
@@ -155,7 +177,7 @@ export default {
       showContainer: false,
       query: {},
       loginUser: {},
-      infoData: {},
+      factoryInfo: {},
       allowsubmit: true,
       yzmcode: '',
       hqyzm: '',
@@ -168,7 +190,9 @@ export default {
       maxnum: 1,
       showTip: false,
       fid: 0,
-      getCodeIng: false
+      getCodeIng: false,
+      afterApply: false,
+      disProductClass: ''
     }
   },
   watch: {
@@ -258,7 +282,7 @@ export default {
       if (self.productClass) {
         postData.productclass = self.productClass
       } else {
-        postData.productclass = self.infoData.productclass
+        postData.productclass = self.factoryInfo.productclass
       }
       let validateData = []
       for (let key in self.requireddata) {
@@ -322,14 +346,15 @@ export default {
           self.$vux.loading.show()
           self.$http.post(`${ENV.BokaApi}/api/factory/applyFactory`, postData).then(function (res) {
             let data = res.data
+            let error = data.flag === 1 ? '申请成功' : data.error
             self.$vux.loading.hide()
             self.$vux.toast.show({
-              text: data.error,
+              text: error,
               type: (data.flag !== 1 ? 'warn' : 'success'),
-              time: self.$util.delay(data.error),
+              time: self.$util.delay(error),
               onHide: function () {
                 if (data.flag === 1) {
-                  self.btnSubmit = '审核中...'
+                  self.afterApply = true
                 }
               }
             })
@@ -379,55 +404,57 @@ export default {
     getData () {
       const self = this
       self.$vux.loading.show()
-      if (self.fid) {
-        self.$http.get(`${ENV.BokaApi}/api/factory/info`,
-          { params: { fid: self.fid } }
-        ).then(function (res) {
-          self.$vux.loading.hide()
-          let data = res.data
+      self.$http.get(`${ENV.BokaApi}/api/factory/info`,
+        { params: { } }
+      ).then(function (res) {
+        self.$vux.loading.hide()
+        let data = res.data
+        if (data.flag) {
           let retdata = data.data ? data.data : data
           console.log('in getData')
           console.log(retdata)
-          self.infoData = retdata
+          self.factoryInfo = retdata
           self.photoarr = []
-          if (retdata.photo && self.$util.trim(retdata.photo) !== '') {
-            self.photoarr.push(retdata.photo)
+          if (retdata.licensephoto && self.$util.trim(retdata.licensephoto) !== '') {
+            self.photoarr = retdata.licensephoto.split(',')
           }
           for (let key in self.submitData) {
             self.submitData[key] = retdata[key]
           }
-          if (self.disClassData) {
-            return self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
-              { params: { limit: 100 } }
-            )
-          }
-        }).then(function (res) {
-          if (res) {
-            let data = res.data
-            data = data.data ? data.data : data
-            self.classData = data
-            self.productClass = []
-            if (self.infoData.productclass && self.$util.trim(self.infoData.productclass) !== '') {
-              let idarr = self.infoData.productclass.split(',')
-              for (let i = 0; i < idarr.length; i++) {
-                self.productClass.push(parseInt(idarr[i]))
+        }
+        return self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
+          { params: { limit: 100 } }
+        )
+      }).then(function (res) {
+        if (res) {
+          let data = res.data
+          data = data.data ? data.data : data
+          self.classData = data
+          self.productClass = []
+          // if (self.factoryInfo.productclass && self.$util.trim(self.factoryInfo.productclass) !== '') {
+          //   let idarr = self.factoryInfo.productclass.split(',')
+          //   for (let i = 0; i < idarr.length; i++) {
+          //     self.productClass.push(parseInt(idarr[i]))
+          //   }
+          // }
+          if (self.factoryInfo.productclass && self.$util.trim(self.factoryInfo.productclass) !== '') {
+            let classStr = []
+            let idarr = self.factoryInfo.productclass.split(',')
+            for (let i = 0; i < idarr.length; i++) {
+              self.productClass.push(parseInt(idarr[i]))
+              for (let j = 0; j < self.classData.length; j++) {
+                if (parseInt(idarr[i]) === self.classData[j].id) {
+                  classStr.push(self.classData[j].title)
+                  break
+                }
               }
             }
+            if (classStr.length) {
+              self.disProductClass = classStr.join(',')
+            }
           }
-        })
-      } else {
-        self.$vux.loading.hide()
-        self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
-          { params: { limit: 100 } }
-        ).then(function (res) {
-          if (res) {
-            let data = res.data
-            data = data.data ? data.data : data
-            self.classData = data
-            self.productClass = []
-          }
-        })
-      }
+        }
+      })
     },
     init () {
     },
@@ -447,35 +474,6 @@ export default {
       self.query = self.$route.query
       self.initData()
       self.getData()
-      // let ismanager = false
-      // for (let i = 0; i < this.loginUser.usergroup.length; i++) {
-      //   if (this.loginUser.usergroup[i] === 1) {
-      //     ismanager = true
-      //     break
-      //   }
-      // }
-      // if (ismanager) {
-      //   self.disClassData = true
-      //   self.requireddata.productclass = ''
-      // }
-      // let isEdit = false
-      // if (this.query.id) {
-      //   isEdit = true
-      //   this.fid = parseInt(this.query.id)
-      // } else if (this.query.fid) {
-      //   isEdit = true
-      //   this.fid = parseInt(this.query.fid)
-      // }
-      // if (ismanager || (isEdit && this.fid === this.loginUser.fid)) {
-      //   self.showSos = false
-      //   self.showContainer = true
-      //   this.$vux.loading.hide()
-      //   self.getData()
-      // } else {
-      //   this.$vux.loading.hide()
-      //   self.showSos = true
-      //   self.showContainer = false
-      // }
     }
   },
   created () {
