@@ -4,7 +4,7 @@
       <form ref="fileForm1" enctype="multipart/form-data">
         <input ref="fileInput1" class="hide" type="file" multiple="multiple" name="files" @change="fileMulChange('fileForm1', 'contentphoto')" />
       </form>
-      <div class="pl12 pr12 pt10 bg-white">文字素材</div>
+      <div class="pl12 pr12 pt10 bg-white" style="border-bottom:1px solid #e5e5e5;">文字素材</div>
       <group class="textarea-outer textarea-text bg-white">
         <x-textarea
           ref="textarea"
@@ -116,17 +116,19 @@ export default {
     saveupevent () {
       const self = this
       let postdata = self.submitdata
+      let newString = postdata.title
+      newString = newString.replace(/\n/g, '_@').replace(/\r/g, '_#')
+      newString = newString.replace(/_@/g, '<br/>')
+      postdata.title = newString
       postdata.modules = self.modules
       postdata.pid = self.id
-      const textarea = self.$refs.textarea.$refs.textarea[0] ? self.$refs.textarea.$refs.textarea[0] : self.$refs.textarea.$refs.textarea
-      let subTitle = textarea.value
-      postdata.title = subTitle
       console.log('提交')
       console.log(self.submitdata)
       if (postdata.contentphoto === '' && postdata.video === '' && postdata.title === '') {
         self.$vux.toast.text('文字图片与视频至少填写一项')
         return false
       }
+      self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/add/productmaterial`, postdata).then(res => {
         const data = res.data
         self.$vux.loading.hide()

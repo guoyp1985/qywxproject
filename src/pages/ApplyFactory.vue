@@ -11,7 +11,7 @@
         <form class="addForm">
           <div class="form-item fg bg-white b-top b-bottom">
             <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">厂家名称<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
+              <div class="t-cell title-cell w80 font14 v_middle">公司名称<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
               <div class="t-cell input-cell v_middle flex_table" style="position:relative;">
                 <x-input style="padding-right:5px;" v-model="submitData.title" type="text" class="input" placeholder="请输入公司名称" ></x-input>
               </div>
@@ -19,9 +19,9 @@
           </div>
           <div class="form-item fg bg-white b-top b-bottom">
             <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">厂家简称<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
+              <div class="t-cell title-cell w80 font14 v_middle">公司简称<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
               <div class="t-cell input-cell v_middle flex_table" style="position:relative;">
-                <x-input style="width:80%;padding-right:5px;" v-model="submitData.company" type="text" class="input" placeholder="公司简称" ></x-input>
+                <x-input style="width:80%;padding-right:5px;" v-model="submitData.company" type="text" class="input" placeholder="请输入公司简称" ></x-input>
                 <span class="font14">旗舰店</span>
               </div>
             </div>
@@ -265,6 +265,10 @@ export default {
         v[key] = postData[key]
         validateData.push(v)
       }
+      if (postData.productclass.length === 0 || !postData.productclass) {
+        self.$vux.toast.text('必填项不能为空', 'middle')
+        return false
+      }
       let iscontinue = self.$util.validateQueue(validateData,
         model => {
           switch (model.key) {
@@ -318,22 +322,16 @@ export default {
           self.$http.post(`${ENV.BokaApi}/api/factory/applyFactory`, postData).then(function (res) {
             let data = res.data
             self.$vux.loading.hide()
-            let error = data.flag ? '设置成功' : data.error
-            let timeout = self.$util.delay(error)
-            if (data.flag === 1) {
-              // setTimeout(() => {
-              //   self.$router.go(-1)
-              // }, timeout)
-              this.flags = data.flag
-              self.$vux.toast.text('申请成功！')
-              self.btnSubmit = '审核中...'
-            } else {
-              self.$vux.toast.show({
-                text: error,
-                type: data.flag ? 'success' : 'warn',
-                time: timeout
-              })
-            }
+            self.$vux.toast.show({
+              text: data.error,
+              type: (data.flag !== 1 ? 'warn' : 'success'),
+              time: self.$util.delay(data.error),
+              onHide: function () {
+                if (data.flag === 1) {
+                  self.btnSubmit = '审核中...'
+                }
+              }
+            })
           })
         }
       })

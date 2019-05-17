@@ -95,7 +95,7 @@
               <span class="al al-shouhouwuyou font20"></span>
             </div>
           </grid-item>
-          <grid-item label="申请厂家" @click.native="toLink('/ApplyFactory')">
+          <grid-item v-if="showApply" label="申请厂家" @click.native="toLink('/ApplyFactory')">
             <div slot="icon" class="circle-icon-bg rgba07 color-white flex_center mb10">
               <span class="al al-shouhouwuyou font20"></span>
             </div>
@@ -186,7 +186,8 @@ export default {
       showFactory: false,
       showManager: false,
       showQuit: false,
-      showTip: false
+      showTip: false,
+      showApply: false
     }
   },
   methods: {
@@ -262,6 +263,8 @@ export default {
         self.setUserInfo()
         if (this.loginUser.fid > 0) {
           this.showFactory = true
+        } else {
+          this.showApply = true
         }
         for (let i = 0; i < self.loginUser.usergroup.length; i++) {
           if (this.loginUser.usergroup[i] === 1) {

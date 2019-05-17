@@ -85,7 +85,7 @@
       </template>
     </div>
     <!-- 新增按钮 -->
-    <div class="btn-bottom" @click="closeChat">
+    <div v-if="showApply" class="btn-bottom" @click="closeChat">
       <div class="btn font14">我也要提供货源</div>
     </div>
     <!--<div class="auto-modal flex_center wechat-modal" v-if="showRetailerWechat">
@@ -139,7 +139,9 @@ export default {
     return {
       query: {},
       loginUser: {},
+      userInfo: {},
       divData: {},
+      showApply: false,
       disProductData: false,
       productData: [],
       classData: [],
@@ -375,6 +377,8 @@ export default {
         this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
           const data = res.data
           this.loginUser = data
+          console.log('SHUSDNAKSD SDA:')
+          console.log(this.loginUser)
           User.set(data)
           if (`${this.loginUser.retailerinfo.firstinfo.importproduct}` === '0' && this.query.from) {
             this.isFirst = true
@@ -395,11 +399,23 @@ export default {
           self.getData1()
         })
       }
+    },
+    getData2 () {
+      this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
+        const data = res.data
+        this.userInfo = data
+        if (this.userInfo.fid > 0) {
+          this.showApply = false
+        } else {
+          this.showApply = true
+        }
+      })
     }
   },
   created () {
     self = this
     this.refresh()
+    self.getData2()
   },
   activated () {
     this.$refs.scrollContainer.scrollTop = this.pageTop
