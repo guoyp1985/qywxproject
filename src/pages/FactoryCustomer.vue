@@ -15,12 +15,34 @@
               </template>
             </div>
             <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item pt10 pl12 pr12 bg-white mb10 list-shadow">
-              <div class="t-table pb10">
+              <div class="t-table pb10" @click="btnDetail(index)">
                 <div class="t-cell v_middle w70">
                   <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                 </div>
                 <div class="t-cell v_middle">
                   <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
+                </div>
+                <div class="t-cell v_middle w60 align_right">
+                  <div class="qbtnInfo bg-red color-white al al-asmkticon0165 font20"></div>
+                </div>
+              </div>
+              <div v-if="item.checked">
+                <div class="detailInfo w_100 font14 color-gray b_bottom_after">
+                  <div class="txt-item" @click="btnDetail(index)">性别: {{item.sexname}}</div>
+                  <div class="txt-item" @click="btnDetail(index)">地区: {{ item.country }} {{ item.province }} {{ item.city }}</div>
+                  <div class="txt-item flex_left" @click="influence">影响力:
+                    <span class="color-red4">{{item.yingxiangli}}</span>
+                    <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
+                  </div>
+                  <div class="txt-item">累计消费: {{$t('RMB')}}{{item.salesmoney}}</div>
+                </div>
+                <div class="flex_center bg-white h40">
+                  <div class="t-table align_center color-gray2 font14 color-gray2">
+                    <div class="t-cell v_middle b_right_after" @click="toSaleRecord(item)">消费记录</div>
+                    <div class="t-cell v_middle b_right_after" @click="toChat(item)">
+                      <div>联系TA</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -239,9 +261,9 @@ export default {
       let params = this.$util.handleAppParams(this.query, {uid: item.uid, fromModule: 'retailer'})
       this.$router.push({path: '/chat', query: params})
     },
-    toTimeline (item) {
-      let params = this.$util.handleAppParams(this.query, {uid: item.uid})
-      this.$router.push({path: '/timeline', query: params})
+    toSaleRecord (item) {
+      let params = this.$util.handleAppParams(this.query, {uid: item.uid, fid: this.loginUser.fid})
+      this.$router.push({path: '/factoryOrders', query: params})
     },
     btnDetail (index) {
       for (var i = 0; i < this.tabdata1.length; i++) {
