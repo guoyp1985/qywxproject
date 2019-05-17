@@ -125,12 +125,12 @@
           </div>
 
           <div class="form-item required bg-white">
-            <div class="flex_left">商品规格<span class="al al-xing color-red font12 ricon" style="margin-top: -3px;"></span></div>
+            <div class="flex_left">商品规格</div>
             <div class="option-list">
               <div class="option-item" v-for="(item,index) in optionsData" :key="index">
                 <div class="option-title flex_left">
                   <div class="flex_cell flex_left">规格 {{index + 1}}</div>
-                  <div v-if="index > 0" class="w60 flex_right color-theme" @click="deleteOption(index)">删除</div>
+                  <div class="w60 flex_right color-theme" @click="deleteOption(index)">删除</div>
                 </div>
                 <div class="option-con">
                   <div class="flex_left con-item">
@@ -357,7 +357,8 @@ export default {
       classData: [],
       submitIng: false,
       showTip: false,
-      optionsData: [{title: '', photo: '', storage: ''}],
+      // optionsData: [{title: '', photo: '', storage: ''}],
+      optionsData: [],
       selectedOptionIndex: 0,
       optionsPhoto: []
     }
@@ -420,10 +421,11 @@ export default {
       this.$vux.confirm.show({
         content: '确定要删除吗？',
         onConfirm: () => {
-          if (this.optionsData[index].id) {
+          let deleteOptions = this.optionsData[index]
+          if (deleteOptions.id) {
             this.$vux.loading.show()
             this.$http.post(`${ENV.BokaApi}/api/delete/factoryproductoptions`, {
-              id: this.optionsData[index].id
+              id: deleteOptions.id
             }).then((res) => {
               this.$vux.loading.hide()
               let data = res.data
@@ -436,6 +438,8 @@ export default {
               if (data.flag) {
                 this.optionsData.splice(index, 1)
                 this.optionsPhoto.splice(index, 1)
+                let leftStorage = parseInt(this.submitdata.storage) - parseInt(deleteOptions.storage)
+                this.submitdata.storage = leftStorage < 0 ? 0 : leftStorage
               }
             })
           } else {
@@ -678,6 +682,7 @@ export default {
         }
         let price = postdata.price.toString().replace(/,/g, '')
         let oriprice = postdata.oriprice.toString().replace(/,/g, '')
+        let postage = postdata.postage.toString().replace(/,/g, '')
         let profit = postdata.profit.toString().replace(/,/g, '')
         if ((self.$util.trim(oriprice) !== '' && (isNaN(parseFloat(oriprice)) || parseFloat(oriprice) < 0)) || isNaN(parseFloat(price)) || parseFloat(price) <= 0) {
           self.$vux.alert.show({
@@ -708,8 +713,16 @@ export default {
           })
           return false
         }
+        if (!self.optionsData.length && self.$util.trim(postdata.storage) === '') {
+          self.$vux.toast.text('请输入商品库存', 'middle')
+          return false
+        }
         if (self.$util.trim(postdata.postage) === '') {
           self.$vux.toast.text('请输入运费', 'middle')
+          return false
+        }
+        if (isNaN(postage) || postage < 0) {
+          self.$vux.toast.text('请输入正确的运费', 'middle')
           return false
         }
         let iscontinue = true

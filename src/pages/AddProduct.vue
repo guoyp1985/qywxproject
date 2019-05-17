@@ -380,10 +380,11 @@ export default {
       this.$vux.confirm.show({
         content: '确定要删除吗？',
         onConfirm: () => {
-          if (this.optionsData[index].id) {
+          let deleteOptions = this.optionsData[index]
+          if (deleteOptions.id) {
             this.$vux.loading.show()
             this.$http.post(`${ENV.BokaApi}/api/delete/productoptions`, {
-              id: this.optionsData[index].id
+              id: deleteOptions.id
             }).then((res) => {
               this.$vux.loading.hide()
               let data = res.data
@@ -396,6 +397,8 @@ export default {
               if (data.flag) {
                 this.optionsData.splice(index, 1)
                 this.optionsPhoto.splice(index, 1)
+                let leftStorage = parseInt(this.submitdata.storage) - parseInt(deleteOptions.storage)
+                this.submitdata.storage = leftStorage < 0 ? 0 : leftStorage
               }
             })
           } else {
