@@ -261,6 +261,7 @@ export default {
 <style lang="less">
 .addmaterial {
   .textarea-outer.textarea-text .x-textarea{height:150px;}
+  .weui-cell__bd textarea{height:150px !important;}
   .sc-bottom{
     width:100%;padding:10px 20px;box-sizing:border-box;background-color:#fff;
     border-top:1px solid #e5e5e5;position:fixed;bottom:0;

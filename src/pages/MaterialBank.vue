@@ -37,7 +37,7 @@
           </div>
           <div class="datetxt flex_left">
             <div class="font12">{{item.dateline_str}}</div>
-            <div class="ricon ml20" @click="delScai(item,index)">删除</div>
+            <div v-if="item.uploader == userInfo.uid" class="ricon ml20" @click="delScai(item,index)">删除</div>
           </div>
         </div>
       </div>
@@ -56,7 +56,8 @@ export default {
     return {
       tlData: [],
       id: 0,
-      photoarr1: []
+      photoarr1: [],
+      userInfo: {}
     }
   },
   methods: {
@@ -129,8 +130,15 @@ export default {
           retdata[i].photoarr = photoarr
         }
         this.tlData = retdata
-        console.log('素材数据')
-        console.log(this.photoarr)
+      })
+    },
+    getData2 () {
+      this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        this.userInfo = retdata
+        console.log('个人信息：')
+        console.log(this.userInfo)
       })
     },
     delScai (item, index) {
@@ -157,6 +165,7 @@ export default {
     this.id = this.$route.query.pid
     this.refresh()
     this.getData()
+    this.getData2()
   }
 }
 </script>
