@@ -4,7 +4,7 @@
       <form ref="fileForm1" enctype="multipart/form-data">
         <input ref="fileInput1" class="hide" type="file" multiple="multiple" name="files" @change="fileMulChange('fileForm1', 'contentphoto')" />
       </form>
-      <div class="pl12 pr12 pt10 bg-white">文字素材</div>
+      <div class="pl12 pr12 pt10 bg-white" style="border-bottom:1px solid #e5e5e5;">文字素材</div>
       <group class="textarea-outer textarea-text bg-white">
         <x-textarea
           ref="textarea"

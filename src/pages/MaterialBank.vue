@@ -34,7 +34,7 @@
             </div>
             <template v-if="item.video && item.video != ''">
               <div class="picitem more" @click="clickPlay('productVideo')">
-                <div class="inner align_center" style="border:1px solid #e5e5e5;line-height:90px;">
+                <div class="inner align_center" style="border:1px solid #e5e5e5;line-height:95px;">
                   <i class="al al-bofang"></i>
                 </div>
               </div>
