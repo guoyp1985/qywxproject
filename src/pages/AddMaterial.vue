@@ -7,16 +7,14 @@
       <div class="pl12 pr12 pt10 bg-white">文字素材</div>
       <group class="textarea-outer textarea-text bg-white">
         <x-textarea
-          ref="contentTextarea"
+          ref="textarea"
           v-model="submitdata.title"
-          name="title"
-          class="x-textarea"
-          :placeholder="$t('Product description')"
-          :show-counter="false"
-          :rows="1"
-          @on-change="textareaChange('contentTextarea')"
-          @on-focus="textareaFocus('contentTextarea')"
-          autosize>
+          @on-change="valueChange"
+          class="font14 pop-textarea"
+          :rows="10"
+          :cols="30"
+          :max="200"
+          placeholder="请输入宣传内容">
         </x-textarea>
       </group>
       <div class="pl12 pr12 pt10 b_top_after bg-white">详情图像<span class="color-gray">（图像宽高不受限制）</span></div>
@@ -69,7 +67,7 @@
       </div>
     </div>
     <div class="sc-bottom" @click="saveupevent">
-      <div class="btnadd">发布素材</div>
+      <div class="btnadd">立即发布</div>
     </div>
   </div>
 </template>
@@ -96,48 +94,52 @@ export default {
     }
   },
   methods: {
-    textareaChange (refname) {
-      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
-      curArea.updateAutosize()
-      setTimeout(function () {
-        curArea.updateAutosize()
-      }, 50)
+    refresh () {
+      this.photoarr1 = []
+      this.videoarr = []
+      this.submitdata.title = ''
     },
-    textareaFocus (refname) {
-      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
-      curArea.updateAutosize()
+    // textareaChange (refname) {
+    //   let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+    //   curArea.updateAutosize()
+    //   setTimeout(function () {
+    //     curArea.updateAutosize()
+    //   }, 50)
+    // },
+    // textareaFocus (refname) {
+    //   let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+    //   curArea.updateAutosize()
+    // },
+    valueChange (val) {
+      this.submitdata.title = val
     },
     saveupevent () {
       const self = this
       let postdata = self.submitdata
-      postdata.modules = this.modules
-      postdata.pid = this.id
+      postdata.modules = self.modules
+      postdata.pid = self.id
+      const textarea = self.$refs.textarea.$refs.textarea[0] ? self.$refs.textarea.$refs.textarea[0] : self.$refs.textarea.$refs.textarea
+      let subTitle = textarea.value
+      postdata.title = subTitle
       console.log('提交')
-      console.log(postdata)
-      if (postdata.title === '') {
-        self.$vux.toast.text('文字介绍不能为空')
-        return false
-      }
-      if (postdata.contentphoto === '' && postdata.video === '') {
-        self.$vux.toast.text('图片和视频请选择一种上传')
+      console.log(self.submitdata)
+      if (postdata.contentphoto === '' && postdata.video === '' && postdata.title === '') {
+        self.$vux.toast.text('文字图片与视频至少填写一项')
         return false
       }
       self.$http.post(`${ENV.BokaApi}/api/add/productmaterial`, postdata).then(res => {
-        self.$vux.loading.hide()
         const data = res.data
-        console.log(data)
-        if (data.flag === 1) {
-          self.$vux.toast.show({
-            text: '发布成功',
-            icon: 'none'
-          })
-          this.$router.push({path: `/MaterialBank?pid=${this.id}`})
-        } else {
-          self.$vux.toast.show({
-            text: '发布失败，请重试',
-            icon: 'none'
-          })
-        }
+        self.$vux.loading.hide()
+        self.$vux.toast.show({
+          text: data.error,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+              self.$router.push({ path: `/MaterialBank`, query: {pid: self.id} })
+            }
+          }
+        })
       })
     },
     uploadPhoto (refname, type) {
@@ -216,13 +218,7 @@ export default {
           let data = res.data
           if (data.flag === 1) {
             let retdata = data.data
-            if (type === 'photo' && self.photoarr.length < self.maxnum) {
-              let allowNum = self.maxnum - self.photoarr.length
-              let addNum = retdata.length > allowNum ? allowNum : retdata.length
-              let addData = retdata.slice(0, addNum)
-              self.photoarr = self.photoarr.concat(addData)
-              self.submitdata.photo = self.photoarr.join(',')
-            } else if (type === 'contentphoto' && self.photoarr1.length < self.maxnum1) {
+            if (type === 'contentphoto' && self.photoarr1.length < self.maxnum1) {
               let allowNum = self.maxnum1 - self.photoarr1.length
               let addNum = retdata.length > allowNum ? allowNum : retdata.length
               let addData = retdata.slice(0, addNum)
@@ -252,8 +248,9 @@ export default {
       }
     }
   },
-  created () {
+  activated () {
     this.id = this.$route.query.pid
+    this.refresh()
     console.log('PID:')
     console.log(this.id)
   }
@@ -262,6 +259,7 @@ export default {
 <style lang="less">
 .addmaterial {
   .textarea-outer.textarea-text .x-textarea{height:150px;}
+  .weui-cell__bd textarea{height:150px !important;}
   .sc-bottom{
     width:100%;padding:10px 20px;box-sizing:border-box;background-color:#fff;
     border-top:1px solid #e5e5e5;position:fixed;bottom:0;
@@ -280,5 +278,6 @@ export default {
     left:0;top:0;right:0;bottom:0;
     opacity:0;
   }
+  .pointer{pointer-events:none !important;}
 }
 </style>

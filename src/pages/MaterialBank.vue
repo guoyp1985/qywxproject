@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea font14 bg-white materialbank">
+  <div class="containerarea font14 bg-white materialbank" v-if="disShow">
     <div v-if="!tlData || tlData.length == 0" class="flex_center font16 mt20">暂无素材数据</div>
     <div v-else class="timelinelist" v-for="(item, index) in tlData" :key="index">
       <div class="tlitem">
@@ -7,15 +7,20 @@
         <div class="con">
           <div class="flex_left">
             <div class="txt no_bold">{{item.uploadername}}</div>
-            <div style="margin-left:auto;" @click="copyTxt">复制</div>
+            <div v-if="item.title !== ''" style="margin-left:auto;color:#7d7979;" @click="copyTxt"><span class="al al-copy mr3 font14"></span>复制</div>
           </div>
-          <div>{{item.title}}</div>
+          <div v-if="item.title && item.title != ''" v-html="filterEmot(item.title)"></div>
           <div class="piclist">
-            <div class="picitem more" v-for="(items,index) in item.photoarr">
+            <div class="picitem more" v-for="(items,index1) in item.photoarr">
               <div class="inner">
-                <img :src="items" />
+                <img :src="items" @click="showBigimg1(items,item.photoarr,`previewer${index}`,index1)" />
               </div>
             </div>
+            <template v-if="item.photoarr.length > 0">
+              <div v-transfer-dom>
+                <previewer :list="item.previewerPhoto" :ref="`previewer${index}`"></previewer>
+              </div>
+            </template>
             <div v-if="item.video" class="picitem more">
               <div class="inner">
                 <video
@@ -37,7 +42,7 @@
           </div>
           <div class="datetxt flex_left">
             <div class="font12">{{item.dateline_str}}</div>
-            <div class="ricon ml20" @click="delScai(item,index)">删除</div>
+            <div v-if="item.uploader == userInfo.uid" class="ricon ml20" @click="delScai(item,index)">删除</div>
           </div>
         </div>
       </div>
@@ -48,18 +53,42 @@
   </div>
 </template>
 <script>
+import { TransferDom, Previewer } from 'vux'
 import ENV from 'env'
 import Time from '#/time'
 
 export default {
+  directives: {
+    TransferDom
+  },
+  components: {
+    Previewer
+  },
   data () {
     return {
       tlData: [],
       id: 0,
-      photoarr1: []
+      photoarr1: [],
+      userInfo: {},
+      disShow: false
     }
   },
   methods: {
+    filterEmot (text) {
+      return this.$util.emotPrase(text)
+    },
+    showBigimg1 (src, arr, refname, index) {
+      const self = this
+      if (self.$util.isPC()) {
+        let view = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+        view.show(index)
+      } else {
+        window.WeixinJSBridge.invoke('imagePreview', {
+          current: src,
+          urls: arr
+        })
+      }
+    },
     copyTxt (e) {
       const self = this
       let eleobj = null
@@ -122,15 +151,24 @@ export default {
         for (var i = 0; i < retdata.length; i++) {
           let photoarr = []
           let photo = retdata[i].contentphoto
-          retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd')
+          retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd hh:mm')
           if (photo && this.$util.trim(photo) !== '') {
             photoarr = photo.split(',')
           }
           retdata[i].photoarr = photoarr
+          retdata[i].previewerPhoto = this.$util.previewerImgdata(photoarr)
         }
         this.tlData = retdata
-        console.log('素材数据')
-        console.log(this.photoarr)
+        this.disShow = true
+      })
+    },
+    getData2 () {
+      this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        this.userInfo = retdata
+        console.log('个人信息：')
+        console.log(this.userInfo)
       })
     },
     delScai (item, index) {
@@ -157,6 +195,7 @@ export default {
     this.id = this.$route.query.pid
     this.refresh()
     this.getData()
+    this.getData2()
   }
 }
 </script>
@@ -172,5 +211,6 @@ export default {
   .videoarea video{position: absolute;width: 100%;height: 100%;}
   .videoarea .close-icon{position:absolute;left:50%;top:7px;width:60px;height:30px;margin-left:-30px;background-color:#232323;color:#fff;border-radius:10px;}
   .picitem video{width:100px;height:100px;}
+  .timelinelist:last-child{margin-bottom:50px;}
 }
 </style>
