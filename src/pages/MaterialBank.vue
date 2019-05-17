@@ -135,7 +135,7 @@ export default {
       const self = this
       this.playVideo = true
       setTimeout(function () {
-        self.$refs[refname][0].play()
+        self.$refs[refname].play()
       }, 100)
     },
     stopPlay (refname) {
@@ -216,6 +216,12 @@ export default {
   .videoarea .close-icon{position:absolute;left:50%;top:7px;width:60px;height:30px;margin-left:-30px;background-color:#232323;color:#fff;border-radius:10px;}
   .picitem video{width:100px;height:100px;}
   .timelinelist:last-child{margin-bottom:50px;}
+  // .videobg{width:100%;height:100%;background-size:cover;background-position:center;position:relative;}
+  // .play-icon{
+  //   width:60px;height:60px;background: rgba(0,0,0,.4);border-radius: 50%;color:#fff;
+  //   position:absolute;left:50%;top:50%;margin-left:-30px;margin-top:-30px;
+  // }
+  // .play-icon .al{margin-left:4px;}
   .play-icon{width:110px;height:110px;border:1px solid #e5e5e5;}
 }
 </style>

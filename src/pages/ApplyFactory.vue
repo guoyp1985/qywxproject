@@ -265,6 +265,10 @@ export default {
         v[key] = postData[key]
         validateData.push(v)
       }
+      if (postData.productclass.length === 0 || !postData.productclass) {
+        self.$vux.toast.text('必填项不能为空', 'middle')
+        return false
+      }
       let iscontinue = self.$util.validateQueue(validateData,
         model => {
           switch (model.key) {
@@ -318,22 +322,16 @@ export default {
           self.$http.post(`${ENV.BokaApi}/api/factory/applyFactory`, postData).then(function (res) {
             let data = res.data
             self.$vux.loading.hide()
-            let error = data.flag ? '设置成功' : data.error
-            let timeout = self.$util.delay(error)
-            if (data.flag === 1) {
-              // setTimeout(() => {
-              //   self.$router.go(-1)
-              // }, timeout)
-              this.flags = data.flag
-              self.$vux.toast.text('申请成功！')
-              self.btnSubmit = '审核中...'
-            } else {
-              self.$vux.toast.show({
-                text: error,
-                type: data.flag ? 'success' : 'warn',
-                time: timeout
-              })
-            }
+            self.$vux.toast.show({
+              text: data.error,
+              type: (data.flag !== 1 ? 'warn' : 'success'),
+              time: self.$util.delay(data.error),
+              onHide: function () {
+                if (data.flag === 1) {
+                  self.btnSubmit = '审核中...'
+                }
+              }
+            })
           })
         }
       })
