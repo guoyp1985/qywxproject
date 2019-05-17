@@ -2,6 +2,22 @@
   <div class="containerarea font14 bg-white materialbank" v-if="disShow">
     <div v-if="!tlData || tlData.length == 0" class="flex_center font16 mt20">暂无素材数据</div>
     <div v-else class="timelinelist" v-for="(item, index) in tlData" :key="index">
+      <div v-if="playVideo" class="videoarea">
+        <video
+          ref="productVideo"
+          :src="item.video"
+          controls
+          autoplay="true"
+          webkit-playsinline=""
+          playsinline="true"
+          x-webkit-airplay="true"
+          raw-controls=""
+          x5-video-player-type="h5"
+          x5-video-player-fullscreen="true"
+          x5-video-orientation="portrait">
+        </video>
+        <div class="close-icon flex_center" @click="stopPlay('productVideo')">关闭</div>
+      </div>
       <div class="tlitem">
         <div class="avatar"><img :src="item.uploaderavatar" /></div>
         <div class="con">
@@ -16,29 +32,16 @@
                 <img :src="items" @click="showBigimg1(items,item.photoarr,`previewer${index}`,index1)" />
               </div>
             </div>
+            <template v-if="item.video && item.video != ''">
+              <div class="play-icon flex_center" @click="clickPlay('productVideo')">
+                <i class="al al-bofang"></i>
+              </div>
+            </template>
             <template v-if="item.photoarr.length > 0">
               <div v-transfer-dom>
                 <previewer :list="item.previewerPhoto" :ref="`previewer${index}`"></previewer>
               </div>
             </template>
-            <div v-if="item.video" class="picitem more">
-              <div class="inner">
-                <video
-                  ref="productVideo"
-                  :src="item.video"
-                  controls
-                  autoplay="true"
-                  webkit-playsinline=""
-                  playsinline="true"
-                  x-webkit-airplay="true"
-                  raw-controls=""
-                  x5-video-player-type="h5"
-                  x5-video-player-fullscreen="true"
-                  x5-video-orientation="portrait">
-                </video>
-                <!-- <div class="close-icon flex_center" @click="stopPlay('productVideo')">关闭</div> -->
-              </div>
-            </div>
           </div>
           <div class="datetxt flex_left">
             <div class="font12">{{item.dateline_str}}</div>
@@ -70,7 +73,8 @@ export default {
       id: 0,
       photoarr1: [],
       userInfo: {},
-      disShow: false
+      disShow: false,
+      playVideo: false
     }
   },
   methods: {
@@ -212,5 +216,6 @@ export default {
   .videoarea .close-icon{position:absolute;left:50%;top:7px;width:60px;height:30px;margin-left:-30px;background-color:#232323;color:#fff;border-radius:10px;}
   .picitem video{width:100px;height:100px;}
   .timelinelist:last-child{margin-bottom:50px;}
+  .play-icon{width:110px;height:110px;border:1px solid #e5e5e5;}
 }
 </style>
