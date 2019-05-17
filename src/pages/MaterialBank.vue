@@ -33,8 +33,10 @@
               </div>
             </div>
             <template v-if="item.video && item.video != ''">
-              <div class="play-icon flex_center" @click="clickPlay('productVideo')">
-                <i class="al al-bofang"></i>
+              <div class="picitem more" @click="clickPlay('productVideo')">
+                <div class="inner align_center" style="border:1px solid #e5e5e5;line-height:90px;">
+                  <i class="al al-bofang"></i>
+                </div>
               </div>
             </template>
             <template v-if="item.photoarr.length > 0">
@@ -50,6 +52,7 @@
         </div>
       </div>
     </div>
+    <div style="width:100%;height:50px;"></div>
     <router-link class="bg-sucai" :to="{path: '/AddMaterial', query: {pid: this.id}}">
       <div class="addsucai">发布素材</div>
     </router-link>
@@ -215,13 +218,6 @@ export default {
   .videoarea video{position: absolute;width: 100%;height: 100%;}
   .videoarea .close-icon{position:absolute;left:50%;top:7px;width:60px;height:30px;margin-left:-30px;background-color:#232323;color:#fff;border-radius:10px;}
   .picitem video{width:100px;height:100px;}
-  .timelinelist:last-child{margin-bottom:50px;}
-  // .videobg{width:100%;height:100%;background-size:cover;background-position:center;position:relative;}
-  // .play-icon{
-  //   width:60px;height:60px;background: rgba(0,0,0,.4);border-radius: 50%;color:#fff;
-  //   position:absolute;left:50%;top:50%;margin-left:-30px;margin-top:-30px;
-  // }
-  // .play-icon .al{margin-left:4px;}
   .play-icon{width:110px;height:110px;border:1px solid #e5e5e5;}
 }
 </style>

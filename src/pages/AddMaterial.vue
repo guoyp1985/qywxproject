@@ -127,6 +127,7 @@ export default {
         self.$vux.toast.text('文字图片与视频至少填写一项')
         return false
       }
+      self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/add/productmaterial`, postdata).then(res => {
         const data = res.data
         self.$vux.loading.hide()

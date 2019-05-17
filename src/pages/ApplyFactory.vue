@@ -11,7 +11,7 @@
         <form class="addForm">
           <div class="form-item fg bg-white b-top b-bottom">
             <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">厂家名称<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
+              <div class="t-cell title-cell w80 font14 v_middle">公司名称<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
               <div class="t-cell input-cell v_middle flex_table" style="position:relative;">
                 <x-input style="padding-right:5px;" v-model="submitData.title" type="text" class="input" placeholder="请输入公司名称" ></x-input>
               </div>
@@ -19,9 +19,9 @@
           </div>
           <div class="form-item fg bg-white b-top b-bottom">
             <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">厂家简称<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
+              <div class="t-cell title-cell w80 font14 v_middle">公司简称<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
               <div class="t-cell input-cell v_middle flex_table" style="position:relative;">
-                <x-input style="width:80%;padding-right:5px;" v-model="submitData.company" type="text" class="input" placeholder="公司简称" ></x-input>
+                <x-input style="width:80%;padding-right:5px;" v-model="submitData.company" type="text" class="input" placeholder="请输入公司简称" ></x-input>
                 <span class="font14">旗舰店</span>
               </div>
             </div>
