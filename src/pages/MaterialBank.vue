@@ -52,7 +52,7 @@
         </div>
       </div>
     </div>
-    <div style="width:100%;height:50px;z-index:-1;"></div>
+    <!-- <div style="width:100%;height:50px;z-index:-1;"></div> -->
     <router-link class="bg-sucai" :to="{path: '/AddMaterial', query: {pid: this.id}}">
       <div class="addsucai">发布素材</div>
     </router-link>
@@ -219,5 +219,6 @@ export default {
   .videoarea .close-icon{position:absolute;left:50%;top:7px;width:60px;height:30px;margin-left:-30px;background-color:#232323;color:#fff;border-radius:10px;}
   .picitem video{width:100px;height:100px;}
   .play-icon{width:110px;height:110px;border:1px solid #e5e5e5;}
+  .timelinelist:last-child{margin-bottom:50px;}
 }
 </style>
