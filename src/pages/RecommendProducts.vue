@@ -85,7 +85,7 @@
       </template>
     </div>
     <!-- 新增按钮 -->
-    <div v-if="showApply" class="btn-bottom" @click="closeChat">
+    <div v-if="showApply && !loginUser.fid" class="btn-bottom" @click="closeChat">
       <div class="btn font14">我也要提供货源</div>
     </div>
     <!--<div class="auto-modal flex_center wechat-modal" v-if="showRetailerWechat">
