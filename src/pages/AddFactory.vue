@@ -276,6 +276,8 @@ export default {
         v[key] = postData[key]
         validateData.push(v)
       }
+      console.log('validateData')
+      console.log(validateData)
       let iscontinue = self.$util.validateQueue(validateData,
         model => {
           switch (model.key) {
@@ -395,8 +397,8 @@ export default {
     },
     initData () {
       const self = this
-      self.submitData = { title: '', summary: '', shortcode: '', photo: '', superiorrate: '20', salesrate: '80' }
-      self.requireddata = { title: '' }
+      self.submitData = { company: '', summary: '', shortcode: '', photo: '', superiorrate: '20', salesrate: '80' }
+      self.requireddata = { company: '' }
       self.disClassData = false
     },
     refresh () {
