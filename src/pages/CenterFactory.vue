@@ -7,6 +7,9 @@
         </div>
         <div class="pagebottom flex_center b_top_after font16">请先关注</div>
       </template>
+      <template v-else-if="factoryinfo.moderate != 1">
+        <router-link to="/applyFactory" class="bg-theme color-white flex_center" style="width:200px;height:35px;">申请厂家</router-link>
+      </template>
       <template v-else>
         <template v-if="showCenter">
           <center-factory :factory-info="factoryinfo" :endTime="endTime" :messages="messages" :login-user="loginUser"></center-factory>
