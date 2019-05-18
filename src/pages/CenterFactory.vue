@@ -7,7 +7,7 @@
         </div>
         <div class="pagebottom flex_center b_top_after font16">请先关注</div>
       </template>
-      <div v-else-if="factoryinfo.moderate != 1" class="w_100 h_100 flex_center">
+      <div v-else-if="!loginUser.factoryinfo || loginUser.factoryinfo.moderate != 1" class="w_100 h_100 flex_center">
         <router-link to="/applyFactory" class="bg-theme color-white flex_center font16" style="width:70%;height:35px;border-radius:20px;">申请厂家</router-link>
       </div>
       <template v-else>
@@ -48,7 +48,7 @@ export default {
     getData () {
       const self = this
       self.$vux.loading.show()
-      self.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
+      self.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
         if (res.status === 200) {
           self.loginUser = res.data
           User.set(self.loginUser)
@@ -56,23 +56,18 @@ export default {
             self.$vux.loading.hide()
           } else {
             self.showCenter = true
-            self.$http.get(`${ENV.BokaApi}/api/factory/info`).then(function (res) {
-              if (res.status === 200) {
-                let data = res.data
-                self.factoryinfo = data.data ? data.data : data
-                self.endTime = new Time(self.factoryinfo.endtime * 1000).dateFormat('yyyy-MM-dd')
-                let photoArr = [self.factoryinfo.photo]
-                self.factoryinfo.photoArr = self.$util.previewerImgdata(photoArr)
-                self.$vux.loading.hide()
-                return self.$http.get(`${ENV.BokaApi}/api/message/newMessages`)
-              }
-            }).then(function (res) {
-              if (res) {
-                let data = res.data
-                self.messages = data.data
-              }
-            })
+            self.factoryinfo = self.loginUser.factoryinfo
+            self.endTime = new Time(self.factoryinfo.endtime * 1000).dateFormat('yyyy-MM-dd')
+            let photoArr = [self.factoryinfo.photo]
+            self.factoryinfo.photoArr = self.$util.previewerImgdata(photoArr)
+            self.$vux.loading.hide()
+            return self.$http.get(`${ENV.BokaApi}/api/message/newMessages`)
           }
+        }
+      }).then(res => {
+        if (res) {
+          let data = res.data
+          self.messages = data.data
         }
       })
     },
