@@ -12,10 +12,10 @@
           <div class="form-item fg bg-white b-top b-bottom">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Fatory name') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
-              <div class="t-cell input-cell v_middle flex_table" style="position:relative;">
-                <x-input style="width:80%;padding-right:5px;" v-model="submitData.title" type="text" class="input" :placeholder="$t('Fatory name')" ></x-input>
-                <span class="font14">旗舰店</span>
+              <div class="t-cell input-cell v_middle flex_right" style="position:relative;">
+                <x-input style="width:80%;padding-right:5px;" v-model="submitData.company" type="text" class="input" :placeholder="$t('Fatory name')" ></x-input>
               </div>
+              <div class="t-cell v_middle font14 w50 align_right">旗舰店</div>
             </div>
           </div>
           <div class="form-item bg-white fg b-top">
@@ -93,15 +93,19 @@
           <!-- 分润比例设置 -->
           <div class="form-item bg-white fg b-top">
             <div class=""><span>分润比例设置</span><span @click="clickTip"><i class="al al-wenhao color-red ml5 font24" style="vertical-align:-4px;"></i></span></div>
-            <div class="profit-level b_bottom_after">
-              <span>推荐人佣金</span>
-              <x-input class="input" type="tel" v-model="submitData.superiorrate" placeholder="输入百分比，例如10%则填写10"></x-input>
-              <div class="color-gray">%</div>
+            <div class="flex_left padding10 b_bottom_after">
+              <div class="flex_left title-cell w90">推荐人佣金</div>
+              <div class="flex_cell input-cell flex_right" style="position:relative;">
+                <x-input class="input" type="tel" v-model="submitData.superiorrate" placeholder="输入百分比，例如10%则填写10"></x-input>
+              </div>
+              <div class="flex_right color-gray" style="width:20px;">%</div>
             </div>
-            <div class="profit-level">
-              <span>销售佣金</span>
-              <x-input class="input" type="tel" v-model="submitData.salesrate" placeholder="输入百分比，例如10%则填写10"></x-input>
-              <div class="color-gray">%</div>
+            <div class="flex_left padding10">
+              <div class="flex_left title-cell w90">销售佣金</div>
+              <div class="flex_cell input-cell flex_right" style="position:relative;">
+                <x-input class="input" type="tel" v-model="submitData.salesrate" placeholder="输入百分比，例如10%则填写10"></x-input>
+              </div>
+              <div class="flex_right color-gray" style="width:20px;">%</div>
             </div>
           </div>
           <template v-if="disClassData">
@@ -167,8 +171,8 @@ export default {
       loginUser: {},
       infoData: {},
       allowsubmit: true,
-      submitData: { title: '', summary: '', shortcode: '', photo: '', superiorrate: '20', salesrate: '80' },
-      requireddata: { title: '' },
+      submitData: { company: '', summary: '', shortcode: '', photo: '', superiorrate: '20', salesrate: '80' },
+      requireddata: { company: '' },
       classData: [],
       productClass: [],
       disClassData: false,
@@ -299,7 +303,7 @@ export default {
         self.$vux.toast.text('请输入正确的分润比例', 'middle')
         return
       }
-      if (parseFloat(superiorrate) + parseFloat(salesrate) != 100) {
+      if (parseFloat(superiorrate) + parseFloat(salesrate) !== 100) {
         self.$vux.toast.text('推荐佣金+销售佣金必须等于100%', 'middle')
         return
       }

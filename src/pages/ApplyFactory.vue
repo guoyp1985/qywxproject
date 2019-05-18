@@ -332,7 +332,7 @@ export default {
         self.$vux.toast.text('请输入正确的分润比例', 'middle')
         return
       }
-      if (parseFloat(superiorrate) + parseFloat(salesrate) != 100) {
+      if (parseFloat(superiorrate) + parseFloat(salesrate) !== 100) {
         self.$vux.toast.text('推荐佣金+销售佣金必须等于100%', 'middle')
         return
       }
