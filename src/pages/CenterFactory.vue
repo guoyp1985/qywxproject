@@ -49,20 +49,20 @@ export default {
       const self = this
       self.$vux.loading.show()
       self.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
-        if (res.status === 200) {
-          self.loginUser = res.data
-          User.set(self.loginUser)
-          if (self.loginUser.subscribe !== 1) {
-            self.$vux.loading.hide()
-          } else {
-            self.showCenter = true
-            self.factoryinfo = self.loginUser.factoryinfo
+        self.loginUser = res.data
+        User.set(self.loginUser)
+        if (self.loginUser.subscribe !== 1) {
+          self.$vux.loading.hide()
+        } else {
+          self.showCenter = true
+          self.factoryinfo = self.loginUser.factoryinfo
+          if (self.factoryinfo) {
             self.endTime = new Time(self.factoryinfo.endtime * 1000).dateFormat('yyyy-MM-dd')
             let photoArr = [self.factoryinfo.photo]
             self.factoryinfo.photoArr = self.$util.previewerImgdata(photoArr)
-            self.$vux.loading.hide()
-            return self.$http.get(`${ENV.BokaApi}/api/message/newMessages`)
           }
+          self.$vux.loading.hide()
+          return self.$http.get(`${ENV.BokaApi}/api/message/newMessages`)
         }
       }).then(res => {
         if (res) {
