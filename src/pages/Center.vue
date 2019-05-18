@@ -95,7 +95,7 @@
               <span class="al al-shouhouwuyou font20"></span>
             </div>
           </grid-item>
-          <grid-item v-if="showApply && !loginUser.fid" label="申请厂家" @click.native="toLink('/ApplyFactory')">
+          <grid-item v-if="showApply && (!loginUser.fid || (loginUser.factoryinfo && loginUser.factoryinfo.moderate != 1))" label="申请厂家" @click.native="toLink('/ApplyFactory')">
             <div slot="icon" class="circle-icon-bg rgba07 color-white flex_center mb10">
               <span class="al al-shouhouwuyou font20"></span>
             </div>
@@ -263,9 +263,8 @@ export default {
         self.setUserInfo()
         if (this.loginUser.fid > 0) {
           this.showFactory = true
-        } else {
-          this.showApply = true
         }
+        this.showApply = true
         for (let i = 0; i < self.loginUser.usergroup.length; i++) {
           if (this.loginUser.usergroup[i] === 1) {
             this.showManager = true

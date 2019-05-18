@@ -13,7 +13,7 @@
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">公司名称<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
               <div class="t-cell input-cell v_middle flex_right" style="position:relative;">
-                <template v-if="factoryInfo && factoryInfo.id">{{factoryInfo.title}}</template>
+                <template v-if="factoryInfo && factoryInfo.moderate == 0">{{factoryInfo.title}}</template>
                 <x-input v-else style="padding-right:5px;" v-model="submitData.title" type="text" class="input" placeholder="请输入公司名称" ></x-input>
               </div>
             </div>
@@ -22,7 +22,7 @@
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">公司简称<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
               <div class="t-cell input-cell v_middle flex_right" style="position:relative;">
-                <template v-if="factoryInfo && factoryInfo.id">{{factoryInfo.company}}</template>
+                <template v-if="factoryInfo && factoryInfo.moderate == 0">{{factoryInfo.company}}</template>
                 <x-input v-else style="padding-right:5px;" v-model="submitData.company" type="text" class="input" placeholder="请输入公司简称" ></x-input>
               </div>
               <div class="t-cell v_middle font14 w50 align_right">旗舰店</div>
@@ -32,12 +32,12 @@
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">手机号<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
               <div class="t-cell input-cell v_middle flex_right" style="position:relative;">
-                <template v-if="factoryInfo && factoryInfo.id">{{factoryInfo.mobile}}</template>
+                <template v-if="factoryInfo && factoryInfo.moderate == 0">{{factoryInfo.mobile}}</template>
                 <x-input v-else style="padding-right:5px;" v-model="submitData.mobile" type="text" class="input" placeholder="请输入手机号" ></x-input>
               </div>
             </div>
           </div>
-          <div class="form-item fg bg-white b-top b-bottom" v-if="!factoryInfo || !factoryInfo.id">
+          <div class="form-item fg bg-white b-top b-bottom" v-if="!factoryInfo || factoryInfo.moderate != 0">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">验证码<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
               <div class="t-cell input-cell v_middle flex_right" style="position:relative;">
@@ -51,7 +51,7 @@
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">营业执照<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
               <div class="t-cell input-cell v_middle align_right" style="position:relative;">
-                <template v-if="factoryInfo && factoryInfo.id">
+                <template v-if="factoryInfo && factoryInfo.moderate == 0">
                   <div class="q_photolist align_left bg-white">
                     <div class="photoitem">
                       <div class="inner photo imgcover" :photo="factoryInfo.licensephoto" :style="`background-image: url('${factoryInfo.licensephoto}');`"></div>
@@ -77,7 +77,7 @@
             <div class="t-table">
               <div class="t-cell title-cell font14 v_middle" style="width:100px;">社会信用代码<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
               <div class="t-cell input-cell v_middle flex_right" style="position:relative;">
-                <template v-if="factoryInfo && factoryInfo.id">{{factoryInfo.licensecode}}</template>
+                <template v-if="factoryInfo && factoryInfo.moderate == 0">{{factoryInfo.licensecode}}</template>
                 <x-input v-else style="padding-right:5px;" v-model="submitData.licensecode" type="text" class="input" placeholder="请输入营业执照上的信用代码" ></x-input>
               </div>
             </div>
@@ -86,20 +86,24 @@
           <!-- 分润比例设置 -->
           <div class="form-item bg-white fg b-top">
             <div class=""><span>分润比例设置</span><span @click="clickTip"><i class="al al-wenhao color-red ml5 font24" style="vertical-align:-4px;"></i></span></div>
-            <div class="profit-level b_bottom_after flex_left">
-              <span>推荐人佣金</span>
-              <div v-if="factoryInfo && factoryInfo.id" class="input align_right">{{factoryInfo.superiorrate}}</div>
-              <x-input v-else class="input" type="tel" v-model="submitData.superiorrate" placeholder="输入百分比，例如10%则填写10"></x-input>
-              <div class="color-gray">%</div>
+            <div class="flex_left padding10 b_bottom_after">
+              <div class="flex_left title-cell w90">推荐人佣金</div>
+              <div class="flex_cell input-cell flex_right" style="position:relative;">
+                <template v-if="factoryInfo && factoryInfo.moderate == 0">{{factoryInfo.superiorrate}}</template>
+                <x-input v-else class="input" type="tel" v-model="submitData.superiorrate" placeholder="输入百分比，例如10%则填写10"></x-input>
+              </div>
+              <div class="flex_right color-gray" style="width:20px;">%</div>
             </div>
-            <div class="profit-level flex_left">
-              <span>销售佣金</span>
-              <div v-if="factoryInfo && factoryInfo.id" class="input align_right">{{factoryInfo.salesrate}}</div>
-              <x-input v-else class="input" type="tel" v-model="submitData.salesrate" placeholder="输入百分比，例如10%则填写10"></x-input>
-              <div class="color-gray">%</div>
+            <div class="flex_left padding10">
+              <div class="flex_left title-cell w90">销售佣金</div>
+              <div class="flex_cell input-cell flex_right" style="position:relative;">
+                <template v-if="factoryInfo && factoryInfo.moderate == 0">{{factoryInfo.salesrate}}</template>
+                <x-input v-else class="input" type="tel" v-model="submitData.salesrate" placeholder="输入百分比，例如10%则填写10"></x-input>
+              </div>
+              <div class="flex_right color-gray" style="width:20px;">%</div>
             </div>
           </div>
-          <template v-if="factoryInfo.id">
+          <template v-if="factoryInfo && factoryInfo.moderate == 0">
             <div class="form-item fg bg-white b-top b-bottom">
               <div class="t-table">
                 <div class="t-cell title-cell font14 v_middle" style="width:100px;">经营产品<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
@@ -125,8 +129,8 @@
       </div>
       <!-- <div class="s-bottom flex_center bg-orange color-white" @click="saveEvent">{{ $t('Submit') }}</div> -->
       <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
-        <div v-if="!factoryInfo || !factoryInfo.id" :class="`flex_cell flex_center btn-bottom-red ${this.flags ? 'disable' : ''}`" @click="saveEvent">提交申请</div>
-        <div v-else="factoryInfo.moderate == 0" class="flex_cell flex_center btn-bottom-red disable">审核中...</div>
+        <div v-if="factoryInfo && factoryInfo.id && factoryInfo.moderate == 0" class="flex_cell flex_center btn-bottom-red disable">审核中...</div>
+        <div v-else :class="`flex_cell flex_center btn-bottom-red ${this.flags ? 'disable' : ''}`" @click="saveEvent">提交申请</div>
       </div>
       <div v-if="showTip" class="auto-modal flex_center">
         <div class="modal-inner border-box" style="width:80%;">
@@ -335,31 +339,27 @@ export default {
       if (!iscontinue) {
         return false
       }
-      let con = '确认添加该厂家吗？'
-      // if (self.fid) {
-      //   con = '确认更新该厂家信息吗？'
-      //   postData.id = self.fid
-      // }
-      self.$vux.confirm.show({
-        content: con,
-        onConfirm () {
-          self.$vux.loading.show()
-          self.$http.post(`${ENV.BokaApi}/api/factory/applyFactory`, postData).then(function (res) {
-            let data = res.data
-            let error = data.flag === 1 ? '申请成功' : data.error
-            self.$vux.loading.hide()
-            self.$vux.toast.show({
-              text: error,
-              type: (data.flag !== 1 ? 'warn' : 'success'),
-              time: self.$util.delay(error),
-              onHide: function () {
-                if (data.flag === 1) {
-                  self.afterApply = true
-                }
-              }
-            })
-          })
-        }
+      if (this.factoryInfo.id) {
+        postData.id = this.factoryInfo.id
+      }
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/factory/applyFactory`, postData).then(res => {
+        let data = res.data
+        let error = data.flag === 1 ? '申请成功' : data.error
+        self.$vux.loading.hide()
+        self.$vux.toast.show({
+          text: error,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: self.$util.delay(error),
+          onHide: () => {
+            if (data.flag === 1) {
+              self.afterApply = true
+              self.loginUser.factoryinfo = data.data
+              User.set(self.loginUser)
+              self.factoryInfo = data.data
+            }
+          }
+        })
       })
     },
     getXcode () {
@@ -431,12 +431,6 @@ export default {
           data = data.data ? data.data : data
           self.classData = data
           self.productClass = []
-          // if (self.factoryInfo.productclass && self.$util.trim(self.factoryInfo.productclass) !== '') {
-          //   let idarr = self.factoryInfo.productclass.split(',')
-          //   for (let i = 0; i < idarr.length; i++) {
-          //     self.productClass.push(parseInt(idarr[i]))
-          //   }
-          // }
           if (self.factoryInfo.productclass && self.$util.trim(self.factoryInfo.productclass) !== '') {
             let classStr = []
             let idarr = self.factoryInfo.productclass.split(',')
@@ -506,7 +500,7 @@ export default {
   input{
     padding-left: 10px;
     flex: 1;
-    text-align:left;
+    text-align:right;
   }
   .weui-cell:before{display:none;}
 }
