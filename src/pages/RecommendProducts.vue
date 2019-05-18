@@ -85,26 +85,21 @@
       </template>
     </div>
     <!-- 新增按钮 -->
-    <div v-if="showApply && !loginUser.fid" class="btn-bottom" @click="closeChat">
+    <div class="btn-bottom" @click="closeChat">
       <div class="btn font14">我也要提供货源</div>
     </div>
-    <!--<div class="auto-modal flex_center wechat-modal" v-if="showRetailerWechat">
+    <div class="auto-modal flex_center wechat-modal" v-if="showSubscribe">
       <div class="modal-inner padding20 border-box" style="width:80%;">
-        <div class="align_center font18 bold pb10">成为厂家即可提供货源</div>
-        <div class="align_center font16">在客服会话回复【<span class="bold color-theme">2</span>】长按扫码关注公众号，点击菜单中的【申请厂家】提交申请即可。</div>
         <div class="align_center pt20 pb20 wechat-pic">
-          <img src="https://tossharingsales.boka.cn/minigxk/gxk_wechat.png" style="height:260px;" />
-          <span class="txt1">2</span>
-          <span class="txt2">2</span>
+          <img :src="WeixinQrcode" style="max-width:300px;" />
         </div>
-        <div class="modal-bottom">
-          <div class="w_100 h_100 bg-theme color-white font16 flex_center" style="border-radius:5px;">点击回复2获取公众号二维码</div>
-        </div>
-        <div class="close-area flex_center" @click="closeChat">
-          <span class="al al-close"></span>
+        <div class="align_center pt10 pb10" v-if="loginUser.subscribe == 1">去公众号进入厂家中心添加商品即可提供货源</div>
+        <div class="align_center pt10 pb10" v-else>关注公众号进入厂家中心添加商品即可提供货源</div>
+        <div class="close-area flex_center" @click="closeSubscribe">
+          <div class="al al-close"></div>
         </div>
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -164,7 +159,9 @@ export default {
       clickIndex: 0,
       afterSearch: false,
       showRetailerWechat: false,
-      isLoading: false
+      isLoading: false,
+      WeixinQrcode: ENV.WeixinQrcode,
+      showSubscribe: false
     }
   },
   watch: {
@@ -173,8 +170,16 @@ export default {
     }
   },
   methods: {
+    closeSubscribe () {
+      this.showSubscribe = false
+    },
     closeChat () {
-      this.$router.push({path: '/ApplyFactory'})
+      let params = this.$util.handleAppParams(this.query, {})
+      if (this.loginUser.factoryinfo && this.loginUser.factoryinfo.moderate === 1) {
+        this.showSubscribe = true
+      } else {
+        this.$router.push({path: '/applyFactory', query: params})
+      }
     },
     initData () {
       this.isFirst = false
