@@ -395,6 +395,7 @@ export default {
                 }
               }, 1000)
             } else {
+              this.getCodeIng = false
               this.$vux.toast.text(data.error)
             }
           })
@@ -456,6 +457,7 @@ export default {
       const self = this
       this.count = TimeCount
       this.message = '获取验证码'
+      this.getCodeIng = false
       clearInterval(this.intervalId)
       this.intervalId = null
       this.photoarr = []
