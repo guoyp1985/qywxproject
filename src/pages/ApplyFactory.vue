@@ -458,6 +458,7 @@ export default {
       this.message = '获取验证码'
       clearInterval(this.intervalId)
       this.intervalId = null
+      this.photoarr = []
       self.submitData = { title: '', mobile: '', company: '', licensephoto: '', licensecode: '', superiorrate: '20', salesrate: '80' }
       self.requireddata = { title: '', company: '', licensephoto: '', licensecode: '' }
     },
