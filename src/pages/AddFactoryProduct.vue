@@ -114,6 +114,18 @@
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>
           </div>
+          <div class="form-item required bg-white" v-if="!optionsData.length">
+            <div class="flex_row">
+              <div class="flex_cell">
+                <div class="t-table">
+                  <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product') }}{{ $t('Storage') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+                  <div class="t-cell input-cell v_middle" style="position:relative;">
+                    <x-input v-model="submitdata.storage" type="tel" class="input" name="storage" :placeholder="$t('Storage')" maxlength="5" size="5" ></x-input>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="form-item required bg-white">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Postage') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
@@ -410,7 +422,8 @@ export default {
       }
       this.photoarr = []
       this.photoarr1 = []
-      this.optionsData = [{title: '', photo: '', storage: ''}]
+      // this.optionsData = [{title: '', photo: '', storage: ''}]
+      this.optionsData = []
       this.selectedOptionIndex = 0
       this.optionsPhoto = []
     },

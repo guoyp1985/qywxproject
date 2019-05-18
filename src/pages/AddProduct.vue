@@ -98,7 +98,7 @@
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>
           </div>
-          <div class="form-item required bg-white">
+          <div class="form-item required bg-white" v-if="!optionsData.length">
             <div class="flex_row">
               <div class="flex_cell">
                 <div class="t-table">

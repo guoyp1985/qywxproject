@@ -261,7 +261,7 @@ export default {
         self.loginUser = res.data
         User.set(self.loginUser)
         self.setUserInfo()
-        if (this.loginUser.fid > 0) {
+        if (this.loginUser.factoryinfo && this.loginUser.factoryinfo.moderate === 1) {
           this.showFactory = true
         }
         this.showApply = true
