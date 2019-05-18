@@ -107,7 +107,7 @@
               <img class="v_middle imgcover" style="width:60px;height:60px;" :src="factoryinfo.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
             </div>
     				<div class="t-cell v_middle">
-    					<div class="distitle clamp2">{{ factoryinfo.title }}旗舰店</div>
+    					<div class="distitle clamp2">{{ factoryinfo.company }}旗舰店</div>
     					<div class="distitle clamp2 color-gray font12 mt5">{{ factoryinfo.summary }}</div>
     				</div>
           </div>
