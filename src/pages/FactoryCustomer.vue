@@ -458,6 +458,9 @@ export default {
       const self = this
       self.showApply = false
       self.showContainer = false
+      self.distabdata1 = false
+      self.tabdata1 = []
+      self.pagestart1 = 0
     },
     refresh () {
       const self = this
