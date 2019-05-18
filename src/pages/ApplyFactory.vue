@@ -357,6 +357,7 @@ export default {
               self.loginUser.factoryinfo = data.data
               User.set(self.loginUser)
               self.factoryInfo = data.data
+              self.handleProductClass()
             }
           }
         })
@@ -402,6 +403,26 @@ export default {
         }
       }
     },
+    handleProductClass () {
+      const self = this
+      self.productClass = []
+      if (self.factoryInfo.productclass && self.$util.trim(self.factoryInfo.productclass) !== '') {
+        let classStr = []
+        let idarr = self.factoryInfo.productclass.split(',')
+        for (let i = 0; i < idarr.length; i++) {
+          self.productClass.push(parseInt(idarr[i]))
+          for (let j = 0; j < self.classData.length; j++) {
+            if (parseInt(idarr[i]) === self.classData[j].id) {
+              classStr.push(self.classData[j].title)
+              break
+            }
+          }
+        }
+        if (classStr.length) {
+          self.disProductClass = classStr.join(',')
+        }
+      }
+    },
     getData () {
       const self = this
       self.$vux.loading.show()
@@ -431,23 +452,7 @@ export default {
           let data = res.data
           data = data.data ? data.data : data
           self.classData = data
-          self.productClass = []
-          if (self.factoryInfo.productclass && self.$util.trim(self.factoryInfo.productclass) !== '') {
-            let classStr = []
-            let idarr = self.factoryInfo.productclass.split(',')
-            for (let i = 0; i < idarr.length; i++) {
-              self.productClass.push(parseInt(idarr[i]))
-              for (let j = 0; j < self.classData.length; j++) {
-                if (parseInt(idarr[i]) === self.classData[j].id) {
-                  classStr.push(self.classData[j].title)
-                  break
-                }
-              }
-            }
-            if (classStr.length) {
-              self.disProductClass = classStr.join(',')
-            }
-          }
+          self.handleProductClass()
         }
       })
     },
