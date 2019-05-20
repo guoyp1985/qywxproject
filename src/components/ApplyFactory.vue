@@ -236,6 +236,8 @@ export default {
       this.$wechat.miniProgram.navigateTo({url: '/pages/subscribe'})
     },
     watchTop () {
+      console.log('in watchTop')
+      console.log(this.$route.query.from)
       if (this.loginUser.subscribe !== 1 && this.$route.query.from && !this.showTop) {
         this.showTop = true
       }
