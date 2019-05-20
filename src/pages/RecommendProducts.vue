@@ -177,7 +177,8 @@ export default {
     closeChat () {
       let params = this.$util.handleAppParams(this.query, {})
       if (this.loginUser.factoryinfo && this.loginUser.factoryinfo.moderate === 1) {
-        this.showSubscribe = true
+        params.fid = this.loginUser.factoryinfo.id
+        this.$router.push({path: '/factoryProductlist', query: params})
       } else {
         this.$router.push({path: '/centerFactory', query: params})
       }
