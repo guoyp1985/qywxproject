@@ -1,6 +1,14 @@
 <template>
   <div class="containerarea s-havebottom font14 apply-factory-page">
-    <div class="s-container" style="top:0;">
+    <div v-if="showTop && factoryInfo.moderate == 0" class="pagetop border-box db-flex top-subscribe-tip">
+      <div class="flex_cell h_100 flex_left">
+        <i class="al al-gantanhaozhong font20"></i><span>关注公众号，及时收到审核通知</span>
+      </div>
+      <div class="w80 h_100 flex_right">
+        <div class="btn flex_center" @click="toSubscribe">立即关注</div>
+      </div>
+    </div>
+    <div class="s-container" :style="`top:${(showTop && factoryInfo.moderate == 0) ? '50' : 0}px;`">
       <form enctype="multipart/form-data">
         <input ref="fileInput1" class="hide" type="file" name="files" @change="fileChange('photo')" />
       </form>
@@ -202,7 +210,8 @@ export default {
       fid: 0,
       getCodeIng: false,
       requireddata: { title: '', company: '', licensephoto: '', licensecode: '' },
-      isLoadPhoto: false
+      isLoadPhoto: false,
+      showTop: false
     }
   },
   watch: {
@@ -211,6 +220,7 @@ export default {
     },
     submitData: function () {
       console.log('in submitData watch')
+      this.watchTop()
       this.watchPhoto()
       return this.submitData
     },
@@ -222,6 +232,14 @@ export default {
     }
   },
   methods: {
+    toSubscribe () {
+      this.$wechat.miniProgram.navigateTo({url: '/pages/subscribe'})
+    },
+    watchTop () {
+      if (this.loginUser.subscribe !== 1 && this.$route.query.from && !this.showTop) {
+        this.showTop = true
+      }
+    },
     watchPhoto () {
       console.log('in watchPhoto watch')
       if (this.factoryInfo.licensephoto && this.factoryInfo.licensephoto !== '' && !this.isLoadPhoto) {

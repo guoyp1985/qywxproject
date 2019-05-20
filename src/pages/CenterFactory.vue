@@ -8,7 +8,6 @@
         <div class="pagebottom flex_center b_top_after font16">请先关注</div>
       </template>
       <div v-else-if="!loginUser.factoryinfo || loginUser.factoryinfo.moderate != 1" class="w_100 h_100 flex_center">
-        <!-- <router-link to="/applyFactory" class="bg-theme color-white flex_center font16" style="width:70%;height:35px;border-radius:20px;">申请厂家</router-link> -->
         <apply-factory
           :factory-info="factoryInfo"
           :login-user="loginUser"
@@ -85,8 +84,6 @@ export default {
       }
     },
     afterApply (data) {
-      console.log('进入到了申请成功')
-      console.log(data)
       delete this.factoryInfo.id
       this.loginUser.factoryinfo = data
       User.set(this.loginUser)
@@ -104,17 +101,13 @@ export default {
         } else {
           self.showCenter = true
           if (self.loginUser.factoryinfo) {
-            console.log('厂家信息有值')
             self.factoryInfo = self.loginUser.factoryinfo
-            console.log(self.factoryInfo)
             self.endTime = new Time(self.factoryInfo.endtime * 1000).dateFormat('yyyy-MM-dd')
             let photoArr = [self.factoryInfo.photo]
             self.factoryInfo.photoArr = self.$util.previewerImgdata(photoArr)
             for (let key in self.submitkey) {
               self.submitData[key] = self.factoryInfo[key]
             }
-            console.log('要提交的数据')
-            console.log(self.submitData)
           }
           self.$vux.loading.hide()
           return self.$http.get(`${ENV.BokaApi}/api/message/newMessages`)
