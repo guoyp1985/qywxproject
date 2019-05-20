@@ -58,8 +58,9 @@
                       <div class="w_100 clamp1 color-red">{{ $t('RMB') }} {{ item.price }}</div>
                     </div>
                     <div class="flex_right" style="width:55px;">
-                      <div v-if="!item.haveimport" class="bg-theme color-white flex_center" style="width:50px;border-radius:10px;height:25px;" @click.stop="upEvent(item, index)">上架</div>
-                      <div v-else class="bg-theme color-white flex_center" style="width:50px;border-radius:10px;height:25px;">已上架</div>
+                      <div v-if="item.haveimport == -1" class="bg-theme color-white flex_center" style="width:50px;border-radius:10px;height:25px;" @click.stop="upEvent(item, index)">上架</div>
+                      <div v-else-if="item.haveimport == 0" class="bg-theme color-white flex_center font12" style="width:50px;border-radius:10px;height:25px;" @click.stop="upEvent(item, index)">重新上架</div>
+                      <div v-else-if="item.haveimport == 1" class="bg-theme color-white flex_center" style="width:50px;border-radius:10px;height:25px;">已上架</div>
                     </div>
                   </div>
           			</div>
@@ -209,37 +210,45 @@ export default {
     afterClickOpen (data) {
       this.isFirst = false
     },
+    ajaxImport (item) {
+      const self = this
+      let params = {id: item.id}
+      if (self.query.wid) {
+        params.wid = self.query.wid
+      }
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/factory/importFactoryProduct`, params).then((res) => {
+        let data = res.data
+        self.$vux.loading.hide()
+        let error = data.error
+        if (data.flag === 1) {
+          error = '上架成功！该商品已显示在你的店铺中！'
+          this.productData[this.clickIndex].haveimport = 1
+        }
+        self.$vux.toast.show({
+          span: error,
+          type: data.flag === 1 ? 'success' : 'warn',
+          time: self.$util.delay(error),
+          onHide: () => {
+            if (this.isFirst && data.flag) {
+              this.showHb = true
+            }
+          }
+        })
+      })
+    },
     importProduct (item) {
       const self = this
-      self.$vux.confirm.show({
-        content: '确定将该商品上架到店铺并进行出售吗？',
-        onConfirm: () => {
-          self.$vux.loading.show()
-          let params = {id: item.id}
-          if (self.query.wid) {
-            params.wid = self.query.wid
+      if (item.haveimport == 0) {
+        self.ajaxImport()
+      } else {
+        self.$vux.confirm.show({
+          content: '确定将该商品上架到店铺并进行出售吗？',
+          onConfirm: () => {
+            self.ajaxImport()
           }
-          self.$http.post(`${ENV.BokaApi}/api/factory/importFactoryProduct`, params).then((res) => {
-            let data = res.data
-            self.$vux.loading.hide()
-            let error = data.error
-            if (data.flag === 1) {
-              error = '上架成功！该商品已显示在你的店铺中！'
-              this.productData[this.clickIndex].haveimport = 1
-            }
-            self.$vux.toast.show({
-              span: error,
-              type: data.flag === 1 ? 'success' : 'warn',
-              time: self.$util.delay(error),
-              onHide: () => {
-                if (this.isFirst && data.flag) {
-                  this.showHb = true
-                }
-              }
-            })
-          })
-        }
-      })
+        })
+      }
     },
     upEvent (item, index) {
       this.clickData = item
