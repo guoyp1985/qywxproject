@@ -178,7 +178,7 @@ export default {
       let params = this.$util.handleAppParams(this.query, {})
       console.log('点击了')
       console.log(this.loginUser.factoryinfo)
-      if (this.loginUser.factoryinfo && this.loginUser.factoryinfo.id && this.loginUser.factoryinfo.moderate === 1) {
+      if (this.loginUser.factoryinfo && this.loginUser.factoryinfo.moderate === 1) {
         this.showSubscribe = true
       } else {
         this.$router.push({path: '/centerFactory', query: params})

@@ -43,6 +43,7 @@ export default {
   },
   data () {
     return {
+      query: {},
       showCenter: false,
       showApply: false,
       selectedIndex: 0,
@@ -133,6 +134,7 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
       this.getData()
     }
   },
