@@ -336,7 +336,9 @@ export default {
         params.fid = this.loginUser.retailerinfo.fid
       }
       if (this.sort === 'dateline') {
-        params.orderby = 'recommendtime'
+        if (this.selectedIndex === 0) {
+          params.orderby = 'recommendtime'
+        }
         params.ascdesc = this.datecss
       } else {
         params.orderby = 'salesrebate'
@@ -345,7 +347,6 @@ export default {
       if (this.selectedIndex === 0) {
         params.recommend = 2
       } else if (this.selectedIndex === 1) {
-        // params.orderby = 'saled'
         params.from = 'origin'
       } else {
         // params.orderby = 'saled'
