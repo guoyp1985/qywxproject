@@ -503,6 +503,7 @@ export default {
     console.log('in mounted')
     this.initData()
     this.watchPhoto()
+    this.watchTop()
   }
 };
 </script>
