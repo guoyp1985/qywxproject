@@ -240,12 +240,12 @@ export default {
     importProduct (item) {
       const self = this
       if (item.haveimport === 0) {
-        self.ajaxImport()
+        self.ajaxImport(item)
       } else {
         self.$vux.confirm.show({
           content: '确定将该商品上架到店铺并进行出售吗？',
           onConfirm: () => {
-            self.ajaxImport()
+            self.ajaxImport(item)
           }
         })
       }
