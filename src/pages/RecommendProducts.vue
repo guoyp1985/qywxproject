@@ -176,6 +176,8 @@ export default {
     },
     closeChat () {
       let params = this.$util.handleAppParams(this.query, {})
+      console.log('点击了')
+      console.log(this.loginUser.factoryinfo)
       if (this.loginUser.factoryinfo && this.loginUser.factoryinfo.moderate === 1) {
         this.showSubscribe = true
       } else {
@@ -239,7 +241,7 @@ export default {
     },
     importProduct (item) {
       const self = this
-      if (item.haveimport == 0) {
+      if (item.haveimport === 0) {
         self.ajaxImport()
       } else {
         self.$vux.confirm.show({
