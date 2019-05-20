@@ -57,10 +57,10 @@
                     <div class="flex_cell flex_left">
                       <div class="w_100 clamp1 color-red">{{ $t('RMB') }} {{ item.price }}</div>
                     </div>
-                    <div class="flex_right" style="width:55px;">
-                      <div v-if="item.haveimport == -1" class="bg-theme color-white flex_center" style="width:50px;border-radius:10px;height:25px;" @click.stop="upEvent(item, index)">上架</div>
-                      <div v-else-if="item.haveimport == 0" class="bg-theme color-white flex_center font12" style="width:50px;border-radius:10px;height:25px;" @click.stop="upEvent(item, index)">重新上架</div>
-                      <div v-else-if="item.haveimport == 1" class="bg-theme color-white flex_center" style="width:50px;border-radius:10px;height:25px;">已上架</div>
+                    <div class="flex_right" style="width:60px;">
+                      <span v-if="item.haveimport == -1" class="bg-theme color-white flex_center padding5" style="border-radius:5px;" @click.stop="upEvent(item, index)">上架</span>
+                      <span v-else-if="item.haveimport == 0" class="bg-theme color-white flex_center padding5" style="border-radius:5px;" @click.stop="upEvent(item, index)">重新上架</span>
+                      <span v-else-if="item.haveimport == 1" class="bg-theme color-white flex_center padding5" style="border-radius:5px;">已上架</span>
                     </div>
                   </div>
           			</div>
