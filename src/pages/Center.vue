@@ -95,7 +95,7 @@
               <span class="al al-shouhouwuyou font20"></span>
             </div>
           </grid-item>
-          <grid-item v-if="showApply && (!loginUser.fid || (loginUser.factoryinfo && loginUser.factoryinfo.moderate != 1))" label="申请厂家" @click.native="toLink('/ApplyFactory')">
+          <grid-item v-if="showApply && (!loginUser.fid || (loginUser.factoryinfo && loginUser.factoryinfo.moderate != 1))" label="申请厂家" @click.native="toLink('/centerFactory')">
             <div slot="icon" class="circle-icon-bg rgba07 color-white flex_center mb10">
               <span class="al al-shouhouwuyou font20"></span>
             </div>

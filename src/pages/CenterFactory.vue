@@ -1,6 +1,6 @@
 <template>
   <div id="centersales" class="containerarea font14">
-    <template v-if="loginUser">
+    <template v-if="loginUser.uid">
       <template v-if="loginUser.subscribe != 1">
         <div class="pagemiddle flex_center" style="top:0;">
           <img :src="WeixinQrcode" style="max-width:90%;max-height:90%;" />
@@ -8,11 +8,21 @@
         <div class="pagebottom flex_center b_top_after font16">请先关注</div>
       </template>
       <div v-else-if="!loginUser.factoryinfo || loginUser.factoryinfo.moderate != 1" class="w_100 h_100 flex_center">
-        <router-link to="/applyFactory" class="bg-theme color-white flex_center font16" style="width:70%;height:35px;border-radius:20px;">申请厂家</router-link>
+        <!-- <router-link to="/applyFactory" class="bg-theme color-white flex_center font16" style="width:70%;height:35px;border-radius:20px;">申请厂家</router-link> -->
+        <apply-factory
+          :factory-info="factoryInfo"
+          :login-user="loginUser"
+          :classData="classData"
+          :productClass="productClass"
+          :classTitle="classTitle"
+          :submitData="submitData"
+          @clickPhoto="afterUploadPhoto"
+          @afterApply="afterApply">
+        </apply-factory>
       </div>
       <template v-else>
         <template v-if="showCenter">
-          <center-factory :factory-info="factoryinfo" :endTime="endTime" :messages="messages" :login-user="loginUser"></center-factory>
+          <center-factory :factory-info="factoryInfo" :endTime="endTime" :messages="messages" :login-user="loginUser"></center-factory>
         </template>
       </template>
     </template>
@@ -22,29 +32,66 @@
 <script>
 import { Swiper, SwiperItem } from 'vux'
 import CenterFactory from '@/components/CenterFactory'
+import ApplyFactory from '@/components/ApplyFactory'
 import ENV from 'env'
 import Time from '#/time'
-import { User } from '#/storage'
+import {User} from '#/storage'
 
 export default {
   components: {
-    Swiper, SwiperItem, CenterFactory
+    Swiper, SwiperItem, CenterFactory, ApplyFactory
   },
   data () {
     return {
       showCenter: false,
       showApply: false,
-      afterApply: false,
       selectedIndex: 0,
-      factoryinfo: {},
-      loginUser: null,
+      factoryInfo: {},
+      loginUser: {},
       classData: [],
       WeixinQrcode: ENV.WeixinQrcode,
       messages: 0,
-      endTime: ''
+      endTime: '',
+      submitkey: { title: '', mobile: '', company: '', licensephoto: '', licensecode: '', superiorrate: '20', salesrate: '80' },
+      submitData: {},
+      productClass: [],
+      classTitle: ''
     }
   },
   methods: {
+    afterUploadPhoto (photoarr) {
+      delete this.submitData.licensephoto
+      this.submitData.licensephoto = photoarr.join(',')
+    },
+    handleProductClass () {
+      const self = this
+      self.productClass = []
+      if (self.factoryInfo.productclass && self.$util.trim(self.factoryInfo.productclass) !== '') {
+        let classStr = []
+        let idarr = self.factoryInfo.productclass.split(',')
+        for (let i = 0; i < idarr.length; i++) {
+          self.productClass.push(parseInt(idarr[i]))
+          for (let j = 0; j < self.classData.length; j++) {
+            if (parseInt(idarr[i]) === self.classData[j].id) {
+              classStr.push(self.classData[j].title)
+              break
+            }
+          }
+        }
+        if (classStr.length) {
+          self.classTitle = classStr.join(',')
+        }
+      }
+    },
+    afterApply (data) {
+      console.log('进入到了申请成功')
+      console.log(data)
+      delete this.factoryInfo.id
+      this.loginUser.factoryinfo = data
+      User.set(this.loginUser)
+      this.factoryInfo = data
+      this.handleProductClass()
+    },
     getData () {
       const self = this
       self.$vux.loading.show()
@@ -55,11 +102,14 @@ export default {
           self.$vux.loading.hide()
         } else {
           self.showCenter = true
-          self.factoryinfo = self.loginUser.factoryinfo
-          if (self.factoryinfo) {
-            self.endTime = new Time(self.factoryinfo.endtime * 1000).dateFormat('yyyy-MM-dd')
-            let photoArr = [self.factoryinfo.photo]
-            self.factoryinfo.photoArr = self.$util.previewerImgdata(photoArr)
+          if (self.loginUser.factoryinfo) {
+            self.factoryInfo = self.loginUser.factoryinfo
+            self.endTime = new Time(self.factoryInfo.endtime * 1000).dateFormat('yyyy-MM-dd')
+            let photoArr = [self.factoryInfo.photo]
+            self.factoryInfo.photoArr = self.$util.previewerImgdata(photoArr)
+            for (let key in self.submitkey) {
+              self.submitData[key] = self.factoryInfo[key]
+            }
           }
           self.$vux.loading.hide()
           return self.$http.get(`${ENV.BokaApi}/api/message/newMessages`)
@@ -68,6 +118,16 @@ export default {
         if (res) {
           let data = res.data
           self.messages = data.data
+        }
+        return self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
+          { params: { limit: 100 } }
+        )
+      }).then(function (res) {
+        if (res) {
+          let data = res.data
+          data = data.data ? data.data : data
+          self.classData = data
+          self.handleProductClass()
         }
       })
     },
