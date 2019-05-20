@@ -178,7 +178,7 @@ export default {
       if (this.loginUser.factoryinfo && this.loginUser.factoryinfo.moderate === 1) {
         this.showSubscribe = true
       } else {
-        this.$router.push({path: '/applyFactory', query: params})
+        this.$router.push({path: '/centerFactory', query: params})
       }
     },
     initData () {

@@ -151,9 +151,7 @@
 <script>
 import { Group, XInput, TransferDom, Popup, Checker, Datetime, CheckerItem, CheckIcon, XTextarea } from 'vux'
 import ENV from 'env'
-import { User } from '#/storage'
 import Reg from '#/reg'
-import Sos from '@/components/Sos'
 const TimeCount = 60
 
 export default {
@@ -163,10 +161,7 @@ export default {
       type: Object,
       default: {}
     },
-    factoryInfo: {
-      type: Object,
-      default: {}
-    },
+    factoryInfo: Object,
     classData: {
       type: Array,
       default: []
@@ -175,17 +170,20 @@ export default {
       type: Object,
       default: {}
     },
-    afterUploadPhoto: Function,
     productClass: {
       type: Array,
       default: []
+    },
+    classTitle: {
+      type: String,
+      default: ''
     }
   },
   directives: {
     TransferDom
   },
   components: {
-    Group, XInput, Popup, Checker, Datetime, CheckerItem, CheckIcon, XTextarea, Sos
+    Group, XInput, Popup, Checker, Datetime, CheckerItem, CheckIcon, XTextarea
   },
   data () {
     return {
@@ -195,30 +193,25 @@ export default {
       count: 60,
       countNum: 60,
       intervalId: null,
-      showSos: false,
-      sosTitle: '抱歉，您暂无权限访问此页面！',
-      showContainer: false,
-      query: {},
       allowsubmit: true,
       yzmcode: '',
       hqyzm: '',
-      // submitData: { title: '', mobile: '', company: '', licensephoto: '', licensecode: '', superiorrate: '20', salesrate: '80' },
-      // requireddata: { title: '', company: '', licensephoto: '', licensecode: '' },
-      // productClass: [],
       photoarr: [],
       maxnum: 1,
       showTip: false,
       fid: 0,
       getCodeIng: false,
-      afterApply: false,
-      classTitle: ''
+      requireddata: { title: '', company: '', licensephoto: '', licensecode: '' },
+      isLoadPhoto: false
     }
   },
   watch: {
-    query: function () {
-      return this.query
+    factoryInfo: function () {
+      return this.factoryInfo
     },
     submitData: function () {
+      console.log('in submitData watch')
+      this.watchPhoto()
       return this.submitData
     },
     requireddata: function () {
@@ -229,6 +222,13 @@ export default {
     }
   },
   methods: {
+    watchPhoto () {
+      console.log('in watchPhoto watch')
+      if (this.factoryInfo.licensephoto && this.factoryInfo.licensephoto !== '' && !this.isLoadPhoto) {
+        this.isLoadPhoto = true
+        this.photoarr = this.factoryInfo.licensephoto.split(',')
+      }
+    },
     clickTip () {
       this.showTip = true
     },
@@ -246,14 +246,14 @@ export default {
     deletephoto (item, index) {
       const self = this
       self.photoarr.splice(index, 1)
-      self.afterUploadPhoto(self.photoarr)
+      self.$emit('clickPhoto', self.photoarr)
     },
     photoCallback (data) {
       const self = this
       if (data.flag === 1) {
         if (self.photoarr.length < self.maxnum) {
           self.photoarr.push(data.data)
-          self.afterUploadPhoto(self.photoarr)
+          self.$emit('clickPhoto', self.photoarr)
         }
       } else if (data.error) {
         self.$vux.toast.show({
@@ -333,7 +333,6 @@ export default {
         this.$vux.toast.text('验证码错误！')
         return false
       }
-      // postData.shortcode = postData.shortcode.toUpperCase()
       let superiorrate = postData.superiorrate
       let salesrate = postData.salesrate
       let reg = /^[1-9]\.?[0-9]*$/
@@ -368,11 +367,8 @@ export default {
           time: self.$util.delay(error),
           onHide: () => {
             if (data.flag === 1) {
-              self.afterApply = true
-              self.loginUser.factoryinfo = data.data
-              User.set(self.loginUser)
-              self.factoryInfo = data.data
-              self.handleProductClass()
+              self.initCode()
+              self.$emit('afterApply', data.data)
             }
           }
         })
@@ -471,34 +467,22 @@ export default {
         }
       })
     },
-    init () {
-    },
-    initData () {
-      const self = this
+    initCode () {
       this.count = TimeCount
       this.message = '获取验证码'
+      this.yzmcode = ''
       this.getCodeIng = false
       clearInterval(this.intervalId)
       this.intervalId = null
-      this.photoarr = []
-      self.submitData = { title: '', mobile: '', company: '', licensephoto: '', licensecode: '', superiorrate: '20', salesrate: '80' }
-      self.requireddata = { title: '', company: '', licensephoto: '', licensecode: '' }
     },
-    refresh () {
-      const self = this
-      this.$vux.loading.show()
-      this.loginUser = User.get()
-      self.query = self.$route.query
-      self.initData()
-      self.getData()
+    initData () {
+      this.initCode()
     }
   },
-  created () {
-    // this.init()
-  },
-  activated () {
-    // this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-    // this.refresh()
+  mounted () {
+    console.log('in mounted')
+    this.initData()
+    this.watchPhoto()
   }
 };
 </script>

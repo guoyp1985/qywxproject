@@ -10,17 +10,19 @@
       <div v-else-if="!loginUser.factoryinfo || loginUser.factoryinfo.moderate != 1" class="w_100 h_100 flex_center">
         <!-- <router-link to="/applyFactory" class="bg-theme color-white flex_center font16" style="width:70%;height:35px;border-radius:20px;">申请厂家</router-link> -->
         <apply-factory
-          :factory-info="factoryinfo"
+          :factory-info="factoryInfo"
           :login-user="loginUser"
           :classData="classData"
           :productClass="productClass"
+          :classTitle="classTitle"
           :submitData="submitData"
-          @afterUploadPhoto="photoCallback">
+          @clickPhoto="afterUploadPhoto"
+          @afterApply="afterApply">
         </apply-factory>
       </div>
       <template v-else>
         <template v-if="showCenter">
-          <center-factory :factory-info="factoryinfo" :endTime="endTime" :messages="messages" :login-user="loginUser"></center-factory>
+          <center-factory :factory-info="factoryInfo" :endTime="endTime" :messages="messages" :login-user="loginUser"></center-factory>
         </template>
       </template>
     </template>
@@ -43,21 +45,52 @@ export default {
     return {
       showCenter: false,
       showApply: false,
-      afterApply: false,
       selectedIndex: 0,
-      factoryinfo: {},
+      factoryInfo: {},
       loginUser: {},
       classData: [],
       WeixinQrcode: ENV.WeixinQrcode,
       messages: 0,
       endTime: '',
-      submitData: { title: '', mobile: '', company: '', licensephoto: '', licensecode: '', superiorrate: '20', salesrate: '80' },
-      productClass: []
+      submitkey: { title: '', mobile: '', company: '', licensephoto: '', licensecode: '', superiorrate: '20', salesrate: '80' },
+      submitData: {},
+      productClass: [],
+      classTitle: ''
     }
   },
   methods: {
-    photoCallback (photoarr) {
+    afterUploadPhoto (photoarr) {
+      delete this.submitData.licensephoto
       this.submitData.licensephoto = photoarr.join(',')
+    },
+    handleProductClass () {
+      const self = this
+      self.productClass = []
+      if (self.factoryInfo.productclass && self.$util.trim(self.factoryInfo.productclass) !== '') {
+        let classStr = []
+        let idarr = self.factoryInfo.productclass.split(',')
+        for (let i = 0; i < idarr.length; i++) {
+          self.productClass.push(parseInt(idarr[i]))
+          for (let j = 0; j < self.classData.length; j++) {
+            if (parseInt(idarr[i]) === self.classData[j].id) {
+              classStr.push(self.classData[j].title)
+              break
+            }
+          }
+        }
+        if (classStr.length) {
+          self.classTitle = classStr.join(',')
+        }
+      }
+    },
+    afterApply (data) {
+      console.log('进入到了申请成功')
+      console.log(data)
+      delete this.factoryInfo.id
+      this.loginUser.factoryinfo = data
+      User.set(this.loginUser)
+      this.factoryInfo = data
+      this.handleProductClass()
     },
     getData () {
       const self = this
@@ -70,10 +103,13 @@ export default {
         } else {
           self.showCenter = true
           if (self.loginUser.factoryinfo) {
-            self.factoryinfo = self.loginUser.factoryinfo
-            self.endTime = new Time(self.factoryinfo.endtime * 1000).dateFormat('yyyy-MM-dd')
-            let photoArr = [self.factoryinfo.photo]
-            self.factoryinfo.photoArr = self.$util.previewerImgdata(photoArr)
+            self.factoryInfo = self.loginUser.factoryinfo
+            self.endTime = new Time(self.factoryInfo.endtime * 1000).dateFormat('yyyy-MM-dd')
+            let photoArr = [self.factoryInfo.photo]
+            self.factoryInfo.photoArr = self.$util.previewerImgdata(photoArr)
+            for (let key in self.submitkey) {
+              self.submitData[key] = self.factoryInfo[key]
+            }
           }
           self.$vux.loading.hide()
           return self.$http.get(`${ENV.BokaApi}/api/message/newMessages`)
@@ -91,7 +127,7 @@ export default {
           let data = res.data
           data = data.data ? data.data : data
           self.classData = data
-          // self.handleProductClass()
+          self.handleProductClass()
         }
       })
     },
