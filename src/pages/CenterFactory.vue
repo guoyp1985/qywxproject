@@ -104,13 +104,17 @@ export default {
         } else {
           self.showCenter = true
           if (self.loginUser.factoryinfo) {
+            console.log('厂家信息有值')
             self.factoryInfo = self.loginUser.factoryinfo
+            console.log(self.factoryInfo)
             self.endTime = new Time(self.factoryInfo.endtime * 1000).dateFormat('yyyy-MM-dd')
             let photoArr = [self.factoryInfo.photo]
             self.factoryInfo.photoArr = self.$util.previewerImgdata(photoArr)
             for (let key in self.submitkey) {
               self.submitData[key] = self.factoryInfo[key]
             }
+            console.log('要提交的数据')
+            console.log(self.submitData)
           }
           self.$vux.loading.hide()
           return self.$http.get(`${ENV.BokaApi}/api/message/newMessages`)
