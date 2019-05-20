@@ -1,6 +1,6 @@
 <template>
   <div id="centersales" class="containerarea font14">
-    <template v-if="loginUser">
+    <template v-if="loginUser.uid">
       <template v-if="loginUser.subscribe != 1">
         <div class="pagemiddle flex_center" style="top:0;">
           <img :src="WeixinQrcode" style="max-width:90%;max-height:90%;" />
@@ -8,7 +8,15 @@
         <div class="pagebottom flex_center b_top_after font16">请先关注</div>
       </template>
       <div v-else-if="!loginUser.factoryinfo || loginUser.factoryinfo.moderate != 1" class="w_100 h_100 flex_center">
-        <router-link to="/applyFactory" class="bg-theme color-white flex_center font16" style="width:70%;height:35px;border-radius:20px;">申请厂家</router-link>
+        <!-- <router-link to="/applyFactory" class="bg-theme color-white flex_center font16" style="width:70%;height:35px;border-radius:20px;">申请厂家</router-link> -->
+        <apply-factory
+          :factory-info="factoryinfo"
+          :login-user="loginUser"
+          :classData="classData"
+          :productClass="productClass"
+          :submitData="submitData"
+          @afterUploadPhoto="photoCallback">
+        </apply-factory>
       </div>
       <template v-else>
         <template v-if="showCenter">
@@ -22,13 +30,14 @@
 <script>
 import { Swiper, SwiperItem } from 'vux'
 import CenterFactory from '@/components/CenterFactory'
+import ApplyFactory from '@/components/ApplyFactory'
 import ENV from 'env'
 import Time from '#/time'
-import { User } from '#/storage'
+import {User} from '#/storage'
 
 export default {
   components: {
-    Swiper, SwiperItem, CenterFactory
+    Swiper, SwiperItem, CenterFactory, ApplyFactory
   },
   data () {
     return {
@@ -37,14 +46,19 @@ export default {
       afterApply: false,
       selectedIndex: 0,
       factoryinfo: {},
-      loginUser: null,
+      loginUser: {},
       classData: [],
       WeixinQrcode: ENV.WeixinQrcode,
       messages: 0,
-      endTime: ''
+      endTime: '',
+      submitData: { title: '', mobile: '', company: '', licensephoto: '', licensecode: '', superiorrate: '20', salesrate: '80' },
+      productClass: []
     }
   },
   methods: {
+    photoCallback (photoarr) {
+      this.submitData.licensephoto = photoarr.join(',')
+    },
     getData () {
       const self = this
       self.$vux.loading.show()
@@ -55,8 +69,8 @@ export default {
           self.$vux.loading.hide()
         } else {
           self.showCenter = true
-          self.factoryinfo = self.loginUser.factoryinfo
-          if (self.factoryinfo) {
+          if (self.loginUser.factoryinfo) {
+            self.factoryinfo = self.loginUser.factoryinfo
             self.endTime = new Time(self.factoryinfo.endtime * 1000).dateFormat('yyyy-MM-dd')
             let photoArr = [self.factoryinfo.photo]
             self.factoryinfo.photoArr = self.$util.previewerImgdata(photoArr)
@@ -68,6 +82,16 @@ export default {
         if (res) {
           let data = res.data
           self.messages = data.data
+        }
+        return self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
+          { params: { limit: 100 } }
+        )
+      }).then(function (res) {
+        if (res) {
+          let data = res.data
+          data = data.data ? data.data : data
+          self.classData = data
+          // self.handleProductClass()
         }
       })
     },

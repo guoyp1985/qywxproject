@@ -931,11 +931,13 @@ export default {
       this.isfavorite = !this.isfavorite
     },
     buyevent (buytype) {
-      if (buytype && buytype !== '') {
+      if (buytype === 'group' || buytype === 'groupbuy') {
         this.clickBuytype = buytype
       } else {
         this.clickBuytype = null
       }
+      console.log('buytype')
+      console.log(this.clickBuytype)
       if (this.productdata.options.length) {
         if (!this.selectedOption || !this.selectedOption.id) {
           this.selectedOption = this.productdata.options[0]
