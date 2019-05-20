@@ -1,7 +1,7 @@
 <template>
   <div id="centersales" class="containerarea font14">
     <template v-if="loginUser.uid">
-      <template v-if="loginUser.subscribe != 1">
+      <template v-if="loginUser.subscribe != 1 && !query.from">
         <div class="pagemiddle flex_center" style="top:0;">
           <img :src="WeixinQrcode" style="max-width:90%;max-height:90%;" />
         </div>
