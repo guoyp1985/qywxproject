@@ -108,7 +108,7 @@
           </div>
         </div>
         <template v-if="factoryInfo && factoryInfo.moderate == 0">
-          <div class="form-item fg bg-white b-top b-bottom">
+          <div class="form-item fg bg-white b-top b-bottom mb5">
             <div class="t-table">
               <div class="t-cell title-cell font14 v_middle" style="width:100px;">经营产品<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
               <div class="t-cell input-cell v_middle flex_table" style="position:relative;">{{classTitle}}</div>
@@ -116,7 +116,7 @@
           </div>
         </template>
         <template v-else>
-          <div class="form-item required border-box bg-white padding10 fg b-top" v-if="classData.length > 0">
+          <div class="form-item required border-box bg-white padding10 fg b-top mb5" v-if="classData.length > 0">
             <div class="pb10">经营产品<span class="color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
             <checker
             class="x-checker"
@@ -236,14 +236,11 @@ export default {
       this.$wechat.miniProgram.navigateTo({url: '/pages/subscribe'})
     },
     watchTop () {
-      console.log('in watchTop')
-      console.log(this.$route.query.from)
       if (this.loginUser.subscribe !== 1 && this.$route.query.from && !this.showTop) {
         this.showTop = true
       }
     },
     watchPhoto () {
-      console.log('in watchPhoto watch')
       if (this.factoryInfo.licensephoto && this.factoryInfo.licensephoto !== '' && !this.isLoadPhoto) {
         this.isLoadPhoto = true
         this.photoarr = this.factoryInfo.licensephoto.split(',')
