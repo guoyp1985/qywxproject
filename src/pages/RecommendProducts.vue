@@ -137,7 +137,6 @@ export default {
       loginUser: {},
       userInfo: {},
       divData: {},
-      showApply: false,
       disProductData: false,
       productData: [],
       classData: [],
@@ -388,18 +387,16 @@ export default {
       this.query = this.$route.query
       this.loginUser = User.get()
       this.initData()
-      if ((`${this.loginUser.retailerinfo.firstinfo.importproduct}` === '0' && this.query.from) || !this.loginUser.retailerinfo.vipvalidate) {
-        this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
-          const data = res.data
-          this.loginUser = data
-          console.log('SHUSDNAKSD SDA:')
-          console.log(this.loginUser)
-          User.set(data)
-          if (`${this.loginUser.retailerinfo.firstinfo.importproduct}` === '0' && this.query.from) {
-            this.isFirst = true
-          }
-        })
-      }
+      this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
+        const data = res.data
+        this.loginUser = data
+        console.log('SHUSDNAKSD SDA:')
+        console.log(this.loginUser)
+        User.set(data)
+        if (`${this.loginUser.retailerinfo.firstinfo.importproduct}` === '0' && this.query.from) {
+          this.isFirst = true
+        }
+      })
       if (!self.classData.length) {
         self.$http.get(`${ENV.BokaApi}/api/list/productclass?ascdesc=asc`, { params: { pagestart: pageStart, limit: 500 } }).then((res) => {
           self.$vux.loading.hide()
@@ -414,23 +411,10 @@ export default {
           self.getData1()
         })
       }
-    },
-    getData2 () {
-      this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
-        const data = res.data
-        this.userInfo = data
-        if (this.userInfo.fid > 0) {
-          this.showApply = false
-        } else {
-          this.showApply = true
-        }
-      })
     }
   },
   created () {
     self = this
-    this.refresh()
-    self.getData2()
   },
   activated () {
     this.$refs.scrollContainer.scrollTop = this.pageTop
@@ -440,6 +424,7 @@ export default {
     this.$util.getSystemParams(() => {
       this.sysParams = SystemParams.get()
     })
+    this.refresh()
   },
   beforeRouteLeave (to, from, next) {
     this.pageTop = this.$refs.scrollContainer.scrollTop
