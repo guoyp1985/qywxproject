@@ -99,7 +99,7 @@ export default {
       self.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
         self.loginUser = res.data
         User.set(self.loginUser)
-        if (self.loginUser.subscribe !== 1) {
+        if (self.loginUser.subscribe !== 1 && !self.query.from) {
           self.$vux.loading.hide()
         } else {
           self.showCenter = true
