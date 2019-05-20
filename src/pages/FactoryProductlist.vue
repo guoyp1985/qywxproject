@@ -21,7 +21,7 @@
           </template>
           <template v-else>
             <div class="scroll_list ">
-              <router-link :to="{path:'/factoryProduct',query:{id: item.id, fid: query.fid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
+              <div @click="toFactoryProduct(item)" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
                 <div v-if="item.moderate == 0" class="ico down"></div>
             		<div class="t-table bg-white pt10 pb10">
             			<div class="t-cell pl12 v_middle" style="width:110px;">
@@ -45,13 +45,13 @@
                     </div>
             			</div>
             		</div>
-              </router-link>
+              </div>
             </div>
           </template>
         </template>
       </div>
       <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
-        <router-link class="addproduct flex_cell flex_center btn-bottom-red" :to="{path: '/addFactoryProduct', query: {fid: query.fid}}">{{ $t('Add product') }}</router-link>
+        <div class="addproduct flex_cell flex_center btn-bottom-red" @click="toAdd">{{ $t('Add product') }}</div>
       </div>
       <div v-transfer-dom>
         <popup class="menuwrap" v-model="showpopup1">
@@ -140,6 +140,14 @@ export default {
     }
   },
   methods: {
+    toFactoryProduct (item) {
+      let params = this.$util.handleAppParams(this.query, {id: item.id, fid: this.query.fid})
+      this.$router.push({path: '/factoryProduct', query: params})
+    },
+    toAdd () {
+      let params = this.$util.handleAppParams(this.query, {fid: this.query.fid})
+      this.$router.push({path: '/addFactoryProduct', query: params})
+    },
     getPhoto (src) {
       return this.$util.getPhoto(src)
     },
