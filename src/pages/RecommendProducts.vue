@@ -176,8 +176,6 @@ export default {
     },
     closeChat () {
       let params = this.$util.handleAppParams(this.query, {})
-      console.log('点击了')
-      console.log(this.loginUser.factoryinfo)
       if (this.loginUser.factoryinfo && this.loginUser.factoryinfo.moderate === 1) {
         this.showSubscribe = true
       } else {
