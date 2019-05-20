@@ -431,12 +431,6 @@ export default {
     this.tabLeft = document.querySelector('.vux-tab').scrollLeft
     next()
   }
-  /*
-  activated () {
-    self = this
-    this.refresh()
-  }
-  */
 }
 </script>
 
