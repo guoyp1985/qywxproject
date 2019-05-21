@@ -17,12 +17,12 @@
               </div>
             </div>
             <template v-if="item.video && item.video != ''">
-              <div class="picitem more" @click="clickPlay('productVideo')">
+              <div class="picitem more" @click="clickPlay('productVideo', item)">
                 <div class="inner align_center" style="border:1px solid #e5e5e5;line-height:95px;">
                   <i class="al al-bofang"></i>
                 </div>
               </div>
-              <div v-if="playVideo" class="videoarea">
+              <div v-if="item.playvideo" class="videoarea">
                 <video
                   ref="productVideo"
                   :src="item.video"
@@ -36,7 +36,7 @@
                   x5-video-player-fullscreen="true"
                   x5-video-orientation="portrait">
                 </video>
-                <div class="close-icon flex_center" @click="stopPlay('productVideo')">关闭</div>
+                <div class="close-icon flex_center" @click="stopPlay('productVideo', item)">关闭</div>
               </div>
             </template>
             <template v-if="item.photoarr.length > 0">
@@ -135,15 +135,17 @@ export default {
         }, 200)
       }
     },
-    clickPlay (refname) {
+    clickPlay (refname, item) {
       const self = this
-      this.playVideo = true
+      // this.playVideo = true
+      item.playvideo = true
       setTimeout(function () {
         self.$refs[refname][0].play()
       }, 100)
     },
-    stopPlay (refname) {
-      this.playVideo = false
+    stopPlay (refname, item) {
+      // this.playVideo = false
+      item.playvideo = false
     },
     refresh () {
       this.tlData = []
@@ -160,6 +162,7 @@ export default {
           let photoarr = []
           let photo = retdata[i].contentphoto
           this.video = retdata[i].video
+          retdata[i].playvideo = false
           retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd hh:mm')
           if (photo && this.$util.trim(photo) !== '') {
             photoarr = photo.split(',')
@@ -218,7 +221,7 @@ export default {
   .tlitem{border-bottom:1px solid #e5e5e5;}
   .videoarea{position:absolute;left:0;top:0;right:0;bottom:0;background-color:#000;color:#fff;}
   .videoarea video{position:absolute;width:100%;height:100%;}
-  .videoarea .close-icon{position:absolute;left:50%;top:7px;width:60px;height:30px;margin-left:-30px;background-color:#232323;color:#fff;border-radius:10px;}
+  .videoarea .close-icon{position:absolute;left:50%;top:7px;width:60px;height:30px;margin-left:-30px;background-color:rgba(0,0,0,0.3);color:#fff;border-radius:10px;}
   .play-icon{width:110px;height:110px;border:1px solid #e5e5e5;}
   .timelinelist:last-child{margin-bottom:50px;}
 }
