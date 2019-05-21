@@ -22,14 +22,14 @@
                   <i class="al al-bofang"></i>
                 </div>
               </div>
+              <!-- webkit-playsinline=""
+              playsinline="true" -->
               <div v-if="item.playvideo" class="videoarea">
                 <video
                   ref="productVideo"
                   :src="item.video"
                   controls
                   autoplay="true"
-                  webkit-playsinline=""
-                  playsinline="true"
                   x-webkit-airplay="true"
                   raw-controls=""
                   x5-video-player-type="h5"
@@ -216,7 +216,7 @@ export default {
   }
   .addsucai{width:100%;height:30px;background-color:#ff6a61;color:#fff;text-align:center;border-radius:20px;line-height:30px;}
   .tlitem{border-bottom:1px solid #e5e5e5;}
-  .videoarea{position:absolute;left:0;top:0;right:0;bottom:0;background-color:#000;color:#fff;}
+  .videoarea{position:absolute;left:0;top:0;right:0;bottom:0;background-color:#000;color:#fff;z-index:10;}
   .videoarea video{position:absolute;width:100%;height:100%;}
   .videoarea .close-icon{position:absolute;left:50%;top:7px;width:60px;height:30px;margin-left:-30px;background-color:rgba(0,0,0,0.3);color:#fff;border-radius:10px;}
   .play-icon{width:110px;height:110px;border:1px solid #e5e5e5;}
