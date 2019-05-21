@@ -125,12 +125,14 @@
         </div>
       </div>
       <div v-if="loginUser.isretailer" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
-        <div class="align_center flex_center flex_cell" v-if="!loginUser.retailerinfo.fid || loginUser.retailerinfo.fid == query.fid">
-          <div class="btn-bottom-red flex_center" style="width:80%;" v-if="productdata.haveimport">已上架</div>
-          <div class="btn-bottom-red flex_center" style="width:80%;" v-else @click="importEvent">上架到店铺</div>
+        <!-- <div class="align_center flex_center flex_cell" v-if="!loginUser.retailerinfo.fid || loginUser.retailerinfo.fid == query.fid"> -->
+        <div class="align_center flex_center flex_cell">
+          <div class="btn-bottom-red flex_center" style="width:90%;" v-if="productdata.haveimport == 1">已上架</div>
+          <div class="btn-bottom-red flex_center" style="width:90%;" v-else-if="productdata.haveimport == -1" @click="importEvent">上架到店铺</div>
+          <div class="btn-bottom-red flex_center" style="width:90%;" v-else-if="productdata.haveimport == 0" @click="importEvent">重新上架到店铺</div>
         </div>
         <div class="align_center flex_center flex_cell">
-          <div @click="toStore" class="btn-bottom-orange flex_center" style="width:80%;">我的店铺</div>
+          <div @click="toStore" class="btn-bottom-orange flex_center" style="width:90%;">我的店铺</div>
         </div>
       </div>
       <div v-transfer-dom>
@@ -470,37 +472,45 @@ export default {
       shareData.data = self.productdata
       self.$util.handleWxShare(shareData)
     },
+    ajaxImport () {
+      const self = this
+      let params = {id: self.query.id}
+      if (self.query.wid) {
+        params.wid = self.query.wid
+      }
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/factory/importFactoryProduct`, params).then((res) => {
+        let data = res.data
+        self.$vux.loading.hide()
+        let error = data.error
+        if (data.flag === 1) {
+          error = '上架成功！该商品已显示在你的店铺中！'
+          self.productdata.haveimport = 1
+        }
+        self.$vux.toast.show({
+          text: error,
+          type: data.flag === 1 ? 'success' : 'warn',
+          time: self.$util.delay(error),
+          onHide: () => {
+            if (this.isFirst && data.flag) {
+              this.showHb = true
+            }
+          }
+        })
+      })
+    },
     importProduct () {
       const self = this
-      self.$vux.confirm.show({
-        content: '确定将该商品上架到店铺并进行出售吗？',
-        onConfirm: () => {
-          self.$vux.loading.show()
-          let params = {id: self.query.id}
-          if (self.query.wid) {
-            params.wid = self.query.wid
+      if (self.productdata.haveimport === 0) {
+        self.ajaxImport()
+      } else {
+        self.$vux.confirm.show({
+          content: '确定将该商品上架到店铺并进行出售吗？',
+          onConfirm: () => {
+            self.ajaxImport()
           }
-          self.$http.post(`${ENV.BokaApi}/api/factory/importFactoryProduct`, params).then((res) => {
-            let data = res.data
-            self.$vux.loading.hide()
-            let error = data.error
-            if (data.flag === 1) {
-              error = '上架成功！该商品已显示在你的店铺中！'
-              self.productdata.haveimport = 1
-            }
-            self.$vux.toast.show({
-              text: error,
-              type: data.flag === 1 ? 'success' : 'warn',
-              time: self.$util.delay(error),
-              onHide: () => {
-                if (this.isFirst && data.flag) {
-                  this.showHb = true
-                }
-              }
-            })
-          })
-        }
-      })
+        })
+      }
     },
     importEvent () {
       if (!this.loginUser.isretailer || !this.retailerInfo.vipvalidate) {

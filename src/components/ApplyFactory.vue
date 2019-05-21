@@ -1,6 +1,14 @@
 <template>
   <div class="containerarea s-havebottom font14 apply-factory-page">
-    <div class="s-container" style="top:0;">
+    <div v-if="showTop && factoryInfo.moderate == 0" class="pagetop border-box db-flex top-subscribe-tip">
+      <div class="flex_cell h_100 flex_left">
+        <i class="al al-gantanhaozhong font20"></i><span>关注公众号，及时收到审核通知</span>
+      </div>
+      <div class="w80 h_100 flex_right">
+        <div class="btn flex_center" @click="toSubscribe">立即关注</div>
+      </div>
+    </div>
+    <div class="s-container" :style="`top:${(showTop && factoryInfo.moderate == 0) ? '50' : 0}px;`">
       <form enctype="multipart/form-data">
         <input ref="fileInput1" class="hide" type="file" name="files" @change="fileChange('photo')" />
       </form>
@@ -100,7 +108,7 @@
           </div>
         </div>
         <template v-if="factoryInfo && factoryInfo.moderate == 0">
-          <div class="form-item fg bg-white b-top b-bottom">
+          <div class="form-item fg bg-white b-top b-bottom mb5">
             <div class="t-table">
               <div class="t-cell title-cell font14 v_middle" style="width:100px;">经营产品<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
               <div class="t-cell input-cell v_middle flex_table" style="position:relative;">{{classTitle}}</div>
@@ -108,7 +116,7 @@
           </div>
         </template>
         <template v-else>
-          <div class="form-item required border-box bg-white padding10 fg b-top" v-if="classData.length > 0">
+          <div class="form-item required border-box bg-white padding10 fg b-top mb5" v-if="classData.length > 0">
             <div class="pb10">经营产品<span class="color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
             <checker
             class="x-checker"
@@ -202,7 +210,8 @@ export default {
       fid: 0,
       getCodeIng: false,
       requireddata: { title: '', company: '', licensephoto: '', licensecode: '' },
-      isLoadPhoto: false
+      isLoadPhoto: false,
+      showTop: false
     }
   },
   watch: {
@@ -211,6 +220,7 @@ export default {
     },
     submitData: function () {
       console.log('in submitData watch')
+      this.watchTop()
       this.watchPhoto()
       return this.submitData
     },
@@ -222,8 +232,15 @@ export default {
     }
   },
   methods: {
+    toSubscribe () {
+      this.$wechat.miniProgram.navigateTo({url: '/pages/subscribe'})
+    },
+    watchTop () {
+      if (this.loginUser.subscribe !== 1 && this.$route.query.from && !this.showTop) {
+        this.showTop = true
+      }
+    },
     watchPhoto () {
-      console.log('in watchPhoto watch')
       if (this.factoryInfo.licensephoto && this.factoryInfo.licensephoto !== '' && !this.isLoadPhoto) {
         this.isLoadPhoto = true
         this.photoarr = this.factoryInfo.licensephoto.split(',')
@@ -483,6 +500,7 @@ export default {
     console.log('in mounted')
     this.initData()
     this.watchPhoto()
+    this.watchTop()
   }
 };
 </script>

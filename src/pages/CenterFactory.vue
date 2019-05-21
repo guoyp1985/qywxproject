@@ -1,14 +1,13 @@
 <template>
   <div id="centersales" class="containerarea font14">
     <template v-if="loginUser.uid">
-      <template v-if="loginUser.subscribe != 1">
+      <template v-if="loginUser.subscribe != 1 && !query.from">
         <div class="pagemiddle flex_center" style="top:0;">
           <img :src="WeixinQrcode" style="max-width:90%;max-height:90%;" />
         </div>
         <div class="pagebottom flex_center b_top_after font16">请先关注</div>
       </template>
       <div v-else-if="!loginUser.factoryinfo || loginUser.factoryinfo.moderate != 1" class="w_100 h_100 flex_center">
-        <!-- <router-link to="/applyFactory" class="bg-theme color-white flex_center font16" style="width:70%;height:35px;border-radius:20px;">申请厂家</router-link> -->
         <apply-factory
           :factory-info="factoryInfo"
           :login-user="loginUser"
@@ -43,6 +42,7 @@ export default {
   },
   data () {
     return {
+      query: {},
       showCenter: false,
       showApply: false,
       selectedIndex: 0,
@@ -84,8 +84,6 @@ export default {
       }
     },
     afterApply (data) {
-      console.log('进入到了申请成功')
-      console.log(data)
       delete this.factoryInfo.id
       this.loginUser.factoryinfo = data
       User.set(this.loginUser)
@@ -98,7 +96,7 @@ export default {
       self.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
         self.loginUser = res.data
         User.set(self.loginUser)
-        if (self.loginUser.subscribe !== 1) {
+        if (self.loginUser.subscribe !== 1 && !self.query.from) {
           self.$vux.loading.hide()
         } else {
           self.showCenter = true
@@ -133,6 +131,7 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
       this.getData()
     }
   },

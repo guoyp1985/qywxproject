@@ -788,18 +788,18 @@ export default {
           postdata.id = self.query.id
         }
         postdata.fid = self.query.fid
-        self.$http.post(`${ENV.BokaApi}/api/add/factoryproduct`, postdata).then(function (res) {
+        self.$http.post(`${ENV.BokaApi}/api/add/factoryproduct`, postdata).then(res => {
           let data = res.data
           self.$vux.loading.hide()
           self.$vux.toast.show({
             text: data.error,
             type: data.flag !== 1 ? 'warn' : 'success',
             time: self.$util.delay(data.error),
-            onHide: function () {
+            onHide: () => {
               self.submitIng = false
               if (data.flag === 1) {
-                // self.$router.push({ path: '/factoryAgentFee', query: { id: data.data, fid: self.query.fid, from: 'add' } })
-                self.$router.push({ path: '/factoryProduct', query: { id: data.data, fid: self.query.fid } })
+                let rparams = self.$util.handleAppParams(self.query, {id: data.data, fid: self.query.fid})
+                self.$router.push({path: '/factoryProduct', query: rparams})
               }
             }
           })
