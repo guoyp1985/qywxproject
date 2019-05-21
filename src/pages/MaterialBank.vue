@@ -215,7 +215,7 @@ export default {
   .addsucai{width:100%;height:30px;background-color:#ff6a61;color:#fff;text-align:center;border-radius:20px;line-height:30px;}
   .tlitem{border-bottom:1px solid #e5e5e5;}
   .videoarea{position:absolute;left:0;top:0;right:0;bottom:0;z-index:9999;background-color:#000;color:#fff;}
-  .videoarea video{position: absolute;width: 100%;height: 100%;}
+  .videoarea video{position:fixed;bottom:0;}
   .videoarea .close-icon{position:absolute;left:50%;top:7px;width:60px;height:30px;margin-left:-30px;background-color:#232323;color:#fff;border-radius:10px;}
   .picitem video{width:100px;height:100px;}
   .play-icon{width:110px;height:110px;border:1px solid #e5e5e5;}
