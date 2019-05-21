@@ -74,8 +74,6 @@ export default {
     return {
       tlData: [],
       id: 0,
-      video: '',
-      photoarr1: [],
       userInfo: {},
       disShow: false,
       playVideo: false
@@ -161,7 +159,6 @@ export default {
         for (var i = 0; i < retdata.length; i++) {
           let photoarr = []
           let photo = retdata[i].contentphoto
-          this.video = retdata[i].video
           retdata[i].playvideo = false
           retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd hh:mm')
           if (photo && this.$util.trim(photo) !== '') {
