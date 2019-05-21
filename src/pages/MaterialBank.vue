@@ -2,22 +2,7 @@
   <div class="containerarea font14 bg-white materialbank" v-if="disShow">
     <div v-if="!tlData || tlData.length == 0" class="flex_center font16 mt20">暂无素材数据</div>
     <div v-else class="timelinelist" v-for="(item, index) in tlData" :key="index">
-      <div v-if="playVideo" class="videoarea">
-        <video
-          ref="productVideo"
-          :src="item.video"
-          controls
-          autoplay="true"
-          webkit-playsinline=""
-          playsinline="true"
-          x-webkit-airplay="true"
-          raw-controls=""
-          x5-video-player-type="h5"
-          x5-video-player-fullscreen="true"
-          x5-video-orientation="portrait">
-        </video>
-        <div class="close-icon flex_center" @click="stopPlay('productVideo')">关闭</div>
-      </div>
+
       <div class="tlitem">
         <div class="avatar"><img :src="item.uploaderavatar" /></div>
         <div class="con">
@@ -36,6 +21,22 @@
               <div class="picitem more" @click="clickPlay('productVideo')">
                 <div class="inner align_center" style="border:1px solid #e5e5e5;line-height:95px;">
                   <i class="al al-bofang"></i>
+                </div>
+                <div v-if="playVideo" class="videoarea">
+                  <video
+                    ref="productVideo"
+                    :src="item.video"
+                    controls
+                    autoplay="true"
+                    webkit-playsinline=""
+                    playsinline="true"
+                    x-webkit-airplay="true"
+                    raw-controls=""
+                    x5-video-player-type="h5"
+                    x5-video-player-fullscreen="true"
+                    x5-video-orientation="portrait">
+                  </video>
+                  <div class="close-icon flex_center" @click="stopPlay('productVideo')">关闭</div>
                 </div>
               </div>
             </template>
@@ -214,10 +215,10 @@ export default {
   }
   .addsucai{width:100%;height:30px;background-color:#ff6a61;color:#fff;text-align:center;border-radius:20px;line-height:30px;}
   .tlitem{border-bottom:1px solid #e5e5e5;}
-  .videoarea{position:absolute;left:0;top:0;right:0;bottom:0;z-index:9999;background-color:#000;color:#fff;}
-  .videoarea video{position:fixed;bottom:0;}
+  .videoarea{position:absolute;left:0;top:0;right:0;bottom:0;background-color:#000;color:#fff;}
+  .videoarea video{position: absolute;width: 100%;height: 100%;z-index:9999;}
   .videoarea .close-icon{position:absolute;left:50%;top:7px;width:60px;height:30px;margin-left:-30px;background-color:#232323;color:#fff;border-radius:10px;}
-  .picitem video{width:100px;height:100px;}
+  // .picitem video{width:100px;height:100px;}
   .play-icon{width:110px;height:110px;border:1px solid #e5e5e5;}
   .timelinelist:last-child{margin-bottom:50px;}
 }
