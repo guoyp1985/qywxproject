@@ -47,7 +47,7 @@
           </div>
           <div class="datetxt flex_left">
             <div class="font12">{{item.dateline_str}}</div>
-            <div v-if="item.uploader == userInfo.uid" class="ricon ml20" @click="delScai(item,index)">删除</div>
+            <div v-if="item.uploader == userInfo.uid || item.fid == userInfo.fid" class="ricon ml20" @click="delScai(item,index)">删除</div>
           </div>
         </div>
       </div>
