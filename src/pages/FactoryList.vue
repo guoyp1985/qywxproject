@@ -3,7 +3,7 @@
     <apply-tip v-if="showApply"></apply-tip>
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <template v-if="showContainer">
-      <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 0)">
+      <div class="pagemiddle" ref="scrollContainer">
         <template v-if="disTabData1">
           <div v-if="!tabData1 || tabData1.length == 0" class="emptyitem flex_center">
             <div>暂无加盟厂家</div>
