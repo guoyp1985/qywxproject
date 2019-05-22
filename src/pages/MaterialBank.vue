@@ -1,58 +1,58 @@
 <template>
-  <div class="containerarea font14 bg-white materialbank" v-if="disShow">
+  <div class="containerarea font14 bg-white materialbank" v-if="disShow" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
     <div v-if="!tlData || tlData.length == 0" class="flex_center font16 mt20">暂无素材数据</div>
-    <div v-else class="timelinelist" v-for="(item, index) in tlData" :key="index">
-      <div v-if="playVideo" class="videoarea">
-        <video
-          ref="productVideo"
-          :src="item.video"
-          controls
-          autoplay="true"
-          webkit-playsinline=""
-          playsinline="true"
-          x-webkit-airplay="true"
-          raw-controls=""
-          x5-video-player-type="h5"
-          x5-video-player-fullscreen="true"
-          x5-video-orientation="portrait">
-        </video>
-        <div class="close-icon flex_center" @click="stopPlay('productVideo')">关闭</div>
-      </div>
-      <div class="tlitem">
-        <div class="avatar"><img :src="item.uploaderavatar" /></div>
-        <div class="con">
-          <div class="flex_left">
-            <div class="txt no_bold">{{item.uploadername}}</div>
-            <div v-if="item.title !== ''" style="margin-left:auto;color:#7d7979;" @click="copyTxt"><span class="al al-copy mr3 font14"></span>复制</div>
-          </div>
-          <div v-if="item.title && item.title != ''" v-html="filterEmot(item.title)"></div>
-          <div class="piclist">
-            <div class="picitem more" v-for="(items,index1) in item.photoarr">
-              <div class="inner">
-                <img :src="items" @click="showBigimg1(items,item.photoarr,`previewer${index}`,index1)" />
-              </div>
+      <div v-else class="timelinelist" v-for="(item, index) in tlData" :key="index">
+        <div class="tlitem">
+          <div class="avatar"><img :src="item.uploaderavatar" /></div>
+          <div class="con">
+            <div class="flex_left">
+              <div class="txt no_bold">{{item.uploadername}}</div>
+              <div v-if="item.title !== ''" style="margin-left:auto;color:#7d7979;" @click="copyTxt"><span class="al al-copy mr3 font14"></span>复制</div>
             </div>
-            <template v-if="item.video && item.video != ''">
-              <div class="picitem more" @click="clickPlay('productVideo')">
-                <div class="inner align_center" style="border:1px solid #e5e5e5;line-height:95px;">
-                  <i class="al al-bofang"></i>
+            <div v-if="item.title && item.title != ''" v-html="filterEmot(item.title)"></div>
+            <div class="piclist">
+              <div class="picitem more" v-for="(items,index1) in item.photoarr">
+                <div class="inner">
+                  <img :src="items" @click="showBigimg1(items,item.photoarr,`previewer${index}`,index1)" />
                 </div>
               </div>
-            </template>
-            <template v-if="item.photoarr.length > 0">
-              <div v-transfer-dom>
-                <previewer :list="item.previewerPhoto" :ref="`previewer${index}`"></previewer>
-              </div>
-            </template>
-          </div>
-          <div class="datetxt flex_left">
-            <div class="font12">{{item.dateline_str}}</div>
-            <div v-if="item.uploader == userInfo.uid" class="ricon ml20" @click="delScai(item,index)">删除</div>
+              <template v-if="item.video && item.video != ''">
+                <div class="picitem more" @click="clickPlay('productVideo', item)">
+                  <div class="inner align_center" :style="`border:1px solid #e5e5e5;line-height:95px;background:url('${item.uploaderavatar}')`">
+                    <div class="pofang"><i class="al al-bofang"></i></div>
+                  </div>
+                </div>
+                <!-- webkit-playsinline=""
+                playsinline="true" -->
+                <div v-if="item.playvideo" class="videoarea">
+                  <video
+                    ref="productVideo"
+                    :src="item.video"
+                    controls
+                    autoplay="true"
+                    x-webkit-airplay="true"
+                    raw-controls=""
+                    x5-video-player-type="h5"
+                    x5-video-player-fullscreen="true"
+                    x5-video-orientation="portrait">
+                  </video>
+                  <div class="close-icon flex_center" @click="stopPlay('productVideo', item)">关闭</div>
+                </div>
+              </template>
+              <template v-if="item.photoarr.length > 0">
+                <div v-transfer-dom>
+                  <previewer :list="item.previewerPhoto" :ref="`previewer${index}`"></previewer>
+                </div>
+              </template>
+            </div>
+            <div class="datetxt flex_left">
+              <div class="font12">{{item.dateline_str}}</div>
+              <div v-if="item.uploader == userInfo.uid || item.fid == userInfo.fid" class="ricon ml20" @click="delScai(item,index)">删除</div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div style="width:100%;height:50px;z-index:-1;"></div>
+      <div style="width:100%;height:50px;z-index:-1;"></div>
     <router-link class="bg-sucai" :to="{path: '/AddMaterial', query: {pid: this.id}}">
       <div class="addsucai">发布素材</div>
     </router-link>
@@ -62,6 +62,8 @@
 import { TransferDom, Previewer } from 'vux'
 import ENV from 'env'
 import Time from '#/time'
+let pageStart = 0
+const limit = 10
 
 export default {
   directives: {
@@ -74,13 +76,27 @@ export default {
     return {
       tlData: [],
       id: 0,
-      photoarr1: [],
       userInfo: {},
       disShow: false,
       playVideo: false
     }
   },
   methods: {
+    handleScroll: function (refname) {
+      console.log('进来了')
+      const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      self.$util.scrollEvent({
+        element: scrollarea,
+        callback: function () {
+          if (self.tlData.length === (pageStart + 1) * limit) {
+            pageStart++
+            self.$vux.loading.show()
+            self.getData()
+          }
+        }
+      })
+    },
     filterEmot (text) {
       return this.$util.emotPrase(text)
     },
@@ -134,15 +150,17 @@ export default {
         }, 200)
       }
     },
-    clickPlay (refname) {
+    clickPlay (refname, item) {
       const self = this
-      this.playVideo = true
+      // this.playVideo = true
+      item.playvideo = true
       setTimeout(function () {
         self.$refs[refname][0].play()
       }, 100)
     },
-    stopPlay (refname) {
-      this.playVideo = false
+    stopPlay (refname, item) {
+      // this.playVideo = false
+      item.playvideo = false
     },
     refresh () {
       this.tlData = []
@@ -150,7 +168,7 @@ export default {
     getData () {
       this.refresh()
       this.$http.get(`${ENV.BokaApi}/api/list/productmaterial`, {
-        params: {pid: this.id}
+        params: {pid: this.id, pagestart: pageStart, limit: limit}
       }).then(res => {
         this.$vux.loading.hide()
         const data = res.data
@@ -158,6 +176,7 @@ export default {
         for (var i = 0; i < retdata.length; i++) {
           let photoarr = []
           let photo = retdata[i].contentphoto
+          retdata[i].playvideo = false
           retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd hh:mm')
           if (photo && this.$util.trim(photo) !== '') {
             photoarr = photo.split(',')
@@ -165,7 +184,7 @@ export default {
           retdata[i].photoarr = photoarr
           retdata[i].previewerPhoto = this.$util.previewerImgdata(photoarr)
         }
-        this.tlData = retdata
+        this.tlData = this.tlData.concat(retdata)
         this.disShow = true
       })
     },
@@ -210,15 +229,18 @@ export default {
 .materialbank{
   .bg-sucai{
     width:100%;padding:10px 20px;box-sizing:border-box;background-color:#fff;
-    border-top:1px solid #e5e5e5;position:fixed;bottom:0;z-index:9999;
+    border-top:1px solid #e5e5e5;position:fixed;bottom:0;
   }
   .addsucai{width:100%;height:30px;background-color:#ff6a61;color:#fff;text-align:center;border-radius:20px;line-height:30px;}
   .tlitem{border-bottom:1px solid #e5e5e5;}
-  .videoarea{position:absolute;left:0;top:0;right:0;bottom:0;z-index:9999;background-color:#000;color:#fff;}
-  .videoarea video{position: absolute;width: 100%;height: 100%;}
-  .videoarea .close-icon{position:absolute;left:50%;top:7px;width:60px;height:30px;margin-left:-30px;background-color:#232323;color:#fff;border-radius:10px;}
-  .picitem video{width:100px;height:100px;}
+  .videoarea{position:absolute;left:0;top:0;right:0;bottom:0;background-color:#000;color:#fff;z-index:10;}
+  .videoarea video{position:absolute;width:100%;height:100%;}
+  .videoarea .close-icon{position:absolute;left:50%;top:7px;width:60px;height:30px;margin-left:-30px;background-color:rgba(0,0,0,0.3);color:#fff;border-radius:10px;}
   .play-icon{width:110px;height:110px;border:1px solid #e5e5e5;}
   .timelinelist:last-child{margin-bottom:50px;}
+  .pofang{
+    width:40px;height:40px;background-color:rgba(0,0,0,0.3);border-radius:50%;text-align:center;line-height:45px;
+    margin-left:20px;margin-top:20px;color:#fff;
+  }
 }
 </style>

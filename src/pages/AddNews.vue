@@ -51,7 +51,7 @@
             </div>
           </div>
         </div>
-        <group class="option-area" label-width="6em">
+        <!-- <group class="option-area" label-width="6em">
           <x-textarea
             ref="descTextarea"
             class="font14"
@@ -74,7 +74,7 @@
             @on-focus="textareaFocus('summaryTextarea')"
             autosize>
           </x-textarea>
-        </group>
+        </group> -->
       </div>
       <div class="mt20 flex_center pl12 pr12">
         <div class="flex_cell flex_center btn-bottom-red" @click="save">下一步，编辑内容</div>
