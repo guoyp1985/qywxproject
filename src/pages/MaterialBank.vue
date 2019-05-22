@@ -1,56 +1,54 @@
 <template>
   <div class="containerarea font14 bg-white materialbank" v-if="disShow">
     <div class="pagemiddle" style="top:0;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
-      <div>
+      <div class="timelinelist">
         <div v-if="!tlData || tlData.length == 0" class="flex_center font16 mt20">暂无素材数据</div>
-        <div v-else class="timelinelist" v-for="(item, index) in tlData" :key="index">
-          <div class="tlitem">
-            <div class="avatar"><img :src="item.uploaderavatar" /></div>
-            <div class="con">
-              <div class="flex_left">
-                <div class="txt no_bold">{{item.uploadername}}</div>
-                <div v-if="item.title !== ''" style="margin-left:auto;color:#7d7979;" @click="copyTxt"><span class="al al-copy mr3 font14"></span>复制</div>
+        <div v-else v-for="(item, index) in tlData" :key="index" class="tlitem">
+          <div class="avatar"><img :src="item.uploaderavatar" /></div>
+          <div class="con">
+            <div class="flex_left">
+              <div class="txt no_bold">{{item.uploadername}}</div>
+              <div v-if="item.title !== ''" style="margin-left:auto;color:#7d7979;" @click="copyTxt"><span class="al al-copy mr3 font14"></span>复制</div>
+            </div>
+            <div v-if="item.title && item.title != ''" v-html="filterEmot(item.title)"></div>
+            <div class="piclist">
+              <div class="picitem more" v-for="(items,index1) in item.photoarr">
+                <div class="inner">
+                  <img :src="items" @click="showBigimg1(items,item.photoarr,`previewer${index}`,index1)" />
+                </div>
               </div>
-              <div v-if="item.title && item.title != ''" v-html="filterEmot(item.title)"></div>
-              <div class="piclist">
-                <div class="picitem more" v-for="(items,index1) in item.photoarr">
-                  <div class="inner">
-                    <img :src="items" @click="showBigimg1(items,item.photoarr,`previewer${index}`,index1)" />
+              <template v-if="item.video && item.video != ''">
+                <div class="picitem more" @click="clickPlay('productVideo', item)">
+                  <div class="inner align_center" :style="`border:1px solid #e5e5e5;line-height:95px;background:url('${item.uploaderavatar}')`">
+                    <div class="pofang"><i class="al al-bofang"></i></div>
                   </div>
                 </div>
-                <template v-if="item.video && item.video != ''">
-                  <div class="picitem more" @click="clickPlay('productVideo', item)">
-                    <div class="inner align_center" :style="`border:1px solid #e5e5e5;line-height:95px;background:url('${item.uploaderavatar}')`">
-                      <div class="pofang"><i class="al al-bofang"></i></div>
-                    </div>
-                  </div>
-                  <!-- webkit-playsinline=""
-                  playsinline="true" -->
-                  <div v-if="item.playvideo" class="videoarea">
-                    <video
-                      ref="productVideo"
-                      :src="item.video"
-                      controls
-                      autoplay="true"
-                      x-webkit-airplay="true"
-                      raw-controls=""
-                      x5-video-player-type="h5"
-                      x5-video-player-fullscreen="true"
-                      x5-video-orientation="portrait">
-                    </video>
-                    <div class="close-icon flex_center" @click="stopPlay('productVideo', item)">关闭</div>
-                  </div>
-                </template>
-                <template v-if="item.photoarr.length > 0">
-                  <div v-transfer-dom>
-                    <previewer :list="item.previewerPhoto" :ref="`previewer${index}`"></previewer>
-                  </div>
-                </template>
-              </div>
-              <div class="datetxt flex_left">
-                <div class="font12">{{item.dateline_str}}</div>
-                <div v-if="item.uploader == userInfo.uid || item.fid == userInfo.fid" class="ricon ml20" @click="delScai(item,index)">删除</div>
-              </div>
+                <!-- webkit-playsinline=""
+                playsinline="true" -->
+                <div v-if="item.playvideo" class="videoarea">
+                  <video
+                    ref="productVideo"
+                    :src="item.video"
+                    controls
+                    autoplay="true"
+                    x-webkit-airplay="true"
+                    raw-controls=""
+                    x5-video-player-type="h5"
+                    x5-video-player-fullscreen="true"
+                    x5-video-orientation="portrait">
+                  </video>
+                  <div class="close-icon flex_center" @click="stopPlay('productVideo', item)">关闭</div>
+                </div>
+              </template>
+              <template v-if="item.photoarr.length > 0">
+                <div v-transfer-dom>
+                  <previewer :list="item.previewerPhoto" :ref="`previewer${index}`"></previewer>
+                </div>
+              </template>
+            </div>
+            <div class="datetxt flex_left">
+              <div class="font12">{{item.dateline_str}}</div>
+              <div v-if="item.uploader == userInfo.uid || item.fid == userInfo.fid" class="ricon ml20" @click="delScai(item,index)">删除</div>
             </div>
           </div>
         </div>
@@ -238,12 +236,12 @@ export default {
     border-top:1px solid #e5e5e5;
   }
   .addsucai{width:100%;height:30px;background-color:#ff6a61;color:#fff;text-align:center;border-radius:20px;line-height:30px;}
-  .tlitem{border-bottom:1px solid #e5e5e5;}
+  .timelinelist .tlitem:not(:last-child){border-bottom:1px solid #e5e5e5;}
   .videoarea{position:absolute;left:0;top:0;right:0;bottom:0;background-color:#000;color:#fff;z-index:10;}
   .videoarea video{position:absolute;width:100%;height:100%;}
   .videoarea .close-icon{position:absolute;left:50%;top:7px;width:60px;height:30px;margin-left:-30px;background-color:rgba(0,0,0,0.3);color:#fff;border-radius:10px;}
   .play-icon{width:110px;height:110px;border:1px solid #e5e5e5;}
-  .timelinelist:last-child{margin-bottom:50px;}
+  // .timelinelist:last-child{margin-bottom:50px;}
   .pofang{
     width:40px;height:40px;background-color:rgba(0,0,0,0.3);border-radius:50%;text-align:center;line-height:45px;
     margin-left:20px;margin-top:20px;color:#fff;
