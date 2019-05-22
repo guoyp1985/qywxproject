@@ -1,58 +1,58 @@
 <template>
-  <div class="containerarea font14 bg-white materialbank" v-if="disShow">
+  <div class="containerarea font14 bg-white materialbank" v-if="disShow" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
     <div v-if="!tlData || tlData.length == 0" class="flex_center font16 mt20">暂无素材数据</div>
-    <div v-else class="timelinelist" v-for="(item, index) in tlData" :key="index">
-      <div class="tlitem">
-        <div class="avatar"><img :src="item.uploaderavatar" /></div>
-        <div class="con">
-          <div class="flex_left">
-            <div class="txt no_bold">{{item.uploadername}}</div>
-            <div v-if="item.title !== ''" style="margin-left:auto;color:#7d7979;" @click="copyTxt"><span class="al al-copy mr3 font14"></span>复制</div>
-          </div>
-          <div v-if="item.title && item.title != ''" v-html="filterEmot(item.title)"></div>
-          <div class="piclist">
-            <div class="picitem more" v-for="(items,index1) in item.photoarr">
-              <div class="inner">
-                <img :src="items" @click="showBigimg1(items,item.photoarr,`previewer${index}`,index1)" />
-              </div>
+      <div v-else class="timelinelist" v-for="(item, index) in tlData" :key="index">
+        <div class="tlitem">
+          <div class="avatar"><img :src="item.uploaderavatar" /></div>
+          <div class="con">
+            <div class="flex_left">
+              <div class="txt no_bold">{{item.uploadername}}</div>
+              <div v-if="item.title !== ''" style="margin-left:auto;color:#7d7979;" @click="copyTxt"><span class="al al-copy mr3 font14"></span>复制</div>
             </div>
-            <template v-if="item.video && item.video != ''">
-              <div class="picitem more" @click="clickPlay('productVideo', item)">
-                <div class="inner align_center" :style="`border:1px solid #e5e5e5;line-height:95px;background:url('${item.uploaderavatar}')`">
-                  <div class="pofang"><i class="al al-bofang"></i></div>
+            <div v-if="item.title && item.title != ''" v-html="filterEmot(item.title)"></div>
+            <div class="piclist">
+              <div class="picitem more" v-for="(items,index1) in item.photoarr">
+                <div class="inner">
+                  <img :src="items" @click="showBigimg1(items,item.photoarr,`previewer${index}`,index1)" />
                 </div>
               </div>
-              <!-- webkit-playsinline=""
-              playsinline="true" -->
-              <div v-if="item.playvideo" class="videoarea">
-                <video
-                  ref="productVideo"
-                  :src="item.video"
-                  controls
-                  autoplay="true"
-                  x-webkit-airplay="true"
-                  raw-controls=""
-                  x5-video-player-type="h5"
-                  x5-video-player-fullscreen="true"
-                  x5-video-orientation="portrait">
-                </video>
-                <div class="close-icon flex_center" @click="stopPlay('productVideo', item)">关闭</div>
-              </div>
-            </template>
-            <template v-if="item.photoarr.length > 0">
-              <div v-transfer-dom>
-                <previewer :list="item.previewerPhoto" :ref="`previewer${index}`"></previewer>
-              </div>
-            </template>
-          </div>
-          <div class="datetxt flex_left">
-            <div class="font12">{{item.dateline_str}}</div>
-            <div v-if="item.uploader == userInfo.uid || item.fid == userInfo.fid" class="ricon ml20" @click="delScai(item,index)">删除</div>
+              <template v-if="item.video && item.video != ''">
+                <div class="picitem more" @click="clickPlay('productVideo', item)">
+                  <div class="inner align_center" :style="`border:1px solid #e5e5e5;line-height:95px;background:url('${item.uploaderavatar}')`">
+                    <div class="pofang"><i class="al al-bofang"></i></div>
+                  </div>
+                </div>
+                <!-- webkit-playsinline=""
+                playsinline="true" -->
+                <div v-if="item.playvideo" class="videoarea">
+                  <video
+                    ref="productVideo"
+                    :src="item.video"
+                    controls
+                    autoplay="true"
+                    x-webkit-airplay="true"
+                    raw-controls=""
+                    x5-video-player-type="h5"
+                    x5-video-player-fullscreen="true"
+                    x5-video-orientation="portrait">
+                  </video>
+                  <div class="close-icon flex_center" @click="stopPlay('productVideo', item)">关闭</div>
+                </div>
+              </template>
+              <template v-if="item.photoarr.length > 0">
+                <div v-transfer-dom>
+                  <previewer :list="item.previewerPhoto" :ref="`previewer${index}`"></previewer>
+                </div>
+              </template>
+            </div>
+            <div class="datetxt flex_left">
+              <div class="font12">{{item.dateline_str}}</div>
+              <div v-if="item.uploader == userInfo.uid || item.fid == userInfo.fid" class="ricon ml20" @click="delScai(item,index)">删除</div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div style="width:100%;height:50px;z-index:-1;"></div>
+      <div style="width:100%;height:50px;z-index:-1;"></div>
     <router-link class="bg-sucai" :to="{path: '/AddMaterial', query: {pid: this.id}}">
       <div class="addsucai">发布素材</div>
     </router-link>
@@ -62,6 +62,8 @@
 import { TransferDom, Previewer } from 'vux'
 import ENV from 'env'
 import Time from '#/time'
+let pageStart = 0
+const limit = 10
 
 export default {
   directives: {
@@ -80,6 +82,21 @@ export default {
     }
   },
   methods: {
+    handleScroll: function (refname) {
+      console.log('进来了')
+      const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      self.$util.scrollEvent({
+        element: scrollarea,
+        callback: function () {
+          if (self.tlData.length === (pageStart + 1) * limit) {
+            pageStart++
+            self.$vux.loading.show()
+            self.getData()
+          }
+        }
+      })
+    },
     filterEmot (text) {
       return this.$util.emotPrase(text)
     },
@@ -151,7 +168,7 @@ export default {
     getData () {
       this.refresh()
       this.$http.get(`${ENV.BokaApi}/api/list/productmaterial`, {
-        params: {pid: this.id}
+        params: {pid: this.id, pagestart: pageStart, limit: limit}
       }).then(res => {
         this.$vux.loading.hide()
         const data = res.data
@@ -167,7 +184,7 @@ export default {
           retdata[i].photoarr = photoarr
           retdata[i].previewerPhoto = this.$util.previewerImgdata(photoarr)
         }
-        this.tlData = retdata
+        this.tlData = this.tlData.concat(retdata)
         this.disShow = true
       })
     },
