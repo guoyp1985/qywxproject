@@ -21,14 +21,16 @@
                 <div class="picitem">
                   <div class="inner-sp flex_center" style="border:1px solid #e5e5e5;">
                     <div class="pofang flex_center" @click="clickPlay('productVideo', item)"><i class="al al-bofang font16"></i></div>
-                    <!-- <video
+                    <video
+                      id="video1"
                       :src="item.video"
+                      autoplay="autoplay"
                       x-webkit-airplay="true"
                       raw-controls=""
                       x5-video-player-type="h5"
                       x5-video-player-fullscreen="true"
                       x5-video-orientation="portrait">
-                    </video> -->
+                    </video>
                   </div>
                 </div>
               </template>
@@ -267,7 +269,7 @@ export default {
   .play-icon{width:110px;height:110px;border:1px solid #e5e5e5;}
   // .timelinelist:last-child{margin-bottom:50px;}
   .pofang{
-    width:40px;height:40px;background-color:rgba(0,0,0,0.3);border-radius:50%;color:#fff;z-index:10;
+    position:absolute;width:40px;height:40px;background-color:rgba(0,0,0,0.3);border-radius:50%;color:#fff;z-index:10;
     .al{margin-left:5px;margin-top:3px;}
   }
   .inner-sp{width:90px;height:90px;background-color:#333;}
