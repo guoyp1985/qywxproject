@@ -1,31 +1,32 @@
 <template>
-  <div class="add-tags">
-    <form enctype="multipart/form-data">
-      <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange" />
-    </form>
-    <div class="input-box">
-      <textarea class="font14" placeholder="说点什么吧..." maxlength="200" v-model="content"></textarea>
-      <span class="count">{{count}} / 200</span>
-    </div>
-    <div class="photos">
-      <div class="photo-wraper" v-for="(photo, index) in photos" :key="photo.id">
-        <div class="photo">
-          <div class="close" @click="delPhoto(index)">
-            <i class="al al-guanbi font16"></i>
+  <div class="containerarea font14 bg-page add-tags-page">
+    <div class="pagemiddle" style="top:0;">
+      <form enctype="multipart/form-data">
+        <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange" />
+      </form>
+      <div class="input-box">
+        <textarea class="font14" placeholder="说点什么吧..." maxlength="200" v-model="content"></textarea>
+        <span class="count">{{count}} / 200</span>
+      </div>
+      <div class="photos">
+        <div class="photo-wraper" v-for="(photo, index) in photos" :key="photo.id">
+          <div class="photo">
+            <div class="close" @click="delPhoto(index)">
+              <i class="al al-guanbi font16"></i>
+            </div>
+            <img :src="photo">
           </div>
-          <img :src="photo">
         </div>
-      </div>
-      <div class="photo-wraper" v-if="photos.length < 9">
-        <div class="photo count-tip" @click="onChooseImage">
-          <span class="al al-zhaopian"></span>
-          <span class="count">{{photos.length}} / 9</span>
+        <div class="photo-wraper" v-if="photos.length < 9">
+          <div class="photo count-tip" @click="onChooseImage">
+            <span class="al al-zhaopian"></span>
+            <span class="count">{{photos.length}} / 9</span>
+          </div>
         </div>
       </div>
     </div>
-    <!-- <div style="height:70px;"></div> -->
-    <div class="submit-btn flex_center">
-      <button @click="submit">发布</button>
+    <div class="pagebottom flex_center">
+      <div class="flex_center bg-theme color-white submit-btn" @click="submit">发布</div>
     </div>
   </div>
 </template>
@@ -47,7 +48,8 @@ export default{
       photos: [],
       content: '',
       count: 0,
-      maxnum: 9
+      maxnum: 9,
+      submitIng: false
     }
   },
   watch: {
@@ -99,28 +101,24 @@ export default{
       }
     },
     submit () {
-      if (!this.content.length && !this.photos.length) {
-        this.$vux.toast.show({
-          text: '请输入内容!',
-          type: 'warn'
+      if (!this.submitIng) {
+        if (!this.content.length && !this.photos.length) {
+          this.$vux.toast.show({
+            text: '请输入内容!',
+            type: 'warn'
+          })
+          return
+        }
+        this.submitIng = true
+        let postData = {type: 'add', content: this.content, teamid: this.id, photo: this.photos.length > 0 ? this.photos.join(',') : ''}
+        this.$http.post(`${ENV.BokaApi}/api/team/source`, postData).then(res => {
+          console.log(res)
+          this.submitIng = false
+          if (res.data.flag) {
+            this.$router.back()
+          }
         })
-        return
       }
-      this.$http({
-        url: `${ENV.BokaApi}/api/team/source`,
-        method: 'post',
-        data: {
-          type: 'add',
-          content: this.content,
-          teamid: this.id,
-          photo: this.photos.length > 0 ? this.photos.join(',') : ''
-        }
-      }).then(res => {
-        console.log(res)
-        if (res.data.flag) {
-          this.$router.back()
-        }
-      })
     },
     delPhoto (index) {
       this.photos.splice(index, 1)
@@ -130,11 +128,7 @@ export default{
 </script>
 
 <style lang="less" scoped="">
-.add-tags{
-  touch-action: none;
-  position: relative;
-  width: 100%;
-  height: 110%;
+.add-tags-page{
   .close{
     position:absolute;top:-9px;right:-4px;z-index:10;
     width:25px;height:25px;border-radius:50%;background-color:#EC3E3F;color:#fff;
@@ -206,21 +200,6 @@ export default{
       margin-right: 5%;
     }
   }
-  .submit-btn{
-    position:fixed;
-    bottom: 0;
-    width: 100%;
-    height: 70px;
-    background-color: #fff;
-    button{
-      width: 80%;
-      color: #fff;
-      border-radius: 10px;
-      background-color: #ff6a61;
-      border: none;
-      padding-top: 10px;
-      padding-bottom: 10px;
-    }
-  }
+  .submit-btn{width: 80%;height:35px;border-radius: 10px;}
 }
 </style>
