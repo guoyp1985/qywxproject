@@ -18,9 +18,9 @@
                 </div>
               </div>
               <template v-if="item.video && item.video != ''">
-                <div class="picitem more" @click="clickPlay('productVideo', item)">
-                  <div class="inner align_center" :style="`border:1px solid #e5e5e5;line-height:95px;background:url('${item.uploaderavatar}')`">
-                    <div class="pofang"><i class="al al-bofang"></i></div>
+                <div class="picitem" @click="clickPlay('productVideo', item)">
+                  <div class="inner-sp flex_center" style="border:1px solid #e5e5e5;">
+                    <div class="pofang flex_center"><i class="al al-bofang"></i></div>
                   </div>
                 </div>
                 <!-- webkit-playsinline=""
@@ -243,8 +243,9 @@ export default {
   .play-icon{width:110px;height:110px;border:1px solid #e5e5e5;}
   // .timelinelist:last-child{margin-bottom:50px;}
   .pofang{
-    width:40px;height:40px;background-color:rgba(0,0,0,0.3);border-radius:50%;text-align:center;line-height:45px;
-    margin-left:20px;margin-top:20px;color:#fff;
+    width:40px;height:40px;background-color:rgba(0,0,0,0.3);border-radius:50%;color:#fff;
+    .al{margin-left:5px;margin-top:3px;}
   }
+  .inner-sp{width:90px;height:90px;background-color:#333;}
 }
 </style>
