@@ -5,21 +5,24 @@
     </template>
     <template v-if="showContainer">
       <div v-if="playVideo" class="videoarea">
-        <video
-          ref="productVideo"
-          :src="productdata.video"
-          controls
-          autoplay="true"
-          webkit-playsinline=""
-          playsinline="true"
-          x-webkit-airplay="true"
-          raw-controls=""
-          x5-video-player-type="h5"
-          x5-video-player-fullscreen="true"
-          x5-video-orientation="portrait">
-        </video>
-        <div class="close-icon flex_center" @click="stopPlay('productVideo')">
-          <i class="al al-guanbi"></i>
+        <div class="video-inner">
+          <video
+            ref="productVideo"
+            :src="productdata.video"
+            controls
+            autoplay="true"
+            webkit-playsinline=""
+            playsinline="true"
+            x-webkit-airplay="true"
+            raw-controls=""
+            x5-video-player-type="h5"
+            x5-video-player-fullscreen="true"
+            x5-video-orientation="portrait">
+          </video>
+        </div>
+        <div class="btn-area flex_center">
+          <div class="btn-item flex_center" @click="saveVideo('productVideo')">保存</div>
+          <div class="btn-item flex_center" @click="stopPlay('productVideo')">关闭</div>
         </div>
       </div>
       <div id="scroll-container" class="pagemiddle scroll-container">
@@ -415,7 +418,14 @@ export default {
       }
     },
     clickPlay (refname) {
+      const self = this
       this.playVideo = true
+      setTimeout(() => {
+        self.$refs[refname].play()
+      }, 100)
+    },
+    saveVideo () {
+      location.replace(this.productdata.video)
     },
     stopPlay (refname) {
       this.playVideo = false
