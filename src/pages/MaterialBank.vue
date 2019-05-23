@@ -22,7 +22,6 @@
                   <div class="inner-sp flex_center" style="border:1px solid #e5e5e5;">
                     <div class="pofang flex_center" @click="clickPlay('productVideo', item)"><i class="al al-bofang font16"></i></div>
                     <video
-                      id="video1"
                       :src="item.video"
                       x-webkit-airplay="true"
                       raw-controls=""
@@ -39,7 +38,7 @@
                 </div>
               </template>
             </div>
-            <div class="datetxt flex_left" @click="videoImage(index)">
+            <div class="datetxt flex_left">
               <div class="font12">{{item.dateline_str}}</div>
               <div v-if="item.uploader == userInfo.uid || item.fid == userInfo.fid" class="ricon ml20" @click="delScai(item,index)">删除</div>
             </div>
@@ -101,10 +100,6 @@ export default {
     }
   },
   methods: {
-    videoImage (index) {
-      let videoplay = document.getElementById('video1')
-      videoplay.currentTime = 4.5
-    },
     handleScroll: function (refname) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
