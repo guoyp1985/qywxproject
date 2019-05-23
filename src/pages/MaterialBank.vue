@@ -24,7 +24,6 @@
                     <video
                       id="video1"
                       :src="item.video"
-                      autoplay="autoplay"
                       x-webkit-airplay="true"
                       raw-controls=""
                       x5-video-player-type="h5"
@@ -40,7 +39,7 @@
                 </div>
               </template>
             </div>
-            <div class="datetxt flex_left">
+            <div class="datetxt flex_left" @click="videoImage(index)">
               <div class="font12">{{item.dateline_str}}</div>
               <div v-if="item.uploader == userInfo.uid || item.fid == userInfo.fid" class="ricon ml20" @click="delScai(item,index)">删除</div>
             </div>
@@ -102,6 +101,10 @@ export default {
     }
   },
   methods: {
+    videoImage (index) {
+      let videoplay = document.getElementById('video1')
+      videoplay.currentTime = 4.5
+    },
     handleScroll: function (refname) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
