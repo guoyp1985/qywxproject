@@ -1348,12 +1348,12 @@ export default {
 .product .videoarea{
   position:absolute;left:0;top:0;right:0;bottom:0;z-index:9999;background-color:#000;color:#fff;
   .btn-area{
-    position:absolute;left:0;top:7px;right:0;height:50px;
+    position:absolute;left:0;top:7px;right:0;height:50px;z-index:10;
     .btn-item:not(:last-child){margin-right:20px;}
     .btn-item{width:60px;height:30px;background-color:#232323;color:#fff;border-radius:10px;}
   }
   .video-inner{
-    position:absolute;left:0;top:50px;right:0;bottom:0;
+    position:absolute;left:0;top:0;right:0;bottom:0;
     video{position: absolute;width: 100%;height: 100%;}
   }
 }
