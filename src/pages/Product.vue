@@ -813,7 +813,7 @@ export default {
     clickPlay (refname) {
       const self = this
       this.playVideo = true
-      setTimeout(function () {
+      setTimeout(() => {
         self.$refs[refname].play()
       }, 100)
     },
