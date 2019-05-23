@@ -23,22 +23,6 @@
                     <div class="pofang flex_center"><i class="al al-bofang"></i></div>
                   </div>
                 </div>
-                <!-- webkit-playsinline=""
-                playsinline="true" -->
-                <div v-if="item.playvideo" class="videoarea">
-                  <video
-                    ref="productVideo"
-                    :src="item.video"
-                    controls
-                    autoplay="true"
-                    x-webkit-airplay="true"
-                    raw-controls=""
-                    x5-video-player-type="h5"
-                    x5-video-player-fullscreen="true"
-                    x5-video-orientation="portrait">
-                  </video>
-                  <div class="close-icon flex_center" @click="stopPlay('productVideo', item)">关闭</div>
-                </div>
               </template>
               <template v-if="item.photoarr.length > 0">
                 <div v-transfer-dom>
@@ -58,6 +42,25 @@
     <router-link class="bg-sucai pagebottom flex_center" :to="{path: '/AddMaterial', query: {pid: this.id}}">
       <div class="addsucai">发布素材</div>
     </router-link>
+    <div v-if="showVideo" class="videoarea">
+      <div class="video-inner">
+        <video
+          ref="productVideo"
+          :src="clickVideo"
+          controls
+          autoplay="true"
+          x-webkit-airplay="true"
+          raw-controls=""
+          x5-video-player-type="h5"
+          x5-video-player-fullscreen="true"
+          x5-video-orientation="portrait">
+        </video>
+      </div>
+      <div class="btn-area flex_center">
+        <div class="btn-item flex_center" @click="saveVideo('productVideo')">保存</div>
+        <div class="btn-item flex_center" @click="stopPlay('productVideo')">关闭</div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -81,7 +84,9 @@ export default {
       userInfo: {},
       disShow: false,
       playVideo: false,
-      isLoading: false
+      isLoading: false,
+      showVideo: false,
+      clickVideo: null
     }
   },
   methods: {
@@ -154,17 +159,20 @@ export default {
       }
     },
     clickPlay (refname, item) {
-      const self = this
-      // this.playVideo = true
-      console.log(item)
-      item.playvideo = true
-      setTimeout(function () {
-        self.$refs[refname][0].play()
-      }, 100)
+      // const self = this
+      // console.log(item)
+      // item.playvideo = true
+      // setTimeout(function () {
+      //   self.$refs[refname][0].play()
+      // }, 100)
+      this.clickVideo = item.video
+      this.showVideo = true
+    },
+    saveVideo () {
+      location.replace(this.clickVideo)
     },
     stopPlay (refname, item) {
-      // this.playVideo = false
-      item.playvideo = false
+      this.showVideo = false
     },
     refresh () {
       this.tlData = []
@@ -237,9 +245,18 @@ export default {
   }
   .addsucai{width:100%;height:30px;background-color:#ff6a61;color:#fff;text-align:center;border-radius:20px;line-height:30px;}
   .timelinelist .tlitem:not(:last-child){border-bottom:1px solid #e5e5e5;}
-  .videoarea{position:absolute;left:0;top:0;right:0;bottom:0;background-color:#000;color:#fff;z-index:10;}
-  .videoarea video{position:absolute;width:100%;height:100%;}
-  .videoarea .close-icon{position:absolute;left:50%;top:7px;width:60px;height:30px;margin-left:-30px;background-color:rgba(0,0,0,0.3);color:#fff;border-radius:10px;}
+  .videoarea{
+    position:absolute;left:0;top:0;right:0;bottom:0;z-index:9999;background-color:#000;color:#fff;
+    .btn-area{
+      position:absolute;left:0;top:7px;right:0;height:50px;z-index:10;
+      .btn-item:not(:last-child){margin-right:20px;}
+      .btn-item{width:60px;height:30px;background-color:#232323;color:#fff;border-radius:10px;}
+    }
+    .video-inner{
+      position:absolute;left:0;top:0;right:0;bottom:0;
+      video{position: absolute;width: 100%;height: 100%;}
+    }
+  }
   .play-icon{width:110px;height:110px;border:1px solid #e5e5e5;}
   // .timelinelist:last-child{margin-bottom:50px;}
   .pofang{
