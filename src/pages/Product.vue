@@ -5,25 +5,25 @@
     </template>
     <template v-if="showcontainer">
       <div v-if="playVideo" class="videoarea">
-        <video
-          ref="productVideo"
-          :src="productdata.video"
-          controls
-          autoplay="true"
-          webkit-playsinline=""
-          playsinline="true"
-          x-webkit-airplay="true"
-          raw-controls=""
-          x5-video-player-type="h5"
-          x5-video-player-fullscreen="true"
-          x5-video-orientation="portrait">
-        </video>
-        <div class="close-icon flex_center" @click="stopPlay('productVideo')">关闭</div>
-        <!--
-        <div class="close-icon flex_center" @click="stopPlay('productVideo')">
-          <i class="al al-guanbi"></i>
+        <div class="video-inner">
+          <video
+            ref="productVideo"
+            :src="productdata.video"
+            controls
+            autoplay="true"
+            webkit-playsinline=""
+            playsinline="true"
+            x-webkit-airplay="true"
+            raw-controls=""
+            x5-video-player-type="h5"
+            x5-video-player-fullscreen="true"
+            x5-video-orientation="portrait">
+          </video>
         </div>
-      -->
+        <div class="btn-area flex_center">
+          <div class="btn-item flex_center" @click="saveVideo('productVideo')">保存</div>
+          <div class="btn-item flex_center" @click="stopPlay('productVideo')">关闭</div>
+        </div>
       </div>
       <div id="scroll-container" class="pagemiddle scroll-container">
         <title-tip scroll-box="scroll-container" @access="access" :user="loginUser" :messages="messages" :avatar-href="loginUser.avatar" :user-name="loginUser.linkman" :user-credit="loginUser.credit"></title-tip>
@@ -813,9 +813,12 @@ export default {
     clickPlay (refname) {
       const self = this
       this.playVideo = true
-      setTimeout(function () {
+      setTimeout(() => {
         self.$refs[refname].play()
       }, 100)
+    },
+    saveVideo () {
+      location.replace(this.productdata.video)
     },
     stopPlay (refname) {
       this.playVideo = false
@@ -1312,6 +1315,7 @@ export default {
     }
   },
   created () {
+    console.log(this.$wechat)
     this.init()
   },
   activated () {
@@ -1341,9 +1345,18 @@ export default {
   position:absolute;left:50%;top:50%;margin-left:-30px;margin-top:-30px;
 }
 .product .play-icon .al{margin-left:4px;}
-.product .videoarea{position:absolute;left:0;top:0;right:0;bottom:0;z-index:9999;background-color:#000;color:#fff;}
-.product .videoarea video{position: absolute;width: 100%;height: 100%;}
-.product .videoarea .close-icon{position:absolute;left:50%;top:7px;width:60px;height:30px;margin-left:-30px;background-color:#232323;color:#fff;border-radius:10px;}
+.product .videoarea{
+  position:absolute;left:0;top:0;right:0;bottom:0;z-index:9999;background-color:#000;color:#fff;
+  .btn-area{
+    position:absolute;left:0;top:7px;right:0;height:50px;z-index:10;
+    .btn-item:not(:last-child){margin-right:20px;}
+    .btn-item{width:60px;height:30px;background-color:#232323;color:#fff;border-radius:10px;}
+  }
+  .video-inner{
+    position:absolute;left:0;top:0;right:0;bottom:0;
+    video{position: absolute;width: 100%;height: 100%;}
+  }
+}
 .product .fixed-topcoll{position:absolute;right:0;top:20px;z-index:10;width:80px;height:35px;border-top-left-radius:20px;border-bottom-left-radius:20px;background-color:rgba(153,153,153,0.8);color:#fff;}
 .product .fixed-topcoll.start{top:60px;}
 .vline{position:relative;}
