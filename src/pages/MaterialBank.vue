@@ -159,14 +159,11 @@ export default {
       }
     },
     clickPlay (refname, item) {
-      // const self = this
-      // console.log(item)
-      // item.playvideo = true
-      // setTimeout(function () {
-      //   self.$refs[refname][0].play()
-      // }, 100)
       this.clickVideo = item.video
       this.showVideo = true
+      setTimeout(() => {
+        this.$refs[refname].play()
+      }, 100)
     },
     saveVideo () {
       location.replace(this.clickVideo)
