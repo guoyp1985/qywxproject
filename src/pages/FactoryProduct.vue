@@ -647,16 +647,24 @@ export default {
     .txt-item{margin-top:10px;}
     .btn{border-radius:10px;background-color:#ccc;color:#999;font-size:12px;height:22px;padding:0 10px;}
   }
-
+  .videoarea{
+    position:absolute;left:0;top:0;right:0;bottom:0;z-index:9999;background-color:#000;color:#fff;
+    .btn-area{
+      position:absolute;left:0;top:7px;right:0;height:50px;z-index:10;
+      .btn-item:not(:last-child){margin-right:20px;}
+      .btn-item{width:60px;height:30px;background-color:#232323;color:#fff;border-radius:10px;}
+    }
+    .video-inner{
+      position:absolute;left:0;top:0;right:0;bottom:0;
+      video{position: absolute;width: 100%;height: 100%;}
+    }
+  }
   .videobg{width:100%;height:100%;background-size:cover;background-position:center;position:relative;}
   .play-icon{
     width:60px;height:60px;background: rgba(0,0,0,.4);border-radius: 50%;color:#fff;
     position:absolute;left:50%;top:50%;margin-left:-30px;margin-top:-30px;
   }
   .play-icon .al{margin-left:4px;}
-  .videoarea{position:absolute;left:0;top:0;right:0;bottom:0;z-index:9999;background-color:#000;color:#fff;}
-  .videoarea video{position: absolute;width: 100%;height: 100%;}
-  .videoarea .close-icon{position:absolute;left:15px;top:15px;width:40px;height:40px;}
   .vline{position:relative;}
   .vline:after {
     content: " ";
