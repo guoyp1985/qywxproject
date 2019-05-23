@@ -21,7 +21,7 @@
           </video>
         </div>
         <div class="btn-area flex_center">
-          <div class="btn-item flex_center" @click="saveVideo('productVideo')">保存</div>
+          <div class="btn-item flex_center" @click="saveVideo('productVideo')" v-if="!query.from">保存</div>
           <div class="btn-item flex_center" @click="stopPlay('productVideo')">关闭</div>
         </div>
       </div>
