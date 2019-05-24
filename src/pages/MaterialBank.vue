@@ -38,9 +38,11 @@
                 </div>
               </template>
             </div>
-            <div class="datetxt flex_left">
-              <div class="font12">{{item.dateline_str}}</div>
-              <div v-if="item.uploader == userInfo.uid || item.fid == userInfo.fid" class="ricon ml20" @click="delScai(item,index)">删除</div>
+            <div class="datetxt">
+              <div class="flex_cell font12 flex_left">
+                <div class="font12">{{item.dateline_str}}</div>
+                <div v-if="item.uploader == userInfo.uid || item.fid == userInfo.fid" class="ricon ml20" @click="delScai(item,index)">删除</div>
+              </div>
             </div>
           </div>
         </div>
@@ -267,8 +269,8 @@ export default {
   .play-icon{width:110px;height:110px;border:1px solid #e5e5e5;}
   // .timelinelist:last-child{margin-bottom:50px;}
   .pofang{
-    position:absolute;width:40px;height:40px;background-color:rgba(0,0,0,0.3);border-radius:50%;color:#fff;z-index:10;
-    .al{margin-left:5px;margin-top:3px;}
+    position:absolute;width:40px;height:40px;background-color:rgba(0,0,0,0.6);border-radius:50%;color:#fff;z-index:10;
+    .al{margin-left:5px;}
   }
   .inner-sp{width:90px;height:90px;background-color:#333;}
   .inner-sp video{width:100%;height:100%;}
