@@ -22,6 +22,7 @@
                   <div class="inner-sp flex_center" style="border:1px solid #e5e5e5;">
                     <div class="pofang flex_center" @click="clickPlay('productVideo', item)"><i class="al al-bofang font16"></i></div>
                     <video
+                      id="video"
                       :src="item.video"
                       x-webkit-airplay="true"
                       raw-controls=""
@@ -252,7 +253,7 @@ export default {
   .bg-sucai{
     border-top:1px solid #e5e5e5;
   }
-  .addsucai{width:100%;height:30px;background-color:#ff6a61;color:#fff;text-align:center;border-radius:20px;line-height:30px;}
+  .addsucai{width:90%;height:30px;background-color:#ff6a61;color:#fff;text-align:center;border-radius:20px;line-height:30px;}
   .timelinelist .tlitem:not(:last-child){border-bottom:1px solid #e5e5e5;}
   .videoarea{
     position:absolute;left:0;top:0;right:0;bottom:0;z-index:9999;background-color:#000;color:#fff;
