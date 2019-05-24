@@ -175,12 +175,12 @@
       </cell>
 
       <!-- 我的推荐 -->
-      <cell :link="{path:'/retailerRecommands', query:{wid: retailerInfo.uid}}" style="position:relative">
+      <!-- <cell :link="{path:'/retailerRecommands', query:{wid: retailerInfo.uid}}" style="position:relative">
         <div slot="icon" class="pr10"><i class="al al-kehu1 db-in font18 color-red4"></i></div>
         <div slot="inline-desc">
           <span class="font15">{{$t('Retailer recommand')}}</span>
         </div>
-      </cell>
+      </cell> -->
 
       <template>
         <cell :link="{path:'/retailerSetting'}" style="position:relative">
