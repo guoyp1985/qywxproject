@@ -18,9 +18,18 @@
                 </div>
               </div>
               <template v-if="item.video && item.video != ''">
-                <div class="picitem" @click="clickPlay('productVideo', item)">
+                <div class="picitem">
                   <div class="inner-sp flex_center" style="border:1px solid #e5e5e5;">
-                    <div class="pofang flex_center"><i class="al al-bofang"></i></div>
+                    <div class="pofang flex_center" @click="clickPlay('productVideo', item)"><i class="al al-bofang font16"></i></div>
+                    <video
+                      id="video"
+                      :src="item.video"
+                      x-webkit-airplay="true"
+                      raw-controls=""
+                      x5-video-player-type="h5"
+                      x5-video-player-fullscreen="true"
+                      x5-video-orientation="portrait">
+                    </video>
                   </div>
                 </div>
               </template>
@@ -30,9 +39,11 @@
                 </div>
               </template>
             </div>
-            <div class="datetxt flex_left">
-              <div class="font12">{{item.dateline_str}}</div>
-              <div v-if="item.uploader == userInfo.uid || item.fid == userInfo.fid" class="ricon ml20" @click="delScai(item,index)">删除</div>
+            <div class="datetxt">
+              <div class="flex_cell font12 flex_left">
+                <div class="font12">{{item.dateline_str}}</div>
+                <div v-if="item.uploader == userInfo.uid || item.fid == userInfo.fid" class="ricon ml20" @click="delScai(item,index)">删除</div>
+              </div>
             </div>
           </div>
         </div>
@@ -49,6 +60,8 @@
           :src="clickVideo"
           controls
           autoplay="true"
+          playsinline="true"
+          webkit-playsinline="true"
           x-webkit-airplay="true"
           raw-controls=""
           x5-video-player-type="h5"
@@ -240,7 +253,7 @@ export default {
   .bg-sucai{
     border-top:1px solid #e5e5e5;
   }
-  .addsucai{width:100%;height:30px;background-color:#ff6a61;color:#fff;text-align:center;border-radius:20px;line-height:30px;}
+  .addsucai{width:90%;height:30px;background-color:#ff6a61;color:#fff;text-align:center;border-radius:20px;line-height:30px;}
   .timelinelist .tlitem:not(:last-child){border-bottom:1px solid #e5e5e5;}
   .videoarea{
     position:absolute;left:0;top:0;right:0;bottom:0;z-index:9999;background-color:#000;color:#fff;
@@ -257,9 +270,10 @@ export default {
   .play-icon{width:110px;height:110px;border:1px solid #e5e5e5;}
   // .timelinelist:last-child{margin-bottom:50px;}
   .pofang{
-    width:40px;height:40px;background-color:rgba(0,0,0,0.3);border-radius:50%;color:#fff;
-    .al{margin-left:5px;margin-top:3px;}
+    position:absolute;width:40px;height:40px;background-color:rgba(0,0,0,0.6);border-radius:50%;color:#fff;z-index:10;
+    .al{margin-left:5px;}
   }
   .inner-sp{width:90px;height:90px;background-color:#333;}
+  .inner-sp video{width:100%;height:100%;}
 }
 </style>

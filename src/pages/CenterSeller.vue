@@ -413,6 +413,8 @@ export default {
           retdata[i].digmanstr = retdata[i].digman.join(',')
         }
         self.tlData = self.tlData.concat(retdata)
+        console.log('chat data:')
+        console.log(self.tlData)
         self.disTimeline = true
       })
     },
