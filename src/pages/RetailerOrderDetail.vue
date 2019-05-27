@@ -257,6 +257,7 @@ export default {
       this.isFirst = false
       this.showFirst = false
       this.showHb = false
+      this.deliverdata = { delivercompany: '-1', delivercode: '' }
     },
     submitFirstTip () {
       this.showFirst = false
