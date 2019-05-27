@@ -28,7 +28,7 @@
         <retailer-apply :login-user="loginUser" :after-apply="applySuccess" :class-data="classData" :systemParams="systemParams"></retailer-apply>
       </template>
       <template v-if="showFactory">
-        <div>恭喜您，加入成功！</div>
+        <div class="w_100 h_100 flex_center font16">恭喜您，加入成功！</div>
       </template>
     </template>
     <open-vip v-if="showVip && retailerInfo.isretailer == 2" :retailer-info="retailerInfo" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
