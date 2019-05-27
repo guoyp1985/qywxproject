@@ -7,7 +7,7 @@
   <div id="chat-room" class="font14">
     <template v-if="allowChat || loginUser.isretailer === 1">
       <div style="opacity:0;position:absolute;z-index:-1;" class="copy_txt">{{clickMsgItem.content}}</div>
-      <div v-if="retailerInfo.uid && showTip && query.miniconfig != 'wechat.mini_program.qxb'" ref="topTipArea" class="db-flex w_100 border-box padding10 bg-white b_bottom_after font13 color-gray" style="color:inherit;">
+      <div v-if="retailerInfo.uid && showTip" ref="topTipArea" class="db-flex w_100 border-box padding10 bg-white b_bottom_after font13 color-gray" style="color:inherit;">
         <div class="flex_left" style="width:70px;">
           <img class="v_middle imgcover" style="width:60px;height:60px;" :src="retailerInfo.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
         </div>
@@ -296,7 +296,7 @@ export default {
       selectNewsData: null,
       selectProductsData: null,
       showUserInfo: false,
-      showTip: true,
+      showTip: false,
       recordCheck: false,
       allowChatModule: ['news', 'product', 'store', 'messagelist', 'retailer', 'order', 'factory'],
       allowChat: false,
@@ -1106,6 +1106,11 @@ export default {
       this.loginUser = User.get()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
+      if (this.query.miniconfig === 'wechat.mini_program.qxb') {
+        this.showTip = false
+      } else {
+        this.showTip = true
+      }
       for (var i = 0; i < self.allowChatModule.length; i++) {
         if (this.query.fromModule === self.allowChatModule[i]) {
           self.allowChat = true
