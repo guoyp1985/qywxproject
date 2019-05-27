@@ -28,7 +28,7 @@
         <retailer-apply :login-user="loginUser" :after-apply="applySuccess" :class-data="classData" :systemParams="systemParams"></retailer-apply>
       </template>
       <template v-if="showFactory">
-        <div class="w_100 h_100 flex_center font16">恭喜您，加入成功！</div>
+        <bind-factory :login-user="loginUser" :query="query"></bind-factory>
       </template>
     </template>
     <open-vip v-if="showVip && retailerInfo.isretailer == 2" :retailer-info="retailerInfo" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
@@ -40,6 +40,7 @@
 import { Swiper, SwiperItem } from 'vux'
 import CenterSales from '@/components/CenterSales'
 import RetailerApply from '@/components/RetailerApply'
+import BindFactory from '@/components/BindFactory'
 import Subscribe from '@/components/Subscribe'
 import OpenVip from '@/components/OpenVip'
 import Vip from '@/components/Vip'
