@@ -7,7 +7,7 @@
   <div id="chat-room" class="font14">
     <template v-if="allowChat || loginUser.isretailer === 1">
       <div style="opacity:0;position:absolute;z-index:-1;" class="copy_txt">{{clickMsgItem.content}}</div>
-      <div v-if="retailerInfo.uid && showTip" ref="topTipArea" class="db-flex w_100 border-box padding10 bg-white b_bottom_after font13 color-gray" style="color:inherit;">
+      <div v-if="retailerInfo.uid && showTip && query.miniconfig != 'wechat.mini_program.qxb'" ref="topTipArea" class="db-flex w_100 border-box padding10 bg-white b_bottom_after font13 color-gray" style="color:inherit;">
         <div class="flex_left" style="width:70px;">
           <img class="v_middle imgcover" style="width:60px;height:60px;" :src="retailerInfo.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
         </div>
@@ -1047,22 +1047,6 @@ export default {
           }
         })
       })
-    },
-    _getRetailerInfo () {
-      const self = this
-      if ((self.query.fromModule === 'store' || self.query.fromModule === 'news') && self.query.wid) {
-        self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
-          params: { uid: self.query.wid }
-        }).then(function (res) {
-          if (res && res.status === 200) {
-            const data = res.data
-            self.retailerInfo = data.data
-            // setTimeout(function () {
-            //   self.showTip = false
-            // }, 10000)
-          }
-        })
-      }
     },
     getRetailerInfo () {
       const self = this
