@@ -51,54 +51,71 @@
   checkbox{transform: scale(0.8);}
   checkbox .wx-checkbox-input.wx-checkbox-input-checked{border-color:#ECAC4D;color:#ECAC4D;}
   checkbox .wx-checkbox-input.wx-checkbox-input-checked::before{border-color:#ECAC4D;color:#ECAC4D;}
+  .line-area{
+    width:100%;padding-top:10px;padding-bottom:10px;font-size:16px;position:relative;
+    display:flex !important;justify-content: center; align-items: center;
+    .line{width:80%;height:2px;background-color:#FF6B63;position:absolute;}
+    .line-txt{width:100px;background-color:#fff;color:#FF6B63;position:relative;z-index:1;text-align:center}
+  }
 }
 </style>
 <template>
-  <div class="containerarea bg-white font14 bind-factory-page">
+  <div class="containerarea bg-page font14 bind-factory-page">
     <template v-if="showContainer">
-      <div class="page-inner">
-        <div class="conarea">
-          <div class="avatar">
-            <img :src="loginUser.avatar" />
-          </div>
-          <div class="txt">{{loginUser.linkman}}</div>
-          <template v-if="!loginUser.regwid">
-            <div class="txt" >请先完善信息成为合伙人！</div>
-            <div class="form-control">
-              <text class="txt">手机号</text>
-              <input v-model="telphone" maxlength="11" bindinput="inputTelphone" type="number" name="telphone" placeholder="请输入手机号"/>
+      <div class="bg-white">
+        <div class="page-inner">
+          <div class="conarea">
+            <div class="avatar">
+              <img :src="loginUser.avatar" />
             </div>
-            <div class="form-control">
-              <text class="txt">验证码</text>
-              <input v-model="xcode" bindinput="inputXcode" type="number" name="xcode" placeholder="请输入验证码" />
-              <div class="btn-code" @click="getXcode" :class="{'disabled' : count !== countNum}">{{message}}</div>
+            <div class="txt">恭喜 {{loginUser.linkman}}</div>
+            <div class="txt">合伙人资格申请成功</div>
+            <div class="btnarea flex_center" v-if="query.minibackurl">
+              <div class="btn flex_center dark" @click="toApp">马上分享赚佣金</div>
             </div>
-            <div class="form-control">
-              <text class="txt">身份证号</text>
-              <input v-model="idcard" maxlength="18" bindinput="inputIdcard" type="text" name="idcard" placeholder="请输入身份证号"/>
-            </div>
-            <div class="btnarea flex_center">
-              <div class="btn flex_center dark" @click="toApply">成为合伙人</div>
-            </div>
-          </template>
-          <template v-else>
-            <div class="flex_left cell-item">
-              <div class="txt_cell font14">可提现金额</div>
-              <div class="flex_cell bold font16">￥{{groupsData.waitMoney}}</div>
-              <div class="btn_cell flex_right" report-submit="true">
-                <div class="btn flex_center font14" @click="toRevenue">去提现</div>
+            <!-- <template v-if="!loginUser.regwid">
+              <div class="txt" >请先完善信息成为合伙人！</div>
+              <div class="form-control">
+                <text class="txt">手机号</text>
+                <input v-model="telphone" maxlength="11" bindinput="inputTelphone" type="number" name="telphone" placeholder="请输入手机号"/>
               </div>
-            </div>
-          </template>
+              <div class="form-control">
+                <text class="txt">验证码</text>
+                <input v-model="xcode" bindinput="inputXcode" type="number" name="xcode" placeholder="请输入验证码" />
+                <div class="btn-code" @click="getXcode" :class="{'disabled' : count !== countNum}">{{message}}</div>
+              </div>
+              <div class="form-control">
+                <text class="txt">身份证号</text>
+                <input v-model="idcard" maxlength="18" bindinput="inputIdcard" type="text" name="idcard" placeholder="请输入身份证号"/>
+              </div>
+              <div class="btnarea flex_center">
+                <div class="btn flex_center dark" @click="toApply">成为合伙人</div>
+              </div>
+            </template>
+            <template v-else>
+              <div class="flex_left cell-item">
+                <div class="txt_cell font14">可提现金额</div>
+                <div class="flex_cell bold font16">￥{{groupsData.waitMoney}}</div>
+                <div class="btn_cell flex_right" report-submit="true">
+                  <div class="btn flex_center font14" @click="toRevenue">去提现</div>
+                </div>
+              </div>
+            </template> -->
+          </div>
         </div>
       </div>
-      <!-- <div class="mt10 bg-white">
-        <div class="padding20">
-          <div class="box-area1">
-            <div class="color-theme bold">1、</div>
-          </div>
+      <div class="bg-white mt10">
+        <div class="line-area">
+          <div class="lineone line"></div>
+          <div class="gztxt line-txt">如何赚佣金？</div>
         </div>
-      </div> -->
+        <div class="padding20">
+          <div>1. 合伙人可看到每款商品的佣金金额，且佣金只对自己可见。</div>
+          <div class="mt5">2. 合伙人自己购买以及分享给好友购买，都可获得销售佣金。</div>
+          <div class="mt5">3. 佣金需订单确认收货后才可提现。</div>
+          <div class="mt5">4. 推荐佣金是指推荐好友成为合伙人后，好友出售的每笔订单皆可获得推荐佣金。</div>
+        </div>
+      </div>
     </template>
   </div>
 </template>
@@ -160,6 +177,18 @@ export default {
     }
   },
   methods: {
+    toApp () {
+      if (this.query.minibackurl) {
+        let minibackurl = decodeURIComponent(this.query.minibackurl)
+        if (this.query.backtype === 'relaunch') {
+          this.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+        } else if (this.query.backtype === 'redirect') {
+          this.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+        } else {
+          this.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+        }
+      }
+    },
     toRevenue () {
       let params = this.$util.handleAppParams(this.query, {})
       this.$router.push({path: '/factoryRevenue', query: params})
