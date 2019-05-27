@@ -49,7 +49,7 @@ import { User, SystemParams } from '#/storage'
 
 export default {
   components: {
-    Swiper, SwiperItem, CenterSales, RetailerApply, Subscribe, Vip, OpenVip
+    Swiper, SwiperItem, CenterSales, RetailerApply, Subscribe, Vip, OpenVip, BindFactory
   },
   data () {
     return {
