@@ -603,7 +603,7 @@ export default {
         return false
       }
       self.$vux.loading.show()
-      let params = self.$util.trim(self.submitdata.mobile)
+      let params = {phone: self.$util.trim(self.submitdata.mobile)}
       if (self.$route.query.fromapp !== 'factory') {
         params.type = 'apply'
       }
