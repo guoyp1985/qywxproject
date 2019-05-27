@@ -603,8 +603,12 @@ export default {
         return false
       }
       self.$vux.loading.show()
+      let params = self.$util.trim(self.submitdata.mobile)
+      if (self.$route.query.fromapp !== 'factory') {
+        params.type = 'apply'
+      }
       self.$http.get(`${ENV.BokaApi}/api/verifyMobile`, {
-        params: { phone: self.$util.trim(self.submitdata.mobile), type: 'apply' }
+        params: params
       }).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()

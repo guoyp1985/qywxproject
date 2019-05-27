@@ -27,6 +27,9 @@
       <template v-if="showApply">
         <retailer-apply :login-user="loginUser" :after-apply="applySuccess" :class-data="classData" :systemParams="systemParams"></retailer-apply>
       </template>
+      <template v-if="showFactory">
+        <div>恭喜您，加入成功！</div>
+      </template>
     </template>
     <open-vip v-if="showVip && retailerInfo.isretailer == 2" :retailer-info="retailerInfo" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
     <vip v-if="showVip && retailerInfo.isretailer == 1" :retailer-info="retailerInfo" @hide-vip="hideVip" @open-vip="openVip1"></vip>
@@ -52,6 +55,7 @@ export default {
       showCenter: false,
       showApply: false,
       afterApply: false,
+      showFactory: false,
       selectedIndex: 0,
       retailerInfo: {},
       loginUser: null,
@@ -111,7 +115,11 @@ export default {
         this.$router.push(backurl)
       } else {
         self.initContainer()
-        self.showCenter = true
+        if (self.query.fromapp === 'factory') {
+          self.showFactory = true
+        } else {
+          self.showCenter = true
+        }
         self.$vux.loading.hide()
       }
     },
@@ -157,39 +165,43 @@ export default {
               }).then(function (res) {
                 if (self.loginUser.isretailer) {
                   self.initContainer()
-                  self.showCenter = true
-                  let shareParams = {
-                    module: 'retailer',
-                    moduleid: self.loginUser.uid,
-                    title: `${self.loginUser.linkman}邀请你一起入驻共销客`,
-                    desc: '共销客帮你解决微商创业难题',
-                    photo: self.loginUser.avatar,
-                    link: `${ENV.Host}/#/centerSales?&share_uid=${self.loginUser.uid}`
+                  if (self.query.fromapp === 'factory') {
+                    self.showFactory = true
+                  } else {
+                    self.showCenter = true
+                    let shareParams = {
+                      module: 'retailer',
+                      moduleid: self.loginUser.uid,
+                      title: `${self.loginUser.linkman}邀请你一起入驻共销客`,
+                      desc: '共销客帮你解决微商创业难题',
+                      photo: self.loginUser.avatar,
+                      link: `${ENV.Host}/#/centerSales?&share_uid=${self.loginUser.uid}`
+                    }
+                    if (self.query.share_uid) {
+                      shareParams.link = `${shareParams.link}&lastshareuid=${self.query.share_uid}`
+                      shareParams.lastshareuid = self.query.share_uid
+                    }
+                    self.$util.handleWxShare(shareParams)
+                    self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
+                      if (res.status === 200) {
+                        let data = res.data
+                        self.retailerInfo = data.data ? data.data : data
+                        self.$vux.loading.hide()
+                        return self.$http.get(`${ENV.BokaApi}/api/message/newMessages`)
+                      }
+                    }).then(function (res) {
+                      if (res) {
+                        let data = res.data
+                        self.messages = data.data
+                        return self.$http.get(`${ENV.BokaApi}/api/retailer/shareview`)
+                      }
+                    }).then(function (res) {
+                      if (res) {
+                        let data = res.data
+                        self.marqueeData = data.data ? data.data : data
+                      }
+                    })
                   }
-                  if (self.query.share_uid) {
-                    shareParams.link = `${shareParams.link}&lastshareuid=${self.query.share_uid}`
-                    shareParams.lastshareuid = self.query.share_uid
-                  }
-                  self.$util.handleWxShare(shareParams)
-                  self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
-                    if (res.status === 200) {
-                      let data = res.data
-                      self.retailerInfo = data.data ? data.data : data
-                      self.$vux.loading.hide()
-                      return self.$http.get(`${ENV.BokaApi}/api/message/newMessages`)
-                    }
-                  }).then(function (res) {
-                    if (res) {
-                      let data = res.data
-                      self.messages = data.data
-                      return self.$http.get(`${ENV.BokaApi}/api/retailer/shareview`)
-                    }
-                  }).then(function (res) {
-                    if (res) {
-                      let data = res.data
-                      self.marqueeData = data.data ? data.data : data
-                    }
-                  })
                 }
               })
             }
@@ -201,6 +213,7 @@ export default {
       const self = this
       self.showCenter = false
       self.showApply = false
+      this.showFactory = false
       document.title = '卖家中心'
     },
     refresh (query) {
