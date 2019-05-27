@@ -95,7 +95,7 @@
         <!-- </swiper-item>
       </swiper> -->
     </div>
-    <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
+    <!-- <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
       <div class="flex_cell flex_center" v-if="retailerInfo.fid > 0">
         <div class="addproduct flex_center btn-bottom-red" style="width:85%;" @click="toUpdate">同步商品</div>
       </div>
@@ -110,6 +110,14 @@
           <div class="addproduct flex_center btn-bottom-red" style="width:85%;" @click="toCollect">{{ $t('Collect product') }}</div>
         </div>
       </template>
+    </div> -->
+    <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
+      <div class="flex_cell flex_center">
+        <div class="addproduct flex_center btn-bottom-orange" style="width:85%;" @click="toRecommend">{{ $t('Source of goods') }}</div>
+      </div>
+      <div class="flex_cell flex_center">
+        <div class="addproduct flex_center btn-bottom-red" style="width:85%;" @click="toAdd">{{ $t('Add product') }}</div>
+      </div>
     </div>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showpopup1">
