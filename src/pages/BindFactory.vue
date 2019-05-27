@@ -305,6 +305,7 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
+      this.query = this.$route.query
       if (this.loginUser.regwid) {
         this.showContainer = true
       } else {
