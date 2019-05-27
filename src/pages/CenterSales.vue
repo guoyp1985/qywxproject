@@ -99,6 +99,13 @@ export default {
         })
       }
     },
+    bindFactory () {
+      if (this.query.fromapp === 'factory') {
+        this.$http.post(`factory.boka.cn/api/miniopen/bindRetailer?uid=8345&wid=1406`, {
+          uid: this.query.uid, wid: this.loginUser.uid
+        })
+      }
+    },
     applySuccess () {
       const self = this
       if (self.query.minibackurl) {
@@ -116,6 +123,7 @@ export default {
       } else {
         self.initContainer()
         if (self.query.fromapp === 'factory') {
+          this.bindFactory()
           self.showFactory = true
         } else {
           self.showCenter = true
@@ -139,7 +147,7 @@ export default {
     getData () {
       const self = this
       self.$vux.loading.show()
-      self.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
+      self.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
         if (res) {
           if (res.status === 200) {
             self.loginUser = res.data
@@ -160,6 +168,7 @@ export default {
                 }
               })
             } else if (self.loginUser.isretailer === 1 || self.loginUser.isretailer === 2) {
+              self.bindFactory()
               self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
                 module: 'retailer', action: 'index'
               }).then(function (res) {
