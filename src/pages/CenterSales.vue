@@ -166,6 +166,7 @@ export default {
                 if (self.loginUser.isretailer) {
                   self.initContainer()
                   if (self.query.fromapp === 'factory') {
+                    self.$vux.loading.hide()
                     self.showFactory = true
                   } else {
                     self.showCenter = true
