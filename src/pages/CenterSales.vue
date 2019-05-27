@@ -101,7 +101,7 @@ export default {
     },
     bindFactory () {
       if (this.query.fromapp === 'factory') {
-        this.$http.post(`factory.boka.cn/api/miniopen/bindRetailer?uid=8345&wid=1406`, {
+        this.$http.post(`https://factory.boka.cn/api/miniopen/bindRetailer`, {
           uid: this.query.uid, wid: this.loginUser.uid
         })
       }
