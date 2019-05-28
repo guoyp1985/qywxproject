@@ -22,7 +22,7 @@
                   <div class="inner-sp flex_center" style="border:1px solid #e5e5e5;">
                     <div class="pofang flex_center" @click="clickPlay('productVideo', item)"><i class="al al-bofang font16"></i></div>
                     <video
-                      id="video"
+                      ref="video"
                       :src="item.video"
                       x-webkit-airplay="true"
                       raw-controls=""
