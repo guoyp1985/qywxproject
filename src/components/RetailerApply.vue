@@ -604,7 +604,7 @@ export default {
       }
       self.$vux.loading.show()
       self.$http.get(`${ENV.BokaApi}/api/verifyMobile`, {
-        params: { phone: self.$util.trim(self.submitdata.mobile), type: 'apply' }
+        params: {phone: self.$util.trim(self.submitdata.mobile), type: 'apply'}
       }).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()

@@ -722,6 +722,9 @@ Util.install = function (Vue, options) {
       if (query.control) {
         params.control = query.control
       }
+      if (query.miniconfig) {
+        params.miniconfig = query.miniconfig
+      }
       return params
     },
     getSystemParams: (callback) => {

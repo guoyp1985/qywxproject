@@ -296,7 +296,7 @@ export default {
       selectNewsData: null,
       selectProductsData: null,
       showUserInfo: false,
-      showTip: true,
+      showTip: false,
       recordCheck: false,
       allowChatModule: ['news', 'product', 'store', 'messagelist', 'retailer', 'order', 'factory'],
       allowChat: false,
@@ -1048,22 +1048,6 @@ export default {
         })
       })
     },
-    _getRetailerInfo () {
-      const self = this
-      if ((self.query.fromModule === 'store' || self.query.fromModule === 'news') && self.query.wid) {
-        self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
-          params: { uid: self.query.wid }
-        }).then(function (res) {
-          if (res && res.status === 200) {
-            const data = res.data
-            self.retailerInfo = data.data
-            // setTimeout(function () {
-            //   self.showTip = false
-            // }, 10000)
-          }
-        })
-      }
-    },
     getRetailerInfo () {
       const self = this
       self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
@@ -1122,6 +1106,11 @@ export default {
       this.loginUser = User.get()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
+      if (this.query.miniconfig === 'wechat.mini_program.qxb') {
+        this.showTip = false
+      } else {
+        this.showTip = true
+      }
       for (var i = 0; i < self.allowChatModule.length; i++) {
         if (this.query.fromModule === self.allowChatModule[i]) {
           self.allowChat = true
