@@ -92,10 +92,6 @@
 
 <script>
 import {} from 'vux'
-import Time from '#/time'
-import Reg from '#/reg'
-import ENV from 'env'
-import { User } from '#/storage'
 export default {
   name: 'BindFactory',
   props: {
