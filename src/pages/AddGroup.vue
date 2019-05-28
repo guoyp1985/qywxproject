@@ -38,15 +38,15 @@
           </div>
         </div>
       </div>
-      <div class="protocal-area">
+      <!-- <div class="protocal-area">
         <check-icon :value.sync="isAccept">同意<a class="color-red" @click.stop="showProtocol">群群推协议</a></check-icon>
-      </div>
+      </div> -->
       <div class="flex_center btnin">
         <div class="inputs">
           <x-input type="text" v-model="crypto" placeholder="请输入密钥"></x-input>
         </div>
-        <div v-if="isAccept == true" @click="submitHandle" :class="`${rgbred} btn`">验证</div>
-        <div v-else disabled="true" class="btn">验证</div>
+        <div @click="submitHandle" class="rgba09red btn">验证</div>
+        <!-- <div v-else disabled="true" class="btn">验证</div> -->
       </div>
     </div>
     <div v-transfer-dom>
@@ -75,7 +75,7 @@
         </div>
       </x-dialog>
     </div>
-    <div class="font12 color-red4 align_center mt10" style="padding:0 15px;box-sizing:border-box;">注意：请勿将官方客服踢出微信群，否则影响微信群接收订单！</div>
+    <div class="font12 color-red4 align_center mt10" style="padding:0 15px;box-sizing:border-box;">注意：请勿将官方客服踢出微信群，否则影响获取邀请人信息</div>
     <template v-if="showHb">
       <firstHb action="addgroup" @closeFirstHb="closeFirstHb"></firstHb>
     </template>
@@ -147,10 +147,10 @@ export default {
             this.$vux.toast.text('请填写验证密钥', 'middle')
           }
         )) {
-          if (!this.isAccept) {
-            this.$vux.toast.text('提交评估需同意协议', 'middle')
-            return
-          }
+          // if (!this.isAccept) {
+          //   this.$vux.toast.text('提交评估需同意协议', 'middle')
+          //   return
+          // }
           this.isSubmiting = true
           this.$vux.loading.show()
           this.$http.post(`${ENV.BokaApi}/api/groups/addGroup`, data).then(res => {
