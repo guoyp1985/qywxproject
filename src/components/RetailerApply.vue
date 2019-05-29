@@ -2,7 +2,7 @@
   <div class="containerarea font14 bg-white retailerapply notop nobottom">
     <div class="pagemiddle bg-white">
       <div class="flex_center bg-white posi_r" style="height:auto;">
-        <div class="profit-show-btn font12" @click="onProfitShow">了解卖家优势</div>
+        <div v-if="!fromFactory" class="profit-show-btn font12" @click="onProfitShow">了解卖家优势</div>
         <div class="transition-top posi_r" style="width:100%;">
           <img src="https://tossharingsales.boka.cn/images/banner_top.png" width="100%"/>
           <div class="waveWrapper waveAnimation">
@@ -28,7 +28,7 @@
             <div class="t-cell input-cell v_middle" style="position:relative;">{{ shareUser.linkman }}</div>
           </div>
         </div>
-        <div class="form-item required border1px">
+        <div v-if="!fromFactory" class="form-item required border1px">
           <div class="t-table">
             <div class="t-cell title-cell font14 v_middle">真实姓名<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
             <div class="t-cell input-cell v_middle" style="position:relative;">
@@ -68,7 +68,7 @@
           </div>
         </div>
       -->
-        <div class="form-item required border1px padding10" v-if="classData.length > 0 && classDataShow">
+        <div class="form-item required border1px padding10" v-if="!fromFactory && classData.length > 0 && classDataShow">
           <input v-model="submitdata.productclass" type="hidden" name="productclass" />
           <div class="pb10">经营产品或服务<span class="color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
           <checker
@@ -111,7 +111,7 @@
         </div>
       </form>
       <div :class="`pagebottom-area flex_center pl12 pr12 bg-white ${bottomcss}`" @click="submitevent">
-        <div class="flex_cell flex_center btn-bottom-red">马上入驻</div>
+        <div class="flex_cell flex_center btn-bottom-red">马上加入</div>
       </div>
     </div>
     <div v-transfer-dom class="x-popup protocal-popup">
@@ -557,7 +557,8 @@ export default {
       VIP2: true,
       feetype: 'oneyear',
       platform: '共销客',
-      applyMobile: null
+      applyMobile: null,
+      fromFactory: true
     }
   },
   watch: {
@@ -747,6 +748,13 @@ export default {
   created () {
     const self = this
     self.query = self.$route.query
+    if (self.query.fromapp === 'factory') {
+      this.fromFactory = true
+      this.requireddata = {'mobile': '', 'verifycode': ''}
+    } else {
+      this.fromFactory = false
+      this.requireddata = {truename: '', 'mobile': '', 'verifycode': '', 'productclass': ''}
+    }
     if (self.query.fromappname) {
       self.platform = self.query.fromappname
     }
