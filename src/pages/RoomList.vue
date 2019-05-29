@@ -255,7 +255,8 @@ export default {
           switch (_this.selectedIndex) {
             case 0:
               if (_this.rooms.length === (_this.pageStart1 + 1) * _this.limit) {
-                _this.loadRooms(_this.pageStart1++)
+                _this.pageStart1++
+                _this.loadRooms()
               }
               break
             case 1:
@@ -310,12 +311,14 @@ export default {
         }
       })
     },
-    loadRooms (page) {
+    loadRooms () {
       if (!this.loaddata) {
         this.loaddata = true
-        page = page || 0
+        // page = page || 0
+        console.log('分页：')
+        console.log(this.pageStart1)
         this.$vux.loading.show()
-        let params = { pagestart: page, limit: this.limit }
+        let params = { pagestart: this.pageStart1, limit: this.limit }
         this.$http.post(`${ENV.BokaApi}/api/groups/myGroups`, params)
         .then(res => {
           this.$vux.loading.hide()
