@@ -707,23 +707,12 @@ Util.install = function (Vue, options) {
       })
     },
     handleAppParams: function (query, params) {
-      if (query.from) {
-        params.from = query.from
-      }
-      if (query.appid) {
-        params.appid = query.appid
-      }
-      if (query.minibackurl) {
-        params.minibackurl = query.minibackurl
-      }
-      if (query.backtype) {
-        params.backtype = query.backtype
-      }
-      if (query.control) {
-        params.control = query.control
-      }
-      if (query.miniconfig) {
-        params.miniconfig = query.miniconfig
+      let arr = ['from', 'appid', 'minibackurl', 'backtype', 'control', 'miniconfig', 'fromapp']
+      for (let i = 0; i < arr.length; i++) {
+        let pname = arr[i]
+        if (query[pname]) {
+          params[pname] = query[pname]
+        }
       }
       return params
     },
