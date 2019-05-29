@@ -109,27 +109,29 @@ export default {
     },
     applySuccess () {
       const self = this
-      if (self.query.minibackurl) {
-        let minibackurl = decodeURIComponent(self.query.minibackurl)
-        if (self.query.backtype === 'relaunch') {
-          self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
-        } else if (self.query.backtype === 'redirect') {
-          self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
-        } else {
-          self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
-        }
-      } else if (self.query.backurl) {
-        let backurl = decodeURIComponent(self.query.backurl)
-        this.$router.push(backurl)
+      if (self.query.fromapp === 'factory') {
+        this.initContainer()
+        this.bindFactory()
+        this.showFactory = true
+        this.$vux.loading.hide()
       } else {
-        self.initContainer()
-        if (self.query.fromapp === 'factory') {
-          this.bindFactory()
-          self.showFactory = true
+        if (self.query.minibackurl) {
+          let minibackurl = decodeURIComponent(self.query.minibackurl)
+          if (self.query.backtype === 'relaunch') {
+            self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+          } else if (self.query.backtype === 'redirect') {
+            self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+          } else {
+            self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+          }
+        } else if (self.query.backurl) {
+          let backurl = decodeURIComponent(self.query.backurl)
+          this.$router.push(backurl)
         } else {
+          self.initContainer()
           self.showCenter = true
+          self.$vux.loading.hide()
         }
-        self.$vux.loading.hide()
       }
     },
     inCenter () {
@@ -156,7 +158,7 @@ export default {
         if (!self.loginUser.isretailer || !self.loginUser.retailerinfo.moderate) {
           self.initContainer()
           self.showApply = true
-          document.title = '申请卖家'
+          document.title = '申请加入'
           self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`, {params: {limit: 100}}).then((res) => {
             self.$vux.loading.hide()
             if (res.status === 200) {

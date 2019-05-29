@@ -2,7 +2,7 @@
   <div class="containerarea font14 bg-white retailerapply notop nobottom">
     <div class="pagemiddle bg-white">
       <div class="flex_center bg-white posi_r" style="height:auto;">
-        <div class="profit-show-btn font12" @click="onProfitShow">了解卖家优势</div>
+        <div v-if="!fromFactory" class="profit-show-btn font12" @click="onProfitShow">了解卖家优势</div>
         <div class="transition-top posi_r" style="width:100%;">
           <img src="https://tossharingsales.boka.cn/images/banner_top.png" width="100%"/>
           <div class="waveWrapper waveAnimation">
@@ -111,7 +111,7 @@
         </div>
       </form>
       <div :class="`pagebottom-area flex_center pl12 pr12 bg-white ${bottomcss}`" @click="submitevent">
-        <div class="flex_cell flex_center btn-bottom-red">马上入驻</div>
+        <div class="flex_cell flex_center btn-bottom-red">马上加入</div>
       </div>
     </div>
     <div v-transfer-dom class="x-popup protocal-popup">
