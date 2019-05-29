@@ -146,9 +146,11 @@ export default {
       })
     },
     getData () {
+      alert(22)
       const self = this
       self.$vux.loading.show()
       self.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
+        alert(33)
         if (res) {
           if (res.status === 200) {
             self.loginUser = res.data
@@ -236,7 +238,6 @@ export default {
     refresh (query) {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = query
-      alert(11)
       this.getData()
       if (!SystemParams.get()) {
         this.$util.getSystemParams(() => {
