@@ -236,6 +236,7 @@ export default {
     refresh (query) {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = query
+      alert(11)
       this.getData()
       if (!SystemParams.get()) {
         this.$util.getSystemParams(() => {
