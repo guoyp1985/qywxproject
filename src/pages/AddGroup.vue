@@ -34,7 +34,7 @@
         <div class="step-item-info db-flex">
           <div class="step-item-title">第四步:</div>
           <div class="flex_cell color-gray2">
-            <span>请将手动添加的微信群与获取到的微信群进行绑定。</span>
+            <span>请将手动添加的微信群与获取到的微信群进行关联。</span>
           </div>
         </div>
       </div>

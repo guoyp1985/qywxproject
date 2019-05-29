@@ -101,7 +101,12 @@
             </div>
             <div class="card-options">
               <template v-for="(item,index) in productdata.options">
-                <img v-if="index < 5" :src="item.photo" />
+                <div v-if="item.photo !== ''">
+                  <img v-if="index < 5" :src="item.photo" />
+                </div>
+                <div v-else>
+                  <img v-if="index < 5" :src="notgeimg" />
+                </div>
               </template>
               <div class="flex_center txt-item">
                 <div class="btn flex_center">共{{productdata.options.length}}种规格可选</div>
@@ -468,8 +473,11 @@
             <div class="close-area flex_center color-gray" @click="closeOptions"><span class="al al-close"></span></div>
             <div class="column-content columnarea">
               <div class="part1 flex_left">
-                <div class="pic flex_left">
+                <div class="pic flex_left" v-if="selectedOption.photo !== ''">
                   <img :src="selectedOption.photo" @click="viewBigImg(0)" />
+                </div>
+                <div class="pic flex_left" v-else>
+                  <img :src="notgeimg" @click="viewBigImg(0)" />
                 </div>
                 <div class="flex_cell flex_left">
                   <div class="w_100">
@@ -485,8 +493,11 @@
                 <div class="pt10">规格</div>
                 <div class="options-list">
                   <div v-for="(item,index) in productdata.options" :class="`options-item ${(selectedOptionIndex == index && item.storage > 0) ? 'active' : ''} ${item.storage <= 0 ? 'disabled' : ''}`" @click="clickOptions(item,index)">
-                    <div class="flex_center">
+                    <div class="flex_center" v-if="item.photo !== ''">
                       <img :src="item.photo" /><span class="ml5">{{item.title}}</span>
+                    </div>
+                    <div class="flex_center" v-else>
+                      <img :src="notgeimg" /><span class="ml5">{{item.title}}</span>
                     </div>
                   </div>
                 </div>
@@ -601,7 +612,8 @@ export default {
       selectedOptionIndex: 0,
       previewerOptionsPhoto: [],
       clickBuytype: null,
-      clickGoupData: null
+      clickGoupData: null,
+      notgeimg: ''
     }
   },
   watch: {
@@ -1146,6 +1158,9 @@ export default {
             const photo = self.productdata.photo
             if (photo && self.$util.trim(photo) !== '') {
               self.photoarr = photo.split(',')
+              self.notgeimg = self.photoarr[0]
+              console.log('商品图片：')
+              console.log(self.notgeimg)
             }
             if (self.photoarr.length > 0) {
               self.showFlash = true
