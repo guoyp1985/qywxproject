@@ -148,7 +148,9 @@ export default {
     getData () {
       const self = this
       self.$vux.loading.show()
-      self.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
+      self.$http.get(`${ENV.BokaApi}/api/user/show`, {
+        params: {test: 'gypvue'}
+      }).then(res => {
         self.loginUser = res.data
         User.set(self.loginUser)
         if (!self.loginUser.isretailer || !self.loginUser.retailerinfo.moderate) {
