@@ -146,79 +146,74 @@ export default {
       })
     },
     getData () {
-      alert(22)
       const self = this
       self.$vux.loading.show()
       self.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
-        alert(33)
-        if (res) {
-          if (res.status === 200) {
-            self.loginUser = res.data
-            User.set(self.loginUser)
-            if (!self.loginUser.isretailer || !self.loginUser.retailerinfo.moderate) {
-              self.initContainer()
-              self.showApply = true
-              document.title = '申请卖家'
-              self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`, {params: {limit: 100}}).then((res) => {
-                self.$vux.loading.hide()
-                if (res.status === 200) {
-                  let data = res.data
-                  data = data.data ? data.data : data
-                  for (let i = 0; i < data.length; i++) {
-                    data[i].checked = false
-                  }
-                  self.classData = data
-                }
-              })
-            } else if (self.loginUser.isretailer === 1 || self.loginUser.isretailer === 2) {
-              self.bindFactory()
-              self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-                module: 'retailer', action: 'index'
-              }).then(function (res) {
-                if (self.loginUser.isretailer) {
-                  self.initContainer()
-                  if (self.query.fromapp === 'factory') {
-                    self.$vux.loading.hide()
-                    self.showFactory = true
-                  } else {
-                    self.showCenter = true
-                    let shareParams = {
-                      module: 'retailer',
-                      moduleid: self.loginUser.uid,
-                      title: `${self.loginUser.linkman}邀请你一起入驻共销客`,
-                      desc: '共销客帮你解决微商创业难题',
-                      photo: self.loginUser.avatar,
-                      link: `${ENV.Host}/#/centerSales?&share_uid=${self.loginUser.uid}`
-                    }
-                    if (self.query.share_uid) {
-                      shareParams.link = `${shareParams.link}&lastshareuid=${self.query.share_uid}`
-                      shareParams.lastshareuid = self.query.share_uid
-                    }
-                    self.$util.handleWxShare(shareParams)
-                    self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
-                      if (res.status === 200) {
-                        let data = res.data
-                        self.retailerInfo = data.data ? data.data : data
-                        self.$vux.loading.hide()
-                        return self.$http.get(`${ENV.BokaApi}/api/message/newMessages`)
-                      }
-                    }).then(function (res) {
-                      if (res) {
-                        let data = res.data
-                        self.messages = data.data
-                        return self.$http.get(`${ENV.BokaApi}/api/retailer/shareview`)
-                      }
-                    }).then(function (res) {
-                      if (res) {
-                        let data = res.data
-                        self.marqueeData = data.data ? data.data : data
-                      }
-                    })
-                  }
-                }
-              })
+        alert(JSON.stringify(res))
+        self.loginUser = res.data
+        User.set(self.loginUser)
+        if (!self.loginUser.isretailer || !self.loginUser.retailerinfo.moderate) {
+          self.initContainer()
+          self.showApply = true
+          document.title = '申请卖家'
+          self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`, {params: {limit: 100}}).then((res) => {
+            self.$vux.loading.hide()
+            if (res.status === 200) {
+              let data = res.data
+              data = data.data ? data.data : data
+              for (let i = 0; i < data.length; i++) {
+                data[i].checked = false
+              }
+              self.classData = data
             }
-          }
+          })
+        } else if (self.loginUser.isretailer === 1 || self.loginUser.isretailer === 2) {
+          self.bindFactory()
+          self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+            module: 'retailer', action: 'index'
+          }).then(function (res) {
+            if (self.loginUser.isretailer) {
+              self.initContainer()
+              if (self.query.fromapp === 'factory') {
+                self.$vux.loading.hide()
+                self.showFactory = true
+              } else {
+                self.showCenter = true
+                let shareParams = {
+                  module: 'retailer',
+                  moduleid: self.loginUser.uid,
+                  title: `${self.loginUser.linkman}邀请你一起入驻共销客`,
+                  desc: '共销客帮你解决微商创业难题',
+                  photo: self.loginUser.avatar,
+                  link: `${ENV.Host}/#/centerSales?&share_uid=${self.loginUser.uid}`
+                }
+                if (self.query.share_uid) {
+                  shareParams.link = `${shareParams.link}&lastshareuid=${self.query.share_uid}`
+                  shareParams.lastshareuid = self.query.share_uid
+                }
+                self.$util.handleWxShare(shareParams)
+                self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
+                  if (res.status === 200) {
+                    let data = res.data
+                    self.retailerInfo = data.data ? data.data : data
+                    self.$vux.loading.hide()
+                    return self.$http.get(`${ENV.BokaApi}/api/message/newMessages`)
+                  }
+                }).then(function (res) {
+                  if (res) {
+                    let data = res.data
+                    self.messages = data.data
+                    return self.$http.get(`${ENV.BokaApi}/api/retailer/shareview`)
+                  }
+                }).then(function (res) {
+                  if (res) {
+                    let data = res.data
+                    self.marqueeData = data.data ? data.data : data
+                  }
+                })
+              }
+            }
+          })
         }
       }, res => {
         this.$vux.toast.show({
