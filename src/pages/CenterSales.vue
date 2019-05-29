@@ -218,6 +218,12 @@ export default {
             }
           }
         }
+      }, res => {
+        this.$vux.toast.show({
+          text: res,
+          type: 'text',
+          time: 5000
+        })
       })
     },
     initContainer () {
@@ -228,8 +234,6 @@ export default {
       document.title = '卖家中心'
     },
     refresh (query) {
-      // const self = this
-      console.log(this.$wechat)
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = query
       this.getData()
