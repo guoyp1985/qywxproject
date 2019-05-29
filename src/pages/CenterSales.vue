@@ -215,12 +215,6 @@ export default {
             }
           })
         }
-      }, res => {
-        this.$vux.toast.show({
-          text: res,
-          type: 'text',
-          time: 5000
-        })
       })
     },
     initContainer () {
