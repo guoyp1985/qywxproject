@@ -149,7 +149,7 @@ export default {
       const self = this
       self.$vux.loading.show()
       self.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
-        alert(JSON.stringify(res))
+        // alert(JSON.stringify(res))
         self.loginUser = res.data
         User.set(self.loginUser)
         if (!self.loginUser.isretailer || !self.loginUser.retailerinfo.moderate) {
