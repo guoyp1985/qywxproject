@@ -754,7 +754,9 @@ Util.install = function (Vue, options) {
           }
         },
         fail: res => {
-          alert(JSON.stringify(res))
+          Vue.toast.show({
+            text: '微信地址获取失败'
+          })
         }
       })
     }
