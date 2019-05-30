@@ -1106,7 +1106,7 @@ export default {
       this.loginUser = User.get()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
-      if (this.query.miniconfig === 'wechat.mini_program.qxb') {
+      if (this.query.miniconfig === 'wechat.mini_program.qxb' || this.query.fromapp === 'factory') {
         this.showTip = false
       } else {
         this.showTip = true
