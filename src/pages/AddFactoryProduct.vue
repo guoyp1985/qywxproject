@@ -775,8 +775,7 @@ export default {
         if (this.optionsData.length) {
           for (let i = 0; i < this.optionsData.length; i++) {
             let curOption = this.optionsData[i]
-            let oPhoto = curOption.photo ? curOption.photo : self.photoarr[0]
-            let addoption = {title: curOption.title, photo: oPhoto, storage: curOption.storage}
+            let addoption = {title: curOption.title, photo: curOption.photo, storage: curOption.storage}
             if (curOption.id) {
               addoption.id = curOption.id
             }
