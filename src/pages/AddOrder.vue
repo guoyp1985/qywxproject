@@ -145,8 +145,9 @@
               </div>
             </div>
             <div class="popup-bottom flex_center">
-              <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closepopup">{{ $t('Close') }}</div>
+              <div class="h_100 flex_center bg-gray color-white w80" @click="closepopup">{{ $t('Close') }}</div>
               <router-link :to="{ path: '/newAddress', query: {lasturl: `/addOrder?id=${query.id}`} }" class="flex_cell h_100 flex_center bg-red color-white">新建地址</router-link>
+              <div class="flex_cell h_100 flex_center bg-green color-white" @click="clickWxAddress">使用微信地址</div>
             </div>
           </div>
         </popup>
@@ -409,6 +410,15 @@ export default {
     },
     closepopup () {
       this.showpopup = false
+    },
+    clickWxAddress () {
+      this.showpopup = false
+      this.$util.wxAddress((data1, newData) => {
+        if (data1.flag) {
+          this.addressdata = [newData]
+          this.handleAddress()
+        }
+      })
     },
     radioclick (data, index) {
       const self = this
