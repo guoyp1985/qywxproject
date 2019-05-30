@@ -611,7 +611,7 @@ export default {
                   onConfirm: () => {
                     this.$util.wxAddress((data1, newData) => {
                       if (data1.flag) {
-                        this.addressdata = [newData]
+                        this.addressdata.push(newData)
                         this.handleAddress()
                       }
                     })
