@@ -752,6 +752,9 @@ Util.install = function (Vue, options) {
               }
             })
           }
+        },
+        fail: res => {
+          alert(JSON.stringify(res))
         }
       })
     }
