@@ -113,6 +113,7 @@ export default {
         this.initContainer()
         this.bindFactory()
         this.showFactory = true
+        this.bindFactory()
         this.$vux.loading.hide()
       } else {
         if (self.query.minibackurl) {
