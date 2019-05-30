@@ -4,7 +4,7 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div id="order-search" :class="`containerarea font14 ${loginUser.isretailer ? 's-havebottom' : ''}`">
+  <div id="order-search" :class="`containerarea font14 ${(loginUser.isretailer && query.fromapp != 'factory') ? 's-havebottom' : ''}`">
     <div class="s-topbanner s-topbanner1">
       <tab class="b-tab" v-model="selectedIndex">
         <tab-item :selected="selectedIndex==0" @on-item-click="toggleTab">{{ $t('All') }}</tab-item>
@@ -63,7 +63,7 @@
         </template>
       </div>
     </div>
-    <div class="s-bottom flex_center pl12 pr12 list-shadow02" v-if="loginUser.isretailer">
+    <div class="s-bottom flex_center pl12 pr12 list-shadow02" v-if="loginUser.isretailer && query.fromapp != 'factory'">
       <div class="flex_cell flex_center">
         <div class="color-white flex_center btn-bottom-red" @click="toRetailerOrders" style="width:85%;">我的销售订单</div>
       </div>
