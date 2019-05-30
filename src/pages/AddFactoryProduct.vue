@@ -743,9 +743,9 @@ export default {
           for (let i = 0; i < this.optionsData.length; i++) {
             let curOption = this.optionsData[i]
             let curTitle = curOption.title
-            let curPhoto = curOption.photo
+            // let curPhoto = curOption.photo
             let curStorage = curOption.storage
-            if (self.$util.trim(curTitle) === '' || self.$util.trim(curPhoto) === '' || self.$util.trim(curStorage) === '') {
+            if (self.$util.trim(curTitle) === '' || self.$util.trim(curStorage) === '') {
               self.$vux.toast.text('请完规格信息', 'middle')
               iscontinue = false
               break
@@ -775,8 +775,7 @@ export default {
         if (this.optionsData.length) {
           for (let i = 0; i < this.optionsData.length; i++) {
             let curOption = this.optionsData[i]
-            let oPhoto = curOption.photo ? curOption.photo : self.photoarr[0]
-            let addoption = {title: curOption.title, photo: oPhoto, storage: curOption.storage}
+            let addoption = {title: curOption.title, photo: curOption.photo, storage: curOption.storage}
             if (curOption.id) {
               addoption.id = curOption.id
             }
