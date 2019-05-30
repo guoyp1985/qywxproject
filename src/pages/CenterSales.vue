@@ -113,7 +113,6 @@ export default {
         this.initContainer()
         this.bindFactory()
         this.showFactory = true
-        this.bindFactory()
         this.$vux.loading.hide()
       } else {
         if (self.query.minibackurl) {
@@ -151,8 +150,12 @@ export default {
     getData () {
       const self = this
       self.$vux.loading.show()
+      let uparams = {}
+      if (self.query.fromapp === 'factory') {
+        uparams = {fid: this.query.fid, uploader: this.query.wid}
+      }
       self.$http.get(`${ENV.BokaApi}/api/user/show`, {
-        params: {test: 'gypvue'}
+        params: uparams
       }).then(res => {
         self.loginUser = res.data
         User.set(self.loginUser)
