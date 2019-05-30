@@ -413,11 +413,13 @@ export default {
     },
     clickWxAddress () {
       this.showpopup = false
-      this.$util.wxAddress((data1, newData) => {
-        if (data1.flag) {
-          this.addressdata = [newData]
-          this.handleAddress()
-        }
+      this.$wechat.ready(() => {
+        this.$util.wxAddress((data1, newData) => {
+          if (data1.flag) {
+            this.addressdata = [newData]
+            this.handleAddress()
+          }
+        })
       })
     },
     radioclick (data, index) {
