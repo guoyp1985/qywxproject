@@ -334,7 +334,8 @@ export default {
       showFirst: false,
       isFirst: false,
       showHb: false,
-      sysParams: {}
+      sysParams: {},
+      isrefresh: false
     }
   },
   methods: {
@@ -515,6 +516,7 @@ export default {
           }
           break
       }
+      this.isrefresh = false
     },
     changePrice (item, index) {
       event.preventDefault()
@@ -556,7 +558,6 @@ export default {
       })
     },
     uploaddeliver (item, index) {
-      event.preventDefault()
       const self = this
       self.deliveritem = item
       self.deliverindex = index
@@ -591,6 +592,7 @@ export default {
           onHide: () => {
             if (data.flag === 1) {
               self.showpopup = false
+              self.isrefresh = true
               self.refresh()
               // self.deliveritem.flag = 3
               // self.deliveritem.delivercompany = self.deliverdata.delivercompany
@@ -696,7 +698,9 @@ export default {
           } else {
             this.selectedIndex = 0
           }
-          if (this.selectedIndex === 0) {
+          if (this.isrefresh) {
+            this.swiperChange()
+          } else if (this.selectedIndex === 0) {
             this.swiperChange()
           }
           // if (`${this.loginUser.retailerinfo.firstinfo.orderdeliver}` === '0' && this.query.from) {
