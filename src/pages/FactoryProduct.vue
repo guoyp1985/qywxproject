@@ -65,7 +65,10 @@
             <div class="w60 flex_left bold">规格</div>
             <div class="flex_cell card-options">
               <template v-for="(item,index) in productdata.options">
-                <img v-if="index < 5" :src="item.photo" />
+                <div v-if="index < 5">
+                  <img v-if="item.photo && item.photo !== ''" :src="item.photo" />
+                  <img v-else :src="photoarr[0]" />
+                </div>
               </template>
               <div class="flex_center txt-item">
                 <div class="btn flex_center">共{{productdata.options.length}}种规格可选</div>
@@ -198,8 +201,11 @@
                 <div class="pt10">规格</div>
                 <div class="options-list">
                   <div v-for="(item,index) in productdata.options" :class="`options-item ${(selectedOptionIndex == index && item.storage > 0) ? 'active' : ''} ${item.storage <= 0 ? 'disabled' : ''}`" @click="clickOptions(item,index)">
-                    <div class="flex_center">
+                    <div class="flex_center" v-if="item.photo && item.photo !== ''">
                       <img :src="item.photo" /><span class="ml5">{{item.title}}</span>
+                    </div>
+                    <div class="flex_center" v-else>
+                      <img :src="photoarr[0]" /><span class="ml5">{{item.title}}</span>
                     </div>
                   </div>
                 </div>
