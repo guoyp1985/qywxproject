@@ -288,7 +288,8 @@ export default {
       showOptions: false,
       selectedOption: {},
       selectedOptionIndex: 0,
-      previewerOptionsPhoto: []
+      previewerOptionsPhoto: [],
+      VipFree: false
     }
   },
   watch: {
@@ -529,10 +530,18 @@ export default {
       }
     },
     importEvent () {
-      if (!this.loginUser.isretailer || !this.retailerInfo.vipvalidate) {
-        this.showTip = true
+      if (this.VipFree) {
+        if (!this.loginUser.isretailer || !this.loginUser.retailerinfo.moderate) {
+          this.showTip = true
+        } else {
+          this.importProduct()
+        }
       } else {
-        this.importProduct()
+        if (!this.loginUser.isretailer || !this.retailerInfo.vipvalidate) {
+          this.showTip = true
+        } else {
+          this.importProduct()
+        }
       }
     },
     openVip () {
@@ -619,6 +628,15 @@ export default {
           this.isFirst = false
         }
         this.getData()
+        return this.$http.post(`${ENV.BokaApi}/api/common/getSysParas`)
+      }).then(res => {
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        if (parseFloat(retdata.retailer_apply_oneyear) === 0) {
+          this.VipFree = true
+        } else {
+          this.VipFree = false
+        }
       })
     }
   },
