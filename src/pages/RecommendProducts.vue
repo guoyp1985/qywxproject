@@ -161,7 +161,8 @@ export default {
       showRetailerWechat: false,
       isLoading: false,
       WeixinQrcode: ENV.WeixinQrcode,
-      showSubscribe: false
+      showSubscribe: false,
+      VipFree: false
     }
   },
   watch: {
@@ -187,6 +188,7 @@ export default {
       this.showFirst = false
       this.clickData = null
       this.clickIndex = 0
+      this.VipFree = false
     },
     closeTip () {
       this.showTip = false
@@ -253,10 +255,18 @@ export default {
     upEvent (item, index) {
       this.clickData = item
       this.clickIndex = index
-      if (!this.loginUser.isretailer || !this.loginUser.retailerinfo.vipvalidate) {
-        this.showTip = true
+      if (this.VipFree) {
+        if (!this.loginUser.isretailer || !this.loginUser.retailerinfo.moderate) {
+          this.showTip = true
+        } else {
+          this.importProduct(item)
+        }
       } else {
-        this.importProduct(item)
+        if (!this.loginUser.isretailer || !this.loginUser.retailerinfo.vipvalidate) {
+          this.showTip = true
+        } else {
+          this.importProduct(item)
+        }
       }
     },
     onChange (val) {
@@ -396,6 +406,15 @@ export default {
         User.set(data)
         if (`${this.loginUser.retailerinfo.firstinfo.importproduct}` === '0' && this.query.from) {
           this.isFirst = true
+        }
+        return this.$http.post(`${ENV.BokaApi}/api/common/getSysParas`)
+      }).then(res => {
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        if (parseFloat(retdata.retailer_apply_oneyear) === 0) {
+          this.VipFree = true
+        } else {
+          this.VipFree = false
         }
       })
       if (!self.classData.length) {
