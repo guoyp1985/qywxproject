@@ -17,7 +17,7 @@
           <div style="height:10px;"></div>
         </div>
         <div class="bg-white b_bottom_after padding10">
-          <div class="flex_left">买家：{{ data.username }}  累计消费：<span class="color-red">{{ $t('RMB') }}{{ data.summoney }}</span></div>
+          <div class="flex_left" @click="toMemberView">买家：{{ data.username }}  累计消费：<span class="color-red">{{ $t('RMB') }}{{ data.summoney }}</span></div>
         </div>
         <div v-if="data.flag != 0" class="bg-white b_bottom_after padding10">
           <div v-if="data.flag != 0 && data.flag != 1 && data.flag != 2" class="t-table mb10">
@@ -270,6 +270,10 @@ export default {
       } else {
         this.$router.push({path: '/product', query: {id: item.pid, wid: item.wid}})
       }
+    },
+    toMemberView () {
+      let params = this.$util.handleAppParams(this.query, {uid: this.data.uid})
+      this.$router.push({path: '/membersView', query: params})
     },
     textareaChange (refname) {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
