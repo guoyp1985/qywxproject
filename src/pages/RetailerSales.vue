@@ -157,7 +157,7 @@
       </firstTip>
     </template>
     <template v-if="showHb">
-      <firstHb action="seller" @closeFirstHb="closeFirstHb"></firstHb>
+      <firstHb action="seller" @closeFirstHb="closeFirstHb" @afterOpen="afterClickOpen"></firstHb>
     </template>
   </div>
 </template>
@@ -236,6 +236,9 @@ export default {
     closeFirstHb () {
       this.isFirst = false
       this.showHb = false
+    },
+    afterClickOpen () {
+      this.isFirst = false
     },
     toSaleview (item) {
       let params = this.$util.handleAppParams(this.query, {uid: item.uid})
@@ -481,45 +484,50 @@ export default {
       this.loginUser = User.get()
       this.retailerInfo = this.loginUser.retailerinfo
       this.query = this.$route.query
-      if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
-        self.initContainer()
-        self.$vux.loading.hide()
-        if (!self.loginUser.isretailer) {
+      this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
+        const data = res.data
+        this.loginUser = data
+        User.set(data)
+        if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
           self.initContainer()
-          self.showApply = true
-        } else {
-          self.initContainer()
-          this.showContainer = true
-          if (this.query.flag === '1' || this.query.flag === 1) {
-            this.selectedIndex = 1
-          } else if (this.query.flag === '2' || this.query.flag === 2) {
-            this.selectedIndex = 2
-          }
-          this.swiperChange()
-        }
-        if (`${this.loginUser.retailerinfo.firstinfo.seller}` === '0' && this.query.from) {
-          this.$http.get(`${ENV.BokaApi}/api/retailer/info`).then(res => {
-            const data = res.data
-            if (data.flag) {
-              this.retailerInfo = data.data
-              this.loginUser.retailerinfo = this.retailerInfo
-              User.set(this.loginUser)
-              if (`${this.retailerInfo.firstinfo.seller}` === '0' && this.query.from) {
-                this.isFirst = true
-                let finfo = FirstInfo.get()
-                if (!finfo) {
-                  finfo = this.retailerInfo.firstinfo
-                }
-                if (`${finfo.seller}` === '0') {
-                  this.showFirst = true
-                  finfo.seller = 1
-                }
-                FirstInfo.set(finfo)
-              }
+          self.$vux.loading.hide()
+          if (!self.loginUser.isretailer) {
+            self.initContainer()
+            self.showApply = true
+          } else {
+            self.initContainer()
+            this.showContainer = true
+            if (this.query.flag === '1' || this.query.flag === 1) {
+              this.selectedIndex = 1
+            } else if (this.query.flag === '2' || this.query.flag === 2) {
+              this.selectedIndex = 2
             }
-          })
+            this.swiperChange()
+          }
+          if (`${this.loginUser.retailerinfo.firstinfo.seller}` === '0' && this.query.from) {
+            this.$http.get(`${ENV.BokaApi}/api/retailer/info`).then(res => {
+              const data = res.data
+              if (data.flag) {
+                this.retailerInfo = data.data
+                this.loginUser.retailerinfo = this.retailerInfo
+                User.set(this.loginUser)
+                if (`${this.retailerInfo.firstinfo.seller}` === '0' && this.query.from) {
+                  this.isFirst = true
+                  let finfo = FirstInfo.get()
+                  if (!finfo) {
+                    finfo = this.retailerInfo.firstinfo
+                  }
+                  if (`${finfo.seller}` === '0') {
+                    this.showFirst = true
+                    finfo.seller = 1
+                  }
+                  FirstInfo.set(finfo)
+                }
+              }
+            })
+          }
         }
-      }
+      })
     }
   },
   created () {
