@@ -190,6 +190,7 @@ export default {
               type: 'text',
               time: this.$util.delay(data.error)
             })
+            this.$emit('closeFirstHb')
           }
           this.showModal = false
           this.submitIng = false
