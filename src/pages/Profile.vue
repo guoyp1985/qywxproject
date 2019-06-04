@@ -96,7 +96,7 @@ export default {
           } else {
             minibackurl = `${minibackurl}&`
           }
-          minibackurl = `gxkfid=${this.loginUser.fid}`
+          minibackurl = `${minibackurl}gxkfid=${this.loginUser.fid}`
         }
         this.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
       } else {
