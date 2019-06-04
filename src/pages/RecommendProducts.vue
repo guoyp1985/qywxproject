@@ -71,19 +71,6 @@
           <div style="span-align:center;color:#999;height:30px;line-height:30px;font-size:14px;text-align:center;" v-else-if="scrollEnd && productData.length">没有更多商品啦</div>
         </div>
       </div>
-      <template v-if="showTip">
-        <tip-layer buttonTxt="立即申请" content="会员卖家才可代理厂家商品，赶快入驻申请吧！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
-      </template>
-      <template v-if="showFirst">
-        <firstTip @submitFirstTip="submitFirstTip">
-          <div class="font15 bold txt">
-            <div class="flex_center">{{sysParams.advance_importproduct}}</div>
-          </div>
-        </firstTip>
-      </template>
-      <template v-if="showHb">
-        <firstHb action="importproduct" @closeFirstHb="closeFirstHb" @afterOpen="afterClickOpen"></firstHb>
-      </template>
     </div>
     <!-- 新增按钮 -->
     <div class="btn-bottom" @click="closeChat">
@@ -101,6 +88,19 @@
         </div>
       </div>
     </div>
+    <template v-if="showTip">
+      <tip-layer buttonTxt="立即申请" content="会员卖家才可代理厂家商品，赶快入驻申请吧！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
+    </template>
+    <template v-if="showFirst">
+      <firstTip @submitFirstTip="submitFirstTip">
+        <div class="font15 bold txt">
+          <div class="flex_center">{{sysParams.advance_importproduct}}</div>
+        </div>
+      </firstTip>
+    </template>
+    <template v-if="showHb">
+      <firstHb action="importproduct" @closeFirstHb="closeFirstHb" @afterOpen="afterClickOpen"></firstHb>
+    </template>
   </div>
 </template>
 

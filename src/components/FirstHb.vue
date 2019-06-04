@@ -3,10 +3,29 @@
   position:absolute;left:0;top:0;right:0;bottom:0;
 }
 .first-hb-modal{
-  .modal-inner{width:80%;height:72%;background-color:transparent;max-width:430px;}
-  .pic-outer:after{content:'';display:block;padding-bottom:170%;width:100%;}
+  // .modal-inner{width:80%;height:72%;background-color:transparent;max-width:430px;}
+  // .pic-outer:after{content:'';display:block;padding-bottom:170%;width:100%;}
+  // .pic-outer{
+  //   width:100%;position:relative;max-width:430px;max-height:100%;
+  //   .pic{
+  //     position:absolute;left:0;top:0;right:0;bottom:0;
+  //     img{max-width:100%;max-height:100%;}
+  //   }
+  //   .click-area{
+  //     position:absolute;left:40%;top:56%;width:18%;
+  //     .click-inner{
+  //       width:100%;padding-bottom:100%;
+  //       .btn{
+  //         position:absolute;left:0;top:0;right:0;bottom:0;
+  //       }
+  //     }
+  //   }
+  // }
+
+
+  .modal-inner{width:100%;height:72vh;background-color:transparent;}
   .pic-outer{
-    width:100%;position:relative;max-width:430px;max-height:100%;
+    width:72vh*0.59;height:100%;position:relative;margin:0 auto;
     .pic{
       position:absolute;left:0;top:0;right:0;bottom:0;
       img{max-width:100%;max-height:100%;}
@@ -21,6 +40,7 @@
       }
     }
   }
+
   .top-con{
     position:absolute;left:0;top:8%;right:0;width:100%;color:#fff;font-weight:bold;font-size:35px;z-index:1;
   }
@@ -70,7 +90,7 @@
 <template>
   <div class="first-hb-modal-outer">
     <div class="auto-modal flex_center first-hb-modal" v-if="showModal">
-      <div class="modal-inner border-box">
+      <div class="modal-inner border-box flex_center">
         <div class="pic-outer">
           <div class="pic flex_center">
             <img src="https://tossharingsales.boka.cn/minigxk/zpcj1.png" />
