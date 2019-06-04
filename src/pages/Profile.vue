@@ -33,6 +33,7 @@ export default {
   data () {
     return {
       query: {},
+      loginUser: {},
       option: '',
       options: [
         {
@@ -86,6 +87,22 @@ export default {
         }
       })
     },
+    handleBack () {
+      if (this.query.minibackurl) {
+        let minibackurl = decodeURIComponent(this.query.minibackurl)
+        if (this.loginUser.fid) {
+          if (minibackurl.indexOf('?') < 0) {
+            minibackurl = `${minibackurl}?`
+          } else {
+            minibackurl = `${minibackurl}&`
+          }
+          minibackurl = `gxkfid=${this.loginUser.fid}`
+        }
+        this.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+      } else {
+        this.$router.go(-1)
+      }
+    },
     onConfirm () {
       const self = this
       this.getProfile.mobile = this.$util.trim(this.getProfile.mobile)
@@ -115,29 +132,20 @@ export default {
           })
           self.$vux.toast.text(res.data.error, 'middle')
           setTimeout(() => {
-            if (self.query.minibackurl) {
-              let minibackurl = decodeURIComponent(self.query.minibackurl)
-              self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
-            } else {
-              self.$router.go(-1)
-            }
+            self.handleBack()
           }, 1000)
         })
       }
     },
     onCancel () {
-      if (this.query.minibackurl) {
-        let minibackurl = decodeURIComponent(this.query.minibackurl)
-        this.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
-      } else {
-        this.$router.go(-1)
-      }
+      this.handleBack()
     },
     init () {
       this.getProfile = User.get()
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.loginUser = User.get()
       this.query = this.$route.query
     }
   },
