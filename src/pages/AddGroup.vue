@@ -77,7 +77,7 @@
     </div>
     <div class="font12 color-red4 align_center mt10" style="padding:0 15px;box-sizing:border-box;">注意：请勿将官方客服踢出微信群，否则影响获取邀请人信息</div>
     <template v-if="showHb">
-      <firstHb action="addgroup" @closeFirstHb="closeFirstHb"></firstHb>
+      <firstHb action="addgroup" @closeFirstHb="closeFirstHb" @afterOpen="afterClickOpen"></firstHb>
     </template>
   </div>
 </template>
@@ -117,6 +117,9 @@ export default {
       this.isFirst = false
       this.showHb = false
       this.afterAdd()
+    },
+    afterClickOpen (data) {
+      this.isFirst = false
     },
     toStart () {
       this.$router.push('/RoomStart')
@@ -191,16 +194,14 @@ export default {
     this.query = this.$route.query
     this.loginUser = User.get()
     this.initData()
-    if (`${this.loginUser.retailerinfo.firstinfo.addgroup}` === '0' && this.query.from) {
-      this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
-        const data = res.data
-        this.loginUser = data
-        User.set(data)
-        if (this.loginUser.retailerinfo.firstinfo.addgroup === '0' && this.query.from) {
-          this.isFirst = true
-        }
-      })
-    }
+    this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
+      const data = res.data
+      this.loginUser = data
+      User.set(data)
+      if (this.loginUser.retailerinfo.firstinfo.addgroup === '0' && this.query.from) {
+        this.isFirst = true
+      }
+    })
   }
 }
 </script>
