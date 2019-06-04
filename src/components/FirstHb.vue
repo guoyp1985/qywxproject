@@ -187,7 +187,7 @@ export default {
             this.showResult = false
             this.$vux.toast.show({
               text: data.error,
-              type: data.flag !== 1 ? 'warn' : 'success',
+              type: 'text',
               time: this.$util.delay(data.error)
             })
           }
