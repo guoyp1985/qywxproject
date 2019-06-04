@@ -86,7 +86,7 @@
       <div class="modal-inner border-box flex_center">
         <div class="pic-outer">
           <div class="pic flex_center">
-            <img src="https://tossharingsales.boka.cn/minigxk/zpcj1.png" />
+            <img src="https://tossharingsales.boka.cn/minigxk/zpcj2.jpg" />
           </div>
           <div class="click-area" @click="clickOpen">
             <div class="click-inner">

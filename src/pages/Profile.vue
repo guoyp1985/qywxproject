@@ -32,6 +32,7 @@ export default {
   },
   data () {
     return {
+      query: {},
       option: '',
       options: [
         {
@@ -106,8 +107,7 @@ export default {
           mobile: this.getProfile.mobile,
           sex: this.getProfile.sex,
           company: this.getProfile.company
-        })
-        .then(res => {
+        }).then(res => {
           const user = User.get()
           User.set({
             ...user,
@@ -115,19 +115,30 @@ export default {
           })
           self.$vux.toast.text(res.data.error, 'middle')
           setTimeout(() => {
-            self.$router.go(-1)
+            if (self.query.minibackurl) {
+              let minibackurl = decodeURIComponent(self.query.minibackurl)
+              self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+            } else {
+              self.$router.go(-1)
+            }
           }, 1000)
         })
       }
     },
     onCancel () {
-      this.$router.go(-1)
+      if (this.query.minibackurl) {
+        let minibackurl = decodeURIComponent(this.query.minibackurl)
+        this.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+      } else {
+        this.$router.go(-1)
+      }
     },
     init () {
       this.getProfile = User.get()
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
     }
   },
   created () {
