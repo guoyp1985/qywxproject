@@ -172,6 +172,7 @@ export default {
             this.moneyParams.awardmoney = data.datadesc
             this.showResult = true
           } else {
+            this.showResult = false
             this.$vux.toast.show({
               text: data.error,
               type: data.flag !== 1 ? 'warn' : 'success',

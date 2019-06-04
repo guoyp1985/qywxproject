@@ -572,6 +572,7 @@ export default {
           self.delivercompany = data.data ? data.data : data
         })
       }
+      this.deliverdata = { delivercompany: '-1', delivercode: '' }
       this.showpopup = true
     },
     confirmpopup () {
