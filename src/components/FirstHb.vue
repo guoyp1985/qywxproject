@@ -3,29 +3,9 @@
   position:absolute;left:0;top:0;right:0;bottom:0;
 }
 .first-hb-modal{
-  // .modal-inner{width:80%;height:72%;background-color:transparent;max-width:430px;}
-  // .pic-outer:after{content:'';display:block;padding-bottom:170%;width:100%;}
-  // .pic-outer{
-  //   width:100%;position:relative;max-width:430px;max-height:100%;
-  //   .pic{
-  //     position:absolute;left:0;top:0;right:0;bottom:0;
-  //     img{max-width:100%;max-height:100%;}
-  //   }
-  //   .click-area{
-  //     position:absolute;left:40%;top:56%;width:18%;
-  //     .click-inner{
-  //       width:100%;padding-bottom:100%;
-  //       .btn{
-  //         position:absolute;left:0;top:0;right:0;bottom:0;
-  //       }
-  //     }
-  //   }
-  // }
-
-
-  .modal-inner{width:100%;height:72vh;background-color:transparent;}
+  .modal-inner{width:100%;height:70vh;background-color:transparent;}
   .pic-outer{
-    width:72vh*0.59;height:100%;position:relative;margin:0 auto;
+    width:70vh*0.59;height:100%;position:relative;margin:0 auto;max-width:100%;
     .pic{
       position:absolute;left:0;top:0;right:0;bottom:0;
       img{max-width:100%;max-height:100%;}
@@ -40,7 +20,6 @@
       }
     }
   }
-
   .top-con{
     position:absolute;left:0;top:8%;right:0;width:100%;color:#fff;font-weight:bold;font-size:35px;z-index:1;
   }
@@ -63,13 +42,12 @@
 }
 .first-result-modal{
   .inner{
-    width:90%;position:relative;max-width:400px;max-height:428px;
-    .pic-outer:after{content:'';display:block;padding-bottom:107%;width:100%;}
+    width:90%;height:50vh;position:relative;
     .pic-outer{
-      width:100%;max-width:400px;max-height:428px;position:relative;
+      width:50vh*1.07;height:100%;position:relative;margin:0 auto;max-width:100%;
       .pic{
         position:absolute;left:0;top:0;right:0;bottom:0;
-        img{max-width:100%;max-height:100%;}
+        img{height:100%;max-width:100%;display:block;margin:0 auto;}
       }
     }
   }
@@ -84,6 +62,21 @@
   .txt-list{
     position:absolute;left:0;bottom:10%;right:0;display:flex;
     .item{flex:1;color:#f8edad;box-sizing: border-box;}
+  }
+}
+@media screen and (min-height: 700px) {
+  .first-result-modal{
+    .inner{
+      width:90%;height:auto;position:relative;max-width:400px;max-height:428px;
+      .pic-outer:after{content:'';display:block;padding-bottom:107%;width:100%;}
+      .pic-outer{
+        width:100%;max-width:400px;max-height:428px;position:relative;
+        .pic{
+          position:absolute;left:0;top:0;right:0;bottom:0;
+          img{max-width:100%;max-height:100%;}
+        }
+      }
+    }
   }
 }
 </style>
@@ -113,7 +106,6 @@
             <img src="https://tossharingsales.boka.cn/minigxk/luck/hb2.png" />
           </div>
         </div>
-        <!-- <div class="top-txt flex_center">恭喜你获得<text class="big">{{typeObject[moneyParams.awardtype]}}</text>奖励</div> -->
         <div class="top-txt flex_center">恭喜你获得奖励</div>
         <div class="con-txt flex_center">
           <div class="w_100 align_center">
