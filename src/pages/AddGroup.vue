@@ -162,6 +162,7 @@ export default {
               time: _this.$util.delay(data.error),
               onHide: () => {
                 _this.isSubmiting = false
+                _this.crypto = ''
                 if (data.flag) {
                   if (this.isFirst) {
                     this.showHb = true
