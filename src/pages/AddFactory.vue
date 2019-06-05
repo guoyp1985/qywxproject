@@ -316,6 +316,11 @@ export default {
       if (self.fid) {
         con = '确认更新该厂家信息吗？'
         postData.id = self.fid
+        if (!self.infoData.title || self.infoData.title !== '') {
+          postData.title = postData.company
+        }
+      } else {
+        postData.title = postData.company
       }
       self.$vux.confirm.show({
         content: con,
