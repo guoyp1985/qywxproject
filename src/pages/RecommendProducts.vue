@@ -52,7 +52,7 @@
           			</div>
           			<div class="desbox" style="overflow:hidden;">
           				<div class="align_left clamp1">{{ item.title }}</div>
-                  <div class="clamp1 color-red" style="height:20px;">{{item.sellingpoint}}</div>
+                  <div class="clamp1 color-red" style="height:20px;" v-if="item.sellingpoint && item.sellingpoint != ''">{{item.sellingpoint}}</div>
                   <div class="flex_left mt5">
                     <div class="flex_cell flex_left">
                       <div class="w_100 clamp1 color-red">{{ $t('RMB') }} {{ item.price }}</div>
