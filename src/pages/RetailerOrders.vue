@@ -23,14 +23,14 @@
             ref="search">
           </search>
           <tab v-model="selectedIndex" class="" active-color="#ea3a3a" default-color="#666666">
-            <tab-item v-for="(item,index) in tabtxts" :selected="index == selectedIndex" :key="index">{{item}}</tab-item>
+            <tab-item v-for="(item,index) in tabtxts" :selected="index == selectedIndex" :key="index" @on-item-click="onItemClick()">{{item}}</tab-item>
           </tab>
         </div>
       </div>
       <div class="s-container s-container1">
-        <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
-          <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-            <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)">
+        <!-- <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
+          <swiper-item v-for="(tabitem, index) in tabtxts" :key="index"> -->
+            <div v-show="(selectedIndex == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',0)">
               <div v-if="distabdata1" class="scroll_list">
                 <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 align_center color-gray">
                   <div><i class="al al-wushuju font60 pt20"></i></div>
@@ -48,10 +48,10 @@
                         <span @click="copyTxt(item)" class="ml5" style="position:relative;">
                           <i class="al al-fuzhi font14 color-red4"></i><span class="font12 color-red4">复制</span>
                           <template v-if="item.flag != 0 && item.flag != 1 && item.flag != 2">
-                            <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.delivercompanyname }} {{ item.delivercode }} {{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
+                            <div :class="`deliver_txt-0-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.delivercompanyname }} {{ item.delivercode }} {{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
                           </template>
                           <template v-else>
-                            <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
+                            <div :class="`deliver_txt-0-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
                           </template>
                         </span>
                       </div>
@@ -85,7 +85,7 @@
                 </Orderitemplate>
               </div>
             </div>
-            <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',index)">
+            <div v-show="(selectedIndex == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',1)">
               <div v-if="distabdata2" class="scroll_list">
                 <div v-if="!tabdata2 || tabdata2.length === 0" class="scroll_item padding10 align_center color-gray">
                   <div><i class="al al-wushuju font60 pt20"></i></div>
@@ -103,10 +103,10 @@
                         <span @click="copyTxt(item)" class="ml5" style="position:relative;">
                           <i class="al al-fuzhi font14 color-red4"></i><span class="font12 color-red4">复制</span>
                           <template v-if="item.flag != 0 && item.flag != 1 && item.flag != 2">
-                            <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.delivercompanyname }} {{ item.delivercode }} {{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
+                            <div :class="`deliver_txt-1-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.delivercompanyname }} {{ item.delivercode }} {{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
                           </template>
                           <template v-else>
-                            <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
+                            <div :class="`deliver_txt-1-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
                           </template>
                         </span>
                       </div>
@@ -132,7 +132,7 @@
                 </orderitemplate>
               </div>
             </div>
-            <div v-if="(index == 2)" class="swiper-inner scroll-container31" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',index)">
+            <div v-show="(selectedIndex == 2)" class="swiper-inner scroll-container31" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',2)">
               <div v-if="distabdata3" class="scroll_list">
                 <div v-if="!tabdata3 || tabdata3.length === 0" class="scroll_item padding10 align_center color-gray">
                   <div><i class="al al-wushuju font60 pt20"></i></div>
@@ -150,10 +150,10 @@
                         <span @click="copyTxt(item)" class="ml5" style="position:relative;">
                           <i class="al al-fuzhi font14 color-red4"></i><span class="font12 color-red4">复制</span>
                           <template v-if="item.flag != 0 && item.flag != 1 && item.flag != 2">
-                            <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.delivercompanyname }} {{ item.delivercode }} {{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
+                            <div :class="`deliver_txt-2-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.delivercompanyname }} {{ item.delivercode }} {{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
                           </template>
                           <template v-else>
-                            <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
+                            <div :class="`deliver_txt-2-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
                           </template>
                         </span>
                       </div>
@@ -170,7 +170,7 @@
                 </orderitemplate>
               </div>
             </div>
-            <div v-if="(index == 3)" class="swiper-inner scroll-container4" ref="scrollContainer4" @scroll="handleScroll('scrollContainer4',index)">
+            <div v-show="(selectedIndex == 3)" class="swiper-inner scroll-container4" ref="scrollContainer4" @scroll="handleScroll('scrollContainer4',3)">
               <div v-if="distabdata4" class="scroll_list">
                 <div v-if="!tabdata4 || tabdata4.length === 0" class="scroll_item padding10 align_center color-gray">
                   <div><i class="al al-wushuju font60 pt20"></i></div>
@@ -188,10 +188,10 @@
                         <span @click="copyTxt(item)" class="ml5" style="position:relative;">
                           <i class="al al-fuzhi font14 color-red4"></i><span class=" color-red4">复制</span>
                           <template v-if="item.flag != 0 && item.flag != 1 && item.flag != 2">
-                            <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.delivercompanyname }} {{ item.delivercode }} {{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
+                            <div :class="`deliver_txt-3-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.delivercompanyname }} {{ item.delivercode }} {{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
                           </template>
                           <template v-else>
-                            <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
+                            <div :class="`deliver_txt-3-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
                           </template>
                         </span>
                       </div>
@@ -208,8 +208,8 @@
                 </orderitemplate>
               </div>
             </div>
-          </swiper-item>
-        </swiper>
+          <!-- </swiper-item>
+        </swiper> -->
       </div>
       <!--
       <div class="s-bottom bottomnaviarea b_top_after">
@@ -477,6 +477,43 @@ export default {
         self.distabdata4 = true
       })
     },
+    onItemClick () {
+      const self = this
+      switch (this.selectedIndex) {
+        case 0:
+          if (this.tabdata1.length < this.limit) {
+            self.pagestart1 = 0
+            self.distabdata1 = false
+            this.tabdata1 = []
+            self.getData1()
+          }
+          break
+        case 1:
+          if (this.tabdata2.length < this.limit) {
+            self.pagestart2 = 0
+            self.distabdata2 = false
+            this.tabdata2 = []
+            self.getData2()
+          }
+          break
+        case 2:
+          if (this.tabdata3.length < this.limit) {
+            self.pagestart3 = 0
+            self.distabdata3 = false
+            this.tabdata3 = []
+            self.getData3()
+          }
+          break
+        case 3:
+          if (this.tabdata4.length < this.limit) {
+            self.pagestart4 = 0
+            self.distabdata4 = false
+            this.tabdata4 = []
+            self.getData4()
+          }
+          break
+      }
+    },
     swiperChange (index) {
       const self = this
       if (index !== undefined) {
@@ -699,11 +736,7 @@ export default {
           } else {
             this.selectedIndex = 0
           }
-          if (this.isrefresh) {
-            this.swiperChange()
-          } else if (this.selectedIndex === 0) {
-            this.swiperChange()
-          }
+          this.swiperChange()
           // if (`${this.loginUser.retailerinfo.firstinfo.orderdeliver}` === '0' && this.query.from) {
           //   this.$http.get(`${ENV.BokaApi}/api/retailer/info`).then(res => {
           //     const data = res.data
