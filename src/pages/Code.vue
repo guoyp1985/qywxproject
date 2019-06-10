@@ -3,63 +3,59 @@
     <div class="s-topbanner s-topbanner1">
       <div class="row">
         <tab v-model="selectedIndex" active-color="#ea3a3a" default-color="#666666">
-          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="clickTab(index)">{{item}}</tab-item>
+          <tab-item v-for="(item,index) in tabtxts" :selected="index == selectedIndex" :key="index" @on-item-click="clickTab">{{item}}</tab-item>
         </tab>
       </div>
     </div>
     <div class="s-container s-container1">
-      <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
-        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-          <div v-if="index === 0" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)">
-            <template v-if="disList1">
-              <div v-if="!tabdata1.length" class="w_100 h_100 flex_center color-gray">暂无有效的优惠码</div>
-              <div v-else class="scroll_list">
-                <div v-for="(item,index1) in tabdata1" :key="index1" :class="`scroll_item bg-white item-${item.id}`">
-                  <div class="flex_left">
-                    <div class="flex_cell padding10">
-                      <div class="bold">{{item.code}}</div>
-                      <div class="color-gray font12">使用次数: {{item.quantity}}</div>
-                      <div class="color-gray font12">已用次数: {{item.haveused}}</div>
-                      <div class="color-gray font12">生成时间: {{item.dateline | dateFormat}}</div>
+      <div v-show="selectedIndex === 0" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',0)">
+        <template v-if="disList1">
+          <div v-if="!tabdata1.length" class="w_100 h_100 flex_center color-gray">暂无有效的优惠码</div>
+          <div v-else class="scroll_list">
+            <div v-for="(item,index1) in tabdata1" :key="index1" :class="`scroll_item bg-white item-${item.id}`">
+              <div class="flex_left">
+                <div class="flex_cell padding10">
+                  <div class="bold">{{item.code}}</div>
+                  <div class="color-gray font12">使用次数: {{item.quantity}}</div>
+                  <div class="color-gray font12">已用次数: {{item.haveused}}</div>
+                  <div class="color-gray font12">生成时间: {{item.dateline | dateFormat}}</div>
+                </div>
+                <div class="w100 flex_center">
+                  <div>
+                    <div class="btncopy" @click="copyTxt(item)">复制
+                      <div class="copy_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.code }}</div>
                     </div>
-                    <div class="w100 flex_center">
-                      <div>
-                        <div class="btncopy" @click="copyTxt(item)">复制
-                          <div class="copy_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.code }}</div>
-                        </div>
-                        <div class="btncopy bg-orange mt5" @click="toStat(item)">统计</div>
-                      </div>
-                    </div>
+                    <div class="btncopy bg-orange mt5" @click="toStat(item)">统计</div>
                   </div>
                 </div>
               </div>
-            </template>
+            </div>
           </div>
-          <div v-if="index === 1" class="swiper-inner scroll-container1" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',index)">
-            <template v-if="disList2">
-              <div v-if="!tabdata2.length" class="w_100 h_100 flex_center color-gray">暂无已使用的优惠码</div>
-              <div v-else class="scroll_list">
-                <div v-for="(item,index1) in tabdata2" :key="index1" class="scroll_item bg-white">
-                  <div class="flex_left">
-                    <div class="pic flex_center" v-if="item.avatar && item.avatar != ''">
-                      <img :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-                    </div>
-                    <div class="flex_cell padding10">
-                      <div class="bold">{{item.code}}</div>
-                      <div class="color-gray font12">{{item.linkman}}</div>
-                      <div class="color-gray font12">使用次数: {{item.quantity}}</div>
-                      <div class="color-gray font12">使用时间: {{item.usedateline | dateFormat}}</div>
-                    </div>
-                    <div class="w100 flex_center">
-                      <div class="btncopy bg-orange mt5" @click="toStat(item)">统计</div>
-                    </div>
-                  </div>
+        </template>
+      </div>
+      <div v-show="selectedIndex === 1" class="swiper-inner scroll-container1" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',1)">
+        <template v-if="disList2">
+          <div v-if="!tabdata2.length" class="w_100 h_100 flex_center color-gray">暂无已使用的优惠码</div>
+          <div v-else class="scroll_list">
+            <div v-for="(item,index1) in tabdata2" :key="index1" class="scroll_item bg-white">
+              <div class="flex_left">
+                <div class="pic flex_center" v-if="item.avatar && item.avatar != ''">
+                  <img :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                </div>
+                <div class="flex_cell padding10">
+                  <div class="bold">{{item.code}}</div>
+                  <div class="color-gray font12">{{item.linkman}}</div>
+                  <div class="color-gray font12">使用次数: {{item.quantity}}</div>
+                  <div class="color-gray font12">使用时间: {{item.usedateline | dateFormat}}</div>
+                </div>
+                <div class="w100 flex_center">
+                  <div class="btncopy bg-orange mt5" @click="toStat(item)">统计</div>
                 </div>
               </div>
-            </template>
+            </div>
           </div>
-        </swiper-item>
-      </swiper>
+        </template>
+      </div>
     </div>
     <div class="s-bottom flex_center list-shadow02 bg-white">
       <div class="flex_center btn-bottom-red" style="width:85%;" @click="btnshow">生成优惠码</div>
@@ -245,7 +241,7 @@ export default {
       })
     },
     clickTab () {
-      console.log('in clicktab')
+      this.swiperChange()
     },
     swiperChange (index) {
       if (index !== undefined) {

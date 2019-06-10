@@ -8,61 +8,57 @@
     <div class="s-topbanner s-topbanner1">
       <div class="row">
         <tab v-model="selectedIndex" active-color="#ea3a3a" default-color="#666666">
-          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
+          <tab-item v-for="(item,index) in tabtxts" :selected="index == selectedIndex" :key="index" @on-item-click="clickTab">{{item}}</tab-item>
         </tab>
       </div>
     </div>
     <div class="s-container s-container1">
-      <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
-        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-          <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)">
-            <template v-if="distabdata1">
-              <div v-if="!tabdata1 || tabdata1.length === 0" class="w_100 h_100 flex_center color-gray">你还没有未使用的优惠券</div>
-              <div v-else class="lists">
-                <div v-for="(item,index1) in tabdata1" :key="index1" :class="`scroll_item ${item.validate ? '' : 'grayitem'}`">
-                  <div class="flex_cell txt-cell" style="overflow:visible">
-                    <div class="font20 mb5 clamp1 txt">满{{item.ordermoney}}减{{item.money}}</div>
-                    <div class="font12 mb5 clamp1">限【{{item.retailer}}】店铺使用</div>
-                    <div class="font12">自{{item.dateline_str}}起7日有效</div>
-                    <div class="ball ball-up"></div>
-                    <div class="ball ball-down"></div>
-                  </div>
-                  <div class="btn-cell flex_center" v-if="item.validate">
-                    <router-link v-if="item.productcount > 0" class="rbtn color-theme" :to="{path: '/store',query: {wid:item.wid}}">进店使用</router-link>
-                    <router-link v-else class="rbtn color-theme" :to="{path:'/chat',query:{uid:item.wid,from:query.from}}">联系卖家</router-link>
-                  </div>
-                  <div class="btn-cell flex_center" v-else>
-                    <div class="al al-yiguoqi4"></div>
-                  </div>
-                </div>
+      <div v-show="(selectedIndex == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',0)">
+        <template v-if="distabdata1">
+          <div v-if="!tabdata1 || tabdata1.length === 0" class="w_100 h_100 flex_center color-gray">你还没有未使用的优惠券</div>
+          <div v-else class="lists">
+            <div v-for="(item,index1) in tabdata1" :key="index1" :class="`scroll_item ${item.validate ? '' : 'grayitem'}`">
+              <div class="flex_cell txt-cell" style="overflow:visible">
+                <div class="font20 mb5 clamp1 txt">满{{item.ordermoney}}减{{item.money}}</div>
+                <div class="font12 mb5 clamp1">限【{{item.retailer}}】店铺使用</div>
+                <div class="font12">自{{item.dateline_str}}起7日有效</div>
+                <div class="ball ball-up"></div>
+                <div class="ball ball-down"></div>
               </div>
-            </template>
-          </div>
-          <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',index)">
-            <template v-if="distabdata2">
-              <div v-if="!tabdata2 || tabdata2.length === 0" class="w_100 h_100 flex_center color-gray">你还没有已使用的优惠券</div>
-              <div v-else class="lists">
-                <div v-for="(item,index1) in tabdata2" :key="index1" :class="`scroll_item ${item.validate ? '' : 'grayitem'}`">
-                  <div class="flex_cell txt-cell" style="overflow:visible">
-                    <div class="font20 mb5 clamp1 txt">满{{item.ordermoney}}减{{item.money}}</div>
-                    <div class="font12 mb5 clamp1">限【{{item.retailer}}】店铺使用</div>
-                    <div class="font12">自{{item.dateline_str}}起7日有效</div>
-                    <div class="ball ball-up"></div>
-                    <div class="ball ball-down"></div>
-                  </div>
-                  <div class="btn-cell flex_center" v-if="item.validate">
-                    <router-link v-if="item.productcount > 0" class="rbtn color-theme" :to="{path: '/store',query: {wid:item.wid}}">进店使用</router-link>
-                    <router-link v-else class="rbtn color-theme" :to="{path:'/chat',query:{uid:item.wid,from:query.from}}">联系卖家</router-link>
-                  </div>
-                  <div class="btn-cell flex_center" v-else>
-                    <div class="al al-yishiyong11"></div>
-                  </div>
-                </div>
+              <div class="btn-cell flex_center" v-if="item.validate">
+                <router-link v-if="item.productcount > 0" class="rbtn color-theme" :to="{path: '/store',query: {wid:item.wid}}">进店使用</router-link>
+                <router-link v-else class="rbtn color-theme" :to="{path:'/chat',query:{uid:item.wid,from:query.from}}">联系卖家</router-link>
               </div>
-            </template>
+              <div class="btn-cell flex_center" v-else>
+                <div class="al al-yiguoqi4"></div>
+              </div>
+            </div>
           </div>
-        </swiper-item>
-      </swiper>
+        </template>
+      </div>
+      <div v-show="(selectedIndex == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',1)">
+        <template v-if="distabdata2">
+          <div v-if="!tabdata2 || tabdata2.length === 0" class="w_100 h_100 flex_center color-gray">你还没有已使用的优惠券</div>
+          <div v-else class="lists">
+            <div v-for="(item,index1) in tabdata2" :key="index1" :class="`scroll_item ${item.validate ? '' : 'grayitem'}`">
+              <div class="flex_cell txt-cell" style="overflow:visible">
+                <div class="font20 mb5 clamp1 txt">满{{item.ordermoney}}减{{item.money}}</div>
+                <div class="font12 mb5 clamp1">限【{{item.retailer}}】店铺使用</div>
+                <div class="font12">自{{item.dateline_str}}起7日有效</div>
+                <div class="ball ball-up"></div>
+                <div class="ball ball-down"></div>
+              </div>
+              <div class="btn-cell flex_center" v-if="item.validate">
+                <router-link v-if="item.productcount > 0" class="rbtn color-theme" :to="{path: '/store',query: {wid:item.wid}}">进店使用</router-link>
+                <router-link v-else class="rbtn color-theme" :to="{path:'/chat',query:{uid:item.wid,from:query.from}}">联系卖家</router-link>
+              </div>
+              <div class="btn-cell flex_center" v-else>
+                <div class="al al-yishiyong11"></div>
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
     </div>
   </div>
 </template>
@@ -117,7 +113,7 @@ export default {
     }
   },
   methods: {
-    handleScroll: function (refname, index) {
+    handleScroll (refname, index) {
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
         element: scrollarea,
@@ -138,6 +134,9 @@ export default {
           }
         }
       })
+    },
+    clickTab (index) {
+      this.swiperChange()
     },
     getData1 () {
       this.$vux.loading.show()

@@ -8,230 +8,219 @@
           v-for="(item,index) in tabtxts"
           :selected="query.from == 'seller' && index == 1"
           :key="index">{{item}}</tab-item>
-        <!--
-        <tab-item
-          v-else
-          v-for="(item,index) in tabtxts"
-          :selected="(!query.from && index == selectedIndex) || (query.from == 'seller' && index == 1) || (query.from == 'miniprogram' && query.from_type != 'activity' && index == 1) || (query.from == 'miniprogram' && query.from_type == 'activity' && index == 0)"
-          :key="index">{{item}}</tab-item>
-        -->
       </tab>
     </div>
-    <div class="s-container" style="top:44px;">
-      <form enctype="multipart/form-data">
-        <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange('qrcode','fileInput')" />
-      </form>
-      <form enctype="multipart/form-data">
-        <input ref="fileInput1" class="hide" type="file" name="files" @change="fileChange('showphoto','fileInput1')" />
-      </form>
-      <swiper v-model="selectedIndex" class="x-swiper no-indicator">
-        <swiper-item v-if="selectedIndex === 0">
-          <div class="swiper-inner" style="bottom:50px;">
-            <form>
-              <forminputplate class="required">
-                <span slot="title">{{ $t('Shop name') }}</span>
-                <input v-model="submitdata.title" type="text" name="title" class="input border-box" :placeholder="$t('Shop name')" />
-              </forminputplate>
-              <div class="form-item required">
-                <div class="pb5">{{ $t('Wechat qrcode') }} <span class="al al-xing color-red font12" style="vertical-align: 3px;"></span><span class="color-gray">({{ $t('Upload wechat qrcode') }})</span></div>
-                <div>
-                  <input v-model="submitdata.qrcode" type="hidden" name="qrcode" />
-                  <div class="q_photolist align_left">
-                    <template v-if="photoarr.length > 0">
-                      <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
-                        <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
-                          <div class="close" @click="deletephoto(item,index,'qrcode')">×</div>
-                          <div class="clip"><i class="al al-set"></i></div>
-                        </div>
-                      </div>
-                    </template>
-                    <div v-if="photoarr.length < maxnum" class="photoitem add" @click="uploadPhoto('fileInput','qrcode')">
-                      <div class="inner">
-                        <div class="innerlist">
-                          <div class="flex_center h_100">
-                            <div class="txt">
-                              <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
-                              <div>点击上传</div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+    <form enctype="multipart/form-data">
+      <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange('qrcode','fileInput')" />
+    </form>
+    <form enctype="multipart/form-data">
+      <input ref="fileInput1" class="hide" type="file" name="files" @change="fileChange('showphoto','fileInput1')" />
+    </form>
+    <div v-show="selectedIndex == 0" class="s-container" style="top:44px;">
+      <div class="swiper-inner" style="bottom:50px;">
+        <form>
+          <forminputplate class="required">
+            <span slot="title">{{ $t('Shop name') }}</span>
+            <input v-model="submitdata.title" type="text" name="title" class="input border-box" :placeholder="$t('Shop name')" />
+          </forminputplate>
+          <div class="form-item required">
+            <div class="pb5">{{ $t('Wechat qrcode') }} <span class="al al-xing color-red font12" style="vertical-align: 3px;"></span><span class="color-gray">({{ $t('Upload wechat qrcode') }})</span></div>
+            <div>
+              <input v-model="submitdata.qrcode" type="hidden" name="qrcode" />
+              <div class="q_photolist align_left">
+                <template v-if="photoarr.length > 0">
+                  <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
+                    <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
+                      <div class="close" @click="deletephoto(item,index,'qrcode')">×</div>
+                      <div class="clip"><i class="al al-set"></i></div>
                     </div>
                   </div>
-                  <div class="font12 color-blue3 mt5" @click="disqrcode">{{ $t('Upload qrcode text') }}</div>
-                </div>
-              </div>
-              <forminputplate class="required" v-if="query.from != 'miniprogram'">
-                <span slot="title">{{ $t('Pay type') }}</span>
-                <div>
-                  <!-- <check-icon class="red-check" :value.sync="submitdata.buyonline === 1" @click.native.stop="setbuyonline(1)">在线支付</check-icon>
-                  <check-icon class="red-check" :value.sync="submitdata.buyonline !== 1" @click.native.stop="setbuyonline(0)">线下支付</check-icon> -->
-                  <check-icon class="red-check" :value.sync="online" @click.native.stop="setbuyonline(1)">在线支付</check-icon>
-                  <check-icon class="red-check" :value.sync="offline" @click.native.stop="setbuyonline(0)">线下支付</check-icon>
-                </div>
-              </forminputplate>
-              <forminputplate class="required" v-if="query.miniconfig != 'wechat.mini_program.tljk'">
-                <span slot="title">超值优惠</span>
-                <div>
-                  <check-icon class="red-check" :value.sync="suggestOpen" @click.native.stop="clickSuggest(1)">开启</check-icon>
-                  <check-icon class="red-check" :value.sync="suggestClose" @click.native.stop="clickSuggest(0)">关闭</check-icon>
-                </div>
-              </forminputplate>
-              <forminputplate class="required">
-                <span slot="title">店铺模板</span>
-                <div>
-                  <check-icon class="red-check" :value.sync="template1" @click.native.stop="clickTemplate(1)">通用版</check-icon>
-                  <check-icon class="red-check" :value.sync="template2" @click.native.stop="clickTemplate(2)">大图版</check-icon>
-                  <check-icon class="red-check" :value.sync="template3" @click.native.stop="clickTemplate(3)">时尚黑</check-icon>
-                  <check-icon class="red-check" :value.sync="template4" @click.native.stop="clickTemplate(4)">清新蓝</check-icon>
-                </div>
-              </forminputplate>
-              <div class="form-item">
-                <div class="t-table">
-                  <div class="t-cell title-cell font14 v_middle">
-                    <span>到账方式</span><span class="al al-wenhao font20 color-theme" style="vertical-align:-2px;" @click="clickHelp"></span>
-                  </div>
-                  <div class="t-cell input-cell v_middle" style="position:relative;">
-                    <div>
-                      <check-icon class="red-check" :value.sync="accountPlat" @click.native.stop="setAccounttype(0)">平台担保</check-icon>
-                      <check-icon class="red-check" :value.sync="accountQuick" @click.native.stop="setAccounttype(1)">立即到账</check-icon>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div v-show="showmore">
-                <forminputplate>
-                  <span slot="title">{{ $t('Shop description') }}</span>
-                  <group class="textarea-outer" style="padding:0;">
-                    <x-textarea
-                      name="text1"
-                      ref="contentTextarea"
-                      v-model="submitdata.content"
-                      style="padding:5px;"
-                      class="x-textarea noborder"
-                      :placeholder="$t('Shop description')"
-                      :show-counter="false"
-                      :rows="1"
-                      @on-change="textareaChange('contentTextarea')"
-                      @on-focus="textareaFocus('contentTextarea')"
-                      autosize>
-                    </x-textarea>
-                  </group>
-                </forminputplate>
-                <forminputplate v-if="query.from != 'miniprogram'">
-                  <span slot="title">{{ $t('Auto reply') }}</span>
-                  <group class="textarea-outer" style="padding:0;">
-                    <x-textarea
-                      name="text2"
-                      ref="fastreplyTextarea"
-                      v-model="submitdata.fastreply"
-                      style="padding:5px;"
-                      class="x-textarea noborder"
-                      :placeholder="$t('Auto reply')"
-                      :show-counter="false"
-                      :rows="1"
-                      @on-change="textareaChange('fastreplyTextarea')"
-                      @on-focus="textareaFocus('fastreplyTextarea')"
-                      autosize>
-                    </x-textarea>
-                  </group>
-                </forminputplate>
-                <div class="form-item required padding10" v-if="classData.length > 0"> <!-- //v-if="classData.length > 0 && classDataShow" -->
-                  <input v-model="productClass" type="hidden" name="productclass" />
-                  <div class="pb10">经营产品或服务<span class="color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
-                  <checker
-                  class="x-checker"
-                  type="checkbox"
-                  v-model="productClass"
-                  :max="3"
-                  default-item-class="ck-item"
-                  selected-item-class="ck-item-selected">
-                    <checker-item class="border1px color-gray" v-for="(item, index) in classData" :key="index" :value="item.id">{{ item.title }}</checker-item>
-                  </checker>
-                </div>
-              </div>
-              <div v-if="showmore" @click="expandevent" class="padding15 font14 align_center color-gray">{{ $t('Up text') }}<i class="al al-jiantou2-up font14 middle-cell"></i></div>
-              <div v-else class="padding15 font14 align_center color-gray"  @click="expandevent">{{ $t('Epand text') }}<i class="al al-jiantouyoushuang- font14"></i></div>
-            </form>
-          </div>
-          <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white" @click="submitevent">
-            <div class="flex_cell flex_center btn-bottom-red">{{ $t('Save') }}</div>
-          </div>
-        </swiper-item>
-        <swiper-item v-if="selectedIndex === 1 && query.from != 'miniprogram'">
-          <div class="swiper-inner" style="bottom:50px;">
-            <form>
-              <div class="form-item required">
-                <div class="pb5">{{ $t('Personal image') }} <span class="al al-xing color-red font12" style="vertical-align: 3px;"></span></div>
-                <div>
-                  <div class="q_photolist align_left">
-                    <template v-if="showphotoArr.length > 0">
-                      <div v-for="(item,index) in showphotoArr" :key="index" class="photoitem">
-                        <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
-                          <div class="close" @click="deletephoto(item,index,'showphoto')">×</div>
-                          <div class="clip"><i class="al al-set"></i></div>
-                        </div>
-                      </div>
-                    </template>
-                    <div v-if="showphotoArr.length < maxnum1" class="photoitem add" @click="uploadPhoto('fileInput1','showphoto')">
-                      <div class="inner">
-                        <div class="innerlist">
-                          <div class="flex_center h_100">
-                            <div class="txt">
-                              <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
-                              <div><span class="havenum">{{ showphotoArr.length }}</span><span class="ml5 mr5">/</span><span class="maxnum">{{ maxnum1 }}</span></div>
-                            </div>
-                          </div>
+                </template>
+                <div v-if="photoarr.length < maxnum" class="photoitem add" @click="uploadPhoto('fileInput','qrcode')">
+                  <div class="inner">
+                    <div class="innerlist">
+                      <div class="flex_center h_100">
+                        <div class="txt">
+                          <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
+                          <div>点击上传</div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <forminputplate>
-                <span slot="title">{{ $t('Seller said') }} <span class="al al-xing color-red font12" style="vertical-align: 3px;"></span></span>
-                <group class="textarea-outer" style="padding:0;">
-                  <x-textarea
-                    ref="sloganTextarea"
-                    v-model="submitdata1.slogan"
-                    style="padding:5px;"
-                    class="x-textarea noborder"
-                    :placeholder="$t('Seller said')"
-                    :show-counter="false"
-                    :rows="1"
-                    @on-change="textareaChange('sloganTextarea')"
-                    @on-focus="textareaFocus('sloganTextarea')"
-                    :autosize="true">
-                  </x-textarea>
-                </group>
-              </forminputplate>
-              <div class="form-item bg-white">
-                <div class="pt10 pb5">
-                  <div class="flex_left">
-                    <span class="v_middle">{{ $t('My tags') }}</span>
-                    <span class="font12 color-gray v_middle">(一次可添加多个标签，用英文逗号隔开)</span>
-                  </div>
+              <div class="font12 color-blue3 mt5" @click="disqrcode">{{ $t('Upload qrcode text') }}</div>
+            </div>
+          </div>
+          <forminputplate class="required" v-if="query.from != 'miniprogram'">
+            <span slot="title">{{ $t('Pay type') }}</span>
+            <div>
+              <!-- <check-icon class="red-check" :value.sync="submitdata.buyonline === 1" @click.native.stop="setbuyonline(1)">在线支付</check-icon>
+              <check-icon class="red-check" :value.sync="submitdata.buyonline !== 1" @click.native.stop="setbuyonline(0)">线下支付</check-icon> -->
+              <check-icon class="red-check" :value.sync="online" @click.native.stop="setbuyonline(1)">在线支付</check-icon>
+              <check-icon class="red-check" :value.sync="offline" @click.native.stop="setbuyonline(0)">线下支付</check-icon>
+            </div>
+          </forminputplate>
+          <forminputplate class="required" v-if="query.miniconfig != 'wechat.mini_program.tljk'">
+            <span slot="title">超值优惠</span>
+            <div>
+              <check-icon class="red-check" :value.sync="suggestOpen" @click.native.stop="clickSuggest(1)">开启</check-icon>
+              <check-icon class="red-check" :value.sync="suggestClose" @click.native.stop="clickSuggest(0)">关闭</check-icon>
+            </div>
+          </forminputplate>
+          <forminputplate class="required">
+            <span slot="title">店铺模板</span>
+            <div>
+              <check-icon class="red-check" :value.sync="template1" @click.native.stop="clickTemplate(1)">通用版</check-icon>
+              <check-icon class="red-check" :value.sync="template2" @click.native.stop="clickTemplate(2)">大图版</check-icon>
+              <check-icon class="red-check" :value.sync="template3" @click.native.stop="clickTemplate(3)">时尚黑</check-icon>
+              <check-icon class="red-check" :value.sync="template4" @click.native.stop="clickTemplate(4)">清新蓝</check-icon>
+            </div>
+          </forminputplate>
+          <div class="form-item">
+            <div class="t-table">
+              <div class="t-cell title-cell font14 v_middle">
+                <span>到账方式</span><span class="al al-wenhao font20 color-theme" style="vertical-align:-2px;" @click="clickHelp"></span>
+              </div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <div>
+                  <check-icon class="red-check" :value.sync="accountPlat" @click.native.stop="setAccounttype(0)">平台担保</check-icon>
+                  <check-icon class="red-check" :value.sync="accountQuick" @click.native.stop="setAccounttype(1)">立即到账</check-icon>
                 </div>
-                <div class="taglist">
-                  <div class="tagitem" v-for="(item,index) in retailerInfo.tags">
-                    <div class="inner">
-                      <span class="v_middle">{{item.title}}</span>
-                      <div class="del" @click="deleteTag(item,index)">×</div>
-                      <div class="edit" @click="addTag(item,index)"><i class="al al-bianji1 font14"></i></div>
+              </div>
+            </div>
+          </div>
+          <div v-show="showmore">
+            <forminputplate>
+              <span slot="title">{{ $t('Shop description') }}</span>
+              <group class="textarea-outer" style="padding:0;">
+                <x-textarea
+                  name="text1"
+                  ref="contentTextarea"
+                  v-model="submitdata.content"
+                  style="padding:5px;"
+                  class="x-textarea noborder"
+                  :placeholder="$t('Shop description')"
+                  :show-counter="false"
+                  :rows="1"
+                  @on-change="textareaChange('contentTextarea')"
+                  @on-focus="textareaFocus('contentTextarea')"
+                  autosize>
+                </x-textarea>
+              </group>
+            </forminputplate>
+            <forminputplate v-if="query.from != 'miniprogram'">
+              <span slot="title">{{ $t('Auto reply') }}</span>
+              <group class="textarea-outer" style="padding:0;">
+                <x-textarea
+                  name="text2"
+                  ref="fastreplyTextarea"
+                  v-model="submitdata.fastreply"
+                  style="padding:5px;"
+                  class="x-textarea noborder"
+                  :placeholder="$t('Auto reply')"
+                  :show-counter="false"
+                  :rows="1"
+                  @on-change="textareaChange('fastreplyTextarea')"
+                  @on-focus="textareaFocus('fastreplyTextarea')"
+                  autosize>
+                </x-textarea>
+              </group>
+            </forminputplate>
+            <div class="form-item required padding10" v-if="classData.length > 0"> <!-- //v-if="classData.length > 0 && classDataShow" -->
+              <input v-model="productClass" type="hidden" name="productclass" />
+              <div class="pb10">经营产品或服务<span class="color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+              <checker
+              class="x-checker"
+              type="checkbox"
+              v-model="productClass"
+              :max="3"
+              default-item-class="ck-item"
+              selected-item-class="ck-item-selected">
+                <checker-item class="border1px color-gray" v-for="(item, index) in classData" :key="index" :value="item.id">{{ item.title }}</checker-item>
+              </checker>
+            </div>
+          </div>
+          <div v-if="showmore" @click="expandevent" class="padding15 font14 align_center color-gray">{{ $t('Up text') }}<i class="al al-jiantou2-up font14 middle-cell"></i></div>
+          <div v-else class="padding15 font14 align_center color-gray"  @click="expandevent">{{ $t('Epand text') }}<i class="al al-jiantouyoushuang- font14"></i></div>
+        </form>
+      </div>
+      <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white" @click="submitevent">
+        <div class="flex_cell flex_center btn-bottom-red">{{ $t('Save') }}</div>
+      </div>
+    </div>
+    <div v-show="selectedIndex == 1 && query.from != 'miniprogram'" class="s-container" style="top:44px;">
+      <div class="swiper-inner" style="bottom:50px;">
+        <form>
+          <div class="form-item required">
+            <div class="pb5">{{ $t('Personal image') }} <span class="al al-xing color-red font12" style="vertical-align: 3px;"></span></div>
+            <div>
+              <div class="q_photolist align_left">
+                <template v-if="showphotoArr.length > 0">
+                  <div v-for="(item,index) in showphotoArr" :key="index" class="photoitem">
+                    <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
+                      <div class="close" @click="deletephoto(item,index,'showphoto')">×</div>
+                      <div class="clip"><i class="al al-set"></i></div>
                     </div>
                   </div>
-                  <div class="tagitem add" @click="addTag">
-                    <div class="inner">添加</div>
+                </template>
+                <div v-if="showphotoArr.length < maxnum1" class="photoitem add" @click="uploadPhoto('fileInput1','showphoto')">
+                  <div class="inner">
+                    <div class="innerlist">
+                      <div class="flex_center h_100">
+                        <div class="txt">
+                          <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
+                          <div><span class="havenum">{{ showphotoArr.length }}</span><span class="ml5 mr5">/</span><span class="maxnum">{{ maxnum1 }}</span></div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </form>
+            </div>
           </div>
-          <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white" @click="submitevent1">
-            <div class="flex_cell flex_center btn-bottom-red">{{ $t('Save') }}</div>
+          <forminputplate>
+            <span slot="title">{{ $t('Seller said') }} <span class="al al-xing color-red font12" style="vertical-align: 3px;"></span></span>
+            <group class="textarea-outer" style="padding:0;">
+              <x-textarea
+                ref="sloganTextarea"
+                v-model="submitdata1.slogan"
+                style="padding:5px;"
+                class="x-textarea noborder"
+                :placeholder="$t('Seller said')"
+                :show-counter="false"
+                :rows="1"
+                @on-change="textareaChange('sloganTextarea')"
+                @on-focus="textareaFocus('sloganTextarea')"
+                :autosize="true">
+              </x-textarea>
+            </group>
+          </forminputplate>
+          <div class="form-item bg-white">
+            <div class="pt10 pb5">
+              <div class="flex_left">
+                <span class="v_middle">{{ $t('My tags') }}</span>
+                <span class="font12 color-gray v_middle">(一次可添加多个标签，用英文逗号隔开)</span>
+              </div>
+            </div>
+            <div class="taglist">
+              <div class="tagitem" v-for="(item,index) in retailerInfo.tags">
+                <div class="inner">
+                  <span class="v_middle">{{item.title}}</span>
+                  <div class="del" @click="deleteTag(item,index)">×</div>
+                  <div class="edit" @click="addTag(item,index)"><i class="al al-bianji1 font14"></i></div>
+                </div>
+              </div>
+              <div class="tagitem add" @click="addTag">
+                <div class="inner">添加</div>
+              </div>
+            </div>
           </div>
-        </swiper-item>
-      </swiper>
+        </form>
+      </div>
+      <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white" @click="submitevent1">
+        <div class="flex_cell flex_center btn-bottom-red">{{ $t('Save') }}</div>
+      </div>
     </div>
     <div v-transfer-dom class="x-popup">
       <popup v-model="showonline" height="100%">
