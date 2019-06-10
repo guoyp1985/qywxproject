@@ -20,7 +20,7 @@
           </template>
           <template v-else>
             <tab v-model="selectedIndex" class="" active-color="#ea3a3a" default-color="#666666">
-              <tab-item v-for="(item,index) in tabtxts" :selected="index == selectedIndex" :key="index">{{item}}</tab-item>
+              <tab-item v-for="(item,index) in tabtxts" :selected="index == selectedIndex" :key="index" @on-item-click="clickTab">{{item}}</tab-item>
             </tab>
           </template>
         </div>
@@ -66,106 +66,102 @@
           </div>
         </template>
         <template v-else>
-          <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
-            <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-              <div v-if="(index == 0)" class="swiper-inner" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)">
-                <template v-if="disTabData1">
-                  <template v-if="!tabData1.length">
-                    <div class="scroll_list">
-                      <div class="emptyitem">
-                        <div class="t-table" style="padding-top:20%;">
-                          <div class="t-cell padding10">
-                            <div>分享【加盟二维码】给好友，好友扫码即可成为全职卖家帮你销售商品</div>
-                            <div class="color-blue"><span @click="disJoinQrcode">分享加盟二维码</span></div>
-                          </div>
+          <div v-show="(selectedIndex == 0)" class="swiper-inner" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',0)">
+            <template v-if="disTabData1">
+              <template v-if="!tabData1.length">
+                <div class="scroll_list">
+                  <div class="emptyitem">
+                    <div class="t-table" style="padding-top:20%;">
+                      <div class="t-cell padding10">
+                        <div>分享【加盟二维码】给好友，好友扫码即可成为全职卖家帮你销售商品</div>
+                        <div class="color-blue"><span @click="disJoinQrcode">分享加盟二维码</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+              <template v-else>
+                <div class="pro_box bg-page list_shadow pl12 pr12 pb15  border-box">
+                  <div class="pro_list_top"></div>
+                  <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white font12" style="margin-top: -4px;">
+                    <div>什么是全职卖家？</div>
+                    <div>指公司内部的销售员或只允许销售本厂家商品的卖家。</div>
+                    <div>如何发展全职卖家？</div>
+                    <div>1、扫描【加盟二维码】申请加盟的卖家即可成为全职卖家。</div>
+                    <div>2、通过【优惠码】申请的卖家即可成为全职卖家。</div>
+                  </div>
+                </div>
+                <div class="scroll_list ">
+                  <div class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData1" :key="item.id" style="color:inherit;">
+                    <div class="t-table bg-white pl10 pr10 pt10 pb10 border-box">
+                      <div class="t-cell v_middle w70">
+                        <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                      </div>
+                      <div class="t-cell v_middle pr10" style="box-sizing:border-box;">
+                        <div class="clamp1 font16">{{item.linkman}}</div>
+                        <div class="clamp1 font12 color-gray">店铺: {{item.title}}</div>
+                        <div class="clamp1 font12 color-gray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
+                        <div class="clamp1 font12 color-orange">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
+                      </div>
+                      <div class="align_right t-cell v_middle w80">
+                        <div class="btnicon bg-red color-white font12" @click="controlPopup1(item,index)">
+                          <i class="al al-asmkticon0165 v_middle"></i>
                         </div>
                       </div>
-                    </div>
-                  </template>
-                  <template v-else>
-                    <div class="pro_box bg-page list_shadow pl12 pr12 pb15  border-box">
-                      <div class="pro_list_top"></div>
-                      <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white font12" style="margin-top: -4px;">
-                        <div>什么是全职卖家？</div>
-                        <div>指公司内部的销售员或只允许销售本厂家商品的卖家。</div>
-                        <div>如何发展全职卖家？</div>
-                        <div>1、扫描【加盟二维码】申请加盟的卖家即可成为全职卖家。</div>
-                        <div>2、通过【优惠码】申请的卖家即可成为全职卖家。</div>
+                		</div>
+                  </div>
+                </div>
+              </template>
+            </template>
+          </div>
+          <div v-show="(selectedIndex == 1)" class="swiper-inner" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',1)">
+            <template v-if="disTabData2">
+              <template v-if="!tabData2.length">
+                <div class="scroll_list">
+                  <div class="emptyitem">
+                    <div class="t-table" style="padding-top:20%;">
+                      <div class="t-cell padding10">
+                        <div>分享【厂家介绍】给好友，好友申请加盟即可成为兼职卖家帮你销售商品</div>
+                        <div class="color-blue"><router-link :to="{path: '/factoryDetail',query:{fid:fid}}">分享厂家介绍</router-link></div>
                       </div>
                     </div>
-                    <div class="scroll_list ">
-                      <div class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData1" :key="item.id" style="color:inherit;">
-                        <div class="t-table bg-white pl10 pr10 pt10 pb10 border-box">
-                          <div class="t-cell v_middle w70">
-                            <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-                          </div>
-                          <div class="t-cell v_middle pr10" style="box-sizing:border-box;">
-                            <div class="clamp1 font16">{{item.linkman}}</div>
-                            <div class="clamp1 font12 color-gray">店铺: {{item.title}}</div>
-                            <div class="clamp1 font12 color-gray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
-                            <div class="clamp1 font12 color-orange">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
-                          </div>
-                          <div class="align_right t-cell v_middle w80">
-                            <div class="btnicon bg-red color-white font12" @click="controlPopup1(item,index)">
-                              <i class="al al-asmkticon0165 v_middle"></i>
-                            </div>
-                          </div>
-                    		</div>
+                  </div>
+                </div>
+              </template>
+              <template v-else>
+                <div class="pro_box bg-page list_shadow pl12 pr12 pb15 border-box">
+                  <div class="pro_list_top"></div>
+                  <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white font12" style="margin-top: -4px;">
+                    <div>什么是兼职卖家？</div>
+                    <div>指拥有自己的店铺，利用自己的客户群体兼职销售本厂家商品的卖家。</div>
+                    <div>如何发展兼职卖家？</div>
+                    <div>1、通过厂家介绍界面申请加盟的卖家即可成为兼职卖家。</div>
+                    <div>2、卖家通过渠道列表选择并加盟厂家商品时，即可成为兼职卖家。</div>
+                  </div>
+                </div>
+                <div class="scroll_list ">
+                  <div class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData2" :key="item.id" style="color:inherit;">
+                    <div class="t-table bg-white pl10 pr10 pt10 pb10 border-box">
+                      <div class="t-cell v_middle w70">
+                        <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                       </div>
-                    </div>
-                  </template>
-                </template>
-              </div>
-              <div v-if="(index == 1)" class="swiper-inner" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',index)">
-                <template v-if="disTabData2">
-                  <template v-if="!tabData2.length">
-                    <div class="scroll_list">
-                      <div class="emptyitem">
-                        <div class="t-table" style="padding-top:20%;">
-                          <div class="t-cell padding10">
-                            <div>分享【厂家介绍】给好友，好友申请加盟即可成为兼职卖家帮你销售商品</div>
-                            <div class="color-blue"><router-link :to="{path: '/factoryDetail',query:{fid:fid}}">分享厂家介绍</router-link></div>
-                          </div>
+                      <div class="t-cell v_middle pr10" style="box-sizing:border-box;">
+                        <div class="clamp1 font16">{{item.linkman}}</div>
+                        <div class="clamp1 font12 color-gray">店铺: {{item.title}}</div>
+                        <div class="clamp1 font12 color-gray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
+                        <div class="clamp1 font12 color-orange">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
+                      </div>
+                      <div class="align_right t-cell v_middle w80">
+                        <div class="btnicon bg-red color-white font12" @click="controlPopup1(item,index)">
+                          <i class="al al-asmkticon0165 v_middle"></i>
                         </div>
                       </div>
-                    </div>
-                  </template>
-                  <template v-else>
-                    <div class="pro_box bg-page list_shadow pl12 pr12 pb15 border-box">
-                      <div class="pro_list_top"></div>
-                      <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white font12" style="margin-top: -4px;">
-                        <div>什么是兼职卖家？</div>
-                        <div>指拥有自己的店铺，利用自己的客户群体兼职销售本厂家商品的卖家。</div>
-                        <div>如何发展兼职卖家？</div>
-                        <div>1、通过厂家介绍界面申请加盟的卖家即可成为兼职卖家。</div>
-                        <div>2、卖家通过渠道列表选择并加盟厂家商品时，即可成为兼职卖家。</div>
-                      </div>
-                    </div>
-                    <div class="scroll_list ">
-                      <div class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData2" :key="item.id" style="color:inherit;">
-                        <div class="t-table bg-white pl10 pr10 pt10 pb10 border-box">
-                          <div class="t-cell v_middle w70">
-                            <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-                          </div>
-                          <div class="t-cell v_middle pr10" style="box-sizing:border-box;">
-                            <div class="clamp1 font16">{{item.linkman}}</div>
-                            <div class="clamp1 font12 color-gray">店铺: {{item.title}}</div>
-                            <div class="clamp1 font12 color-gray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
-                            <div class="clamp1 font12 color-orange">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
-                          </div>
-                          <div class="align_right t-cell v_middle w80">
-                            <div class="btnicon bg-red color-white font12" @click="controlPopup1(item,index)">
-                              <i class="al al-asmkticon0165 v_middle"></i>
-                            </div>
-                          </div>
-                    		</div>
-                      </div>
-                    </div>
-                  </template>
-                </template>
-              </div>
-            </swiper-item>
-          </swiper>
+                		</div>
+                  </div>
+                </div>
+              </template>
+            </template>
+          </div>
         </template>
       </div>
       <div v-transfer-dom>
@@ -428,6 +424,9 @@ export default {
           }
         }
       })
+    },
+    clickTab () {
+      this.swiperChange()
     },
     swiperChange (index) {
       const self = this

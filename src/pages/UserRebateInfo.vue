@@ -11,95 +11,91 @@
       </tab>
     </div>
     <div class="s-container s-container1">
-      <!-- <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
-        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index"> -->
-          <div v-show="(selectedIndex == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',0)">
-            <template v-if="distabdata1">
-              <div v-if="!tabdata1.length" class="flex_empty">
-                <div>
-                  <div class="align_center"><i class="al al-wushuju font60" ></i></div>
-                  <div class="mt5 align_center">暂无待返点记录！</div>
+      <div v-show="(selectedIndex == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',0)">
+        <template v-if="distabdata1">
+          <div v-if="!tabdata1.length" class="flex_empty">
+            <div>
+              <div class="align_center"><i class="al al-wushuju font60" ></i></div>
+              <div class="mt5 align_center">暂无待返点记录！</div>
+            </div>
+          </div>
+          <div v-else v-for="(item,index1) in tabdata1" :key="index1" class="scroll_item bg-white mt10 list-shadow">
+            <div class="pl12 pr12 pt10 pb10">
+              <div class="t-table">
+                <div class="t-cell pic v_middle w45 pr10 border-box">
+                  <img class="avatarimg6 imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
+                </div>
+                <div class="t-cell v_middle" style="color:inherit;">
+                  <div class="clamp1 color-999">{{item.username}}</div>
+                </div>
+                <div class="t-cell v_middle" style="color:inherit;">
+                  <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline }}</div>
                 </div>
               </div>
-              <div v-else v-for="(item,index1) in tabdata1" :key="index1" class="scroll_item bg-white mt10 list-shadow">
-                <div class="pl12 pr12 pt10 pb10">
-                  <div class="t-table">
-                    <div class="t-cell pic v_middle w45 pr10 border-box">
-                      <img class="avatarimg6 imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
-                    </div>
-                    <div class="t-cell v_middle" style="color:inherit;">
-                      <div class="clamp1 color-999">{{item.username}}</div>
-                    </div>
-                    <div class="t-cell v_middle" style="color:inherit;">
-                      <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline }}</div>
-                    </div>
+            </div>
+            <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
+              <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{$t('RMB')}}{{item.money}}</span></div>
+              <div class="clamp1 font14 color-gray">店铺: {{ item.title }}</div>
+            </div>
+          </div>
+        </template>
+      </div>
+      <div v-show="(selectedIndex == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',1)">
+        <template v-if="distabdata2">
+          <div v-if="!tabdata2.length" class="flex_empty">
+            <div>
+              <div class="align_center"><i class="al al-wushuju font60" ></i></div>
+              <div class="mt5 align_center">暂无已返点记录！</div>
+            </div>
+          </div>
+          <div v-else v-for="(item,index1) in tabdata2" :key="index1" class="scroll_item bg-white mt10 list-shadow">
+            <div class="pl12 pr12 pt10 pb10">
+              <div class="t-table">
+                <div class="t-cell pic v_middle w45 pr10 border-box">
+                  <img class="avatarimg6 imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
+                </div>
+                <div class="t-cell v_middle" style="color:inherit;">
+                  <div class="clamp1 color-999">{{item.username}}</div>
+                </div>
+                <div class="t-cell v_middle" style="color:inherit;">
+                  <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
+              <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{$t('RMB')}}{{item.money}}</span></div>
+              <div class="clamp1 font14 color-gray">店铺: {{ item.title }}</div>
+            </div>
+          </div>
+        </template>
+      </div>
+      <div v-show="(selectedIndex == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',2)">
+        <template v-if="distabdata3">
+          <div v-if="!tabdata3.length" class="flex_empty">
+            <div>
+              <div class="align_center"><i class="al al-wushuju font60" ></i></div>
+              <div class="mt5 align_center">暂无提现记录！</div>
+            </div>
+          </div>
+          <div v-else v-for="(item,index1) in tabdata3" :key="index1" class="scroll_item bg-white mt10 list-shadow">
+            <div class="pl12 pr12 pt10 pb10">
+              <div class="db-flex">
+                <div class="flex_cell flex_left">
+                  <div class="w_100">
+                    <div><span>{{item.cashtypetext}}</span><span v-if="item.status == 1" class="color-green2">【{{item.statustext}}】</span><span v-else class="color-theme">【{{item.statustext}}】</span></div>
+                    <div class="mt5 color-gray" v-if="item.cmms && item.cmms > 0">手续费: {{ $t('RMB') }}{{item.cmms}}</div>
+                    <div class="color-theme mt5" v-if="item.reason && item.reason != ''">{{item.reason}}</div>
+                    <div class="mt5 font12 clamp1 color-gray">{{ item.dateline | dateFormat }}</div>
                   </div>
                 </div>
-                <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
-                  <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{$t('RMB')}}{{item.money}}</span></div>
-                  <div class="clamp1 font14 color-gray">店铺: {{ item.title }}</div>
+                <div class="w100 flex_right">
+                  <div class="clamp1">{{ $t('RMB') }}{{item.money}}</div>
                 </div>
               </div>
-            </template>
+            </div>
           </div>
-          <div v-show="(selectedIndex == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',1)">
-            <template v-if="distabdata2">
-              <div v-if="!tabdata2.length" class="flex_empty">
-                <div>
-                  <div class="align_center"><i class="al al-wushuju font60" ></i></div>
-                  <div class="mt5 align_center">暂无已返点记录！</div>
-                </div>
-              </div>
-              <div v-else v-for="(item,index1) in tabdata2" :key="index1" class="scroll_item bg-white mt10 list-shadow">
-                <div class="pl12 pr12 pt10 pb10">
-                  <div class="t-table">
-                    <div class="t-cell pic v_middle w45 pr10 border-box">
-                      <img class="avatarimg6 imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
-                    </div>
-                    <div class="t-cell v_middle" style="color:inherit;">
-                      <div class="clamp1 color-999">{{item.username}}</div>
-                    </div>
-                    <div class="t-cell v_middle" style="color:inherit;">
-                      <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline }}</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
-                  <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{$t('RMB')}}{{item.money}}</span></div>
-                  <div class="clamp1 font14 color-gray">店铺: {{ item.title }}</div>
-                </div>
-              </div>
-            </template>
-          </div>
-          <div v-show="(selectedIndex == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',2)">
-            <template v-if="distabdata3">
-              <div v-if="!tabdata3.length" class="flex_empty">
-                <div>
-                  <div class="align_center"><i class="al al-wushuju font60" ></i></div>
-                  <div class="mt5 align_center">暂无提现记录！</div>
-                </div>
-              </div>
-              <div v-else v-for="(item,index1) in tabdata3" :key="index1" class="scroll_item bg-white mt10 list-shadow">
-                <div class="pl12 pr12 pt10 pb10">
-                  <div class="db-flex">
-                    <div class="flex_cell flex_left">
-                      <div class="w_100">
-                        <div><span>{{item.cashtypetext}}</span><span v-if="item.status == 1" class="color-green2">【{{item.statustext}}】</span><span v-else class="color-theme">【{{item.statustext}}】</span></div>
-                        <div class="mt5 color-gray" v-if="item.cmms && item.cmms > 0">手续费: {{ $t('RMB') }}{{item.cmms}}</div>
-                        <div class="color-theme mt5" v-if="item.reason && item.reason != ''">{{item.reason}}</div>
-                        <div class="mt5 font12 clamp1 color-gray">{{ item.dateline | dateFormat }}</div>
-                      </div>
-                    </div>
-                    <div class="w100 flex_right">
-                      <div class="clamp1">{{ $t('RMB') }}{{item.money}}</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </template>
-          </div>
-        <!-- </swiper-item>
-      </swiper> -->
+        </template>
+      </div>
     </div>
     <div v-transfer-dom>
       <popup class="bg-white" v-model="showMoneyPopup" position="bottom">

@@ -4,96 +4,92 @@
       <tab-item v-for="(item,index) in tabtxts" :selected="selectedIndex == index" :key="index" @on-item-click="clickTab(index)">{{item}}</tab-item>
     </tab>
     <div class="s-container scroll-container" style="top:50px;">
-      <!-- <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
-        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index"> -->
-          <div v-show="(selectedIndex == 0)" class="swiper-inner" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', 0)">
-            <div class="pro_box bg-page list_shadow pl12 pr12 pb15 border-box">
-              <div class="pro_list_top"></div>
-              <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white font12" style="margin-top: -4px;">
-                <div>悄悄告诉你，立即分享新发布的商品可以：</div>
-                <div>1. 接收好友查看商品的通知；</div>
-                <div>2. 监控谁看过、分享过以及多次浏览过你的商品；</div>
-                <div>3. 获得到更多潜在客户及销售机会。</div>
-              </div>
-            </div>
-            <template v-if="disList1">
-              <template v-if="!tabData1 || !tabData1.length">
-                <div class="flex_center padding20 color-gray">暂无商品，快去添加商品吧！</div>
-              </template>
-              <div v-else class="scroll_list ">
-                <router-link :to="{path:'/product',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData1" :key="index" style="color:inherit;">
-                  <div v-if="item.fpid" class="ico1">货源</div>
-              		<div class="t-table bg-white pt10 pb10">
-              			<div class="t-cell pl12 v_middle" style="width:110px;">
-                      <img class="imgcover v_middle" :src="getPhoto(item.photo)" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
-                    </div>
-              			<div class="t-cell v_middle">
-                      <div class="clamp1 font16 pr10 color-lightgray"><span v-if="item.priority" style="color:#fd8c2c;">【精选】</span>{{item.title}}</div>
-                      <div class="t-table pr12 border-box mt15">
-                        <div class="t-cell color-999 font14">
-                          <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ item.price }}</span></div>
-                          <div class="clamp1 mt5" v-if="item.fpid > 0">厂家佣金:<span class="color-red"> {{ $t('RMB') }}{{ item.rebatein }}</span></div>
-                          <div class="clamp1 mt5 font12">
-                              <span class="v_middle db-in mr5" v-if="item.fpid == 0">库存: {{ item.storage }}{{item.unit}}</span>
-                              <span class="v_middle db-in">已售: {{ item.saled }}{{item.unit}}</span>
-                          </div>
-                        </div>
-                        <div class="align_right t-cell v_bottom w50">
-                          <div class="btnicon bg-red color-white font12" @click="controlpopup1(item,index)">
-                            <i class="al al-asmkticon0165 v_middle"></i>
-                          </div>
-                        </div>
-                      </div>
-              			</div>
-              		</div>
-                </router-link>
-              </div>
-            </template>
+      <div v-show="(selectedIndex == 0)" class="swiper-inner" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', 0)">
+        <div class="pro_box bg-page list_shadow pl12 pr12 pb15 border-box">
+          <div class="pro_list_top"></div>
+          <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white font12" style="margin-top: -4px;">
+            <div>悄悄告诉你，立即分享新发布的商品可以：</div>
+            <div>1. 接收好友查看商品的通知；</div>
+            <div>2. 监控谁看过、分享过以及多次浏览过你的商品；</div>
+            <div>3. 获得到更多潜在客户及销售机会。</div>
           </div>
-          <div v-show="(selectedIndex == 1)" class="swiper-inner" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', 1)">
-            <div class="pro_box bg-page list_shadow pl12 pr12 pb15 border-box">
-              <div class="pro_list_top"></div>
-              <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white font12" style="margin-top: -4px;">
-                <div>悄悄告诉你，立即分享新发布的商品可以：</div>
-                <div>1. 接收好友查看商品的通知；</div>
-                <div>2. 监控谁看过、分享过以及多次浏览过你的商品；</div>
-                <div>3. 获得到更多潜在客户及销售机会。</div>
-              </div>
-            </div>
-            <template v-if="disList2">
-              <div v-if="!tabData2 || !tabData2.length" class="flex_center padding20 color-gray">暂无下架商品！</div>
-              <div v-else class="scroll_list ">
-                <router-link :to="{path:'/product',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData2" :key="index" style="color:inherit;">
-                  <div v-if="item.fpid" class="ico1">货源</div>
-              		<div class="t-table bg-white pt10 pb10">
-              			<div class="t-cell pl12 v_middle" style="width:110px;">
-                      <img class="imgcover v_middle" :src="getPhoto(item.photo)" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
-                    </div>
-              			<div class="t-cell v_middle">
-                      <div class="clamp1 font16 pr10 color-lightgray"><span v-if="item.priority" style="color:#fd8c2c;">【精选】</span>{{item.title}}</div>
-                      <div class="t-table pr12 border-box mt15">
-                        <div class="t-cell color-999 font14">
-                          <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ item.price }}</span></div>
-                          <div class="clamp1 mt5" v-if="item.fpid > 0">厂家佣金:<span class="color-red"> {{ $t('RMB') }}{{ item.rebatein }}</span></div>
-                          <div class="clamp1 mt5 font12">
-                              <span class="v_middle db-in mr5" v-if="item.fpid == 0">库存: {{ item.storage }}{{item.unit}}</span>
-                              <span class="v_middle db-in">已售: {{ item.saled }}{{item.unit}}</span>
-                          </div>
-                        </div>
-                        <div class="align_right t-cell v_bottom w50">
-                          <div class="btnicon bg-red color-white font12" @click="controlpopup1(item,index)">
-                            <i class="al al-asmkticon0165 v_middle"></i>
-                          </div>
-                        </div>
+        </div>
+        <template v-if="disList1">
+          <template v-if="!tabData1 || !tabData1.length">
+            <div class="flex_center padding20 color-gray">暂无商品，快去添加商品吧！</div>
+          </template>
+          <div v-else class="scroll_list ">
+            <router-link :to="{path:'/product',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData1" :key="index" style="color:inherit;">
+              <div v-if="item.fpid" class="ico1">货源</div>
+          		<div class="t-table bg-white pt10 pb10">
+          			<div class="t-cell pl12 v_middle" style="width:110px;">
+                  <img class="imgcover v_middle" :src="getPhoto(item.photo)" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+                </div>
+          			<div class="t-cell v_middle">
+                  <div class="clamp1 font16 pr10 color-lightgray"><span v-if="item.priority" style="color:#fd8c2c;">【精选】</span>{{item.title}}</div>
+                  <div class="t-table pr12 border-box mt15">
+                    <div class="t-cell color-999 font14">
+                      <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ item.price }}</span></div>
+                      <div class="clamp1 mt5" v-if="item.fpid > 0">厂家佣金:<span class="color-red"> {{ $t('RMB') }}{{ item.rebatein }}</span></div>
+                      <div class="clamp1 mt5 font12">
+                          <span class="v_middle db-in mr5" v-if="item.fpid == 0">库存: {{ item.storage }}{{item.unit}}</span>
+                          <span class="v_middle db-in">已售: {{ item.saled }}{{item.unit}}</span>
                       </div>
-              			</div>
-              		</div>
-                </router-link>
-              </div>
-            </template>
+                    </div>
+                    <div class="align_right t-cell v_bottom w50">
+                      <div class="btnicon bg-red color-white font12" @click="controlpopup1(item,index)">
+                        <i class="al al-asmkticon0165 v_middle"></i>
+                      </div>
+                    </div>
+                  </div>
+          			</div>
+          		</div>
+            </router-link>
           </div>
-        <!-- </swiper-item>
-      </swiper> -->
+        </template>
+      </div>
+      <div v-show="(selectedIndex == 1)" class="swiper-inner" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', 1)">
+        <div class="pro_box bg-page list_shadow pl12 pr12 pb15 border-box">
+          <div class="pro_list_top"></div>
+          <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white font12" style="margin-top: -4px;">
+            <div>悄悄告诉你，立即分享新发布的商品可以：</div>
+            <div>1. 接收好友查看商品的通知；</div>
+            <div>2. 监控谁看过、分享过以及多次浏览过你的商品；</div>
+            <div>3. 获得到更多潜在客户及销售机会。</div>
+          </div>
+        </div>
+        <template v-if="disList2">
+          <div v-if="!tabData2 || !tabData2.length" class="flex_center padding20 color-gray">暂无下架商品！</div>
+          <div v-else class="scroll_list ">
+            <router-link :to="{path:'/product',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData2" :key="index" style="color:inherit;">
+              <div v-if="item.fpid" class="ico1">货源</div>
+          		<div class="t-table bg-white pt10 pb10">
+          			<div class="t-cell pl12 v_middle" style="width:110px;">
+                  <img class="imgcover v_middle" :src="getPhoto(item.photo)" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+                </div>
+          			<div class="t-cell v_middle">
+                  <div class="clamp1 font16 pr10 color-lightgray"><span v-if="item.priority" style="color:#fd8c2c;">【精选】</span>{{item.title}}</div>
+                  <div class="t-table pr12 border-box mt15">
+                    <div class="t-cell color-999 font14">
+                      <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ item.price }}</span></div>
+                      <div class="clamp1 mt5" v-if="item.fpid > 0">厂家佣金:<span class="color-red"> {{ $t('RMB') }}{{ item.rebatein }}</span></div>
+                      <div class="clamp1 mt5 font12">
+                          <span class="v_middle db-in mr5" v-if="item.fpid == 0">库存: {{ item.storage }}{{item.unit}}</span>
+                          <span class="v_middle db-in">已售: {{ item.saled }}{{item.unit}}</span>
+                      </div>
+                    </div>
+                    <div class="align_right t-cell v_bottom w50">
+                      <div class="btnicon bg-red color-white font12" @click="controlpopup1(item,index)">
+                        <i class="al al-asmkticon0165 v_middle"></i>
+                      </div>
+                    </div>
+                  </div>
+          			</div>
+          		</div>
+            </router-link>
+          </div>
+        </template>
+      </div>
     </div>
     <!-- <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
       <div class="flex_cell flex_center" v-if="retailerInfo.fid > 0">

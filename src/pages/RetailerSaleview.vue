@@ -20,7 +20,7 @@
         </div>
         <div class="row row2">
           <tab v-model="selectedIndex" class="v-tab" active-color="#ea3a3a" default-color="#666" style="height:60px;">
-            <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">
+            <tab-item v-for="(item,index) in tabtxts" :selected="index == selectedIndex" :key="index" @on-item-click="clickTab">
               <div class="flex_center txt">
                 <div>
                   <div>{{item}}</div>
@@ -34,92 +34,88 @@
         </div>
       </div>
       <div class="s-container s-container2" style="top:148px;">
-        <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
-          <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-            <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)">
-              <div v-if="distabdata1" class="scroll_list pl10 pr10 mb10 list-shadow">
-                <div v-if="!tabdata1 || tabdata1.length == 0" class="scroll_item color-gray padding10 align_center">
-                  <div><i class="al al-wushuju font60 pt20"></i></div>
-                  <div class="mt5">该返点客还没有带来消费</div>
-                  <div>积极与返点客沟通可调动TA的积极性哦！</div>
+        <div v-show="(selectedIndex == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',0)">
+          <div v-if="distabdata1" class="scroll_list pl10 pr10 mb10 list-shadow">
+            <div v-if="!tabdata1 || tabdata1.length == 0" class="scroll_item color-gray padding10 align_center">
+              <div><i class="al al-wushuju font60 pt20"></i></div>
+              <div class="mt5">该返点客还没有带来消费</div>
+              <div>积极与返点客沟通可调动TA的积极性哦！</div>
+            </div>
+            <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata1" :key="item.id">
+              <div class="t-table">
+                <div @click="toMemberView(item)" class="t-cell v_middle w70">
+                  <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                 </div>
-                <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata1" :key="item.id">
-                  <div class="t-table">
-                    <div @click="toMemberView(item)" class="t-cell v_middle w70">
-                      <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-                    </div>
-                    <div @click="toMemberView(item)" class="t-cell v_middle">
-                      <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
-                      <div class="clamp1 font14 color-gray">订单金额:{{ $t('RMB') }}{{item.special}}</div>
-                      <div class="clamp1 font14 color-gray">时间:{{ item.dateline | dateformat }}</div>
-                    </div>
-                    <div class="t-cell v_middle align_right w60">
-                      <div @click="toChat(item)" class="qbtn bg-red color-white">联系</div>
-                    </div>
-                  </div>
+                <div @click="toMemberView(item)" class="t-cell v_middle">
+                  <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
+                  <div class="clamp1 font14 color-gray">订单金额:{{ $t('RMB') }}{{item.special}}</div>
+                  <div class="clamp1 font14 color-gray">时间:{{ item.dateline | dateformat }}</div>
+                </div>
+                <div class="t-cell v_middle align_right w60">
+                  <div @click="toChat(item)" class="qbtn bg-red color-white">联系</div>
                 </div>
               </div>
             </div>
-            <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',index)">
-              <div v-if="distabdata2" class="scroll_list pl10 pr10 mb10 list-shadow">
-                <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item color-gray padding10 align_center">
-                  <div><i class="al al-wushuju font60 pt20"></i></div>
-                  <div class="mt5">该返点客还没有分享过</div>
-                  <div>积极与返点客沟通可调动TA的积极性哦！</div>
+          </div>
+        </div>
+        <div v-show="(selectedIndex == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',1)">
+          <div v-if="distabdata2" class="scroll_list pl10 pr10 mb10 list-shadow">
+            <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item color-gray padding10 align_center">
+              <div><i class="al al-wushuju font60 pt20"></i></div>
+              <div class="mt5">该返点客还没有分享过</div>
+              <div>积极与返点客沟通可调动TA的积极性哦！</div>
+            </div>
+            <div v-else class="scroll_item pt10 pb10 db" v-for="(item,index1) in tabdata2" :key="item.id" @click="clickItem(item)">
+              <div class="t-table">
+                <div class="t-cell v_middle w80">
+                  <img class="imgcover v_middle" style="width:70px;height:70px;" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
                 </div>
-                <div v-else class="scroll_item pt10 pb10 db" v-for="(item,index1) in tabdata2" :key="item.id" @click="clickItem(item)">
-                  <div class="t-table">
-                    <div class="t-cell v_middle w80">
-                      <img class="imgcover v_middle" style="width:70px;height:70px;" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-                    </div>
-                    <div class="t-cell v_middle">
-                      <div class="clamp1 font14 color-lightgray">{{item.title}}</div>
-                      <div class="clamp1 font14 color-gray">分享次数:{{item.shares}}</div>
-                      <div class="clamp1 font14 color-gray">带来访问:{{item.visitor}}</div>
-                      <div class="clamp1 font14 color-gray">{{ item.dateline | dateformat }}</div>
-                    </div>
-                  </div>
+                <div class="t-cell v_middle">
+                  <div class="clamp1 font14 color-lightgray">{{item.title}}</div>
+                  <div class="clamp1 font14 color-gray">分享次数:{{item.shares}}</div>
+                  <div class="clamp1 font14 color-gray">带来访问:{{item.visitor}}</div>
+                  <div class="clamp1 font14 color-gray">{{ item.dateline | dateformat }}</div>
                 </div>
               </div>
             </div>
-            <div v-if="(index == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',index)">
-              <div class="font12 padding10 b_bottom bg-page color-lightgray">
-                <div class="t-table w_100">
-                  <div class="t-cell align_left pl10">{{ $t('Customer text') }}</div>
-                  <div class="t-cell align_right w80">{{ $t('Percent') }}</div>
-                  <div class="t-cell align_right w60">{{ $t('Contact Consumers') }}</div>
+          </div>
+        </div>
+        <div v-show="(selectedIndex == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',2)">
+          <div class="font12 padding10 b_bottom bg-page color-lightgray">
+            <div class="t-table w_100">
+              <div class="t-cell align_left pl10">{{ $t('Customer text') }}</div>
+              <div class="t-cell align_right w80">{{ $t('Percent') }}</div>
+              <div class="t-cell align_right w60">{{ $t('Contact Consumers') }}</div>
+            </div>
+          </div>
+          <div v-if="distabdata3" class="scroll_list pl10 pr10 mb10 list-shadow cols-2">
+            <div v-if="!tabdata3 || tabdata3.length == 0" class="scroll_item color-gray padding10 align_center">
+              <div><i class="al al-wushuju font60 pt20"></i></div>
+              <div class="mt5">该返点客还没有带来客户</div>
+              <div>积极与返点客沟通可调动TA的积极性哦！</div>
+            </div>
+            <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata3" :key="item.id">
+              <div class="t-table">
+                <div @click="toMemberView(item)" class="t-cell v_middle w70">
+                  <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                 </div>
-              </div>
-              <div v-if="distabdata3" class="scroll_list pl10 pr10 mb10 list-shadow cols-2">
-                <div v-if="!tabdata3 || tabdata3.length == 0" class="scroll_item color-gray padding10 align_center">
-                  <div><i class="al al-wushuju font60 pt20"></i></div>
-                  <div class="mt5">该返点客还没有带来客户</div>
-                  <div>积极与返点客沟通可调动TA的积极性哦！</div>
+                <div @click="toMemberView(item)" class="t-cell v_middle">
+                  <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
+                  <div class="clamp1 font14 color-gray">{{ item.dateline | dateformat }}</div>
                 </div>
-                <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata3" :key="item.id">
-                  <div class="t-table">
-                    <div @click="toMemberView(item)" class="t-cell v_middle w70">
-                      <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                <div class="t-cell v_middle w60 h_100 align_right">
+                    <div class="percentarea db-in v_middle" @click="percentclick">
+                      <div class="inner" :style="`width:${item.percent}%`"></div>
+                      <div class="txt font12">{{ item.percent }}%</div>
                     </div>
-                    <div @click="toMemberView(item)" class="t-cell v_middle">
-                      <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
-                      <div class="clamp1 font14 color-gray">{{ item.dateline | dateformat }}</div>
-                    </div>
-                    <div class="t-cell v_middle w60 h_100 align_right">
-                        <div class="percentarea db-in v_middle" @click="percentclick">
-                          <div class="inner" :style="`width:${item.percent}%`"></div>
-                          <div class="txt font12">{{ item.percent }}%</div>
-                        </div>
-                    </div>
-                    <div class="t-cell v_middle align_right w60">
-                        <div @click="toChat(item)" class="qbtn bg-red color-white">联系</div>
-                    </div>
-                  </div>
+                </div>
+                <div class="t-cell v_middle align_right w60">
+                    <div @click="toChat(item)" class="qbtn bg-red color-white">联系</div>
                 </div>
               </div>
             </div>
-          </swiper-item>
-        </swiper>
+          </div>
+        </div>
       </div>
       <div v-transfer-dom class="x-popup">
         <popup v-model="isshowpopup" height="100%">
@@ -336,6 +332,9 @@ export default {
         self.tabdata3 = self.tabdata3.concat(retdata)
         self.distabdata3 = true
       })
+    },
+    clickTab () {
+      this.swiperChange()
     },
     swiperChange (index) {
       const self = this

@@ -11,115 +11,111 @@
         </div>
       </div>
       <div class="s-container s-container1">
-        <!-- <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
-          <swiper-item v-for="(tabitem, index) in tabtxts" :key="index"> -->
-            <template v-if="(selectedIndex == 0)">
-              <div class="flex_center bg-white" style="height:55px;position:absolute;left:0;top:0;right:0;">
-                <search
-                  class="v-search bg-white"
-                  v-model="searchword1"
-                  :auto-fixed="autofixed"
-                  @on-submit="onSubmit1"
-                  @on-change="onChange1"
-                  @on-cancel="onCancel1"
-                  ref="search">
-                </search>
-              </div>
-              <div v-if="distabdata1" class="scroll_list swiper-inner scroll-container1" style="top:55px;" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',selectedIndex)">
-                <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 color-gray align_center">
-                  <template v-if="searchresult1">
-                    <div class="flex_center" style="height:80px;">暂无搜索结果</div>
-                  </template>
-                  <template v-else>
-                    <div><i class="al al-qiangkehu font60 pt20"></i></div>
-                    <div class="mt5">竟然没有返点客，点击【邀请返点客】，选择客户并【邀请】，与返点客一起赚钱吧！</div>
-                  </template>
+        <template v-if="(selectedIndex == 0)">
+          <div class="flex_center bg-white" style="height:55px;position:absolute;left:0;top:0;right:0;">
+            <search
+              class="v-search bg-white"
+              v-model="searchword1"
+              :auto-fixed="autofixed"
+              @on-submit="onSubmit1"
+              @on-change="onChange1"
+              @on-cancel="onCancel1"
+              ref="search">
+            </search>
+          </div>
+          <div v-if="distabdata1" class="scroll_list swiper-inner scroll-container1" style="top:55px;" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',selectedIndex)">
+            <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 color-gray align_center">
+              <template v-if="searchresult1">
+                <div class="flex_center" style="height:80px;">暂无搜索结果</div>
+              </template>
+              <template v-else>
+                <div><i class="al al-qiangkehu font60 pt20"></i></div>
+                <div class="mt5">竟然没有返点客，点击【邀请返点客】，选择客户并【邀请】，与返点客一起赚钱吧！</div>
+              </template>
+            </div>
+            <div v-else class="scroll_item pt10 pb10  pl12 pr12 bg-white mt10 list-shadow" v-for="(item,index1) in tabdata1" :key="item.id">
+              <div class="t-table">
+                <div @click="toSaleview(item)" class="t-cell v_middle" style="width:70px;">
+                  <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                 </div>
-                <div v-else class="scroll_item pt10 pb10  pl12 pr12 bg-white mt10 list-shadow" v-for="(item,index1) in tabdata1" :key="item.id">
-                  <div class="t-table">
-                    <div @click="toSaleview(item)" class="t-cell v_middle" style="width:70px;">
-                      <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-                    </div>
-                    <div @click="toSaleview(item)" class="t-cell v_middle">
-                      <div class="clamp1 font14 color-lightgray">{{item.username}}({{item.linkman}})</div>
-                      <div class="clamp1 mt5 font14 color-gray">带来消费: ￥{{item.sales}}</div>
-                    </div>
-                    <div @click="toChat(item)" class="t-cell w60 align_right v_middle">
-                      <div class="qbtn bg-red color-white">联系</div>
-                    </div>
-                  </div>
+                <div @click="toSaleview(item)" class="t-cell v_middle">
+                  <div class="clamp1 font14 color-lightgray">{{item.username}}({{item.linkman}})</div>
+                  <div class="clamp1 mt5 font14 color-gray">带来消费: ￥{{item.sales}}</div>
                 </div>
-              </div>
-            </template>
-            <template v-if="(selectedIndex == 1)">
-              <div class="flex_center bg-white" style="height:55px;position:absolute;left:0;top:0;right:0;">
-                <search
-                  class="v-search bg-white"
-                  v-model="searchword2"
-                  :auto-fixed="autofixed"
-                  @on-submit="onSubmit2"
-                  @on-change="onChange2"
-                  @on-cancel="onCancel2"
-                  ref="search">
-                </search>
-              </div>
-              <div v-if="distabdata2" class="scroll_list swiper-inner scroll-container2" style="top:55px;" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',selectedIndex)">
-                <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item color-gray padding10 align_center">
-                  <template v-if="searchresult2">
-                    <div class="flex_center" style="height:80px;">暂无搜索结果</div>
-                  </template>
-                  <template v-else>
-                  <div><i class="al al-qiangkehu font60 pt20"></i></div>
-                  <div class="mt5">竟然没有客户！将商品、活动或文章分享给好友或朋友圈，获得客户后即可将客户邀请成返点客啦！</div>
-                  </template>
-                </div>
-                <div v-else class="scroll_item pt10 pb10  pl12 pr12 bg-white mt10 list-shadow" v-for="(item,index1) in tabdata2" :key="item.id">
-                  <div class="t-table">
-                    <div @click="toMemberView(item)" class="t-cell v_middle " style="width: 70px;">
-                      <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-                    </div>
-                    <div class="t-cell v_middle">
-                      <div @click="toMemberView(item)">
-                        <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
-                        <!-- <div class="clamp1 font14 color-gray">成为客户时间: {{ item.dateline | dateformat }}</div> -->
-                      </div>
-                      <div class="clamp1 font14 color-gray" style="width:120px;" @click="influence">影响力:
-                        <span class="color-red4">{{item.yingxiangli}}</span>
-                        <span class="al al-wenhao font20 ml5 v_middle"></span>
-                      </div>
-                      <div @click="toMemberView(item)">
-                        <div class="clamp1 font14 color-gray">返点客: {{item.uploadname}}</div>
-                      </div>
-                    </div>
-                    <div class="t-cell v_middle align_right w60">
-                      <div class="qbtn bg-red color-white" @click="inviteevent(item,index1)">邀请</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </template>
-            <div v-if="(selectedIndex == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',selectedIndex)">
-              <div v-if="distabdata3" class="scroll_list cols-2">
-                <div v-if="!tabdata3 || tabdata3.length == 0" class="scroll_item color-gray padding10 align_center">
-                  <div><i class="al al-wushuju font60 pt20"></i></div>
-                  <div class="mt5">暂无返点记录，返点客帮你带来消费后，系统即可自动返点并记录！</div>
-                </div>
-                <div @click="toDetail(item)" v-else class="scroll_item db pt10 pb10 pl12 pr12 bg-white mt10 list-shadow" v-for="(item,index1) in tabdata3" :key="item.id">
-                  <div class="t-table">
-                    <div class="t-cell v_middle" style="width:70px;">
-                      <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-                    </div>
-                    <div class="t-cell v_middle">
-                      <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
-                      <div class="clamp1 mt5 font14 color-gray">返点金额: ￥{{item.money}}</div>
-                      <div class="clamp1 font14 color-gray">返点时间: {{ item.dateline | dateformat }} </div>
-                    </div>
-                  </div>
+                <div @click="toChat(item)" class="t-cell w60 align_right v_middle">
+                  <div class="qbtn bg-red color-white">联系</div>
                 </div>
               </div>
             </div>
-          <!-- </swiper-item>
-        </swiper> -->
+          </div>
+        </template>
+        <template v-if="(selectedIndex == 1)">
+          <div class="flex_center bg-white" style="height:55px;position:absolute;left:0;top:0;right:0;">
+            <search
+              class="v-search bg-white"
+              v-model="searchword2"
+              :auto-fixed="autofixed"
+              @on-submit="onSubmit2"
+              @on-change="onChange2"
+              @on-cancel="onCancel2"
+              ref="search">
+            </search>
+          </div>
+          <div v-if="distabdata2" class="scroll_list swiper-inner scroll-container2" style="top:55px;" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',selectedIndex)">
+            <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item color-gray padding10 align_center">
+              <template v-if="searchresult2">
+                <div class="flex_center" style="height:80px;">暂无搜索结果</div>
+              </template>
+              <template v-else>
+              <div><i class="al al-qiangkehu font60 pt20"></i></div>
+              <div class="mt5">竟然没有客户！将商品、活动或文章分享给好友或朋友圈，获得客户后即可将客户邀请成返点客啦！</div>
+              </template>
+            </div>
+            <div v-else class="scroll_item pt10 pb10  pl12 pr12 bg-white mt10 list-shadow" v-for="(item,index1) in tabdata2" :key="item.id">
+              <div class="t-table">
+                <div @click="toMemberView(item)" class="t-cell v_middle " style="width: 70px;">
+                  <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                </div>
+                <div class="t-cell v_middle">
+                  <div @click="toMemberView(item)">
+                    <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
+                    <!-- <div class="clamp1 font14 color-gray">成为客户时间: {{ item.dateline | dateformat }}</div> -->
+                  </div>
+                  <div class="clamp1 font14 color-gray" style="width:120px;" @click="influence">影响力:
+                    <span class="color-red4">{{item.yingxiangli}}</span>
+                    <span class="al al-wenhao font20 ml5 v_middle"></span>
+                  </div>
+                  <div @click="toMemberView(item)">
+                    <div class="clamp1 font14 color-gray">返点客: {{item.uploadname}}</div>
+                  </div>
+                </div>
+                <div class="t-cell v_middle align_right w60">
+                  <div class="qbtn bg-red color-white" @click="inviteevent(item,index1)">邀请</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+        <div v-if="(selectedIndex == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',selectedIndex)">
+          <div v-if="distabdata3" class="scroll_list cols-2">
+            <div v-if="!tabdata3 || tabdata3.length == 0" class="scroll_item color-gray padding10 align_center">
+              <div><i class="al al-wushuju font60 pt20"></i></div>
+              <div class="mt5">暂无返点记录，返点客帮你带来消费后，系统即可自动返点并记录！</div>
+            </div>
+            <div @click="toDetail(item)" v-else class="scroll_item db pt10 pb10 pl12 pr12 bg-white mt10 list-shadow" v-for="(item,index1) in tabdata3" :key="item.id">
+              <div class="t-table">
+                <div class="t-cell v_middle" style="width:70px;">
+                  <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                </div>
+                <div class="t-cell v_middle">
+                  <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
+                  <div class="clamp1 mt5 font14 color-gray">返点金额: ￥{{item.money}}</div>
+                  <div class="clamp1 font14 color-gray">返点时间: {{ item.dateline | dateformat }} </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </template>
     <div v-transfer-dom class="x-popup">
