@@ -343,7 +343,7 @@ export default {
       maxnum: 9,
       havenum: 0,
       photoarr1: [],
-      maxnum1: 19,
+      maxnum1: 29,
       havenum1: 0,
       videoarr: [],
       maxnum2: 1,

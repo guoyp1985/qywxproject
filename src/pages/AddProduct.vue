@@ -316,7 +316,7 @@ export default {
       havenum: 0,
       photoarr1: [],
       photoarr2: [],
-      maxnum1: 19,
+      maxnum1: 29,
       havenum1: 0,
       videoarr: [],
       maxnum2: 1,
