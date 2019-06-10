@@ -3,92 +3,88 @@
     <Sos v-if="showSos" title="您无权限访问该页面"></Sos>
     <template v-if="showContainer">
       <tab v-model="selectedIndex" class="w_100 v-tab">
-        <tab-item v-for="(item,index) in tabtxts" :selected="selectedIndex == index" :key="index">{{item}}</tab-item>
+        <tab-item v-for="(item,index) in tabtxts" :selected="selectedIndex == index" :key="index" @on-item-click="clickTab">{{item}}</tab-item>
       </tab>
       <div class="s-container scroll-container" style="top:50px;bottom:0;">
-        <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
-          <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-            <div v-if="(index == 0)" class="swiper-inner" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', index)">
-              <template v-if="disList1">
-                <template v-if="!tabData1 || !tabData1.length">
-                  <div class="flex_center padding20 color-gray">暂无相关数据</div>
-                </template>
-                <div v-else class="scroll_list ">
-                  <div class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData1" :key="index" style="color:inherit;">
-                    <div class="t-table bg-white">
-                			<div class="t-cell v_middle pic" @click="toProduct(item)">
-                        <img class="imgcover v_middle" :src="getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
-                      </div>
-                			<div class="t-cell v_middle" @click="toProduct(item)">
-                        <div class="clamp1">{{item.title}}</div>
-                        <div class="font12 color-gray">
-                          <div class="clamp1 color-red">售价: {{ $t('RMB') }}{{ item.price }}</div>
-                          <div class="clamp1">佣金:<span class="color-red"> {{ $t('RMB') }}{{ item.levelagent }}</span></div>
-                          <div class="clamp1">
-                              <span class="v_middle db-in mr5"><span class="al al-kucun font14"></span>{{ item.storage }}{{item.unit}}</span>
-                              <span class="v_middle db-in"><span class="al al-yishouchu font14"></span>{{ item.saled }}{{item.unit}}</span>
-                          </div>
-                        </div>
-                			</div>
-                      <div class="t-cell v_middle w50 align_right">
-                        <div class="btnicon bg-red color-white font12" @click="clickControl(item,index)">
-                          <i class="al al-asmkticon0165 v_middle"></i>
-                        </div>
-                      </div>
-                		</div>
-                    <div class="flex_left mt5 font12" @click="toProduct(item)" v-if="item.sellingpoint && item.sellingpoint != ''"><span class="color-theme mr5 w60">商品优势: </span><span class="flex_cell">{{item.sellingpoint}}</span></div>
+        <div v-show="(selectedIndex == 0)" class="swiper-inner" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', 0)">
+          <template v-if="disList1">
+            <template v-if="!tabData1 || !tabData1.length">
+              <div class="flex_center padding20 color-gray">暂无相关数据</div>
+            </template>
+            <div v-else class="scroll_list ">
+              <div class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData1" :key="index" style="color:inherit;">
+                <div class="t-table bg-white">
+            			<div class="t-cell v_middle pic" @click="toProduct(item)">
+                    <img class="imgcover v_middle" :src="getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                   </div>
-                </div>
-              </template>
-            </div>
-            <div v-if="(index == 1)" class="swiper-inner" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', index)">
-              <template v-if="disList2">
-                <div v-if="!tabData2 || !tabData2.length" class="flex_center padding20 color-gray">暂无相关数据</div>
-                <div v-else class="scroll_list ">
-                  <div :to="{path:'/product',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData2" :key="index" style="color:inherit;">
-                    <div v-if="item.recommend == 2" class="ico tuijian"></div>
-                    <div v-if="item.recommend == 3" class="ico yinliu"></div>
-                    <div v-if="item.recommend == 4" class="ico huiyuan"></div>
-                    <div v-if="item.recommend == 5" class="ico baokuan"></div>
-                    <div v-if="item.recommend == 6" class="ico xinpin"></div>
-                    <div v-if="item.recommend == 7" class="ico jianhuo"></div>
-                    <div class="t-table bg-white">
-                			<div class="t-cell v_middle pic" @click="toProduct(item)">
-                        <img class="imgcover v_middle" :src="getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+            			<div class="t-cell v_middle" @click="toProduct(item)">
+                    <div class="clamp1">{{item.title}}</div>
+                    <div class="font12 color-gray">
+                      <div class="clamp1 color-red">售价: {{ $t('RMB') }}{{ item.price }}</div>
+                      <div class="clamp1">佣金:<span class="color-red"> {{ $t('RMB') }}{{ item.levelagent }}</span></div>
+                      <div class="clamp1">
+                          <span class="v_middle db-in mr5"><span class="al al-kucun font14"></span>{{ item.storage }}{{item.unit}}</span>
+                          <span class="v_middle db-in"><span class="al al-yishouchu font14"></span>{{ item.saled }}{{item.unit}}</span>
                       </div>
-                			<div class="t-cell v_middle" @click="toProduct(item)">
-                        <!-- <div class="clamp1">
-                          <span v-if="item.recommend == 2" class="color-theme">【推荐商品】</span>
-                          <span v-if="item.recommend == 3" class="color-theme">【引流商品】</span>
-                          <span v-if="item.recommend == 4" class="color-theme">【会员商品】</span>
-                          <span v-if="item.recommend == 5" class="color-theme">【爆款】</span>
-                          <span v-if="item.recommend == 6" class="color-theme">【新品】</span>
-                          <span v-if="item.recommend == 7" class="color-theme">【尖货】</span>
-                          {{item.title}}
-                        </div> -->
-                        <div class="clamp1">{{item.title}}</div>
-                        <div class="font12 color-gray">
-                          <div class="clamp1 color-red">售价: {{ $t('RMB') }}{{ item.price }}</div>
-                          <div class="clamp1">佣金:<span class="color-red"> {{ $t('RMB') }}{{ item.levelagent }}</span></div>
-                          <div class="clamp1">
-                              <span class="v_middle db-in mr5"><span class="al al-kucun font14"></span>{{ item.storage }}{{item.unit}}</span>
-                              <span class="v_middle db-in"><span class="al al-yishouchu font14"></span>{{ item.saled }}{{item.unit}}</span>
-                          </div>
-                        </div>
-                			</div>
-                      <div class="t-cell v_middle w50 align_right">
-                        <div class="btnicon bg-red color-white font12" @click="clickControl1(item,index)">
-                          <i class="al al-asmkticon0165 v_middle"></i>
-                        </div>
-                      </div>
-                		</div>
-                    <div class="flex_left mt5 font12" @click="toProduct(item)" v-if="item.sellingpoint && item.sellingpoint != ''"><span class="color-theme mr5 w60">商品优势: </span><span class="flex_cell">{{item.sellingpoint}}</span></div>
+                    </div>
+            			</div>
+                  <div class="t-cell v_middle w50 align_right">
+                    <div class="btnicon bg-red color-white font12" @click="clickControl(item,index)">
+                      <i class="al al-asmkticon0165 v_middle"></i>
+                    </div>
                   </div>
-                </div>
-              </template>
+            		</div>
+                <div class="flex_left mt5 font12" @click="toProduct(item)" v-if="item.sellingpoint && item.sellingpoint != ''"><span class="color-theme mr5 w60">商品优势: </span><span class="flex_cell">{{item.sellingpoint}}</span></div>
+              </div>
             </div>
-          </swiper-item>
-        </swiper>
+          </template>
+        </div>
+        <div v-show="(selectedIndex == 1)" class="swiper-inner" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', 1)">
+          <template v-if="disList2">
+            <div v-if="!tabData2 || !tabData2.length" class="flex_center padding20 color-gray">暂无相关数据</div>
+            <div v-else class="scroll_list ">
+              <div :to="{path:'/product',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData2" :key="index" style="color:inherit;">
+                <div v-if="item.recommend == 2" class="ico tuijian"></div>
+                <div v-if="item.recommend == 3" class="ico yinliu"></div>
+                <div v-if="item.recommend == 4" class="ico huiyuan"></div>
+                <div v-if="item.recommend == 5" class="ico baokuan"></div>
+                <div v-if="item.recommend == 6" class="ico xinpin"></div>
+                <div v-if="item.recommend == 7" class="ico jianhuo"></div>
+                <div class="t-table bg-white">
+            			<div class="t-cell v_middle pic" @click="toProduct(item)">
+                    <img class="imgcover v_middle" :src="getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+                  </div>
+            			<div class="t-cell v_middle" @click="toProduct(item)">
+                    <!-- <div class="clamp1">
+                      <span v-if="item.recommend == 2" class="color-theme">【推荐商品】</span>
+                      <span v-if="item.recommend == 3" class="color-theme">【引流商品】</span>
+                      <span v-if="item.recommend == 4" class="color-theme">【会员商品】</span>
+                      <span v-if="item.recommend == 5" class="color-theme">【爆款】</span>
+                      <span v-if="item.recommend == 6" class="color-theme">【新品】</span>
+                      <span v-if="item.recommend == 7" class="color-theme">【尖货】</span>
+                      {{item.title}}
+                    </div> -->
+                    <div class="clamp1">{{item.title}}</div>
+                    <div class="font12 color-gray">
+                      <div class="clamp1 color-red">售价: {{ $t('RMB') }}{{ item.price }}</div>
+                      <div class="clamp1">佣金:<span class="color-red"> {{ $t('RMB') }}{{ item.levelagent }}</span></div>
+                      <div class="clamp1">
+                          <span class="v_middle db-in mr5"><span class="al al-kucun font14"></span>{{ item.storage }}{{item.unit}}</span>
+                          <span class="v_middle db-in"><span class="al al-yishouchu font14"></span>{{ item.saled }}{{item.unit}}</span>
+                      </div>
+                    </div>
+            			</div>
+                  <div class="t-cell v_middle w50 align_right">
+                    <div class="btnicon bg-red color-white font12" @click="clickControl1(item,index)">
+                      <i class="al al-asmkticon0165 v_middle"></i>
+                    </div>
+                  </div>
+            		</div>
+                <div class="flex_left mt5 font12" @click="toProduct(item)" v-if="item.sellingpoint && item.sellingpoint != ''"><span class="color-theme mr5 w60">商品优势: </span><span class="flex_cell">{{item.sellingpoint}}</span></div>
+              </div>
+            </div>
+          </template>
+        </div>
       </div>
       <div v-transfer-dom>
         <popup class="menuwrap" v-model="showPopup">
@@ -391,6 +387,9 @@ export default {
           })
         }
       })
+    },
+    clickTab () {
+      this.swiperChange()
     },
     swiperChange (index) {
       if (index && index !== this.selectedIndex) {

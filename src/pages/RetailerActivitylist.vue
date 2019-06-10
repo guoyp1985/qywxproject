@@ -17,111 +17,109 @@
         <template v-if="!tabdata1 || tabdata1.length == 0 || query.from == 'miniprogram'">
           <create-activity :retailer-info="retailerInfo" @on-add="clickAdd"></create-activity>
         </template>
-        <swiper v-else v-model="tabmodel" class="x-swiper no-indicator">
-          <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-            <div v-if="index === 0" class="swiper-inner scroll-container1" ref="scrollContainer" @scroll="handleScroll">
-              <div class="pro_box bg-page list_shadow pl12 pr12 pb15">
-                <div class="pro_list_top bg-page color-lightgray pt10 pb10 pl12 pr12"></div>
-                <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white" style="margin-top: -4px;">
-                  <div>活动只有立即分享才会发挥作用哦！分享后你可以：</div>
-                  <div>1. 知道查看活动的用户和他们的兴趣度；</div>
-                  <div>2. 可以带来更多客户及购买量。</div>
-                </div>
-              </div>
-              <div class="scroll_list">
-                <div v-for="(item,index1) in tabdata1" :key="item.id" :class="`scroll_item ${item.type}item bg-white mb5 pl12 pr12 db`">
-                  <router-link :to="{path:'/product',query:{wid:item.uploader,id:item.id}}" v-if="item.type == 'spring'" :key="item.id" class="db" style="position:relative;">
-                    <div v-if="item.isfinished === 1" class="ico finished"></div>
-                    <div class="t-table">
-                      <div class="t-cell align_left pr10 v_middle" style="width:100px;">
-                        <img class="v_middle imgcover" :src="item.photo" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
-                      </div>
-                      <div class="t-cell align_left v_middle">
-                        <div class="clamp1 font16 color-lightgray">{{item.title}}</div>
-                        <div class="clamp1 color-999 font14 middle-cell mt5">总金额: <span class="color-red">{{ $t('RMB') }}{{ item.budget }}</span></div>
-                        <div class="clamp1 color-999 font14 middle-cell">已领取:{{ item.getcount }}人/{{ $t('RMB') }}{{ item.getmoney }}</div>
-                        <div class="clamp1 color-999 font14 middle-cell">剩  余:{{ $t('RMB') }}{{ item.leavemoney }}</div>
-                      </div>
-                      <div class="t-cell align_right v_middle font0" style="width:60px;">
-                        <router-link v-if="item.moderate == 0" class="qbtn bg-red color-white" :to="`/pay/${item.orderid}`">去支付</router-link>
-                        <router-link class="qbtn bg-red color-white" to="/activityStat">{{ $t('Stat') }}</router-link>
-                        <div class="qbtn bg-red color-white mt5" v-if="item.moderate != 0">补钱</div>
-                        <div class="qbtn bg-red color-white mt5" v-if="item.isfinished != 1" @click="stopevent(item,index1)">停止</div>
-                      </div>
-                    </div>
-                    <div class="mt5 font12 color-gray">活动时间：{{ item.starttime | dateformat}} 至 {{ item.endtime | dateformat}}</div>
-                  </router-link>
-                  <router-link :to="{path:'/product',query:{wid:item.uploader,id:item.productid}}" v-if="item.type == 'groupbuy'" :key="item.id" class="db" style="position:relative;">
-                    <div v-if="item.isfinished === 1" class="ico finished"></div>
-                    <div class="t-table">
-                      <div class="t-cell align_left pr10 v_middle" style="width:100px;">
-                        <img class="v_middle imgcover" :src="item.photo" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
-                      </div>
-                      <div class="t-cell align_left v_middle">
-                        <div class="clamp1 font16 color-lightgray">{{item.title}}</div>
-                        <div class="clamp1 font14 color-gray mt5">{{ $t('Groupprice') }} <span class="color-red"> {{ $t('RMB') }} {{ item.groupprice }} </span></div>
-                        <div class="clamp1 font14 color-gray mt5">{{ $t('Group numbers') }} {{ item.numbers }}{{ $t('Person') }}</div>
-                      </div>
-                      <div class="t-cell align_right v_middle font0" style="width:60px;">
-                        <router-link class="qbtn bg-red color-white" :to="{path: '/stat', query:{id: item.id, module: 'activity'}}">{{ $t('Stat') }}</router-link>
-                        <div class="qbtn bg-red color-white mt5" v-if="item.isfinished != 1" @click="stopevent(item,index1)">停止</div>
-                      </div>
-                    </div>
-                    <div class="mt5 font12 color-gray">活动时间：{{ item.starttime | dateformat}} 至 {{ item.endtime | dateformat}}</div>
-                  </router-link>
-                  <router-link :to="{path:'/activity',query:{id:item.id}}" v-else-if="item.type == 'bargainbuy'" :key="item.id" class="db" style="position:relative;">
-                    <div v-if="item.isfinished === 1" class="ico finished"></div>
-                    <div class="t-table">
-                      <div class="t-cell align_left pr10 v_middle" style="width:100px;">
-                        <img class="v_middle imgcover" :src="item.photo" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
-                      </div>
-                      <div class="t-cell align_left v_middle">
-                        <div class="clamp1 font16 color-lightgray">{{item.title}}</div>
-                        <div class="clamp1 font14 color-gray mt5">{{ $t('Min buy price') }} <span class="color-red"> {{ $t('RMB') }} {{ item.minprice }} </span></div>
-                      </div>
-                      <div class="t-cell align_right v_middle font0" style="width:60px;">
-                        <router-link class="qbtn bg-red color-white" :to="{path: '/stat', query:{id: item.id, module: 'activity'}}">{{ $t('Stat') }}</router-link>
-                        <div class="qbtn bg-red color-white mt5" v-if="item.isfinished != 1" @click="stopevent(item,index1)">停止</div>
-                      </div>
-                    </div>
-                    <div class="mt5 font12 color-gray">活动时间：{{ item.starttime | dateformat}} 至 {{ item.endtime | dateformat}}</div>
-                  </router-link>
-                  <router-link :to="{path:'/activity',query:{id:item.id}}" v-else-if="item.type == 'sharehongbao'" :key="item.id" class="db" style="position:relative;">
-                    <div class="t-table">
-                      <div class="t-cell align_left pr10 v_middle" style="width:100px;">
-                        <img class="v_middle imgcover" :src="item.photo" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
-                      </div>
-                      <div class="t-cell align_left v_middle">
-                        <div class="clamp1 font16 color-lightgray">分享红包: {{item.title}}</div>
-                        <div class="clamp1 font14 color-gray mt5">充值金额 <span class="color-red"> {{ $t('RMB') }} {{ item.budget }} </span></div>
-                        <div class="clamp1 font14 color-gray mt5">已发金额 <span class="color-red"> {{ $t('RMB') }} {{ item.leftstorage }} </span> </div>
-                      </div>
-                      <div class="t-cell align_right v_middle font0" style="width:60px;">
-                        <router-link class="qbtn bg-red color-white" :to="{path: '/stat', query:{id: item.id, module: 'activity'}}">{{ $t('Stat') }}</router-link>
-                      </div>
-                    </div>
-                  </router-link>
-                  <router-link :to="{path:'/activity',query:{id:item.id}}" v-else-if="item.type == 'answer'" :key="item.id" class="db" style="position:relative;">
-                    <div class="t-table">
-                      <div class="t-cell align_left pr10 v_middle" style="width:100px;">
-                        <img class="v_middle imgcover" :src="item.photo" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
-                      </div>
-                      <div class="t-cell align_left v_middle">
-                        <div class="clamp1 font16 color-lightgray">答题: {{item.title}}</div>
-                      </div>
-                      <div class="t-cell align_right v_middle font0" style="width:60px;">
-                        <router-link class="qbtn bg-red color-white" :to="{path: '/stat', query:{id: item.id, module: 'activity'}}">{{ $t('Stat') }}</router-link>
-                      </div>
-                    </div>
-                  </router-link>
-                </div>
+        <template v-else>
+          <div v-if="tabmodel === 0" class="swiper-inner scroll-container1" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
+            <div class="pro_box bg-page list_shadow pl12 pr12 pb15">
+              <div class="pro_list_top bg-page color-lightgray pt10 pb10 pl12 pr12"></div>
+              <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white" style="margin-top: -4px;">
+                <div>活动只有立即分享才会发挥作用哦！分享后你可以：</div>
+                <div>1. 知道查看活动的用户和他们的兴趣度；</div>
+                <div>2. 可以带来更多客户及购买量。</div>
               </div>
             </div>
-            <template v-if="index == 1">
-              <create-activity :retailer-info="retailerInfo" @on-add="clickAdd"></create-activity>
-            </template>
-          </swiper-item>
-        </swiper>
+            <div class="scroll_list">
+              <div v-for="(item,index1) in tabdata1" :key="item.id" :class="`scroll_item ${item.type}item bg-white mb5 pl12 pr12 db`">
+                <router-link :to="{path:'/product',query:{wid:item.uploader,id:item.id}}" v-if="item.type == 'spring'" :key="item.id" class="db" style="position:relative;">
+                  <div v-if="item.isfinished === 1" class="ico finished"></div>
+                  <div class="t-table">
+                    <div class="t-cell align_left pr10 v_middle" style="width:100px;">
+                      <img class="v_middle imgcover" :src="item.photo" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+                    </div>
+                    <div class="t-cell align_left v_middle">
+                      <div class="clamp1 font16 color-lightgray">{{item.title}}</div>
+                      <div class="clamp1 color-999 font14 middle-cell mt5">总金额: <span class="color-red">{{ $t('RMB') }}{{ item.budget }}</span></div>
+                      <div class="clamp1 color-999 font14 middle-cell">已领取:{{ item.getcount }}人/{{ $t('RMB') }}{{ item.getmoney }}</div>
+                      <div class="clamp1 color-999 font14 middle-cell">剩  余:{{ $t('RMB') }}{{ item.leavemoney }}</div>
+                    </div>
+                    <div class="t-cell align_right v_middle font0" style="width:60px;">
+                      <router-link v-if="item.moderate == 0" class="qbtn bg-red color-white" :to="`/pay/${item.orderid}`">去支付</router-link>
+                      <router-link class="qbtn bg-red color-white" to="/activityStat">{{ $t('Stat') }}</router-link>
+                      <div class="qbtn bg-red color-white mt5" v-if="item.moderate != 0">补钱</div>
+                      <div class="qbtn bg-red color-white mt5" v-if="item.isfinished != 1" @click="stopevent(item,index1)">停止</div>
+                    </div>
+                  </div>
+                  <div class="mt5 font12 color-gray">活动时间：{{ item.starttime | dateformat}} 至 {{ item.endtime | dateformat}}</div>
+                </router-link>
+                <router-link :to="{path:'/product',query:{wid:item.uploader,id:item.productid}}" v-if="item.type == 'groupbuy'" :key="item.id" class="db" style="position:relative;">
+                  <div v-if="item.isfinished === 1" class="ico finished"></div>
+                  <div class="t-table">
+                    <div class="t-cell align_left pr10 v_middle" style="width:100px;">
+                      <img class="v_middle imgcover" :src="item.photo" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+                    </div>
+                    <div class="t-cell align_left v_middle">
+                      <div class="clamp1 font16 color-lightgray">{{item.title}}</div>
+                      <div class="clamp1 font14 color-gray mt5">{{ $t('Groupprice') }} <span class="color-red"> {{ $t('RMB') }} {{ item.groupprice }} </span></div>
+                      <div class="clamp1 font14 color-gray mt5">{{ $t('Group numbers') }} {{ item.numbers }}{{ $t('Person') }}</div>
+                    </div>
+                    <div class="t-cell align_right v_middle font0" style="width:60px;">
+                      <router-link class="qbtn bg-red color-white" :to="{path: '/stat', query:{id: item.id, module: 'activity'}}">{{ $t('Stat') }}</router-link>
+                      <div class="qbtn bg-red color-white mt5" v-if="item.isfinished != 1" @click="stopevent(item,index1)">停止</div>
+                    </div>
+                  </div>
+                  <div class="mt5 font12 color-gray">活动时间：{{ item.starttime | dateformat}} 至 {{ item.endtime | dateformat}}</div>
+                </router-link>
+                <router-link :to="{path:'/activity',query:{id:item.id}}" v-else-if="item.type == 'bargainbuy'" :key="item.id" class="db" style="position:relative;">
+                  <div v-if="item.isfinished === 1" class="ico finished"></div>
+                  <div class="t-table">
+                    <div class="t-cell align_left pr10 v_middle" style="width:100px;">
+                      <img class="v_middle imgcover" :src="item.photo" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+                    </div>
+                    <div class="t-cell align_left v_middle">
+                      <div class="clamp1 font16 color-lightgray">{{item.title}}</div>
+                      <div class="clamp1 font14 color-gray mt5">{{ $t('Min buy price') }} <span class="color-red"> {{ $t('RMB') }} {{ item.minprice }} </span></div>
+                    </div>
+                    <div class="t-cell align_right v_middle font0" style="width:60px;">
+                      <router-link class="qbtn bg-red color-white" :to="{path: '/stat', query:{id: item.id, module: 'activity'}}">{{ $t('Stat') }}</router-link>
+                      <div class="qbtn bg-red color-white mt5" v-if="item.isfinished != 1" @click="stopevent(item,index1)">停止</div>
+                    </div>
+                  </div>
+                  <div class="mt5 font12 color-gray">活动时间：{{ item.starttime | dateformat}} 至 {{ item.endtime | dateformat}}</div>
+                </router-link>
+                <router-link :to="{path:'/activity',query:{id:item.id}}" v-else-if="item.type == 'sharehongbao'" :key="item.id" class="db" style="position:relative;">
+                  <div class="t-table">
+                    <div class="t-cell align_left pr10 v_middle" style="width:100px;">
+                      <img class="v_middle imgcover" :src="item.photo" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+                    </div>
+                    <div class="t-cell align_left v_middle">
+                      <div class="clamp1 font16 color-lightgray">分享红包: {{item.title}}</div>
+                      <div class="clamp1 font14 color-gray mt5">充值金额 <span class="color-red"> {{ $t('RMB') }} {{ item.budget }} </span></div>
+                      <div class="clamp1 font14 color-gray mt5">已发金额 <span class="color-red"> {{ $t('RMB') }} {{ item.leftstorage }} </span> </div>
+                    </div>
+                    <div class="t-cell align_right v_middle font0" style="width:60px;">
+                      <router-link class="qbtn bg-red color-white" :to="{path: '/stat', query:{id: item.id, module: 'activity'}}">{{ $t('Stat') }}</router-link>
+                    </div>
+                  </div>
+                </router-link>
+                <router-link :to="{path:'/activity',query:{id:item.id}}" v-else-if="item.type == 'answer'" :key="item.id" class="db" style="position:relative;">
+                  <div class="t-table">
+                    <div class="t-cell align_left pr10 v_middle" style="width:100px;">
+                      <img class="v_middle imgcover" :src="item.photo" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+                    </div>
+                    <div class="t-cell align_left v_middle">
+                      <div class="clamp1 font16 color-lightgray">答题: {{item.title}}</div>
+                    </div>
+                    <div class="t-cell align_right v_middle font0" style="width:60px;">
+                      <router-link class="qbtn bg-red color-white" :to="{path: '/stat', query:{id: item.id, module: 'activity'}}">{{ $t('Stat') }}</router-link>
+                    </div>
+                  </div>
+                </router-link>
+              </div>
+            </div>
+          </div>
+          <template v-if="tabmodel == 1">
+            <create-activity :retailer-info="retailerInfo" @on-add="clickAdd"></create-activity>
+          </template>
+        </template>
       </div>
     </template>
   </div>
@@ -238,10 +236,11 @@ export default {
         }
       })
     },
-    handleScroll () {
+    handleScroll (refname) {
       const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
-        element: self.$refs.scrollContainer[0],
+        element: scrollarea,
         callback: function () {
           if (self.tabdata1.length === (pageStart1 + 1) * limit) {
             pageStart1++

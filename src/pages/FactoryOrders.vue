@@ -7,161 +7,157 @@
       <div class="s-topbanner s-topbanner1">
         <div class="row">
           <tab v-model="selectedIndex" class="" active-color="#ea3a3a" default-color="#666666">
-            <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
+            <tab-item v-for="(item,index) in tabtxts" :selected="index == selectedIndex" :key="index" @on-item-click="clickTab">{{item}}</tab-item>
           </tab>
         </div>
       </div>
       <div class="s-container s-container1">
-        <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
-          <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-            <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)">
-              <div v-if="distabdata1" class="scroll_list">
-                <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 align_center color-gray">
-                  <div><i class="al al-wushuju font60 pt20"></i></div>
-                  <div class="mt5">暂无相关订单！</div>
-                </div>
-                <Orderitemplate v-else v-for="(item,index1) in tabdata1" :key="item.id" :data="item" order-link="/factoryOrderDetail">
-                  <span slot="orderno">{{ item.orderno }}</span>
-                  <span slot="flagstr">{{ item.flagstr }}</span>
-                  <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item" :product="product"></Orderproductplate>
-                  <div slot="receivearea">
-                    <div class="t-table">
-                      <div class="font12 color-lightgray">
-                        <span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span>
-                        <span @click="copyTxt(item)" class="ml5" style="position:relative;">
-                          <i class="al al-fuzhi font14 color-red4"></i><span class="font12 color-red4">复制</span>
-                          <template v-if="item.flag != 0 && item.flag != 1 && item.flag != 2">
-                            <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.delivercompanyname }} {{ item.delivercode }} {{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
-                          </template>
-                          <template v-else>
-                            <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
-                          </template>
-                        </span>
-                      </div>
-                      <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right color-lightgray font12">
-                        <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
-                      </div>
-                    </div>
-                    <div class="t-table pt5 color-lightgray font13 deliverarea" >
-                      <div class="t-cell middle-cell appendcontrol align_right w80" v-if="item.flag == 2 && item.candeliver">
-                        <div class="qbtn4 font12" style="padding:1px 14px;" @click="uploaddeliver(item,index)">{{ $t('Deliver goods') }}</div>
-                      </div>
-                      <div class="t-cell middle-cell appendcontrol align_right w80" v-if="item.flag == 3">
-                        <router-link :to="{path: '/deliverinfo', query: {id: item.id}}" class="qbtn4 color-orange7 font12" style="border:1px solid #ee9f25;padding:1px 8px">{{ $t('View deliver') }}</router-link>
-                      </div>
-                    </div>
-                  </div>
-                </Orderitemplate>
-              </div>
+        <div v-show="(selectedIndex == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',0)">
+          <div v-if="distabdata1" class="scroll_list">
+            <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 align_center color-gray">
+              <div><i class="al al-wushuju font60 pt20"></i></div>
+              <div class="mt5">暂无相关订单！</div>
             </div>
-            <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',index)">
-              <div v-if="distabdata2" class="scroll_list">
-                <div v-if="!tabdata2 || tabdata2.length === 0" class="scroll_item padding10 align_center color-gray">
-                  <div><i class="al al-wushuju font60 pt20"></i></div>
-                  <div class="mt5">暂无相关订单！</div>
-                </div>
-                <orderitemplate v-else v-for="(item,index1) in tabdata2" :key="item.id" :data="item" order-link="/factoryOrderDetail">
-                  <span slot="orderno">{{ item.orderno }}</span>
-                  <span slot="flagstr">{{ item.flagstr }}</span>
-                  <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item" :product="product"></Orderproductplate>
-                  <div slot="receivearea">
-                    <div class="t-table">
-                      <div class="font12 color-lightgray">
-                        <span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span>
-                        <span @click="copyTxt(item)" class="ml5" style="position:relative;">
-                          <i class="al al-fuzhi font14 color-red4"></i><span class="font12 color-red4">复制</span>
-                          <template v-if="item.flag != 0 && item.flag != 1 && item.flag != 2">
-                            <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.delivercompanyname }} {{ item.delivercode }} {{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
-                          </template>
-                          <template v-else>
-                            <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
-                          </template>
-                        </span>
-                      </div>
-                      <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right color-lightgray font12">
-                        <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
-                      </div>
-                    </div>
+            <Orderitemplate v-else v-for="(item,index1) in tabdata1" :key="item.id" :data="item" order-link="/factoryOrderDetail">
+              <span slot="orderno">{{ item.orderno }}</span>
+              <span slot="flagstr">{{ item.flagstr }}</span>
+              <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item" :product="product"></Orderproductplate>
+              <div slot="receivearea">
+                <div class="t-table">
+                  <div class="font12 color-lightgray">
+                    <span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span>
+                    <span @click="copyTxt(item)" class="ml5" style="position:relative;">
+                      <i class="al al-fuzhi font14 color-red4"></i><span class="font12 color-red4">复制</span>
+                      <template v-if="item.flag != 0 && item.flag != 1 && item.flag != 2">
+                        <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.delivercompanyname }} {{ item.delivercode }} {{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
+                      </template>
+                      <template v-else>
+                        <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
+                      </template>
+                    </span>
                   </div>
-                </orderitemplate>
-              </div>
-            </div>
-            <div v-if="(index == 2)" class="swiper-inner scroll-container31" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',index)">
-              <div v-if="distabdata3" class="scroll_list">
-                <div v-if="!tabdata3 || tabdata3.length === 0" class="scroll_item padding10 align_center color-gray">
-                  <div><i class="al al-wushuju font60 pt20"></i></div>
-                  <div class="mt5">暂无相关订单！</div>
-                </div>
-                <orderitemplate v-else v-for="(item,index1) in tabdata3" :key="item.id" :data="item" order-link="/factoryOrderDetail">
-                  <span slot="orderno">{{ item.orderno }}</span>
-                  <span slot="flagstr">{{ item.flagstr }}</span>
-                  <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item" :product="product"></Orderproductplate>
-                  <div slot="receivearea">
-                    <div class="t-table">
-                      <div class="font12 color-lightgray">
-                        <span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span>
-                        <span @click="copyTxt(item)" class="ml5" style="position:relative;">
-                          <i class="al al-fuzhi font14 color-red4"></i><span class="font12 color-red4">复制</span>
-                          <template v-if="item.flag != 0 && item.flag != 1 && item.flag != 2">
-                            <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.delivercompanyname }} {{ item.delivercode }} {{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
-                          </template>
-                          <template v-else>
-                            <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
-                          </template>
-                        </span>
-                      </div>
-                      <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right color-lightgray font12">
-                        <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
-                      </div>
-                    </div>
-                    <div v-if="item.candeliver" class="t-table pt5 color-lightgray font13 deliverarea">
-                      <div class="t-cell middle-cell appendcontrol align_right w80">
-                        <div class="qbtn4 font12" style="padding:1px 14px;" @click="uploaddeliver(item,index)">{{ $t('Deliver goods') }}</div>
-                      </div>
-                    </div>
+                  <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right color-lightgray font12">
+                    <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
                   </div>
-                </orderitemplate>
-              </div>
-            </div>
-            <div v-if="(index == 3)" class="swiper-inner scroll-container4" ref="scrollContainer4" @scroll="handleScroll('scrollContainer4',index)">
-              <div v-if="distabdata4" class="scroll_list">
-                <div v-if="!tabdata4 || tabdata4.length === 0" class="scroll_item padding10 align_center color-gray">
-                  <div><i class="al al-wushuju font60 pt20"></i></div>
-                  <div class="mt5">暂无相关订单！</div>
                 </div>
-                <orderitemplate v-else v-for="(item,index1) in tabdata4" :key="item.id" :data="item" order-link="/factoryOrderDetail">
-                  <span slot="orderno">{{ item.orderno }}</span>
-                  <span slot="flagstr">{{ item.flagstr }}</span>
-                  <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item" :product="product"></Orderproductplate>
-                  <div slot="receivearea">
-                    <div class="t-table">
-                      <div class="font12 color-lightgray">
-                        <span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span>
-                        <span @click="copyTxt(item)" class="ml5" style="position:relative;">
-                          <i class="al al-fuzhi font14 color-red4"></i><span class="font12 color-red4">复制</span>
-                          <template v-if="item.flag != 0 && item.flag != 1 && item.flag != 2">
-                            <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.delivercompanyname }} {{ item.delivercode }} {{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
-                          </template>
-                          <template v-else>
-                            <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
-                          </template>
-                        </span>
-                      </div>
-                      <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right color-lightgray font12">
-                        <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
-                      </div>
-                    </div>
-                    <div class="t-table pt5 color-lightgray font13 deliverarea">
-                      <div class="t-cell middle-cell appendcontrol align_right w80">
-                        <router-link :to="{path: '/deliverinfo', query: {id: item.id}}" class="qbtn4 color-orange7 font12" style="border:1px solid #ee9f25;padding:1px 8px">{{ $t('View deliver') }}</router-link>
-                      </div>
-                    </div>
+                <div class="t-table pt5 color-lightgray font13 deliverarea" >
+                  <div class="t-cell middle-cell appendcontrol align_right w80" v-if="item.flag == 2 && item.candeliver">
+                    <div class="qbtn4 font12" style="padding:1px 14px;" @click="uploaddeliver(item,index)">{{ $t('Deliver goods') }}</div>
                   </div>
-                </orderitemplate>
+                  <div class="t-cell middle-cell appendcontrol align_right w80" v-if="item.flag == 3">
+                    <router-link :to="{path: '/deliverinfo', query: {id: item.id}}" class="qbtn4 color-orange7 font12" style="border:1px solid #ee9f25;padding:1px 8px">{{ $t('View deliver') }}</router-link>
+                  </div>
+                </div>
               </div>
+            </Orderitemplate>
+          </div>
+        </div>
+        <div v-show="(selectedIndex == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',1)">
+          <div v-if="distabdata2" class="scroll_list">
+            <div v-if="!tabdata2 || tabdata2.length === 0" class="scroll_item padding10 align_center color-gray">
+              <div><i class="al al-wushuju font60 pt20"></i></div>
+              <div class="mt5">暂无相关订单！</div>
             </div>
-          </swiper-item>
-        </swiper>
+            <orderitemplate v-else v-for="(item,index1) in tabdata2" :key="item.id" :data="item" order-link="/factoryOrderDetail">
+              <span slot="orderno">{{ item.orderno }}</span>
+              <span slot="flagstr">{{ item.flagstr }}</span>
+              <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item" :product="product"></Orderproductplate>
+              <div slot="receivearea">
+                <div class="t-table">
+                  <div class="font12 color-lightgray">
+                    <span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span>
+                    <span @click="copyTxt(item)" class="ml5" style="position:relative;">
+                      <i class="al al-fuzhi font14 color-red4"></i><span class="font12 color-red4">复制</span>
+                      <template v-if="item.flag != 0 && item.flag != 1 && item.flag != 2">
+                        <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.delivercompanyname }} {{ item.delivercode }} {{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
+                      </template>
+                      <template v-else>
+                        <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
+                      </template>
+                    </span>
+                  </div>
+                  <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right color-lightgray font12">
+                    <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
+                  </div>
+                </div>
+              </div>
+            </orderitemplate>
+          </div>
+        </div>
+        <div v-show="(selectedIndex == 2)" class="swiper-inner scroll-container31" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',2)">
+          <div v-if="distabdata3" class="scroll_list">
+            <div v-if="!tabdata3 || tabdata3.length === 0" class="scroll_item padding10 align_center color-gray">
+              <div><i class="al al-wushuju font60 pt20"></i></div>
+              <div class="mt5">暂无相关订单！</div>
+            </div>
+            <orderitemplate v-else v-for="(item,index1) in tabdata3" :key="item.id" :data="item" order-link="/factoryOrderDetail">
+              <span slot="orderno">{{ item.orderno }}</span>
+              <span slot="flagstr">{{ item.flagstr }}</span>
+              <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item" :product="product"></Orderproductplate>
+              <div slot="receivearea">
+                <div class="t-table">
+                  <div class="font12 color-lightgray">
+                    <span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span>
+                    <span @click="copyTxt(item)" class="ml5" style="position:relative;">
+                      <i class="al al-fuzhi font14 color-red4"></i><span class="font12 color-red4">复制</span>
+                      <template v-if="item.flag != 0 && item.flag != 1 && item.flag != 2">
+                        <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.delivercompanyname }} {{ item.delivercode }} {{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
+                      </template>
+                      <template v-else>
+                        <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
+                      </template>
+                    </span>
+                  </div>
+                  <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right color-lightgray font12">
+                    <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
+                  </div>
+                </div>
+                <div v-if="item.candeliver" class="t-table pt5 color-lightgray font13 deliverarea">
+                  <div class="t-cell middle-cell appendcontrol align_right w80">
+                    <div class="qbtn4 font12" style="padding:1px 14px;" @click="uploaddeliver(item,index)">{{ $t('Deliver goods') }}</div>
+                  </div>
+                </div>
+              </div>
+            </orderitemplate>
+          </div>
+        </div>
+        <div v-show="(selectedIndex == 3)" class="swiper-inner scroll-container4" ref="scrollContainer4" @scroll="handleScroll('scrollContainer4',3)">
+          <div v-if="distabdata4" class="scroll_list">
+            <div v-if="!tabdata4 || tabdata4.length === 0" class="scroll_item padding10 align_center color-gray">
+              <div><i class="al al-wushuju font60 pt20"></i></div>
+              <div class="mt5">暂无相关订单！</div>
+            </div>
+            <orderitemplate v-else v-for="(item,index1) in tabdata4" :key="item.id" :data="item" order-link="/factoryOrderDetail">
+              <span slot="orderno">{{ item.orderno }}</span>
+              <span slot="flagstr">{{ item.flagstr }}</span>
+              <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item" :product="product"></Orderproductplate>
+              <div slot="receivearea">
+                <div class="t-table">
+                  <div class="font12 color-lightgray">
+                    <span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span>
+                    <span @click="copyTxt(item)" class="ml5" style="position:relative;">
+                      <i class="al al-fuzhi font14 color-red4"></i><span class="font12 color-red4">复制</span>
+                      <template v-if="item.flag != 0 && item.flag != 1 && item.flag != 2">
+                        <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.delivercompanyname }} {{ item.delivercode }} {{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
+                      </template>
+                      <template v-else>
+                        <div :class="`deliver_txt-${index}-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
+                      </template>
+                    </span>
+                  </div>
+                  <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right color-lightgray font12">
+                    <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
+                  </div>
+                </div>
+                <div class="t-table pt5 color-lightgray font13 deliverarea">
+                  <div class="t-cell middle-cell appendcontrol align_right w80">
+                    <router-link :to="{path: '/deliverinfo', query: {id: item.id}}" class="qbtn4 color-orange7 font12" style="border:1px solid #ee9f25;padding:1px 8px">{{ $t('View deliver') }}</router-link>
+                  </div>
+                </div>
+              </div>
+            </orderitemplate>
+          </div>
+        </div>
       </div>
       <div v-transfer-dom class="x-popup popup-deliver">
         <popup v-model="showpopup" height="100%">
@@ -407,6 +403,9 @@ export default {
         self.tabdata4 = self.tabdata4.concat(retdata)
         self.distabdata4 = true
       })
+    },
+    clickTab () {
+      this.swiperChange()
     },
     swiperChange (index) {
       const self = this
