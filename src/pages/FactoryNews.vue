@@ -43,7 +43,7 @@
           </div>
         </div>
       </div>
-      <div v-if="loginUser.isretailer" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
+      <div v-if="loginUser.isretailer && !editIng" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
         <div class="align_center flex_center flex_cell">
           <div class="flex_cell flex_center btn-bottom-red" v-if="article.haveimport" >已导入</div>
           <div class="flex_cell flex_center btn-bottom-red" v-else @click="importEvent">导入到我的文章</div>
