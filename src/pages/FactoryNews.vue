@@ -28,10 +28,10 @@
           </div>
           <template v-if="showArticle">
             <template v-if="article.uploader == reward.uid">
-              <div id="editor-content" :class="`article-content ${article.content == '' ? 'color-gray font16' : ''}`">
-                <p v-if="article.content == '' && !afterEdit">文章内容为空，点击【编辑】按钮可修改内容哦！</p>
-                <div v-else v-html="article.content"></div>
+              <div v-if="article.content == '' && !afterEdit" id="editor-content" class="article-content color-gray font16">
+                <p>文章内容为空，点击【编辑】按钮可修改内容哦！</p>
               </div>
+              <div v-else id="editor-content" class="article-content" v-html="article.content"></div>
             </template>
             <template v-else>
               <div class="article-content" v-html="article.content"></div>
@@ -345,25 +345,29 @@ export default {
       const self = this
       let editorContent = document.querySelector('#editor-content')
       self.$vux.loading.show()
-      let con = editorContent.innerHTML.replace('文章内容为空，点击【编辑】按钮可修改内容哦！', '')
+      let con = editorContent.innerHTML.replace(/Eleditor-active/g, '')
+        .replace('<p class="">文章内容为空，点击【编辑】按钮可修改内容哦！</p>', '')
+        .replace('<p>文章内容为空，点击【编辑】按钮可修改内容哦！</p>', '')
+        .replace('<p class="Eleditor-active">文章内容为空，点击【编辑】按钮可修改内容哦！</p>', '')
       self.$http.post(`${ENV.BokaApi}/api/editContent/factorynews`, {
         id: self.query.id,
         content: con
       }).then(res => {
         let data = res.data
         self.$vux.loading.hide()
+        if (data.flag === 1) {
+          if (con !== '') {
+            self.article.content = con
+            self.afterEdit = true
+          }
+          self.handleImg()
+          callback && callback()
+        }
         let toasttype = data.flag !== 1 ? 'warn' : 'success'
         self.$vux.toast.show({
           text: data.error,
           type: toasttype,
-          time: self.$util.delay(data.error),
-          onHide: function () {
-            if (data.flag === 1) {
-              self.afterEdit = true
-              self.handleImg()
-              callback && callback()
-            }
-          }
+          time: self.$util.delay(data.error)
         })
       })
     },
