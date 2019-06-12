@@ -25,8 +25,8 @@
               <div class="q_photolist align_left">
                 <template v-if="photoarr.length > 0">
                   <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
-                    <div class="inner photo" :photo="item" :style="`background-image: url('${item}');`">
-                      <div class="close" @click="deletephoto(item,index,'photo')">×</div>
+                    <div class="inner photo" :photo="item" :style="`background-image: url('${item}');`" @click="uploadPhoto('fileInput','photo',index)">
+                      <div class="close" @click.stop="deletephoto(item,index,'photo')">×</div>
                     </div>
                   </div>
                 </template>
@@ -201,8 +201,8 @@
             <div class="q_photolist align_left bg-white">
               <template v-if="photoarr1.length > 0">
                 <div v-for="(item,index) in photoarr1" :key="index" class="photoitem">
-                  <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
-                    <div class="close" @click="deletephoto(item,index,'contentphoto')">×</div>
+                  <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`" @click="uploadPhoto('fileInput1','contentphoto',index)">
+                    <div class="close" @click.stop="deletephoto(item,index,'contentphoto')">×</div>
                   </div>
                 </div>
               </template>
@@ -346,7 +346,8 @@ export default {
       // optionsData: [{title: '', photo: '', storage: ''}],
       optionsData: [],
       selectedOptionIndex: 0,
-      optionsPhoto: []
+      optionsPhoto: [],
+      clickPhotoIndex: -1
     }
   },
   watch: {
@@ -521,6 +522,7 @@ export default {
     },
     photoCallback (data, type) {
       const self = this
+      const index = this.clickPhotoIndex
       if (data.flag === 1) {
         if (type === 'photo' && self.photoarr.length < self.maxnum) {
           self.photoarr.push(data.data)
@@ -539,9 +541,16 @@ export default {
         })
       }
     },
-    uploadPhoto (refname, type) {
+    uploadPhoto (refname, type, index) {
       const self = this
       const fileInput = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      console.log('点击上传图片')
+      console.log(this.photoarr)
+      if (index !== undefined && index !== 'undefined') {
+        this.clickPhotoIndex = index
+      } else {
+        this.clickPhotoIndex = -1
+      }
       if (self.$util.isPC() || type === 'video') {
         fileInput.click()
       } else {
@@ -561,7 +570,7 @@ export default {
           self.$util.wxUploadImage({
             maxnum: curMaxnum,
             handleCallback: function (data) {
-              self.photoCallback(data, type)
+              self.photoCallback(data, type, index)
             }
           })
         })
@@ -585,10 +594,13 @@ export default {
         })
       }
     },
-    fileMulChange (refname, type, index) {
+    fileMulChange (refname, type) {
       const self = this
+      const index = this.clickPhotoIndex
       const target = event.target
       const files = target.files
+      console.log('进入到了file的change事件中')
+      console.log(index)
       if (files.length > 0) {
         let filedata = new FormData()
         for (let i = 0; i < files.length; i++) {
@@ -612,10 +624,6 @@ export default {
               let addData = retdata.slice(0, addNum)
               self.photoarr1 = self.photoarr1.concat(addData)
               self.submitdata.contentphoto = self.photoarr1.join(',')
-            } else if (type === 'gsphoto') {
-              self.photoarr2 = retdata
-              console.log('规格图片：')
-              console.log(self.photoarr2, index)
             }
           } else if (data.error) {
             self.$vux.toast.show({

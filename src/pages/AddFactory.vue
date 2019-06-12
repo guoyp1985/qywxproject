@@ -124,7 +124,6 @@
           </template>
         </form>
       </div>
-      <div class="s-bottom flex_center bg-orange color-white" @click="saveEvent">{{ $t('Submit') }}</div>
       <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
         <div class="flex_cell flex_center btn-bottom-red" @click="saveEvent">{{ $t('Submit') }}</div>
       </div>
@@ -324,7 +323,7 @@ export default {
       }
       self.$vux.confirm.show({
         content: con,
-        onConfirm () {
+        onConfirm: () => {
           self.$vux.loading.show()
           self.$http.post(`${ENV.BokaApi}/api/factory/add`, postData).then(function (res) {
             let data = res.data
@@ -338,7 +337,21 @@ export default {
             })
             if (data.flag === 1) {
               setTimeout(() => {
-                self.$router.go(-1)
+                if (self.query.minibackurl) {
+                  let minibackurl = decodeURIComponent(self.query.minibackurl)
+                  if (self.query.backtype === 'relaunch') {
+                    self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+                  } else if (self.query.backtype === 'redirect') {
+                    self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+                  } else {
+                    self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+                  }
+                } else if (self.query.backurl) {
+                  let backurl = decodeURIComponent(self.query.backurl)
+                  this.$router.push(backurl)
+                } else {
+                  self.$router.go(-1)
+                }
               }, timeout)
             }
           })
