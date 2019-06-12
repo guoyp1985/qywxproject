@@ -108,6 +108,14 @@ export default {
     toApp () {
       if (this.query.minibackurl) {
         let minibackurl = decodeURIComponent(this.query.minibackurl)
+        if (this.loginUser.fid) {
+          if (minibackurl.indexOf('?') < 0) {
+            minibackurl = `${minibackurl}?`
+          } else {
+            minibackurl = `${minibackurl}&`
+          }
+          minibackurl = `${minibackurl}gxkfid=${this.loginUser.fid}`
+        }
         if (this.query.backtype === 'relaunch') {
           this.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
         } else if (this.query.backtype === 'redirect') {
