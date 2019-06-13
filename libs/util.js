@@ -707,7 +707,7 @@ Util.install = function (Vue, options) {
       })
     },
     handleAppParams: function (query, params) {
-      let arr = ['from', 'appid', 'minibackurl', 'backtype', 'control', 'miniconfig', 'fromapp', 'allowfirst']
+      let arr = ['from', 'appid', 'minibackurl', 'backtype', 'control', 'miniconfig', 'fromapp', 'allowfirst', 'fromapp']
       for (let i = 0; i < arr.length; i++) {
         let pname = arr[i]
         if (query[pname]) {

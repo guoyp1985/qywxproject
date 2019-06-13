@@ -157,7 +157,12 @@
         </share-success>
       </template>
       <template v-if="showTip">
-        <tip-layer buttonTxt="立即申请" content="会员卖家才可代理厂家商品，赶快入驻申请吧！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
+        <template v-if="VipFree">
+          <tip-layer buttonTxt="立即申请" content="注册成为卖家后，才可代理厂家商品哦，赶快注册吧！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
+        </template>
+        <template v-else>
+          <tip-layer buttonTxt="立即申请" content="会员卖家才可代理厂家商品，赶快入驻申请吧！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
+        </template>
       </template>
     </template>
     <template v-if="showHelpModal">
@@ -405,7 +410,7 @@ export default {
       this.showTip = false
     },
     toApply () {
-      if (this.query.from) {
+      if (this.query.from && this.query.fromapp !== 'ddzs') {
         let webquery = encodeURIComponent(`id=${this.query.id}&from=${this.query.from}`)
         this.$wechat.miniProgram.redirectTo({url: `/pages/vip?weburl=factoryProduct&webquery=${webquery}`})
       } else {
@@ -418,6 +423,9 @@ export default {
         }
         if (this.query.allowfirst) {
           backurl = `${backurl}&allowfirst=${this.query.allowfirst}`
+        }
+        if (this.query.allowfirst) {
+          backurl = `${backurl}&fromapp=${this.query.fromapp}`
         }
         backurl = encodeURIComponent(backurl)
         this.$router.push({path: '/center', query: {backurl: backurl}})
