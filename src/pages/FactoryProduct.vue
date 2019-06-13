@@ -413,6 +413,9 @@ export default {
         if (this.query.from) {
           backurl = `${backurl}&from=${this.query.from}`
         }
+        if (this.query.fid) {
+          backurl = `${backurl}&fid=${this.query.fid}`
+        }
         backurl = encodeURIComponent(backurl)
         this.$router.push({path: '/center', query: {backurl: backurl}})
       }
