@@ -89,7 +89,12 @@
       </div>
     </div>
     <template v-if="showTip">
-      <tip-layer buttonTxt="立即申请" content="会员卖家才可代理厂家商品，赶快入驻申请吧！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
+      <template v-if="VipFree">
+        <tip-layer buttonTxt="立即申请" content="注册成为卖家后，才可代理厂家商品哦，赶快注册吧！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
+      </template>
+      <template v-else>
+        <tip-layer buttonTxt="立即申请" content="会员卖家才可代理厂家商品，赶快入驻申请吧！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
+      </template>
     </template>
     <template v-if="showFirst">
       <firstTip @submitFirstTip="submitFirstTip">
