@@ -199,7 +199,7 @@ export default {
       this.showTip = false
     },
     toApply () {
-      if (this.query.from) {
+      if (this.query.from && this.query.fromapp !== 'ddzs') {
         let webquery = encodeURIComponent(`from=${this.query.from}`)
         this.$wechat.miniProgram.redirectTo({url: `/pages/vip?weburl=recommendProducts&webquery=${webquery}`})
       } else {
