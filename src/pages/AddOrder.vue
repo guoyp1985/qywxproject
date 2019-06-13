@@ -73,7 +73,7 @@
                 </div>
               </div>
             </template>
-            <div class="b_bottom_after padding10">
+            <div class="b_bottom_after padding10" v-if="showLineArea">
               <div class="t-table">
                 <div class="t-cell v_middle w100">收货方式</div>
                 <div class="t-cell v_middle align_right">
@@ -302,7 +302,8 @@ export default {
       maxQuantity: 1,
       WeixinName: ENV.WeixinName,
       showModal: false,
-      payData: {}
+      payData: {},
+      showLineArea: false
     }
   },
   watch: {
@@ -585,6 +586,11 @@ export default {
               postd.shopinfo.push(p)
               total += parseFloat(info.special) * info.quantity
               total1 += parseFloat(info.special) * info.quantity
+              if (info.fid) {
+                this.showLineArea = false
+              } else {
+                this.showLineArea = true
+              }
             }
             if (order.postage) {
               total += parseFloat(order.postage.replace(/,/g, ''))
