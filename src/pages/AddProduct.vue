@@ -522,7 +522,6 @@ export default {
     },
     photoCallback (data, type) {
       const self = this
-      const index = this.clickPhotoIndex
       if (data.flag === 1) {
         if (type === 'photo' && self.photoarr.length < self.maxnum) {
           self.photoarr.push(data.data)

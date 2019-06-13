@@ -404,7 +404,7 @@ export default {
         console.log('SHUSDNAKSD SDA:')
         console.log(this.loginUser)
         User.set(data)
-        if (`${this.loginUser.retailerinfo.firstinfo.importproduct}` === '0' && this.query.from) {
+        if (`${this.loginUser.retailerinfo.firstinfo.importproduct}` === '0' && this.query.from && this.query.allowfirst !== 'false') {
           this.isFirst = true
         }
         return this.$http.post(`${ENV.BokaApi}/api/common/getSysParas`)
