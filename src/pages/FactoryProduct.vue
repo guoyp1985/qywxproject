@@ -428,7 +428,7 @@ export default {
           backurl = `${backurl}&fromapp=${this.query.fromapp}`
         }
         backurl = encodeURIComponent(backurl)
-        this.$router.push({path: '/center', query: {backurl: backurl}})
+        this.$router.push({path: '/centerSales', query: {backurl: backurl}})
       }
     },
     toStore () {

@@ -205,7 +205,7 @@ export default {
       } else {
         let backurl = `/recommendProducts`
         backurl = encodeURIComponent(backurl)
-        this.$router.push({path: '/center', query: {backurl: backurl}})
+        this.$router.push({path: '/centerSales', query: {backurl: backurl}})
       }
     },
     submitFirstTip () {
