@@ -410,6 +410,7 @@ export default {
       this.showTip = false
     },
     toApply () {
+      this.showTip = false
       if (this.query.from && this.query.fromapp !== 'ddzs') {
         let webquery = encodeURIComponent(`id=${this.query.id}&from=${this.query.from}`)
         this.$wechat.miniProgram.redirectTo({url: `/pages/vip?weburl=factoryProduct&webquery=${webquery}`})
