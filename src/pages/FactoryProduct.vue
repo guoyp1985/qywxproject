@@ -416,6 +416,9 @@ export default {
         if (this.query.fid) {
           backurl = `${backurl}&fid=${this.query.fid}`
         }
+        if (this.query.allowfirst) {
+          backurl = `${backurl}&allowfirst=${this.query.allowfirst}`
+        }
         backurl = encodeURIComponent(backurl)
         this.$router.push({path: '/center', query: {backurl: backurl}})
       }
@@ -625,10 +628,12 @@ export default {
         User.set(data)
         this.retailerInfo = this.loginUser.retailerinfo
         this.query = this.$route.query
-        if (this.retailerInfo && `${this.retailerInfo.firstinfo.importproduct}` === '0' && this.query.from) {
-          this.isFirst = true
-        } else {
-          this.isFirst = false
+        if (this.query.allowfirst !== 'false') {
+          if (this.retailerInfo && `${this.retailerInfo.firstinfo.importproduct}` === '0' && this.query.from) {
+            this.isFirst = true
+          } else {
+            this.isFirst = false
+          }
         }
         this.getData()
         return this.$http.post(`${ENV.BokaApi}/api/common/getSysParas`)
