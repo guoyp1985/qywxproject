@@ -50,7 +50,7 @@
           </div>
           <div v-if="tradeData.length" class="form-item required bg-white">
             <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product class') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+              <div class="t-cell title-cell w80 font14 v_middle">行业<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
                 <select v-model="submitData.trade" class="w_100" style="height:35px;">
                   <option v-for="(item,index) in tradeData" :value="item.skey" :selected="submitData.trade === item.skey">{{ item.value }}</option>
