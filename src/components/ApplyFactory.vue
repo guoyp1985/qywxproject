@@ -77,6 +77,16 @@
             </div>
           </div>
         </div>
+        <div v-if="tradeData.length" class="form-item required bg-white">
+          <div class="t-table">
+            <div class="t-cell title-cell w80 font14 v_middle">行业<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+            <div class="t-cell input-cell v_middle" style="position:relative;">
+              <select v-model="submitData.trade" class="w_100" style="height:35px;">
+                <option v-for="(item,index) in tradeData" :value="item.skey" :selected="submitData.trade === item.skey">{{ item.value }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
         <div class="form-item fg bg-white b-top b-bottom">
           <div class="t-table">
             <div class="t-cell title-cell font14 v_middle" style="width:100px;">社会信用代码<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
@@ -205,6 +215,7 @@ export default {
       yzmcode: '',
       hqyzm: '',
       photoarr: [],
+      tradeData: [],
       maxnum: 1,
       showTip: false,
       fid: 0,
@@ -450,6 +461,15 @@ export default {
           self.classTitle = classStr.join(',')
         }
       }
+      self.$http.get(`${ENV.BokaApi}/api/factory/modulefield`,
+        { params: {module: 'factory', field: 'trade'} }
+      ).then(function (res) {
+        if (res) {
+          let data = res.data
+          data = data.data ? data.data : data
+          self.tradeData = data
+        }
+      })
     },
     getData () {
       const self = this
