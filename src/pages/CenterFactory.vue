@@ -15,6 +15,7 @@
           :productClass="productClass"
           :classTitle="classTitle"
           :submitData="submitData"
+          :tradeData="tradeData"
           @clickPhoto="afterUploadPhoto"
           @afterApply="afterApply">
         </apply-factory>
@@ -55,7 +56,8 @@ export default {
       submitkey: { title: '', mobile: '', company: '', licensephoto: '', licensecode: '', superiorrate: '20', salesrate: '80' },
       submitData: {},
       productClass: [],
-      classTitle: ''
+      classTitle: '',
+      tradeData: []
     }
   },
   methods: {
@@ -100,6 +102,7 @@ export default {
           self.$vux.loading.hide()
         } else {
           self.showCenter = true
+          self.loginUser.factoryinfo = null
           if (self.loginUser.factoryinfo) {
             self.factoryInfo = self.loginUser.factoryinfo
             self.endTime = new Time(self.factoryInfo.endtime * 1000).dateFormat('yyyy-MM-dd')
@@ -126,6 +129,15 @@ export default {
           data = data.data ? data.data : data
           self.classData = data
           self.handleProductClass()
+        }
+        return self.$http.get(`${ENV.BokaApi}/api/factory/modulefield`,
+          { params: {module: 'factory', field: 'trade'} }
+        )
+      }).then(function (res) {
+        if (res) {
+          let data = res.data
+          data = data.data ? data.data : data
+          self.tradeData = data
         }
       })
     },
