@@ -102,7 +102,6 @@ export default {
           self.$vux.loading.hide()
         } else {
           self.showCenter = true
-          self.loginUser.factoryinfo = null
           if (self.loginUser.factoryinfo) {
             self.factoryInfo = self.loginUser.factoryinfo
             self.endTime = new Time(self.factoryInfo.endtime * 1000).dateFormat('yyyy-MM-dd')
