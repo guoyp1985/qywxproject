@@ -528,7 +528,7 @@ var Eleditor = function(){
 						_$selected.after( $('<img src="'+_url+'">') );
 
 						if( _$selected.hasClass('Eleditor-placeholder') ){
-							_$selected.remove();
+							// _$selected.remove();
 						}
 					}
 
@@ -594,15 +594,15 @@ var Eleditor = function(){
         _$selected && _$selected.after(_buildWordHtml);
 				alert(_$selected[0])
 				alert(_buildWordHtml[0])
-        // _flushEditorControllerLayerPosi();
-        //
-        // _$editorTextModule.find('.Eleditor-active').removeClass('Eleditor-active');
-        // _$editorTextModule.find('.Eleditor-textStyle-color span').removeAttr('style');
-        // _$editorTextArea.removeAttr('style').html('');
-        // _$editorTextLinkArea.val('');
-        // _hideEditorWrapMask();
-        // _$editorTextModule.hide();
-        // _hideEditorControllerLayer();
+        _flushEditorControllerLayerPosi();
+
+        _$editorTextModule.find('.Eleditor-active').removeClass('Eleditor-active');
+        _$editorTextModule.find('.Eleditor-textStyle-color span').removeAttr('style');
+        _$editorTextArea.removeAttr('style').html('');
+        _$editorTextLinkArea.val('');
+        _hideEditorWrapMask();
+        _$editorTextModule.hide();
+        _hideEditorControllerLayer();
       });
 		},
 		insertHr: function(){
