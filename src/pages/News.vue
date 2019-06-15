@@ -526,8 +526,8 @@ export default {
             self.article.content = con
             self.afterEdit = true
           }
-          self.handleImg()
-        //   callback && callback()
+          // self.handleImg()
+          callback && callback()
         }
         let toasttype = data.flag !== 1 ? 'warn' : 'success'
         self.$vux.toast.show({
