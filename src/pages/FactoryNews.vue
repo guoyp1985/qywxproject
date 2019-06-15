@@ -145,7 +145,16 @@ export default {
       this.editIng = true
     },
     clickInsertProduct (url) {
-      this.$router.push(url)
+      console.log('in in in clickInsertProduct')
+      if (self.query.from === 'miniprogram') {
+        const params = self.$util.query(url)
+        self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}`})
+      } else if (self.query.fromapp === 'factory') {
+        const params = self.$util.query(url)
+        self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&fid=${params.fid}`})
+      } else {
+        self.$router.push(url)
+      }
     },
     popupSubscribe () {
       this.showSubscribe = true
@@ -154,17 +163,33 @@ export default {
       this.showSubscribe = false
     },
     clickProduct (event) {
-      const self = this
-      let node = event.target
-      while (node) {
-        if (node.nodeType === 1 && node.getAttribute('class').indexOf('insertproduct') > -1) {
-          const linkurl = node.getAttribute('linkurl')
-          if (linkurl) {
+      console.log('进入点出商品事件')
+      if (parseInt(self.reward.uid) !== parseInt(self.article.uploader)) {
+        console.log('in news clickproduct')
+        let node = event.target
+        let linkurl = null
+        while (node) {
+          if (node.nodeType === 1) {
+            let nodeClass = node.getAttribute('class')
+            if (nodeClass && nodeClass.indexOf('insertproduct') > -1) {
+              linkurl = node.getAttribute('linkurl')
+              break
+            }
+          }
+          node = node.parentNode
+        }
+        if (linkurl) {
+          console.log(linkurl)
+          if (self.query.from === 'miniprogram') {
+            const params = self.$util.query(linkurl)
+            self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}`})
+          } else if (self.query.fromapp === 'factory') {
+            const params = self.$util.query(linkurl)
+            self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&fid=${params.fid}`})
+          } else {
             self.$router.push(linkurl)
           }
-          break
         }
-        node = node.parentNode
       }
     },
     importNews () {
