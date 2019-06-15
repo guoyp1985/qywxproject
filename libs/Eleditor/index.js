@@ -591,8 +591,9 @@ var Eleditor = function(){
 				_appendHistory();
         // _appendHistory({ m: 'insertNode', node: _buildWordHtml });
         var _buildWordHtml = $('<img src="'+returl+'" style="display:block;margin:2px auto;" />');
-				alert(_buildWordHtml)
         _$selected && _$selected.after(_buildWordHtml);
+				alert(_$selected[0])
+				alert(_buildWordHtml[0])
         // _flushEditorControllerLayerPosi();
         //
         // _$editorTextModule.find('.Eleditor-active').removeClass('Eleditor-active');
