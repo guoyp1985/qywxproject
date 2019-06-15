@@ -464,7 +464,7 @@ export default {
                     callback && callback(data.data)
                     self.$vux.toast.show({
                       text: data.data,
-                      time: 2000
+                      time: 5000
                     })
                   } else if (data.error) {
                     self.$vux.toast.show({
