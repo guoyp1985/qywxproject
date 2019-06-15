@@ -460,12 +460,12 @@ export default {
                 maxnum: 1,
                 handleCallback: function (data) {
                   if (data.flag === 1 && data.data) {
-                    // self.$emit('on-auto-save')
+                    self.$emit('on-auto-save')
                     callback && callback(data.data)
-                    self.$vux.toast.show({
-                      text: data.data,
-                      time: 5000
-                    })
+                    // self.$vux.toast.show({
+                    //   text: data.data,
+                    //   time: 5000
+                    // })
                   } else if (data.error) {
                     self.$vux.toast.show({
                       text: data.error,
