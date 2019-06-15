@@ -528,7 +528,7 @@ var Eleditor = function(){
 						_$selected.after( $('<img src="'+_url+'">') );
 
 						if( _$selected.hasClass('Eleditor-placeholder') ){
-							// _$selected.remove();
+							_$selected.remove();
 						}
 					}
 
