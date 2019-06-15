@@ -593,15 +593,15 @@ var Eleditor = function(){
         var _buildWordHtml = $('<img src="'+returl+'" style="display:block;margin:2px auto;" />');
 				alert(_buildWordHtml)
         _$selected && _$selected.after(_buildWordHtml);
-        _flushEditorControllerLayerPosi();
-
-        _$editorTextModule.find('.Eleditor-active').removeClass('Eleditor-active');
-        _$editorTextModule.find('.Eleditor-textStyle-color span').removeAttr('style');
-        _$editorTextArea.removeAttr('style').html('');
-        _$editorTextLinkArea.val('');
-        _hideEditorWrapMask();
-        _$editorTextModule.hide();
-        _hideEditorControllerLayer();
+        // _flushEditorControllerLayerPosi();
+        //
+        // _$editorTextModule.find('.Eleditor-active').removeClass('Eleditor-active');
+        // _$editorTextModule.find('.Eleditor-textStyle-color span').removeAttr('style');
+        // _$editorTextArea.removeAttr('style').html('');
+        // _$editorTextLinkArea.val('');
+        // _hideEditorWrapMask();
+        // _$editorTextModule.hide();
+        // _hideEditorControllerLayer();
       });
 		},
 		insertHr: function(){
