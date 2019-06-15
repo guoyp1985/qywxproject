@@ -462,9 +462,13 @@ export default {
                   if (data.flag === 1 && data.data) {
                     self.$emit('on-auto-save')
                     callback && callback(data.data)
+                    self.$vux.toast.show({
+                      text: data.data,
+                      time: 2000
+                    })
                   } else if (data.error) {
                     self.$vux.toast.show({
-                      text: 'data.error',
+                      text: data.error,
                       time: self.$util.delay(data.error)
                     })
                   }
