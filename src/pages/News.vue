@@ -522,12 +522,12 @@ export default {
         if (data.flag === 1) {
           console.log('编辑完成后的商品内容')
           console.log(con)
-          if (con !== '') {
-            self.article.content = con
-            self.afterEdit = true
-          }
-          // self.handleImg()
-          // callback && callback()
+          // if (con !== '') {
+          //   self.article.content = con
+          //   self.afterEdit = true
+          // }
+          self.handleImg()
+          callback && callback()
         }
         let toasttype = data.flag !== 1 ? 'warn' : 'success'
         self.$vux.toast.show({
