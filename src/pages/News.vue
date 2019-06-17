@@ -508,7 +508,8 @@ export default {
         editorContent = document.querySelector('#editor-content')
       }
       self.$vux.loading.show()
-      let con = editorContent.innerHTML.replace(/Eleditor-active/g, '')
+      let con = editorContent.innerHTML
+        .replace(/Eleditor-active/g, '')
         .replace('<p class="">文章内容为空，点击【编辑】按钮可修改内容哦！</p>', '')
         .replace('<p>文章内容为空，点击【编辑】按钮可修改内容哦！</p>', '')
         .replace('<p class="Eleditor-active">文章内容为空，点击【编辑】按钮可修改内容哦！</p>', '')
@@ -522,7 +523,7 @@ export default {
           console.log('编辑完成后的商品内容')
           console.log(con)
           if (con !== '') {
-            self.article.content = con
+            // self.article.content = con
             self.afterEdit = true
           }
           self.handleImg()
