@@ -5,6 +5,17 @@
     </template>
     <template v-if="showContainer">
       <div class="pagemiddle">
+        <div v-if="classData.length" class="form-item required bg-white">
+          <div class="t-table">
+            <div class="t-cell title-cell w80 font14 v_middle">文章类别<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+            <div class="t-cell input-cell v_middle" style="position:relative;">
+              <select v-model="submitdata.classid" class="w_100" style="height:35px;">
+                <option value='0'>请选择</option>
+                <option v-for="(item,index) in classData" :value="item.id">{{ item.title }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
         <group label-width="5em">
           <group class="textarea-outer">
             <x-textarea
@@ -108,9 +119,11 @@ export default {
       photoarr: [],
       maxnum: 1,
       havenum: 0,
-      submitdata: { title: '', photo: '', seodescription: '', summary: '' },
-      requireddata: { title: '', 'photo': '' },
-      submitIng: false
+      submitdata: {classid: 0, title: '', photo: '', seodescription: '', summary: ''},
+      requireddata: {title: '', 'photo': ''},
+      submitIng: false,
+      classData: [],
+      Fid: 0
     }
   },
   computed: {
@@ -122,8 +135,8 @@ export default {
       this.allowsubmit = true
       this.photoarr = []
       this.havenum = 0
-      this.submitdata = { title: '', photo: '', seodescription: '', summary: '' }
-      this.requireddata = { title: '', 'photo': '' }
+      this.submitdata = {classid: 0, title: '', photo: '', seodescription: '', summary: ''}
+      this.requireddata = {title: '', 'photo': ''}
     },
     textareaChange (refname) {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
@@ -193,6 +206,10 @@ export default {
       const self = this
       if (!self.submitIng) {
         const query = self.$route.query
+        if (!self.submitdata.classid) {
+          self.$vux.toast.text('请选择分类', 'middle')
+          return false
+        }
         let validateData = []
         for (let key in self.requireddata) {
           let v = {}
@@ -296,6 +313,16 @@ export default {
           self.showSos = false
           self.showContainer = true
           this.$vux.loading.hide()
+          this.Fid = this.$route.query.fid ? this.$route.query.fid : this.loginUser.fid
+          if (!this.classData.length) {
+            this.$http.get(`${ENV.BokaApi}/api/list/factorynewsclass`, {
+              params: {pagestart: 0, limit: 500, ascdesc: 'asc', fid: this.Fid}
+            }).then(res => {
+              const data = res.data
+              const retdata = data.data ? data.data : data
+              this.classData = retdata
+            })
+          }
           if (this.query.id === undefined || this.query.id !== this.$route.query.id || this.query.fid !== this.$route.query.fid) {
             this.initData()
             this.query = this.$route.query
