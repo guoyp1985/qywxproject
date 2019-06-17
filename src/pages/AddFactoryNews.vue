@@ -7,7 +7,7 @@
       <div class="pagemiddle">
         <div v-if="classData.length" class="form-item required bg-white">
           <div class="t-table">
-            <div class="t-cell title-cell w80 font14 v_middle">文章类别<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+            <div class="t-cell title-cell w80 font14 v_middle">文章类别</div>
             <div class="t-cell input-cell v_middle" style="position:relative;">
               <select v-model="submitdata.classid" class="w_100" style="height:35px;">
                 <option value='0'>请选择</option>
