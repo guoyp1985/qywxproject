@@ -108,7 +108,7 @@
                       </template>
                     </span>
                   </div>
-                  <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right color-lightgray font12">
+                  <div v-if="item.seller && item.seller.uid && (!item.frommin || item.frommin == '')" class="t-cell v_middle align_right color-lightgray font12">
                     <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
                   </div>
                 </div>

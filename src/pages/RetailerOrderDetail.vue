@@ -5,7 +5,7 @@
     <Sos v-if="showSos" :title="sosTitle"></Sos>
     <template v-if="showContainer">
       <div class="pagemiddle scroll-container">
-        <div v-if="data.seller && data.seller.username">
+        <div v-if="data.seller && data.seller.username && (!data.frommin || data.frommin == '')">
           <div class="b_bottom_after padding10 bg-white">
             <div class="t-table">
               <div class="t-cell w100">返点客：</div>
