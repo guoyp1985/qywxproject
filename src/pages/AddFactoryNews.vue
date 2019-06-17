@@ -206,10 +206,10 @@ export default {
       const self = this
       if (!self.submitIng) {
         const query = self.$route.query
-        if (!self.submitdata.classid) {
-          self.$vux.toast.text('请选择分类', 'middle')
-          return false
-        }
+        // if (!self.submitdata.classid) {
+        //   self.$vux.toast.text('请选择分类', 'middle')
+        //   return false
+        // }
         let validateData = []
         for (let key in self.requireddata) {
           let v = {}
