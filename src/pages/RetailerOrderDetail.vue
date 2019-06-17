@@ -423,7 +423,7 @@ export default {
         return false
       }
       self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/order/deliver`, self.deliverdata).then((res) => {
+      self.$http.post(`${ENV.BokaApi}/api/order/deliver`, {...self.deliverdata, id: this.query.id}).then((res) => {
         let data = res.data
         self.$vux.loading.hide()
         let error = data.error
