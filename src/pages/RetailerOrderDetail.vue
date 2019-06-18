@@ -99,15 +99,11 @@
           </div>
         </div>
         <div class="align_right">
-          <div v-if="!data.payorder && data.flag != 1" class="b_bottom_after pl10 pr10 pb10 bg-white">
+          <!-- <div v-if="!data.payorder && data.flag != 1" class="b_bottom_after pl10 pr10 pb10 bg-white">
             <div class="t-table">
-              <!-- <div class="t-cell v_middle align_right cancelarea">
-                <div v-if="data.flag == 0" class="color-red">交易已关闭</div>
-                <div v-else class="db-in color-blue" @click="cancelorder">关闭交易</div>
-              </div> -->
               <router-link v-if="data.flag != 0" class="t-cell w80 color-blue" :to="{path: '/retailerAddorder', query: {id: data.id}}" >修改订单</router-link>
             </div>
-          </div>
+          </div> -->
           <div v-if="data.nexttime" class="align_left padding10 color-gray2 font12">回访时间：{{ data.nexttime | dateformat }}</div>
         </div>
         <div class="padding10" v-if="data.cancensorback == 1">
