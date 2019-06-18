@@ -126,7 +126,8 @@
                     </div>
                   </div>
                   <div class="t-cell v_middle appendcontrol align_right w80">
-                    <div class="qbtn4 font12" style="padding:1px 14px;" @click="changePrice(item,index1)">{{ $t('Change price') }}</div>
+                    <div class="qbtn4 font12" style="padding:1px 14px;" v-if="item.orderonline == 0 && (item.frommin == 'wl' || item.frommin == 'wlphoto')" @click="confirmPrice(item,index1)">确认收款</div>
+                    <div class="qbtn4 font12" style="padding:1px 14px;" v-else @click="changePrice(item,index1)">{{ $t('Change price') }}</div>
                   </div>
                 </div>
               </div>
