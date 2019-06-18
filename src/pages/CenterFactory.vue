@@ -110,6 +110,8 @@ export default {
             for (let key in self.submitkey) {
               self.submitData[key] = self.factoryInfo[key]
             }
+          } else {
+            self.submitData = self.submitkey
           }
           self.$vux.loading.hide()
           return self.$http.get(`${ENV.BokaApi}/api/message/newMessages`)
