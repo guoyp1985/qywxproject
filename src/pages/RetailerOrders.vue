@@ -61,14 +61,17 @@
                   <template v-if="item.flag == 1 && item.fid == 0 && item.crowdid == 0">
                     <div class="t-cell v_middle align_left color-orange">
                       <div class="clamp1">
-                        <span class="v_middle">待支付: {{ $t('RMB') }}</span><span class="v_middle">{{ item.paymoney }}</span>
+                        <span class="v_middle">待支付: {{ $t('RMB') }}</span><span class="v_middle">{{ item.needpaymoney }}</span>
                         <template v-if="!item.delivertype && item.postage && item.postage != ''">
                           <span class="v_middle font12 color-gray" v-if="item.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
                           <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ item.postage }} )</span>
                         </template>
                       </div>
                     </div>
-                    <div class="t-cell v_middle appendcontrol align_right w80">
+                    <div class="t-cell v_middle appendcontrol align_right w80" v-if="item.orderonline == 0">
+                      <div class="qbtn4 font12" style="padding:1px 14px;" @click="confirmPrice(item,index1)">确认收款</div>
+                    </div>
+                    <div class="t-cell v_middle appendcontrol align_right w80" v-else>
                       <div class="qbtn4 font12" style="padding:1px 14px;" @click="changePrice(item,index1)">{{ $t('Change price') }}</div>
                     </div>
                   </template>
@@ -115,7 +118,7 @@
                 <div v-if="item.flag == 1 && item.fid == 0 && item.crowdid == 0" class="t-table pt5 color-lightgray font13 deliverarea" >
                   <div class="t-cell v_middle align_left color-orange">
                     <div class="clamp1">
-                      <span class="v_middle">待支付: {{ $t('RMB') }}</span><span class="v_middle">{{ item.paymoney }}</span>
+                      <span class="v_middle">待支付: {{ $t('RMB') }}</span><span class="v_middle">{{ item.needpaymoney }}</span>
                       <template v-if="!item.delivertype && item.postage && item.postage != ''">
                         <span class="v_middle font12 color-gray" v-if="item.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
                         <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ item.postage }} )</span>
@@ -263,6 +266,28 @@
         <firstHb action="orderdeliver" @closeFirstHb="closeFirstHb"></firstHb>
       </template>
     </template>
+    <div class="auto-modal flex_center confirm-tip-modal" v-if="showConfirmModal">
+      <div class="modal-inner border-box">
+        <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">确认收到买家转账了吗？</div>
+        <div class="padding20 font16">
+          <div class="flex_left pt20">备注订单金额（不必填）</div>
+          <div class="db w_100 pt20">
+            <div class="flex_left w_100 pb20">
+              <x-input v-model="priceVal" class="input flex_left" type="text" placeholder="请输入订单金额" maxlength="10"></x-input>
+              <div class="flex_right small-cell">元</div>
+            </div>
+            <div class="btns flex_center w_100 mt20">
+              <div class="flex_cell flex_center">
+                <div class="btn btn-cancel flex_center" @click="closeConfirm">取消</div>
+              </div>
+              <div class="flex_cell flex_center">
+                <div class="btn btn-save flex_center" @click="confirmEvent">确认收款</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <i18n>
@@ -272,13 +297,12 @@ My orders:
   zh-CN: 我的订单
 </i18n>
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, TransferDom, Popup, XImg, Search } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, TransferDom, Popup, XImg, Search, XInput } from 'vux'
 import Orderitemplate from '@/components/Orderitemplate'
 import Orderproductplate from '@/components/Orderproductplate'
 import Time from '#/time'
 import jQuery from 'jquery'
 import ENV from 'env'
-// import { User, FirstInfo } from '#/storage'
 import { User, SystemParams } from '#/storage'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
@@ -290,7 +314,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, Popup, Orderitemplate, Orderproductplate, XImg, Subscribe, ApplyTip, Search, FirstTip, FirstHb
+    Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, Popup, Orderitemplate, Orderproductplate, XImg, Subscribe, ApplyTip, Search, FirstTip, FirstHb, XInput
   },
   filters: {
     dateformat: function (value) {
@@ -331,7 +355,11 @@ export default {
       isFirst: false,
       showHb: false,
       sysParams: {},
-      isrefresh: false
+      isrefresh: false,
+      showConfirmModal: false,
+      clickData: null,
+      clickIndex: 0,
+      priceVal: ''
     }
   },
   methods: {
@@ -551,11 +579,85 @@ export default {
       }
       this.isrefresh = false
     },
+    handleListData (data) {
+      let retdata = data
+      retdata.dateline_str = new Time(retdata.dateline * 1000).dateFormat('yyyy-MM-dd hh:mm')
+      if (retdata.pid && retdata.pid !== '') {
+        retdata.pid_arr = retdata.pid.split(',')
+      }
+      if (retdata.flag !== 1) {
+        let curprice = retdata.price
+        if (curprice && curprice !== '') {
+          curprice = curprice.replace(/,/g, '')
+          retdata.price_num = curprice
+        }
+      }
+      return retdata
+    },
+    closeConfirm () {
+      this.showConfirmModal = false
+      this.clickData = null
+      this.clickIndex = 0
+    },
+    confirmPrice (item, index) {
+      this.showConfirmModal = true
+      this.clickData = item
+      this.clickIndex = index
+    },
+    confirmEvent () {
+      const self = this
+      let postPrice = this.priceVal
+      if (this.$util.trim(postPrice) === '') {
+        postPrice = 0
+      }
+      if (isNaN(postPrice) || postPrice < 0) {
+        self.$vux.toast.text('请输入正确的价格', 'middle')
+        return false
+      }
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/order/orderState`,
+        {id: this.clickData.id, type: 'confirm', price: postPrice}
+      ).then(res => {
+        if (res) {
+          self.$vux.loading.hide()
+          const data = res.data
+          self.$vux.toast.show({
+            text: data.error,
+            time: self.$util.delay(data.error)
+          })
+          if (data.flag) {
+            this.showConfirmModal = false
+            let newData = this.handleListData(data.data)
+            switch (this.selectedIndex) {
+              case 0:
+                this.tabdata1[this.clickIndex] = newData
+                for (let i = 0; i < this.tabdata2.length; i++) {
+                  if (this.tabdata2[i].id === data.id) {
+                    this.tabdata2.splice(i, 1)
+                    this.getData2(true)
+                    break
+                  }
+                }
+                break
+              case 1:
+                this.tabdata2.splice(this.clickIndex, 1)
+                this.getData2(true)
+                for (let i = 0; i < this.tabdata1.length; i++) {
+                  if (this.tabdata1[i].id === data.id) {
+                    this.tabdata1[i] = newData
+                    break
+                  }
+                }
+                break
+            }
+          }
+        }
+      })
+    },
     changePrice (item, index) {
-      event.preventDefault()
       const self = this
       let showtitle = '修改价格'
-      let inputval = item.paymoney.replace(/,/g, '')
+      let inputval = item.needpaymoney.replace(/,/g, '')
       self.$vux.confirm.prompt(inputval, {
         title: showtitle,
         onShow: () => {
@@ -579,9 +681,9 @@ export default {
               onHide: () => {
                 if (data.flag === 1) {
                   if (this.selectedIndex === 0) {
-                    this.tabdata1[index].paymoney = parseFloat(val).toFixed(2)
+                    this.tabdata1[index].needpaymoney = parseFloat(val).toFixed(2)
                   } else if (this.selectedIndex === 1) {
-                    this.tabdata2[index].paymoney = parseFloat(val).toFixed(2)
+                    this.tabdata2[index].needpaymoney = parseFloat(val).toFixed(2)
                   }
                 }
               }
@@ -781,5 +883,19 @@ export default {
 .retailerordes.show-tip-page{
   .s-topbanner{top:48px;}
   .s-container{top:147px;}
+}
+.confirm-tip-modal{
+  .modal-inner{width:80%;}
+  .input{
+    flex:1;height:35px;border: 1px solid #eee;box-sizing: border-box;
+    border-radius:5px;padding-left:5px;padding-right:5px;
+  }
+  .small-cell{width:20px;}
+  .btns{
+    width:100%;
+    .btn{width:80%;height:40px;border-radius:5px;color:#fff;font-size:16px !important;}
+    .btn-cancel{background-color:#bdbdbd !important;}
+    .btn-save{background-color:#ff6a61 !important;}
+  }
 }
 </style>

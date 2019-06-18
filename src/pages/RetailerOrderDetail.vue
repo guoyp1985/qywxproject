@@ -84,7 +84,7 @@
           </div>
           <div class="align_right padding10 flex_right">
             <div>
-              <span class="v_middle">实际支付: {{ $t('RMB') }}</span><span class="font16 v_middle">{{ data.paymoney }}</span>
+              <span class="v_middle">实际支付: {{ $t('RMB') }}</span><span class="font16 v_middle">{{ data.needpaymoney }}</span>
               <span class="v_middle font12 color-gray" v-if="data.carddeduct > 0">( 优惠券抵扣: {{ $t('RMB') }} {{ data.carddeduct }} )</span>
             </div>
           </div>
