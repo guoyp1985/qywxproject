@@ -118,7 +118,7 @@
         </div>
       </div>
       <template v-if="data.flag == 1 && data.fid == 0 && data.crowdid == 0">
-        <div v-if="data.retailer.orderonline == 0 && (data.frommin == 'wl' || data.frommin == 'wlphoto')" class="pagebottom flex_center font16 bg-orange5 color-white" @click="confirmPrice">确认收款</div>
+        <div v-if="data.retailer.orderonline == 0 && data.frommin && data.frommin != ''" class="pagebottom flex_center font16 bg-orange5 color-white" @click="confirmPrice">确认收款</div>
         <div v-else class="pagebottom flex_center font16 bg-orange5 color-white" @click="changePrice">{{ $t('Change price') }}</div>
       </template>
       <div v-if="data.flag == 2 && data.candeliver" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">{{ $t('Deliver goods') }}</div>
