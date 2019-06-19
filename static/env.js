@@ -12,6 +12,7 @@ var ENV = {
   SocketBokaRoom: 'laravel.boka.cn',
   SocketServer: 'wss://chat.boka.cn/wss', //'wss://chat.boka.cn/wss', // vux: 'ws://123.206.77.217:7272', // vue: 'ws://124.207.246.109:7272'
   AdminUrl: 'http://laravelcms.boka.cn/admin/login/unionIdLogin',
+  FactoryApi: 'https://factorydev.boka.cn',
   OrderStatus: [
     {id: 0, status: '订单取消'},
     {id: 1, status: '已确认订单'},
