@@ -401,7 +401,7 @@ export default {
     return {
       maxnum: 1,
       maxnum1: 9,
-      showmore: false,
+      showmore: true,
       requireddata: {title: '', 'qrcode': ''},
       requireddata1: {showphoto: '', slogan: ''},
       showqrcode: false,
