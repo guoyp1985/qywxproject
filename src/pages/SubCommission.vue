@@ -1,33 +1,71 @@
 <template>
   <div class="containerarea font14 bg-page sub-commission-page notop nobottom">
     <div class="pagemiddle" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',0)">
-        <template v-if="disList1">
-          <div v-if="!tabdata1.length" class="w_100 h_100 flex_center color-gray">暂无数据</div>
-          <div v-else class="scroll_list">
-            <div v-for="(item,index1) in tabdata1" :key="index1" class="scroll_item bg-white flex_left">
-              <div class="pic flex_left">
-                <img :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-              </div>
-              <div class="flex_cell">
-                <div class="clamp1">{{item.linkman}}</div>
-                <div class="color-gray font12">{{item.dateline | dateFormat}}</div>
-              </div>
-              <div class="w100 flex_right color-theme">分佣: {{$t("RMB")}}{{item.salesmoney}}</div>
+      <template v-if="disList1">
+        <div v-if="!tabdata1.length" class="w_100 h_100 flex_center color-gray">暂无数据</div>
+        <div v-else class="scroll_list">
+          <div v-for="(item,index1) in tabdata1" :key="index1" class="scroll_item bg-white flex_left" @click="toDetail(item)">
+            <div class="pic flex_left">
+              <img :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+            </div>
+            <div class="flex_cell">
+              <div class="clamp1">{{item.linkman}}</div>
+              <div class="color-theme mt5">分佣: {{$t("RMB")}}{{item.salesmoney}}</div>
+              <div class="color-gray font12">{{item.dateline | dateFormat}}</div>
+            </div>
+            <div class="w80 flex_right">
+              <div class="bg-theme color-white btn flex_center">详情</div>
             </div>
           </div>
-        </template>
-      </div>
+        </div>
+      </template>
+    </div>
+    <div v-transfer-dom class="x-popup">
+      <popup v-model="showDetail" height="100%">
+        <div class="popup1 detail-modal">
+          <div class="popup-top flex_center">{{clickData.linkman}}</div>
+          <div class="popup-middle font14 flex_center">
+            <div class="table vip-info">
+              <div class="tr">
+                <div class="td">销售收入</div>
+                <div class="td flex_cell">{{clickData.salesmoney}}</div>
+              </div>
+              <div class="tr">
+                <div class="td">销售单数</div>
+                <div class="td flex_cell">{{clickData.salescount}}</div>
+              </div>
+              <div class="tr">
+                <div class="td">下级带来销售</div>
+                <div class="td flex_cell">{{clickData.pc_count}}</div>
+              </div>
+              <div class="tr">
+                <div class="td">下下级带来销售</div>
+                <div class="td flex_cell">{{clickData.pb_count}}</div>
+              </div>
+              <div class="tr">
+                <div class="td">下下下级带来销售</div>
+                <div class="td flex_cell">{{clickData.pa_count}}</div>
+              </div>
+              <div class="tr">
+                <div class="td">红包发放金额</div>
+                <div class="td flex_cell">{{clickData.hongbaomoney}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="popup-bottom flex_center">
+            <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeDetail">{{ $t('Close') }}</div>
+          </div>
+        </div>
+      </popup>
     </div>
   </div>
 </template>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, TransferDom, XInput } from 'vux'
+import { Popup, TransferDom, XInput } from 'vux'
 import ENV from 'env'
 import Time from '#/time'
 import { User } from '#/storage'
-import jQuery from 'jquery'
-import TipButtonLayer from '@/components/TipButtonLayer'
 
 const limit = 20
 let pageStart1 = 0
@@ -39,22 +77,16 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, TipButtonLayer, XInput
+    Popup, XInput
   },
   data () {
     return {
       loginUser: {},
       query: {},
-      tabtxts: [ '有效码', '已使用' ],
-      selectedIndex: 0,
       disList1: false,
-      disList2: false,
       tabdata1: [],
-      tabdata2: [],
-      showModal: false,
-      quantity: '',
-      codefee: 0,
-      showTipModal: false
+      showDetail: false,
+      clickData: {}
     }
   },
   filters: {
@@ -63,44 +95,13 @@ export default {
     }
   },
   methods: {
-    closeTipModal () {
-      this.showTipModal = false
+    toDetail (item) {
+      this.clickData = item
+      this.showDetail = true
     },
-    btnshow () {
-      this.showModal = true
-    },
-    btnclose () {
-      this.showModal = false
-    },
-    copyTxt (item) {
-      const className = `.concession .item-${item.id} .copy_txt`
-      const eleobj = jQuery(className)[0]
-      let range = null
-      let save = function (e) {
-        e.clipboardData.setData('text/plain', eleobj.innerHTML)
-        e.preventDefault()
-      }
-      if (self.$util.isIOS()) { // ios设备
-        console.log('进入到了ios设备')
-        window.getSelection().removeAllRanges()
-        range = document.createRange()
-        range.selectNode(eleobj)
-        console.log(range)
-        window.getSelection().addRange(range)
-        document.execCommand('copy')
-        window.getSelection().removeAllRanges()
-      } else { // 安卓设备
-        console.log('in android')
-        document.addEventListener('copy', save)
-        document.execCommand('copy')
-        document.removeEventListener('copy', save)
-      }
-      setTimeout(function () {
-        self.$vux.toast.show({
-          text: '复制成功',
-          time: 1500
-        })
-      }, 200)
+    closeDetail () {
+      this.showDetail = false
+      this.clickData = {}
     },
     handleScroll: function (refname, index) {
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
@@ -161,5 +162,27 @@ export default {
     width:70px;
     img{width:60px;height:60px;border-radius:50%;object-fit: cover;}
   }
+  .btn{width:60px;height:30px;border-radius:10px;}
+}
+.detail-modal .table{
+  width:90%;margin:0 auto;position:relative;border:#e3e3e3 1px solid;font-size:12px;
+  .tr:not(:last-child){border-bottom:1px solid #f2f2f2;}
+  .tr{
+    width:100%;height:45px;display:flex !important;align-items: left;justify-content:flex-start;flex-flow:row wrap; align-items: center;
+    .th{height:100%;font-size:16px;display:flex !important;justify-content: center; align-items: center;}
+    .th:nth-child(1){width:40%;border-right:1px solid #f2f2f2;}
+    .th:nth-child(2){flex:1;background-color:#e4e4e4;font-weight:bold;}
+    .th:nth-child(3){flex:1;background-color:#ECAC4D;font-weight:bold;}
+    .td:nth-child(1){width:40%;border-right:1px solid #f2f2f2;padding:0 5px;box-sizing: border-box;}
+    .td:nth-child(2){border-right:1px solid #f2f2f2;}
+    .td{
+      height:100%;display:flex !important;justify-content: center; align-items: center;
+      .small-td{height:45px;display:flex !important;justify-content: center; align-items: center;}
+      .small-td:not(:last-child){border-bottom:1px solid #f2f2f2;}
+      .al{font-size:20px;color:#ff6a61;font-weight:bold;}
+    }
+  }
+  .tr:nth-child(odd) .td{background-color:#fff;}
+  .tr:nth-child(even) .td{background-color:#eee;}
 }
 </style>
