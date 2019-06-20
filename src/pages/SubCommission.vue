@@ -35,15 +35,15 @@
                 <div class="td flex_cell">{{clickData.salescount}}</div>
               </div>
               <div class="tr">
-                <div class="td">下级带来销售</div>
+                <div class="td">下级带来人数</div>
                 <div class="td flex_cell">{{clickData.pc_count}}</div>
               </div>
               <div class="tr">
-                <div class="td">下下级带来销售</div>
+                <div class="td">下下级带来人数</div>
                 <div class="td flex_cell">{{clickData.pb_count}}</div>
               </div>
               <div class="tr">
-                <div class="td">下下下级带来销售</div>
+                <div class="td">下下下级带来人数</div>
                 <div class="td flex_cell">{{clickData.pa_count}}</div>
               </div>
               <div class="tr">
