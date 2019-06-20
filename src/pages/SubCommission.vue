@@ -28,27 +28,27 @@
             <div class="table vip-info">
               <div class="tr">
                 <div class="td">销售收入</div>
-                <div class="td flex_cell">{{clickData.salesmoney}}</div>
+                <div class="td flex_cell">{{$t("RMB")}}{{clickData.salesmoney}}</div>
               </div>
               <div class="tr">
                 <div class="td">销售单数</div>
-                <div class="td flex_cell">{{clickData.salescount}}</div>
+                <div class="td flex_cell">{{clickData.salescount}}单</div>
               </div>
               <div class="tr">
                 <div class="td">下级带来人数</div>
-                <div class="td flex_cell">{{clickData.pc_count}}</div>
+                <div class="td flex_cell">{{clickData.pc_count}}人</div>
               </div>
               <div class="tr">
                 <div class="td">下下级带来人数</div>
-                <div class="td flex_cell">{{clickData.pb_count}}</div>
+                <div class="td flex_cell">{{clickData.pb_count}}人</div>
               </div>
               <div class="tr">
                 <div class="td">下下下级带来人数</div>
-                <div class="td flex_cell">{{clickData.pa_count}}</div>
+                <div class="td flex_cell">{{clickData.pa_count}}人</div>
               </div>
               <div class="tr">
                 <div class="td">红包发放金额</div>
-                <div class="td flex_cell">{{clickData.hongbaomoney}}</div>
+                <div class="td flex_cell">{{$t("RMB")}}{{clickData.hongbaomoney}}</div>
               </div>
             </div>
           </div>
