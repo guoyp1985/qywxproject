@@ -1,6 +1,6 @@
 <template>
-  <div class="containerarea font14 bg-white addmaterial">
-    <div class="">
+  <div class="containerarea s-havebottom font14 bg-white addmaterial">
+    <div class="s-container" style="top:0;">
       <form ref="fileForm1" enctype="multipart/form-data">
         <input ref="fileInput1" class="hide" type="file" multiple="multiple" name="files" @change="fileMulChange('fileForm1', 'contentphoto')" />
       </form>
@@ -66,8 +66,8 @@
         </div>
       </div>
     </div>
-    <div class="sc-bottom">
-      <button  @click="saveupevent" class="btnadd" :disabled="flags">立即发布</button>
+    <div class="s-bottom flex_center color-white list-shadow02">
+      <div class="flex_center color-white btn-bottom-red" style="width:90%;" @click="saveupevent">立即发布</div>
     </div>
   </div>
 </template>
