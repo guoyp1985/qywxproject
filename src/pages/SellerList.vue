@@ -49,7 +49,7 @@
                       </div>
                       <div class="t-cell v_middle pr10" style="box-sizing:border-box;">
                         <div class="clamp1 font16">{{item.linkman}}</div>
-                        <div class="clamp1 font12 color-gray" v-if="item.identity && item.identity != '' && query.id == 97">卖家等级: {{item.identity}}</div>
+                        <div class="clamp1 font12 color-gray" v-if="item.identity && item.identity != 'W'">卖家等级: {{item.identity}}</div>
                         <div class="clamp1 font12 color-gray">店铺: {{item.title}}</div>
                         <div class="clamp1 font12 color-gray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
                         <div class="clamp1 font12 color-orange">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
@@ -100,7 +100,7 @@
                       </div>
                       <div class="t-cell v_middle pr10" style="box-sizing:border-box;">
                         <div class="clamp1 font16">{{item.linkman}}</div>
-                        <div class="clamp1 font12 color-gray" v-if="item.identity && item.identity != '' && query.id == 97">卖家等级: {{item.identity}}</div>
+                        <div class="clamp1 font12 color-gray" v-if="item.identity && item.identity != 'W'">卖家等级: {{item.identity}}</div>
                         <div class="clamp1 font12 color-gray">店铺: {{item.title}}</div>
                         <div class="clamp1 font12 color-gray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
                         <div class="clamp1 font12 color-orange">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
@@ -149,7 +149,7 @@
                       </div>
                       <div class="t-cell v_middle pr10" style="box-sizing:border-box;">
                         <div class="clamp1 font16">{{item.linkman}}</div>
-                        <div class="clamp1 font12 color-gray" v-if="item.identity && item.identity != '' && query.id == 97">卖家等级: {{item.identity}}</div>
+                        <div class="clamp1 font12 color-gray" v-if="item.identity && item.identity != 'W'">卖家等级: {{item.identity}}</div>
                         <div class="clamp1 font12 color-gray">店铺: {{item.title}}</div>
                         <div class="clamp1 font12 color-gray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
                         <div class="clamp1 font12 color-orange">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
@@ -171,7 +171,7 @@
         <popup class="menuwrap" v-model="showPopup1">
           <div class="popup0">
             <div class="list" v-if="clickData">
-              <div class="item" v-if="clickData.identity == 'D' && query.id == 97">
+              <div class="item" v-if="clickData.identity == 'D'">
                 <div class="inner" @click="clickPopup('up')">升级到C</div>
               </div>
               <div class="item" >
