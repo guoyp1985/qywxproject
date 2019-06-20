@@ -129,8 +129,10 @@ export default {
       self.$http.post(`${ENV.BokaApi}/api/haitun/teamStat`, {pagestart: pageStart1, limit: limit, fid: 97}).then((res) => {
         let data = res.data
         self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
-        self.tabdata1 = self.tabdata1.concat(retdata)
+        if (data.flag) {
+          let retdata = data.data ? data.data : data
+          self.tabdata1 = self.tabdata1.concat(retdata)
+        }
         self.disList1 = true
       })
     },
