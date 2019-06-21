@@ -514,7 +514,6 @@ export default {
             self.$http.post(`${ENV.BokaApi}/api/haitun/upgrade`, {uid: self.clickData.uid, fid: self.query.id}).then((res) => {
               self.$vux.loading.hide()
               const data = res.data
-              let error = data.flag ? '成功' : data.error
               if (data.flag) {
                 self.clickData.identity = 'C'
                 if (self.selectedIndex === 0) {
@@ -524,8 +523,8 @@ export default {
                 }
               }
               self.$vux.toast.show({
-                text: error,
-                time: self.$util.delay(error)
+                text: data.error,
+                time: self.$util.delay(data.error)
               })
             })
           }
