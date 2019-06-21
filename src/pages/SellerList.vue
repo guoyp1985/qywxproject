@@ -49,6 +49,7 @@
                       </div>
                       <div class="t-cell v_middle pr10" style="box-sizing:border-box;">
                         <div class="clamp1 font16">{{item.linkman}}</div>
+                        <div class="clamp1 font12 color-gray" v-if="item.identity && item.identity != 'W'">卖家等级: {{item.identity}}</div>
                         <div class="clamp1 font12 color-gray">店铺: {{item.title}}</div>
                         <div class="clamp1 font12 color-gray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
                         <div class="clamp1 font12 color-orange">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
@@ -99,6 +100,7 @@
                       </div>
                       <div class="t-cell v_middle pr10" style="box-sizing:border-box;">
                         <div class="clamp1 font16">{{item.linkman}}</div>
+                        <div class="clamp1 font12 color-gray" v-if="item.identity && item.identity != 'W'">卖家等级: {{item.identity}}</div>
                         <div class="clamp1 font12 color-gray">店铺: {{item.title}}</div>
                         <div class="clamp1 font12 color-gray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
                         <div class="clamp1 font12 color-orange">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
@@ -147,6 +149,7 @@
                       </div>
                       <div class="t-cell v_middle pr10" style="box-sizing:border-box;">
                         <div class="clamp1 font16">{{item.linkman}}</div>
+                        <div class="clamp1 font12 color-gray" v-if="item.identity && item.identity != 'W'">卖家等级: {{item.identity}}</div>
                         <div class="clamp1 font12 color-gray">店铺: {{item.title}}</div>
                         <div class="clamp1 font12 color-gray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
                         <div class="clamp1 font12 color-orange">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
@@ -168,6 +171,9 @@
         <popup class="menuwrap" v-model="showPopup1">
           <div class="popup0">
             <div class="list" v-if="clickData">
+              <div class="item" v-if="clickData.identity == 'D'">
+                <div class="inner" @click="clickPopup('up')">升级到C</div>
+              </div>
               <div class="item" >
                 <div class="inner" @click="clickPopup('uploader')">更改推荐人</div>
               </div>
@@ -497,6 +503,29 @@ export default {
                   self.tabData2.splice(self.tabData2.length - 1, 1)
                 }
               }
+            })
+          }
+        })
+      } else if (key === 'up') {
+        self.$vux.confirm.show({
+          content: '确定将该用户升级到C级吗？',
+          onConfirm: () => {
+            self.$vux.loading.show()
+            self.$http.post(`${ENV.BokaApi}/api/haitun/upgrade`, {uid: self.clickData.uid, fid: self.query.id}).then((res) => {
+              self.$vux.loading.hide()
+              const data = res.data
+              if (data.flag) {
+                self.clickData.identity = 'C'
+                if (self.selectedIndex === 0) {
+                  self.tabData1[self.clickIndex].identity = 'C'
+                } else {
+                  self.tabData2[self.clickIndex].identity = 'C'
+                }
+              }
+              self.$vux.toast.show({
+                text: data.error,
+                time: self.$util.delay(data.error)
+              })
             })
           }
         })

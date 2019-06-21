@@ -93,7 +93,7 @@
       <group>
         <cell>
           <div>
-            <span class="v_middle font12 color-orange">实际支付: </span><span class="v_middle font14 color-orange">{{ $t('RMB') }}{{data.paymoney}}</span>
+            <span class="v_middle font12 color-orange">实际支付: </span><span class="v_middle font14 color-orange">{{ $t('RMB') }}{{data.needpaymoney}}</span>
             <template v-if="data.carddeduct > 0">
               <span class="v_middle font12 ml10 color-gray">优惠券抵扣: </span><span class="v_middle font14 color-gray">{{ $t('RMB') }}{{data.carddeduct}}</span>
             </template>

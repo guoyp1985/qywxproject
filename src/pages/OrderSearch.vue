@@ -200,7 +200,7 @@ export default {
             ]
             break
           case 2:
-            if (item.canback && item.backflag !== 20) {
+            if (item.canback && item.backflag !== 20 && (!item.frommin || item.frommin === '' || (item.frommin !== '' && (item.orderonline !== 0 || (item.orderonline === 0 && item.fid))))) {
               item.buttons = [
                 {id: 3, name: '申请退款'}
               ]

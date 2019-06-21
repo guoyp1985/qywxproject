@@ -5,7 +5,7 @@
     <Sos v-if="showSos" :title="sosTitle"></Sos>
     <template v-if="showContainer">
       <div class="pagemiddle scroll-container">
-        <div v-if="data.seller && data.seller.username">
+        <div v-if="data.seller && data.seller.username && (!data.frommin || data.frommin == '')">
           <div class="b_bottom_after padding10 bg-white">
             <div class="t-table">
               <div class="t-cell w100">返点客：</div>
@@ -84,7 +84,7 @@
           </div>
           <div class="align_right padding10 flex_right">
             <div>
-              <span class="v_middle">实际支付: {{ $t('RMB') }}</span><span class="font16 v_middle">{{ data.paymoney }}</span>
+              <span class="v_middle">实际支付: {{ $t('RMB') }}</span><span class="font16 v_middle">{{ data.needpaymoney }}</span>
               <span class="v_middle font12 color-gray" v-if="data.carddeduct > 0">( 优惠券抵扣: {{ $t('RMB') }} {{ data.carddeduct }} )</span>
             </div>
           </div>
@@ -99,15 +99,11 @@
           </div>
         </div>
         <div class="align_right">
-          <div v-if="!data.payorder && data.flag != 1" class="b_bottom_after pl10 pr10 pb10 bg-white">
+          <!-- <div v-if="!data.payorder && data.flag != 1" class="b_bottom_after pl10 pr10 pb10 bg-white">
             <div class="t-table">
-              <!-- <div class="t-cell v_middle align_right cancelarea">
-                <div v-if="data.flag == 0" class="color-red">交易已关闭</div>
-                <div v-else class="db-in color-blue" @click="cancelorder">关闭交易</div>
-              </div> -->
               <router-link v-if="data.flag != 0" class="t-cell w80 color-blue" :to="{path: '/retailerAddorder', query: {id: data.id}}" >修改订单</router-link>
             </div>
-          </div>
+          </div> -->
           <div v-if="data.nexttime" class="align_left padding10 color-gray2 font12">回访时间：{{ data.nexttime | dateformat }}</div>
         </div>
         <div class="padding10" v-if="data.cancensorback == 1">
@@ -117,7 +113,10 @@
           </div>
         </div>
       </div>
-      <div v-if="data.flag == 1 && data.fid == 0 && data.crowdid == 0" class="pagebottom flex_center font16 bg-orange5 color-white" @click="changePrice">{{ $t('Change price') }}</div>
+      <template v-if="data.flag == 1 && data.fid == 0 && data.crowdid == 0">
+        <div v-if="data.retailer.orderonline == 0 && data.frommin && data.frommin != ''" class="pagebottom flex_center font16 bg-orange5 color-white" @click="confirmPrice">确认收款</div>
+        <div v-else class="pagebottom flex_center font16 bg-orange5 color-white" @click="changePrice">{{ $t('Change price') }}</div>
+      </template>
       <div v-if="data.flag == 2 && data.candeliver" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">{{ $t('Deliver goods') }}</div>
       <div v-else-if="data.flag == 3 && (!data.fid || data.fid == loginUser.fid)" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">{{ $t('Update deliver info') }}</div>
       <div v-transfer-dom class="x-popup popup-deliver">
@@ -194,10 +193,32 @@
         <firstHb action="orderdeliver"></firstHb>
       </template>
     </template>
+    <div class="auto-modal flex_center confirm-tip-modal" v-if="showConfirmModal">
+      <div class="modal-inner border-box">
+        <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">确认收到买家转账了吗？</div>
+        <div class="padding20 font16">
+          <div class="flex_left pt20">备注订单金额（不必填）</div>
+          <div class="db w_100 pt20">
+            <div class="flex_left w_100 pb20">
+              <x-input v-model="priceVal" class="input flex_left" type="text" placeholder="请输入订单金额" maxlength="10"></x-input>
+              <div class="flex_right small-cell">元</div>
+            </div>
+            <div class="btns flex_center w_100 mt20">
+              <div class="flex_cell flex_center">
+                <div class="btn btn-cancel flex_center" @click="closeConfirm">取消</div>
+              </div>
+              <div class="flex_cell flex_center">
+                <div class="btn btn-save flex_center" @click="confirmEvent">确认收款</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
-import { Group, Cell, Sticky, XDialog, TransferDom, Popup, XImg, XTextarea, XButton } from 'vux'
+import { Group, Cell, Sticky, XDialog, TransferDom, Popup, XImg, XTextarea, XButton, XInput } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
@@ -214,7 +235,7 @@ export default {
     TransferDom
   },
   components: {
-    Group, Cell, Sticky, XDialog, Popup, OrderInfo, XImg, Sos, Subscribe, ApplyTip, XTextarea, XButton, FirstTip, FirstHb
+    Group, Cell, Sticky, XDialog, Popup, OrderInfo, XImg, Sos, Subscribe, ApplyTip, XTextarea, XButton, FirstTip, FirstHb, XInput
   },
   filters: {
     dateformat: function (value) {
@@ -242,7 +263,9 @@ export default {
       showFirst: false,
       isFirst: false,
       showHb: false,
-      sysParams: {}
+      sysParams: {},
+      showConfirmModal: false,
+      priceVal: ''
     }
   },
   watch: {
@@ -286,6 +309,57 @@ export default {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
       curArea.updateAutosize()
     },
+    handleListData (data) {
+      let retdata = data
+      retdata.dateline_str = new Time(retdata.dateline * 1000).dateFormat('yyyy-MM-dd hh:mm')
+      if (retdata.pid && retdata.pid !== '') {
+        retdata.pid_arr = retdata.pid.split(',')
+      }
+      if (retdata.flag !== 1) {
+        let curprice = retdata.price
+        if (curprice && curprice !== '') {
+          curprice = curprice.replace(/,/g, '')
+          retdata.price_num = curprice
+        }
+      }
+      return retdata
+    },
+    closeConfirm () {
+      this.showConfirmModal = false
+      this.clickData = null
+      this.clickIndex = 0
+    },
+    confirmPrice (item, index) {
+      this.showConfirmModal = true
+    },
+    confirmEvent () {
+      const self = this
+      let postPrice = this.priceVal
+      if (this.$util.trim(postPrice) === '') {
+        postPrice = 0
+      }
+      if (isNaN(postPrice) || postPrice < 0) {
+        self.$vux.toast.text('请输入正确的价格', 'middle')
+        return false
+      }
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/order/orderState`,
+        {id: this.data.id, type: 'confirm', price: postPrice}
+      ).then(res => {
+        if (res) {
+          self.$vux.loading.hide()
+          const data = res.data
+          self.$vux.toast.show({
+            text: data.error,
+            time: self.$util.delay(data.error)
+          })
+          if (data.flag) {
+            this.showConfirmModal = false
+            this.getData()
+          }
+        }
+      })
+    },
     agreeEvent (val) {
       const self = this
       if (val === 1) {
@@ -307,6 +381,7 @@ export default {
                     this.data.backflag = 0
                     this.data.flag = 0
                     this.data.flagstr = '已退款'
+                    this.getData()
                   }
                 }
               })
@@ -335,6 +410,7 @@ export default {
           onHide: () => {
             if (data.flag === 1) {
               this.data.backflag = 0
+              this.getData()
             }
           }
         })
@@ -421,7 +497,7 @@ export default {
         return false
       }
       self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/order/deliver`, self.deliverdata).then((res) => {
+      self.$http.post(`${ENV.BokaApi}/api/order/deliver`, {...self.deliverdata, id: this.query.id}).then((res) => {
         let data = res.data
         self.$vux.loading.hide()
         let error = data.error
@@ -605,4 +681,18 @@ export default {
 
 <style lang="less" scoped>
 .popup-deliver .fileinput{position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;background-color:transparent;opacity:0;}
+.confirm-tip-modal{
+  .modal-inner{width:80%;}
+  .input{
+    flex:1;height:35px;border: 1px solid #eee;box-sizing: border-box;
+    border-radius:5px;padding-left:5px;padding-right:5px;
+  }
+  .small-cell{width:20px;}
+  .btns{
+    width:100%;
+    .btn{width:80%;height:40px;border-radius:5px;color:#fff;font-size:16px !important;}
+    .btn-cancel{background-color:#bdbdbd !important;}
+    .btn-save{background-color:#ff6a61 !important;}
+  }
+}
 </style>

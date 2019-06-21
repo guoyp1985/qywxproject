@@ -49,7 +49,7 @@
     </div>
     <div class="pay-info flex_right">
       <div class="clamp1 w_100">
-        <span class="v_middle font12">实际支付: </span><span class="v_middle font14">{{ $t('RMB') }}{{item.paymoney}}</span>
+        <span class="v_middle font12">实际支付: </span><span class="v_middle font14">{{ $t('RMB') }}{{item.needpaymoney}}</span>
         <template v-if="!item.delivertype && item.postage && item.postage != ''">
           <span class="v_middle font12 color-gray" v-if="item.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
           <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ item.postage }} )</span>

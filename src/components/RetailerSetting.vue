@@ -61,7 +61,7 @@
               <check-icon class="red-check" :value.sync="offline" @click.native.stop="setbuyonline(0)">线下支付</check-icon>
             </div>
           </forminputplate>
-          <forminputplate class="required" v-if="query.miniconfig != 'wechat.mini_program.tljk'">
+          <forminputplate class="required" v-if="query.miniconfig != 'wechat.mini_program.tljk' && query.fromapp != 'qxb'">
             <span slot="title">超值优惠</span>
             <div>
               <check-icon class="red-check" :value.sync="suggestOpen" @click.native.stop="clickSuggest(1)">开启</check-icon>
@@ -77,7 +77,7 @@
               <check-icon class="red-check" :value.sync="template4" @click.native.stop="clickTemplate(4)">清新蓝</check-icon>
             </div>
           </forminputplate>
-          <div class="form-item">
+          <div class="form-item" v-if="query.fromapp != 'qxb'">
             <div class="t-table">
               <div class="t-cell title-cell font14 v_middle">
                 <span>到账方式</span><span class="al al-wenhao font20 color-theme" style="vertical-align:-2px;" @click="clickHelp"></span>
@@ -401,7 +401,7 @@ export default {
     return {
       maxnum: 1,
       maxnum1: 9,
-      showmore: false,
+      showmore: true,
       requireddata: {title: '', 'qrcode': ''},
       requireddata1: {showphoto: '', slogan: ''},
       showqrcode: false,

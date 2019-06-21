@@ -71,7 +71,7 @@ export default {
         content: '确定要删除厂家小程序用户吗？',
         onConfirm () {
           self.$vux.loading.show()
-          self.$http.get(`https://factory.boka.cn/delUser`, {
+          self.$http.get(`${ENV.FactoryApi}/delUser`, {
             params: {uids: self.uids}
           }).then(function (res) {
             let data = res.data
