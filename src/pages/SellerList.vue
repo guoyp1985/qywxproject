@@ -511,9 +511,7 @@ export default {
           content: '确定将该用户升级到C级吗？',
           onConfirm: () => {
             self.$vux.loading.show()
-            self.$http.get(`${ENV.BokaApi}/api/haitun/upgrade`, {
-              params: {uid: self.clickData.uid, fid: self.query.id}
-            }).then((res) => {
+            self.$http.post(`${ENV.BokaApi}/api/haitun/upgrade`, {uid: self.clickData.uid, fid: self.query.id}).then((res) => {
               self.$vux.loading.hide()
               const data = res.data
               let error = data.flag ? '成功' : data.error
