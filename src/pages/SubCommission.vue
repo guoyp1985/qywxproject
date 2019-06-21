@@ -27,27 +27,27 @@
           <div class="popup-middle font14 flex_center">
             <div class="table vip-info">
               <div class="tr">
-                <div class="td">销售收入</div>
+                <div class="td">累计销售额</div>
                 <div class="td flex_cell">{{$t("RMB")}}{{clickData.salesmoney}}</div>
               </div>
               <div class="tr">
-                <div class="td">销售单数</div>
+                <div class="td">累计订单数</div>
                 <div class="td flex_cell">{{clickData.salescount}}单</div>
               </div>
               <div class="tr">
-                <div class="td">下级带来单数</div>
+                <div class="td">D1订单数</div>
                 <div class="td flex_cell">{{clickData.pc_count}}单</div>
               </div>
               <div class="tr">
-                <div class="td">下下级带来单数</div>
+                <div class="td">D2订单数</div>
                 <div class="td flex_cell">{{clickData.pb_count}}单</div>
               </div>
               <div class="tr">
-                <div class="td">下下下级带来单数</div>
+                <div class="td">D3订单数</div>
                 <div class="td flex_cell">{{clickData.pa_count}}单</div>
               </div>
               <div class="tr">
-                <div class="td">红包发放金额</div>
+                <div class="td">应获得奖励</div>
                 <div class="td flex_cell">{{$t("RMB")}}{{clickData.hongbaomoney}}</div>
               </div>
             </div>
