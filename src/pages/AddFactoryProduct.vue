@@ -82,22 +82,44 @@
               </div>
             </div>
           </div>
-          <div class="form-item required bg-white">
-            <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">商品原价</div>
-              <div class="t-cell input-cell v_middle" style="position:relative;">
-                <x-input v-model="submitdata.oriprice" @keyup="priceChange('oriprice')" maxlength="7" size="7" type="text" class="input priceInput" name="oriprice" placeholder="商品原价" ></x-input>
+          <div class="flex_center">
+            <div class="form-item required bg-white bright">
+              <div class="t-table">
+                <div class="t-cell title-cell w80 font14 v_middle">商品原价</div>
+                <div class="t-cell input-cell v_middle" style="position:relative;">
+                  <x-input v-model="submitdata.oriprice" @keyup="priceChange('oriprice')" maxlength="7" size="7" type="text" class="input priceInput" name="oriprice" placeholder="原价" ></x-input>
+                </div>
+                <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
               </div>
-              <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
+            </div>
+            <div class="form-item required bg-white">
+              <div class="t-table">
+                <div class="t-cell title-cell w80 font14 v_middle">商品现价<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+                <div class="t-cell input-cell v_middle" style="position:relative;">
+                  <x-input v-model="submitdata.price" @keyup="priceChange('price')" maxlength="7" size="7" type="text" class="input priceInput" name="price" placeholder="现价" ></x-input>
+                </div>
+                <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
+              </div>
             </div>
           </div>
-          <div class="form-item required bg-white">
-            <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">商品现价<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
-              <div class="t-cell input-cell v_middle" style="position:relative;">
-                <x-input v-model="submitdata.price" @keyup="priceChange('price')" maxlength="7" size="7" type="text" class="input priceInput" name="price" :placeholder="$t('User final purchase price')" ></x-input>
+          <div class="flex_row">
+            <div class="form-item required bg-white bright">
+              <div class="t-table">
+                <div class="t-cell title-cell w80 font14 v_middle">猫价</div>
+                <div class="t-cell input-cell v_middle" style="position:relative;">
+                  <x-input v-model="submitdata.tb_price" @keyup="priceChange('tb_price')" maxlength="7" size="7" type="text" class="input priceInput" name="tb_price" placeholder="天猫价格" ></x-input>
+                </div>
+                <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
               </div>
-              <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
+            </div>
+            <div class="form-item required bg-white">
+              <div class="t-table">
+                <div class="t-cell title-cell w80 font14 v_middle">狗价</div>
+                <div class="t-cell input-cell v_middle" style="position:relative;">
+                  <x-input v-model="submitdata.jd_price" @keyup="priceChange('jd_price')" maxlength="7" size="7" type="text" class="input priceInput" name="jd_price" placeholder="京东价格" ></x-input>
+                </div>
+                <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
+              </div>
             </div>
           </div>
 
@@ -354,6 +376,8 @@ export default {
         title: '',
         oriprice: '',
         price: '',
+        tb_price: '',
+        jd_price: '',
         postage: '0.00',
         photo: '',
         content: '',
@@ -410,6 +434,8 @@ export default {
         title: '',
         oriprice: '',
         price: '',
+        tb_price: '',
+        jd_price: '',
         postage: '0.00',
         photo: '',
         content: '',
@@ -695,12 +721,28 @@ export default {
         }
         let price = postdata.price.toString().replace(/,/g, '')
         let oriprice = postdata.oriprice.toString().replace(/,/g, '')
+        let tb_price = postdata.tb_price.toString().replace(/,/g, '')
+        let jd_price = postdata.jd_price.toString().replace(/,/g, '')
         let postage = postdata.postage.toString().replace(/,/g, '')
         let profit = postdata.profit.toString().replace(/,/g, '')
         if ((self.$util.trim(oriprice) !== '' && (isNaN(parseFloat(oriprice)) || parseFloat(oriprice) < 0)) || isNaN(parseFloat(price)) || parseFloat(price) <= 0) {
           self.$vux.alert.show({
             title: '',
             content: '请输入正确的价格'
+          })
+          return false
+        }
+        if ((self.$util.trim(tb_price) !== '' && (isNaN(parseFloat(tb_price)) || parseFloat(tb_price) < 0))) {
+          self.$vux.alert.show({
+            title: '',
+            content: '请输入正确的猫价'
+          })
+          return false
+        }
+        if ((self.$util.trim(jd_price) !== '' && (isNaN(parseFloat(jd_price)) || parseFloat(jd_price) < 0))) {
+          self.$vux.alert.show({
+            title: '',
+            content: '请输入正确的狗价'
           })
           return false
         }
@@ -770,6 +812,8 @@ export default {
         self.submitIng = true
         postdata.price = price
         postdata.oriprice = oriprice
+        postdata.tb_price = tb_price
+        postdata.jd_price = jd_price
         postdata.profit = profit
         let postOptions = []
         if (this.optionsData.length) {
@@ -931,18 +975,20 @@ export default {
 
 <style lang="less">
 .add-factory-product-page{
+  line-height: 1.4;
   .vux-x-input.align_right input{text-align:right;}
   .form-item{position:relative;padding:10px 12px;}
   .form-item:after{
     content:"";display:block;
   	background-color:@list-border-color;height:1px;overflow:hidden;
-  	position: absolute;left: 12px;right: 0;bottom:1px;
+  	position: absolute;right: 0;bottom:0px;
   	-webkit-transform: scaleY(0.5) translateY(0.5px);
   	transform: scaleY(0.5) translateY(0.5px);
   	-webkit-transform-origin: 0% 0%;
   	transform-origin: 0% 0%;
   }
   .b_top_after:after,.b_bottom_after:after{left:12px;}
+  .bright{border-right: 1px solid #ddd}
   .button_photo{
     position:relative;
     display: flex;
