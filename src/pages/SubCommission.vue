@@ -126,7 +126,7 @@ export default {
       })
     },
     getData () {
-      self.$http.post(`${ENV.BokaApi}/api/haitun/teamStat`, {pagestart: pageStart1, limit: limit, fid: 97}).then((res) => {
+      self.$http.post(`${ENV.BokaApi}/api/haitun/teamStat`, {pagestart: pageStart1, limit: limit, fid: ENV.CommissionFid}).then((res) => {
         let data = res.data
         self.$vux.loading.hide()
         if (data.flag) {
