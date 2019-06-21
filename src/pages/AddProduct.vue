@@ -696,8 +696,8 @@ export default {
         }
         let price = postdata.price.toString().replace(/,/g, '')
         let oriprice = postdata.oriprice.toString().replace(/,/g, '')
-        let tb_price = postdata.tb_price.toString().replace(/,/g, '')
-        let jd_price = postdata.jd_price.toString().replace(/,/g, '')
+        let tbprice = postdata.tb_price.toString().replace(/,/g, '')
+        let jdprice = postdata.jd_price.toString().replace(/,/g, '')
         let postage = postdata.postage.toString().replace(/,/g, '')
         let rebate = postdata.rebate
         if (self.$util.trim(rebate) !== '') {
@@ -707,11 +707,11 @@ export default {
           self.$vux.toast.text('请输入正确的价格', 'middle')
           return false
         }
-        if ((self.$util.trim(tb_price) !== '' && (isNaN(tb_price) || parseFloat(tb_price) < 0))) {
+        if ((self.$util.trim(tbprice) !== '' && (isNaN(tbprice) || parseFloat(tbprice) < 0))) {
           self.$vux.toast.text('请输入正确的猫价', 'middle')
           return false
         }
-        if ((self.$util.trim(jd_price) !== '' && (isNaN(jd_price) || parseFloat(jd_price) < 0))) {
+        if ((self.$util.trim(jdprice) !== '' && (isNaN(jdprice) || parseFloat(jdprice) < 0))) {
           self.$vux.toast.text('请输入正确的狗价', 'middle')
           return false
         }
@@ -768,8 +768,8 @@ export default {
         self.submitIng = true
         postdata.price = price
         postdata.oriprice = oriprice
-        postdata.tb_price = tb_price
-        postdata.jd_price = jd_price
+        postdata.tb_price = tbprice
+        postdata.jd_price = jdprice
         postdata.rebate = rebate
         postdata.postage = postdata.postage.toString().replace(/,/g, '')
         let postOptions = []

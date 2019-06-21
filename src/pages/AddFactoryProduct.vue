@@ -721,8 +721,8 @@ export default {
         }
         let price = postdata.price.toString().replace(/,/g, '')
         let oriprice = postdata.oriprice.toString().replace(/,/g, '')
-        let tb_price = postdata.tb_price.toString().replace(/,/g, '')
-        let jd_price = postdata.jd_price.toString().replace(/,/g, '')
+        let tbprice = postdata.tb_price.toString().replace(/,/g, '')
+        let jdprice = postdata.jd_price.toString().replace(/,/g, '')
         let postage = postdata.postage.toString().replace(/,/g, '')
         let profit = postdata.profit.toString().replace(/,/g, '')
         if ((self.$util.trim(oriprice) !== '' && (isNaN(parseFloat(oriprice)) || parseFloat(oriprice) < 0)) || isNaN(parseFloat(price)) || parseFloat(price) <= 0) {
@@ -732,14 +732,14 @@ export default {
           })
           return false
         }
-        if ((self.$util.trim(tb_price) !== '' && (isNaN(parseFloat(tb_price)) || parseFloat(tb_price) < 0))) {
+        if ((self.$util.trim(tbprice) !== '' && (isNaN(parseFloat(tbprice)) || parseFloat(tbprice) < 0))) {
           self.$vux.alert.show({
             title: '',
             content: '请输入正确的猫价'
           })
           return false
         }
-        if ((self.$util.trim(jd_price) !== '' && (isNaN(parseFloat(jd_price)) || parseFloat(jd_price) < 0))) {
+        if ((self.$util.trim(jdprice) !== '' && (isNaN(parseFloat(jdprice)) || parseFloat(jdprice) < 0))) {
           self.$vux.alert.show({
             title: '',
             content: '请输入正确的狗价'
@@ -812,8 +812,8 @@ export default {
         self.submitIng = true
         postdata.price = price
         postdata.oriprice = oriprice
-        postdata.tb_price = tb_price
-        postdata.jd_price = jd_price
+        postdata.tb_price = tbprice
+        postdata.jd_price = jdprice
         postdata.profit = profit
         let postOptions = []
         if (this.optionsData.length) {
