@@ -65,7 +65,8 @@ var ENV = {
   RetailerLoginUrl: 'http://laravelcms.boka.cn/admin/login/login?role=retailer',
   AdminLoginUrl: 'http://laravelcms.boka.cn/admin/login/login?role=admin',
   AdminFactoryImg1: 'https://tossharingsales.boka.cn/images/vue_admin_factory1.png',
-  AdminFactoryImg2: 'https://tossharingsales.boka.cn/images/vue_admin_factory2.png'
+  AdminFactoryImg2: 'https://tossharingsales.boka.cn/images/vue_admin_factory2.png',
+  CommissionFid: 97
 }
 
 ENV.NoAccessUrls = [
