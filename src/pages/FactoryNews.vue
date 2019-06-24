@@ -148,10 +148,10 @@ export default {
       console.log('in in in clickInsertProduct')
       if (self.query.from === 'miniprogram') {
         const params = self.$util.query(url)
-        self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}`})
+        self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}&module=product`})
       } else if (self.query.fromapp === 'factory') {
         const params = self.$util.query(url)
-        self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&fid=${params.fid}`})
+        self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&fid=${params.fid}&module=product`})
       } else {
         self.$router.push(url)
       }
@@ -182,10 +182,10 @@ export default {
           console.log(linkurl)
           if (self.query.from === 'miniprogram') {
             const params = self.$util.query(linkurl)
-            self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}`})
+            self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}&module=product`})
           } else if (self.query.fromapp === 'factory') {
             const params = self.$util.query(linkurl)
-            self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&fid=${params.fid}`})
+            self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&fid=${params.fid}&module=product`})
           } else {
             self.$router.push(linkurl)
           }

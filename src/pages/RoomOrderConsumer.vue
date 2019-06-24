@@ -134,7 +134,7 @@ export default {
   methods: {
     toProduct (item) {
       if (this.query.from) {
-        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&wid=${item.wid}&wechatorderid=${item.id}&iswechat=1`})
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&wid=${item.wid}&module=product&wechatorderid=${item.id}&iswechat=1`})
       } else {
         this.$router.push({path: '/product', query: {id: item.pid, wid: item.wid, wechatorderid: item.id, iswechat: 1}})
       }

@@ -253,7 +253,7 @@ export default {
     },
     toProduct (item) {
       if (this.query.from) {
-        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.id}&wid=${item.uploader}`})
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.id}&wid=${item.uploader}&module=product`})
       } else {
         this.$router.push({path: '/product', query: {id: item.id, wid: item.uploader}})
       }
@@ -261,7 +261,7 @@ export default {
     toProduct1 (item) {
       if (this.query.from) {
         if (item.type === 'groupbuy') {
-          this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.productid}&wid=${item.uploader}`})
+          this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.productid}&wid=${item.uploader}&module=product`})
         } else {
           this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.activity}?id=${item.id}&wid=${item.uploader}`})
         }
