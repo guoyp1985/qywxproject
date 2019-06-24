@@ -9,20 +9,20 @@
       @on-cancel="onCancel"
       ref="search">
     </search>
-    <!-- <div class="menu-swiper-outer">
+    <div class="menu-swiper-outer">
       <swiper class="menu-swiper">
         <swiper-item class="swiper-item"  v-for="(items,index) in classDataArry" :key="index">
-          <div class="inner flex_center active" v-for="(tab,index) in items" :key="index">
+          <div class="inner flex_center active" v-for="(tab,index1) in items" :key="index1" @click="onItemClick(index1)">
             <div class="w_100">
               <div class="pic-outer">
-                <div class="pic"><img src="{{tab.photo}}"></img></div>
+                <div class="pic"><img :src="tab.photo"></img></div>
               </div>
               <div class="txt">{{tab.title}}</div>
             </div>
           </div>
         </swiper-item>
       </swiper>
-    </div> -->
+    </div>
     <!-- <tab class="w_100 v-tab">
       <tab-item v-for="(item,index) in classData" :selected="selectedIndex == index" :key="index"  @on-item-click="onItemClick">{{item.title}}</tab-item>
     </tab> -->
@@ -171,8 +171,6 @@ export default {
       WeixinQrcode: ENV.WeixinQrcode,
       showSubscribe: false,
       VipFree: false,
-      swiperPages: 0,
-      items: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21],
       colCount: 10,
       classDataArry: []
     }
@@ -435,8 +433,6 @@ export default {
           self.$vux.loading.hide()
           const data = res.data
           let retdata = data.data ? data.data : data
-          this.swiperPages = Math.ceil(retdata.length / 10)
-          console.log('--------------轮播页为：' + this.swiperPages);
           retdata = this.defaultTab.concat(retdata)
           self.classData = retdata
           console.log(self.classData)
@@ -448,11 +444,14 @@ export default {
           } else {
             this.showDot = false
           }
-          //拼接成十个一组的对象数组
-          for (let i = 0; i < col; i++) {//循环页数 i:0,1,2
+          // 拼接成十个一组的对象数组
+          for (let i = 0; i < col; i++) { // 循环页数 i:0,1,2
             let arr = []
-            for (let j = 0; j < (i + 1) * colcount; j++) {//循环每页保存的类目数 j:1-30
-              arr.push(retdata[j + i * colcount]) //第一页存前十个，即 j+0*10，j的取值范围，j<10（0-9） retdata[0-9]
+            for (let j = 0; j < (i + 1) * colcount; j++) { // 循环每页保存的类目数 j:1-30
+              if (retdata[j + i * colcount] == null) {
+                break
+              }
+              arr.push(retdata[j + i * colcount]) // 第一页存前十个，即 j+0*10，j的取值范围，j<10（0-9） retdata[0-9]
             }
             this.classDataArry.push(arr)
           }
@@ -494,6 +493,11 @@ export default {
 
 <style lang="less">
 .rproducts{
+  .vux-slider > .vux-indicator, .vux-slider .vux-indicator-right {
+    position: absolute;
+    right: 47%;
+    bottom: -3px;
+  }
   .squarepic .desbox{height:85px;}
   .t-icon{
     position:absolute;left:0;top:10px;border-top-right-radius:20px;border-bottom-right-radius:20px;background-color:#fff;padding:5px 10px 5px 5px;font-size:15px;
