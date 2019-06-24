@@ -24,6 +24,12 @@
         <div class="align_left">提现明细</div>
         <div class="moneyNum"><span class="color-gray pl10">></span></div>
       </div>
+      <div class="pl20  pb10 color-gray font12"></div>
+      <div class="list flex_table" @click="popupexplain2">
+        <div class="align_left color-red">开启快速到账</div>
+        <div class="align_left">(发货后立刻提现)</div>
+        <div class="moneyNum"><span class="pl10 color-red">></span></div>
+      </div>
     </div>
     <!-- 提现至微信零钱 -->
     <div class="mceng" v-if="wechatShow">
@@ -95,7 +101,25 @@
             </div>
           </div>
           <div class="popup-bottom flex_center">
-            <div class="flex_cell bg-gray color-white h_100 flex_center" @click="closepopup">{{ $t('Know txt') }}</div>
+            <div class="flex_cell bg-gray color-white h_100 flex_center" @click="closepopup" >{{ $t('Know txt') }}</div>
+          </div>
+        </div>
+      </popup>
+    </div>
+    <div v-transfer-dom class="x-popup">
+      <popup v-model="showpopup2" height="100%">
+        <div class="popup1">
+          <div class="popup-top flex_center bg-arrival color-white">快速到账</div>
+          <div class="popup-middle font14">
+            <div class="padding10">
+              <qarrival></qarrival>
+            </div>
+          </div>
+          <div class="popup-bottom2 flex_center">
+            <input class="br " type="checkbox"  v-model="checkBox" @click ="checkbox()"><span class="pl8">快速到账协议</span>
+          </div>
+          <div class="popup-bottom flex_center" >
+            <div class="flex_cell bg-gray color-white h_100 flex_center" :class="{'active-check':checkBox}" @click="checkBox&&closepopup2()">立即开启 保证金：¥10000.00</div>
           </div>
         </div>
       </popup>
@@ -105,6 +129,7 @@
 <script>
 import { Popup, TransferDom } from 'vux'
 import CashTxt from '@/components/CashTxt'
+import Qarrival from '@/components/Qarrival'
 import { User } from '#/storage'
 import ENV from 'env'
 export default {
@@ -112,16 +137,18 @@ export default {
     TransferDom
   },
   components: {
-    Popup, CashTxt
+    Popup, CashTxt, Qarrival
   },
   data () {
     return {
       loginUser: {},
       query: {},
+      checkBox:false,
       factoryInfo: {waitcash: '0.00', pendingmoney: '0.00'},
       wechatShow: false,
       bankShow: false,
       showpopup: false,
+      showpopup2:false,
       cashMoney: '',
       cashBankMoney: '',
       fromPage: '',
@@ -176,11 +203,21 @@ export default {
         this.bankShow = true
       }
     },
+    checkbox(){
+      this.checkBox = !this.checkBox
+      console.log(this.checkBox);
+    },
     popupexplain () {
       this.showpopup = !this.showpopup
     },
+    popupexplain2(){
+      this.showpopup2 = !this.showpopup2
+    },
     closepopup () {
       this.showpopup = false
+    },
+    closepopup2 () {
+      this.showpopup2 = false
     },
     closeWechat () {
       this.wechatShow = false
@@ -285,6 +322,7 @@ export default {
 }
 </script>
 <style lang="less">
+  .br{appearance:radio;width: 15px;height: 15px;line-height: 16px;}
   .income{
     background-color:#F2F2F2;height:100%;
     .inhead{
