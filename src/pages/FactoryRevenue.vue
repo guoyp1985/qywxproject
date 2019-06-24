@@ -322,7 +322,6 @@ export default {
 }
 </script>
 <style lang="less">
-  .br{appearance:radio;width: 15px;height: 15px;line-height: 16px;}
   .income{
     background-color:#F2F2F2;height:100%;
     .inhead{
@@ -350,5 +349,6 @@ export default {
       border-radius:5px;margin:0 auto;margin-top:50px;
     }
     .close-area{text-align:center;}
+    .br{appearance:radio;width: 15px;height: 15px;line-height: 16px;}
   }
 </style>
