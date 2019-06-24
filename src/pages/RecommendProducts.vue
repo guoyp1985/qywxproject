@@ -9,35 +9,24 @@
       @on-cancel="onCancel"
       ref="search">
     </search>
-    <div class="menu-swiper-outer">
-    <swiper class="menu-swiper">
-      <swiper-item class="swiper-item"  v-for="(items,index) in classDataArry" :key="index">
-        <div class="inner flex_center active" v-for="(tab,index) in items" :key="index">
-          <div class="w_100">
-            <div class="pic-outer">
-              <div class="pic"><img src="{{tab.photo}}"></img></div>
+    <!-- <div class="menu-swiper-outer">
+      <swiper class="menu-swiper">
+        <swiper-item class="swiper-item"  v-for="(items,index) in classDataArry" :key="index">
+          <div class="inner flex_center active" v-for="(tab,index) in items" :key="index">
+            <div class="w_100">
+              <div class="pic-outer">
+                <div class="pic"><img src="{{tab.photo}}"></img></div>
+              </div>
+              <div class="txt">{{tab.title}}</div>
             </div>
-            <div class="txt">{{tab.title}}</div>
           </div>
-        </div>
-      </swiper-item>
-    </swiper>
-    </div>
+        </swiper-item>
+      </swiper>
+    </div> -->
     <!-- <tab class="w_100 v-tab">
       <tab-item v-for="(item,index) in classData" :selected="selectedIndex == index" :key="index"  @on-item-click="onItemClick">{{item.title}}</tab-item>
     </tab> -->
     <div class="column-content" style="padding-bottom:10px;box-sizing:border-box;position:relative;">
-        <!-- <div>
-          <search
-            class="v-search bg-white"
-            v-model='searchword'
-            :auto-fixed="autofixed"
-            @on-submit="onSubmit"
-            @on-change="onChange"
-            @on-cancel="onCancel"
-            ref="search">
-          </search>
-        </div> -->
       <div class="b_top_after pt10 pb10">
         <div class="flex_center">
           <div :class="`flex_cell flex_center b_right_after sort-icon ${sort == 'dateline' ? 'active' : ''}`" @click="sortEvent('dateline')">

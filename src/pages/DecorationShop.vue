@@ -171,7 +171,7 @@ export default {
     },
     onProduct (item) {
       if (this.query.from === 'miniprogram') {
-        this.$wechat.miniProgram.redirectTo({url: `/packageB/pages/product?id=${item.id}&wid=${this.loginUser.uid}`})
+        this.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${item.id}&wid=${this.loginUser.uid}&module=product`})
       } else {
         this.$router.push({
           path: '/product',

@@ -439,7 +439,7 @@ export default {
         self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
       } else if (self.query.from) {
         if (self.activityType === 'groupbuy') {
-          self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${self.submitdata.productid}&wid=${self.loginUser.uid}`})
+          self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${self.submitdata.productid}&wid=${self.loginUser.uid}&module=product`})
         } else {
           self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.activity}?id=${data.data}`})
         }
