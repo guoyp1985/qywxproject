@@ -9,21 +9,24 @@
       @on-cancel="onCancel"
       ref="search">
     </search>
-    <tab class="w_100 v-tab">
+    <div class="menu-swiper-outer">
+      <swiper class="menu-swiper">
+        <swiper-item class="swiper-item"  v-for="(items,index) in classDataArry" :key="index">
+          <div class="inner flex_center active" v-for="(tab,index1) in items" :key="index1" @click="onItemClick(index1)">
+            <div class="w_100">
+              <div class="pic-outer">
+                <div class="pic"><img :src="tab.photo"></img></div>
+              </div>
+              <div class="txt">{{tab.title}}</div>
+            </div>
+          </div>
+        </swiper-item>
+      </swiper>
+    </div>
+    <!-- <tab class="w_100 v-tab">
       <tab-item v-for="(item,index) in classData" :selected="selectedIndex == index" :key="index"  @on-item-click="onItemClick">{{item.title}}</tab-item>
-    </tab>
+    </tab> -->
     <div class="column-content" style="padding-bottom:10px;box-sizing:border-box;position:relative;">
-        <!-- <div>
-          <search
-            class="v-search bg-white"
-            v-model='searchword'
-            :auto-fixed="autofixed"
-            @on-submit="onSubmit"
-            @on-change="onChange"
-            @on-cancel="onCancel"
-            ref="search">
-          </search>
-        </div> -->
       <div class="b_top_after pt10 pb10">
         <div class="flex_center">
           <div :class="`flex_cell flex_center b_right_after sort-icon ${sort == 'dateline' ? 'active' : ''}`" @click="sortEvent('dateline')">
@@ -115,7 +118,7 @@ Apply join:
 </i18n>
 
 <script>
-import { Tab, TabItem, Search } from 'vux'
+import { Tab, TabItem, Search, Swiper, SwiperItem } from 'vux'
 import { User, SystemParams } from '#/storage'
 import ENV from 'env'
 import Time from '#/time'
@@ -129,7 +132,7 @@ let pageStart = 0
 
 export default {
   components: {
-    Tab, TabItem, Search, TipLayer, FirstTip, FirstHb
+    Tab, TabItem, Search, TipLayer, FirstTip, FirstHb, Swiper, SwiperItem
   },
   filters: {
     dateformat: function (value) {
@@ -146,7 +149,7 @@ export default {
       productData: [],
       classData: [],
       selectedIndex: 0,
-      defaultTab: [{title: '为你推荐'}, {title: '全部'}],
+      defaultTab: [{title: '为你推荐', photo: 'https://tossharingsales.boka.cn/minigxk/allclass.png'}, {title: '全部', photo: 'https://tossharingsales.boka.cn/minigxk/allclass.png'}],
       autofixed: false,
       searchword: '',
       datecss: 'desc',
@@ -167,7 +170,9 @@ export default {
       isLoading: false,
       WeixinQrcode: ENV.WeixinQrcode,
       showSubscribe: false,
-      VipFree: false
+      VipFree: false,
+      colCount: 10,
+      classDataArry: []
     }
   },
   watch: {
@@ -430,6 +435,30 @@ export default {
           let retdata = data.data ? data.data : data
           retdata = this.defaultTab.concat(retdata)
           self.classData = retdata
+          console.log(self.classData)
+          let colcount = this.colCount
+          let len = retdata.length
+          let col = Math.ceil(len / colcount) // 获取swiper-items的数量，向上取整
+          if (col > 1) {
+            this.showDot = true
+          } else {
+            this.showDot = false
+          }
+          // 拼接成十个一组的对象数组
+          for (let i = 0; i < col; i++) { // 循环页数 i:0,1,2
+            let arr = []
+            for (let j = 0; j < (i + 1) * colcount; j++) { // 循环每页保存的类目数 j:1-30
+              if (retdata[j + i * colcount] == null) {
+                break
+              }
+              arr.push(retdata[j + i * colcount]) // 第一页存前十个，即 j+0*10，j的取值范围，j<10（0-9） retdata[0-9]
+            }
+            this.classDataArry.push(arr)
+          }
+          console.log(this.classDataArry);
+          // for (var i = 0; i < self.classData.length; i++) {
+          //   this.classItem.push = self.classData[i]
+          // }
           pageStart = 0
           self.$vux.loading.show()
           self.disProductData = false
@@ -444,7 +473,9 @@ export default {
   },
   activated () {
     this.$refs.scrollContainer.scrollTop = this.pageTop
-    document.querySelector('.vux-tab').scrollLeft = this.tabLeft
+    if (document.querySelector('.vux-tab')) {
+      document.querySelector('.vux-tab').scrollLeft = this.tabLeft
+    }
     this.showHb = false
     this.isFirst = false
     this.$util.getSystemParams(() => {
@@ -462,6 +493,11 @@ export default {
 
 <style lang="less">
 .rproducts{
+  .vux-slider > .vux-indicator, .vux-slider .vux-indicator-right {
+    position: absolute;
+    right: 47%;
+    bottom: -3px;
+  }
   .squarepic .desbox{height:85px;}
   .t-icon{
     position:absolute;left:0;top:10px;border-top-right-radius:20px;border-bottom-right-radius:20px;background-color:#fff;padding:5px 10px 5px 5px;font-size:15px;

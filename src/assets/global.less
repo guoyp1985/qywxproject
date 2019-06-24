@@ -1166,3 +1166,26 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
     }
   }
 }
+.menu-swiper-outer:after{content:'';display:block;padding-top:55%;}
+.menu-swiper-outer.one:after{content:'';display:block;padding-top:27.5%;}
+.menu-swiper-outer{
+	width:100%;max-height:200px;position:relative;
+	.menu-swiper{
+		position:absolute;left:0;top:0;right:0;bottom:0;height:100%;
+		.swiper-item{display:flex;flex-wrap: wrap;position:relative;}
+		.inner{
+			width:20%;height:50%;
+			.pic-outer{
+				width:70%;position:relative;margin:0 auto;
+				.pic:after{content:'';display:block;padding-bottom:100%;}
+				.pic{
+					width:100%;position:relative;
+					img{position:absolute;left:0;top:0;right:0;bottom:0;width:100%;height:100%;}
+				}
+			}
+			.txt{text-align:center;margin-top:5rpx;font-size:12rpx;overflow: hidden;display: block;white-space: nowrap;text-overflow: ellipsis;}
+		}
+		.inner.active .txt{color:black;font-size: 12px}
+	}
+	.wx-swiper-dots.wx-swiper-dots-horizontal{position:absolute;bottom:0;}
+}
