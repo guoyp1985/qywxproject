@@ -26,9 +26,9 @@
       </div>
       <div class="pl20  pb10 color-gray font12"></div>
       <div class="list flex_table" @click="popupexplain2">
-        <div class="align_left color-red">开启快速到账</div>
+        <div class="align_left color-theme">开启快速到账</div>
         <div class="align_left">(发货后立刻提现)</div>
-        <div class="moneyNum"><span class="pl10 color-red">></span></div>
+        <div class="moneyNum"><span class="pl10 color-theme">></span></div>
       </div>
     </div>
     <!-- 提现至微信零钱 -->
@@ -116,10 +116,11 @@
             </div>
           </div>
           <div class="popup-bottom2 flex_center">
-            <input class="br " type="checkbox"  v-model="checkBox" @click ="checkbox()"><span class="pl8">快速到账协议</span>
+            <check-icon class="red-check" :value.sync="isagree" @click.native.stop="checkbox()">快速到账协议</check-icon>
+            <!-- <input class="br " type="checkbox"  v-model="isagree" @click ="checkbox()"><span class="pl8">快速到账协议</span> -->
           </div>
           <div class="popup-bottom flex_center" >
-            <div class="flex_cell bg-gray color-white h_100 flex_center" :class="{'active-check':checkBox}" @click="checkBox&&closepopup2()">立即开启 保证金：¥10000.00</div>
+            <div class="flex_cell bg-gray color-white h_100 flex_center" :class="{'active-check':isagree}" @click="isagree && closepopup2()">立即开启 保证金：¥10000.00</div>
           </div>
         </div>
       </popup>
@@ -127,7 +128,7 @@
   </div>
 </template>
 <script>
-import { Popup, TransferDom } from 'vux'
+import { Popup, TransferDom, CheckIcon } from 'vux'
 import CashTxt from '@/components/CashTxt'
 import Qarrival from '@/components/Qarrival'
 import { User } from '#/storage'
@@ -137,22 +138,22 @@ export default {
     TransferDom
   },
   components: {
-    Popup, CashTxt, Qarrival
+    Popup, CashTxt, Qarrival, CheckIcon
   },
   data () {
     return {
       loginUser: {},
       query: {},
-      checkBox:false,
       factoryInfo: {waitcash: '0.00', pendingmoney: '0.00'},
       wechatShow: false,
       bankShow: false,
       showpopup: false,
-      showpopup2:false,
+      showpopup2: false,
       cashMoney: '',
       cashBankMoney: '',
       fromPage: '',
-      fid: 0
+      fid: 0,
+      isagree: false
     }
   },
   methods: {
@@ -203,14 +204,14 @@ export default {
         this.bankShow = true
       }
     },
-    checkbox(){
-      this.checkBox = !this.checkBox
-      console.log(this.checkBox);
+    checkbox () {
+      this.isagree = !this.isagree
+      console.log(this.isagree)
     },
     popupexplain () {
       this.showpopup = !this.showpopup
     },
-    popupexplain2(){
+    popupexplain2 () {
       this.showpopup2 = !this.showpopup2
     },
     closepopup () {
