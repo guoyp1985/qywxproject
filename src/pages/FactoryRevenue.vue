@@ -143,12 +143,12 @@ export default {
     return {
       loginUser: {},
       query: {},
-      checkBox:false,
+      checkBox: false,
       factoryInfo: {waitcash: '0.00', pendingmoney: '0.00'},
       wechatShow: false,
       bankShow: false,
       showpopup: false,
-      showpopup2:false,
+      showpopup2: false,
       cashMoney: '',
       cashBankMoney: '',
       fromPage: '',
@@ -203,14 +203,14 @@ export default {
         this.bankShow = true
       }
     },
-    checkbox(){
+    checkbox () {
       this.checkBox = !this.checkBox
       console.log(this.checkBox);
     },
     popupexplain () {
       this.showpopup = !this.showpopup
     },
-    popupexplain2(){
+    popupexplain2 () {
       this.showpopup2 = !this.showpopup2
     },
     closepopup () {

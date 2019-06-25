@@ -393,23 +393,22 @@ export default {
         }
       })
     },
-    onItemClick (index,classId) {
+    onItemClick (index, classId) {
       console.log('in onitemclick')
       console.log(index)
       console.log(this)
       this.selectedIndex = index
       this.clickClassId = classId
       // if (index !== self.selectedIndex) {
-        this.clicked = true
-        this.searchword = ''
-        self.selectedIndex = index
-        pageStart = 0
-        self.$vux.loading.show()
-        self.disProductData = false
-        self.productData = []
-        self.getData1()
+      this.clicked = true
+      this.searchword = ''
+      self.selectedIndex = index
+      pageStart = 0
+      self.$vux.loading.show()
+      self.disProductData = false
+      self.productData = []
+      self.getData1()
       // }
-
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
