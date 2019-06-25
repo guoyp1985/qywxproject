@@ -108,16 +108,18 @@
     </div>
     <div v-transfer-dom class="x-popup">
       <popup v-model="showpopup2" height="100%">
-        <div class="popup1">
-          <div class="popup-top flex_center bg-arrival color-white">快速到账</div>
+        <div class="popup1 txt-popup">
+          <div class="popup-top flex_center bg-arrival color-white">
+            <span>快速到账</span>
+            <div class="close flex_center" @click="showpopup2 = false"><span class="al al-close"></span></div>
+          </div>
           <div class="popup-middle font14">
             <div class="padding10">
               <qarrival></qarrival>
             </div>
           </div>
           <div class="popup-bottom2 flex_center">
-            <check-icon class="red-check" :value.sync="isagree" @click.native.stop="checkbox()">快速到账协议</check-icon>
-            <!-- <input class="br " type="checkbox"  v-model="isagree" @click ="checkbox()"><span class="pl8">快速到账协议</span> -->
+            <check-icon class="red-check" :value.sync="isagree">快速到账协议</check-icon>
           </div>
           <div class="popup-bottom flex_center" >
             <div class="flex_cell bg-gray color-white h_100 flex_center" :class="{'active-check':isagree}" @click="isagree && closepopup2()">立即开启 保证金：¥10000.00</div>
@@ -203,10 +205,6 @@ export default {
         }
         this.bankShow = true
       }
-    },
-    checkbox () {
-      this.isagree = !this.isagree
-      console.log(this.isagree)
     },
     popupexplain () {
       this.showpopup = !this.showpopup
@@ -351,5 +349,8 @@ export default {
     }
     .close-area{text-align:center;}
     .br{appearance:radio;width: 15px;height: 15px;line-height: 16px;}
+  }
+  .txt-popup{
+    .close{position:absolute;right:0;top:0;bottom:0;width:40px;}
   }
 </style>
