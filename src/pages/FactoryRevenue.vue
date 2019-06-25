@@ -146,10 +146,6 @@ export default {
     return {
       loginUser: {},
       query: {},
-<<<<<<< HEAD
-      checkBox: false,
-=======
->>>>>>> 3e23338e59e05f454e1cbb2fbd424c2e8e156c4f
       factoryInfo: {waitcash: '0.00', pendingmoney: '0.00'},
       wechatShow: false,
       bankShow: false,
