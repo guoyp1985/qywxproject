@@ -491,7 +491,9 @@ export default {
   },
   beforeRouteLeave (to, from, next) {
     this.pageTop = this.$refs.scrollContainer.scrollTop
-    this.tabLeft = document.querySelector('.vux-tab').scrollLeft
+    if (document.querySelector('.vux-tab')) {
+      this.tabLeft = document.querySelector('.vux-tab').scrollLeft
+    }
     next()
   }
 }
