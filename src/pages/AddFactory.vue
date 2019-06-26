@@ -8,6 +8,9 @@
         <form enctype="multipart/form-data">
           <input ref="fileInput1" class="hide" type="file" name="files" @change="fileChange('photo')" />
         </form>
+        <form enctype="multipart/form-data">
+          <input ref="fileInput2" class="hide" type="file" name="files" @change="fileChange('qrcode')" />
+        </form>
         <form class="addForm">
           <div class="form-item fg bg-white b-top b-bottom">
             <div class="t-table">
@@ -58,16 +61,25 @@
               </div>
             </div>
           </div>
-          <!--
-          <div class="form-item">
+          <div class="form-item bg-white fg b-top">
             <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">卖家名额</div>
+              <div class="t-cell title-cell w100 font14 v_middle">公众号二维码</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <x-input class="input" type="tel" class="input" placeholder="卖家名额" ></x-input>
+                <div class="q_photolist align_left bg-white">
+                  <template v-if="qrcodearr.length > 0">
+                    <div v-for="(item,index) in qrcodearr" :key="index" class="photoitem">
+                      <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
+                        <div class="close" @click="deletephoto(item,index,'qrcode')">×</div>
+                      </div>
+                    </div>
+                  </template>
+                  <div v-if="qrcodearr.length < maxnum" @click="uploadPhoto('fileInput2', 'qrcode')" class="align_right">
+                    <span class="color-red">公众号二维码 ></span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        -->
           <div class="form-item bg-white fg b-top">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">logo</div>
@@ -80,19 +92,7 @@
                       </div>
                     </div>
                   </template>
-                  <!-- <div class="photoitem add">
-                    <div class="inner">
-                      <div class="innerlist">
-                        <div class="flex_center h_100">
-                          <div class="txt">
-                            <i class="al al-zhaopian" style="color:#bbb;line-height:30px;"></i>
-                            <div><span class="havenum">{{ photoarr.length }}</span><span class="ml5 mr5">/</span><span class="maxnum">{{ maxnum }}</span></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div> -->
-                  <div v-if="photoarr.length < maxnum" @click="uploadPhoto('fileInput1')" class="align_right">
+                  <div v-if="photoarr.length < maxnum" @click="uploadPhoto('fileInput1', 'photo')" class="align_right">
                     <span class="color-red">添加logo ></span>
                   </div>
                 </div>
@@ -180,7 +180,7 @@ export default {
       loginUser: {},
       infoData: {},
       allowsubmit: true,
-      submitData: { company: '', summary: '', shortcode: '', photo: '', superiorrate: '20', salesrate: '80', trade: 1 },
+      submitData: { company: '', summary: '', shortcode: '', publicqrcode: '', photo: '', superiorrate: '20', salesrate: '80', trade: 1 },
       requireddata: { company: '' },
       classData: [],
       tradeData: [],
@@ -189,7 +189,8 @@ export default {
       photoarr: [],
       maxnum: 1,
       showTip: false,
-      fid: 0
+      fid: 0,
+      qrcodearr: []
     }
   },
   watch: {
@@ -221,17 +222,29 @@ export default {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
       curArea.updateAutosize()
     },
-    deletephoto (item, index) {
+    deletephoto (item, index, type) {
       const self = this
-      self.photoarr.splice(index, 1)
-      self.submitData.photo = self.photoarr.join(',')
+      if (type === 'qrcode') {
+        self.qrcodearr.splice(index, 1)
+        self.submitData.photo = self.qrcodearr.join(',')
+      } else {
+        self.photoarr.splice(index, 1)
+        self.submitData.publicqrcode = self.photoarr.join(',')
+      }
     },
-    photoCallback (data) {
+    photoCallback (data, type) {
       const self = this
       if (data.flag === 1) {
-        if (self.photoarr.length < self.maxnum) {
-          self.photoarr.push(data.data)
-          self.submitData.photo = self.photoarr.join(',')
+        if (type === 'qrcode') {
+          if (self.qrcodearr.length < self.maxnum) {
+            self.qrcodearr.push(data.data)
+            self.submitData.publicqrcode = self.qrcodearr.join(',')
+          }
+        } else {
+          if (self.photoarr.length < self.maxnum) {
+            self.photoarr.push(data.data)
+            self.submitData.photo = self.photoarr.join(',')
+          }
         }
       } else if (data.error) {
         self.$vux.toast.show({
@@ -240,7 +253,7 @@ export default {
         })
       }
     },
-    uploadPhoto (refname) {
+    uploadPhoto (refname, type) {
       const self = this
       const fileInput = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       if (self.$util.isPC()) {
@@ -250,7 +263,7 @@ export default {
           self.$util.wxUploadImage({
             maxnum: self.maxnum - self.photoarr.length,
             handleCallback: function (data) {
-              self.photoCallback(data)
+              self.photoCallback(data, type)
             }
           })
         })
@@ -384,6 +397,10 @@ export default {
           self.photoarr = []
           if (retdata.photo && self.$util.trim(retdata.photo) !== '') {
             self.photoarr.push(retdata.photo)
+          }
+          self.qrcodearr = []
+          if (retdata.publicqrcode && self.$util.trim(retdata.publicqrcode) !== '') {
+            self.qrcodearr.push(retdata.publicqrcode)
           }
           for (let key in self.submitData) {
             self.submitData[key] = retdata[key]
