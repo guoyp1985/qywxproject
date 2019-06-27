@@ -189,7 +189,7 @@ export default {
       loginUser: {},
       infoData: {},
       allowsubmit: true,
-      submitData: { company: '', summary: '', shortcode: '', publicqrcode: '', photo: '', superiorrate: '20', salesrate: '80', trade: 1 },
+      submitData: { company: '', summary: '', shortcode: '', publicqrcode: '', photo: '', superiorrate: '20', salesrate: '80', trade: 1, shopmodel: '1' },
       requireddata: { company: '' },
       classData: [],
       tradeData: [],
@@ -224,9 +224,11 @@ export default {
       if (curval === 1) {
         this.template1 = true
         this.template2 = false
+        this.submitData.shopmodel = 1
       } else if (curval === 2) {
         this.template1 = false
         this.template2 = true
+        this.submitData.shopmodel = 2
       }
     },
     clickTip () {
@@ -409,7 +411,7 @@ export default {
       if (self.fid) {
         self.$http.get(`${ENV.BokaApi}/api/factory/info`,
           { params: { fid: self.fid } }
-        ).then(function (res) {
+        ).then((res) => {
           let data = res.data
           let retdata = data.data ? data.data : data
           console.log('in getData')
@@ -425,6 +427,17 @@ export default {
           }
           for (let key in self.submitData) {
             self.submitData[key] = retdata[key]
+          }
+
+          if (retdata.shopmodel === '' || !retdata.shopmodel) {
+            this.template1 = true
+            this.submitData.shopmodel = '1'
+          } else {
+            if (retdata.shopmodel === '2') {
+              this.template2 = true
+            } else {
+              this.template1 = true
+            }
           }
           if (self.disClassData) {
             return self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
@@ -446,6 +459,7 @@ export default {
           }
         })
       } else {
+        this.template1 = true
         self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
           { params: { limit: 100 } }
         ).then(function (res) {
@@ -472,7 +486,7 @@ export default {
     },
     initData () {
       const self = this
-      self.submitData = { company: '', summary: '', shortcode: '', photo: '', superiorrate: '20', salesrate: '80', trade: 0 }
+      self.submitData = { company: '', summary: '', shortcode: '', photo: '', superiorrate: '20', salesrate: '80', trade: 0, shopmodel: '1' }
       self.requireddata = { company: '' }
       self.disClassData = false
     },
