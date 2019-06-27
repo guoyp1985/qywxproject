@@ -76,7 +76,7 @@
                     </div>
                   </template>
                   <div class="t-cell v_middle appendcontrol align_right w80" v-if="item.flag == 2 && item.candeliver">
-                    <div class="qbtn4 font12" style="padding:1px 14px;" @click="uploaddeliver(item,index)">{{ $t('Deliver goods') }}</div>
+                    <div class="qbtn4 font12" style="padding:1px 14px;" @click="uploaddeliver(item,index1)">{{ $t('Deliver goods') }}</div>
                   </div>
                   <div class="t-cell v_middle appendcontrol align_right w80" v-if="item.flag == 3">
                     <router-link :to="{path: '/deliverinfo', query: {id: item.id}}" class="qbtn4 color-orange7 font12" style="border:1px solid #ee9f25;padding:1px 8px">{{ $t('View deliver') }}</router-link>
@@ -165,7 +165,7 @@
                 </div>
                 <div v-if="item.candeliver" class="t-table pt5 color-lightgray font13 deliverarea">
                   <div class="t-cell middle-cell appendcontrol align_right w80">
-                    <div class="qbtn4 font12" style="padding:1px 14px;" @click="uploaddeliver(item,index)">{{ $t('Deliver goods') }}</div>
+                    <div class="qbtn4 font12" style="padding:1px 14px;" @click="uploaddeliver(item,index1)">{{ $t('Deliver goods') }}</div>
                   </div>
                 </div>
               </div>
