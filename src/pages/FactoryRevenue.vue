@@ -25,7 +25,12 @@
         <div class="moneyNum"><span class="color-gray pl10">></span></div>
       </div>
       <div class="pl20  pb10 color-gray font12"></div>
-      <div class="list flex_table" @click="popupexplain2">
+      <div class="list flex_table" @click="popupexplain2" v-if="factoryInfo.accounttype">
+        <div class="align_left">快速到账已开启</div>
+        <div class="align_left">(发货后立刻提现)</div>
+        <div class="moneyNum"><span class="pl10">></span></div>
+      </div>
+      <div class="list flex_table" @click="popupexplain2" v-else>
         <div class="align_left color-theme">开启快速到账</div>
         <div class="align_left">(发货后立刻提现)</div>
         <div class="moneyNum"><span class="pl10 color-theme">></span></div>
@@ -118,14 +123,33 @@
               <qarrival></qarrival>
             </div>
           </div>
-          <div class="popup-bottom2 flex_center">
-            <check-icon class="red-check" :value.sync="isagree">快速到账协议</check-icon>
-          </div>
-          <div class="popup-bottom flex_center" >
-            <div class="flex_cell bg-gray color-white h_100 flex_center" :class="{'active-check':isagree}" @click="isagree && closepopup2()">立即开启 保证金：¥10000.00</div>
-          </div>
+          <template v-if="factoryInfo.accounttype">
+            <div class="popup-bottom2 flex_center color-orange">您已签署快速到账协议</div>
+            <div class="popup-bottom flex_center" >
+              <div class="flex_cell bg-gray color-white h_100 flex_center active-check" @click="backAccount()">申请退还保证金</div>
+            </div>
+          </template>
+          <template v-else>
+            <div class="popup-bottom2 flex_center">
+              <check-icon class="red-check" :value.sync="isagree">快速到账协议</check-icon>
+            </div>
+            <div class="popup-bottom flex_center" >
+              <div class="flex_cell bg-gray color-white h_100 flex_center" :class="{'active-check':isagree}" @click="isagree && changeAccount()">立即开启 保证金：¥10000.00</div>
+            </div>
+          </template>
         </div>
       </popup>
+    </div>
+    <div v-if="showKefu" class="auto-modal flex_center">
+      <div class="modal-inner border-box" style="width:80%;">
+        <div class="flex_center padding10">
+          <img src="https://tossharingsales.boka.cn/images/gxkkefu.jpg" />
+        </div>
+        <div class="align_center pb10 pt10">长按识别二维码添加客服微信</div>
+        <div class="close-area flex_center" @click="closeKefu">
+          <i class="al al-close"></i>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -155,7 +179,8 @@ export default {
       cashBankMoney: '',
       fromPage: '',
       fid: 0,
-      isagree: false
+      isagree: false,
+      showKefu: false
     }
   },
   methods: {
@@ -215,8 +240,34 @@ export default {
     closepopup () {
       this.showpopup = false
     },
-    closepopup2 () {
+    changeAccount () {
       this.showpopup2 = false
+      this.$vux.confirm.show({
+        content: '确定要开启快速到账模式？',
+        confirmText: '开启',
+        cancelText: '取消',
+        onConfirm: () => {
+          this.$vux.loading.show()
+          this.$http.post(`${ENV.BokaApi}/api/factory/changeAccountType`).then(res => {
+            this.$vux.loading.hide()
+            const data = res.data
+            this.$vux.toast.show({
+              text: data.error,
+              type: data.flag ? 'success' : 'warn',
+              time: this.$util.delay(data.error)
+            })
+            if (data.flag) {
+            }
+          })
+        }
+      })
+    },
+    backAccount () {
+      this.showpopup2 = false
+      this.showKefu = true
+    },
+    closeKefu () {
+      this.showKefu = false
     },
     closeWechat () {
       this.wechatShow = false

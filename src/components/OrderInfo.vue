@@ -5,7 +5,7 @@
 */
 <template>
   <div class="order-info">
-    <div @click="toStore" :to="{path:'/store',query:{wid:item.wid}}">
+    <div @click="toStore">
       <div class="store-info">
         <div class="info-cell">
           <template v-if="item.retailertitle && item.retailertitle != ''">
