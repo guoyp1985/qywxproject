@@ -14,7 +14,7 @@
           <div class="seller-cell flex_left">
             <div class="font14 clamp1">卖家: {{retailerInfo.title}}</div>
           </div>
-          <div class="contact-cell">
+          <!-- <div class="contact-cell">
             <div class="ol-contact flex_center">
               <div @click="toChat" :to="{path: '/chat', query: {uid: retailerInfo.uploader,fromModule: 'order', from: query.from}}">
                 <span class="al al-pinglun3 color-order-detail font14"></span>
@@ -27,7 +27,7 @@
                 <span class="font13">{{$t('Weixin Contact')}}</span>
               </a>
             </div>
-          </div>
+          </div> -->
         </div>
       </sticky>
       <!--
