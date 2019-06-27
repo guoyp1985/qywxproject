@@ -898,6 +898,8 @@ export default {
             console.log('处理过的规格参数')
             this.optionsData = retOptions
             console.log(this.optionsData)
+          } else {
+            self.submitdata.storage = retdata.storage
           }
           self.data = retdata
           self.activityInfo = self.data.activitinfo

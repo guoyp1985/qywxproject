@@ -99,6 +99,15 @@
               </div>
             </div>
           </div>
+          <div class="form-item bg-white fg b-top">
+            <div class="t-table">
+              <div class="t-cell title-cell w80 font14 v_middle">商城模板</div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <check-icon class="red-check" :value.sync="template1" @click.native.stop="clickTemplate(1)">通用版</check-icon>
+                <check-icon class="red-check" :value.sync="template2" @click.native.stop="clickTemplate(2)">大图版</check-icon>
+              </div>
+            </div>
+          </div>
 
           <!-- 分润比例设置 -->
           <div class="form-item bg-white fg b-top">
@@ -190,7 +199,9 @@ export default {
       maxnum: 1,
       showTip: false,
       fid: 0,
-      qrcodearr: []
+      qrcodearr: [],
+      template1: false,
+      template2: false
     }
   },
   watch: {
@@ -208,6 +219,16 @@ export default {
     }
   },
   methods: {
+    clickTemplate (val) {
+      let curval = parseInt(val)
+      if (curval === 1) {
+        this.template1 = true
+        this.template2 = false
+      } else if (curval === 2) {
+        this.template1 = false
+        this.template2 = true
+      }
+    },
     clickTip () {
       this.showTip = true
     },
