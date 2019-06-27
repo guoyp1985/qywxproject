@@ -5,7 +5,7 @@
 */
 <template>
   <div class="order-info">
-    <div @click="toStore" :to="{path:'/store',query:{wid:item.wid}}">
+    <div @click="toStore">
       <div class="store-info">
         <div class="info-cell">
           <template v-if="item.retailertitle && item.retailertitle != ''">
@@ -141,7 +141,12 @@ export default {
       if (this.item.retailertitle && this.item.retailertitle !== '') {
         let params = {wid: this.item.wid}
         if (this.$route.query.from) {
-          this.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.store}?wid=${this.item.wid}`})
+          if (this.$route.query.fromapp === 'qxb') {
+            this.$wechat.miniProgram.redirectTo({url: `pages/store?wid=${this.item.wid}`})
+            console.log(params)
+          } else {
+            this.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.store}?wid=${this.item.wid}`})
+          }
         } else {
           this.$router.push({path: '/store', query: params})
         }
