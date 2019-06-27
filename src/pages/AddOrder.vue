@@ -475,13 +475,17 @@ export default {
             time: self.$util.delay(data.error),
             onHide: function () {
               if (data.flag === 1) {
-                if (self.isMiniInvoke) {
+                if (data.external === 1) {
                   self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.pay}?id=${data.id}`})
                 } else {
-                  if (data.id) {
-                    location.replace(`${ENV.Host}/#/pay?id=${data.id}`)
+                  if (self.isMiniInvoke) {
+                    self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.pay}?id=${data.id}`})
                   } else {
-                    self.$router.push({path: `/payment?wid=${self.curOrder.wid}`})
+                    if (data.id) {
+                      location.replace(`${ENV.Host}/#/pay?id=${data.id}`)
+                    } else {
+                      self.$router.push({path: `/payment?wid=${self.curOrder.wid}`})
+                    }
                   }
                 }
               } else {
@@ -661,7 +665,11 @@ export default {
       this.loginUser = User.get()
       this.initData()
       this.query = this.$route.query
-      this.submitdata.shopid = this.query.id
+      if (this.query.shop_id) {
+        this.submitdata.shopid = this.query.shop_id
+      } else {
+        this.submitdata.shopid = this.query.id
+      }
       this.getData()
     }
   },
