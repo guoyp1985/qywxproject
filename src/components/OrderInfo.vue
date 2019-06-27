@@ -142,7 +142,7 @@ export default {
         let params = {wid: this.item.wid}
         if (this.$route.query.from) {
           if (this.$route.query.fromapp === 'qxb') {
-            this.$wechat.miniProgram.redirectTo({url: `/pages/store?wid=${this.item.wid}`})
+            this.$wechat.miniProgram.redirectTo({url: `pages/store?wid=${this.item.wid}`})
             console.log(params)
           } else {
             this.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.store}?wid=${this.item.wid}`})
