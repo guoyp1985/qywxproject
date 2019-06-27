@@ -556,7 +556,13 @@ export default {
     },
     getData () {
       const self = this
-      self.$http.get(`${ENV.BokaApi}/api/order/shopShow`).then((res) => {
+      let params = {}
+      if (this.query.shop_id) {
+        params.shop_id = this.query.shop_id
+      }
+      self.$http.get(`${ENV.BokaApi}/api/order/shopShow`,
+        {params: params}
+      ).then((res) => {
         let data = res.data
         if (data.length === 0) {
           self.showContainer = false
