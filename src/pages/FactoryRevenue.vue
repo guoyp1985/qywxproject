@@ -25,10 +25,15 @@
         <div class="moneyNum"><span class="color-gray pl10">></span></div>
       </div>
       <div class="pl20  pb10 color-gray font12"></div>
-      <div class="list flex_table" @click="popupexplain2">
-        <div class="align_left color-red">开启快速到账</div>
+      <div class="list flex_table" @click="popupexplain2" v-if="factoryInfo.accounttype">
+        <div class="align_left">快速到账已开启</div>
         <div class="align_left">(发货后立刻提现)</div>
-        <div class="moneyNum"><span class="pl10 color-red">></span></div>
+        <div class="moneyNum"><span class="pl10">></span></div>
+      </div>
+      <div class="list flex_table" @click="popupexplain2" v-else>
+        <div class="align_left color-theme">开启快速到账</div>
+        <div class="align_left">(发货后立刻提现)</div>
+        <div class="moneyNum"><span class="pl10 color-theme">></span></div>
       </div>
     </div>
     <!-- 提现至微信零钱 -->
@@ -108,26 +113,48 @@
     </div>
     <div v-transfer-dom class="x-popup">
       <popup v-model="showpopup2" height="100%">
-        <div class="popup1">
-          <div class="popup-top flex_center bg-arrival color-white">快速到账</div>
+        <div class="popup1 txt-popup">
+          <div class="popup-top flex_center bg-arrival color-white">
+            <span>快速到账</span>
+            <div class="close flex_center" @click="showpopup2 = false"><span class="al al-close"></span></div>
+          </div>
           <div class="popup-middle font14">
             <div class="padding10">
               <qarrival></qarrival>
             </div>
           </div>
-          <div class="popup-bottom2 flex_center">
-            <input class="br " type="checkbox"  v-model="checkBox" @click ="checkbox()"><span class="pl8">快速到账协议</span>
-          </div>
-          <div class="popup-bottom flex_center" >
-            <div class="flex_cell bg-gray color-white h_100 flex_center" :class="{'active-check':checkBox}" @click="checkBox&&closepopup2()">立即开启 保证金：¥10000.00</div>
-          </div>
+          <template v-if="factoryInfo.accounttype">
+            <div class="popup-bottom2 flex_center color-orange">您已签署快速到账协议</div>
+            <div class="popup-bottom flex_center" >
+              <div class="flex_cell bg-gray color-white h_100 flex_center active-check" @click="backAccount()">申请退还保证金</div>
+            </div>
+          </template>
+          <template v-else>
+            <div class="popup-bottom2 flex_center">
+              <check-icon class="red-check" :value.sync="isagree">快速到账协议</check-icon>
+            </div>
+            <div class="popup-bottom flex_center" >
+              <div class="flex_cell bg-gray color-white h_100 flex_center" :class="{'active-check':isagree}" @click="isagree && changeAccount()">立即开启 保证金：¥10000.00</div>
+            </div>
+          </template>
         </div>
       </popup>
+    </div>
+    <div v-if="showKefu" class="auto-modal flex_center">
+      <div class="modal-inner border-box" style="width:80%;">
+        <div class="flex_center padding10">
+          <img src="https://tossharingsales.boka.cn/images/gxkkefu.jpg" />
+        </div>
+        <div class="align_center pb10 pt10">长按识别二维码添加客服微信</div>
+        <div class="close-area flex_center" @click="closeKefu">
+          <i class="al al-close"></i>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 <script>
-import { Popup, TransferDom } from 'vux'
+import { Popup, TransferDom, CheckIcon } from 'vux'
 import CashTxt from '@/components/CashTxt'
 import Qarrival from '@/components/Qarrival'
 import { User } from '#/storage'
@@ -137,13 +164,12 @@ export default {
     TransferDom
   },
   components: {
-    Popup, CashTxt, Qarrival
+    Popup, CashTxt, Qarrival, CheckIcon
   },
   data () {
     return {
       loginUser: {},
       query: {},
-      checkBox: false,
       factoryInfo: {waitcash: '0.00', pendingmoney: '0.00'},
       wechatShow: false,
       bankShow: false,
@@ -152,7 +178,9 @@ export default {
       cashMoney: '',
       cashBankMoney: '',
       fromPage: '',
-      fid: 0
+      fid: 0,
+      isagree: false,
+      showKefu: false
     }
   },
   methods: {
@@ -203,10 +231,6 @@ export default {
         this.bankShow = true
       }
     },
-    checkbox () {
-      this.checkBox = !this.checkBox
-      console.log(this.checkBox);
-    },
     popupexplain () {
       this.showpopup = !this.showpopup
     },
@@ -216,8 +240,34 @@ export default {
     closepopup () {
       this.showpopup = false
     },
-    closepopup2 () {
+    changeAccount () {
       this.showpopup2 = false
+      this.$vux.confirm.show({
+        content: '确定要开启快速到账模式？',
+        confirmText: '开启',
+        cancelText: '取消',
+        onConfirm: () => {
+          this.$vux.loading.show()
+          this.$http.post(`${ENV.BokaApi}/api/factory/changeAccountType`).then(res => {
+            this.$vux.loading.hide()
+            const data = res.data
+            this.$vux.toast.show({
+              text: data.error,
+              type: data.flag ? 'success' : 'warn',
+              time: this.$util.delay(data.error)
+            })
+            if (data.flag) {
+            }
+          })
+        }
+      })
+    },
+    backAccount () {
+      this.showpopup2 = false
+      this.showKefu = true
+    },
+    closeKefu () {
+      this.showKefu = false
     },
     closeWechat () {
       this.wechatShow = false
@@ -322,7 +372,6 @@ export default {
 }
 </script>
 <style lang="less">
-  .br{appearance:radio;width: 15px;height: 15px;line-height: 16px;}
   .income{
     background-color:#F2F2F2;height:100%;
     .inhead{
@@ -350,5 +399,9 @@ export default {
       border-radius:5px;margin:0 auto;margin-top:50px;
     }
     .close-area{text-align:center;}
+    .br{appearance:radio;width: 15px;height: 15px;line-height: 16px;}
+  }
+  .txt-popup{
+    .close{position:absolute;right:0;top:0;bottom:0;width:40px;}
   }
 </style>

@@ -12,8 +12,13 @@
     <div class="menu-swiper-outer">
       <swiper class="menu-swiper">
         <swiper-item class="swiper-item"  v-for="(items,index) in classDataArry" :key="index">
+<<<<<<< HEAD
           <div :class="`inner flex_center ${selectedIndex == index*colCount+index1 ? 'active' : ''}`" v-for="(tab,index1) in items" :key="index1" @click="onItemClick(index*colCount+index1)">
             <div class="w_100">
+=======
+          <div class="inner flex_center" v-for="(tab,index1) in items" :class="{'active' : selectedIndex == (index * colCount + index1)}" :key="index1" @click="onItemClick(index1,tab.id)">
+            <div class="w_100 al_center">
+>>>>>>> cbaeaa5f6e56d11b22b2ea3a9409fa3963da80c9
               <div class="pic-outer">
                 <div class="pic"><img :src="tab.photo"></img></div>
               </div>
@@ -172,7 +177,9 @@ export default {
       showSubscribe: false,
       VipFree: false,
       colCount: 10,
-      classDataArry: []
+      classDataArry: [],
+      activeColor: '',
+      clicked: false
     }
   },
   watch: {
@@ -391,18 +398,22 @@ export default {
         }
       })
     },
-    onItemClick (index) {
+    onItemClick (index, classId) {
       console.log('in onitemclick')
       console.log(index)
-      if (index !== self.selectedIndex) {
-        this.searchword = ''
-        self.selectedIndex = index
-        pageStart = 0
-        self.$vux.loading.show()
-        self.disProductData = false
-        self.productData = []
-        self.getData1()
-      }
+      console.log(this)
+      this.selectedIndex = index
+      this.clickClassId = classId
+      // if (index !== self.selectedIndex) {
+      this.clicked = true
+      this.searchword = ''
+      self.selectedIndex = index
+      pageStart = 0
+      self.$vux.loading.show()
+      self.disProductData = false
+      self.productData = []
+      self.getData1()
+      // }
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
@@ -485,7 +496,9 @@ export default {
   },
   beforeRouteLeave (to, from, next) {
     this.pageTop = this.$refs.scrollContainer.scrollTop
-    this.tabLeft = document.querySelector('.vux-tab').scrollLeft
+    if (document.querySelector('.vux-tab')) {
+      this.tabLeft = document.querySelector('.vux-tab').scrollLeft
+    }
     next()
   }
 }
@@ -497,6 +510,9 @@ export default {
     position: absolute;
     right: 47%;
     bottom: -3px;
+  }
+  .al_center{
+
   }
   .squarepic .desbox{height:85px;}
   .t-icon{
