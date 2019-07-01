@@ -782,7 +782,6 @@ export default {
                 self.tabdata4.splice(self.tabdata4.length - 1, 1)
                 self.tabdata4 = [controldata].concat(self.tabdata4)
               }
-              self.showpopup = false
               self.deliveritem = null
               self.deliverindex = 0
               self.deliverdata = { delivercompany: '-1', delivercode: '' }

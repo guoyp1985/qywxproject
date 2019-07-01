@@ -11,8 +11,8 @@
           </tab>
         </div>
       </div>
-      <div class="s-container s-container1">
-        <div v-show="(selectedIndex == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',0)">
+      <div class="s-container s-container1" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
+        <div v-show="(selectedIndex == 0)">
           <div v-if="distabdata1" class="scroll_list">
             <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 align_center color-gray">
               <div><i class="al al-wushuju font60 pt20"></i></div>
@@ -52,7 +52,7 @@
             </Orderitemplate>
           </div>
         </div>
-        <div v-show="(selectedIndex == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',1)">
+        <div v-show="(selectedIndex == 1)">
           <div v-if="distabdata2" class="scroll_list">
             <div v-if="!tabdata2 || tabdata2.length === 0" class="scroll_item padding10 align_center color-gray">
               <div><i class="al al-wushuju font60 pt20"></i></div>
@@ -84,7 +84,7 @@
             </orderitemplate>
           </div>
         </div>
-        <div v-show="(selectedIndex == 2)" class="swiper-inner scroll-container31" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',2)">
+        <div v-show="(selectedIndex == 2)">
           <div v-if="distabdata3" class="scroll_list">
             <div v-if="!tabdata3 || tabdata3.length === 0" class="scroll_item padding10 align_center color-gray">
               <div><i class="al al-wushuju font60 pt20"></i></div>
@@ -121,7 +121,7 @@
             </orderitemplate>
           </div>
         </div>
-        <div v-show="(selectedIndex == 3)" class="swiper-inner scroll-container4" ref="scrollContainer4" @scroll="handleScroll('scrollContainer4',3)">
+        <div v-show="(selectedIndex == 3)">
           <div v-if="distabdata4" class="scroll_list">
             <div v-if="!tabdata4 || tabdata4.length === 0" class="scroll_item padding10 align_center color-gray">
               <div><i class="al al-wushuju font60 pt20"></i></div>
@@ -252,7 +252,8 @@ export default {
       deliveritem: null,
       deliverindex: 0,
       delivercompany: [],
-      deliverdata: { delivercompany: '-1', delivercode: '' }
+      deliverdata: { delivercompany: '-1', delivercode: '' },
+      pageTop: 0
     }
   },
   methods: {
@@ -482,13 +483,37 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              self.deliveritem.flag = 3
-              self.deliveritem.delivercompany = self.deliverdata.delivercompany
-              self.deliveritem.delivercode = self.deliverdata.delivercode
-              self.$util.deleteItem(self.tabdata3, self.deliveritem.id)
-              self.tabdata4.push(self.deliveritem)
-
               self.showpopup = false
+              let controldata = {}
+              if (self.selectedIndex === 0) {
+                controldata = self.tabdata1[self.deliverindex]
+                self.tabdata1[self.deliverindex].flag = 3
+                for (let i = 0; i < self.tabdata3.length; i++) {
+                  if (self.tabdata3[i].id === controldata.id) {
+                    self.tabdata3.splice(i, 1)
+                    if (self.tabdata3.length >= self.limit - 1) {
+                      self.getData3(true)
+                    }
+                    break
+                  }
+                }
+              } else if (self.selectedIndex === 2) {
+                controldata = self.tabdata3.splice(self.deliverindex, 1)
+                if (self.tabdata3.length >= self.limit - 1) {
+                  self.getData3(true)
+                }
+                for (let i = 0; i < self.tabdata1.length; i++) {
+                  if (self.tabdata1[i].id === controldata.id) {
+                    self.tabdata1[i].flag = 3
+                    break
+                  }
+                }
+              }
+              if (self.tabdata4.length) {
+                controldata.flag = 3
+                self.tabdata4.splice(self.tabdata4.length - 1, 1)
+                self.tabdata4 = [controldata].concat(self.tabdata4)
+              }
               self.deliveritem = null
               self.deliverindex = 0
               self.deliverdata = { delivercompany: '-1', delivercode: '' }
@@ -550,16 +575,31 @@ export default {
           self.showContainer = true
           this.$vux.loading.hide()
           this.query = this.$route.query
-          self.pagestart1 = 0
-          self.distabdata1 = false
-          this.tabdata1 = []
+          // self.pagestart1 = 0
+          // self.distabdata1 = false
+          // this.tabdata1 = []
           this.swiperChange()
         }
       }
     }
   },
   activated () {
+    if (this.$refs.scrollContainer) {
+      this.$refs.scrollContainer.scrollTop = this.pageTop
+    }
+    if (document.querySelector('.vux-tab')) {
+      document.querySelector('.vux-tab').scrollLeft = this.tabLeft
+    }
     this.refresh()
+  },
+  beforeRouteLeave (to, from, next) {
+    if (this.$refs.scrollContainer) {
+      this.pageTop = this.$refs.scrollContainer.scrollTop
+    }
+    if (document.querySelector('.vux-tab')) {
+      this.tabLeft = document.querySelector('.vux-tab').scrollLeft
+    }
+    next()
   }
 }
 </script>
