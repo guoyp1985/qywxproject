@@ -27,8 +27,8 @@
           </tab>
         </div>
       </div>
-      <div class="s-container s-container1">
-        <div v-show="(selectedIndex == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',0)">
+      <div class="s-container s-container1" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
+        <div v-show="(selectedIndex == 0)">
           <div v-if="distabdata1" class="scroll_list">
             <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 align_center color-gray">
               <div><i class="al al-wushuju font60 pt20"></i></div>
@@ -86,7 +86,7 @@
             </Orderitemplate>
           </div>
         </div>
-        <div v-show="(selectedIndex == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',1)">
+        <div v-show="(selectedIndex == 1)">
           <div v-if="distabdata2" class="scroll_list">
             <div v-if="!tabdata2 || tabdata2.length === 0" class="scroll_item padding10 align_center color-gray">
               <div><i class="al al-wushuju font60 pt20"></i></div>
@@ -134,7 +134,7 @@
             </orderitemplate>
           </div>
         </div>
-        <div v-show="(selectedIndex == 2)" class="swiper-inner scroll-container31" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',2)">
+        <div v-show="(selectedIndex == 2)">
           <div v-if="distabdata3" class="scroll_list">
             <div v-if="!tabdata3 || tabdata3.length === 0" class="scroll_item padding10 align_center color-gray">
               <div><i class="al al-wushuju font60 pt20"></i></div>
@@ -172,7 +172,7 @@
             </orderitemplate>
           </div>
         </div>
-        <div v-show="(selectedIndex == 3)" class="swiper-inner scroll-container4" ref="scrollContainer4" @scroll="handleScroll('scrollContainer4',3)">
+        <div v-show="(selectedIndex == 3)">
           <div v-if="distabdata4" class="scroll_list">
             <div v-if="!tabdata4 || tabdata4.length === 0" class="scroll_item padding10 align_center color-gray">
               <div><i class="al al-wushuju font60 pt20"></i></div>
@@ -360,7 +360,8 @@ export default {
       showConfirmModal: false,
       clickData: null,
       clickIndex: 0,
-      priceVal: ''
+      priceVal: '',
+      pageTop: 0
     }
   },
   methods: {
@@ -419,7 +420,7 @@ export default {
       this.searchword1 = ''
       this.$router.push({path: '/retailerOrderSearch', query: {keyword: kw}})
     },
-    handleScroll: function (refname, index) {
+    handleScroll: function (refname) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
@@ -454,11 +455,16 @@ export default {
         }
       })
     },
-    getData1 () {
+    getData1 (isone) {
       this.$vux.loading.show()
       const self = this
-      const params = { params: { pagestart: self.pagestart1, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/order/orderList/retailer`, params).then(function (res) {
+      let params = {pagestart: self.pagestart1, limit: self.limit}
+      if (isone) {
+        params = {pagestart: self.tabdata1.length, limit: 1}
+      }
+      self.$http.get(`${ENV.BokaApi}/api/order/orderList/retailer`, {
+        params: params
+      }).then(function (res) {
         const data = res.data
         self.$vux.loading.hide()
         const retdata = data.data ? data.data : data
@@ -466,11 +472,16 @@ export default {
         self.distabdata1 = true
       })
     },
-    getData2 () {
+    getData2 (isone) {
       this.$vux.loading.show()
       const self = this
-      const params = { params: { flag: 1, pagestart: self.pagestart2, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/order/orderList/retailer`, params).then(function (res) {
+      let params = {flag: 1, pagestart: self.pagestart2, limit: self.limit}
+      if (isone) {
+        params = {flag: 1, pagestart: self.tabdata2.length, limit: 1}
+      }
+      self.$http.get(`${ENV.BokaApi}/api/order/orderList/retailer`, {
+        params: params
+      }).then(function (res) {
         const data = res.data
         self.$vux.loading.hide()
         const retdata = data.data ? data.data : data
@@ -478,11 +489,16 @@ export default {
         self.distabdata2 = true
       })
     },
-    getData3 () {
+    getData3 (isone) {
       this.$vux.loading.show()
       const self = this
-      const params = { params: { flag: 2, pagestart: self.pagestart3, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/order/orderList/retailer`, params).then(function (res) {
+      let params = {flag: 2, pagestart: self.pagestart3, limit: self.limit}
+      if (isone) {
+        params = {flag: 2, pagestart: self.tabdata3.length, limit: 1}
+      }
+      self.$http.get(`${ENV.BokaApi}/api/order/orderList/retailer`, {
+        params: params
+      }).then(function (res) {
         const data = res.data
         self.$vux.loading.hide()
         const retdata = data.data ? data.data : data
@@ -490,11 +506,16 @@ export default {
         self.distabdata3 = true
       })
     },
-    getData4 () {
+    getData4 (isone) {
       this.$vux.loading.show()
       const self = this
-      const params = { params: { flag: 3, pagestart: self.pagestart4, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/order/orderList/retailer`, params).then(function (res) {
+      let params = {flag: 3, pagestart: self.pagestart4, limit: self.limit}
+      if (isone) {
+        params = {flag: 3, pagestart: self.tabdata4.length, limit: 1}
+      }
+      self.$http.get(`${ENV.BokaApi}/api/order/orderList/retailer`, {
+        params: params
+      }).then(function (res) {
         const data = res.data
         self.$vux.loading.hide()
         const retdata = data.data ? data.data : data
@@ -729,18 +750,42 @@ export default {
           onHide: () => {
             if (data.flag === 1) {
               self.showpopup = false
-              self.isrefresh = true
-              self.refresh()
-              // self.deliveritem.flag = 3
-              // self.deliveritem.delivercompany = self.deliverdata.delivercompany
-              // self.deliveritem.delivercode = self.deliverdata.delivercode
-              // self.$util.deleteItem(self.tabdata3, self.deliveritem.id)
-              // self.tabdata4.push(self.deliveritem)
-              //
-              // self.showpopup = false
-              // self.deliveritem = null
-              // self.deliverindex = 0
-              // self.deliverdata = { delivercompany: '-1', delivercode: '' }
+              // self.isrefresh = true
+              // self.refresh()
+              let controldata = {}
+              if (self.selectedIndex === 0) {
+                controldata = self.tabdata1[self.deliverindex]
+                self.tabdata1[self.deliverindex].flag = 3
+                for (let i = 0; i < self.tabdata3.length; i++) {
+                  if (self.tabdata3[i].id === controldata.id) {
+                    self.tabdata3.splice(i, 1)
+                    if (self.tabdata3.length >= self.limit - 1) {
+                      self.getData3(true)
+                    }
+                    break
+                  }
+                }
+              } else if (self.selectedIndex === 2) {
+                controldata = self.tabdata3.splice(self.deliverindex, 1)
+                if (self.tabdata3.length >= self.limit - 1) {
+                  self.getData3(true)
+                }
+                for (let i = 0; i < self.tabdata1.length; i++) {
+                  if (self.tabdata1[i].id === controldata.id) {
+                    self.tabdata1[i].flag = 3
+                    break
+                  }
+                }
+              }
+              if (self.tabdata4.length) {
+                controldata.flag = 3
+                self.tabdata4.splice(self.tabdata4.length - 1, 1)
+                self.tabdata4 = [controldata].concat(self.tabdata4)
+              }
+              self.showpopup = false
+              self.deliveritem = null
+              self.deliverindex = 0
+              self.deliverdata = { delivercompany: '-1', delivercode: '' }
               // if (this.isFirst) {
               //   this.showHb = true
               // }
@@ -790,21 +835,21 @@ export default {
       this.getData()
     },
     initContainer () {
-      this.showApply = false
-      this.showContainer = false
-      this.selectedIndex = 0
-      this.distabdata1 = 0
-      this.distabdata2 = 0
-      this.distabdata3 = 0
-      this.distabdata4 = 0
-      this.tabdata1 = []
-      this.tabdata2 = []
-      this.tabdata3 = []
-      this.tabdata4 = []
-      this.pagestart1 = 0
-      this.pagestart2 = 0
-      this.pagestart3 = 0
-      this.pagestart4 = 0
+      // this.showApply = false
+      // this.showContainer = false
+      // this.selectedIndex = 0
+      // this.distabdata1 = 0
+      // this.distabdata2 = 0
+      // this.distabdata3 = 0
+      // this.distabdata4 = 0
+      // this.tabdata1 = []
+      // this.tabdata2 = []
+      // this.tabdata3 = []
+      // this.tabdata4 = []
+      // this.pagestart1 = 0
+      // this.pagestart2 = 0
+      // this.pagestart3 = 0
+      // this.pagestart4 = 0
     },
     refresh () {
       const self = this
@@ -828,14 +873,25 @@ export default {
           this.query = this.$route.query
           if (this.query.flag === '1') {
             this.selectedIndex = 1
+            if (!this.tabdata2.length) {
+              this.swiperChange()
+            }
           } else if (this.query.flag === '2') {
             this.selectedIndex = 2
+            if (!this.tabdata3.length) {
+              this.swiperChange()
+            }
           } else if (this.query.flag === '3') {
             this.selectedIndex = 3
+            if (!this.tabdata4.length) {
+              this.swiperChange()
+            }
           } else {
             this.selectedIndex = 0
+            if (!this.tabdata1.length) {
+              this.swiperChange()
+            }
           }
-          this.swiperChange()
           // if (`${this.loginUser.retailerinfo.firstinfo.orderdeliver}` === '0' && this.query.from) {
           //   this.$http.get(`${ENV.BokaApi}/api/retailer/info`).then(res => {
           //     const data = res.data
@@ -866,11 +922,26 @@ export default {
     this.init()
   },
   activated () {
+    if (this.$refs.scrollContainer) {
+      this.$refs.scrollContainer.scrollTop = this.pageTop
+    }
+    if (document.querySelector('.vux-tab')) {
+      document.querySelector('.vux-tab').scrollLeft = this.tabLeft
+    }
     this.refresh()
     this.$util.getSystemParams(() => {
       this.sysParams = SystemParams.get()
     })
     this.$util.miniPost()
+  },
+  beforeRouteLeave (to, from, next) {
+    if (this.$refs.scrollContainer) {
+      this.pageTop = this.$refs.scrollContainer.scrollTop
+    }
+    if (document.querySelector('.vux-tab')) {
+      this.tabLeft = document.querySelector('.vux-tab').scrollLeft
+    }
+    next()
   }
 }
 </script>
