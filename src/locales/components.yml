@@ -745,7 +745,7 @@ zh-CN:
   Groupprice: 团购价
   Group numbers: 成团人数
   Person: 人
-  Online consulting: 在线咨询
+  Online consulting: 在线联系
   I am the seller: 我是卖家
   Sales Assistant: 销售助手
   Newcomer Guide: 新手指南
@@ -827,6 +827,7 @@ zh-CN:
   Contact factory: 联系厂家
   Source of goods: 货源
   tRecommendProducts: 货源
+  RtEcommendProducts: 货源
   tFactoryOrderDetail: 订单详情
   tRetailerAcademic: 共销客商学院
   Academic title: 素材标题
