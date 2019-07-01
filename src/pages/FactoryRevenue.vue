@@ -1,9 +1,10 @@
 <template>
-  <div class="containerarea font14 income" ref="revenueContainer">
+  <div class="containerarea font14 factory-revenue-page" ref="revenueContainer">
     <div class="inhead">
       <div class="in-item flex_center pr20 pl20 pt20">
         <div class="item mr10 flex_center" @click="toBank">我的银行卡</div>
         <div class="item ml10 flex_center" @click="popupexplain">提现说明</div>
+        <div class="top-menu" v-if="menuData.length" @click="clickMenu"><span class="al al-daohang"></span></div>
       </div>
     </div>
     <div class="middle-content">
@@ -17,23 +18,23 @@
     <div class="btom-content">
       <div class="list flex_table mt20" @click="toIncome">
         <div class="align_left">待结算金额</div>
-        <div class="moneyNum">{{factoryInfo.pendingmoney}}元<span class="color-gray pl10">></span></div>
+        <div class="moneyNum">{{factoryInfo.pendingmoney}}元<span class="al al-mjiantou-copy pl10 color-gray font16"></span></div>
       </div>
       <div class="pl20 pt10 pb10 color-gray font12">等待订单确认收货后方可结算并提现</div>
       <div class="list flex_table" @click="toDetail">
         <div class="align_left">提现明细</div>
-        <div class="moneyNum"><span class="color-gray pl10">></span></div>
+        <div class="moneyNum"><span class="al al-mjiantou-copy pl10 color-gray font16"></span></div>
       </div>
       <div class="pl20  pb10 color-gray font12"></div>
       <div class="list flex_table" @click="popupexplain2" v-if="factoryInfo.accounttype">
         <div class="align_left">快速到账已开启</div>
         <div class="align_left">(发货后立刻提现)</div>
-        <div class="moneyNum"><span class="pl10">></span></div>
+        <div class="moneyNum"><span class="al al-mjiantou-copy pl10 color-gray font16"></span></div>
       </div>
       <div class="list flex_table" @click="popupexplain2" v-else>
         <div class="align_left color-theme">开启快速到账</div>
         <div class="align_left">(发货后立刻提现)</div>
-        <div class="moneyNum"><span class="pl10 color-theme">></span></div>
+        <div class="moneyNum"><span class="al al-mjiantou-copy pl10 color-theme font16"></span></div>
       </div>
     </div>
     <!-- 提现至微信零钱 -->
@@ -151,6 +152,18 @@
         </div>
       </div>
     </div>
+    <div v-transfer-dom class="x-popup" position="bottom" v-if="menuData.length">
+      <popup v-model="showMenu">
+        <div class="top-menu-area" v-if="showMenu">
+          <div class="menu-list scroll_list">
+            <div v-for="(item,index) in menuData" :key="item.id" class="menu-item scroll_item flex_left" @click="toMenu(item)">
+              <div class="flex_cell flex_left">{{item.value}}</div>
+              <div class="w30 flex_center"><span class="al al-mjiantou-copy color-gray font16"></span></div>
+            </div>
+          </div>
+        </div>
+      </popup>
+    </div>
   </div>
 </template>
 <script>
@@ -180,10 +193,44 @@ export default {
       fromPage: '',
       fid: 0,
       isagree: false,
-      showKefu: false
+      showKefu: false,
+      showMenu: false,
+      menuData: []
     }
   },
   methods: {
+    clickMenu () {
+      this.showMenu = !this.showMenu
+    },
+    toMenu (item) {
+      let params = this.$util.handleAppParams(this.query, {})
+      switch (item.skey) {
+        case 'factoryproduct':
+          this.$router.push({path: '/factoryProductlist', query: {...params, fid: this.fid}})
+          break
+        case 'factorynews':
+          this.$router.push({path: '/factoryNewsList', query: {...params, fid: this.fid}})
+          break
+        case 'retailer':
+          this.$router.push({path: '/sellerList', query: {...params, id: this.fid}})
+          break
+        case 'customers':
+          this.$router.push({path: '/factoryCustomer', query: params})
+          break
+        case 'orders':
+          this.$router.push({path: '/factoryOrders', query: params})
+          break
+        case 'income':
+          this.$router.push({path: '/factoryRevenue', query: {...params, fid: this.fid}})
+          break
+        case 'friends':
+          this.$router.push({path: '/factoryDetail', query: params})
+          break
+        case 'settings':
+          this.$router.push({path: '/addFactory', query: {...params, fid: this.fid}})
+          break
+      }
+    },
     onBlur () {
       console.log('进入到了失焦页面')
       let revenueContainer = this.$refs.revenueContainer[0] ? this.$refs.revenueContainer[0] : this.$refs.revenueContainer
@@ -367,41 +414,64 @@ export default {
       const retdata = data.data ? data.data : data
       this.factoryInfo = retdata
       this.factoryInfo.waitcash = `${this.factoryInfo.waitcashmoney}`
+      return this.$http.post(`${ENV.FactoryApi}/api/factory/controlsettingList`,
+        {fid: this.fid, type: 'my'}
+      )
+    }).then(res => {
+      const data = res.data
+      const retdata = data.data ? data.data : data
+      this.menuData = []
+      for (let i = 0; i < retdata.length; i++) {
+        if (retdata[i].moderate) {
+          this.menuData.push(retdata[i])
+        }
+      }
     })
   }
 }
 </script>
 <style lang="less">
-  .income{
-    background-color:#F2F2F2;height:100%;
-    .inhead{
-      width:100%;height:100px;background-color:#FF6B63;
-      .mr20{margin-right:10px;}
-      .item{width:100px;height:25px;background-color:#FF6B63;color:#fff;border-radius:20px;border:1px solid #fff;font-size:12px;box-sizing:border-box;}
-    }
-    .middle-content{
-      width:90%;height:180px;background-color:#fff;border-radius:10px;border:1px solid #e5e5e5;margin: 0 auto;margin-top:-30px;
-      .item{width:100px;height:25px;background-color:#fff;border-radius:20px;border:1px solid #FF6B63;font-size:12px;color:#FF6B63;box-sizing:border-box;}
-    }
-    .btom-content{
-      .list{
-        width:100%;padding:10px 20px;background-color:#fff;box-sizing:border-box;
-        .moneyNum{margin-left:auto;}
-      }
-    }
-    .mceng{position:fixed;top:0;bottom:0;left:0;right:0;background-color:rgba(0, 0, 0, 0.3);overflow:hidden;z-index:0;}
-    .wechatShow{
-      width:75%;padding:10px 0;background-color:#fff;border-radius:10px;margin:0 auto;box-sizing:border-box;margin-top:40%;
-      input {color:#FF6B63;}
-    }
-    .btnSubmit{
-      width:90%;padding:10px 0;background-color:#FF6B63;color:#fff;text-align:center;
-      border-radius:5px;margin:0 auto;margin-top:50px;
-    }
-    .close-area{text-align:center;}
-    .br{appearance:radio;width: 15px;height: 15px;line-height: 16px;}
+.factory-revenue-page{
+  background-color:#F2F2F2;height:100%;
+  .inhead{
+    width:100%;height:100px;background-color:#FF6B63;
+    .mr20{margin-right:10px;}
+    .item{width:100px;height:25px;background-color:#FF6B63;color:#fff;border-radius:20px;border:1px solid #fff;font-size:12px;box-sizing:border-box;}
+    .in-item{position:relative;}
   }
-  .txt-popup{
-    .close{position:absolute;right:0;top:0;bottom:0;width:40px;}
+  .top-menu{
+    position:absolute; left:5px;bottom:-5px;
+    .al{font-size:22px;color:#fff;}
   }
+  .middle-content{
+    width:90%;height:180px;background-color:#fff;border-radius:10px;border:1px solid #e5e5e5;margin: 0 auto;margin-top:-30px;
+    .item{width:100px;height:25px;background-color:#fff;border-radius:20px;border:1px solid #FF6B63;font-size:12px;color:#FF6B63;box-sizing:border-box;}
+  }
+  .btom-content{
+    .list{
+      width:100%;padding:10px 20px;background-color:#fff;box-sizing:border-box;
+      .moneyNum{margin-left:auto;}
+    }
+  }
+  .mceng{position:fixed;top:0;bottom:0;left:0;right:0;background-color:rgba(0, 0, 0, 0.3);overflow:hidden;z-index:0;}
+  .wechatShow{
+    width:75%;padding:10px 0;background-color:#fff;border-radius:10px;margin:0 auto;box-sizing:border-box;margin-top:40%;
+    input {color:#FF6B63;}
+  }
+  .btnSubmit{
+    width:90%;padding:10px 0;background-color:#FF6B63;color:#fff;text-align:center;
+    border-radius:5px;margin:0 auto;margin-top:50px;
+  }
+  .close-area{text-align:center;}
+  .br{appearance:radio;width: 15px;height: 15px;line-height: 16px;}
+}
+.txt-popup{
+  .close{position:absolute;right:0;top:0;bottom:0;width:40px;}
+}
+.top-menu-area{
+  background-color:#fff;
+  .menu-list{
+    .menu-item{padding:10px;}
+  }
+}
 </style>
