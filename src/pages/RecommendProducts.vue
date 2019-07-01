@@ -12,13 +12,8 @@
     <div class="menu-swiper-outer">
       <swiper class="menu-swiper">
         <swiper-item class="swiper-item"  v-for="(items,index) in classDataArry" :key="index">
-<<<<<<< HEAD
           <div :class="`inner flex_center ${selectedIndex == index*colCount+index1 ? 'active' : ''}`" v-for="(tab,index1) in items" :key="index1" @click="onItemClick(index*colCount+index1)">
             <div class="w_100">
-=======
-          <div class="inner flex_center" v-for="(tab,index1) in items" :class="{'active' : selectedIndex == (index * colCount + index1)}" :key="index1" @click="onItemClick(index1,tab.id)">
-            <div class="w_100 al_center">
->>>>>>> cbaeaa5f6e56d11b22b2ea3a9409fa3963da80c9
               <div class="pic-outer">
                 <div class="pic"><img :src="tab.photo"></img></div>
               </div>
