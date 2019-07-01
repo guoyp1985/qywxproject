@@ -12,7 +12,7 @@
     <div class="menu-swiper-outer">
       <swiper class="menu-swiper">
         <swiper-item class="swiper-item"  v-for="(items,index) in classDataArry" :key="index">
-          <div class="inner flex_center active" v-for="(tab,index1) in items" :key="index1" @click="onItemClick(index1)">
+          <div :class="`inner flex_center ${selectedIndex == index*colCount+index1 ? 'active' : ''}`" v-for="(tab,index1) in items" :key="index1" @click="onItemClick(index*colCount+index1)">
             <div class="w_100">
               <div class="pic-outer">
                 <div class="pic"><img :src="tab.photo"></img></div>
@@ -534,5 +534,8 @@ export default {
   .txt1{position:absolute;top:26%;left:67%;}
   .txt2{position:absolute;bottom:6.6%;left:6%;}
   }
+  // .flex_center.active{
+  //   color: #ff6a61;
+  // }
 }
 </style>
