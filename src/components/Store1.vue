@@ -128,7 +128,7 @@
             <img slot="photo" class="imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
             <span slot="title" style="word-break:break-all;">{{ item.title }}</span>
             <span slot="price" style="margin-left:1px;">{{ item.price }}</span>
-            <span slot="saled" style="margin-left:1px;" v-if="item.saled">{{ item.saled }}</span>
+            <span slot="saled" style="margin-left:1px;">{{ item.saled }}</span>
           </productitemplate>
         </div>
         <template v-if="toplinedata.length > 0">
