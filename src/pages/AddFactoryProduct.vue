@@ -752,21 +752,23 @@ export default {
         let jdprice = postdata.jd_price.toString().replace(/,/g, '')
         let postage = postdata.postage.toString().replace(/,/g, '')
         let profit = postdata.profit.toString().replace(/,/g, '')
-        if ((self.$util.trim(oriprice) !== '' && (isNaN(parseFloat(oriprice)) || parseFloat(oriprice) < 0)) || isNaN(parseFloat(price)) || parseFloat(price) <= 0) {
+        let salesrebate = postdata.salesrebate.toString().replace(/,/g, '')
+        let superrebate = postdata.superrebate.toString().replace(/,/g, '')
+        if ((self.$util.trim(oriprice) !== '' && (isNaN(oriprice) || parseFloat(oriprice) < 0)) || isNaN(price) || parseFloat(price) <= 0) {
           self.$vux.alert.show({
             title: '',
             content: '请输入正确的价格'
           })
           return false
         }
-        if ((self.$util.trim(tbprice) !== '' && (isNaN(parseFloat(tbprice)) || parseFloat(tbprice) < 0))) {
+        if ((self.$util.trim(tbprice) !== '' && (isNaN(tbprice) || parseFloat(tbprice) < 0))) {
           self.$vux.alert.show({
             title: '',
             content: '请输入正确的猫价'
           })
           return false
         }
-        if ((self.$util.trim(jdprice) !== '' && (isNaN(parseFloat(jdprice)) || parseFloat(jdprice) < 0))) {
+        if ((self.$util.trim(jdprice) !== '' && (isNaN(jdprice) || parseFloat(jdprice) < 0))) {
           self.$vux.alert.show({
             title: '',
             content: '请输入正确的狗价'
@@ -774,7 +776,7 @@ export default {
           return false
         }
         // 商品利润
-        if (self.$util.trim(oriprice) !== '' && (isNaN(parseFloat(profit)) || parseFloat(profit) < 0)) {
+        if (self.$util.trim(oriprice) !== '' && (isNaN(profit) || parseFloat(profit) < 0)) {
           self.$vux.alert.show({
             title: '',
             content: '请输入正确的价格'
@@ -785,6 +787,20 @@ export default {
           self.$vux.alert.show({
             title: '',
             content: '请输入正确的利润'
+          })
+          return false
+        }
+        if (self.$util.trim(salesrebate) !== '' && (isNaN(salesrebate) || parseFloat(salesrebate) < 0)) {
+          self.$vux.alert.show({
+            title: '',
+            content: '请输入正确的销售佣金'
+          })
+          return false
+        }
+        if (self.$util.trim(superrebate) !== '' && (isNaN(superrebate) || parseFloat(superrebate) < 0)) {
+          self.$vux.alert.show({
+            title: '',
+            content: '请输入正确的推荐人佣金'
           })
           return false
         }
