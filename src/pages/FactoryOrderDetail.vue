@@ -58,7 +58,7 @@
         </div>
         <div class="bg-white">
           <div class="scroll_list productlist color_gray appendarea" ajaxurl="" template=".template">
-            <router-link v-for="(item,index) in data.orderlist" :key="item.id" :to="{path: '/product', query: {id: item.pid, wid: data.wid}}" class="scroll_item db padding10 bg-gray4">
+            <div v-for="(item,index) in data.orderlist" :key="item.id" @click="toProduct(item)" class="scroll_item db padding10 bg-gray4">
               <div class="t-table">
                 <div class="t-cell v_middle w60 algin_left">
                   <template v-if="item.options && item.options.id">
@@ -77,7 +77,7 @@
                   <div class="color-gray">× <span class="font12">{{ item.quantity }}</span></div>
                 </div>
               </div>
-            </router-link>
+            </div>
           </div>
           <div class="align_right padding10 flex_right">
             <div>合计:{{ $t('RMB') }} <span class="font16">{{ totalPrice }}</span></div>
@@ -215,6 +215,15 @@ export default {
   computed: {
   },
   methods: {
+    toProduct (item) {
+      if (this.query.fromapp === 'factory') {
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&module=product`})
+      } else if (this.query.from) {
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&wid=${item.wid}&module=product`})
+      } else {
+        this.$router.push({path: '/product', query: {id: item.pid, wid: item.wid}})
+      }
+    },
     evaluate () {
       this.$router.push({name: 'evaluation', params: {order: this.order}})
     },
