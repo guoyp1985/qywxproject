@@ -286,10 +286,10 @@ export default {
       this.showFirst = false
     },
     toProduct (item) {
-      console.log(item)
-      console.log(this.query)
-      if (this.query.from) {
-        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&wid=${item.wid}&module=product`})
+      if (this.query.fromapp === 'factory') {
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&module=factoryproduct`})
+      } else if (this.query.from) {
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&wid=${item.wid}`})
       } else {
         this.$router.push({path: '/product', query: {id: item.pid, wid: item.wid}})
       }
