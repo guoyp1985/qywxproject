@@ -128,7 +128,7 @@
           <!-- 商品利润 -->
           <div class="form-item required bg-white">
             <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">商品利润<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+              <div class="t-cell title-cell w80 font14 v_middle">商品利润</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
                 <x-input v-model="submitdata.profit" @keyup="priceChange('profit')" type="text" class="input priceInput" name="profit" :placeholder="$t('Saled profit')" ></x-input>
               </div>
@@ -138,12 +138,12 @@
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>
           </div>
-          <!-- <div class="flex_row">
+          <div class="flex_row">
             <div class="form-item required bg-white bright">
               <div class="t-table">
                 <div class="t-cell title-cell w80 font14 v_middle">销售佣金</div>
                 <div class="t-cell input-cell v_middle" style="position:relative;">
-                  <x-input v-model="submitdata.tb_price" @keyup="priceChange('tb_price')" maxlength="7" size="7" type="text" class="input priceInput" name="tb_price" placeholder="天猫价格" ></x-input>
+                  <x-input v-model="submitdata.salesrebate" @keyup="priceChange('salesrebate')" maxlength="7" size="7" type="text" class="input priceInput" name="tb_price" placeholder="销售佣金" ></x-input>
                 </div>
                 <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
               </div>
@@ -152,13 +152,13 @@
               <div class="t-table">
                 <div class="t-cell title-cell w80 font14 v_middle">推荐人佣金</div>
                 <div class="t-cell input-cell v_middle" style="position:relative;">
-                  <x-input v-model="submitdata.jd_price" @keyup="priceChange('jd_price')" maxlength="7" size="7" type="text" class="input priceInput" name="jd_price" placeholder="京东价格" ></x-input>
+                  <x-input v-model="submitdata.superrebate" @keyup="priceChange('superrebate')" maxlength="7" size="7" type="text" class="input priceInput" name="jd_price" placeholder="推荐人佣金" ></x-input>
                 </div>
                 <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
               </div>
             </div>
           </div>
-          <div class="pt10 bg-page"></div> -->
+          <div class="pt10 bg-page"></div>
           <div class="form-item required bg-white" v-if="!optionsData.length">
             <div class="flex_row">
               <div class="flex_cell">
@@ -408,10 +408,12 @@ export default {
         seotitle: '',
         seodescription: '',
         profit: '',
+        salesrebate: '',
+        superrebate: '',
         sellingpoint: ''
       },
       allowsubmit: true,
-      requireddata: { title: '', 'price': '', 'postage': '', 'photo': '', 'profit': '' },
+      requireddata: {title: '', 'price': '', 'postage': '', 'photo': ''},
       levels: [],
       classData: [],
       submitIng: false,
@@ -467,6 +469,8 @@ export default {
         seodescription: '',
         video: '',
         profit: '',
+        salesrebate: '',
+        superrebate: '',
         sellingpoint: ''
       }
       this.photoarr = []
