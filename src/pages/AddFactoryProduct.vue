@@ -790,17 +790,40 @@ export default {
           })
           return false
         }
-        if (self.$util.trim(salesrebate) !== '' && (isNaN(salesrebate) || parseFloat(salesrebate) < 0)) {
-          self.$vux.alert.show({
-            title: '',
-            content: '请输入正确的销售佣金'
-          })
-          return false
+        if (self.$util.trim(salesrebate) !== '') {
+          if (isNaN(salesrebate) || parseFloat(salesrebate) < 0) {
+            self.$vux.alert.show({
+              title: '',
+              content: '请输入正确的销售佣金'
+            })
+            return false
+          } else if (parseFloat(salesrebate) > price) {
+            self.$vux.alert.show({
+              title: '',
+              content: '销售佣金不能大于商品现价'
+            })
+            return false
+          }
         }
-        if (self.$util.trim(superrebate) !== '' && (isNaN(superrebate) || parseFloat(superrebate) < 0)) {
+        if (self.$util.trim(superrebate) !== '') {
+          if (isNaN(superrebate) || parseFloat(superrebate) < 0) {
+            self.$vux.alert.show({
+              title: '',
+              content: '请输入正确的推荐人佣金'
+            })
+            return false
+          } else if (parseFloat(superrebate) > price) {
+            self.$vux.alert.show({
+              title: '',
+              content: '推荐人佣金不能大于商品现价'
+            })
+            return false
+          }
+        }
+        if (self.$util.trim(salesrebate) !== '' && self.$util.trim(superrebate) !== '' && parseFloat(salesrebate) + parseFloat(superrebate) > price) {
           self.$vux.alert.show({
             title: '',
-            content: '请输入正确的推荐人佣金'
+            content: '销售佣金+推荐人佣金不能大于商品现价'
           })
           return false
         }
