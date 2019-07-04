@@ -101,7 +101,8 @@
                 </div>
                 <div class="flex_center bg-white h40">
                   <div class="t-table align_center color-gray2 font14 color-gray2">
-                    <div class="t-cell v_middle b_right_after" @click="toTimeline(item)" :to="{path: '/timeline', query:{ uid: item.uid }}">客户行为</div>
+                    <div class="t-cell v_middle b_right_after" v-if="query.from" @click="toCard(item)">专属优惠券</div>
+                    <div class="t-cell v_middle b_right_after" v-else @click="toTimeline(item)" :to="{path: '/timeline', query:{ uid: item.uid }}">客户行为</div>
                     <div class="t-cell v_middle b_right_after" v-if="item.priority" @click="priorityEvent(item,index)">取消置顶</div>
                     <div class="t-cell v_middle b_right_after" v-else @click="priorityEvent(item,index)">置顶</div>
                     <div class="t-cell v_middle b_right_after" @click="toChat(item)">
@@ -467,6 +468,11 @@ export default {
     toTimeline (item) {
       let params = this.$util.handleAppParams(this.query, {uid: item.uid})
       this.$router.push({path: '/timeline', query: params})
+    },
+    toCard (item) {
+      if (this.query.from) {
+        this.$wechat.miniProgram.navigateTo({url: ENV.MiniRouter.addCard})
+      }
     },
     btnDetail (index) {
       for (var i = 0; i < this.tabdata1.length; i++) {

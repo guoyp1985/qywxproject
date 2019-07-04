@@ -28,7 +28,8 @@ var ENV = {
     news: '/packageB/pages/news',
     pay: '/packageB/pages/pay',
     product: '/packageB/pages/product',
-    store: '/packageB/pages/store'
+    store: '/packageB/pages/store',
+    addCard: '/packageA/pages/addCard'
   },
   Emots: [
     '微笑', '撇嘴', '色', '发呆', '得意', '流泪', '害羞', '闭嘴',
