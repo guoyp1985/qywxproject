@@ -42,14 +42,26 @@
             </div>
           </div>
           <template v-if="showArticle">
-            <template v-if="article.uploader == reward.uid">
-              <div v-if="article.content == '' && !afterEdit" id="editor-content" class="article-content color-gray font16">
-                <p>文章内容为空，点击【编辑】按钮可修改内容哦！</p>
-              </div>
-              <div v-else id="editor-content" class="article-content" v-html="article.content"></div>
+            <template v-if="article.c_format == 'json'">
+              <template v-for="(item, index) in article.content">
+                <div v-if="item.content && item.content != ''" class="padding10">{{item.content}}</div>
+                <template v-for="(photo,index1) in item.photo" index="index1" item="photo">
+                  <div class="flex_center">
+                    <img :src="photo" style="max-width:100%;"/>
+                  </div>
+                </template>
+              </template>
             </template>
             <template v-else>
-              <div class="article-content" v-html="article.content"></div>
+              <template v-if="article.uploader == reward.uid">
+                <div v-if="article.content == '' && !afterEdit" id="editor-content" class="article-content color-gray font16">
+                  <p>文章内容为空，点击【编辑】按钮可修改内容哦！</p>
+                </div>
+                <div v-else id="editor-content" class="article-content" v-html="article.content"></div>
+              </template>
+              <template v-else>
+                <div class="article-content" v-html="article.content"></div>
+              </template>
             </template>
           </template>
           <template v-if="query.control != 'edit'">
@@ -105,7 +117,7 @@
         :module="module"
         :on-close="closeShareSuccess">
       </share-success>
-      <editor v-if="reward.uid == article.uploader && showEditor" elem="#editor-content" :loginUser="loginUser" :query="query" @on-edit="clickEdit" @on-auto-save="autoSave" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
+      <editor v-if="reward.uid == article.uploader && showEditor && article.c_format != 'json'" elem="#editor-content" :loginUser="loginUser" :query="query" @on-edit="clickEdit" @on-auto-save="autoSave" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
       <comment-popup :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-cancel="commentPopupCancel"></comment-popup>
       <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
       <div v-transfer-dom class="x-popup">
@@ -383,21 +395,23 @@ export default {
             self.reward = User.get()
             self.article = res.data.data
             self.createSocket()
-            self.article.content = this.article.content ? self.article.content
-              .replace(/[\r\n]/g, '')
-              .replace(/\s{2,}/g, '')
-              .match(Reg.rSplitAllTags).map(fragment => {
-                if (Reg.rTestSelfCloseTag.test(fragment)) {
-                  fragment = fragment.replace(Reg.filterSpecAttr('style'), (match, p1, p2, p3, p4, p5) => {
-                    return `${p1}${p5}`
-                  })
-                  if (!Reg.rTestSelfCloseOKTag.test(fragment)) {
-                    fragment = fragment.replace(Reg.rInsertSlash, '$1/$2')
+            if (self.article.c_format !== 'json') {
+              self.article.content = this.article.content ? self.article.content
+                .replace(/[\r\n]/g, '')
+                .replace(/\s{2,}/g, '')
+                .match(Reg.rSplitAllTags).map(fragment => {
+                  if (Reg.rTestSelfCloseTag.test(fragment)) {
+                    fragment = fragment.replace(Reg.filterSpecAttr('style'), (match, p1, p2, p3, p4, p5) => {
+                      return `${p1}${p5}`
+                    })
+                    if (!Reg.rTestSelfCloseOKTag.test(fragment)) {
+                      fragment = fragment.replace(Reg.rInsertSlash, '$1/$2')
+                    }
+                    return fragment
                   }
                   return fragment
-                }
-                return fragment
-              }).join('') : ''
+                }).join('') : ''
+            }
             self.showArticle = true
             self.showEditor = true
             document.title = self.article.title
