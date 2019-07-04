@@ -26,10 +26,10 @@
               <div class="q_photolist align_left">
                 <template v-if="photoarr.length > 0">
                   <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
-                    <div class="inner photo" :photo="item" :style="`background-image: url('${item}');`">
+                    <div class="inner photo" :photo="item" :style="`background-image: url('${item}');`" @click="uploadPhoto('fileInput','photo',index)">
                       <div class="close" @click="deletephoto(item,index,'photo')">×</div>
-                      <div class="move-ico prev" v-if="index > 0" @click="movePhoto('photo',index,'prev')"><span class="al al-qianyi"></span></div>
-                      <div class="move-ico next" v-if="photoarr.length > 1 && index < photoarr.length - 1" @click="movePhoto('photo',index,'next')"><span class="al al-houyi"></span></div>
+                      <div class="move-ico prev" v-if="index > 0" @click.stop="movePhoto('photo',index,'prev')"><span class="al al-qianyi"></span></div>
+                      <div class="move-ico next" v-if="photoarr.length > 1 && index < photoarr.length - 1" @click.stop="movePhoto('photo',index,'next')"><span class="al al-houyi"></span></div>
                     </div>
                   </div>
                 </template>
@@ -265,10 +265,10 @@
             <div class="q_photolist align_left bg-white">
               <template v-if="photoarr1.length > 0">
                 <div v-for="(item,index) in photoarr1" :key="index" class="photoitem">
-                  <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
+                  <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`" @click="uploadPhoto('fileInput1','contentphoto',index)">
                     <div class="close" @click="deletephoto(item,index,'contentphoto')">×</div>
-                    <div class="move-ico prev" v-if="index > 0" @click="movePhoto('content',index,'prev')"><span class="al al-qianyi"></span></div>
-                    <div class="move-ico next" v-if="photoarr1.length > 1 && index < photoarr1.length - 1" @click="movePhoto('content',index,'next')"><span class="al al-houyi"></span></div>
+                    <div class="move-ico prev" v-if="index > 0" @click.stop="movePhoto('content',index,'prev')"><span class="al al-qianyi"></span></div>
+                    <div class="move-ico next" v-if="photoarr1.length > 1 && index < photoarr1.length - 1" @click.stop="movePhoto('content',index,'next')"><span class="al al-houyi"></span></div>
                   </div>
                 </div>
               </template>
@@ -425,7 +425,8 @@ export default {
       // optionsData: [{title: '', photo: '', storage: ''}],
       optionsData: [],
       selectedOptionIndex: 0,
-      optionsPhoto: []
+      optionsPhoto: [],
+      clickPhotoIndex: -1
     }
   },
   watch: {
@@ -636,15 +637,34 @@ export default {
     photoCallback (data, type) {
       const self = this
       if (data.flag === 1) {
-        if (type === 'photo' && self.photoarr.length < self.maxnum) {
-          self.photoarr.push(data.data)
-          self.submitdata.photo = self.photoarr.join(',')
-        } else if (type === 'contentphoto' && self.photoarr1.length < self.maxnum1) {
-          self.photoarr1.push(data.data)
-          self.submitdata.contentphoto = self.photoarr1.join(',')
-        } else if (type === 'video') {
-          self.videoarr.push(data.data)
-          self.submitdata.video = self.videoarr.join(',')
+        if (this.clickPhotoIndex > -1) {
+          if (type === 'photo') {
+            self.photoarr[this.clickPhotoIndex] = data.data
+            let lastphoto = this.photoarr.splice(this.photoarr.length - 1, 1)
+            this.photoarr.push(lastphoto)
+            self.submitdata.photo = self.photoarr.join(',')
+          } else if (type === 'contentphoto') {
+            self.photoarr1[this.clickPhotoIndex] = data.data
+            let lastphoto = this.photoarr1.splice(this.photoarr1.length - 1, 1)
+            this.photoarr1.push(lastphoto)
+            self.submitdata.contentphoto = self.photoarr1.join(',')
+          } else if (type === 'video') {
+            self.videoarr[this.clickPhotoIndex] = data.data
+            let lastphoto = this.videoarr.splice(this.videoarr.length - 1, 1)
+            this.videoarr.push(lastphoto)
+            self.submitdata.video = self.videoarr.join(',')
+          }
+        } else {
+          if (type === 'photo' && self.photoarr.length < self.maxnum) {
+            self.photoarr.push(data.data)
+            self.submitdata.photo = self.photoarr.join(',')
+          } else if (type === 'contentphoto' && self.photoarr1.length < self.maxnum1) {
+            self.photoarr1.push(data.data)
+            self.submitdata.contentphoto = self.photoarr1.join(',')
+          } else if (type === 'video') {
+            self.videoarr.push(data.data)
+            self.submitdata.video = self.videoarr.join(',')
+          }
         }
       } else if (data.error) {
         self.$vux.toast.show({
@@ -653,9 +673,14 @@ export default {
         })
       }
     },
-    uploadPhoto (refname, type) {
+    uploadPhoto (refname, type, index) {
       const self = this
       const fileInput = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      if (index !== undefined && index !== 'undefined') {
+        this.clickPhotoIndex = index
+      } else {
+        this.clickPhotoIndex = -1
+      }
       if (self.$util.isPC() || type === 'video') {
         fileInput.click()
       } else {
@@ -701,31 +726,64 @@ export default {
     },
     fileMulChange (refname, type) {
       const self = this
+      const index = this.clickPhotoIndex
       const target = event.target
       const files = target.files
+      console.log('进入到了新的多选文件file的change事件中')
+      console.log(index)
       if (files.length > 0) {
         let filedata = new FormData()
         for (let i = 0; i < files.length; i++) {
           filedata.append(`files[${i}]`, files[i])
         }
         self.$vux.loading.show()
-        self.$http.post(`${ENV.BokaApi}/api/uploadFiles`, filedata).then(function (res) {
+        self.$http.post(`${ENV.BokaApi}/api/uploadFiles`, filedata).then(res => {
           self.$vux.loading.hide()
           let data = res.data
           if (data.flag === 1) {
             let retdata = data.data
-            if (type === 'photo' && self.photoarr.length < self.maxnum) {
-              let allowNum = self.maxnum - self.photoarr.length
-              let addNum = retdata.length > allowNum ? allowNum : retdata.length
-              let addData = retdata.slice(0, addNum)
-              self.photoarr = self.photoarr.concat(addData)
-              self.submitdata.photo = self.photoarr.join(',')
-            } else if (type === 'contentphoto' && self.photoarr1.length < self.maxnum1) {
-              let allowNum = self.maxnum1 - self.photoarr1.length
-              let addNum = retdata.length > allowNum ? allowNum : retdata.length
-              let addData = retdata.slice(0, addNum)
-              self.photoarr1 = self.photoarr1.concat(addData)
-              self.submitdata.contentphoto = self.photoarr1.join(',')
+            if (index > -1) {
+              console.log('进入到了编辑')
+              if (type === 'photo') {
+                let allowNum = self.maxnum - self.photoarr.length + 1
+                let addNum = retdata.length > allowNum ? allowNum : retdata.length
+                let addData = retdata.slice(0, addNum)
+                if (addData.length > 1) {
+                  self.photoarr.splice(index, 1, ...addData)
+                } else {
+                  self.photoarr[index] = addData[0]
+                  let lastphoto = self.photoarr.splice(self.photoarr.length - 1, 1)
+                  self.photoarr.push(lastphoto)
+                }
+                self.submitdata.photo = self.photoarr.join(',')
+              } else if (type === 'contentphoto') {
+                let allowNum = self.maxnum1 - self.photoarr1.length + 1
+                let addNum = retdata.length > allowNum ? allowNum : retdata.length
+                let addData = retdata.slice(0, addNum)
+                if (addData > 1) {
+                  self.photoarr1.splice(index, 1, ...addData)
+                } else {
+                  self.photoarr1[index] = addData[0]
+                  let lastphoto = self.photoarr1.splice(self.photoarr1.length - 1, 1)
+                  self.photoarr1.push(lastphoto)
+                }
+                self.submitdata.contentphoto = self.photoarr1.join(',')
+              }
+            } else {
+              console.log('进入到了上传')
+              if (type === 'photo' && self.photoarr.length < self.maxnum) {
+                let allowNum = self.maxnum - self.photoarr.length
+                let addNum = retdata.length > allowNum ? allowNum : retdata.length
+                let addData = retdata.slice(0, addNum)
+                self.photoarr = self.photoarr.concat(addData)
+                self.submitdata.photo = self.photoarr.join(',')
+              } else if (type === 'contentphoto' && self.photoarr1.length < self.maxnum1) {
+                let allowNum = self.maxnum1 - self.photoarr1.length
+                let addNum = retdata.length > allowNum ? allowNum : retdata.length
+                let addData = retdata.slice(0, addNum)
+                self.photoarr1 = self.photoarr1.concat(addData)
+                self.submitdata.contentphoto = self.photoarr1.join(',')
+              }
             }
           } else if (data.error) {
             self.$vux.toast.show({
