@@ -742,7 +742,7 @@ export default {
           self.$vux.toast.text('请输入商品价格', 'middle')
           return false
         }
-        if (self.$util.trim(postdata.profit) === '') {
+        if (self.$util.trim(postdata.profit) === '' && self.$util.trim(postdata.salesrebate) === '' && self.$util.trim(postdata.superrebate) === '') {
           self.$vux.toast.text('请输入商品利润', 'middle')
           return false
         }
