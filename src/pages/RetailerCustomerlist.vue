@@ -471,7 +471,7 @@ export default {
     },
     toCard (item) {
       if (this.query.from) {
-        this.$wechat.miniProgram.navigateTo({url: ENV.MiniRouter.addCard})
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.addCard}?uid=${item.uid}`})
       }
     },
     btnDetail (index) {
