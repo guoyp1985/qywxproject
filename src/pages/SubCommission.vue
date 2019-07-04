@@ -31,7 +31,7 @@
                 <div class="td flex_cell">{{$t("RMB")}}{{clickData.salesmoney}}</div>
               </div>
               <div class="tr">
-                <div class="td">累计订单数</div>
+                <div class="td">自己订单数</div>
                 <div class="td flex_cell">{{clickData.salescount}}单</div>
               </div>
               <div class="tr">
