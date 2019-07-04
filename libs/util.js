@@ -732,9 +732,7 @@ Util.install = function (Vue, options) {
     wxAddress: (callback) => {
       Vue.wechat.openAddress({
         success: res => {
-          Vue.toast.show({
-            text: JSON.stringify(res)
-          })
+          alert(JSON.stringify(res))
           if (res.errMsg === 'openAddress:ok') {
             let postData = {isdefault: 1}
             postData.province = res.provinceName
@@ -757,6 +755,7 @@ Util.install = function (Vue, options) {
           }
         },
         fail: res => {
+          alert(JSON.stringify(res))
           Vue.toast.show({
             text: '微信地址获取失败'
           })
