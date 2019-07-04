@@ -732,6 +732,9 @@ Util.install = function (Vue, options) {
     wxAddress: (callback) => {
       Vue.wechat.openAddress({
         success: res => {
+          Vue.toast.show({
+            text: JSON.stringify(res)
+          })
           if (res.errMsg === 'openAddress:ok') {
             let postData = {isdefault: 1}
             postData.province = res.provinceName
