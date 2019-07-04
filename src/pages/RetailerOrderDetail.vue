@@ -17,7 +17,16 @@
           <div style="height:10px;"></div>
         </div>
         <div class="bg-white b_bottom_after padding10">
-          <div class="flex_left" @click="toMemberView">买家：{{ data.username }}  累计消费：<span class="color-red">{{ $t('RMB') }}{{ data.summoney }}</span></div>
+          <template v-if="query.from">
+            <div class="flex_left" @click="toMemberView">买家：{{ data.username }}</div>
+            <div class="flex_left">
+              <div class="flex_cell flex_left" @click="toMemberView">累计消费：<span class="color-red">{{ $t('RMB') }}{{ data.summoney }}</span></div>
+              <div class="flex_right" v-if="query.from" style="width:120px;" @click="toCard">
+                <div class="bg-theme color-white align_center" style="width:110px;padding:5px 0;border-radius:30px;">生成专属优惠券</div>
+              </div>
+            </div>
+          </template>
+          <div v-else class="flex_left" @click="toMemberView">买家：{{ data.username }} 累计消费：<span class="color-red">{{ $t('RMB') }}{{ data.summoney }}</span></div>
         </div>
         <div v-if="data.flag != 0" class="bg-white b_bottom_after padding10">
           <div v-if="data.flag != 0 && data.flag != 1 && data.flag != 2" class="t-table mb10">
@@ -297,6 +306,11 @@ export default {
     toMemberView () {
       let params = this.$util.handleAppParams(this.query, {uid: this.data.uid})
       this.$router.push({path: '/membersView', query: params})
+    },
+    toCard (item) {
+      if (this.query.from) {
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.addCard}?uid=${this.data.uid}`})
+      }
     },
     textareaChange (refname) {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
