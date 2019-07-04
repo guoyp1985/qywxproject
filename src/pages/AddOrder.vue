@@ -684,7 +684,7 @@ export default {
   },
   activated () {
     this.refresh()
-    this.$util.wxConfig()
+    // this.$util.wxConfig()
     this.$util.miniPost()
   }
 }

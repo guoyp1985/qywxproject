@@ -1338,6 +1338,7 @@ export default {
   },
   activated () {
     this.refresh()
+    this.$util.wxConfig()
     this.$util.miniPost()
   }
   // beforeRouteLeave (to, from, next) {
