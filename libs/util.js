@@ -236,7 +236,7 @@ Util.install = function (Vue, options) {
     },
     wxConfig: function (callback) {
       Vue.http.get(`${ENV.BokaApi}/api/jsconfig`,
-        { params: { url: encodeURIComponent(location.href) } }
+        { params: { url: encodeURIComponent(location.href.split('#')[0]) } }
       ).then(res => {
         if (!res) return
         Vue.wechat.config(res.data)
