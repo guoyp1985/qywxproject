@@ -143,7 +143,7 @@
               <div class="t-table">
                 <div class="t-cell title-cell w80 font14 v_middle">销售佣金</div>
                 <div class="t-cell input-cell v_middle" style="position:relative;">
-                  <x-input v-model="submitdata.salesrebate" @keyup="priceChange('salesrebate')" maxlength="7" size="7" type="text" class="input priceInput" name="tb_price" placeholder="销售佣金" ></x-input>
+                  <x-input v-model="submitdata.salesrebate" @keyup="priceChange('salesrebate')" maxlength="7" size="7" type="text" class="input priceInput" name="salesrebate" placeholder="销售佣金" ></x-input>
                 </div>
                 <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
               </div>
@@ -152,7 +152,7 @@
               <div class="t-table">
                 <div class="t-cell title-cell w80 font14 v_middle">推荐人佣金</div>
                 <div class="t-cell input-cell v_middle" style="position:relative;">
-                  <x-input v-model="submitdata.superrebate" @keyup="priceChange('superrebate')" maxlength="7" size="7" type="text" class="input priceInput" name="jd_price" placeholder="推荐人佣金" ></x-input>
+                  <x-input v-model="submitdata.superrebate" @keyup="priceChange('superrebate')" maxlength="7" size="7" type="text" class="input priceInput" name="superrebate" placeholder="推荐人佣金" ></x-input>
                 </div>
                 <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
               </div>
