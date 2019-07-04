@@ -27,14 +27,26 @@
             <router-link class="article-author" :to="{ name: '', params: {} }">{{article.author}}</router-link>
           </div>
           <template v-if="showArticle">
-            <template v-if="article.uploader == reward.uid">
-              <div v-if="article.content == '' && !afterEdit" id="editor-content" class="article-content color-gray font16">
-                <p>文章内容为空，点击【编辑】按钮可修改内容哦！</p>
-              </div>
-              <div v-else id="editor-content" class="article-content" v-html="article.content"></div>
+            <template v-if="article.c_format == 'json'">
+              <template v-for="(item, index) in article.content">
+                <div v-if="item.content && item.content != ''" class="padding10">{{item.content}}</div>
+                <template v-for="(photo,index1) in item.photo" index="index1" item="photo">
+                  <div class="flex_center">
+                    <img :src="photo" style="max-width:100%;"/>
+                  </div>
+                </template>
+              </template>
             </template>
             <template v-else>
-              <div class="article-content" v-html="article.content"></div>
+              <template v-if="article.uploader == reward.uid">
+                <div v-if="article.content == '' && !afterEdit" id="editor-content" class="article-content color-gray font16">
+                  <p>文章内容为空，点击【编辑】按钮可修改内容哦！</p>
+                </div>
+                <div v-else id="editor-content" class="article-content" v-html="article.content"></div>
+              </template>
+              <template v-else>
+                <div class="article-content" v-html="article.content"></div>
+              </template>
             </template>
           </template>
           <div class="reading-info">
