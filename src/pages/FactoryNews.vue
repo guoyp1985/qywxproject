@@ -27,6 +27,20 @@
             <router-link class="article-author" :to="{ name: '', params: {} }">{{article.author}}</router-link>
           </div>
           <template v-if="showArticle">
+            <video
+              v-if="article.video && article.video != ''"
+              ref="newsVideo"
+              :src="article.video"
+              controls
+              autoplay="true"
+              webkit-playsinline=""
+              playsinline="true"
+              x-webkit-airplay="true"
+              raw-controls=""
+              x5-video-player-type="h5"
+              x5-video-player-fullscreen="true"
+              x5-video-orientation="portrait">
+            </video>
             <template v-if="article.c_format == 'json'">
               <template v-for="(item, index) in article.content">
                 <div v-if="item.content && item.content != ''" class="padding10">{{item.content}}</div>
