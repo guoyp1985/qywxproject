@@ -78,7 +78,7 @@
                   <div class="inner photo imgcover" :photo="item" style="border:#ccc 1px solid;">
                     <div class="flex_center" style="position:absolute;left:0;top:0;bottom:0;right:0;">
                       <i class="al al-ai-video"></i>
-                      <div class="close" @click="deletephoto(item,index,'video')">×</div>
+                      <div class="close" @click="deletePhoto(item,index,'video')">×</div>
                     </div>
                   </div>
                 </div>
