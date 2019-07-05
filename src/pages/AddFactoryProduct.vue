@@ -534,8 +534,9 @@ export default {
               if (data.flag) {
                 this.optionsData.splice(index, 1)
                 this.optionsPhoto.splice(index, 1)
-                let leftStorage = parseInt(this.submitdata.storage) - parseInt(deleteOptions.storage)
-                this.submitdata.storage = leftStorage < 0 ? 0 : leftStorage
+                if (!this.optionsData.length) {
+                  this.submitdata.storage = 0
+                }
               }
             })
           } else {
