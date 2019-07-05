@@ -63,6 +63,23 @@
             </div>
           </div>
         </div>
+        <group label-width="5em">
+          <group class="textarea-outer">
+            <x-textarea
+              ref="videoTextarea"
+              v-model="submitdata.video"
+              title="视频链接"
+              class="x-textarea noborder"
+              placeholder="视频链接"
+              :show-counter="false"
+              :rows="1"
+              :max="30"
+              @on-change="textareaChange('videoTextarea')"
+              @on-focus="textareaFocus('videoTextarea')"
+              autosize>
+            </x-textarea>
+          </group>
+        </group>
         <group class="option-area" label-width="6em">
           <x-textarea
             ref="descTextarea"
@@ -119,11 +136,12 @@ export default {
       photoarr: [],
       maxnum: 1,
       havenum: 0,
-      submitdata: {classid: 0, title: '', photo: '', seodescription: '', summary: ''},
+      submitdata: {classid: 0, title: '', photo: '', video: '', seodescription: '', summary: ''},
       requireddata: {title: '', 'photo': ''},
       submitIng: false,
       classData: [],
-      Fid: 0
+      Fid: 0,
+      videoarr: []
     }
   },
   computed: {
