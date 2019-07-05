@@ -130,7 +130,8 @@ export default {
       showRefundModal: false,
       refundContent: '',
       clickOrder: {},
-      clickIndex: 0
+      clickIndex: 0,
+      pageTop: 0
     }
   },
   computed: {
@@ -154,19 +155,19 @@ export default {
   },
   methods: {
     initData () {
-      this.selectedIndex = 0
-      this.distabdata1 = false
-      this.distabdata2 = false
-      this.distabdata3 = false
-      this.distabdata4 = false
-      this.tabdata1 = []
-      this.tabdata2 = []
-      this.tabdata3 = []
-      this.tabdata4 = []
-      this.pagestart1 = 1
-      this.pagestart2 = 1
-      this.pagestart3 = 1
-      this.pagestart4 = 1
+      // this.selectedIndex = 0
+      // this.distabdata1 = false
+      // this.distabdata2 = false
+      // this.distabdata3 = false
+      // this.distabdata4 = false
+      // this.tabdata1 = []
+      // this.tabdata2 = []
+      // this.tabdata3 = []
+      // this.tabdata4 = []
+      // this.pagestart1 = 1
+      // this.pagestart2 = 1
+      // this.pagestart3 = 1
+      // this.pagestart4 = 1
       this.showRefundModal = false
       this.refundContent = ''
       this.clickOrder = {}
@@ -487,33 +488,57 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.initData()
-      // if ((this.query.flag === undefined && this.$route.query.flag === undefined) || this.query.flag !== this.$route.query.flag) {
       this.query = this.$route.query
       let flag = parseInt(this.query.flag)
       switch (flag) {
         case 2:
-          this.selectedIndex = 1
+          if (!this.tabdata1.length) {
+            this.selectedIndex = 1
+            this.toggleTab()
+          }
           break
         case 3:
-          this.selectedIndex = 2
+          if (!this.tabdata2.length) {
+            this.selectedIndex = 2
+            this.toggleTab()
+          }
           break
         case 4:
-          this.selectedIndex = 3
+          if (!this.tabdata3.length) {
+            this.selectedIndex = 3
+            this.toggleTab()
+          }
           break
         default :
-          this.selectedIndex = 0
+          if (!this.tabdata4.length) {
+            this.selectedIndex = 0
+            this.toggleTab()
+          }
           break
       }
-      this.toggleTab()
-      // }
     }
   },
   created () {
     this.init()
   },
   activated () {
+    if (this.$refs.scrollContainer) {
+      this.$refs.scrollContainer.scrollTop = this.pageTop
+    }
+    if (document.querySelector('.vux-tab')) {
+      document.querySelector('.vux-tab').scrollLeft = this.tabLeft
+    }
     this.refresh()
     this.$util.miniPost()
+  },
+  beforeRouteLeave (to, from, next) {
+    if (this.$refs.scrollContainer) {
+      this.pageTop = this.$refs.scrollContainer.scrollTop
+    }
+    if (document.querySelector('.vux-tab')) {
+      this.tabLeft = document.querySelector('.vux-tab').scrollLeft
+    }
+    next()
   }
 }
 </script>

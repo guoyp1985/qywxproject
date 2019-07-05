@@ -871,23 +871,23 @@ export default {
           this.showContainer = true
           this.query = this.$route.query
           if (this.query.flag === '1') {
-            this.selectedIndex = 1
             if (!this.tabdata2.length) {
+              this.selectedIndex = 1
               this.swiperChange()
             }
           } else if (this.query.flag === '2') {
-            this.selectedIndex = 2
             if (!this.tabdata3.length) {
+              this.selectedIndex = 2
               this.swiperChange()
             }
           } else if (this.query.flag === '3') {
-            this.selectedIndex = 3
             if (!this.tabdata4.length) {
+              this.selectedIndex = 3
               this.swiperChange()
             }
           } else {
-            this.selectedIndex = 0
             if (!this.tabdata1.length) {
+              this.selectedIndex = 0
               this.swiperChange()
             }
           }
