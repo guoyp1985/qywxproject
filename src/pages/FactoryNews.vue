@@ -28,6 +28,7 @@
           </div>
           <template v-if="showArticle">
             <video
+              style="max-width:100%;"
               v-if="article.video && article.video != ''"
               ref="newsVideo"
               :src="article.video"
