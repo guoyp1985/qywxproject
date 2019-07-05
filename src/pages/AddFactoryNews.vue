@@ -25,8 +25,8 @@
               class="x-textarea noborder"
               :placeholder="`${$t('Necessary')}${$t('Title')}`"
               :show-counter="false"
-              :rows="3"
-              :max="200"
+              :rows="1"
+              :max="30"
               @on-change="textareaChange('titleTextarea')"
               @on-focus="textareaFocus('titleTextarea')"
               autosize>
@@ -72,8 +72,8 @@
               class="x-textarea noborder"
               placeholder="视频链接"
               :show-counter="false"
-              :rows="1"
-              :max="30"
+              :rows="3"
+              :max="200"
               @on-change="textareaChange('videoTextarea')"
               @on-focus="textareaFocus('videoTextarea')"
               autosize>
