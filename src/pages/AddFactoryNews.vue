@@ -248,9 +248,14 @@ export default {
         this.cutImg = item
       }
     },
-    deletePhoto (item, index) {
-      this.photoarr.splice(index, 1)
-      this.submitdata.photo = this.photoarr.join(',')
+    deletePhoto (item, index, type) {
+      if (type === 'video') {
+        this.videoarr = []
+        this.submitdata.video = ''
+      } else {
+        this.photoarr.splice(index, 1)
+        this.submitdata.photo = this.photoarr.join(',')
+      }
     },
     save () {
       const self = this
