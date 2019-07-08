@@ -227,7 +227,7 @@
   </div>
 </template>
 <script>
-import {  , Cell, Sticky, XDialog, TransferDom, Popup, XImg, XTextarea, XButton, XInput } from 'vux'
+import { Group, Cell, Sticky, XDialog, TransferDom, Popup, XImg, XTextarea, XButton, XInput } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
