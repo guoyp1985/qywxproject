@@ -27,14 +27,41 @@
             <router-link class="article-author" :to="{ name: '', params: {} }">{{article.author}}</router-link>
           </div>
           <template v-if="showArticle">
-            <template v-if="article.uploader == reward.uid">
-              <div v-if="article.content == '' && !afterEdit" id="editor-content" class="article-content color-gray font16">
-                <p>文章内容为空，点击【编辑】按钮可修改内容哦！</p>
-              </div>
-              <div v-else id="editor-content" class="article-content" v-html="article.content"></div>
+            <video
+              style="max-width:100%;"
+              v-if="article.video && article.video != ''"
+              ref="newsVideo"
+              :src="article.video"
+              controls
+              autoplay="true"
+              webkit-playsinline=""
+              playsinline="true"
+              x-webkit-airplay="true"
+              raw-controls=""
+              x5-video-player-type="h5"
+              x5-video-player-fullscreen="true"
+              x5-video-orientation="portrait">
+            </video>
+            <template v-if="article.c_format == 'json'">
+              <template v-for="(item, index) in article.content">
+                <div v-if="item.content && item.content != ''" class="padding10">{{item.content}}</div>
+                <template v-for="(photo,index1) in item.photo" index="index1" item="photo">
+                  <div class="flex_center">
+                    <img :src="photo" style="max-width:100%;"/>
+                  </div>
+                </template>
+              </template>
             </template>
             <template v-else>
-              <div class="article-content" v-html="article.content"></div>
+              <template v-if="article.uploader == reward.uid">
+                <div v-if="article.content == '' && !afterEdit" id="editor-content" class="article-content color-gray font16">
+                  <p>文章内容为空，点击【编辑】按钮可修改内容哦！</p>
+                </div>
+                <div v-else id="editor-content" class="article-content" v-html="article.content"></div>
+              </template>
+              <template v-else>
+                <div class="article-content" v-html="article.content"></div>
+              </template>
             </template>
           </template>
           <div class="reading-info">
@@ -57,7 +84,7 @@
         :module="module"
         :on-close="closeShareSuccess">
       </share-success>
-      <editor v-if="reward.uid == article.uploader && showEditor" elem="#editor-content" module="factorynews" :loginUser="loginUser" :query="query" @on-edit="clickEdit" @on-auto-save="autoSave" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
+      <editor v-if="reward.uid == article.uploader && showEditor && article.c_format != 'json'" elem="#editor-content" module="factorynews" :loginUser="loginUser" :query="query" @on-edit="clickEdit" @on-auto-save="autoSave" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
       <div v-transfer-dom class="x-popup">
         <popup v-model="showSubscribe" height="100%">
           <div class="popup1">

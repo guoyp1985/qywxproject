@@ -236,7 +236,7 @@ Util.install = function (Vue, options) {
     },
     wxConfig: function (callback) {
       Vue.http.get(`${ENV.BokaApi}/api/jsconfig`,
-        { params: { url: encodeURIComponent(location.href) } }
+        { params: { url: encodeURIComponent(location.href.split('#')[0]) } }
       ).then(res => {
         if (!res) return
         Vue.wechat.config(res.data)
@@ -732,6 +732,7 @@ Util.install = function (Vue, options) {
     wxAddress: (callback) => {
       Vue.wechat.openAddress({
         success: res => {
+          // alert('22' + JSON.stringify(res))
           if (res.errMsg === 'openAddress:ok') {
             let postData = {isdefault: 1}
             postData.province = res.provinceName
@@ -754,6 +755,7 @@ Util.install = function (Vue, options) {
           }
         },
         fail: res => {
+          // alert('11' + JSON.stringify(res))
           Vue.toast.show({
             text: '微信地址获取失败'
           })

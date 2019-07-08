@@ -146,8 +146,8 @@
             </div>
             <div class="popup-bottom flex_center">
               <div class="h_100 flex_center bg-gray color-white w80" @click="closepopup">{{ $t('Close') }}</div>
-              <router-link :to="{ path: '/newAddress', query: {lasturl: `/addOrder?id=${query.id}`} }" class="flex_cell h_100 flex_center bg-red color-white">新建地址</router-link>
-              <div class="flex_cell h_100 flex_center bg-green color-white" @click="clickWxAddress">使用微信地址</div>
+              <div @click="toNewAddress" class="flex_cell h_100 flex_center bg-red color-white">新建地址</div>
+              <div v-if="!query.from" class="flex_cell h_100 flex_center bg-green color-white" @click="clickWxAddress">使用微信地址</div>
             </div>
           </div>
         </popup>
@@ -353,6 +353,15 @@ export default {
       this.buyType = 'online'
       this.onlineVal = true
       this.offlineVal = false
+    },
+    toNewAddress () {
+      let parr = []
+      for (let key in this.query) {
+        parr.push(`${key}=${this.query[key]}`)
+      }
+      let pstr = parr.join('&')
+      let params = this.$util.handleAppParams(this.query, {lasturl: `/addOrder?${pstr}`})
+      this.$router.push({path: '/newAddress', query: params})
     },
     setBuy (val) {
       let total = parseFloat(this.payPrice)
@@ -621,19 +630,21 @@ export default {
               self.addressdata = retdata
               self.handleAddress()
             } else {
-              this.$wechat.ready(() => {
-                this.$vux.confirm.show({
-                  content: '是否使用微信地址？',
-                  onConfirm: () => {
-                    this.$util.wxAddress((data1, newData) => {
-                      if (data1.flag) {
-                        this.addressdata.push(newData)
-                        this.handleAddress()
-                      }
-                    })
-                  }
+              if (!this.query.from) {
+                this.$wechat.ready(() => {
+                  this.$vux.confirm.show({
+                    content: '是否使用微信地址？',
+                    onConfirm: () => {
+                      this.$util.wxAddress((data1, newData) => {
+                        if (data1.flag) {
+                          this.addressdata.push(newData)
+                          this.handleAddress()
+                        }
+                      })
+                    }
+                  })
                 })
-              })
+              }
             }
           }
           return self.$http.post(`${ENV.BokaApi}/api/card/canUse`, {

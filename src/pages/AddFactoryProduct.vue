@@ -26,8 +26,10 @@
               <div class="q_photolist align_left">
                 <template v-if="photoarr.length > 0">
                   <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
-                    <div class="inner photo" :photo="item" :style="`background-image: url('${item}');`">
+                    <div class="inner photo" :photo="item" :style="`background-image: url('${item}');`" @click="uploadPhoto('fileInput','photo',index)">
                       <div class="close" @click="deletephoto(item,index,'photo')">×</div>
+                      <div class="move-ico prev" v-if="index > 0" @click.stop="movePhoto('photo',index,'prev')"><span class="al al-qianyi"></span></div>
+                      <div class="move-ico next" v-if="photoarr.length > 1 && index < photoarr.length - 1" @click.stop="movePhoto('photo',index,'next')"><span class="al al-houyi"></span></div>
                     </div>
                   </div>
                 </template>
@@ -143,7 +145,7 @@
               <div class="t-table">
                 <div class="t-cell title-cell w80 font14 v_middle">销售佣金</div>
                 <div class="t-cell input-cell v_middle" style="position:relative;">
-                  <x-input v-model="submitdata.salesrebate" @keyup="priceChange('salesrebate')" maxlength="7" size="7" type="text" class="input priceInput" name="tb_price" placeholder="销售佣金" ></x-input>
+                  <x-input v-model="submitdata.salesrebate" @keyup="priceChange('salesrebate')" maxlength="7" size="7" type="text" class="input priceInput" name="salesrebate" placeholder="销售佣金" ></x-input>
                 </div>
                 <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
               </div>
@@ -152,7 +154,7 @@
               <div class="t-table">
                 <div class="t-cell title-cell w80 font14 v_middle">推荐人佣金</div>
                 <div class="t-cell input-cell v_middle" style="position:relative;">
-                  <x-input v-model="submitdata.superrebate" @keyup="priceChange('superrebate')" maxlength="7" size="7" type="text" class="input priceInput" name="jd_price" placeholder="推荐人佣金" ></x-input>
+                  <x-input v-model="submitdata.superrebate" @keyup="priceChange('superrebate')" maxlength="7" size="7" type="text" class="input priceInput" name="superrebate" placeholder="推荐人佣金" ></x-input>
                 </div>
                 <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
               </div>
@@ -263,8 +265,10 @@
             <div class="q_photolist align_left bg-white">
               <template v-if="photoarr1.length > 0">
                 <div v-for="(item,index) in photoarr1" :key="index" class="photoitem">
-                  <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
+                  <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`" @click="uploadPhoto('fileInput1','contentphoto',index)">
                     <div class="close" @click="deletephoto(item,index,'contentphoto')">×</div>
+                    <div class="move-ico prev" v-if="index > 0" @click.stop="movePhoto('content',index,'prev')"><span class="al al-qianyi"></span></div>
+                    <div class="move-ico next" v-if="photoarr1.length > 1 && index < photoarr1.length - 1" @click.stop="movePhoto('content',index,'next')"><span class="al al-houyi"></span></div>
                   </div>
                 </div>
               </template>
@@ -421,7 +425,8 @@ export default {
       // optionsData: [{title: '', photo: '', storage: ''}],
       optionsData: [],
       selectedOptionIndex: 0,
-      optionsPhoto: []
+      optionsPhoto: [],
+      clickPhotoIndex: -1
     }
   },
   watch: {
@@ -480,6 +485,31 @@ export default {
       this.selectedOptionIndex = 0
       this.optionsPhoto = []
     },
+    movePhoto (type, index, move) {
+      let moveindex
+      let curphoto = ''
+      let movephoto = ''
+      if (move === 'prev') {
+        moveindex = index - 1
+      } else {
+        moveindex = index + 1
+      }
+      if (type === 'photo') {
+        curphoto = this.photoarr[index]
+        movephoto = this.photoarr[moveindex]
+        this.photoarr[index] = movephoto
+        this.photoarr[moveindex] = curphoto
+        let lastphoto = this.photoarr.splice(this.photoarr.length - 1, 1)
+        this.photoarr.push(lastphoto)
+      } else {
+        curphoto = this.photoarr1[index]
+        movephoto = this.photoarr1[moveindex]
+        this.photoarr1[index] = movephoto
+        this.photoarr1[moveindex] = curphoto
+        let lastphoto = this.photoarr1.splice(this.photoarr1.length - 1, 1)
+        this.photoarr1.push(lastphoto)
+      }
+    },
     addOption () {
       this.optionsData.push({})
     },
@@ -504,8 +534,9 @@ export default {
               if (data.flag) {
                 this.optionsData.splice(index, 1)
                 this.optionsPhoto.splice(index, 1)
-                let leftStorage = parseInt(this.submitdata.storage) - parseInt(deleteOptions.storage)
-                this.submitdata.storage = leftStorage < 0 ? 0 : leftStorage
+                if (!this.optionsData.length) {
+                  this.submitdata.storage = 0
+                }
               }
             })
           } else {
@@ -607,15 +638,34 @@ export default {
     photoCallback (data, type) {
       const self = this
       if (data.flag === 1) {
-        if (type === 'photo' && self.photoarr.length < self.maxnum) {
-          self.photoarr.push(data.data)
-          self.submitdata.photo = self.photoarr.join(',')
-        } else if (type === 'contentphoto' && self.photoarr1.length < self.maxnum1) {
-          self.photoarr1.push(data.data)
-          self.submitdata.contentphoto = self.photoarr1.join(',')
-        } else if (type === 'video') {
-          self.videoarr.push(data.data)
-          self.submitdata.video = self.videoarr.join(',')
+        if (this.clickPhotoIndex > -1) {
+          if (type === 'photo') {
+            self.photoarr[this.clickPhotoIndex] = data.data
+            let lastphoto = this.photoarr.splice(this.photoarr.length - 1, 1)
+            this.photoarr.push(lastphoto)
+            self.submitdata.photo = self.photoarr.join(',')
+          } else if (type === 'contentphoto') {
+            self.photoarr1[this.clickPhotoIndex] = data.data
+            let lastphoto = this.photoarr1.splice(this.photoarr1.length - 1, 1)
+            this.photoarr1.push(lastphoto)
+            self.submitdata.contentphoto = self.photoarr1.join(',')
+          } else if (type === 'video') {
+            self.videoarr[this.clickPhotoIndex] = data.data
+            let lastphoto = this.videoarr.splice(this.videoarr.length - 1, 1)
+            this.videoarr.push(lastphoto)
+            self.submitdata.video = self.videoarr.join(',')
+          }
+        } else {
+          if (type === 'photo' && self.photoarr.length < self.maxnum) {
+            self.photoarr.push(data.data)
+            self.submitdata.photo = self.photoarr.join(',')
+          } else if (type === 'contentphoto' && self.photoarr1.length < self.maxnum1) {
+            self.photoarr1.push(data.data)
+            self.submitdata.contentphoto = self.photoarr1.join(',')
+          } else if (type === 'video') {
+            self.videoarr.push(data.data)
+            self.submitdata.video = self.videoarr.join(',')
+          }
         }
       } else if (data.error) {
         self.$vux.toast.show({
@@ -624,9 +674,14 @@ export default {
         })
       }
     },
-    uploadPhoto (refname, type) {
+    uploadPhoto (refname, type, index) {
       const self = this
       const fileInput = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      if (index !== undefined && index !== 'undefined') {
+        this.clickPhotoIndex = index
+      } else {
+        this.clickPhotoIndex = -1
+      }
       if (self.$util.isPC() || type === 'video') {
         fileInput.click()
       } else {
@@ -672,31 +727,64 @@ export default {
     },
     fileMulChange (refname, type) {
       const self = this
+      const index = this.clickPhotoIndex
       const target = event.target
       const files = target.files
+      console.log('进入到了新的多选文件file的change事件中')
+      console.log(index)
       if (files.length > 0) {
         let filedata = new FormData()
         for (let i = 0; i < files.length; i++) {
           filedata.append(`files[${i}]`, files[i])
         }
         self.$vux.loading.show()
-        self.$http.post(`${ENV.BokaApi}/api/uploadFiles`, filedata).then(function (res) {
+        self.$http.post(`${ENV.BokaApi}/api/uploadFiles`, filedata).then(res => {
           self.$vux.loading.hide()
           let data = res.data
           if (data.flag === 1) {
             let retdata = data.data
-            if (type === 'photo' && self.photoarr.length < self.maxnum) {
-              let allowNum = self.maxnum - self.photoarr.length
-              let addNum = retdata.length > allowNum ? allowNum : retdata.length
-              let addData = retdata.slice(0, addNum)
-              self.photoarr = self.photoarr.concat(addData)
-              self.submitdata.photo = self.photoarr.join(',')
-            } else if (type === 'contentphoto' && self.photoarr1.length < self.maxnum1) {
-              let allowNum = self.maxnum1 - self.photoarr1.length
-              let addNum = retdata.length > allowNum ? allowNum : retdata.length
-              let addData = retdata.slice(0, addNum)
-              self.photoarr1 = self.photoarr1.concat(addData)
-              self.submitdata.contentphoto = self.photoarr1.join(',')
+            if (index > -1) {
+              console.log('进入到了编辑')
+              if (type === 'photo') {
+                let allowNum = self.maxnum - self.photoarr.length + 1
+                let addNum = retdata.length > allowNum ? allowNum : retdata.length
+                let addData = retdata.slice(0, addNum)
+                if (addData.length > 1) {
+                  self.photoarr.splice(index, 1, ...addData)
+                } else {
+                  self.photoarr[index] = addData[0]
+                  let lastphoto = self.photoarr.splice(self.photoarr.length - 1, 1)
+                  self.photoarr.push(lastphoto)
+                }
+                self.submitdata.photo = self.photoarr.join(',')
+              } else if (type === 'contentphoto') {
+                let allowNum = self.maxnum1 - self.photoarr1.length + 1
+                let addNum = retdata.length > allowNum ? allowNum : retdata.length
+                let addData = retdata.slice(0, addNum)
+                if (addData > 1) {
+                  self.photoarr1.splice(index, 1, ...addData)
+                } else {
+                  self.photoarr1[index] = addData[0]
+                  let lastphoto = self.photoarr1.splice(self.photoarr1.length - 1, 1)
+                  self.photoarr1.push(lastphoto)
+                }
+                self.submitdata.contentphoto = self.photoarr1.join(',')
+              }
+            } else {
+              console.log('进入到了上传')
+              if (type === 'photo' && self.photoarr.length < self.maxnum) {
+                let allowNum = self.maxnum - self.photoarr.length
+                let addNum = retdata.length > allowNum ? allowNum : retdata.length
+                let addData = retdata.slice(0, addNum)
+                self.photoarr = self.photoarr.concat(addData)
+                self.submitdata.photo = self.photoarr.join(',')
+              } else if (type === 'contentphoto' && self.photoarr1.length < self.maxnum1) {
+                let allowNum = self.maxnum1 - self.photoarr1.length
+                let addNum = retdata.length > allowNum ? allowNum : retdata.length
+                let addData = retdata.slice(0, addNum)
+                self.photoarr1 = self.photoarr1.concat(addData)
+                self.submitdata.contentphoto = self.photoarr1.join(',')
+              }
             }
           } else if (data.error) {
             self.$vux.toast.show({
@@ -742,7 +830,7 @@ export default {
           self.$vux.toast.text('请输入商品价格', 'middle')
           return false
         }
-        if (self.$util.trim(postdata.profit) === '') {
+        if (self.$util.trim(postdata.profit) === '' && self.$util.trim(postdata.salesrebate) === '' && self.$util.trim(postdata.superrebate) === '') {
           self.$vux.toast.text('请输入商品利润', 'middle')
           return false
         }
@@ -790,17 +878,40 @@ export default {
           })
           return false
         }
-        if (self.$util.trim(salesrebate) !== '' && (isNaN(salesrebate) || parseFloat(salesrebate) < 0)) {
-          self.$vux.alert.show({
-            title: '',
-            content: '请输入正确的销售佣金'
-          })
-          return false
+        if (self.$util.trim(salesrebate) !== '') {
+          if (isNaN(salesrebate) || parseFloat(salesrebate) < 0) {
+            self.$vux.alert.show({
+              title: '',
+              content: '请输入正确的销售佣金'
+            })
+            return false
+          } else if (parseFloat(salesrebate) > price) {
+            self.$vux.alert.show({
+              title: '',
+              content: '销售佣金不能大于商品现价'
+            })
+            return false
+          }
         }
-        if (self.$util.trim(superrebate) !== '' && (isNaN(superrebate) || parseFloat(superrebate) < 0)) {
+        if (self.$util.trim(superrebate) !== '') {
+          if (isNaN(superrebate) || parseFloat(superrebate) < 0) {
+            self.$vux.alert.show({
+              title: '',
+              content: '请输入正确的推荐人佣金'
+            })
+            return false
+          } else if (parseFloat(superrebate) > price) {
+            self.$vux.alert.show({
+              title: '',
+              content: '推荐人佣金不能大于商品现价'
+            })
+            return false
+          }
+        }
+        if (self.$util.trim(salesrebate) !== '' && self.$util.trim(superrebate) !== '' && parseFloat(salesrebate) + parseFloat(superrebate) > price) {
           self.$vux.alert.show({
             title: '',
-            content: '请输入正确的推荐人佣金'
+            content: '销售佣金+推荐人佣金不能大于商品现价'
           })
           return false
         }

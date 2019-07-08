@@ -39,7 +39,7 @@
         <div class="img-operate-area">
           <input v-model="submitdata.photo" type="hidden" name="photo" />
           <form enctype="multipart/form-data">
-            <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange" />
+            <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange('fileInput')" />
           </form>
           <div class="q_photolist align_left">
             <template v-if="photoarr.length > 0">
@@ -63,6 +63,46 @@
             </div>
           </div>
         </div>
+        <div class="form-item bg-white">
+          <div class="t-table">
+            <div class="t-cell title-cell w80 font14 v_middle">视频</div>
+            <div class="t-cell input-cell v_middle" style="position:relative;">
+              <div class="q_photolist align_left" style="overflow:hidden;">
+                <form ref="videoForm" class="db" enctype="multipart/form-data" v-if="videoarr.length == 0">
+                  <div class="button_video flex_center">
+                    <i class="al al-ai-video color-white"></i>
+                    <input ref="videoInput" type="file" name="files" @change="fileChange('videoForm', 'video')" />
+                  </div>
+                </form>
+                <div v-else v-for="(item,index) in videoarr" :key="index" class="videoitem photoitem">
+                  <div class="inner photo imgcover" :photo="item" style="border:#ccc 1px solid;">
+                    <div class="flex_center" style="position:absolute;left:0;top:0;bottom:0;right:0;">
+                      <i class="al al-ai-video"></i>
+                      <div class="close" @click="deletePhoto(item,index,'video')">×</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- <group label-width="5em">
+          <group class="textarea-outer">
+            <x-textarea
+              ref="videoTextarea"
+              v-model="submitdata.video"
+              title="视频链接"
+              class="x-textarea noborder"
+              placeholder="视频链接"
+              :show-counter="false"
+              :rows="3"
+              :max="200"
+              @on-change="textareaChange('videoTextarea')"
+              @on-focus="textareaFocus('videoTextarea')"
+              autosize>
+            </x-textarea>
+          </group>
+        </group> -->
         <group class="option-area" label-width="6em">
           <x-textarea
             ref="descTextarea"
@@ -119,11 +159,12 @@ export default {
       photoarr: [],
       maxnum: 1,
       havenum: 0,
-      submitdata: {classid: 0, title: '', photo: '', seodescription: '', summary: ''},
+      submitdata: {classid: 0, title: '', photo: '', video: '', seodescription: '', summary: ''},
       requireddata: {title: '', 'photo': ''},
       submitIng: false,
       classData: [],
-      Fid: 0
+      Fid: 0,
+      videoarr: []
     }
   },
   computed: {
@@ -146,11 +187,16 @@ export default {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
       curArea.updateAutosize()
     },
-    photoCallback (data) {
+    photoCallback (data, type) {
       const self = this
       if (data.flag === 1) {
-        self.photoarr.push(data.data)
-        self.submitdata.photo = self.photoarr.join(',')
+        if (type === 'video') {
+          self.videoarr.push(data.data)
+          self.submitdata.video = self.videoarr.join(',')
+        } else {
+          self.photoarr.push(data.data)
+          self.submitdata.photo = self.photoarr.join(',')
+        }
       } else if (data.error) {
         self.$vux.toast.show({
           text: data.error,
@@ -175,17 +221,21 @@ export default {
         })
       }
     },
-    fileChange (e) {
+    fileChange (refname, type, index) {
       const self = this
-      let files = e.target.files
+      const target = event.target
+      const files = target.files
       if (files.length > 0) {
-        const fileForm = e.target.parentNode
+        let fileForm = target.parentNode
+        if (type === 'video') {
+          fileForm = target.parentNode.parentNode
+        }
         const filedata = new FormData(fileForm)
         self.$vux.loading.show()
-        self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
-          let data = res.data
+        self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(res => {
           self.$vux.loading.hide()
-          self.photoCallback(data)
+          let data = res.data
+          self.photoCallback(data, type)
         })
       }
     },
@@ -198,9 +248,14 @@ export default {
         this.cutImg = item
       }
     },
-    deletePhoto (item, index) {
-      this.photoarr.splice(index, 1)
-      this.submitdata.photo = this.photoarr.join(',')
+    deletePhoto (item, index, type) {
+      if (type === 'video') {
+        this.videoarr = []
+        this.submitdata.video = ''
+      } else {
+        this.photoarr.splice(index, 1)
+        this.submitdata.photo = this.photoarr.join(',')
+      }
     },
     save () {
       const self = this
@@ -272,10 +327,12 @@ export default {
         document.title = '更多设置'
         this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
           params: { id: this.query.id, module: 'factorynews' }
-        })
-        .then(function (res) {
+        }).then(function (res) {
           const data = res.data
           const retdata = data.data ? data.data : data
+          if (retdata.video && retdata.video !== '') {
+            self.videoarr = [retdata.video]
+          }
           if (retdata) {
             for (let key in self.submitdata) {
               self.submitdata[key] = retdata[key]
@@ -396,4 +453,17 @@ export default {
   padding: 10px;
 }
 .x-textarea .weui-label{font-size:14px;}
+.button_video{
+  position:relative;
+  width:60px;
+  height:60px;
+  background-color:#ea3a3a;
+  border-radius:50%;
+  overflow:hidden;
+}
+.button_video input{
+  position:absolute;
+  left:0;top:0;right:0;bottom:0;
+  opacity:0;
+}
 </style>
