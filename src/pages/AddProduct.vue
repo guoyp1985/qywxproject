@@ -107,7 +107,7 @@
               <div class="t-table">
                 <div class="t-cell title-cell w80 font14 v_middle">猫价</div>
                 <div class="t-cell input-cell v_middle" style="position:relative;">
-                  <x-input v-model="submitdata.tb_price" @keyup="priceChange('tb_price')" maxlength="9" size="9" type="text" class="input priceInput" name="tb_price" placeholder="天猫价" ></x-input>
+                  <x-input v-model="submitdata.tb_price" @keyup="priceChange('tb_price')" maxlength="9" size="9" type="text" class="input priceInput" name="tb_price" placeholder="猫价" ></x-input>
                 </div>
                 <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
               </div>
@@ -116,7 +116,7 @@
               <div class="t-table">
                 <div class="t-cell title-cell w80 font14 v_middle">狗价</div>
                 <div class="t-cell input-cell v_middle" style="position:relative;">
-                  <x-input v-model="submitdata.jd_price" @keyup="priceChange('jd_price')" maxlength="9" size="9" type="text" class="input priceInput" name="jd_price" placeholder="京东价" ></x-input>
+                  <x-input v-model="submitdata.jd_price" @keyup="priceChange('jd_price')" maxlength="9" size="9" type="text" class="input priceInput" name="jd_price" placeholder="狗价" ></x-input>
                 </div>
                 <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
               </div>
