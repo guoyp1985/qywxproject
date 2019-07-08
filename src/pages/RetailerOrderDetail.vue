@@ -298,7 +298,7 @@ export default {
       if (this.query.fromapp === 'factory') {
         this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&module=product`})
       } else if (this.query.from) {
-        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&wid=${item.wid}`})
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&wid=${item.wid}&module=product`})
       } else {
         this.$router.push({path: '/product', query: {id: item.pid, wid: item.wid}})
       }
