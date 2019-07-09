@@ -158,6 +158,10 @@ export default {
     retailerInfo: {
       type: Object,
       default: {}
+    },
+    fid: {
+      type: Number,
+      default: 0
     }
   },
   data () {
@@ -188,7 +192,7 @@ export default {
     },
     toCreate (type) {
       const self = this
-      if (self.retailerInfo.buyonline !== 1) {
+      if (self.retailerInfo.buyonline !== 1 && !this.fid) {
         self.$vux.alert.show({
           title: '',
           content: '线下支付模式无法创建活动，请到设置中修改支付方式再来创建！'

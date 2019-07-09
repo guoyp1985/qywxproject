@@ -22,7 +22,7 @@
       </div>
       <template v-else>
         <template v-if="showCenter">
-          <center-factory :factory-info="factoryInfo" :endTime="endTime" :messages="messages" :login-user="loginUser"></center-factory>
+          <center-factory :query="query" :factory-info="factoryInfo" :endTime="endTime" :messages="messages" :login-user="loginUser"></center-factory>
         </template>
       </template>
     </template>
