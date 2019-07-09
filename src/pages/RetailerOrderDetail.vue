@@ -17,11 +17,11 @@
           <div style="height:10px;"></div>
         </div>
         <div class="bg-white b_bottom_after padding10">
-          <template v-if="query.from && query.fromapp != 'factory'">
+          <template v-if="query.from && query.fromapp != 'factory' && query.fromapp != 'qxb'">
             <div class="flex_left" @click="toMemberView">买家：{{ data.username }}</div>
             <div class="flex_left">
               <div class="flex_cell flex_left" @click="toMemberView">累计消费：<span class="color-red">{{ $t('RMB') }}{{ data.summoney }}</span></div>
-              <div class="flex_right" style="width:120px;" @click="toCard">
+              <div class="flex_right" style="width:120px;" v-if="" @click="toCard">
                 <div class="bg-theme color-white align_center" style="width:110px;padding:5px 0;border-radius:30px;">生成专属优惠券</div>
               </div>
             </div>
@@ -298,7 +298,7 @@ export default {
       if (this.query.fromapp === 'factory') {
         this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&module=product`})
       } else if (this.query.from) {
-        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&wid=${item.wid}`})
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&wid=${item.wid}&module=product`})
       } else {
         this.$router.push({path: '/product', query: {id: item.pid, wid: item.wid}})
       }
