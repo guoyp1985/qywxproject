@@ -192,6 +192,7 @@ export default {
     },
     toCreate (type) {
       const self = this
+      console.log(this.fid)
       if (self.retailerInfo.buyonline !== 1 && !this.fid) {
         self.$vux.alert.show({
           title: '',

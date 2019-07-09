@@ -15,7 +15,7 @@
       </div>
       <div class="s-container" style="top:44px">
         <template v-if="!tabdata1 || tabdata1.length == 0 || query.from == 'miniprogram'">
-          <create-activity :retailer-info="factoryInfo" @on-add="clickAdd"></create-activity>
+          <create-activity :fid="Fid" :retailer-info="retailerInfo" @on-add="clickAdd"></create-activity>
         </template>
         <template v-else>
           <div v-if="tabmodel === 0" class="swiper-inner scroll-container1" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
@@ -68,7 +68,7 @@
             </div>
           </div>
           <template v-if="tabmodel == 1">
-            <create-activity :fid="Fid" :retailerInfo="retailerInfo" @on-add="clickAdd"></create-activity>
+            <create-activity :fid="Fid" :retailerInfo.sync="retailerInfo" @on-add="clickAdd"></create-activity>
           </template>
         </template>
       </div>
@@ -265,7 +265,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.query = this.$route.query
-      this.Fid = this.query.fid ? this.query.fid : this.loginUser.fid
+      this.Fid = this.query.fid ? parseInt(this.query.fid) : this.loginUser.fid
       self.showContainer = true
       if (this.tabdata1.length < limit || this.query.add) {
         pageStart1 = 0
