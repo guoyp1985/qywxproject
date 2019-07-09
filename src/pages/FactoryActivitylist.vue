@@ -166,7 +166,7 @@ export default {
       if (self.query.from) {
         self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${item.productid}&fid=${item.fid}&module=factoryproduct`})
       } else {
-        self.$router.push({path: '/product', query: {id: item.productid, fid: item.fid, module: 'factoryproduct'}})
+        self.$router.push({path: '/product', query: {id: item.fpid, fid: item.fid, module: 'factoryproduct'}})
       }
     },
     toActivity (item) {
