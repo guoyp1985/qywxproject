@@ -50,7 +50,7 @@
           			<div class="picarea">
           				<div class="pic">
                     <img class="imgcover" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-                    <div class="t-icon color-theme flex_center"><i class="al al-zhuanqian font18"></i><span>赚 {{$t('RMB')}}{{item.levelagent}}</span></div>
+                    <div class="t-icon color-theme flex_center"><i class="al al-zhuanqian font18"></i><span>赚 {{$t('RMB')}}{{item.salesrebate ? item.salesrebate : item.levelagent}}</span></div>
                   </div>
           			</div>
           			<div class="desbox" style="overflow:hidden;">
