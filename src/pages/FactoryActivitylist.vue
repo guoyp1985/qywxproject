@@ -162,7 +162,6 @@ export default {
   },
   methods: {
     toStat (item) {
-      const self = this
       let queryParams = this.$util.handleAppParams(this.query, {id: item.id, module: 'activity'})
       if (this.query.minibackurl) {
         queryParams.minibackurl = this.query.minibackurl

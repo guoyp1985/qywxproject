@@ -608,9 +608,9 @@ export default {
           })
           return false
         }
-        if (groupprice > priceval) {
+        if (groupprice >= priceval) {
           self.$vux.toast.show({
-            text: '团购价不能大于原价',
+            text: '团购价应低于商品现价',
             type: 'warn',
             time: 1500
           })
