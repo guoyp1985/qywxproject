@@ -215,6 +215,9 @@ export default {
   computed: {
   },
   methods: {
+    initData () {
+      this.deliverdata = { delivercompany: '-1', delivercode: '' }
+    },
     toProduct (item) {
       if (this.query.fromapp === 'factory') {
         this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&module=product`})
@@ -462,6 +465,7 @@ export default {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
+      this.initData()
       if (this.loginUser) {
         this.$vux.loading.show()
         let isAdmin = false
