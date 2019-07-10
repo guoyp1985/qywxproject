@@ -172,7 +172,7 @@ export default {
     toProduct (item) {
       const self = this
       if (self.query.from) {
-        self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${item.fpid}&fid=${item.fid}&module=factoryproduct`})
+        self.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.fpid}&fid=${item.fid}&module=factoryproduct`})
       } else {
         self.$router.push({path: '/product', query: {id: item.fpid, fid: item.fid, module: 'factoryproduct'}})
       }
@@ -180,7 +180,7 @@ export default {
     toActivity (item) {
       const self = this
       if (self.query.from) {
-        self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.activity}?id=${item.id}`})
+        self.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.activity}?id=${item.id}`})
       } else {
         self.$router.push({path: '/activity', query: {id: item.id}})
       }
