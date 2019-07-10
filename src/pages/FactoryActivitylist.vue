@@ -41,8 +41,8 @@
                       <div class="clamp1 font14 color-gray mt5">{{ $t('Group numbers') }} {{ item.numbers }}{{ $t('Person') }}</div>
                     </div>
                     <div class="t-cell align_right v_middle font0" style="width:60px;">
-                      <router-link class="qbtn bg-red color-white" :to="{path: '/stat', query:{id: item.id, module: 'activity'}}">{{ $t('Stat') }}</router-link>
-                      <div class="qbtn bg-red color-white mt5" v-if="item.isfinished != 1" @click="stopevent(item,index1)">停止</div>
+                      <div class="qbtn bg-red color-white" :to="{path: '/stat', query:{id: item.id, module: 'activity'}}" @click.stop="toStat(item)">{{ $t('Stat') }}</div>
+                      <div class="qbtn bg-red color-white mt5" v-if="item.isfinished != 1" @click.stop="stopevent(item,index1)">停止</div>
                     </div>
                   </div>
                   <div class="mt5 font12 color-gray">活动时间：{{ item.starttime | dateformat}} 至 {{ item.endtime | dateformat}}</div>
@@ -58,8 +58,8 @@
                       <div class="clamp1 font14 color-gray mt5">{{ $t('Min buy price') }} <span class="color-red"> {{ $t('RMB') }} {{ item.minprice }} </span></div>
                     </div>
                     <div class="t-cell align_right v_middle font0" style="width:60px;">
-                      <router-link class="qbtn bg-red color-white" :to="{path: '/stat', query:{id: item.id, module: 'activity'}}">{{ $t('Stat') }}</router-link>
-                      <div class="qbtn bg-red color-white mt5" v-if="item.isfinished != 1" @click="stopevent(item,index1)">停止</div>
+                      <div class="qbtn bg-red color-white" :to="{path: '/stat', query:{id: item.id, module: 'activity'}}" @click.stop="toStat(item)">{{ $t('Stat') }}</div>
+                      <div class="qbtn bg-red color-white mt5" v-if="item.isfinished != 1" @click.stop="stopevent(item,index1)">停止</div>
                     </div>
                   </div>
                   <div class="mt5 font12 color-gray">活动时间：{{ item.starttime | dateformat}} 至 {{ item.endtime | dateformat}}</div>
@@ -161,6 +161,15 @@ export default {
     }
   },
   methods: {
+    toStat (item) {
+      const self = this
+      let queryParams = this.$util.handleAppParams(this.query, {id: item.id, module: 'activity'})
+      if (this.query.minibackurl) {
+        queryParams.minibackurl = this.query.minibackurl
+        queryParams.backtype = this.query.backtype
+      }
+      this.$router.push({path: '/stat', query: queryParams})
+    },
     toProduct (item) {
       const self = this
       if (self.query.from) {
