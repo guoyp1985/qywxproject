@@ -316,6 +316,7 @@ export default {
             }
           }
         })
+        this.$apply()
       })
     },
     viewShipping (order) {
