@@ -275,6 +275,7 @@ export default {
       .then(res => {
         self.$vux.loading.hide()
         this.showRefundModal = false
+        this.refundContent = ''
         const data = res.data
         self.$vux.toast.show({
           text: data.error,
