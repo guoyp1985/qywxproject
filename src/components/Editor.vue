@@ -693,7 +693,7 @@ export default {
           const params = self.$util.query(linkurl)
           self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}&module=product`})
         } else {
-          self.$router.push(linkurl)
+          self.$router.push({path: linkurl})
         }
       }
     }

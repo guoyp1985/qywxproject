@@ -283,16 +283,16 @@ export default {
           self.disManagerList = true
         })
       } else if (key === 'edit') {
-        self.$router.push(`/addFactory?id=${self.clickData.id}`)
+        self.$router.push({path: '/addFactory', query: {id: self.clickData.id}})
       } else if (key === 'set') {
-        self.$router.push(`/factoryAgentFee?id=${self.clickData.id}`)
+        self.$router.push({path: '/factoryAgentFee', query: {id: self.clickData.id}})
       } else if (key === 'retailer') {
-        self.$router.push(`/sellerList?id=${self.clickData.id}`)
+        self.$router.push({path: '/sellerList', query: {id: self.clickData.id}})
       } else if (key === 'stat') {
-        self.$router.push(`/stat?id=${self.clickData.id}&module=factory`)
+        self.$router.push({path: '/stat', query: {id: self.clickData.id, module: 'factory'}})
       } else if (key === 'bank') {
         let fromPage = encodeURIComponent('/factoryManage')
-        self.$router.push(`/factoryBank?id=${self.clickData.id}&control=manage&fromPage=${fromPage}`)
+        self.$router.push({path: '/factoryBank', query: {id: self.clickData.id, control: 'manage', fromPage: fromPage}})
       } else {
         self.showPopup1 = false
       }

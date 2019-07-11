@@ -188,7 +188,7 @@ export default {
         cancelText: ENV.giveUpVipText,
         confirmText: ENV.openVipText,
         onCancel () {
-          self.$router.push('/centerSales')
+          self.$router.push({path: '/centerSales'})
         },
         onConfirm () {
           location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders`)

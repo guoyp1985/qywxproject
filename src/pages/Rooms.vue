@@ -105,7 +105,7 @@ export default {
       this.$router.push({path: '/roomOrderDeal', query: params})
     },
     toStart () {
-      this.$router.push('/roomStart?frompage=rooms')
+      this.$router.push({path: '/roomStart', query: {frompage: 'rooms'}})
     },
     sortHandle (i) {
       this.selectIndex = i

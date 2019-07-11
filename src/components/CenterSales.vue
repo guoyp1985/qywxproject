@@ -375,7 +375,7 @@ export default {
         content: '请先添加商品再使用该功能哦！',
         confirmText: '添加商品',
         onConfirm () {
-          self.$router.push('/addProduct')
+          self.$router.push({path: '/addProduct'})
         }
       })
     },

@@ -48,6 +48,15 @@
               </div>
           </grid-item>
         </div>
+        <div class="gridlist" v-if="query.from">
+          <grid-item :label="$t('Activity')" :link="{path:'/factoryActivitylist'}">
+              <div slot="icon" style="position:relative;">
+                <i class="al al-huodong"></i>
+                <div class="numicon" v-if="factoryInfo.newactivity > 0 && factoryInfo.newactivity < 100">{{ factoryInfo.newactivity }}</div>
+                <div class="numicon" v-if="factoryInfo.newactivity >= 100">···</div>
+              </div>
+          </grid-item>
+        </div>
         <div class="gridlist">
           <grid-item :label="$t('News')" :link="{path:'/factoryNewsList', query: {fid: factoryInfo.id}}">
             <div slot="icon" style="position:relative;">
@@ -205,6 +214,10 @@ import ENV from 'env'
 export default {
   name: 'CenterFactory',
   props: {
+    query: {
+      type: Object,
+      default: {}
+    },
     loginUser: {
       type: Object,
       default: {}

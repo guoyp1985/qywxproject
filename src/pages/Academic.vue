@@ -133,7 +133,7 @@ export default {
       this.$util.wxAccess()
     },
     clickInsertProduct (url) {
-      this.$router.push(url)
+      this.$router.push({path: url})
     },
     popupSubscribe () {
       this.showSubscribe = true
@@ -148,7 +148,7 @@ export default {
         if (node.nodeType === 1 && node.getAttribute('class').indexOf('insertproduct') > -1) {
           const linkurl = node.getAttribute('linkurl')
           if (linkurl) {
-            self.$router.push(linkurl)
+            self.$router.push({path: linkurl})
           }
           break
         }

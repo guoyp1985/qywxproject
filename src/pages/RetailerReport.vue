@@ -150,12 +150,12 @@ export default {
     },
     toCustomer () {
       if (this.retailerInfo.moderate && this.retailerInfo.vipvalidate) {
-        this.$router.push('/retailerCustomerlist')
+        this.$router.push({path: '/retailerCustomerlist'})
       }
     },
     toSales () {
       if (this.retailerInfo.moderate && this.retailerInfo.vipvalidate) {
-        this.$router.push('/retailerSalechance')
+        this.$router.push({path: '/retailerSalechance'})
       }
     },
     getData () {

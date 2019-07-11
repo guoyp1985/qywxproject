@@ -1319,6 +1319,9 @@ export default {
         this.showShareSuccess = false
         this.showVideo = true
         this.query = this.$route.query
+        if (this.query.module) {
+          this.module = this.query.module
+        }
         if (this.query.iswechat) {
           this.showShareLayer = true
         }
