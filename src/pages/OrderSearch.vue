@@ -275,7 +275,7 @@ export default {
       .then(res => {
         self.$vux.loading.hide()
         this.showRefundModal = false
-
+        this.refundContent = ''
         const data = res.data
         self.$vux.toast.show({
           text: data.error,
@@ -302,7 +302,6 @@ export default {
                   this.tabdata2[this.clickIndex].backflag = 20
                   this.tabdata2[this.clickIndex].flagstr = '待发货(退款申请中)'
                   this.tabdata2[this.clickIndex].buttons = []
-                  this.refundContent = ''
                   for (let i = 0; i < this.tabdata1.length; i++) {
                     if (this.tabdata1[i].id === this.clickData.id) {
                       this.tabdata1[i].backflag = 20
