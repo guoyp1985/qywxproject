@@ -355,7 +355,7 @@ export default {
     },
     getData1 (type) {
       let params = {pagestart: pageStart, limit: limit, wid: this.loginUser.uid}
-      if (this.loginUser.retailerinfo.fid) {
+      if (this.loginUser.retailerinfo && this.loginUser.retailerinfo.fid) {
         params.fid = this.loginUser.retailerinfo.fid
       }
       if (this.sort === 'dateline') {
@@ -421,7 +421,7 @@ export default {
         console.log('SHUSDNAKSD SDA:')
         console.log(this.loginUser)
         User.set(data)
-        if (`${this.loginUser.retailerinfo.firstinfo.importproduct}` === '0' && this.query.from && this.query.allowfirst !== 'false') {
+        if (this.loginUser.retailerinfo && `${this.loginUser.retailerinfo.firstinfo.importproduct}` === '0' && this.query.from && this.query.allowfirst !== 'false') {
           this.isFirst = true
         }
         return this.$http.post(`${ENV.BokaApi}/api/common/getSysParas`)
