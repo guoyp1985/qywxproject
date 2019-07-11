@@ -395,7 +395,7 @@ export default {
                   }
                 } else if (self.query.backurl) {
                   let backurl = decodeURIComponent(self.query.backurl)
-                  this.$router.push(backurl)
+                  this.$router.push({path: backurl})
                 } else {
                   self.$router.go(-1)
                 }

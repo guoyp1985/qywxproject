@@ -406,7 +406,7 @@ export default {
       }
     },
     tofactoryDetail () {
-      this.$router.push('/factoryDetail?fid=' + this.productdata.fid)
+      this.$router.push({path: '/factoryDetail', query: {fid: this.productdata.fid}})
     },
     filterEmot (text) {
       return this.$util.emotPrase(text)
@@ -461,7 +461,7 @@ export default {
       if (this.loginUser.subscribe === 0) {
         this.$util.wxAccess()
       } else {
-        this.$router.push('/center')
+        this.$router.push({path: '/center'})
       }
     },
     showBigimg (index) {

@@ -716,7 +716,7 @@ export default {
                   self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
                 }
               } else {
-                self.$router.push('/centerSales')
+                self.$router.push({path: '/centerSales'})
               }
             }
           }

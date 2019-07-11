@@ -107,7 +107,7 @@ export default {
           .then(res => {
             this.$vux.loading.hide()
             if (self.query.lasturl) {
-              self.$router.push(self.query.lasturl)
+              this.$router.push({path: self.query.lasturl})
               this.isSubmitIng = false
             } else {
               this.$router.go(-1)

@@ -61,7 +61,7 @@ export default {
     clickMore () {
       this.showTip = false
       this.showMore = true
-      this.$router.push('/roomStart')
+      this.$router.push({path: '/roomStart'})
     },
     refresh () {
       this.loginUser = User.get()

@@ -320,14 +320,14 @@ export default {
       if (this.loginUser.isretailer === 2 && this.newsCount >= 5) {
         this.openVip()
       } else {
-        this.$router.push('/retailerGoodeazy')
+        this.$router.push({path: '/retailerGoodeazy'})
       }
     },
     toAdd () {
       if (this.loginUser.isretailer === 2 && this.newsCount >= 5) {
         this.openVip()
       } else {
-        this.$router.push('/addNews')
+        this.$router.push({path: '/addNews'})
       }
     },
     handleScroll (refname, type) {

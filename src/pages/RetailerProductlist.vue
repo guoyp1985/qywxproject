@@ -375,21 +375,21 @@ export default {
       if (this.loginUser.isretailer === 2 && this.tabData1.length >= 5) {
         this.openVip()
       } else {
-        this.$router.push('/recommendProducts')
+        this.$router.push({path: '/recommendProducts'})
       }
     },
     toAdd () {
       if (this.loginUser.isretailer === 2 && this.tabData1.length >= 5) {
         this.openVip()
       } else {
-        this.$router.push('/addProduct')
+        this.$router.push({path: '/addProduct'})
       }
     },
     toCollect () {
       if (this.loginUser.isretailer === 2 && this.tabData1.length >= 5) {
         this.openVip()
       } else {
-        this.$router.push('/CollectProduct')
+        this.$router.push({path: '/CollectProduct'})
       }
     },
     getPhoto (src) {
