@@ -86,7 +86,7 @@
           </div>
           <div class="pt10 bg-page"></div>
           <div class="flex_center">
-            <div class="form-item required bg-white">
+            <div class="form-item required bg-white bright">
               <div class="t-table">
                 <div class="t-cell title-cell w80 font14 v_middle">商品现价<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
                 <div class="t-cell input-cell v_middle" style="position:relative;">
@@ -95,7 +95,7 @@
                 <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
               </div>
             </div>
-            <div class="form-item required bg-white bright">
+            <div class="form-item required bg-white">
               <div class="t-table">
                 <div class="t-cell title-cell w80 font14 v_middle">商品原价</div>
                 <div class="t-cell input-cell v_middle" style="position:relative;">
