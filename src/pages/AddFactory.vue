@@ -82,6 +82,15 @@
           </div>
           <div class="form-item bg-white fg b-top">
             <div class="t-table">
+              <div class="t-cell title-cell w100 font14 v_middle">客服</div>
+              <div class="t-cell input-cell v_middle" style="position:relative;text-align:right;" @click="clickUserEvent">
+                <template v-if="serviceUser && serviceUser.uid"><img class="v_middle" :src="serviceUser.avatar" style="width:30px;height:30px;object-fit:cover;border-radius:50%;" /><span class="ml5 v_middle">{{serviceUser.linkman}}</span></template>
+                <span v-else class="color-red">去选择 ></span>
+              </div>
+            </div>
+          </div>
+          <div class="form-item bg-white fg b-top">
+            <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">logo</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
                 <div class="q_photolist align_left bg-white">
@@ -160,6 +169,34 @@
           </div>
         </div>
       </div>
+      <div v-transfer-dom class="x-popup">
+        <popup v-model="showUserPopup" height="100%">
+          <div class="popup1">
+            <div class="popup-top flex_center">选择客服</div>
+            <div ref="scrollProduct" @scroll="handleScroll('scrollProduct','product')" class="popup-middle">
+              <div class="scroll_list">
+                <div v-if="!userData || userData.length === 0" class="scroll_item padding10 color-gray align_center">
+                  <div class="flex_center" style="height:80px;">暂无用户</div>
+                </div>
+                <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in userData" :key="item.id" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
+                  <div class="t-table">
+                    <div class="t-cell pic v_middle w50">
+                      <img :src="item.avatar" style="width:40px;height:40px;border-radius:50%;" class="v_middle imgcover" />
+                    </div>
+                    <div class="t-cell v_middle" style="color:inherit;">
+                      <div class="clamp1">{{item.linkman}}</div>
+                    </div>
+                  </div>
+                </check-icon>
+              </div>
+            </div>
+            <div class="popup-bottom flex_center">
+              <div class="flex_cell bg-gray color-white h_100 flex_center" @click="closeUserPopup">{{ $t('Close') }}</div>
+              <div class="flex_cell bg-green color-white h_100 flex_center" @click="submitUser">{{ $t('Confirm txt') }}</div>
+            </div>
+          </div>
+        </popup>
+      </div>
     </template>
   </div>
 </template>
@@ -189,7 +226,7 @@ export default {
       loginUser: {},
       infoData: {},
       allowsubmit: true,
-      submitData: { company: '', summary: '', shortcode: '', publicqrcode: '', photo: '', superiorrate: '20', salesrate: '80', trade: 1, shopmodel: '1' },
+      submitData: { company: '', summary: '', shortcode: '', publicqrcode: '', services: '', photo: '', superiorrate: '20', salesrate: '80', trade: 1, shopmodel: '1' },
       requireddata: { company: '' },
       classData: [],
       tradeData: [],
@@ -201,7 +238,13 @@ export default {
       fid: 0,
       qrcodearr: [],
       template1: false,
-      template2: false
+      template2: false,
+      serviceUser: {},
+      showUserPopup: false,
+      userData: [],
+      pageStart: 0,
+      limit: 20,
+      clickUser: null
     }
   },
   watch: {
@@ -219,6 +262,52 @@ export default {
     }
   },
   methods: {
+    clearChecked () {
+      for (let i = 0; i < this.userData.length; i++) {
+        delete this.userData[i].checked
+      }
+    },
+    getUsers () {
+      const self = this
+      const params = {fid: self.query.fid, pagestart: self.pageStart, limit: self.limit}
+      self.$http.post(`${ENV.BokaApi}/api/factory/adminList`, params).then(function (res) {
+        self.$vux.loading.hide()
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        self.userData = self.userData.concat(retdata)
+      })
+    },
+    clickUserEvent () {
+      this.showUserPopup = true
+      if (!this.userData.length) {
+        this.getUsers()
+      }
+    },
+    closeUserPopup () {
+      this.showUserPopup = false
+      this.clickUser = false
+      this.clearChecked()
+    },
+    radioclick (item, index) {
+      this.clickUser = item
+      for (let i = 0; i < this.userData.length; i++) {
+        if (this.userData[i].uid === item.uid) {
+          this.userData[i].checked = true
+        } else {
+          delete this.userData[i].checked
+        }
+      }
+    },
+    submitUser () {
+      if (!this.clickUser) {
+        this.$vux.toast.text('请选择用户', 'middle')
+      } else {
+        this.showUserPopup = false
+        this.serviceUser = this.clickUser
+        this.clickUser = null
+        this.clearChecked()
+      }
+    },
     clickTemplate (val) {
       let curval = parseInt(val)
       if (curval === 1) {
@@ -368,6 +457,9 @@ export default {
       } else {
         postData.title = postData.company
       }
+      if (this.serviceUser && this.serviceUser.uid) {
+        postData.services = this.serviceUser.uid
+      }
       self.$vux.confirm.show({
         content: con,
         onConfirm: () => {
@@ -417,6 +509,14 @@ export default {
           console.log('in getData')
           console.log(retdata)
           self.infoData = retdata
+          if (retdata.services && retdata.services !== '') {
+            let suid = retdata.services.split(',')[0]
+            for (let i = 0; i < retdata.services_data.length; i++) {
+              if (suid === retdata.services_data[i].uid) {
+                this.serviceUser = retdata.services_data[i]
+              }
+            }
+          }
           self.photoarr = []
           if (retdata.photo && self.$util.trim(retdata.photo) !== '') {
             self.photoarr.push(retdata.photo)

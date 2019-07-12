@@ -45,6 +45,7 @@
   "FactoryLevel",
   "FactoryManage",
   "FactoryNews",
+  "FactoryNewsClass",
   "FactoryNewsList",
   "FactoryOrders",
   "FactoryOrderDetail",
