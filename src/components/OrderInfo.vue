@@ -61,7 +61,9 @@
     </div>
     <div class="operate-area" v-if="item.buttons && item.buttons.length">
       <div class="db-in" v-for="(button, index) in item.buttons" :key="index">
-        <x-button mini @click.native="buttonClick(button.id)" class="font12">{{button.name}}</x-button>
+        <template v-if="!(query.fromapp == 'factory' && button.id == 2)">
+          <x-button mini @click.native="buttonClick(button.id)" class="font12">{{button.name}}</x-button>
+        </template>
       </div>
     </div>
   </div>
@@ -105,6 +107,7 @@ export default {
   },
   data () {
     return {
+      query: {},
       statusButtons: [
         {id: 1, name: '取消订单'},
         {id: 2, name: '去支付'},
@@ -159,6 +162,9 @@ export default {
     buttonClick (type) {
       this.$emit('on-process', type, this.item, this.index)
     }
+  },
+  created () {
+    this.query = this.$route.query
   }
 }
 </script>

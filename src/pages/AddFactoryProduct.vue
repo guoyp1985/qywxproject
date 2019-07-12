@@ -26,7 +26,8 @@
               <div class="q_photolist align_left">
                 <template v-if="photoarr.length > 0">
                   <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
-                    <div class="inner photo" :photo="item" :style="`background-image: url('${item}');`" @click="uploadPhoto('fileInput','photo',index)">
+                    <div class="inner photo" :photo="item">
+                      <img :src="item" class="pic" @click="uploadPhoto('fileInput','photo',index)" />
                       <div class="close" @click="deletephoto(item,index,'photo')">×</div>
                       <div class="move-ico prev" v-if="index > 0" @click.stop="movePhoto('photo',index,'prev')"><span class="al al-qianyi"></span></div>
                       <div class="move-ico next" v-if="photoarr.length > 1 && index < photoarr.length - 1" @click.stop="movePhoto('photo',index,'next')"><span class="al al-houyi"></span></div>
@@ -265,7 +266,8 @@
             <div class="q_photolist align_left bg-white">
               <template v-if="photoarr1.length > 0">
                 <div v-for="(item,index) in photoarr1" :key="index" class="photoitem">
-                  <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`" @click="uploadPhoto('fileInput1','contentphoto',index)">
+                  <div class="inner photo imgcover" :photo="item">
+                    <img :src="item" class="pic" @click="uploadPhoto('fileInput1','contentphoto',index)" />
                     <div class="close" @click="deletephoto(item,index,'contentphoto')">×</div>
                     <div class="move-ico prev" v-if="index > 0" @click.stop="movePhoto('content',index,'prev')"><span class="al al-qianyi"></span></div>
                     <div class="move-ico next" v-if="photoarr1.length > 1 && index < photoarr1.length - 1" @click.stop="movePhoto('content',index,'next')"><span class="al al-houyi"></span></div>
