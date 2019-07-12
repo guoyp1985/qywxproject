@@ -395,6 +395,7 @@ export default {
           }
         })
       } else {
+        this.refresh()
         this.showRefundModal = true
       }
     },
