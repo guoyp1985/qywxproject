@@ -4,6 +4,9 @@
       <Sos :title="sosTitle"></Sos>
     </template>
     <template v-if="showContainer">
+      <form ref="fileForm" enctype="multipart/form-data">
+        <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange('fileForm')" />
+      </form>
       <div class="pagetop b_bottom_after flex_center" style="height:55px;">
         <search
           class="v-search"
@@ -31,7 +34,7 @@
               </div>
             </template>
           </div>
-          <router-link :to="{path: '/factoryNews', query: {id: item.id, fid: query.fid}}" v-else v-for="(item,index1) in tabdata1" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
+          <router-link :to="{path: '/factoryNewsList', query: {classid: item.id, fid: query.fid}}" v-else v-for="(item,index1) in tabdata1" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
             <div class="t-table">
               <div class="t-cell v_middle w70">
                 <img class="imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
@@ -39,38 +42,59 @@
               <div class="t-cell v_middle">
                 <div class="clamp1 font14 color-lightgray"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
                 <div class="clamp1 font14 color-gray v_middle mt5">
-                    <span class="v_middle color-999">{{ item.dateline | dateformat }}</span>
-                    <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.views}}</span>
-                    <span class="v_middle"><i class="al al-ai-share font14 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.shares}}</span>
                 </div>
               </div>
               <div class="align_right t-cell v_bottom w80 pb8">
-                  <div class="btnicon bg-red color-white font12" @click="controlpopup(item)">
-                    <i class="al al-asmkticon0165 v_middle"></i>
-                  </div>
+                  <div class="btnicon bg-red color-white font12" @click="clickEdit(item,index1)">编辑</div>
               </div>
             </div>
           </router-link>
         </div>
       </div>
       <div class="s-bottom list-shadow flex_center bg-white pl12 pr12">
-        <div class="flex_cell flex_center">
-          <router-link class="flex_center btn-bottom-orange" style="width:80%;" :to="{path: '/factoryNewsClass', query: {fid: query.fid}}" >文章分类</router-link>
-        </div>
-        <div class="flex_cell flex_center">
-          <router-link class="flex_center btn-bottom-red" style="width:80%;" :to="{path: '/addFactoryNews', query: {fid: query.fid}}" >{{ $t('Create news') }}</router-link>
-        </div>
+        <div class="flex_cell flex_center btn-bottom-red" @click="addClass">创建文章类别</div>
       </div>
       <div v-transfer-dom>
         <popup class="menuwrap" v-model="showpopup">
-          <div class="popup0">
-            <div class="list">
-              <div class="item" v-for="(row,index1) in controldata" :key="index1">
-                <router-link class="inner" v-if="row.key == 'stat'" :to="{path:'/stat',query:{id:clickdata.id,module:'factorynews', fid: query.fid}}">{{ row.title }}</router-link>
-                <router-link class="inner" v-else-if="row.key == 'set'" :to="{path:'/addFactoryNews',query:{id:clickdata.id, fid: query.fid}}">{{ row.title }}</router-link>
+          <div class="popup0 bg-white">
+            <div class="form-item required bg-white">
+              <div class="t-table">
+                <div class="t-cell title-cell w80 font14 v_middle">分类名称<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+                <div class="t-cell input-cell v_middle" style="position:relative;">
+                  <group class="textarea-outer" style="padding:0;">
+                    <x-textarea
+                      ref="titleTextarea"
+                      v-model="classTitle"
+                      name="title" class="x-textarea noborder"
+                      placeholder="分类名称"
+                      :show-counter="false"
+                      :rows="1"
+                      :max="30"
+                      @on-change="textareaChange('titleTextarea')"
+                      @on-focus="textareaFocus('titleTextarea')"
+                      autosize>
+                    </x-textarea>
+                  </group>
+                </div>
               </div>
-              <div class="item close mt10" @click="clickpopup('row.key,clickdata')">
-                <div class="inner">{{ $t('Cancel txt') }}</div>
+            </div>
+            <div class="pl12 pr12 pt10 b_top_after bg-white">封面图<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+            <div class="b_bottom_after bg-white pl12 pr12 pb5">
+              <div class="q_photolist align_left bg-white">
+                <div class="photoitem">
+                  <div class="inner photo imgcover" style="border:#ccc 1px solid;" @click="uploadPhoto('fileInput')">
+                    <img v-if="coverPhoto && coverPhoto != ''" :src="coverPhoto" class="pic" />
+                    <div v-else class="pic flex_center"><i class="al al-zhaopian color-gray"></i></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="flex_center padding20">
+              <div class="flex_cell flex_center" @click="closePopup">
+                <div class="flex_center btn-bottom-red" style="width:80%;background-color:#ccc;">取消</div>
+              </div>
+              <div class="flex_cell flex_center" @click="submitClass">
+                <div class="flex_center btn-bottom-red" style="width:80%;">提交</div>
               </div>
             </div>
           </div>
@@ -90,7 +114,7 @@ Control text:
 </i18n>
 
 <script>
-import { TransferDom, Popup, CheckIcon, XImg, Search } from 'vux'
+import { TransferDom, Popup, CheckIcon, XImg, Search, Group, XInput, XTextarea } from 'vux'
 import Time from '#/time'
 import { User } from '#/storage'
 import ENV from 'env'
@@ -101,7 +125,7 @@ export default {
     TransferDom
   },
   components: {
-    Popup, CheckIcon, XImg, Search, Sos
+    Popup, CheckIcon, XImg, Search, Sos, Group, XInput, XTextarea
   },
   filters: {
     dateformat: function (value) {
@@ -134,14 +158,118 @@ export default {
       ],
       showpopup: false,
       clickdata: {},
+      clickIndex: 0,
       limit: 10,
       pagestart1: 0,
       pagestart2: 0,
       searchword1: '',
-      searchresult1: false
+      searchresult1: false,
+      coverPhoto: '',
+      classTitle: '',
+      submitIng: false
     }
   },
   methods: {
+    textareaChange (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
+      setTimeout(function () {
+        curArea.updateAutosize()
+      }, 50)
+    },
+    textareaFocus (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
+    },
+    photoCallback (data) {
+      if (data.flag === 1) {
+        this.coverPhoto = data.data
+      } else if (data.error) {
+        this.$vux.toast.show({
+          text: data.error,
+          time: this.$util.delay(data.error)
+        })
+      }
+    },
+    uploadPhoto (refname) {
+      const self = this
+      const fileInput = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      if (self.$util.isPC()) {
+        fileInput.click()
+      } else {
+        self.$wechat.ready(function () {
+          self.$util.wxUploadImage({
+            maxnum: 1,
+            handleCallback: function (data) {
+              self.photoCallback(data)
+            }
+          })
+        })
+      }
+    },
+    fileChange (refname) {
+      const self = this
+      const target = event.target
+      const files = target.files
+      if (files.length > 0) {
+        let fileForm = target.parentNode
+        const filedata = new FormData(fileForm)
+        self.$vux.loading.show()
+        self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(res => {
+          self.$vux.loading.hide()
+          let data = res.data
+          self.photoCallback(data)
+        })
+      }
+    },
+    addClass () {
+      this.showpopup = true
+    },
+    closePopup () {
+      this.showpopup = false
+      this.clickdata = null
+      this.clickIndex = 0
+    },
+    submitClass () {
+      if (!this.submitIng) {
+        let postdata = {title: this.classTitle, photo: this.coverPhoto, fid: this.query.fid}
+        if (this.clickdata && this.clickdata.id) {
+          postdata.id = this.clickdata.id
+        }
+        if (this.$util.trim(postdata.title) === '') {
+          this.$vux.toast.text('请输入分类名称', 'middle')
+          return false
+        }
+        if (this.$util.trim(postdata.photo) === '') {
+          this.$vux.toast.text('请上传分类封面图', 'middle')
+          return false
+        }
+        this.submitIng = false
+        this.$vux.loading.show()
+        this.$http.post(`${ENV.BokaApi}/api/add/factorynewsclass`, postdata).then(res => {
+          const data = res.data
+          this.$vux.loading.hide()
+          this.$vux.toast.show({
+            text: data.error,
+            type: data.flag !== 1 ? 'warn' : 'success',
+            time: this.$util.delay(data.error)
+          })
+          if (data.flag) {
+            this.showpopup = false
+            if (postdata.id) {
+              this.tabdata1[this.clickIndex] = data.datainfo
+            } else {
+              if (this.tabdata1.length === (this.pagestart1 + 1) * this.limit) {
+                this.tabdata1.splice(this.tabdata1.length - 1, 1)
+              }
+              this.tabdata1 = [data.datainfo].concat(this.tabdata1)
+            }
+            this.clickdata = null
+            this.clickIndex = 0
+          }
+        })
+      }
+    },
     handleScroll (refname, type) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
@@ -166,10 +294,7 @@ export default {
     },
     getData1 () {
       const self = this
-      const params = { fid: self.query.fid, pagestart: self.pagestart1, limit: self.limit, wid: this.loginUser.uid }
-      if (this.query.classid) {
-        params.classid = this.query.classid
-      }
+      const params = {fid: self.query.fid, pagestart: self.pagestart1, limit: self.limit}
       let keyword = self.searchword1
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         self.searchresult1 = true
@@ -177,7 +302,7 @@ export default {
       } else {
         self.searchresult1 = false
       }
-      self.$http.get(`${ENV.BokaApi}/api/list/factorynews`, {
+      self.$http.get(`${ENV.BokaApi}/api/list/factorynewsclass`, {
         params: params
       }).then(function (res) {
         self.$vux.loading.hide()
@@ -207,10 +332,13 @@ export default {
       self.pagestart1 = 0
       self.getData1()
     },
-    controlpopup (item) {
+    clickEdit (item, index) {
       event.preventDefault()
       this.showpopup = !this.showpopup
       this.clickdata = item
+      this.clickIndex = index
+      this.coverPhoto = item.photo
+      this.classTitle = item.title
     },
     getCustomerdata () {
       const self = this
