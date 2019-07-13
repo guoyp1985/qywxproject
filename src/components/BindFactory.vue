@@ -122,8 +122,10 @@ export default {
           this.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
         } else if (this.query.backtype === 'redirect') {
           this.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
-        } else {
+        } else if (this.query.backtype === 'navigateTo') {
           this.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+        } else {
+          this.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
         }
       }
     }
