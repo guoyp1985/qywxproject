@@ -170,6 +170,13 @@ export default {
     }
   },
   methods: {
+    clearClassValue () {
+      this.showpopup = false
+      this.classTitle = ''
+      this.coverPhoto = ''
+      this.clickdata = null
+      this.clickIndex = 0
+    },
     textareaChange (refname) {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
       curArea.updateAutosize()
@@ -226,9 +233,7 @@ export default {
       this.showpopup = true
     },
     closePopup () {
-      this.showpopup = false
-      this.clickdata = null
-      this.clickIndex = 0
+      this.clearClassValue()
     },
     submitClass () {
       if (!this.submitIng) {
@@ -264,8 +269,7 @@ export default {
               }
               this.tabdata1 = [data.datainfo].concat(this.tabdata1)
             }
-            this.clickdata = null
-            this.clickIndex = 0
+            this.clearClassValue()
           }
         })
       }
