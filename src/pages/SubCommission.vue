@@ -108,19 +108,9 @@ export default {
       self.$util.scrollEvent({
         element: scrollarea,
         callback: function () {
-          switch (self.selectedIndex) {
-            case 0:
-              if (self.tabdata1.length === (pageStart1 + 1) * limit) {
-                pageStart1++
-                self.getData1()
-              }
-              break
-            case 1:
-              if (self.tabdata2.length === (pageStart2 + 1) * limit) {
-                pageStart2++
-                self.getData2()
-              }
-              break
+          if (self.tabdata1.length === (pageStart1 + 1) * limit) {
+            pageStart1++
+            self.getData1()
           }
         }
       })
