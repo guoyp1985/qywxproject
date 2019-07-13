@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea font14 bg-page sub-commission-page notop nobottom">
-    <div class="pagemiddle" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',0)">
+    <div class="pagemiddle" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1')">
       <template v-if="disList1">
         <div v-if="!tabdata1.length" class="w_100 h_100 flex_center color-gray">暂无数据</div>
         <div v-else class="scroll_list">
@@ -18,6 +18,8 @@
             </div>
           </div>
         </div>
+        <div class="padding20 flex_center color-gray font12" v-if="isLoading">数据加载中</div>
+        <div class="padding20 flex_center color-gray font12" v-else="isDone">没有更多数据了</div>
       </template>
     </div>
     <div v-transfer-dom class="x-popup">
@@ -69,7 +71,6 @@ import { User } from '#/storage'
 
 const limit = 20
 let pageStart1 = 0
-let pageStart2 = 0
 let self = {}
 
 export default {
@@ -86,7 +87,9 @@ export default {
       disList1: false,
       tabdata1: [],
       showDetail: false,
-      clickData: {}
+      clickData: {},
+      isLoading: false,
+      isDone: false
     }
   },
   filters: {
@@ -103,14 +106,17 @@ export default {
       this.showDetail = false
       this.clickData = {}
     },
-    handleScroll: function (refname, index) {
+    handleScroll: function (refname) {
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
         element: scrollarea,
         callback: function () {
           if (self.tabdata1.length === (pageStart1 + 1) * limit) {
+            self.isLoading = true
             pageStart1++
-            self.getData1()
+            self.getData()
+          } else {
+            self.isDone = true
           }
         }
       })
@@ -119,10 +125,13 @@ export default {
       self.$http.post(`${ENV.BokaApi}/api/haitun/teamStat`, {pagestart: pageStart1, limit: limit, fid: ENV.CommissionFid}).then((res) => {
         let data = res.data
         self.$vux.loading.hide()
-        if (data.flag) {
-          let retdata = data.data ? data.data : data
+        let retdata = data.data ? data.data : data
+        if (retdata.length) {
           self.tabdata1 = self.tabdata1.concat(retdata)
+        } else if (this.tabData1.length) {
+          self.isDone = true
         }
+        self.isLoading = false
         self.disList1 = true
       })
     },
