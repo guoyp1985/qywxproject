@@ -58,6 +58,9 @@
           <div class="popup0">
             <div class="list" v-if="clickdata">
               <div class="item">
+                <div class="inner" @click="clickpopup('copy')">复制商品信息</div>
+              </div>
+              <div class="item">
                 <router-link class="inner" :to="{path: '/materialbank', query: {pid: clickdata.id}}">素材库</router-link>
               </div>
               <div class="item" v-if="clickdata.moderate == 1">
@@ -230,6 +233,54 @@ export default {
         } else {
           self.showTip = true
         }
+      } else if (key === 'copy') {
+        self.showpopup1 = false
+        self.$vux.confirm.show({
+          title: '复制成功将会重新生成与当前商品信息完全一致的新商品',
+          confirmText: '复制',
+          onConfirm: () => {
+            self.$vux.loading.show()
+            let postdata = {
+              photo: this.clickdata.photo,
+              classid: this.clickdata.classid,
+              title: this.clickdata.title,
+              oriprice: this.clickdata.oriprice,
+              price: this.clickdata.price,
+              tb_price: this.clickdata.tb_price,
+              jd_price: this.clickdata.jd_price,
+              profit: this.clickdata.profit,
+              salesrebate: this.clickdata.salesrebate,
+              superrebate: this.clickdata.superrebate,
+              storage: this.clickdata.storage,
+              postage: this.clickdata.postage,
+              options: this.clickdata.options,
+              sellingpoint: this.clickdata.sellingpoint,
+              content: this.clickdata.content,
+              contentphoto: this.clickdata.contentphoto,
+              video: this.clickdata.video,
+              seotitle: this.clickdata.seotitle,
+              seodescription: this.clickdata.seodescription,
+              fid: this.clickdata.fid
+            }
+            self.$http.post(`${ENV.BokaApi}/api/add/factoryproduct`, postdata).then(res => {
+              let data = res.data
+              self.$vux.loading.hide()
+              self.$vux.toast.show({
+                text: data.error,
+                type: data.flag !== 1 ? 'warn' : 'success',
+                time: self.$util.delay(data.error),
+                onHide: () => {
+                  if (data.flag === 1) {
+                    if (self.productdata.length === (pageStart1 + 1) * limit) {
+                      self.productdata.splice(self.productdata.length - 1, 1)
+                    }
+                    self.productdata = [data.datainfo].concat(self.productdata)
+                  }
+                }
+              })
+            })
+          }
+        })
       } else {
         self.showpopup1 = false
       }
