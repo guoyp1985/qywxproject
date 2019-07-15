@@ -2,7 +2,7 @@
   <div class="containerarea font14 rgoodeazy bg-white">
     <div class="pl10 pr10">
       <div class="font15 pt15">商品链接采集商品</div>
-      <div class="font12 color-gray mt5">请复制京东或天猫商品链接，粘贴在文本框内，点击“采集”按钮，采集成功后即可编辑分享</div>
+      <div class="font12 color-gray mt5">请复制天猫商品链接，粘贴在文本框内，点击“采集”按钮，采集成功后即可编辑分享</div>
       <form class="subform mb15">
         <div class="flex_left mt12 border1px">
           <div class="flex_cell" style="height:100%;">
