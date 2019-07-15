@@ -51,9 +51,9 @@
         </template>
       </div>
       <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
-        <div class="align_center flex_center flex_cell">
+        <!-- <div class="align_center flex_center flex_cell">
           <router-link class="flex_center bg-orange color-white" style="width:85%;border-radius:50px;height:35px;" to="/factoryGoodeazy">采集商品</router-link>
-        </div>
+        </div> -->
         <div class="flex_cell flex_center">
           <div class="bg-red flex_center color-white" style="width:85%;border-radius:50px;height:35px;" @click="toAdd">{{ $t('Add product') }}</div>
         </div>
