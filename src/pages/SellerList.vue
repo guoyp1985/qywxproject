@@ -252,7 +252,7 @@
                 ref="search">
               </search>
             </div>
-            <div class="popup-middle font14 padding10" style="top:101px;box-sizing:border-box;">
+            <div class="popup-middle font14 padding10" style="top:101px;box-sizing:border-box;" ref="userScrollContainer" @scroll="handleScroll1('userScrollContainer')">
               <template v-if="disUserData">
                 <template v-if="!userData.length">
                   <div class="padding10 align_center color-gray" v-if="searchword2 != ''">暂无搜索结果</div>
@@ -427,6 +427,20 @@ export default {
               self.$vux.loading.show()
               self.getData3()
             }
+          }
+        }
+      })
+    },
+    handleScroll1: function (refname, index) {
+      const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      self.$util.scrollEvent({
+        element: scrollarea,
+        callback: () => {
+          if (self.userData.length === (self.pageStart4 + 1) * self.limit) {
+            self.pageStart4++
+            self.$vux.loading.show()
+            self.searchUser()
           }
         }
       })
