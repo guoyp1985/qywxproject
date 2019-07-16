@@ -69,8 +69,10 @@
           </div>
           <div class="txt">恭喜 {{loginUser.linkman}}</div>
           <div class="txt">合伙人资格申请成功</div>
+          <div class="txt" v-if="query.censor == '1'">管理大大正在审核中，请耐心等待哦^_^</div>
           <div class="btnarea flex_center mt20" v-if="query.minibackurl">
-            <div class="btn flex_center dark" @click="toApp">马上分享赚佣金</div>
+            <div v-if="query.censor == '1'" class="btn flex_center dark" @click="toApp">回到首页</div>
+            <div v-else class="btn flex_center dark" @click="toApp">马上分享赚佣金</div>
           </div>
         </div>
       </div>
@@ -120,8 +122,10 @@ export default {
           this.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
         } else if (this.query.backtype === 'redirect') {
           this.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
-        } else {
+        } else if (this.query.backtype === 'navigateTo') {
           this.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+        } else {
+          this.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
         }
       }
     }
