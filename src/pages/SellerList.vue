@@ -370,6 +370,10 @@ export default {
     },
     onCancel2 () {
       this.searchword2 = ''
+      this.disUserData = false
+      this.userData = []
+      this.pageStart4 = 0
+      this.searchUser()
     },
     onSubmit2 () {
       this.disUserData = false
