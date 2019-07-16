@@ -383,7 +383,11 @@ export default {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
+        console.log('------------查询前-----------')
+        console.log(self.productData)
         self.productData = self.productData.concat(retdata)
+        console.log('------------查询后-----------')
+        console.log(self.productData)
         self.disProductData = true
         self.isLoading = false
         if (this.searchword !== '') {
