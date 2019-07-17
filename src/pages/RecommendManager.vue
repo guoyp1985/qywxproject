@@ -67,7 +67,7 @@
                     <div class="clamp1">{{item.title}}</div>
                     <div class="font12 color-gray">
                       <div class="clamp1 color-red">售价: {{ $t('RMB') }}{{ item.price }}</div>
-                      <div class="clamp1">佣金:<span class="color-red"> {{ $t('RMB') }}{{ item.levelagent }}</span></div>
+                      <div class="clamp1">佣金:<span class="color-red"> {{ $t('RMB') }}<template v-if="item.salesrebate">{{item.salesrebate}}</template><template v-else>{{item.levelagent}}</template></span></div>
                       <div class="clamp1">
                           <span class="v_middle db-in mr5"><span class="al al-kucun font14"></span>{{ item.storage }}{{item.unit}}</span>
                           <span class="v_middle db-in"><span class="al al-yishouchu font14"></span>{{ item.saled }}{{item.unit}}</span>

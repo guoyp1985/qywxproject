@@ -327,7 +327,7 @@ export default {
       pageStart2: 0,
       pageStart3: 0,
       pageStart4: 0,
-      limit: 10,
+      limit: 20,
       showPopup1: false,
       clickData: {},
       clickIndex: 0,
