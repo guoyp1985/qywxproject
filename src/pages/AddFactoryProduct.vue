@@ -865,18 +865,22 @@ export default {
           })
           return false
         }
+        if (self.$util.trim(oriprice) !== '' && parseFloat(oriprice) <= parseFloat(price)) {
+          self.$vux.toast.text('商品现价不能大于等于原价', 'middle')
+          return false
+        }
         // 商品利润
         if (self.$util.trim(oriprice) !== '' && (isNaN(profit) || parseFloat(profit) < 0)) {
           self.$vux.alert.show({
             title: '',
-            content: '请输入正确的价格'
+            content: '请输入正确的利润'
           })
           return false
         }
         if (parseFloat(profit) >= parseFloat(price)) {
           self.$vux.alert.show({
             title: '',
-            content: '请输入正确的利润'
+            content: '利润不能大于商品现价'
           })
           return false
         }
