@@ -53,7 +53,7 @@
           			<div class="picarea">
           				<div class="pic">
                     <img class="imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-                    <div class="t-icon color-theme">佣金: {{$t('RMB')}}{{item.levelagent}}</div>
+                    <div class="t-icon color-theme">佣金: {{$t('RMB')}}<template v-if="item.salesrebate">{{item.salesrebate}}</template><template v-else>{{item.levelagent}}</template></div>
           				</div>
           			</div>
           			<div class="desbox" style="overflow:hidden;">
