@@ -191,8 +191,16 @@ export default {
       const self = this
       if (data.flag === 1) {
         if (type === 'video') {
-          self.videoarr.push(data.data)
-          self.submitdata.video = self.videoarr.join(',')
+          if (data.data.lastIndexOf('.mp4') < 0) {
+            let error = '请上传正确的视频文件'
+            self.$vux.toast.show({
+              text: error,
+              time: self.$util.delay(error)
+            })
+          } else {
+            self.videoarr.push(data.data)
+            self.submitdata.video = self.videoarr.join(',')
+          }
         } else {
           self.photoarr.push(data.data)
           self.submitdata.photo = self.photoarr.join(',')
