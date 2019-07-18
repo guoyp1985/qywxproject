@@ -70,7 +70,7 @@ import { User } from '#/storage'
 import Sos from '@/components/Sos'
 
 let pageStart1 = 0
-const limit = 10
+const limit = 50
 export default {
   directives: {
     TransferDom
