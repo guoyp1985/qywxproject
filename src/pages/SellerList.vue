@@ -165,55 +165,6 @@
               </template>
             </template>
           </div>
-          <div v-show="(selectedIndex == 2)" class="swiper-inner" ref="scrollContainer5" @scroll="handleScroll('scrollContainer5',3)">
-            <template v-if="disTabData5">
-              <template v-if="!tabData5.length">
-                <div class="scroll_list">
-                  <div class="emptyitem">
-                    <div class="t-table" style="padding-top:20%;">
-                      <div class="t-cell padding10">
-                        <div>分享【厂家介绍】给好友，好友申请加盟即可成为兼职卖家帮你销售商品</div>
-                        <div class="color-blue"><router-link :to="{path: '/factoryDetail',query:{fid:fid}}">分享厂家介绍</router-link></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </template>
-              <template v-else>
-                <div class="pro_box bg-page list_shadow pl12 pr12 pb15 border-box">
-                  <div class="pro_list_top"></div>
-                  <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white font12" style="margin-top: -4px;">
-                    <div>什么是待审核卖家？</div>
-                    <div>指拥有自己的店铺，利用自己的客户群体兼职销售本厂家商品的卖家。</div>
-                    <div>如何发展兼职卖家？</div>
-                    <div>1、通过厂家介绍界面申请加盟的卖家即可成为兼职卖家。</div>
-                    <div>2、卖家通过渠道列表选择并加盟厂家商品时，即可成为兼职卖家。</div>
-                  </div>
-                </div>
-                <div class="scroll_list ">
-                  <div class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData5" :key="item.id" style="color:inherit;">
-                    <div class="t-table bg-white pl10 pr10 pt10 pb10 border-box">
-                      <div class="t-cell v_middle w70">
-                        <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-                      </div>
-                      <div class="t-cell v_middle pr10" style="box-sizing:border-box;">
-                        <div class="clamp1 font16">{{item.linkman}}</div>
-                        <div class="clamp1 font12 color-gray" v-if="item.identity && item.identity != 'W'">卖家等级: {{item.identity}}</div>
-                        <div class="clamp1 font12 color-gray">店铺: {{item.title}}</div>
-                        <div class="clamp1 font12 color-gray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
-                        <div class="clamp1 font12 color-orange">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
-                      </div>
-                      <div class="align_right t-cell v_middle w80">
-                        <div class="btnicon bg-red color-white font12" @click="controlPopup1(item,index)">
-                          <i class="al al-asmkticon0165 v_middle"></i>
-                        </div>
-                      </div>
-                		</div>
-                  </div>
-                </div>
-              </template>
-            </template>
-          </div>
         </template>
       </div>
       <div v-transfer-dom>
@@ -361,7 +312,7 @@ export default {
       query: {},
       fid: 0,
       loginUser: {},
-      tabtxts: [ '全职卖家', '兼职卖家', '待审批卖家' ],
+      tabtxts: ['全职卖家', '兼职卖家'],
       selectedIndex: 0,
       searchword1: '',
       searchword2: '',
