@@ -191,7 +191,7 @@ export default {
       const self = this
       if (data.flag === 1) {
         if (type === 'video') {
-          if (data.data.lastIndexOf('.mp4') < 0) {
+          if (data.data.lastIndexOf('.mp4') < 0 || data.data.lastIndexOf('.MOV') < 0) {
             let error = '请上传正确的视频文件'
             self.$vux.toast.show({
               text: error,
