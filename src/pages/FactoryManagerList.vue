@@ -187,29 +187,16 @@ export default {
       this.loginUser = User.get()
       if (this.loginUser) {
         this.$vux.loading.show()
-        let isAdmin = false
-        for (let i = 0; i < self.loginUser.usergroup.length; i++) {
-          if (self.loginUser.usergroup[i] === 1) {
-            isAdmin = true
-            break
-          }
-        }
-        if (!isAdmin) {
-          this.$vux.loading.hide()
-          self.showSos = true
-          self.showContainer = false
-        } else {
-          self.showSos = false
-          self.showContainer = true
-          this.$vux.loading.hide()
-          this.query = this.$route.query
-          if (this.Data.length < limit) {
-            this.disList = false
-            this.Data = []
-            this.$vux.loading.show()
-            pageStart1 = 0
-            this.getData1()
-          }
+        self.showSos = false
+        self.showContainer = true
+        this.$vux.loading.hide()
+        this.query = this.$route.query
+        if (this.Data.length < limit) {
+          this.disList = false
+          this.Data = []
+          this.$vux.loading.show()
+          pageStart1 = 0
+          this.getData1()
         }
       }
     }
