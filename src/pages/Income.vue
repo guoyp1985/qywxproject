@@ -207,6 +207,12 @@
             <div v-else v-for="(item,index1) in tabdata3" :key="index1" class="scroll_item bg-white mt10 list-shadow">
               <div class="pl12 pr12 pt10 pb10">
                 <div class="db-flex">
+                  <div class="flex_left w100" v-if="item.photo && item.photo != ''">
+                    <img @click="viewBigImg(`previewer-${index1}`,item.photo)" :src="item.photo" style="width:90px;height:90px;object-fit:cover;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+                    <div v-transfer-dom>
+                      <previewer :list="item.previewerPhoto" :ref="`previewer-${index1}`"></previewer>
+                    </div>
+                  </div>
                   <div class="flex_cell flex_left">
                     <div class="w_100">
                       <div><span>{{item.cashtypetext}}</span><span v-if="item.status == 1" class="color-green2">【{{item.statustext}}】</span><span v-else class="color-theme">【{{item.statustext}}】</span></div>
@@ -342,6 +348,17 @@ export default {
         this.wechatCash = true
       }
     },
+    viewBigImg (refname, url) {
+      const self = this
+      if (self.$util.isPC()) {
+        self.$refs[refname].show(0)
+      } else {
+        window.WeixinJSBridge.invoke('imagePreview', {
+          current: url,
+          urls: [url]
+        })
+      }
+    },
     handleScroll (refname, index) {
       const self = this
       let scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
@@ -401,6 +418,14 @@ export default {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
+        for (var i = 0; i < retdata.length; i++) {
+          let photoarr = []
+          let photo = retdata[i].photo
+          if (photo && self.$util.trim(photo) !== '') {
+            photoarr = photo.split(',')
+          }
+          retdata[i].previewerPhoto = self.$util.previewerImgdata(photoarr)
+        }
         self.tabdata3 = self.tabdata3.concat(retdata)
         self.disData3 = true
       })
