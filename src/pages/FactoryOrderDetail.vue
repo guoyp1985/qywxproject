@@ -167,6 +167,9 @@
         </div>
       </div>
     </div>
+    <div class="bg-theme flex_center color-white fix-home-icon" @click="toHome" v-if="query.from">
+      <i class="al al-home1"></i>
+    </div>
   </div>
 </template>
 <script>
@@ -226,6 +229,9 @@ export default {
       } else {
         this.$router.push({path: '/product', query: {id: item.pid, wid: item.wid}})
       }
+    },
+    toHome () {
+      this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage})
     },
     evaluate () {
       this.$router.push({name: 'evaluation', params: {order: this.order}})
@@ -497,4 +503,8 @@ export default {
 
 <style lang="less" scoped>
 .popup-deliver .fileinput{position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;background-color:transparent;opacity:0;}
+.fix-home-icon{
+  position:absolute;right:20px;bottom:80px;
+  width:50px;height:50px;border-radius:50%;
+}
 </style>
