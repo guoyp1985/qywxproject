@@ -329,12 +329,8 @@ export default {
       pageStart2: 0,
       pageStart3: 0,
       pageStart4: 0,
-<<<<<<< HEAD
       pageStart5: 0,
-      limit: 10,
-=======
       limit: 20,
->>>>>>> 87622036467b0716fdaea6ea40888eeb8087466f
       showPopup1: false,
       clickData: {},
       clickIndex: 0,
