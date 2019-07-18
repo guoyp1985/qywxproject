@@ -252,7 +252,7 @@
                 ref="search">
               </search>
             </div>
-            <div class="popup-middle font14 padding10" style="top:101px;box-sizing:border-box;">
+            <div class="popup-middle font14 padding10" style="top:101px;box-sizing:border-box;" ref="userScrollContainer" @scroll="handleScroll1('userScrollContainer')">
               <template v-if="disUserData">
                 <template v-if="!userData.length">
                   <div class="padding10 align_center color-gray" v-if="searchword2 != ''">暂无搜索结果</div>
@@ -329,8 +329,12 @@ export default {
       pageStart2: 0,
       pageStart3: 0,
       pageStart4: 0,
+<<<<<<< HEAD
       pageStart5: 0,
       limit: 10,
+=======
+      limit: 20,
+>>>>>>> 87622036467b0716fdaea6ea40888eeb8087466f
       showPopup1: false,
       clickData: {},
       clickIndex: 0,
@@ -373,6 +377,10 @@ export default {
     },
     onCancel2 () {
       this.searchword2 = ''
+      this.disUserData = false
+      this.userData = []
+      this.pageStart4 = 0
+      this.searchUser()
     },
     onSubmit2 () {
       this.disUserData = false
@@ -438,6 +446,20 @@ export default {
           //     self.getData5()
           //   }
           // }
+        }
+      })
+    },
+    handleScroll1: function (refname, index) {
+      const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      self.$util.scrollEvent({
+        element: scrollarea,
+        callback: () => {
+          if (self.userData.length === (self.pageStart4 + 1) * self.limit) {
+            self.pageStart4++
+            self.$vux.loading.show()
+            self.searchUser()
+          }
         }
       })
     },

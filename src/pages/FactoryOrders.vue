@@ -18,7 +18,7 @@
               <div><i class="al al-wushuju font60 pt20"></i></div>
               <div class="mt5">暂无相关订单！</div>
             </div>
-            <Orderitemplate v-else v-for="(item,index1) in tabdata1" :key="item.id" :data="item" order-link="/factoryOrderDetail">
+            <Orderitemplate v-else v-for="(item,index1) in tabdata1" :key="index1" :data="item" order-link="/factoryOrderDetail">
               <span slot="orderno">{{ item.orderno }}</span>
               <span slot="flagstr">{{ item.flagstr }}</span>
               <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item" :product="product"></Orderproductplate>
@@ -58,7 +58,7 @@
               <div><i class="al al-wushuju font60 pt20"></i></div>
               <div class="mt5">暂无相关订单！</div>
             </div>
-            <orderitemplate v-else v-for="(item,index1) in tabdata2" :key="item.id" :data="item" order-link="/factoryOrderDetail">
+            <orderitemplate v-else v-for="(item,index1) in tabdata2" :key="index1" :data="item" order-link="/factoryOrderDetail">
               <span slot="orderno">{{ item.orderno }}</span>
               <span slot="flagstr">{{ item.flagstr }}</span>
               <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item" :product="product"></Orderproductplate>
@@ -90,7 +90,7 @@
               <div><i class="al al-wushuju font60 pt20"></i></div>
               <div class="mt5">暂无相关订单！</div>
             </div>
-            <orderitemplate v-else v-for="(item,index1) in tabdata3" :key="item.id" :data="item" order-link="/factoryOrderDetail">
+            <orderitemplate v-else v-for="(item,index1) in tabdata3" :key="index1" :data="item" order-link="/factoryOrderDetail">
               <span slot="orderno">{{ item.orderno }}</span>
               <span slot="flagstr">{{ item.flagstr }}</span>
               <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item" :product="product"></Orderproductplate>
@@ -127,7 +127,7 @@
               <div><i class="al al-wushuju font60 pt20"></i></div>
               <div class="mt5">暂无相关订单！</div>
             </div>
-            <orderitemplate v-else v-for="(item,index1) in tabdata4" :key="item.id" :data="item" order-link="/factoryOrderDetail">
+            <orderitemplate v-else v-for="(item,index1) in tabdata4" :key="index1" :data="item" order-link="/factoryOrderDetail">
               <span slot="orderno">{{ item.orderno }}</span>
               <span slot="flagstr">{{ item.flagstr }}</span>
               <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item" :product="product"></Orderproductplate>

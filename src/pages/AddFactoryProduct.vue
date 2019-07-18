@@ -652,10 +652,18 @@ export default {
             this.photoarr1.push(lastphoto)
             self.submitdata.contentphoto = self.photoarr1.join(',')
           } else if (type === 'video') {
-            self.videoarr[this.clickPhotoIndex] = data.data
-            let lastphoto = this.videoarr.splice(this.videoarr.length - 1, 1)
-            this.videoarr.push(lastphoto)
-            self.submitdata.video = self.videoarr.join(',')
+            if (data.data.lastIndexOf('.mp4') < 0 && data.data.lastIndexOf('.MOV') < 0) {
+              let error = '请上传正确的视频文件'
+              self.$vux.toast.show({
+                text: error,
+                time: self.$util.delay(error)
+              })
+            } else {
+              self.videoarr[this.clickPhotoIndex] = data.data
+              let lastphoto = this.videoarr.splice(this.videoarr.length - 1, 1)
+              this.videoarr.push(lastphoto)
+              self.submitdata.video = self.videoarr.join(',')
+            }
           }
         } else {
           if (type === 'photo' && self.photoarr.length < self.maxnum) {
@@ -665,8 +673,16 @@ export default {
             self.photoarr1.push(data.data)
             self.submitdata.contentphoto = self.photoarr1.join(',')
           } else if (type === 'video') {
-            self.videoarr.push(data.data)
-            self.submitdata.video = self.videoarr.join(',')
+            if (data.data.lastIndexOf('.mp4') < 0 && data.data.lastIndexOf('.MOV') < 0) {
+              let error = '请上传正确的视频文件'
+              self.$vux.toast.show({
+                text: error,
+                time: self.$util.delay(error)
+              })
+            } else {
+              self.videoarr.push(data.data)
+              self.submitdata.video = self.videoarr.join(',')
+            }
           }
         }
       } else if (data.error) {
@@ -865,18 +881,22 @@ export default {
           })
           return false
         }
+        if (self.$util.trim(oriprice) !== '' && parseFloat(oriprice) <= parseFloat(price)) {
+          self.$vux.toast.text('商品现价不能大于等于原价', 'middle')
+          return false
+        }
         // 商品利润
         if (self.$util.trim(oriprice) !== '' && (isNaN(profit) || parseFloat(profit) < 0)) {
           self.$vux.alert.show({
             title: '',
-            content: '请输入正确的价格'
+            content: '请输入正确的利润'
           })
           return false
         }
         if (parseFloat(profit) >= parseFloat(price)) {
           self.$vux.alert.show({
             title: '',
-            content: '请输入正确的利润'
+            content: '利润不能大于商品现价'
           })
           return false
         }

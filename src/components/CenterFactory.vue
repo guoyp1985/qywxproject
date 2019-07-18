@@ -124,6 +124,13 @@
             </div>
           </grid-item>
         </div>
+        <div class="gridlist">
+          <grid-item label="厂家管理" :link="{path:'/factoryManagerList', query: {fid: loginUser.fid}}" style="position:relative;">
+            <div slot="icon">
+              <i class="al al-peoplefill"></i>
+            </div>
+          </grid-item>
+        </div>
       </grid>
     </div>
     <group class="list-shadow02 order_list_show posi_r">
@@ -365,6 +372,7 @@ export default {
 .centersales .weui-grids .gridlist:nth-child(5) .weui-grid{background: linear-gradient(#f25c7d, #ed2d5a);}
 .centersales .weui-grids .gridlist:nth-child(6) .weui-grid{background: linear-gradient(#7974f6, #615aec);}
 .centersales .weui-grids .gridlist:nth-child(7) .weui-grid{background: linear-gradient(#2498e0, #226ab2);}
+.centersales .weui-grids .gridlist:nth-child(8) .weui-grid{background: linear-gradient(#f98, #f99);}
 .centersales .weui-grids .gridlist.disabled .weui-grid{background: linear-gradient(#b9b9b9, #afafaf);}
 .listitem.disabled {position:relative;background-color:#d8d8d8;}
 

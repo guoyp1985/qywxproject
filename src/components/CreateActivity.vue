@@ -17,7 +17,7 @@
         <i class="al al-mjiantou-copy font14"></i>
       </div>
     </div>
-    <div class="db-flex pl12 pr12 pt10 pb10 mb5 bg-white" @click="clickadd('bargainbuy')">
+    <div v-if="!fid" class="db-flex pl12 pr12 pt10 pb10 mb5 bg-white" @click="clickadd('bargainbuy')">
       <div class="flex_left" style="width:110px;">
         <img class="disphoto db middle-cell" style="width:100px;height:100px;" src="https://tossharingsales.boka.cn/images/bargainbuy.jpg">
       </div>

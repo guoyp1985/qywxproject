@@ -11,7 +11,7 @@
             <div class="flex_cell">
               <div class="clamp1">{{item.linkman}}</div>
               <div class="color-theme mt5">获得奖励: {{$t("RMB")}}{{item.hongbaomoney}}</div>
-              <div class="color-gray font12">{{item.dateline | dateFormat}}</div>
+              <!-- <div class="color-gray font12">{{item.dateline | dateFormat}}</div> -->
             </div>
             <div class="w80 flex_right">
               <div class="bg-theme color-white btn flex_center">详情</div>
