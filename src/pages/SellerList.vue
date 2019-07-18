@@ -430,13 +430,14 @@ export default {
               self.$vux.loading.show()
               self.getData3()
             }
-          } else if (index === 3) {
-            if (self.tabData5.length === (self.pageStart5 + 1) * self.limit) {
-              self.pageStart5++
-              self.$vux.loading.show()
-              self.getData5()
-            }
           }
+          //  else if (index === 3) {
+          //   if (self.tabData5.length === (self.pageStart5 + 1) * self.limit) {
+          //     self.pageStart5++
+          //     self.$vux.loading.show()
+          //     self.getData5()
+          //   }
+          // }
         }
       })
     },
@@ -465,13 +466,13 @@ export default {
             self.getData2()
           }
           break
-        case 2:
-          if (this.tabData5.length < this.limit) {
-            self.pageStart5 = 0
-            self.disTabData5 = false
-            this.tabData5 = []
-            self.getData5()
-          }
+        // case 2:
+        //   if (this.tabData5.length < this.limit) {
+        //     self.pageStart5 = 0
+        //     self.disTabData5 = false
+        //     this.tabData5 = []
+        //     self.getData5()
+        //   }
       }
     },
     controlPopup1 (item, index) {
