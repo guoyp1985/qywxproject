@@ -10,7 +10,7 @@
             <div class="scroll_list">
               <div class="emptyitem">
                 <div class="t-table" style="padding-top:20%;">
-                  <div class="t-cell padding10">暂无厂家数据</div>
+                  <div class="t-cell padding10">暂无管理员</div>
                 </div>
               </div>
             </div>
@@ -19,13 +19,13 @@
             <div class="scroll_list ">
               <div class="scroll_item padding10 mb10 font14 bg-white db list-shadow " v-for="(item,index) in Data" :key="item.id" style="color:inherit;">
                 <div class="t-table">
-                  <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
+                  <div class="t-cell v_middle w70">
                     <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-                  </router-link>
-                  <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle">
+                  </div>
+                  <div class="t-cell v_middle">
                     <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
-                  </router-link>
-                  <div :to="{path: '/chat', query: {uid: item.uid,from:query.from}}" class="t-cell v_middle w60 align_right">
+                  </div>
+                  <div class="t-cell v_middle w60 align_right">
                     <div class="qbtn bg-red color-white" @click="deleteManager(item,index)">删除</div>
                   </div>
                 </div>
@@ -36,72 +36,6 @@
       </div>
       <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
         <div class="addproduct flex_cell flex_center btn-bottom-red" @click="clickPopup1">添加管理员</div>
-      </div>
-      <div v-transfer-dom>
-        <popup class="menuwrap" v-model="showPopup1">
-          <div class="popup0">
-            <div class="list" v-if="clickData">
-              <!-- <div class="item">
-                <div class="inner" @click="clickPopup('push')">添加管理员</div>
-              </div> -->
-              <div class="item">
-                <div class="inner" @click="clickPopup('manager')">管理员列表</div>
-              </div>
-              <!-- <div class="item">
-                <div class="inner" @click="clickPopup('set')">设置佣金</div>
-              </div> -->
-              <div class="item">
-                <div class="inner" @click="showxdate2">设置到期时间</div>
-              </div>
-              <div class="item">
-                <div class="inner" @click="clickPopup('edit')">编辑</div>
-              </div>
-              <div class="item">
-                <div class="inner" @click="clickPopup('retailer')">卖家</div>
-              </div>
-              <div class="item">
-                <div class="inner" @click="clickPopup('stat')">统计</div>
-              </div>
-              <div class="item">
-                <div class="inner" @click="clickPopup('bank')">结算银行卡</div>
-              </div>
-              <div class="item close mt10" @click="clickPopup('row.key')">
-                <div class="inner">{{ $t('Cancel txt') }}</div>
-              </div>
-            </div>
-          </div>
-        </popup>
-      </div>
-      <div v-transfer-dom class="x-popup">
-        <popup v-model="showManager" height="100%">
-          <div class="popup1 font14">
-            <div class="popup-top flex_center">管理员</div>
-            <div class="popup-middle padding10 border-box">
-              <div class="scroll_list" v-if="disManagerList">
-                <div v-if="!managerData || managerData.length == 0" class="scroll_item emptyitem flex_center">暂无管理员</div>
-                <div v-else v-for="(item,index) in managerData" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
-                  <div class="t-table">
-                    <div :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
-                      <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-                    </div>
-                    <div :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle">
-                      <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
-                    </div>
-                    <div class="t-cell v_middle w60 align_right">
-                      <div class="qbtn bg-red color-white" @click="deleteManager(item,index)">删除</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="popup-bottom flex_center" style="width:50%;">
-              <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeManager">{{ $t('Close') }}</div>
-            </div>
-            <div class="popup-bottom flex_center" style="width:50%;left:50%;">
-              <div class="flex_cell h_100 flex_center bg-red color-white" @click="clickPopup1">添加管理员</div>
-            </div>
-          </div>
-        </popup>
       </div>
       <div v-transfer-dom class="x-popup">
         <popup v-model="showQrcode" height="100%">
@@ -118,23 +52,6 @@
             </div>
           </div>
         </popup>
-      </div>
-      <!-- <div v-show="timeShow">
-        <group class="x-datetime">
-          <datetime format="YYYY-MM-DD HH:mm" v-model="endTime" :show.sync="visibility2" @on-confirm="saveSuess"></datetime>
-        </group>
-      </div> -->
-      <div class="modalarea flex_center" v-if="timeShow">
-        <div class="modals">
-          <div class="align_center mb10">请输入延长的天数</div>
-          <div class="input-bor mb10">
-            <input :value="day" ref="input1" type="text" class="input priceInput pl10" name="days" placeholder="请输入延长天数" ></input>
-          </div>
-          <div class="flex_table flex_center">
-            <div class="btns mr10" style="background-color:#948f8f;" @click="btnClose">取消</div>
-            <div class="btns ml10" style="background-color:#ea3a3a;" @click="saveSuess">确定</div>
-          </div>
-        </div>
       </div>
     </template>
   </div>
@@ -173,50 +90,15 @@ export default {
       query: {},
       loginUser: {},
       Data: [],
-      showPopup1: false,
       clickData: {},
       clickIndex: 0,
       showQrcode: false,
       disList: false,
-      showManager: false,
       managerData: [],
       disManagerList: false
     }
   },
   methods: {
-    btnClose () {
-      this.timeShow = false
-    },
-    saveSuess (e) {
-      const self = this
-      self.day = self.$refs.input1.value
-      self.$http.post(`${ENV.BokaApi}/api/factory/addFactoryDays`, {
-        fid: self.clickData.id, days: self.day
-      }).then(function (res) {
-        const data = res.data
-        if (data.flag === 1) {
-          self.timeShow = false
-          self.day = ''
-          self.$vux.toast.show({
-            text: '保存成功！',
-            type: 'text',
-            width: '200px'
-          })
-        } else {
-          self.timeShow = false
-          self.day = ''
-          self.$vux.toast.show({
-            text: '操作失败！！！',
-            type: 'text',
-            width: '200px'
-          })
-        }
-      })
-    },
-    showxdate2 () {
-      this.timeShow = true
-      this.showPopup1 = false
-    },
     getPhoto (src) {
       return this.$util.getPhoto(src)
     },
@@ -236,7 +118,6 @@ export default {
     },
     controlPopup1 (item, index) {
       event.preventDefault()
-      this.showPopup1 = !this.showPopup1
       this.clickData = item
       this.clickIndex = index
       let time = new Time(item.endtime * 1000).dateFormat('yyyy-MM-dd hh:mm')
@@ -244,7 +125,6 @@ export default {
     },
     clickPopup1 () {
       const self = this
-      self.showPopup1 = false
       self.showQrcode = true
       self.$vux.loading.show()
       self.$http.get(`${ENV.BokaApi}/api/factory/adminQRCode`, {
@@ -263,42 +143,8 @@ export default {
         }
       })
     },
-    clickPopup (key) {
-      const self = this
-      if (key === 'manager') {
-        self.showPopup1 = false
-        self.showManager = true
-        self.$vux.loading.show()
-        self.$http.post(`${ENV.BokaApi}/api/factory/adminList`, {
-          fid: self.clickData.id
-        }).then(function (res) {
-          let data = res.data
-          self.$vux.loading.hide()
-          self.managerData = data.data ? data.data : data
-          self.disManagerList = true
-        })
-      } else if (key === 'edit') {
-        self.$router.push({path: '/addFactory', query: {id: self.clickData.id}})
-      } else if (key === 'set') {
-        self.$router.push({path: '/factoryAgentFee', query: {id: self.clickData.id}})
-      } else if (key === 'retailer') {
-        self.$router.push({path: '/sellerList', query: {id: self.clickData.id}})
-      } else if (key === 'stat') {
-        self.$router.push({path: '/stat', query: {id: self.clickData.id, module: 'factory'}})
-      } else if (key === 'bank') {
-        let fromPage = encodeURIComponent('/factoryManage')
-        self.$router.push({path: '/factoryBank', query: {id: self.clickData.id, control: 'manage', fromPage: fromPage}})
-      } else {
-        self.showPopup1 = false
-      }
-    },
     closeQrcode () {
       this.showQrcode = false
-    },
-    closeManager () {
-      this.showManager = false
-      this.disManagerList = false
-      this.managerData = []
     },
     deleteManager (item, index) {
       const self = this
