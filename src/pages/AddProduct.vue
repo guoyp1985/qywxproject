@@ -593,7 +593,7 @@ export default {
             this.photoarr1.push(lastphoto)
             self.submitdata.contentphoto = self.photoarr1.join(',')
           } else if (type === 'video') {
-            if (data.data.lastIndexOf('.mp4') < 0 || data.data.lastIndexOf('.MOV') < 0) {
+            if (data.data.lastIndexOf('.mp4') < 0 && data.data.lastIndexOf('.MOV') < 0) {
               let error = '请上传正确的视频文件'
               self.$vux.toast.show({
                 text: error,
@@ -614,7 +614,7 @@ export default {
             self.photoarr1.push(data.data)
             self.submitdata.contentphoto = self.photoarr1.join(',')
           } else if (type === 'video') {
-            if (data.data.lastIndexOf('.mp4') < 0 || data.data.lastIndexOf('.MOV') < 0) {
+            if (data.data.lastIndexOf('.mp4') < 0 && data.data.lastIndexOf('.MOV') < 0) {
               let error = '请上传正确的视频文件'
               self.$vux.toast.show({
                 text: error,
