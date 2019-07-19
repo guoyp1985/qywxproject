@@ -7,7 +7,7 @@
       <div class="s-container" style="top:0;">
         <form>
           <template v-if="query.wid && sellerUser.uid">
-            <div class="padding10 bg-white flex_center"><span class="color-theme bold">{{sellerUser.linkman}}</span><span>为您推荐</span></div>
+            <div class="padding10 bg-white" style="text-align: center;word-break: break-word;"><span class="color-theme bold">{{sellerUser.linkman}}</span><span>为您推荐</span></div>
             <div style="height:12px;"></div>
           </template>
           <template v-if="onlineVal">
