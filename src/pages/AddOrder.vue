@@ -21,7 +21,7 @@
     				</div>
             <div style="height:12px;"></div>
           </template>
-          <div class="pb10 flex_center" v-if="query.wid && sellerUser.uid"><span class="color-theme bold">{{sellerUser.linkman}}</span><span>为您推荐购买</span></div>
+          <div class="pb10 flex_center" v-if="query.wid && sellerUser.uid"><span class="color-theme bold">{{sellerUser.linkman}}</span><span>为您推荐</span></div>
           <div v-for="(item,index) in orderdata" :key="item.id" class="orderitem bg-white">
             <div v-for="(product,index1) in item.info" :key="product.id" class="productitem">
     					<div class="b_bottom_after padding10">
