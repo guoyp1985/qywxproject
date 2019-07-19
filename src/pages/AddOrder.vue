@@ -6,6 +6,10 @@
     <template v-if="showContainer">
       <div class="s-container" style="top:0;">
         <form>
+          <template v-if="query.wid && sellerUser.uid">
+            <div class="padding10 bg-white flex_center"><span class="color-theme bold">{{sellerUser.linkman}}</span><span>为您推荐</span></div>
+            <div style="height:12px;"></div>
+          </template>
           <template v-if="onlineVal">
     				<div class="padding10 b_bottom_after bg-white" @click="showaddress">
     					<div class="t-table">
@@ -21,7 +25,6 @@
     				</div>
             <div style="height:12px;"></div>
           </template>
-          <div class="pb10 flex_center" v-if="query.wid && sellerUser.uid"><span class="color-theme bold">{{sellerUser.linkman}}</span><span>为您推荐</span></div>
           <div v-for="(item,index) in orderdata" :key="item.id" class="orderitem bg-white">
             <div v-for="(product,index1) in item.info" :key="product.id" class="productitem">
     					<div class="b_bottom_after padding10">
