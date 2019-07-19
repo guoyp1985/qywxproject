@@ -112,6 +112,7 @@
                 </div>
               </div>
             </div>
+            <div class="padding10 flex_center" v-if="query.wid && sellerUser.uid">【{{sellerUser.linkman}}】推荐购买</div>
           </div>
         </form>
       </div>
@@ -303,7 +304,8 @@ export default {
       WeixinName: ENV.WeixinName,
       showModal: false,
       payData: {},
-      showLineArea: false
+      showLineArea: false,
+      sellerUser: {}
     }
   },
   watch: {
@@ -664,6 +666,11 @@ export default {
               self.payPrice = (cha + parseFloat(self.postage.replace(/,/g, ''))).toFixed(2)
               break
             }
+          }
+          if (this.query.wid) {
+            this.$http.get(`${ENV.BokaApi}/api/getUser/${this.query.wid}`).then(res => {
+              this.sellerUser = res.data
+            })
           }
         }
       })
