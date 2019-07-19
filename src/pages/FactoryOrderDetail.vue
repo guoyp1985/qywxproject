@@ -427,6 +427,8 @@ export default {
             }
           }
         })
+        this.refundContent = ''
+        this.refresh()
       })
     },
     getData () {
