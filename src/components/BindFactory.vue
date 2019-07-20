@@ -118,6 +118,12 @@ export default {
           }
           minibackurl = `${minibackurl}gxkfid=${this.loginUser.fid}`
         }
+        if (minibackurl.indexOf('?') < 0) {
+          minibackurl = `${minibackurl}?`
+        } else {
+          minibackurl = `${minibackurl}&`
+        }
+        minibackurl = `${minibackurl}regwid=${this.loginUser.uid}`
         if (this.query.backtype === 'relaunch') {
           this.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
         } else if (this.query.backtype === 'redirect') {
