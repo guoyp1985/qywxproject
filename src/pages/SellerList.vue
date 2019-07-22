@@ -183,12 +183,12 @@
                 </div>
               </template>
               <template v-else>
-                <div class="flex_around">
-                  <!-- <div class="doBtn" @click="allchoose()">全选</div> -->
-                  <div class="doBtn" @click="agree()">同意</div>
-                  <div class="doBtn" @click="refuse()">拒绝</div>
-                </div>
-                <div class="scroll_list ">
+                <div class="scroll_list " >
+                  <div class="flex_around">
+                    <div class="doBtn" @click="allchoose()">全选</div>
+                    <div class="doBtn" @click="agree()">同意</div>
+                    <div class="doBtn" @click="refuse()">拒绝</div>
+                  </div>
                   <div class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData5" :key="item.id" style="color:inherit;">
                     <div class="t-table bg-white pl10 pr10 pt10 pb10 border-box">
                       <div class="t-cell v_middle w70">
@@ -201,8 +201,8 @@
                         <div class="clamp1 font12 color-gray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
                         <div class="clamp1 font12 color-orange">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
                       </div>
-                      <div class="align_right t-cell v_middle w80">
-                        <input type="checkbox" v-model="idArr" :value="item.uid" :checked="checked" :data-uid="item.uid" :data-fid="item.fid"/>
+                      <div class="align_right t-cell v_middle w80" >
+                        <input ref="inputCheckbox" type="checkbox" :value="item.uid" :data-uid="item.uid"/>
                       </div>
                 		</div>
                   </div>
@@ -389,7 +389,6 @@ export default {
       selectUploader: null,
       userData: [],
       disUserData: false,
-      checked: false,
       idArr: []
     }
   },
@@ -632,16 +631,54 @@ export default {
         }
       }
     },
-    allchoose () {
-      if (this.checked) {
-        this.checked = false
-      } else {
-        this.checked = true
+    // 获取待审核卖家的信息
+    getDshsSellerInfo () {
+      let uids = []
+      let selectCount = 0
+      let checkdoms = this.$refs.inputCheckbox
+      for (var i = 0; i < checkdoms.length; i++) {
+        if (checkdoms[i].checked) {
+          selectCount++
+          uids.push(checkdoms[i].dataset.uid)
+        }
       }
+      if (selectCount < 1) {
+        this.$vux.alert.show({
+          title: '温馨提示',
+          content: '请先选中待审核的用户'
+        })
+      }
+      this.idArr = uids
+    },
+    allchoose () {
+      let checkdoms = this.$refs.inputCheckbox
+      for (var i = 0; i < checkdoms.length; i++) {
+        checkdoms[i].checked = !checkdoms[i].checked
+      }
+      this.getDshsSellerInfo()
     },
     agree () {
-      console.log('------ids--')
-      console.log(this.idArr)
+      this.getDshsSellerInfo()
+      this.$vux.confirm.show({
+        content: '确定将选中的用户通过审核？',
+        onConfirm: () => {
+          this.$vux.loading.show()
+          this.$http.post(`${ENV.BokaApi}/api/factory/censorRetailer`, {
+            fid: this.fid, uids: this.idArr
+          }).then((res) => {
+            console.log('-------------')
+            console.log(res)
+            this.$vux.loading.hide()
+            this.getData5()
+          })
+        }
+      })
+    },
+    refuse () {
+      this.getDshsSellerInfo()
+      this.$vux.confirm.show({
+        content: '确定将选中的用户拒绝审核？'
+      })
     },
     // getValue (event) {
     //   console.log('----------')
