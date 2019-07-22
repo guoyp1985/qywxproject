@@ -156,7 +156,8 @@
         <div v-if="query.wid && query.wid != loginUser.uid && !loginUser.isretailer" class="pb10 pl10 pr10">
           <router-link to="/centerSales" class="btn-open db" style="background-color: #e10c00">我也要开店</router-link>
         </div>
-        <div style="text-align:center;color:#999;height:30px;line-height:30px;font-size:14px;" v-if="scrollEnd">没有更多商品了！</div>
+        <div class="load-end-area loading" v-if="isLoading"></div>
+        <div class="load-end-area done" v-else-if="isDone"></div>
       </div>
       <div class="s-bottom flex_center list-shadow">
         <div @click="toCenterSales" class="flex_cell color-white h_100 flex_center" style="background:#f9f9f9;border-right:#e8e8e8 1px solid;">
@@ -304,9 +305,13 @@ export default {
       type: Boolean,
       default: ''
     },
-    scrollEnd: {
+    isLoading: {
       type: Boolean,
-      default: ''
+      default: false
+    },
+    isDone: {
+      type: Boolean,
+      default: false
     },
     showSuggest: {
       type: Boolean,

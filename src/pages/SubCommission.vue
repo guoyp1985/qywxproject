@@ -18,8 +18,8 @@
             </div>
           </div>
         </div>
-        <div class="padding20 flex_center color-gray font12" v-if="isLoading">数据加载中</div>
-        <div class="padding20 flex_center color-gray font12" v-else="isDone">没有更多数据了</div>
+        <div class="load-end-area loading" v-if="isLoading"></div>
+        <div class="load-end-area done" v-else-if="isDone"></div>
       </template>
     </div>
     <div v-transfer-dom class="x-popup">
@@ -115,8 +115,6 @@ export default {
             self.isLoading = true
             pageStart1++
             self.getData()
-          } else {
-            self.isDone = true
           }
         }
       })
@@ -128,10 +126,13 @@ export default {
         let retdata = data.data ? data.data : data
         if (retdata.length) {
           self.tabdata1 = self.tabdata1.concat(retdata)
-        } else if (this.tabData1.length) {
-          self.isDone = true
         }
         self.isLoading = false
+        if (retdata.length < limit && this.tabdata1.length && pageStart1 > 0) {
+          this.isDone = true
+        } else {
+          this.isDone = false
+        }
         self.disList1 = true
       })
     },
