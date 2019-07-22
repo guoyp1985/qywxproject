@@ -202,6 +202,47 @@
             </orderitemplate>
           </div>
         </div>
+        <div v-show="(selectedIndex == 4)">
+          <div v-if="distabdata5" class="scroll_list">
+            <div v-if="!tabdata5 || tabdata5.length === 0" class="scroll_item padding10 align_center color-gray">
+              <div><i class="al al-wushuju font60 pt20"></i></div>
+              <div class="mt5">暂无相关订单！</div>
+              <div>积极分享商品或活动，客户才会购买哦~</div>
+            </div>
+            <orderitemplate v-else v-for="(item,index1) in tabdata5" :key="item.id" :data="item" :from="query.from">
+              <span slot="orderno">{{ item.orderno }}</span>
+              <span slot="flagstr">{{ item.flagstr }}</span>
+              <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item" :product="product"></Orderproductplate>
+              <div slot="receivearea">
+                <div class="t-table">
+                  <div class="font12 color-lightgray">
+                    <span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span>
+                    <span @click="copyTxt(item)" class="ml5" style="position:relative;">
+                      <i class="al al-fuzhi font14 color-red4"></i><span class=" color-red4">复制</span>
+                      <template v-if="item.flag != 0 && item.flag != 1 && item.flag != 2">
+                        <div :class="`deliver_txt-3-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.delivercompanyname }} {{ item.delivercode }} {{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
+                      </template>
+                      <template v-else>
+                        <div :class="`deliver_txt-3-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
+                      </template>
+                    </span>
+                  </div>
+                  <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right color-lightgray font12">
+                    <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
+                  </div>
+                </div>
+                <div class="t-table pt5 color-lightgray font13 deliverarea">
+                  <div class="t-cell v_middle appendcontrol align_right w80" v-if="item.flag == 2 && item.candeliver">
+                    <div class="qbtn4 font12" style="padding:1px 14px;" @click="uploaddeliver(item,index1)">{{ $t('Deliver goods') }}</div>
+                  </div>
+                  <div class="t-cell v_middle appendcontrol align_right w80" v-if="item.flag == 3">
+                    <router-link :to="{path: '/deliverinfo', query: {id: item.id}}" class="qbtn4 color-orange7 font12" style="border:1px solid #ee9f25;padding:1px 8px">{{ $t('View deliver') }}</router-link>
+                  </div>
+                </div>
+              </div>
+            </orderitemplate>
+          </div>
+        </div>
       </div>
       <!--
       <div class="s-bottom bottomnaviarea b_top_after">
@@ -321,21 +362,24 @@ export default {
       query: {},
       loginUser: {},
       retailerInfo: {},
-      tabtxts: [ '全部', '待付款', '待发货', '已发货' ],
+      tabtxts: [ '全部', '待付款', '待发货', '已发货', '退款订单' ],
       selectedIndex: 0,
       distabdata1: false,
       distabdata2: false,
       distabdata3: false,
       distabdata4: false,
+      distabdata5: false,
       tabdata1: [],
       tabdata2: [],
       tabdata3: [],
       tabdata4: [],
+      tabdata5: [],
       limit: 10,
       pagestart1: 0,
       pagestart2: 0,
       pagestart3: 0,
       pagestart4: 0,
+      pagestart5: 0,
       showpopup: false,
       deliveritem: null,
       deliverindex: 0,
@@ -443,6 +487,12 @@ export default {
                 self.getData4()
               }
               break
+            case 4:
+              if (self.tabdata5.length === (self.pagestart5 + 1) * self.limit) {
+                self.pagestart5++
+                self.getData5()
+              }
+              break
           }
         }
       })
@@ -515,6 +565,23 @@ export default {
         self.distabdata4 = true
       })
     },
+    getData5 (isone) {
+      this.$vux.loading.show()
+      const self = this
+      let params = {backflag: 20, pagestart: self.pagestart5, limit: self.limit}
+      if (isone) {
+        params = {backflag: 20, pagestart: self.tabdata5.length, limit: 1}
+      }
+      self.$http.get(`${ENV.BokaApi}/api/order/orderList/retailer`, {
+        params: params
+      }).then(function (res) {
+        const data = res.data
+        self.$vux.loading.hide()
+        const retdata = data.data ? data.data : data
+        self.tabdata5 = self.tabdata5.concat(retdata)
+        self.distabdata5 = true
+      })
+    },
     onItemClick () {
       const self = this
       switch (this.selectedIndex) {
@@ -548,6 +615,14 @@ export default {
             self.distabdata4 = false
             this.tabdata4 = []
             self.getData4()
+          }
+          break
+        case 4:
+          if (this.tabdata5.length < this.limit) {
+            self.pagestart5 = 0
+            self.distabdata5 = false
+            this.tabdata5 = []
+            self.getData5()
           }
           break
       }
@@ -588,6 +663,14 @@ export default {
             self.distabdata4 = false
             this.tabdata4 = []
             self.getData4()
+          }
+          break
+        case 4:
+          if (this.tabdata4.length < this.limit) {
+            self.pagestart5 = 0
+            self.distabdata5 = false
+            this.tabdata5 = []
+            self.getData5()
           }
           break
       }

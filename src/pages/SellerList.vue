@@ -183,17 +183,12 @@
                 </div>
               </template>
               <template v-else>
-                <div class="pro_box bg-page list_shadow pl12 pr12 pb15 border-box">
-                  <div class="pro_list_top"></div>
-                  <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white font12" style="margin-top: -4px;">
-                    <div>什么是待审核卖家？</div>
-                    <div>指拥有自己的店铺，利用自己的客户群体兼职销售本厂家商品的卖家。</div>
-                    <div>如何发展兼职卖家？</div>
-                    <div>1、通过厂家介绍界面申请加盟的卖家即可成为兼职卖家。</div>
-                    <div>2、卖家通过渠道列表选择并加盟厂家商品时，即可成为兼职卖家。</div>
+                <div class="scroll_list " >
+                  <div class="flex_around">
+                    <div class="doBtn" @click="allchoose()">全选</div>
+                    <div class="doBtn" @click="agree()">同意</div>
+                    <div class="doBtn" @click="refuse()">拒绝</div>
                   </div>
-                </div>
-                <div class="scroll_list ">
                   <div class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData5" :key="item.id" style="color:inherit;">
                     <div class="t-table bg-white pl10 pr10 pt10 pb10 border-box">
                       <div class="t-cell v_middle w70">
@@ -206,10 +201,8 @@
                         <div class="clamp1 font12 color-gray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
                         <div class="clamp1 font12 color-orange">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
                       </div>
-                      <div class="align_right t-cell v_middle w80">
-                        <div class="btnicon bg-red color-white font12" @click="controlPopup1(item,index)">
-                          <i class="al al-asmkticon0165 v_middle"></i>
-                        </div>
+                      <div class="align_right t-cell v_middle w80" >
+                        <input ref="inputCheckbox" type="checkbox" :value="item.uid" :data-uid="item.uid"/>
                       </div>
                 		</div>
                   </div>
@@ -395,7 +388,8 @@ export default {
       showUploaderPopup: false,
       selectUploader: null,
       userData: [],
-      disUserData: false
+      disUserData: false,
+      idArr: []
     }
   },
   methods: {
@@ -637,6 +631,59 @@ export default {
         }
       }
     },
+    // 获取待审核卖家的信息
+    getDshsSellerInfo () {
+      let uids = []
+      let selectCount = 0
+      let checkdoms = this.$refs.inputCheckbox
+      for (var i = 0; i < checkdoms.length; i++) {
+        if (checkdoms[i].checked) {
+          selectCount++
+          uids.push(checkdoms[i].dataset.uid)
+        }
+      }
+      if (selectCount < 1) {
+        this.$vux.alert.show({
+          title: '温馨提示',
+          content: '请先选中待审核的用户'
+        })
+      }
+      this.idArr = uids
+    },
+    allchoose () {
+      let checkdoms = this.$refs.inputCheckbox
+      for (var i = 0; i < checkdoms.length; i++) {
+        checkdoms[i].checked = !checkdoms[i].checked
+      }
+      this.getDshsSellerInfo()
+    },
+    agree () {
+      this.getDshsSellerInfo()
+      this.$vux.confirm.show({
+        content: '确定将选中的用户通过审核？',
+        onConfirm: () => {
+          this.$vux.loading.show()
+          this.$http.post(`${ENV.BokaApi}/api/factory/censorRetailer`, {
+            fid: this.fid, uids: this.idArr
+          }).then((res) => {
+            console.log('-------------')
+            console.log(res)
+            this.$vux.loading.hide()
+            this.getData5()
+          })
+        }
+      })
+    },
+    refuse () {
+      this.getDshsSellerInfo()
+      this.$vux.confirm.show({
+        content: '确定将选中的用户拒绝审核？'
+      })
+    },
+    // getValue (event) {
+    //   console.log('----------')
+    //   console.log(event.currentTarget.dataset.uid)
+    // },
     submitLevel () {
       const self = this
       if (!self.selectLevel) {
@@ -891,5 +938,7 @@ export default {
     background-position: center;
     background-size: 100%;
   }
+  .doBtn{height: 44px;line-height: 44px;width: 33.3%;text-align: center;}
+  .flex_around{display: flex;justify-content: space-around; align-items: center;}
 }
 </style>
