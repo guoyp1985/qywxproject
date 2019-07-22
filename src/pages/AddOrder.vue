@@ -6,6 +6,10 @@
     <template v-if="showContainer">
       <div class="s-container" style="top:0;">
         <form>
+          <template v-if="query.wid && sellerUser.uid">
+            <div class="padding10 bg-white" style="text-align: center;word-break: break-word;"><span class="color-theme bold">{{sellerUser.linkman}}</span><span>为您推荐</span></div>
+            <div style="height:12px;"></div>
+          </template>
           <template v-if="onlineVal">
     				<div class="padding10 b_bottom_after bg-white" @click="showaddress">
     					<div class="t-table">
@@ -303,7 +307,8 @@ export default {
       WeixinName: ENV.WeixinName,
       showModal: false,
       payData: {},
-      showLineArea: false
+      showLineArea: false,
+      sellerUser: {}
     }
   },
   watch: {
@@ -664,6 +669,11 @@ export default {
               self.payPrice = (cha + parseFloat(self.postage.replace(/,/g, ''))).toFixed(2)
               break
             }
+          }
+          if (this.query.wid) {
+            this.$http.get(`${ENV.BokaApi}/api/getUser/${this.query.wid}`).then(res => {
+              this.sellerUser = res.data
+            })
           }
         }
       })
