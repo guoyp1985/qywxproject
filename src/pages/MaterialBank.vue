@@ -2,7 +2,7 @@
   <div class="containerarea font14 bg-white materialbank" v-if="disShow">
     <div class="pagemiddle" style="top:0;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
       <div class="timelinelist">
-        <div v-if="!tlData || tlData.length == 0" class="flex_center font16 mt20">暂无素材数据</div>
+        <div v-if="!tlData || !tlData.length" class="flex_center font16 mt20">暂无素材数据</div>
         <div v-else v-for="(item, index) in tlData" :key="index" class="tlitem">
           <div class="avatar"><img :src="item.uploaderavatar" /></div>
           <div class="con">
@@ -48,7 +48,8 @@
           </div>
         </div>
       </div>
-      <div class="flex_center" style="color:#999;height:30px;" v-if="isLoading">数据加载中</div>
+      <div class="load-end-area loading" v-if="isLoading"></div>
+      <div class="load-end-area done" v-else-if="isDone"></div>
     </div>
     <router-link class="bg-sucai pagebottom flex_center" :to="{path: '/AddMaterial', query: {pid: this.id}}">
       <div class="addsucai">发布素材</div>
@@ -98,6 +99,7 @@ export default {
       disShow: false,
       playVideo: false,
       isLoading: false,
+      isDone: false,
       showVideo: false,
       clickVideo: null
     }
@@ -185,6 +187,7 @@ export default {
       this.showVideo = false
     },
     refresh () {
+      this.disShow = false
       this.tlData = []
       pageStart = 0
     },
@@ -208,6 +211,12 @@ export default {
         }
         this.tlData = this.tlData.concat(retdata)
         this.isLoading = false
+        this.isLoading1 = false
+        if (retdata.length < limit && this.tlData.length && pageStart > 0) {
+          this.isDone = true
+        } else {
+          this.isDone = false
+        }
         this.disShow = true
       })
     },
