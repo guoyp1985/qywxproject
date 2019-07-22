@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="bold">第一条 手续费</div>
-    <div>1. 交易手续费：<span class="color-theme">根据微信规定，卖家需按订单交易额（含运费）的0.6%承担交易手续费，最低收费金额0.01元，不足0.01元按照0.01元收取。该费用微信收取。</span></div>
+    <div>1. 交易手续费：<span class="color-theme">根据微信规定，</span>卖家需按订单交易额（含运费）的0.6%承担交易手续费，最低收费金额0.01元，不足0.01元按照0.01元收取。<span class="color-theme">该费用微信收取。</span></div>
     <div>2. 提现手续费：</div>
     <div>提现至银行卡：<span class="color-theme">根据微信规定，每笔提现微信将扣除提现金额的1%，最低1元，最高25元。该费用银行收取。</span></div>
     <div class="bold mt5">第二条 提现规则</div>
