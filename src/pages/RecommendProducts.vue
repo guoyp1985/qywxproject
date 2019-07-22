@@ -70,8 +70,8 @@
           		</div>
             </div>
           </div>
-          <div style="span-align:center;color:#999;height:30px;line-height:30px;font-size:14px;text-align:center;" v-if="isLoading">数据加载中</div>
-          <div style="span-align:center;color:#999;height:30px;line-height:30px;font-size:14px;text-align:center;" v-else-if="scrollEnd && productData.length">没有更多商品啦</div>
+          <div class="load-end-area loading" v-if="isLoading"></div>
+          <div class="load-end-area done" v-else-if="isDone"></div>
         </div>
       </div>
     </div>
@@ -127,7 +127,7 @@ import FirstTip from '@/components/FirstTip'
 import FirstHb from '@/components/FirstHb'
 
 let self = this
-const limit = 30
+const limit = 10
 let pageStart = 0
 
 export default {
@@ -157,7 +157,6 @@ export default {
       sort: 'dateline',
       pageTop: 0,
       tabLeft: 0,
-      scrollEnd: false,
       showTip: false,
       showFirst: false,
       isFirst: false,
@@ -174,7 +173,8 @@ export default {
       colCount: 10,
       classDataArry: [],
       activeColor: '',
-      clicked: false
+      clicked: false,
+      isDone: false
     }
   },
   watch: {
@@ -347,8 +347,6 @@ export default {
             self.$vux.loading.show()
             self.isLoading = true
             self.getData1()
-          } else {
-            self.scrollEnd = true
           }
         }
       })
@@ -394,6 +392,11 @@ export default {
           self.afterSearch = true
         } else {
           self.afterSearch = false
+        }
+        if (retdata.length < limit && this.productData.length && pageStart > 0) {
+          this.isDone = true
+        } else {
+          this.isDone = false
         }
       })
     },
