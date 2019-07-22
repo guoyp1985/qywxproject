@@ -1,10 +1,8 @@
 <template>
   <div class="bk-orderitem order-item scroll_item mb10 font14 db list-shadow">
     <div @click="toOrder(data)" class="bg-white padding10 b_bottom_after font12 flex_center ">
-        <div class="color-lightgray" style="width:210px;"><!-- 创建时间：<slot name="createdate"></slot> -->
-          {{ $t('Order Number')}}：<slot name="orderno"></slot>
-        </div>
-        <div class="flex_cell align_right color-red4"><slot name="flagstr"></slot></div>
+        <div class="color-lightgray" style="width:190px;">订单号: {{data.orderno}}</div>
+        <div class="flex_cell align_right color-red4">{{data.flagstr}}</div>
     </div>
     <div @click="toOrder(data)">
       <slot name="productlist"></slot>

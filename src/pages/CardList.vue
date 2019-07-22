@@ -70,13 +70,9 @@ My orders:
 </i18n>
 <script>
 import { Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, TransferDom, Popup, XImg } from 'vux'
-import Orderitemplate from '@/components/Orderitemplate'
-import Orderproductplate from '@/components/Orderproductplate'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
-import Subscribe from '@/components/Subscribe'
-import ApplyTip from '@/components/ApplyTip'
 let self = {}
 const limit = 10
 let pageStart1 = 0
@@ -86,7 +82,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, Popup, Orderitemplate, Orderproductplate, XImg, Subscribe, ApplyTip
+    Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, Popup, XImg
   },
   filters: {
     dateformat: function (value) {
