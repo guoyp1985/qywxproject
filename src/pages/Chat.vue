@@ -222,7 +222,7 @@
           </div>
         </popup>
       </div>
-      <div class="auto-modal flex_center qrcode-modal" v-if="showQrcodeModal">
+      <div class="auto-modal flex_center qrcode-modal" v-show="showQrcodeModal">
         <div class="modal-inner border-box" style="width:80%;">
           <div class="flex_center b_bottom_after padding10 bold font16">识别二维码加卖家微信</div>
           <div class="flex_center padding10">
@@ -1156,6 +1156,7 @@ export default {
   },
   activated () {
     this.$util.miniPost()
+    this.showQrcodeModal = false
     this.refresh()
   }
 }
