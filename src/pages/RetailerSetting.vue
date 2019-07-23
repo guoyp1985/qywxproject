@@ -195,7 +195,7 @@ export default {
         self.initContainer()
         self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
           { params: { limit: 100 } }
-        ).then(function (res) {
+        ).then(res => {
           self.$vux.loading.hide()
           if (res.status === 200) {
             let data = res.data
@@ -211,6 +211,7 @@ export default {
           } else {
             self.$vux.loading.hide()
             self.initContainer()
+            document.title = this.loginUser.retailerinfo.title
             self.showSetting = true
             self.getData()
           }

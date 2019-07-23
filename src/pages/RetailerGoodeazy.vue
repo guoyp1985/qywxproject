@@ -525,6 +525,7 @@ export default {
         } else {
           self.initContainer()
           self.showContainer = true
+          document.title = this.loginUser.retailerinfo.title
           if (self.loginUser.isretailer === 2) {
             self.$http.get(`${ENV.BokaApi}/api/list/news`, {
               params: { from: 'retailer', pagestart: 0, limit: 5 }

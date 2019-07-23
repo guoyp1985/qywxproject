@@ -498,6 +498,7 @@ export default {
             } else if (this.query.flag === '2' || this.query.flag === 2) {
               this.selectedIndex = 2
             }
+            document.title = this.retailerInfo.title
             this.swiperChange()
           }
           if (`${this.loginUser.retailerinfo.firstinfo.seller}` === '0' && this.query.from) {

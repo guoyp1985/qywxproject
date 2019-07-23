@@ -943,6 +943,7 @@ export default {
         } else {
           self.initContainer()
           this.$vux.loading.hide()
+          document.title = this.retailerInfo.title
           this.showContainer = true
           this.query = this.$route.query
           if (this.query.flag === '1') {
