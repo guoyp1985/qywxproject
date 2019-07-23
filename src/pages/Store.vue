@@ -58,7 +58,8 @@
         :hideloading="hideloading"
         :isNextNews="isNextNews"
         :haveMoreNews="haveMoreNews"
-        :scrollEnd="scrollEnd"
+        :isLoading="isLoading"
+        :isDone="isDone"
         :showSuggest="showSuggest"
         :suggestData="suggestData"
         :showHelpModal="showHelpModal"
@@ -99,7 +100,8 @@
         :hideloading="hideloading"
         :isNextNews="isNextNews"
         :haveMoreNews="haveMoreNews"
-        :scrollEnd="scrollEnd"
+        :isLoading="isLoading"
+        :isDone="isDone"
         :showSuggest="showSuggest"
         :suggestData="suggestData"
         :showHelpModal="showHelpModal"
@@ -140,7 +142,8 @@
         :hideloading="hideloading"
         :isNextNews="isNextNews"
         :haveMoreNews="haveMoreNews"
-        :scrollEnd="scrollEnd"
+        :isLoading="isLoading"
+        :isDone="isDone"
         :showSuggest="showSuggest"
         :suggestData="suggestData"
         :showHelpModal="showHelpModal"
@@ -181,7 +184,8 @@
         :hideloading="hideloading"
         :isNextNews="isNextNews"
         :haveMoreNews="haveMoreNews"
-        :scrollEnd="scrollEnd"
+        :isLoading="isLoading"
+        :isDone="isDone"
         :showSuggest="showSuggest"
         :suggestData="suggestData"
         :showHelpModal="showHelpModal"
@@ -280,7 +284,6 @@ export default {
       hideloading: false,
       isNextNews: true,
       haveMoreNews: false,
-      scrollEnd: false,
       showSuggest: false,
       suggestData: [],
       showHelpModal: false,
@@ -289,7 +292,9 @@ export default {
       showTemplate1: false,
       showTemplate2: false,
       showTemplate3: false,
-      showTemplate4: false
+      showTemplate4: false,
+      isLoading: false,
+      isDone: false
     }
   },
   watch: {
@@ -404,13 +409,10 @@ export default {
           console.log((self.pageStart + 1) * limit)
           if (self.productdata.length === (self.pageStart + 1) * limit) {
             console.log(1)
-            self.scrollEnd = false
             self.pageStart++
             self.$vux.loading.show()
+            self.isLoading = true
             self.getData1()
-          } else {
-            console.log(2)
-            self.scrollEnd = true
           }
         }
       })
@@ -423,13 +425,19 @@ export default {
       }
       self.$http.get(`${ENV.BokaApi}/api/retailer/getRetailerProducts`, {
         params: params
-      }).then(function (res) {
+      }).then(res => {
         const data = res.data
         if (self.hideloading) {
           self.$vux.loading.hide()
         }
         const retdata = data.data ? data.data : data
         self.productdata = self.productdata.concat(retdata)
+        this.isLoading = false
+        if (retdata.length < limit && this.productdata.length && this.pageStart > 0) {
+          this.isDone = true
+        } else {
+          this.isDone = false
+        }
         self.disproductdata = true
       })
     },
