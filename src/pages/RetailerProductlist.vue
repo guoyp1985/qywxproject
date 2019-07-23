@@ -807,6 +807,7 @@ export default {
       this.loginUser = User.get()
       this.query = this.$route.query
       this.retailerInfo = this.loginUser.retailerinfo
+      document.title = this.retailerInfo.title
       this.swiperChange()
     },
     onSubmit () {

@@ -203,6 +203,7 @@ export default {
                   if (res.status === 200) {
                     let data = res.data
                     self.retailerInfo = data.data ? data.data : data
+                    document.title = self.retailerInfo.title
                     self.$vux.loading.hide()
                     return self.$http.get(`${ENV.BokaApi}/api/message/newMessages`)
                   }

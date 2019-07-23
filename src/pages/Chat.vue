@@ -1157,6 +1157,7 @@ export default {
   },
   activated () {
     this.$util.miniPost()
+    this.showQrcodeModal = false
     this.refresh()
   }
 }
