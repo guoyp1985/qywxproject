@@ -493,6 +493,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.retailerInfo = this.loginUser.retailerinfo
+      document.title = this.retailerInfo.title
       self.pagestart1 = 0
       this.distabdata1 = false
       this.tabdata1 = []

@@ -320,6 +320,7 @@ export default {
             const data = res.data
             if (data.flag) {
               this.retailerInfo = data.data
+              document.title = this.retailerInfo.title
               this.loginUser.retailerinfo = this.retailerInfo
               User.set(this.loginUser)
             }
