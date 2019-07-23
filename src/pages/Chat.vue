@@ -1090,8 +1090,10 @@ export default {
       return this.$http.get(`${ENV.BokaApi}/api/getUser/${this.query.uid}`)
     },
     refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       const self = this
       self.retailerInfo = {}
+      this.showQrcodeModal = false
       room = ''
       minIdFlag = 0
       this.message = ''
@@ -1104,7 +1106,6 @@ export default {
       this.isUserTouch = false
       this.hasNewMessage = false
       this.loginUser = User.get()
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       if (this.query.miniconfig === 'wechat.mini_program.qxb' || this.query.fromapp === 'factory' || this.query.fromapp === 'qxb') {
         this.showTip = false
