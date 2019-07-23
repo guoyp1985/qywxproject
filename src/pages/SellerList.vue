@@ -725,7 +725,7 @@ export default {
       })
       // })
     },
-    refuse () { // 拒绝
+    refuse () {
       // this.getDshsSellerInfo(() => {
       let uids = []
       let checkdoms = this.$refs.inputCheckbox
@@ -750,10 +750,12 @@ export default {
     closeRefuse () {
       this.showRefuseModal = false
     },
-    submitRefuse () {
+    submitRefuse () { // 拒绝审核
       this.showRefuseModal = false
+      console.log('-----拒绝原因------')
+      console.log(this.refuseContent)
       this.$http.post(`${ENV.BokaApi}/api/factory/censorRetailer`, {
-        fid: this.fid, uids: this.idArr, agree: 1
+        fid: this.fid, uids: this.idArr, ok: 0, reason: this.refuseContent
       }).then((res) => {
         console.log('-------------')
         console.log(res)
