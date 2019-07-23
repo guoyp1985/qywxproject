@@ -710,7 +710,7 @@ export default {
         onConfirm: () => {
           this.$vux.loading.show()
           this.$http.post(`${ENV.BokaApi}/api/factory/censorRetailer`, {
-            fid: this.fid, uids: this.idArr, agree: 0
+            fid: this.fid, uids: this.idArr, ok: 1
           }).then((res) => {
             console.log('-------------')
             console.log(res)
