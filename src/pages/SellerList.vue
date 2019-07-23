@@ -764,6 +764,7 @@ export default {
         this.tabData5 = []
         this.$vux.loading.show()
         this.pageStart5 = 0
+        this.refuseContent = ''
         this.getData5()
       })
     },
