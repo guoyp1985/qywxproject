@@ -634,20 +634,20 @@ export default {
     // 获取待审核卖家的信息
     getDshsSellerInfo () {
       let uids = []
-      let selectCount = 0
+      // let selectCount = 0
       let checkdoms = this.$refs.inputCheckbox
       for (var i = 0; i < checkdoms.length; i++) {
         if (checkdoms[i].checked) {
-          selectCount++
+          // selectCount++
           uids.push(checkdoms[i].dataset.uid)
         }
       }
-      if (selectCount < 1) {
-        this.$vux.alert.show({
-          title: '温馨提示',
-          content: '请先选中待审核的用户'
-        })
-      }
+      // if (selectCount < 1) {
+      //   this.$vux.alert.show({
+      //     title: '温馨提示',
+      //     content: '请先选中待审核的用户'
+      //   })
+      // }
       this.idArr = uids
     },
     allchoose () {
@@ -669,7 +669,7 @@ export default {
             console.log('-------------')
             console.log(res)
             this.$vux.loading.hide()
-            this.getData5()
+            this.refresh()
           })
         }
       })
@@ -859,6 +859,7 @@ export default {
       })
     },
     refresh () {
+      console.log('进入了刷新方法')
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
