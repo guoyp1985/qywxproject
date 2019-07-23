@@ -673,6 +673,7 @@ export default {
           this.showApply = true
         } else {
           this.$vux.loading.hide()
+          document.title = this.loginUser.retailerinfo.title
           if (this.query.id !== this.$route.query.id) {
             self.initContainer()
             this.query = this.$route.query

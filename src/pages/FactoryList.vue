@@ -190,6 +190,7 @@ export default {
           self.initContainer()
           this.showContainer = true
           this.query = this.$route.query
+          document.title = this.loginUser.retailerinfo.title
           if (this.tabData1.length < limit) {
             pageStart1 = 0
             this.disTabData1 = false

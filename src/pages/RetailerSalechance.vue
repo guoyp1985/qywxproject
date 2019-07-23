@@ -277,6 +277,7 @@ export default {
           this.showApply = true
         } else {
           self.initContainer()
+          document.title = this.loginUser.retailerinfo.title
           this.showContainer = true
           this.swiperChange()
         }

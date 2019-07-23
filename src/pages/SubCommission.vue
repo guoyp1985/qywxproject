@@ -142,6 +142,7 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
+      document.title = this.loginUser.retailerinfo.title
       this.query = this.$route.query
       this.disList1 = false
       pageStart1 = 0
