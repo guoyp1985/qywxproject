@@ -749,6 +749,7 @@ export default {
     },
     closeRefuse () {
       this.showRefuseModal = false
+      this.refuseContent = ''
     },
     submitRefuse () { // 拒绝审核
       this.showRefuseModal = false
