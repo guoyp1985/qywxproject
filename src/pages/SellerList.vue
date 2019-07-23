@@ -328,6 +328,29 @@
         </popup>
       </div>
     </template>
+    <div v-if="showRefuseModal" class="auto-modal refund-modal flex_center">
+      <div class="modal-inner border-box" style="width:80%;">
+        <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">拒绝审核</div>
+        <div class="align_left txt padding10">
+          <group class="textarea-outer" style="padding:0;">
+            <x-textarea
+              ref="titleTextarea"
+              v-model="refuseContent"
+              name="title" class="x-textarea noborder"
+              placeholder="请输入原因"
+              :show-counter="false"
+              :rows="6"
+              :max="200"
+              autosize>
+            </x-textarea>
+          </group>
+        </div>
+        <div class="flex_center b_top_after" style="height:50px;">
+          <div class="flex_cell flex_center h_100 b_right_after" @click="closeRefuse">取消</div>
+          <div class="flex_cell flex_center h_100 color-orange" @click="submitRefuse">提交</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -337,7 +360,7 @@ Add factory:
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Popup, Confirm, CheckIcon, XImg, Search } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Popup, Confirm, CheckIcon, XImg, Search, Group, XTextarea } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
@@ -347,7 +370,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Popup, Confirm, CheckIcon, XImg, Sos, Search
+    Tab, TabItem, Swiper, SwiperItem, Popup, Confirm, CheckIcon, XImg, Sos, Search, Group, XTextarea
   },
   data () {
     return {
@@ -389,7 +412,9 @@ export default {
       selectUploader: null,
       userData: [],
       disUserData: false,
-      idArr: []
+      idArr: [],
+      refuseContent: '',
+      showRefuseModal: false
     }
   },
   methods: {
@@ -634,56 +659,112 @@ export default {
     // 获取待审核卖家的信息
     getDshsSellerInfo () {
       let uids = []
-      // let selectCount = 0
       let checkdoms = this.$refs.inputCheckbox
       for (var i = 0; i < checkdoms.length; i++) {
         if (checkdoms[i].checked) {
-          // selectCount++
           uids.push(checkdoms[i].dataset.uid)
         }
       }
-      // if (selectCount < 1) {
+      // console.log('-------uid.length------')
+      // console.log(uids.length)
+      // if (!uids.length) {
       //   this.$vux.alert.show({
       //     title: '温馨提示',
       //     content: '请先选中待审核的用户'
       //   })
+      //   return false
       // }
       this.idArr = uids
+      // if (callback) {
+      //   callback()
+      // }
     },
-    allchoose () {
+    allchoose () {  // 全选
       let checkdoms = this.$refs.inputCheckbox
       for (var i = 0; i < checkdoms.length; i++) {
         checkdoms[i].checked = !checkdoms[i].checked
       }
       this.getDshsSellerInfo()
     },
-    agree () {
-      this.getDshsSellerInfo()
+    agree () {  // 同意
+      // this.getDshsSellerInfo(() => {
+      let uids = []
+      let checkdoms = this.$refs.inputCheckbox
+      for (var i = 0; i < checkdoms.length; i++) {
+        if (checkdoms[i].checked) {
+          uids.push(checkdoms[i].dataset.uid)
+        }
+      }
+      console.log('-------uid.length------')
+      console.log(uids.length)
+      if (!uids.length) {
+        this.$vux.alert.show({
+          title: '温馨提示',
+          content: '请先选中待审核的用户'
+        })
+        return false
+      }
+      this.idArr = uids
       this.$vux.confirm.show({
         content: '确定将选中的用户通过审核？',
         onConfirm: () => {
           this.$vux.loading.show()
           this.$http.post(`${ENV.BokaApi}/api/factory/censorRetailer`, {
-            fid: this.fid, uids: this.idArr
+            fid: this.fid, uids: this.idArr, agree: 0
           }).then((res) => {
             console.log('-------------')
             console.log(res)
             this.$vux.loading.hide()
-            this.refresh()
+            this.disTabData5 = false
+            this.tabData5 = []
+            this.$vux.loading.show()
+            this.pageStart5 = 0
+            this.getData5()
           })
         }
       })
+      // })
     },
-    refuse () {
-      this.getDshsSellerInfo()
-      this.$vux.confirm.show({
-        content: '确定将选中的用户拒绝审核？'
+    refuse () { // 拒绝
+      // this.getDshsSellerInfo(() => {
+      let uids = []
+      let checkdoms = this.$refs.inputCheckbox
+      for (var i = 0; i < checkdoms.length; i++) {
+        if (checkdoms[i].checked) {
+          uids.push(checkdoms[i].dataset.uid)
+        }
+      }
+      console.log('-------uid.length------')
+      console.log(uids.length)
+      if (!uids.length) {
+        this.$vux.alert.show({
+          title: '温馨提示',
+          content: '请先选中待审核的用户'
+        })
+        return false
+      }
+      this.idArr = uids
+      this.showRefuseModal = true
+      // })
+    },
+    closeRefuse () {
+      this.showRefuseModal = false
+    },
+    submitRefuse () {
+      this.showRefuseModal = false
+      this.$http.post(`${ENV.BokaApi}/api/factory/censorRetailer`, {
+        fid: this.fid, uids: this.idArr, agree: 1
+      }).then((res) => {
+        console.log('-------------')
+        console.log(res)
+        this.$vux.loading.hide()
+        this.disTabData5 = false
+        this.tabData5 = []
+        this.$vux.loading.show()
+        this.pageStart5 = 0
+        this.getData5()
       })
     },
-    // getValue (event) {
-    //   console.log('----------')
-    //   console.log(event.currentTarget.dataset.uid)
-    // },
     submitLevel () {
       const self = this
       if (!self.selectLevel) {
