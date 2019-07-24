@@ -241,7 +241,7 @@ export default {
           this.productData[this.clickIndex].haveimport = 1
         }
         self.$vux.toast.show({
-          span: error,
+          text: error,
           type: data.flag === 1 ? 'success' : 'warn',
           time: self.$util.delay(error),
           onHide: () => {
