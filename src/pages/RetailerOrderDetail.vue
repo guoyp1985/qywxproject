@@ -359,6 +359,7 @@ export default {
       curArea.updateAutosize()
     },
     changeContent () {
+      this.postContent = ''
       this.showStatus = true
     },
     closeStatus () {
@@ -684,7 +685,6 @@ export default {
           } else {
             self.showSos = false
             self.showContainer = true
-            this.postContent = this.data.content
             if (self.data.flag !== 2 || (self.data.flag === 2 && !self.data.candeliver)) {
               self.bottomcss = 'nobottom'
             }
