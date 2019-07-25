@@ -430,7 +430,7 @@ export default {
       clickIndex: 0,
       priceVal: '',
       pageTop: 0,
-      imgList: ['https://tossharingsales.boka.cn/images/yjfh1.png', 'https://tossharingsales.boka.cn/images/yjfh2.png', 'https://tossharingsales.boka.cn/images/yjfh3.png'],
+      imgList: ['https://tossharingsales.boka.cn/images/yjfh1.png', 'https://tossharingsales.boka.cn/images/yjfh3.png', 'https://tossharingsales.boka.cn/images/yjfh2.png'],
       showFhbz: false
     }
   },
@@ -467,10 +467,12 @@ export default {
       console.log('查看复制内容')
       console.log(eleobj.innerHTML)
       let save = function (e) {
+        console.log(e)
         e.clipboardData.setData('text/plain', eleobj.innerHTML)
         e.preventDefault()
       }
       if (self.$util.isIOS()) { // ios设备
+        console.log('----ios---')
         window.getSelection().removeAllRanges()
         range = document.createRange()
         range.selectNode(eleobj)

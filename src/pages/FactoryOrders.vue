@@ -318,7 +318,7 @@ export default {
       delivercompany: [],
       deliverdata: { delivercompany: '-1', delivercode: '' },
       pageTop: 0,
-      imgList: ['https://tossharingsales.boka.cn/images/yjfh1.png', 'https://tossharingsales.boka.cn/images/yjfh2.png', 'https://tossharingsales.boka.cn/images/yjfh3.png'],
+      imgList: ['https://tossharingsales.boka.cn/images/yjfh1.png', 'https://tossharingsales.boka.cn/images/yjfh3.png', 'https://tossharingsales.boka.cn/images/yjfh2.png'],
       showFhbz: false
     }
   },
