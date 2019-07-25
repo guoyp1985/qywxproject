@@ -159,8 +159,9 @@
                   </div>
                 </swiper-item>
               </swiper>
-              <div class="copyHtUrl" style="display:none">http://laravelcms.boka.cn/admin/login/login?role=retailer</div>
-              <div class="copyUrl" @click="copyTxt(null, 2)">复制链接</div>
+              <div class="copyUrl" @click="copyTxt(null, 2)">复制链接
+                <div class="copyHtUrl" style="position:absolute;opacity:0;z-index:1;overflow:hidden;">http://laravelcms.boka.cn/admin/login/login?role=retailer</div>
+              </div>
             </div>
           </div>
           <div v-if="distabdata3" class="scroll_list">
