@@ -98,16 +98,18 @@
             </div>
           </div>
         </div>
-        <div class="bg-white padding10 mt10 flex_left" v-if="data.flag === 2">
+        <!-- <div class="bg-white padding10 mt10 flex_left" v-if="data.flag === 2">
           <div class="font16 mr10">备注 </div><input type="text" :value="remarks" placeholder="请输入要备注的内容" />
-        </div>
+        </div> -->
         <div v-if="data && data.delivertype ==2"  class="padding10 b_top_after bg-white">
           <div class="flex_right font12 color-gray">到店自提</div>
         </div>
-        <div v-if="data && data.content != ''"  class="padding10 b_top_after bg-white">
+        <div v-if="data"  class="padding10 b_top_after bg-white">
           <div class="flex_left font12">
             <div class="w40">留言: </div>
-            <div class="flex_cell">{{data.content}}</div>
+            <div class="flex_cell" v-if="data.content && data.content != ''">{{data.content}}</div>
+            <div class="flex_cell" v-else>无</div>
+            <div class="w40 color-theme flex_right" @click="changeContent">修改</div>
           </div>
         </div>
         <div class="align_right">
@@ -163,6 +165,37 @@
             <div class="popup-bottom flex_center">
               <div class="flex_cell bg-gray color-white h_100 flex_center" @click="closepopup">{{ $t('Close') }}</div>
               <div class="flex_cell bg-green color-white h_100 flex_center" @click="confirmpopup">{{ $t('Confirm txt') }}</div>
+            </div>
+          </div>
+        </popup>
+      </div>
+      <div v-transfer-dom class="x-popup popup-deliver">
+        <popup v-model="showStatus" height="100%">
+          <div class="popup1 font14">
+            <div class="popup-top flex_center">备注</div>
+            <div class="popup-middle">
+              <div class="scroll_list">
+                <div class="scroll_item padding10 form-item">
+                  <group class="textarea-outer" style="padding:0;">
+                    <x-textarea
+                      ref="contentTextarea"
+                      v-model="postContent"
+                      class="x-textarea noborder"
+                      placeholder="请输入备注信息"
+                      :show-counter="false"
+                      :rows="6"
+                      :max="200"
+                      @on-change="textareaChange('contentTextarea')"
+                      @on-focus="textareaFocus('contentTextarea')"
+                      autosize>
+                    </x-textarea>
+                  </group>
+                </div>
+              </div>
+            </div>
+            <div class="popup-bottom flex_center">
+              <div class="flex_cell bg-gray color-white h_100 flex_center" @click="closeStatus">{{ $t('Close') }}</div>
+              <div class="flex_cell bg-green color-white h_100 flex_center" @click="submitStatus">{{ $t('Confirm txt') }}</div>
             </div>
           </div>
         </popup>
@@ -278,7 +311,8 @@ export default {
       sysParams: {},
       showConfirmModal: false,
       priceVal: '',
-      remarks: ''
+      postContent: '',
+      showStatus: false
     }
   },
   watch: {
@@ -326,6 +360,32 @@ export default {
     textareaFocus (refname) {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
       curArea.updateAutosize()
+    },
+    changeContent () {
+      this.postContent = ''
+      this.showStatus = true
+    },
+    closeStatus () {
+      this.showStatus = false
+    },
+    submitStatus () {
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/order/changeContent`,
+        {orderid: this.data.id, content: this.postContent}
+      ).then(res => {
+        if (res) {
+          this.$vux.loading.hide()
+          const data = res.data
+          this.$vux.toast.show({
+            text: data.error,
+            time: this.$util.delay(data.error)
+          })
+          if (data.flag) {
+            this.showStatus = false
+            this.data.content = data.data
+          }
+        }
+      })
     },
     handleListData (data) {
       let retdata = data
