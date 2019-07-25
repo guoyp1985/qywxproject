@@ -93,7 +93,8 @@ export default {
             time: self.$util.delay(data.error),
             onHide: function () {
               if (data.flag === 1) {
-                self.$router.go(-1)
+                // self.$router.go(-1)
+                self.$router.push({path: '/orderSearch?flag=4&refresh=1'})
               }
               self.eventIng = false
             }
