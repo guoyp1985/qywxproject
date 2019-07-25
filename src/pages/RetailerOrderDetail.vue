@@ -59,7 +59,7 @@
             <div class="t-cell align_right color-orange5">{{ data.flagstr }}</div>
           </div>
         </div>
-        <div class="bg-white">
+        <div class="bg-white b_bottom_after">
           <div class="scroll_list productlist color_gray appendarea">
             <div v-on:click="toProduct(item)" v-for="(item,index) in data.orderlist" :key="item.id" :data-product-url="{path: '/product', query: {id: item.pid, wid: data.wid}}" class="scroll_item db padding10 bg-gray4">
               <div class="t-table">
@@ -98,6 +98,9 @@
             </div>
           </div>
         </div>
+        <!-- <div class="bg-white padding10 mt10 flex_left" v-if="data.flag === 2">
+          <div class="font16 mr10">备注 </div><input type="text" :value="remarks" placeholder="请输入要备注的内容" />
+        </div> -->
         <div v-if="data && data.delivertype ==2"  class="padding10 b_top_after bg-white">
           <div class="flex_right font12 color-gray">到店自提</div>
         </div>
