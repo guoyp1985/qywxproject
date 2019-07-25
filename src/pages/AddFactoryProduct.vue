@@ -944,9 +944,15 @@ export default {
           })
           return false
         }
-        if (!self.optionsData.length && self.$util.trim(postdata.storage) === '') {
-          self.$vux.toast.text('请输入商品库存', 'middle')
-          return false
+        if (!self.optionsData.length) {
+          if (self.$util.trim(postdata.storage) === '') {
+            self.$vux.toast.text('请输入商品库存', 'middle')
+            return false
+          }
+          if (isNaN(postdata.storage) || parseFloat(postdata.storage) <= 0) {
+            self.$vux.toast.text('库存必须大于0', 'middle')
+            return false
+          }
         }
         if (self.$util.trim(postdata.postage) === '') {
           self.$vux.toast.text('请输入运费', 'middle')
