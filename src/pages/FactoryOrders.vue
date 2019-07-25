@@ -81,7 +81,7 @@
           </div>
         </div>
         <div v-show="(selectedIndex == 2)">
-          <div class="flex_center" style="height:35px;background-color:#fadedd;">
+          <div class="flex_center" style="height:45px;background-color:#fadedd;">
             <div class="color-red" @click="openFhbz">提示:电脑后台可一键批量发货哦!点击查看发货步骤</div>
           </div>
           <div class="auto-modal modalarea1 flex_center store-modal" style="position:fixed;" v-if="showFhbz">
@@ -110,7 +110,7 @@
                 </swiper-item>
               </swiper>
               <div class="copyUrl" @click="copyTxt(null, 2)">复制链接
-                <div class="copyHtUrl" style="position:absolute;opacity:0;z-index:1;overflow:hidden;">http://laravelcms.boka.cn/admin/login/login?role=factory</div>
+                <div class="copyHtUrl" style="position:absolute;opacity:0;z-index:1;overflow:hidden;">{{factoryHt}}</div>
               </div>
             </div>
           </div>
@@ -320,7 +320,8 @@ export default {
       deliverdata: { delivercompany: '-1', delivercode: '' },
       pageTop: 0,
       imgList: ['https://tossharingsales.boka.cn/images/yjfh1.png', 'https://tossharingsales.boka.cn/images/yjfh3.png', 'https://tossharingsales.boka.cn/images/yjfh2.png'],
-      showFhbz: false
+      showFhbz: false,
+      factoryHt: ENV.FactoryHt
     }
   },
   methods: {

@@ -13,6 +13,8 @@ var ENV = {
   SocketServer: 'wss://chat.boka.cn/wss', //'wss://chat.boka.cn/wss', // vux: 'ws://123.206.77.217:7272', // vue: 'ws://124.207.246.109:7272'
   AdminUrl: 'http://laravelcms.boka.cn/admin/login/unionIdLogin',
   FactoryApi: 'https://factorydev.boka.cn',
+  RetailerHt: 'http://laravelcms.boka.cn/admin/login/login?role=retailer',
+  FactoryHt: 'http://laravelcms.boka.cn/admin/login/login?role=factory',
   OrderStatus: [
     {id: 0, status: '订单取消'},
     {id: 1, status: '已确认订单'},
