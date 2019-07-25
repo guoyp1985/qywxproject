@@ -433,7 +433,7 @@ export default {
       pageTop: 0,
       imgList: ['https://tossharingsales.boka.cn/images/yjfh1.png', 'https://tossharingsales.boka.cn/images/yjfh3.png', 'https://tossharingsales.boka.cn/images/yjfh2.png'],
       showFhbz: false,
-      retailerHt: ENV.RetailerHt
+      retailerHt: ENV.RetailerLoginUrl
     }
   },
   methods: {
