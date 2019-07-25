@@ -352,6 +352,8 @@ export default {
       })
     },
     getData1 (type) {
+      console.log(this.loginUser)
+      console.log(this.userInfo)
       let params = {pagestart: pageStart, limit: limit, wid: this.loginUser.uid}
       if (this.loginUser.retailerinfo && this.loginUser.retailerinfo.fid) {
         params.fid = this.loginUser.retailerinfo.fid

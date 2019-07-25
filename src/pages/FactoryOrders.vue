@@ -24,7 +24,7 @@
                 <div class="t-table">
                   <div class="font12 color-lightgray">
                     <span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span>
-                    <span @click="copyTxt(item)" class="ml5" style="position:relative;">
+                    <span @click="copyTxt(item, 1)" class="ml5" style="position:relative;">
                       <i class="al al-fuzhi font14 color-red4"></i><span class="font12 color-red4">复制</span>
                       <template v-if="item.flag != 0 && item.flag != 1 && item.flag != 2">
                         <div :class="`deliver_txt-0-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.delivercompanyname }} {{ item.delivercode }} {{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
@@ -62,7 +62,7 @@
                 <div class="t-table">
                   <div class="font12 color-lightgray">
                     <span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span>
-                    <span @click="copyTxt(item)" class="ml5" style="position:relative;">
+                    <span @click="copyTxt(item, 1)" class="ml5" style="position:relative;">
                       <i class="al al-fuzhi font14 color-red4"></i><span class="font12 color-red4">复制</span>
                       <template v-if="item.flag != 0 && item.flag != 1 && item.flag != 2">
                         <div :class="`deliver_txt-1-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.delivercompanyname }} {{ item.delivercode }} {{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
@@ -81,6 +81,38 @@
           </div>
         </div>
         <div v-show="(selectedIndex == 2)">
+          <div class="flex_center" style="height:35px;background-color:#fadedd;">
+            <div class="color-red" @click="openFhbz">提示:电脑后台可一键批量发货哦!点击查看发货步骤</div>
+          </div>
+          <div class="auto-modal modalarea1 flex_center store-modal" style="position:fixed;" v-if="showFhbz">
+            <div class="modal-inner">
+              <div class="pagetop flex_left font16 pl10 pr10">
+                <div class="close flex_center" @click="closeFhbz"><i class="al al-guanbi"></i></div>
+              </div>
+              <div class="czlc b_bottom">操作流程</div>
+              <swiper height="200px">
+                <swiper-item v-for="(item, index) in imgList" :key="index" :index="index">
+                  <div v-if="index === 0">
+                    <div class="tab-num">第一步</div>
+                    <div class="discribtion">进入电脑后台,导出待发货订单</div>
+                  </div>
+                  <div v-else-if="index === 1">
+                    <div class="tab-num">第二步</div>
+                    <div class="discribtion">录入物流单号,导出Excel文件</div>
+                  </div>
+                  <div v-else>
+                    <div class="tab-num">第三步</div>
+                    <div class="discribtion">导入Excel文件并提交,发货完成</div>
+                  </div>
+                  <div style="width:100%" @click="showBigimg1(index)">
+                    <img class="yjfhimg" :src="item">
+                  </div>
+                </swiper-item>
+              </swiper>
+              <div class="copyHtUrl" style="display:none">http://laravelcms.boka.cn/admin/login/login?role=factory</div>
+              <div class="copyUrl" @click="copyTxt(null, 2)">复制链接</div>
+            </div>
+          </div>
           <div v-if="distabdata3" class="scroll_list">
             <div v-if="!tabdata3 || tabdata3.length === 0" class="scroll_item padding10 align_center color-gray">
               <div><i class="al al-wushuju font60 pt20"></i></div>
@@ -92,7 +124,7 @@
                 <div class="t-table">
                   <div class="font12 color-lightgray">
                     <span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span>
-                    <span @click="copyTxt(item)" class="ml5" style="position:relative;">
+                    <span @click="copyTxt(item, 1)" class="ml5" style="position:relative;">
                       <i class="al al-fuzhi font14 color-red4"></i><span class="font12 color-red4">复制</span>
                       <template v-if="item.flag != 0 && item.flag != 1 && item.flag != 2">
                         <div :class="`deliver_txt-2-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.delivercompanyname }} {{ item.delivercode }} {{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
@@ -127,7 +159,7 @@
                 <div class="t-table">
                   <div class="font12 color-lightgray">
                     <span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span>
-                    <span @click="copyTxt(item)" class="ml5" style="position:relative;">
+                    <span @click="copyTxt(item, 1)" class="ml5" style="position:relative;">
                       <i class="al al-fuzhi font14 color-red4"></i><span class="font12 color-red4">复制</span>
                       <template v-if="item.flag != 0 && item.flag != 1 && item.flag != 2">
                         <div :class="`deliver_txt-3-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.delivercompanyname }} {{ item.delivercode }} {{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
@@ -164,7 +196,7 @@
                 <div class="t-table">
                   <div class="font12 color-lightgray">
                     <span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span>
-                    <span @click="copyTxt(item)" class="ml5" style="position:relative;">
+                    <span @click="copyTxt(item, 1)" class="ml5" style="position:relative;">
                       <i class="al al-fuzhi font14 color-red4"></i><span class="font12 color-red4">复制</span>
                       <template v-if="item.flag != 0 && item.flag != 1 && item.flag != 2">
                         <div :class="`deliver_txt-3-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.delivercompanyname }} {{ item.delivercode }} {{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
@@ -285,15 +317,31 @@ export default {
       deliverindex: 0,
       delivercompany: [],
       deliverdata: { delivercompany: '-1', delivercode: '' },
-      pageTop: 0
+      pageTop: 0,
+      imgList: ['https://tossharingsales.boka.cn/images/yjfh1.png', 'https://tossharingsales.boka.cn/images/yjfh2.png', 'https://tossharingsales.boka.cn/images/yjfh3.png'],
+      showFhbz: false
     }
   },
   methods: {
-    copyTxt (item) {
+    openFhbz () {
+      this.showFhbz = true
+    },
+    closeFhbz () {
+      this.showFhbz = false
+    },
+    copyTxt (item, flag) {  //  flag=1复制订单 flag=2复制后台路径
       const self = this
-      let str = `#factory-orders-page .deliver_txt-${this.selectedIndex}-${item.id}`
+      let str = null
+      if (flag === 1) {
+        str = `#factory-orders-page .deliver_txt-${this.selectedIndex}-${item.id}`
+      }
+      if (flag === 2) {
+        str = `#factory-orders-page .copyHtUrl`
+      }
       let eleobj = jQuery(str)[0]
       let range = null
+      console.log('复制内容')
+      console.log(eleobj.innerHTML)
       let save = function (e) {
         e.clipboardData.setData('text/plain', eleobj.innerHTML)
         e.preventDefault()
@@ -675,4 +723,18 @@ export default {
 
 <style lang="less" scoped>
 .popup-deliver .fileinput{position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;background-color:transparent;opacity:0;}
+.yjfhimg{max-width: 100%}
+.czlc{text-align: center;color: rgb(234, 58, 58);font-size: 18px;padding: 10px;}
+.tab-num{color: rgb(234, 58, 58);font-size: 16px;font-weight: bolder;text-align: center;padding: 5px}
+.discribtion{text-align: center;padding: 5px;}
+.copyUrl{
+  text-align: center;
+  /* height: 48px; */
+  line-height: 48px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  background-color: #ff6a61;
+  margin-top: 10px;
+  color: white;
+}
 </style>
