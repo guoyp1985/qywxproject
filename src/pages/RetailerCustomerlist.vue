@@ -772,7 +772,8 @@ export default {
             self.distabdata1 = false
             this.tabdata1 = []
             if (!self.orderbyParams || !self.orderbyParams.orderby) {
-              self.orderbyParams = {orderby: 'dateline'}
+              // self.orderbyParams = {orderby: 'dateline'}
+              self.orderbyParams = {}
             }
             // self.orderbyParams = {}
             // if (self.dateClass.indexOf('active') > -1) {
