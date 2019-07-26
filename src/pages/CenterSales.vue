@@ -116,14 +116,7 @@ export default {
         this.$vux.loading.hide()
       } else {
         if (self.query.minibackurl) {
-          let minibackurl = decodeURIComponent(self.query.minibackurl)
-          if (self.query.backtype === 'relaunch') {
-            self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
-          } else if (self.query.backtype === 'redirect') {
-            self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
-          } else {
-            self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
-          }
+          this.$util.routerMiniUrl(this.query)
         } else if (self.query.backurl) {
           let backurl = decodeURIComponent(self.query.backurl)
           this.$router.push({path: backurl})

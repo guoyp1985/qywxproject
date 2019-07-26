@@ -493,25 +493,41 @@ export default {
       let flag = parseInt(this.query.flag)
       switch (flag) {
         case 2:
-          if (!this.tabdata1.length) {
+          if (this.query.refresh) {
+            this.pagestart2 = 0
+            this.tabdata2 = []
+            this.toggleTab()
+          } else if (!this.tabdata2.length) {
             this.selectedIndex = 1
             this.toggleTab()
           }
           break
         case 3:
-          if (!this.tabdata2.length) {
+          if (this.query.refresh) {
+            this.pagestart3 = 0
+            this.tabdata3 = []
+            this.toggleTab()
+          } else if (!this.tabdata3.length) {
             this.selectedIndex = 2
             this.toggleTab()
           }
           break
         case 4:
-          if (!this.tabdata3.length) {
+          if (this.query.refresh) {
+            this.pagestart4 = 0
+            this.tabdata4 = []
+            this.toggleTab()
+          } else if (!this.tabdata4.length) {
             this.selectedIndex = 3
             this.toggleTab()
           }
           break
         default :
-          if (!this.tabdata4.length) {
+          if (this.query.refresh) {
+            this.pagestart1 = 0
+            this.tabdata1 = []
+            this.toggleTab()
+          } else if (!this.tabdata1.length) {
             this.selectedIndex = 0
             this.toggleTab()
           }

@@ -107,7 +107,7 @@
         <div v-if="data"  class="padding10 b_top_after bg-white">
           <div class="flex_left font12">
             <div class="w40">留言: </div>
-            <div class="flex_cell" v-if="data.content && data.content != ''">{{data.content}}</div>
+            <div class="flex_cell" v-if="data.content && data.content != ''" v-html="data.content">{{data.content}}</div>
             <div class="flex_cell" v-else>无</div>
             <div class="w40 color-theme flex_right" @click="changeContent">修改</div>
           </div>
