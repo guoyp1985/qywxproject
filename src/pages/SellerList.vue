@@ -689,7 +689,7 @@ export default {
     agree () {  // 同意
       // this.getDshsSellerInfo(() => {
       let uids = []
-      let checkdoms = this.$refs.inputCheckbox
+      let checkdoms = this.$refs.inputCheckbox  // 通过ref获取所有check-box节点
       for (var i = 0; i < checkdoms.length; i++) {
         if (checkdoms[i].checked) {
           uids.push(checkdoms[i].dataset.uid)
@@ -717,7 +717,6 @@ export default {
             this.$vux.loading.hide()
             this.disTabData5 = false
             this.tabData5 = []
-            this.$vux.loading.show()
             this.pageStart5 = 0
             this.getData5()
           })
@@ -755,6 +754,7 @@ export default {
       this.showRefuseModal = false
       console.log('-----拒绝原因------')
       console.log(this.refuseContent)
+      this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/factory/censorRetailer`, {
         fid: this.fid, uids: this.idArr, ok: 0, reason: this.refuseContent
       }).then((res) => {
@@ -763,7 +763,6 @@ export default {
         this.$vux.loading.hide()
         this.disTabData5 = false
         this.tabData5 = []
-        this.$vux.loading.show()
         this.pageStart5 = 0
         this.refuseContent = ''
         this.getData5()
