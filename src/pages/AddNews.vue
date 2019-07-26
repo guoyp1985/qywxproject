@@ -179,19 +179,18 @@ export default {
     uploadPhoto () {
       const self = this
       const fileInput = self.$refs.fileInput[0] ? self.$refs.fileInput[0] : self.$refs.fileInput
-      fileInput.click()
-      // if (self.$util.isPC()) {
-      //   fileInput.click()
-      // } else {
-      //   self.$wechat.ready(function () {
-      //     self.$util.wxUploadImage({
-      //       maxnum: self.maxnum,
-      //       handleCallback: function (data) {
-      //         self.photoCallback(data)
-      //       }
-      //     })
-      //   })
-      // }
+      if (self.$util.isPC()) {
+        fileInput.click()
+      } else {
+        self.$wechat.ready(function () {
+          self.$util.wxUploadImage({
+            maxnum: self.maxnum,
+            handleCallback: function (data) {
+              self.photoCallback(data)
+            }
+          })
+        })
+      }
     },
     fileChange (e) {
       const self = this
