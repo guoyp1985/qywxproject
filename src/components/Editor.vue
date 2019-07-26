@@ -430,7 +430,7 @@ export default {
           self.$emit('on-auto-save')
         },
         insertImageCallback: function (callback) {
-          if (!window.WeixinJSBridge) {
+          // if (!window.WeixinJSBridge) {
             let fileForm = document.querySelector('.editorImageForm')
             let fileInput = document.querySelector('.editorImageForm input')
             fileInput.click()
@@ -454,28 +454,28 @@ export default {
                 })
               }
             })
-          } else {
-            self.$wechat.ready(function () {
-              self.$util.wxUploadImage({
-                maxnum: 1,
-                handleCallback: function (data) {
-                  if (data.flag === 1 && data.data) {
-                    self.$emit('on-auto-save')
-                    callback && callback(data.data)
-                    // self.$vux.toast.show({
-                    //   text: data.data,
-                    //   time: 5000
-                    // })
-                  } else if (data.error) {
-                    self.$vux.toast.show({
-                      text: data.error,
-                      time: self.$util.delay(data.error)
-                    })
-                  }
-                }
-              })
-            })
-          }
+          // } else {
+          //   self.$wechat.ready(function () {
+          //     self.$util.wxUploadImage({
+          //       maxnum: 1,
+          //       handleCallback: function (data) {
+          //         if (data.flag === 1 && data.data) {
+          //           self.$emit('on-auto-save')
+          //           callback && callback(data.data)
+          //           // self.$vux.toast.show({
+          //           //   text: data.data,
+          //           //   time: 5000
+          //           // })
+          //         } else if (data.error) {
+          //           self.$vux.toast.show({
+          //             text: data.error,
+          //             time: self.$util.delay(data.error)
+          //           })
+          //         }
+          //       }
+          //     })
+          //   })
+          // }
           self.showBtnSave = true
         },
         insertProductCallback: function (callback) {

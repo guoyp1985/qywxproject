@@ -543,10 +543,9 @@ export default {
           self.handleImg()
           callback && callback()
         }
-        let toasttype = data.flag !== 1 ? 'warn' : 'success'
         self.$vux.toast.show({
           text: data.error,
-          type: toasttype,
+          type: data.flag ? 'success' : 'warn',
           time: self.$util.delay(data.error)
         })
       })
