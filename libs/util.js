@@ -764,11 +764,15 @@ Util.install = function (Vue, options) {
     },
     routerMiniUrl: (query) => {
       let minibackurl = decodeURIComponent(query.minibackurl)
+      console.log(minibackurl)
       if (query.backtype === 'relaunch') {
+        console.log(1)
         Vue.wechat.miniProgram.reLaunch({url: `${minibackurl}`})
       } else if (query.backtype === 'redirect') {
+        console.log(2)
         Vue.wechat.miniProgram.redirectTo({url: `${minibackurl}`})
       } else {
+        console.log(3)
         Vue.wechat.miniProgram.navigateTo({url: `${minibackurl}`})
       }
     }
