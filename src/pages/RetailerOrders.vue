@@ -160,7 +160,7 @@
                 </swiper-item>
               </swiper>
               <div class="copyUrl" @click="copyTxt(null, 2)">复制链接
-                <div class="copyHtUrl" style="position:absolute;opacity:0;z-index:1;overflow:hidden;">{{retailerHt}}</div>
+                <div class="copyHtUrl" style="position:absolute;opacity:0;top:84%;z-index:1;overflow:hidden;height:50px;width:100%">{{retailerHt}}</div>
               </div>
             </div>
           </div>
