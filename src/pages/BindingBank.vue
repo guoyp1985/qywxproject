@@ -167,7 +167,9 @@ export default {
                 type: 'success'
               })
               setTimeout(() => {
-                if (this.query.fromPage) {
+                if (this.query.minibackurl) {
+                  this.$util.routerMiniUrl(this.query)
+                } else if (this.query.fromPage) {
                   this.$router.push({path: decodeURIComponent(this.query.fromPage)})
                 }
               }, 1000)

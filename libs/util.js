@@ -761,6 +761,16 @@ Util.install = function (Vue, options) {
           })
         }
       })
+    },
+    routerMiniUrl: (query) => {
+      let minibackurl = decodeURIComponent(query.minibackurl)
+      if (query.backtype === 'relaunch') {
+        Vue.wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+      } else if (query.backtype === 'redirect') {
+        Vue.wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+      } else {
+        Vue.wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+      }
     }
   }
 }
