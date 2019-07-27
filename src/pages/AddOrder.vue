@@ -139,7 +139,7 @@
           				</div>
                 </template>
                 <div v-else class="list-shadow mt10" v-for="(item,index) in addressdata" :key="item.id">
-                  <div class="t-table b_bottom_after padding10" @click.native.stop="radioclick(item,index)">
+                  <div class="t-table b_bottom_after padding10" @click="clickAddress(item,index)">
                     <div class="t-cell v_middle" style="color:inherit;">
                       <div class="clamp1">{{ item.linkman }} {{ item.telephone}}</div>
                       <div class="clamp1">{{ item.fulladdress }}</div>
@@ -493,6 +493,10 @@ export default {
           }
         })
       })
+    },
+    clickAddress (data, index) {
+      this.selectaddress = data
+      this.showpopup = false
     },
     radioclick (data, index) {
       const self = this
