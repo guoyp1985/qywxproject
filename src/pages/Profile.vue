@@ -71,8 +71,10 @@ export default {
   methods: {
     syncWxProfile () {
       const self = this
+      this.$vux.loading.show()
       this.$http.get(`${ENV.BokaApi}/api/user/refresh/0`)
       .then(res => {
+        this.$vux.loading.hide()
         if (res.data.flag) {
           const user = User.get()
           const retdata = res.data.data
