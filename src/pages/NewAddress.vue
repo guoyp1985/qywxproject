@@ -42,8 +42,9 @@ export default {
         area: [],
         address: ''
       },
-      switcher: true,
-      isSubmitIng: false
+      switcher: false,
+      isSubmitIng: false,
+      queryData: {}
     }
   },
   computed: {
@@ -73,16 +74,20 @@ export default {
         this.initItem.area = value2name(this.initItem.area || [], ChinaAddressV4Data).split(' ')
         this.initItem.isdefault = this.switcher ? 1 : 0
         const self = this
-        const address = {
-          id: this.item.id,
+        let address = {
           linkman: this.item.linkman,
           telephone: this.$util.trim(this.item.telephone),
           address: this.item.address,
           isdefault: this.item.isdefault,
           province: this.item.area[0],
           city: this.item.area[1],
-          counties: this.item.area[2],
-          do: this.item.id ? 'update' : 'add'
+          counties: this.item.area[2]
+        }
+        if (this.item && this.item.id) {
+          address.do = 'update'
+          address.id = this.item.id
+        } else {
+          address.do = 'add'
         }
         if (this.$util.validateQueue(
           [
@@ -106,8 +111,15 @@ export default {
           this.$http.post(`${ENV.BokaApi}/api/user/address/add`, address)
           .then(res => {
             this.$vux.loading.hide()
-            if (self.query.lasturl) {
-              this.$router.push({path: self.query.lasturl})
+            let lasturl = self.query.lasturl
+            if (lasturl) {
+              let resid = address.do === 'add' ? res.data.data.id : address.id
+              if (lasturl.indexOf('?') > -1) {
+                lasturl = `${lasturl}&addressid=${resid}`
+              } else {
+                lasturl = `${lasturl}?addressid=${resid}`
+              }
+              this.$router.push({path: lasturl})
               this.isSubmitIng = false
             } else {
               this.$router.go(-1)
@@ -120,6 +132,10 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
+      console.log('$route.query')
+      console.log(this.$route.query)
+      console.log('$route.params')
+      console.log(this.$route.params)
       this.isSubmitIng = false
       this.initItem = {
         linkman: '',
@@ -127,7 +143,14 @@ export default {
         area: [null],
         address: ''
       }
-      this.switcher = true
+      this.queryData = this.$route.params.data
+      if (this.queryData && this.queryData.id) {
+        if (this.queryData.isdefault) {
+          this.switcher = true
+        } else {
+          this.switcher = false
+        }
+      }
     }
   },
   activated () {

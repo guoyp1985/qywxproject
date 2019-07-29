@@ -138,14 +138,28 @@
           					</div>
           				</div>
                 </template>
-                <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in addressdata" :key="item.id" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
+                <div v-else class="list-shadow mt10" v-for="(item,index) in addressdata" :key="item.id">
+                  <div class="t-table b_bottom_after padding10" @click="clickAddress(item,index)">
+                    <div class="t-cell v_middle" style="color:inherit;">
+                      <div class="clamp1">{{ item.linkman }} {{ item.telephone}}</div>
+                      <div class="clamp1">{{ item.fulladdress }}</div>
+                    </div>
+                  </div>
+                  <div class="padding10 flex_left">
+                    <div class="flex_left flex_cell">
+                      <check-icon @click.native.stop="setDefault(item,index)" class="green color-gray2" :value.sync="item.isdefault ? true : false">默认地址</check-icon>
+                    </div>
+                    <div class="flex_right w80 color-gray" @click="toNewAddress(item)">编辑</div>
+                  </div>
+                </div>
+                <!-- <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in addressdata" :key="item.id" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
                   <div class="t-table">
                     <div class="t-cell v_middle" style="color:inherit;">
                       <div class="clamp1">{{ item.linkman }} {{ item.telephone}}</div>
                       <div class="clamp1">{{ item.fulladdress }}</div>
                     </div>
                   </div>
-                </check-icon>
+                </check-icon> -->
               </div>
             </div>
             <div class="popup-bottom flex_center">
@@ -308,7 +322,8 @@ export default {
       showModal: false,
       payData: {},
       showLineArea: false,
-      sellerUser: {}
+      sellerUser: {},
+      defaultIng: false
     }
   },
   watch: {
@@ -359,14 +374,56 @@ export default {
       this.onlineVal = true
       this.offlineVal = false
     },
-    toNewAddress () {
+    setDefault (item, index) {
+      if (this.defaultIng) {
+        return false
+      }
+      this.defaultIng = true
+      let newval = item.isdefault ? 0 : 1
+      this.$http.post(`${ENV.BokaApi}/api/setModulePara/address`, {
+        module: 'address', param: 'isdefault', paramvalue: newval, id: item.id
+      }).then(res => {
+        const data = res.data
+        let error = data.flag ? '成功' : data.error
+        this.$vux.toast.show({
+          text: error,
+          type: data.flag ? 'success' : 'warn',
+          time: this.$util.delay(error)
+        })
+        if (data.flag) {
+          this.addressdata[index].isdefault = newval
+          if (newval) {
+            for (let i in this.addressdata) {
+              if (this.addressdata[i].id !== item.id && this.addressdata[i].isdefault) {
+                this.addressdata[i].isdefault = 0
+                this.$http.post(`${ENV.BokaApi}/api/setModulePara/address`, {
+                  module: 'address', param: 'isdefault', paramvalue: 0, id: this.addressdata[i].id
+                }).then(res1 => {
+                  this.defaultIng = false
+                })
+              }
+            }
+          }
+        } else {
+          this.defaultIng = false
+        }
+      })
+    },
+    toNewAddress (item) {
+      console.log('编辑地址')
       let parr = []
       for (let key in this.query) {
-        parr.push(`${key}=${this.query[key]}`)
+        if (key !== 'addressid') {
+          parr.push(`${key}=${this.query[key]}`)
+        }
       }
       let pstr = parr.join('&')
       let params = this.$util.handleAppParams(this.query, {lasturl: `/addOrder?${pstr}`})
-      this.$router.push({path: '/newAddress', query: params})
+      if (item && item.id) {
+        this.$router.push({name: 'tNewAddress', params: {...params, data: item}, query: params})
+      } else {
+        this.$router.push({path: '/newAddress', query: params})
+      }
     },
     setBuy (val) {
       let total = parseFloat(this.payPrice)
@@ -436,6 +493,10 @@ export default {
           }
         })
       })
+    },
+    clickAddress (data, index) {
+      this.selectaddress = data
+      this.showpopup = false
     },
     radioclick (data, index) {
       const self = this
@@ -556,12 +617,21 @@ export default {
     },
     handleAddress () {
       const self = this
+      let paramsid = this.query.addressid
       for (let i = 0; i < self.addressdata.length; i++) {
         let a = self.addressdata[i]
-        if (a.isdefault) {
-          self.selectaddress = a
-          self.addressdata[i].checked = true
-          break
+        if (paramsid) {
+          if (a.id === parseInt(paramsid)) {
+            self.selectaddress = a
+            self.addressdata[i].checked = true
+            break
+          }
+        } else {
+          if (a.isdefault) {
+            self.selectaddress = a
+            self.addressdata[i].checked = true
+            break
+          }
         }
       }
       if (!self.selectaddress && self.addressdata.length > 0) {

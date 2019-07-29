@@ -2,7 +2,7 @@
   <div class="containerarea bg-white font14 retailersetting">
     <div class="pagetop">
       <tab v-model="selectedIndex" class="v-tab">
-        <tab-item v-if="query.from == 'miniprogram'">卖家信息设置</tab-item>
+        <tab-item v-if="query.from">卖家信息设置</tab-item>
         <tab-item
           v-else
           v-for="(item,index) in tabtxts"
@@ -23,7 +23,7 @@
             <span slot="title">{{ $t('Shop name') }}</span>
             <input v-model="submitdata.title" type="text" name="title" class="input border-box" :placeholder="$t('Shop name')" />
           </forminputplate>
-          <div class="form-item required">
+          <div class="form-item required" v-if="query.fromapp != 'factory'">
             <div class="pb5">{{ $t('Wechat qrcode') }} <span class="al al-xing color-red font12" style="vertical-align: 3px;"></span><span class="color-gray">({{ $t('Upload wechat qrcode') }})</span></div>
             <div>
               <input v-model="submitdata.qrcode" type="hidden" name="qrcode" />
@@ -52,7 +52,7 @@
               <div class="font12 color-blue3 mt5" @click="disqrcode">{{ $t('Upload qrcode text') }}</div>
             </div>
           </div>
-          <forminputplate class="required" v-if="query.from != 'miniprogram'">
+          <forminputplate class="required" v-if="!query.from && query.fromapp != 'factory'">
             <span slot="title">{{ $t('Pay type') }}</span>
             <div>
               <!-- <check-icon class="red-check" :value.sync="submitdata.buyonline === 1" @click.native.stop="setbuyonline(1)">在线支付</check-icon>
@@ -61,7 +61,7 @@
               <check-icon class="red-check" :value.sync="offline" @click.native.stop="setbuyonline(0)">线下支付</check-icon>
             </div>
           </forminputplate>
-          <forminputplate class="required" v-if="query.miniconfig != 'wechat.mini_program.tljk' && query.fromapp != 'qxb'">
+          <forminputplate class="required" v-if="query.miniconfig != 'wechat.mini_program.tljk' && query.fromapp != 'qxb' && query.fromapp != 'factory'">
             <span slot="title">超值优惠</span>
             <div>
               <check-icon class="red-check" :value.sync="suggestOpen" @click.native.stop="clickSuggest(1)">开启</check-icon>
@@ -77,7 +77,7 @@
               <check-icon class="red-check" :value.sync="template4" @click.native.stop="clickTemplate(4)">清新蓝</check-icon>
             </div>
           </forminputplate>
-          <div class="form-item" v-if="query.fromapp != 'qxb'">
+          <div class="form-item" v-if="query.fromapp != 'qxb' && query.fromapp != 'factory'">
             <div class="t-table">
               <div class="t-cell title-cell font14 v_middle">
                 <span>到账方式</span><span class="al al-wenhao font20 color-theme" style="vertical-align:-2px;" @click="clickHelp"></span>
@@ -90,7 +90,7 @@
               </div>
             </div>
           </div>
-          <div v-show="showmore">
+          <div v-show="showmore || query.fromapp == 'factory'">
             <forminputplate>
               <span slot="title">{{ $t('Shop description') }}</span>
               <group class="textarea-outer" style="padding:0;">
@@ -109,7 +109,7 @@
                 </x-textarea>
               </group>
             </forminputplate>
-            <forminputplate v-if="query.from != 'miniprogram'">
+            <forminputplate v-if="!query.from && query.fromapp != 'factory' && query.fromapp != 'qxb'">
               <span slot="title">{{ $t('Auto reply') }}</span>
               <group class="textarea-outer" style="padding:0;">
                 <x-textarea
@@ -127,7 +127,7 @@
                 </x-textarea>
               </group>
             </forminputplate>
-            <div class="form-item required padding10" v-if="classData.length > 0"> <!-- //v-if="classData.length > 0 && classDataShow" -->
+            <div class="form-item required padding10" v-if="classData.length > 0 && query.fromapp != 'factory'"> <!-- //v-if="classData.length > 0 && classDataShow" -->
               <input v-model="productClass" type="hidden" name="productclass" />
               <div class="pb10">经营产品或服务<span class="color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
               <checker
@@ -141,15 +141,17 @@
               </checker>
             </div>
           </div>
-          <div v-if="showmore" @click="expandevent" class="padding15 font14 align_center color-gray">{{ $t('Up text') }}<i class="al al-jiantou2-up font14 middle-cell"></i></div>
-          <div v-else class="padding15 font14 align_center color-gray"  @click="expandevent">{{ $t('Epand text') }}<i class="al al-jiantouyoushuang- font14"></i></div>
+          <template v-if="query.fromapp != 'factory'">
+            <div v-if="showmore" @click="expandevent" class="padding15 font14 align_center color-gray">{{ $t('Up text') }}<i class="al al-jiantou2-up font14 middle-cell"></i></div>
+            <div v-else class="padding15 font14 align_center color-gray"  @click="expandevent">{{ $t('Epand text') }}<i class="al al-jiantouyoushuang- font14"></i></div>
+          </template>
         </form>
       </div>
       <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white" @click="submitevent">
         <div class="flex_cell flex_center btn-bottom-red">{{ $t('Save') }}</div>
       </div>
     </div>
-    <div v-show="selectedIndex == 1 && query.from != 'miniprogram'" class="s-container" style="top:44px;">
+    <div v-show="selectedIndex == 1 && !query.from" class="s-container" style="top:44px;">
       <div class="swiper-inner" style="bottom:50px;">
         <form>
           <div class="form-item required">
@@ -707,14 +709,6 @@ export default {
           onHide: function () {
             if (data.flag === 1) {
               if (self.query.minibackurl) {
-                let minibackurl = decodeURIComponent(self.query.minibackurl)
-                if (self.query.backtype === 'relaunch') {
-                  self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
-                } else if (self.query.backtype === 'redirect') {
-                  self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
-                } else {
-                  self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
-                }
               } else {
                 self.$router.push({path: '/centerSales'})
               }
