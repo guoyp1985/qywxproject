@@ -149,6 +149,7 @@
                     <div class="flex_left flex_cell">
                       <check-icon @click.native.stop="setDefault(item,index)" class="green color-gray2" :value.sync="item.isdefault ? true : false">默认地址</check-icon>
                     </div>
+                    <div class="flex_center w80 color-theme" @click="deleteAddress(item,index)">删除</div>
                     <div class="flex_right w80 color-gray" @click="toNewAddress(item)">编辑</div>
                   </div>
                 </div>
@@ -424,6 +425,31 @@ export default {
       } else {
         this.$router.push({path: '/newAddress', query: params})
       }
+    },
+    deleteAddress (item, index) {
+      this.$vux.confirm.show({
+        content: '确定要删除该地址吗？',
+        onConfirm: () => {
+          this.$vux.loading.show()
+          this.$http.post(`${ENV.BokaApi}/api/user/address/delete`, {id: item.id})
+          .then(res => {
+            this.$vux.loading.hide()
+            const data = res.data
+            this.$vux.toast.show({
+              text: data.error,
+              type: (data.flag !== 1 ? 'warn' : 'success'),
+              time: this.$util.delay(data.error)
+            })
+            if (data.flag) {
+              this.addressdata.splice(index, 1)
+              if (this.selectaddress.id === item.id) {
+                this.selectaddress = {}
+                this.submitdata.addressid = 0
+              }
+            }
+          })
+        }
+      })
     },
     setBuy (val) {
       let total = parseFloat(this.payPrice)
