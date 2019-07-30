@@ -117,6 +117,7 @@
         <x-button v-if="data.flag == 1" mini @click.native="cancel" class="font12">取消订单</x-button>
         <x-button v-if="data.flag == 1 && data.payorder == '' && query.fromapp != 'factory'" :link="{path: '/pay', query: {id: data.id}}" mini class="font12">去支付</x-button>
         <x-button v-if="data.flag == 2 && data.canback && data.backflag != 20" mini @click.native="refund" class="font12">申请退款</x-button>
+        <!-- <x-button v-if="data.flag == 3" mini @click.native="afterSale" class="font12">申请售后</x-button> -->
         <x-button v-if="data.flag == 3" mini @click.native="confirm" class="font12">确认收货</x-button>
         <x-button v-if="data.flag == 4" mini @click.native="evaluate" class="font12">评价</x-button>
       </div>
@@ -167,6 +168,53 @@
         </div>
       </div>
     </div>
+    <div v-if="showServiceModal" class="auto-modal refund-modal flex_center">
+      <div class="modal-inner border-box" style="width:80%;">
+        <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">申请售后</div>
+        <div class="align_left txt padding10 b_bottom_after">
+          <group class="textarea-outer" style="padding:0;">
+            <x-textarea
+              ref="serviceTextarea"
+              v-model="serviceContent"
+              name="title" class="x-textarea noborder"
+              placeholder="请输入售后原因"
+              :show-counter="false"
+              :rows="6"
+              :max="200"
+              @on-change="textareaChange('serviceTextarea')"
+              @on-focus="textareaFocus('serviceTextarea')"
+              autosize>
+            </x-textarea>
+          </group>
+        </div>
+        <form enctype="multipart/form-data">
+          <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange" />
+        </form>
+        <div class="q_photolist align_left bg-white">
+          <template v-if="servicePhoto && servicePhoto != ''">
+            <div class="photoitem" style="width:100px;">
+              <div class="inner photo imgcover">
+                <img :src="servicePhoto" class="pic" @click="uploadPhoto('fileInput')" />
+                <div class="close" @click.stop="deletephoto()">×</div>
+              </div>
+            </div>
+          </template>
+          <div v-else class="photoitem add" @click="uploadPhoto('fileInput')" style="width:100px;">
+            <div class="inner">
+              <div class="innerlist">
+                <div class="flex_center h_100">
+                  <i class="al al-zhaopian" style="color:#bbb;line-height:30px;"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex_center b_top_after" style="height:50px;">
+          <div class="flex_cell flex_center h_100 b_right_after" @click="closeService">取消</div>
+          <div class="flex_cell flex_center h_100 color-orange" @click="submitService">提交</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -210,7 +258,10 @@ export default {
       query: {},
       showRefundModal: false,
       refundContent: '',
-      clickTxt: ''
+      clickTxt: '',
+      showServiceModal: false,
+      serviceContent: '',
+      servicePhoto: ''
     }
   },
   computed: {
@@ -219,6 +270,73 @@ export default {
     }
   },
   methods: {
+    deletephoto () {
+      this.servicePhoto = ''
+    },
+    photoCallback (data) {
+      const self = this
+      if (data.flag === 1) {
+        self.servicePhoto = data.data
+      } else if (data.error) {
+        self.$vux.toast.show({
+          text: data.error,
+          time: self.$util.delay(data.error)
+        })
+      }
+    },
+    uploadPhoto (refname) {
+      const self = this
+      const fileInput = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      if (self.$util.isPC()) {
+        fileInput.click()
+      } else {
+        self.$wechat.ready(function () {
+          self.$util.wxUploadImage({
+            maxnum: 1,
+            handleCallback: function (data) {
+              self.photoCallback(data)
+            }
+          })
+        })
+      }
+    },
+    fileChange (refname) {
+      const self = this
+      const target = event.target
+      const files = target.files
+      if (files.length > 0) {
+        let fileForm = target.parentNode
+        const filedata = new FormData(fileForm)
+        self.$vux.loading.show()
+        self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(res => {
+          self.$vux.loading.hide()
+          let data = res.data
+          self.photoCallback(data)
+        })
+      }
+    },
+    closeService () {
+      this.showServiceModal = false
+      this.serviceContent = ''
+    },
+    submitService () {
+      if (this.$util.trim(this.serviceContent) === '' && this.$util.trim(this.servicePhoto) === '') {
+        this.$vux.toast.text('请完善售后信息', 'middle')
+        return false
+      }
+      // this.$vux.loading.show()
+      // this.$http.post(`${ENV.BokaApi}/api/order/`, {
+      //   id: this.data.id
+      // }).then(res => {
+      //   this.$vux.loading.hide()
+      //   const data = res.data
+      //   this.$vux.toast.text(data.error)
+      // })
+    },
+    afterSale (order) {
+      // 售后
+      this.showServiceModal = true
+    },
     toCenter () {
       if (this.query.from) {
         console.log('in click wechate')
