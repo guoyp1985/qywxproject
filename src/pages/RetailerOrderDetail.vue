@@ -17,7 +17,7 @@
           <div style="height:10px;"></div>
         </div>
         <div class="bg-white b_bottom_after padding10">
-          <template v-if="query.from && query.fromapp != 'factory' && query.fromapp != 'qxb'">
+          <template v-if="query.from && query.fromapp != 'factory' && query.fromapp != 'qxb' && query.fromapp != 'wl'">
             <div class="flex_left" @click="toMemberView">买家：{{ data.username }}</div>
             <div class="flex_left">
               <div class="flex_cell flex_left" @click="toMemberView">累计消费：<span class="color-red">{{ $t('RMB') }}{{ data.summoney }}</span></div>
