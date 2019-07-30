@@ -310,7 +310,6 @@ export default {
                       break
                     }
                   }
-                  this.$apply()
                   break
               }
             }
