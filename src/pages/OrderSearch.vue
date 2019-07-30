@@ -303,11 +303,16 @@ export default {
             }
             break
           case 3:
-            item.buttons = [
-              {id: 4, name: '查看物流'},
-              // {id: 5, name: '申请售后'},
-              {id: 6, name: '确认收货'}
-            ]
+            // item.buttons = [
+            //   {id: 4, name: '查看物流'},
+            //   {id: 5, name: '申请售后'},
+            //   {id: 6, name: '确认收货'}
+            // ]
+            item.buttons = [{id: 4, name: '查看物流'}]
+            if (item.backflag !== 120) {
+              item.buttons.push({id: 5, name: '申请售后'})
+            }
+            item.buttons.push({id: 6, name: '确认收货'})
             break
           case 4:
             item.buttons = [
@@ -425,14 +430,22 @@ export default {
         this.$vux.toast.text('请完善售后信息', 'middle')
         return false
       }
-      // this.$vux.loading.show()
-      // this.$http.post(`${ENV.BokaApi}/api/order/`, {
-      //   id: this.clickOrder.id
-      // }).then(res => {
-      //   this.$vux.loading.hide()
-      //   const data = res.data
-      //   this.$vux.toast.text(data.error)
-      // })
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/order/applyService`, {
+        id: this.clickOrder.id, reasonreturn: this.serviceContent, proofphoto: this.servicePhoto
+      }).then(res => {
+        this.$vux.loading.hide()
+        const data = res.data
+        this.$vux.toast.text(data.error)
+        if (data.flag) {
+          this.showServiceModal = false
+          if (this.selectedIndex === 0) {
+            this.tabdata1[this.clickIndex].backflag = 120
+          } else {
+            this.tabdata3[this.clickIndex].backflag = 120
+          }
+        }
+      })
     },
     afterSale (order) {
       // 售后

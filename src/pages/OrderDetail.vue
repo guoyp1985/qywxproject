@@ -1,4 +1,4 @@
-/*
+<!-- /* -->
 * @description: 订单详情页
 * @auther: simon
 * @created_date: 2018-4-20
@@ -117,7 +117,7 @@
         <x-button v-if="data.flag == 1" mini @click.native="cancel" class="font12">取消订单</x-button>
         <x-button v-if="data.flag == 1 && data.payorder == '' && query.fromapp != 'factory'" :link="{path: '/pay', query: {id: data.id}}" mini class="font12">去支付</x-button>
         <x-button v-if="data.flag == 2 && data.canback && data.backflag != 20" mini @click.native="refund" class="font12">申请退款</x-button>
-        <!-- <x-button v-if="data.flag == 3" mini @click.native="afterSale" class="font12">申请售后</x-button> -->
+        <x-button v-if="data.flag == 3 && data.backflag != 120" mini @click.native="afterSale" class="font12">申请售后</x-button>
         <x-button v-if="data.flag == 3" mini @click.native="confirm" class="font12">确认收货</x-button>
         <x-button v-if="data.flag == 4" mini @click.native="evaluate" class="font12">评价</x-button>
       </div>
@@ -324,14 +324,18 @@ export default {
         this.$vux.toast.text('请完善售后信息', 'middle')
         return false
       }
-      // this.$vux.loading.show()
-      // this.$http.post(`${ENV.BokaApi}/api/order/`, {
-      //   id: this.data.id
-      // }).then(res => {
-      //   this.$vux.loading.hide()
-      //   const data = res.data
-      //   this.$vux.toast.text(data.error)
-      // })
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/order/applyService`, {
+        id: this.data.id, reasonreturn: this.serviceContent, proofphoto: this.servicePhoto
+      }).then(res => {
+        this.$vux.loading.hide()
+        const data = res.data
+        this.$vux.toast.text(data.error)
+        if (data.flag) {
+          this.showServiceModal = false
+          this.data.backflag = 120
+        }
+      })
     },
     afterSale (order) {
       // 售后

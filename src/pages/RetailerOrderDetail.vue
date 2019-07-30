@@ -126,13 +126,13 @@
             <div class="flex_center" @click="agreeEvent(1)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">同意退款</div>
           </div>
         </div>
-        <!-- <div class="padding10" v-if="data.flag == 3">
+        <div class="padding10" v-if="data.flag == 3 && data.backflag == 120">
           <div class="flex_right font12">
             <div class="flex_center mr10" @click="serviceEvent(1)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">全额退款</div>
             <div class="flex_center mr10" @click="serviceEvent(2)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">售后反馈</div>
             <div class="flex_center" @click="serviceEvent(3)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">部分补偿</div>
           </div>
-        </div> -->
+        </div>
       </div>
       <template v-if="data.flag == 1 && data.fid == 0 && data.crowdid == 0">
         <div v-if="data.retailer.orderonline == 0 && data.frommin && data.frommin != ''" class="pagebottom flex_center font16 bg-orange5 color-white" @click="confirmPrice">确认收款</div>
@@ -389,24 +389,24 @@ export default {
           self.$vux.confirm.show({
             content: '确定要全额退款给买家吗？',
             onConfirm: () => {
-              // self.$vux.loading.show()
-              // self.$http.post(`${ENV.BokaApi}/api/`, {
-              //   id: self.data.id
-              // }).then((res) => {
-              //   self.$vux.loading.hide()
-              //   const data = res.data
-              //   let error = data.flag ? '成功' : data.error
-              //   self.$vux.toast.show({
-              //     text: error,
-              //     type: (data.flag !== 1 ? 'warn' : 'success'),
-              //     time: self.$util.delay(error),
-              //     onHide: () => {
-              //       if (data.flag === 1) {
-              //          self.data = data.data
-              //       }
-              //     }
-              //   })
-              // })
+              self.$vux.loading.show()
+              self.$http.post(`${ENV.BokaApi}/api/order/dealService`, {
+                id: self.data.id, agree: 1
+              }).then((res) => {
+                self.$vux.loading.hide()
+                const data = res.data
+                let error = data.flag ? '成功' : data.error
+                self.$vux.toast.show({
+                  text: error,
+                  type: (data.flag !== 1 ? 'warn' : 'success'),
+                  time: self.$util.delay(error),
+                  onHide: () => {
+                    if (data.flag === 1) {
+                      self.data.flag = 0
+                    }
+                  }
+                })
+              })
             }
           })
           break
@@ -429,14 +429,21 @@ export default {
         this.$vux.toast.text('请完善信息', 'middle')
         return false
       }
-      // this.$vux.loading.show()
-      // this.$http.post(`${ENV.BokaApi}/api/order/`, {
-      //   id: this.clickOrder.id
-      // }).then(res => {
-      //   this.$vux.loading.hide()
-      //   const data = res.data
-      //   this.$vux.toast.text(data.error)
-      // })
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/order/dealService`, {
+        id: this.clickOrder.id, agree: 2, rejectreason: this.serviceContent
+      }).then(res => {
+        this.$vux.loading.hide()
+        const data = res.data
+        this.$vux.toast.show({
+          text: data.error,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: this.$util.delay(data.error)
+        })
+        if (data.flag === 1) {
+          this.data.backflag = 0
+        }
+      })
     },
     closeMoney () {
       this.showSmoneyModal = false
@@ -456,14 +463,21 @@ export default {
         this.$vux.toast.text('补偿金额不能超过支付金额', 'middle')
         return false
       }
-      // this.$vux.loading.show()
-      // this.$http.post(`${ENV.BokaApi}/api/order/`, {
-      //   id: this.clickOrder.id
-      // }).then(res => {
-      //   this.$vux.loading.hide()
-      //   const data = res.data
-      //   this.$vux.toast.text(data.error)
-      // })
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/order/dealService`, {
+        id: self.data.id, agree: 3, payout: this.serviceMoney
+      }).then(res => {
+        this.$vux.loading.hide()
+        const data = res.data
+        this.$vux.toast.show({
+          text: data.error,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: this.$util.delay(data.error)
+        })
+        if (data.flag === 1) {
+          this.data.flag = 4
+        }
+      })
     },
     submitFirstTip () {
       this.showFirst = false
