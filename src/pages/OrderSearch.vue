@@ -362,8 +362,6 @@ export default {
     },
     refund (order, index) {
       this.showRefundModal = true
-      this.clickOrder = order
-      this.clickIndex = index
     },
     closeRefund () {
       this.showRefundModal = false
@@ -441,8 +439,20 @@ export default {
           this.showServiceModal = false
           if (this.selectedIndex === 0) {
             this.tabdata1[this.clickIndex].backflag = 120
+            this.tabdata1[this.clickIndex].buttons.splice(1, 1)
+            for (let i in this.tabdata3) {
+              if (this.tabdata3[i].id === this.clickOrder.id) {
+                this.tabdata3[i].buttons.splice(1, 1)
+              }
+            }
           } else {
             this.tabdata3[this.clickIndex].backflag = 120
+            this.tabdata3[this.clickIndex].buttons.splice(1, 1)
+            for (let i in this.tabdata1) {
+              if (this.tabdata1[i].id === this.clickOrder.id) {
+                this.tabdata1[i].buttons.splice(1, 1)
+              }
+            }
           }
         }
       })
@@ -461,6 +471,8 @@ export default {
       }
     },
     orderProcess (type, order, index) {
+      this.clickOrder = order
+      this.clickIndex = index
       switch (type) {
         case 1:
           this.cancel(order)
@@ -475,8 +487,6 @@ export default {
           this.viewShipping(order)
           break
         case 5:
-          this.clickOrder = order
-          this.clickIndex = index
           this.afterSale(order)
           break
         case 6:
