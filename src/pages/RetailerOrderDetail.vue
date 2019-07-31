@@ -883,7 +883,7 @@ export default {
             } else {
               this.previewerPhoto = []
             }
-            if (self.data.flag !== 2 || (self.data.flag === 2 && !self.data.candeliver)) {
+            if (!(self.data.flag === 2 && self.data.candeliver) && self.data.flag !== 3) {
               self.bottomcss = 'nobottom'
             }
             let total = 0
