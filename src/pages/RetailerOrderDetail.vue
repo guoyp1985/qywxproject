@@ -534,7 +534,7 @@ export default {
           })
           if (data.flag) {
             this.showStatus = false
-            this.data.content = data.data
+            this.data.content = data.data.replace(/\n/g, '<br/>')
           }
         }
       })
@@ -840,6 +840,7 @@ export default {
           } else {
             self.showSos = false
             self.showContainer = true
+            this.data.content = this.data.content.replace(/\n/g, '<br/>')
             if (self.data.flag !== 2 || (self.data.flag === 2 && !self.data.candeliver)) {
               self.bottomcss = 'nobottom'
             }

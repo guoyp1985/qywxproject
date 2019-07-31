@@ -109,7 +109,7 @@
         <div v-if="data && data.content != ''"  class="pl10 pr10 pb10 color-gray">
           <div class="flex_left font12">
             <div class="w40">留言: </div>
-            <div class="flex_cell">{{data.content}}</div>
+            <div class="flex_cell" v-html="data.content"></div>
           </div>
         </div>
       </group>
@@ -501,6 +501,7 @@ export default {
             self.showContainer = true
             const retdata = data.data
             self.data = retdata
+            this.data.content = this.data.content.replace(/\n/g, '<br/>')
             self.orders = retdata.orderlist
             self.special = retdata.special
             self.retailerInfo = retdata.retailer
