@@ -4,157 +4,159 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div id="order-detail" class="containerarea font14 bg-page">
+  <div id="order-detail" :class="`containerarea font14 bg-page ${query.fromapp == 'factory' ? 'nobottom' : ''}`">
     <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
     </template>
     <template v-if="showContainer">
-      <sticky scroll-box="order-detail">
-        <div class="order-service">
-          <div class="seller-cell flex_left">
-            <div class="font14 clamp1">卖家: {{retailerInfo.title}}</div>
+      <div class="pagemiddle" style="top:0;">
+        <sticky scroll-box="order-detail">
+          <div class="order-service">
+            <div class="seller-cell flex_left">
+              <div class="font14 clamp1">卖家: {{retailerInfo.title}}</div>
+            </div>
+            <!-- <div class="contact-cell">
+              <div class="ol-contact flex_center">
+                <div @click="toChat" :to="{path: '/chat', query: {uid: retailerInfo.uploader,fromModule: 'order', from: query.from}}">
+                  <span class="al al-pinglun3 color-order-detail font14"></span>
+                  <span class="font13">{{$t('Contact Seller')}}</span>
+                </div>
+              </div>
+              <div class="wx-contact flex_center">
+                <a @click="wxContact">
+                  <span class="al al-liaotian color-order-detail font18"></span>
+                  <span class="font13">{{$t('Weixin Contact')}}</span>
+                </a>
+              </div>
+            </div> -->
           </div>
-          <!-- <div class="contact-cell">
-            <div class="ol-contact flex_center">
-              <div @click="toChat" :to="{path: '/chat', query: {uid: retailerInfo.uploader,fromModule: 'order', from: query.from}}">
-                <span class="al al-pinglun3 color-order-detail font14"></span>
-                <span class="font13">{{$t('Contact Seller')}}</span>
+        </sticky>
+        <!--
+        <group class="shipping-card">
+          <cell v-if="expressNumber" class="express-info font14 pb5" :title="expressInfo" :value="$t('View Details')" is-link :link="{path: '/deliverinfo', query: {id: id}}"></cell>
+          <cell class="font14" :title="`${$t('Receiver')}: ${receiver}`" :value="receiverPhone"></cell>
+          <cell class="shipping-address font12 color-gray" :title="`${$t('Shipping Address')}: ${shippingAddress}`"></cell>
+          <cell class="shipping-address font12 color-gray" :title="`${$t('Order Number')}: ${shippingOrderon}`"></cell>
+        </group>
+      -->
+        <div v-if="data.flag != 0" class="bg-white b_bottom_after padding10">
+          <div v-if="data.flag != 0 && data.flag != 1 && data.flag != 2" class="t-table mb10">
+            <div class="t-cell v_middle">{{ data.delivercompanyname }} {{ data.delivercode }}</div>
+            <div class="t-cell v_middle align_right w60">
+              <router-link :to="{path: '/deliverinfo', query: {id: data.id}}" class="font12 color-orange5">查看详情</router-link>
+            </div>
+          </div>
+          <div class="t-table">
+            <div class="t-cell v_middle">{{ $t('Addressee')}}：{{ data.linkman ? data.linkman : '无' }}</div>
+            <div class="t-cell v_middle align_right" style="width:110px;">{{ data.telephone }}</div>
+          </div>
+          <div class="font12 color-gray mt5">{{ $t('Shipping Address')}}：{{ data.address ? data.address : '无' }}</div>
+          <div class="font12 color-gray mt5">{{ $t('Order Number')}}：{{ data.orderno }}</div>
+          <!--
+          <div class="color-red mt5 align_right">
+            <div class="qbtn color-orange5" @click="copyTxt(data)" style="position:relative;">
+              <span>复制</span>
+              <div class="deliver_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ data.linkman ? data.linkman + ', ' : '' }}{{ data.telephone ? data.telephone + ', ' : '' }}{{ data.address ? data.address : '' }}</div>
+            </div>
+          </div>
+        -->
+        </div>
+        <div class="mt10 b_top_after bg-white font12">
+          <div class="flex_left b_bottom_after padding10" v-for="(order, index) in orders" :key="index" @click="toProduct(order)">
+            <div class="flex_left w70">
+              <img v-if="order.options && order.options.id" style="width:60px;height:60px;border: 1px solid #f7f7f7;" class="imgcover" :src="order.options.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+              <img v-else style="width:60px;height:60px;border: 1px solid #f7f7f7;" class="imgcover" :src="order.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+            </div>
+            <div class="flex_left flex_cell">
+              <div class="w_100">
+                <div>{{order.name}}</div>
+                <div class="color-gray" v-if="order.options && order.options.id">{{order.options.title}}</div>
+                <div><span>¥{{order.special}}</span><span class="color-gray ml5 font12">× {{order.quantity}}</span></div>
               </div>
             </div>
-            <div class="wx-contact flex_center">
-              <a @click="wxContact">
-                <span class="al al-liaotian color-order-detail font18"></span>
-                <span class="font13">{{$t('Weixin Contact')}}</span>
-              </a>
-            </div>
-          </div> -->
-        </div>
-      </sticky>
-      <!--
-      <group class="shipping-card">
-        <cell v-if="expressNumber" class="express-info font14 pb5" :title="expressInfo" :value="$t('View Details')" is-link :link="{path: '/deliverinfo', query: {id: id}}"></cell>
-        <cell class="font14" :title="`${$t('Receiver')}: ${receiver}`" :value="receiverPhone"></cell>
-        <cell class="shipping-address font12 color-gray" :title="`${$t('Shipping Address')}: ${shippingAddress}`"></cell>
-        <cell class="shipping-address font12 color-gray" :title="`${$t('Order Number')}: ${shippingOrderon}`"></cell>
-      </group>
-    -->
-      <div v-if="data.flag != 0" class="bg-white b_bottom_after padding10">
-        <div v-if="data.flag != 0 && data.flag != 1 && data.flag != 2" class="t-table mb10">
-          <div class="t-cell v_middle">{{ data.delivercompanyname }} {{ data.delivercode }}</div>
-          <div class="t-cell v_middle align_right w60">
-            <router-link :to="{path: '/deliverinfo', query: {id: data.id}}" class="font12 color-orange5">查看详情</router-link>
-          </div>
-        </div>
-        <div class="t-table">
-          <div class="t-cell v_middle">{{ $t('Addressee')}}：{{ data.linkman ? data.linkman : '无' }}</div>
-          <div class="t-cell v_middle align_right" style="width:110px;">{{ data.telephone }}</div>
-        </div>
-        <div class="font12 color-gray mt5">{{ $t('Shipping Address')}}：{{ data.address ? data.address : '无' }}</div>
-        <div class="font12 color-gray mt5">{{ $t('Order Number')}}：{{ data.orderno }}</div>
-        <!--
-        <div class="color-red mt5 align_right">
-          <div class="qbtn color-orange5" @click="copyTxt(data)" style="position:relative;">
-            <span>复制</span>
-            <div class="deliver_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ data.linkman ? data.linkman + ', ' : '' }}{{ data.telephone ? data.telephone + ', ' : '' }}{{ data.address ? data.address : '' }}</div>
-          </div>
-        </div>
-      -->
-      </div>
-      <div class="mt10 b_top_after bg-white font12">
-        <div class="flex_left b_bottom_after padding10" v-for="(order, index) in orders" :key="index" @click="toProduct(order)">
-          <div class="flex_left w70">
-            <img v-if="order.options && order.options.id" style="width:60px;height:60px;border: 1px solid #f7f7f7;" class="imgcover" :src="order.options.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-            <img v-else style="width:60px;height:60px;border: 1px solid #f7f7f7;" class="imgcover" :src="order.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-          </div>
-          <div class="flex_left flex_cell">
-            <div class="w_100">
-              <div>{{order.name}}</div>
-              <div class="color-gray" v-if="order.options && order.options.id">{{order.options.title}}</div>
-              <div><span>¥{{order.special}}</span><span class="color-gray ml5 font12">× {{order.quantity}}</span></div>
+            <div class="w30 flex_right">
+              <span class="al al-mjiantou-copy color-gray font14 bold"></span>
             </div>
           </div>
-          <div class="w30 flex_right">
-            <span class="al al-mjiantou-copy color-gray font14 bold"></span>
-          </div>
         </div>
-      </div>
-      <group>
-        <cell-form-preview v-if="priceInfos.length" :list="priceInfos"></cell-form-preview>
-        <cell>
-          <div class="color-orange">
-            <span class="v_middle font12">商品: </span><span class="v_middle font14">{{ $t('RMB') }}{{data.special}}</span>
-            <template v-if="!data.delivertype && data.postage && data.postage != ''">
-              <span class="v_middle font12 color-gray" v-if="data.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
-              <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ data.postage }} )</span>
-            </template>
-          </div>
-        </cell>
-      </group>
-      <group>
-        <cell>
-          <div>
-            <span class="v_middle font12 color-orange">实际支付: </span><span class="v_middle font14 color-orange">{{ $t('RMB') }}{{data.needpaymoney}}</span>
-            <template v-if="data.carddeduct > 0">
-              <span class="v_middle font12 ml10 color-gray">优惠券抵扣: </span><span class="v_middle font14 color-gray">{{ $t('RMB') }}{{data.carddeduct}}</span>
-            </template>
-          </div>
-        </cell>
-      </group>
-      <group>
-        <div class="padding10 font12 color-gray flex_left">
-          <div class="flex_cell flex_left">创建时间: {{ data.dateline | dateformat }}</div>
-          <div class="flex_right w60" v-if="data.delivertype == 2">到店自提</div>
-        </div>
-        <div class="pl10 pr10 pb10 font12 color-gray" v-if="data.flag == 3">发货时间: {{ data.delivertime | dateformat }}</div>
-        <div v-if="data && data.content != ''"  class="pl10 pr10 pb10 color-gray">
-          <div class="flex_left font12">
-            <div class="w40">留言: </div>
-            <div class="flex_cell" v-html="data.content"></div>
-          </div>
-        </div>
-      </group>
-      <div class="padding10 align_right">
-        <x-button v-if="data.flag == 1" mini @click.native="cancel" class="font12">取消订单</x-button>
-        <x-button v-if="data.flag == 1 && data.payorder == '' && query.fromapp != 'factory'" :link="{path: '/pay', query: {id: data.id}}" mini class="font12">去支付</x-button>
-        <x-button v-if="data.flag == 2 && data.canback && data.backflag != 20" mini @click.native="refund" class="font12">申请退款</x-button>
-        <x-button v-if="data.flag == 3 && data.backflag != 120" mini @click.native="afterSale" class="font12">申请售后</x-button>
-        <x-button v-if="data.flag == 3" mini @click.native="confirm" class="font12">确认收货</x-button>
-        <x-button v-if="data.flag == 4" mini @click.native="evaluate" class="font12">评价</x-button>
-      </div>
-      <group v-if="(data.reasonreturn && data.reasonreturn != '') || (data.proofphoto && data.proofphoto != '') || (data.rejectreason && data.rejectreason != '')">
-        <template v-if="(data.reasonreturn && data.reasonreturn != '') || (data.proofphoto && data.proofphoto != '')">
-          <div class="b_bottom_after padding10 font14">售后申请</div>
-          <div class="padding10 font12" v-if="data.reasonreturn != ''" v-html="data.reasonreturn"></div>
-          <div class="padding10" v-if="data.proofphoto && data.proofphoto != ''">
-            <img :src="data.proofphoto" style="width:100px;max-width:100%;" @click="viewBigImg" />
-          </div>
-          <div v-if="!data.flag" class="b_top_after">
-            <div class="b_bottom_after padding10 font14">售后反馈</div>
-            <div class="padding10 font12 color-theme">已全额退款</div>
-          </div>
-        </template>
-        <template v-if="data.rejectreason && data.rejectreason != ''">
-          <div class="b_bottom_after padding10 font14">拒绝退款</div>
-          <div class="padding10 font12" v-html="data.rejectreason"></div>
-        </template>
-      </group>
-      <div v-transfer-dom class="qrcode-dialog">
-        <x-dialog v-model="wxCardShow" class="dialog-demo">
-          <template v-if="!retailerInfo || !retailerInfo.qrcode || retailerInfo.qrcode == ''">
-            <div class="img-box flex_center">卖家未上传二维码</div>
-          </template>
-          <template v-else>
-            <div class="img-box">
-              <img :src="retailerInfo.qrcode" style="max-width:100%">
+        <group>
+          <cell-form-preview v-if="priceInfos.length" :list="priceInfos"></cell-form-preview>
+          <cell>
+            <div class="color-orange">
+              <span class="v_middle font12">商品: </span><span class="v_middle font14">{{ $t('RMB') }}{{data.special}}</span>
+              <template v-if="!data.delivertype && data.postage && data.postage != ''">
+                <span class="v_middle font12 color-gray" v-if="data.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
+                <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ data.postage }} )</span>
+              </template>
             </div>
+          </cell>
+        </group>
+        <group>
+          <cell>
             <div>
-              <span>{{$t('Add To Contacts With Scan Qrcode')}}</span>
+              <span class="v_middle font12 color-orange">实际支付: </span><span class="v_middle font14 color-orange">{{ $t('RMB') }}{{data.needpaymoney}}</span>
+              <template v-if="data.carddeduct > 0">
+                <span class="v_middle font12 ml10 color-gray">优惠券抵扣: </span><span class="v_middle font14 color-gray">{{ $t('RMB') }}{{data.carddeduct}}</span>
+              </template>
+            </div>
+          </cell>
+        </group>
+        <group>
+          <div class="padding10 font12 color-gray flex_left">
+            <div class="flex_cell flex_left">创建时间: {{ data.dateline | dateformat }}</div>
+            <div class="flex_right w60" v-if="data.delivertype == 2">到店自提</div>
+          </div>
+          <div class="pl10 pr10 pb10 font12 color-gray" v-if="data.flag == 3">发货时间: {{ data.delivertime | dateformat }}</div>
+          <div v-if="data && data.content != ''"  class="pl10 pr10 pb10 color-gray">
+            <div class="flex_left font12">
+              <div class="w40">留言: </div>
+              <div class="flex_cell" v-html="data.content"></div>
+            </div>
+          </div>
+        </group>
+        <div class="padding10 align_right">
+          <x-button v-if="data.flag == 1" mini @click.native="cancel" class="font12">取消订单</x-button>
+          <x-button v-if="data.flag == 1 && data.payorder == '' && query.fromapp != 'factory'" :link="{path: '/pay', query: {id: data.id}}" mini class="font12">去支付</x-button>
+          <x-button v-if="data.flag == 2 && data.canback && data.backflag != 20" mini @click.native="refund" class="font12">申请退款</x-button>
+          <x-button v-if="data.flag == 3 && data.backflag != 120" mini @click.native="afterSale" class="font12">申请售后</x-button>
+          <x-button v-if="data.flag == 3" mini @click.native="confirm" class="font12">确认收货</x-button>
+          <x-button v-if="data.flag == 4" mini @click.native="evaluate" class="font12">评价</x-button>
+        </div>
+        <group v-if="(data.reasonreturn && data.reasonreturn != '') || (data.proofphoto && data.proofphoto != '') || (data.rejectreason && data.rejectreason != '')">
+          <template v-if="(data.reasonreturn && data.reasonreturn != '') || (data.proofphoto && data.proofphoto != '')">
+            <div class="b_bottom_after padding10 font14">售后申请</div>
+            <div class="padding10 font12" v-if="data.reasonreturn != ''" v-html="data.reasonreturn"></div>
+            <div class="padding10" v-if="data.proofphoto && data.proofphoto != ''">
+              <img :src="data.proofphoto" style="width:100px;max-width:100%;" @click="viewBigImg" />
+            </div>
+            <div v-if="!data.flag" class="b_top_after">
+              <div class="b_bottom_after padding10 font14">售后反馈</div>
+              <div class="padding10 font12 color-theme">已全额退款</div>
             </div>
           </template>
-          <div @click="wxCardShow=false">
-            <span class="vux-close"></span>
-          </div>
-        </x-dialog>
+          <template v-if="data.rejectreason && data.rejectreason != ''">
+            <div class="b_bottom_after padding10 font14">拒绝退款</div>
+            <div class="padding10 font12" v-html="data.rejectreason"></div>
+          </template>
+        </group>
+        <div v-transfer-dom class="qrcode-dialog">
+          <x-dialog v-model="wxCardShow" class="dialog-demo">
+            <template v-if="!retailerInfo || !retailerInfo.qrcode || retailerInfo.qrcode == ''">
+              <div class="img-box flex_center">卖家未上传二维码</div>
+            </template>
+            <template v-else>
+              <div class="img-box">
+                <img :src="retailerInfo.qrcode" style="max-width:100%">
+              </div>
+              <div>
+                <span>{{$t('Add To Contacts With Scan Qrcode')}}</span>
+              </div>
+            </template>
+            <div @click="wxCardShow=false">
+              <span class="vux-close"></span>
+            </div>
+          </x-dialog>
+        </div>
       </div>
       <div v-if="query.fromapp != 'factory'" class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white" style="height:50px;">
         <div @click="toCenter" class="flex_cell flex_center color-white btn-bottom-red">进入个人中心</div>
@@ -573,6 +575,7 @@ export default {
 </script>
 
 <style lang="less">
+#order-detail .pagemiddle{bottom:50px;}
 /* css extension */
 #order-detail .order-service {
   display: flex;
