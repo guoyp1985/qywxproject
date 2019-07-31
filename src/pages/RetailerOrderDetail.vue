@@ -431,7 +431,7 @@ export default {
       }
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/order/dealService`, {
-        id: this.clickOrder.id, agree: 2, rejectreason: this.serviceContent
+        id: this.data.id, agree: 2, rejectreason: this.serviceContent
       }).then(res => {
         this.$vux.loading.hide()
         const data = res.data
@@ -442,6 +442,7 @@ export default {
         })
         if (data.flag === 1) {
           this.data.backflag = 0
+          this.showServiceModal = false
         }
       })
     },
@@ -465,7 +466,7 @@ export default {
       }
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/order/dealService`, {
-        id: self.data.id, agree: 3, payout: this.serviceMoney
+        id: this.data.id, agree: 3, payout: this.serviceMoney
       }).then(res => {
         this.$vux.loading.hide()
         const data = res.data
@@ -476,6 +477,7 @@ export default {
         })
         if (data.flag === 1) {
           this.data.flag = 4
+          this.showSmoneyModal = false
         }
       })
     },

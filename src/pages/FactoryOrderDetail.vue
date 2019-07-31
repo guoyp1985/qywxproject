@@ -281,24 +281,24 @@ export default {
           self.$vux.confirm.show({
             content: '确定要全额退款给买家吗？',
             onConfirm: () => {
-              // self.$vux.loading.show()
-              // self.$http.post(`${ENV.BokaApi}/api/`, {
-              //   id: self.data.id
-              // }).then((res) => {
-              //   self.$vux.loading.hide()
-              //   const data = res.data
-              //   let error = data.flag ? '成功' : data.error
-              //   self.$vux.toast.show({
-              //     text: error,
-              //     type: (data.flag !== 1 ? 'warn' : 'success'),
-              //     time: self.$util.delay(error),
-              //     onHide: () => {
-              //       if (data.flag === 1) {
-              //          self.data = data.data
-              //       }
-              //     }
-              //   })
-              // })
+              self.$vux.loading.show()
+              self.$http.post(`${ENV.BokaApi}/api/order/dealService`, {
+                id: self.data.id, agree: 1
+              }).then((res) => {
+                self.$vux.loading.hide()
+                const data = res.data
+                let error = data.flag ? '成功' : data.error
+                self.$vux.toast.show({
+                  text: error,
+                  type: (data.flag !== 1 ? 'warn' : 'success'),
+                  time: self.$util.delay(error),
+                  onHide: () => {
+                    if (data.flag === 1) {
+                      self.data.flag = 0
+                    }
+                  }
+                })
+              })
             }
           })
           break
@@ -321,14 +321,22 @@ export default {
         this.$vux.toast.text('请完善信息', 'middle')
         return false
       }
-      // this.$vux.loading.show()
-      // this.$http.post(`${ENV.BokaApi}/api/order/`, {
-      //   id: this.clickOrder.id
-      // }).then(res => {
-      //   this.$vux.loading.hide()
-      //   const data = res.data
-      //   this.$vux.toast.text(data.error)
-      // })
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/order/dealService`, {
+        id: this.data.id, agree: 2, rejectreason: this.serviceContent
+      }).then(res => {
+        this.$vux.loading.hide()
+        const data = res.data
+        this.$vux.toast.show({
+          text: data.error,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: this.$util.delay(data.error)
+        })
+        if (data.flag === 1) {
+          this.data.backflag = 0
+          this.showServiceModal = false
+        }
+      })
     },
     closeMoney () {
       this.showSmoneyModal = false
@@ -348,14 +356,22 @@ export default {
         this.$vux.toast.text('补偿金额不能超过支付金额', 'middle')
         return false
       }
-      // this.$vux.loading.show()
-      // this.$http.post(`${ENV.BokaApi}/api/order/`, {
-      //   id: this.clickOrder.id
-      // }).then(res => {
-      //   this.$vux.loading.hide()
-      //   const data = res.data
-      //   this.$vux.toast.text(data.error)
-      // })
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/order/dealService`, {
+        id: this.data.id, agree: 3, payout: this.serviceMoney
+      }).then(res => {
+        this.$vux.loading.hide()
+        const data = res.data
+        this.$vux.toast.show({
+          text: data.error,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: this.$util.delay(data.error)
+        })
+        if (data.flag === 1) {
+          this.data.flag = 4
+          this.showSmoneyModal = false
+        }
+      })
     },
     toProduct (item) {
       if (this.query.fromapp === 'factory') {
