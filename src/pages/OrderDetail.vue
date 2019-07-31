@@ -121,6 +121,23 @@
         <x-button v-if="data.flag == 3" mini @click.native="confirm" class="font12">确认收货</x-button>
         <x-button v-if="data.flag == 4" mini @click.native="evaluate" class="font12">评价</x-button>
       </div>
+      <group v-if="(data.reasonreturn && data.reasonreturn != '') || (data.proofphoto && data.proofphoto != '') || (data.rejectreason && data.rejectreason != '')">
+        <template v-if="(data.reasonreturn && data.reasonreturn != '') || (data.proofphoto && data.proofphoto != '')">
+          <div class="b_bottom_after padding10 font14">售后申请</div>
+          <div class="padding10 font12" v-if="data.reasonreturn != ''" v-html="data.reasonreturn"></div>
+          <div class="padding10" v-if="data.proofphoto && data.proofphoto != ''">
+            <img :src="data.proofphoto" style="width:100px;max-width:100%;" @click="viewBigImg" />
+          </div>
+          <div v-if="!data.flag" class="b_top_after">
+            <div class="b_bottom_after padding10 font14">售后反馈</div>
+            <div class="padding10 font12 color-theme">已全额退款</div>
+          </div>
+        </template>
+        <template v-if="data.rejectreason && data.rejectreason != ''">
+          <div class="b_bottom_after padding10 font14">拒绝退款</div>
+          <div class="padding10 font12" v-html="data.rejectreason"></div>
+        </template>
+      </group>
       <div v-transfer-dom class="qrcode-dialog">
         <x-dialog v-model="wxCardShow" class="dialog-demo">
           <template v-if="!retailerInfo || !retailerInfo.qrcode || retailerInfo.qrcode == ''">
@@ -215,10 +232,13 @@
         </div>
       </div>
     </div>
+    <div v-transfer-dom>
+      <previewer :list="previewerPhoto" ref="previewerPhoto"></previewer>
+    </div>
   </div>
 </template>
 <script>
-import { Group, Cell, Sticky, XDialog, CellFormPreview, TransferDom, XImg, XButton, XTextarea } from 'vux'
+import { Group, Cell, Sticky, XDialog, CellFormPreview, TransferDom, XImg, XButton, XTextarea, Previewer } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
 import Sos from '@/components/Sos'
 import Time from '#/time'
@@ -229,7 +249,7 @@ export default {
     TransferDom
   },
   components: {
-    Group, Cell, Sticky, XDialog, CellFormPreview, OrderInfo, XImg, XButton, Sos, XTextarea
+    Group, Cell, Sticky, XDialog, CellFormPreview, OrderInfo, XImg, XButton, Sos, XTextarea, Previewer
   },
   filters: {
     dateformat: function (value) {
@@ -261,7 +281,8 @@ export default {
       clickTxt: '',
       showServiceModal: false,
       serviceContent: '',
-      servicePhoto: ''
+      servicePhoto: '',
+      previewerPhoto: []
     }
   },
   computed: {
@@ -272,6 +293,17 @@ export default {
   methods: {
     deletephoto () {
       this.servicePhoto = ''
+    },
+    viewBigImg (index) {
+      const self = this
+      if (self.$util.isPC()) {
+        self.$refs.previewerPhoto.show(0)
+      } else {
+        window.WeixinJSBridge.invoke('imagePreview', {
+          current: this.data.proofphoto,
+          urls: [this.data.proofphoto]
+        })
+      }
     },
     photoCallback (data) {
       const self = this
@@ -502,6 +534,17 @@ export default {
             const retdata = data.data
             self.data = retdata
             this.data.content = this.data.content.replace(/\n/g, '<br/>')
+            if (this.data.reasonreturn) {
+              this.data.reasonreturn = this.data.reasonreturn.replace(/\n/g, '<br/>')
+            }
+            if (this.data.rejectreason) {
+              this.data.rejectreason = this.data.rejectreason.replace(/\n/g, '<br/>')
+            }
+            if (this.data.proofphoto && this.data.proofphoto !== '') {
+              this.previewerPhoto = this.$util.previewerImgdata([this.data.proofphoto])
+            } else {
+              this.previewerPhoto = []
+            }
             self.orders = retdata.orderlist
             self.special = retdata.special
             self.retailerInfo = retdata.retailer

@@ -102,13 +102,24 @@
             <div class="flex_center" @click="agreeEvent(1)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">同意退款</div>
           </div>
         </div>
-        <!-- <div class="padding10" v-if="data.flag == 3">
-          <div class="flex_right font12">
-            <div class="flex_center mr10" @click="serviceEvent(1)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">全额退款</div>
-            <div class="flex_center mr10" @click="serviceEvent(2)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">售后反馈</div>
-            <div class="flex_center" @click="serviceEvent(3)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">部分补偿</div>
+        <template v-if="data.flag == 3 && data.backflag == 120">
+          <group v-if="(data.reasonreturn && data.reasonreturn != '') || (data.proofphoto && data.proofphoto != '')">
+            <template v-if="(data.reasonreturn && data.reasonreturn != '') || (data.proofphoto && data.proofphoto != '')">
+              <div class="b_bottom_after padding10 font14">售后申请</div>
+              <div class="padding10 font12" v-if="data.reasonreturn != ''" v-html="data.reasonreturn"></div>
+              <div class="padding10" v-if="data.proofphoto && data.proofphoto != ''">
+                <img :src="data.proofphoto" style="width:100px;max-width:100%;" @click="viewBigImg" />
+              </div>
+            </template>
+          </group>
+          <div class="padding10">
+            <div class="flex_right font12">
+              <div class="flex_center mr10" @click="serviceEvent(1)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">全额退款</div>
+              <div class="flex_center mr10" @click="serviceEvent(2)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">售后反馈</div>
+              <div class="flex_center" @click="serviceEvent(3)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">部分补偿</div>
+            </div>
           </div>
-        </div> -->
+        </template>
       </div>
       <div v-if="data.flag == 2 && data.candeliver" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">{{ $t('Deliver goods') }}</div>
       <div v-else-if="data.flag == 3" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">{{ $t('Update deliver info') }}</div>
@@ -219,10 +230,13 @@
     <div class="bg-theme flex_center color-white fix-home-icon" @click="toHome" v-if="query.from">
       <i class="al al-home1"></i>
     </div>
+    <div v-transfer-dom>
+      <previewer :list="previewerPhoto" ref="previewerPhoto"></previewer>
+    </div>
   </div>
 </template>
 <script>
-import { Group, Cell, Sticky, XDialog, TransferDom, Popup, XImg, XTextarea } from 'vux'
+import { Group, Cell, Sticky, XDialog, TransferDom, Popup, XImg, XTextarea, Previewer } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
 import Sos from '@/components/Sos'
 import Time from '#/time'
@@ -235,7 +249,7 @@ export default {
     TransferDom
   },
   components: {
-    Group, Cell, Sticky, XDialog, Popup, OrderInfo, XImg, Sos, XTextarea
+    Group, Cell, Sticky, XDialog, Popup, OrderInfo, XImg, Sos, XTextarea, Previewer
   },
   filters: {
     dateformat: function (value) {
@@ -260,7 +274,8 @@ export default {
       showServiceModal: false,
       serviceContent: '',
       showSmoneyModal: '',
-      serviceMoney: ''
+      serviceMoney: '',
+      previewerPhoto: []
     }
   },
   watch: {
@@ -273,6 +288,17 @@ export default {
   methods: {
     initData () {
       this.deliverdata = { delivercompany: '-1', delivercode: '' }
+    },
+    viewBigImg (index) {
+      const self = this
+      if (self.$util.isPC()) {
+        self.$refs.previewerPhoto.show(0)
+      } else {
+        window.WeixinJSBridge.invoke('imagePreview', {
+          current: this.data.proofphoto,
+          urls: [this.data.proofphoto]
+        })
+      }
     },
     serviceEvent (type) {
       const self = this
@@ -605,6 +631,15 @@ export default {
           } else {
             self.showSos = false
             self.showContainer = true
+            this.data.content = this.data.content.replace(/\n/g, '<br/>')
+            if (this.data.reasonreturn) {
+              this.data.reasonreturn = this.data.reasonreturn.replace(/\n/g, '<br/>')
+            }
+            if (this.data.proofphoto && this.data.proofphoto !== '') {
+              this.previewerPhoto = this.$util.previewerImgdata([this.data.proofphoto])
+            } else {
+              this.previewerPhoto = []
+            }
             if (self.data.flag !== 2 || (self.data.flag === 2 && !self.data.candeliver)) {
               self.bottomcss = 'nobottom'
             }

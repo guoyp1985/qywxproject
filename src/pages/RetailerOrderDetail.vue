@@ -120,19 +120,38 @@
           </div> -->
           <div v-if="data.nexttime" class="align_left padding10 color-gray2 font12">回访时间：{{ data.nexttime | dateformat }}</div>
         </div>
-        <div class="padding10" v-if="data.cancensorback == 1">
-          <div class="flex_right font12">
-            <div class="flex_center mr10" @click="agreeEvent(0)" style="border:#999 1px solid;height:25px;border-radius:5px;color:#999;width:75px;">拒绝退款</div>
-            <div class="flex_center" @click="agreeEvent(1)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">同意退款</div>
+        <template v-if="data.cancensorback == 1">
+          <template v-if="data.reasonreturn != ''">
+            <div class="bg-white">
+              <div class="padding10 b_bottom_after">退款理由</div>
+              <div class="padding10">{{data.reasonreturn}}</div>
+            </div>
+          </template>
+          <div class="padding10">
+            <div class="flex_right font12">
+              <div class="flex_center mr10" @click="agreeEvent(0)" style="border:#999 1px solid;height:25px;border-radius:5px;color:#999;width:75px;">拒绝退款</div>
+              <div class="flex_center" @click="agreeEvent(1)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">同意退款</div>
+            </div>
           </div>
-        </div>
-        <div class="padding10" v-if="data.flag == 3 && data.backflag == 120">
-          <div class="flex_right font12">
-            <div class="flex_center mr10" @click="serviceEvent(1)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">全额退款</div>
-            <div class="flex_center mr10" @click="serviceEvent(2)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">售后反馈</div>
-            <div class="flex_center" @click="serviceEvent(3)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">部分补偿</div>
+        </template>
+        <template v-if="data.flag == 3 && data.backflag == 120">
+          <group v-if="(data.reasonreturn && data.reasonreturn != '') || (data.proofphoto && data.proofphoto != '')">
+            <template v-if="(data.reasonreturn && data.reasonreturn != '') || (data.proofphoto && data.proofphoto != '')">
+              <div class="b_bottom_after padding10 font14">售后申请</div>
+              <div class="padding10 font12" v-if="data.reasonreturn != ''" v-html="data.reasonreturn"></div>
+              <div class="padding10" v-if="data.proofphoto && data.proofphoto != ''">
+                <img :src="data.proofphoto" style="width:100px;max-width:100%;" @click="viewBigImg" />
+              </div>
+            </template>
+          </group>
+          <div class="padding10">
+            <div class="flex_right font12">
+              <div class="flex_center mr10" @click="serviceEvent(1)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">全额退款</div>
+              <div class="flex_center mr10" @click="serviceEvent(2)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">售后反馈</div>
+              <div class="flex_center" @click="serviceEvent(3)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">部分补偿</div>
+            </div>
           </div>
-        </div>
+        </template>
       </div>
       <template v-if="data.flag == 1 && data.fid == 0 && data.crowdid == 0">
         <div v-if="data.retailer.orderonline == 0 && data.frommin && data.frommin != ''" class="pagebottom flex_center font16 bg-orange5 color-white" @click="confirmPrice">确认收款</div>
@@ -309,10 +328,13 @@
         </div>
       </div>
     </div>
+    <div v-transfer-dom>
+      <previewer :list="previewerPhoto" ref="previewerPhoto"></previewer>
+    </div>
   </div>
 </template>
 <script>
-import { Group, Cell, Sticky, XDialog, TransferDom, Popup, XImg, XTextarea, XButton, XInput } from 'vux'
+import { Group, Cell, Sticky, XDialog, TransferDom, Popup, XImg, XTextarea, XButton, XInput, Previewer } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
@@ -329,7 +351,7 @@ export default {
     TransferDom
   },
   components: {
-    Group, Cell, Sticky, XDialog, Popup, OrderInfo, XImg, Sos, Subscribe, ApplyTip, XTextarea, XButton, FirstTip, FirstHb, XInput
+    Group, Cell, Sticky, XDialog, Popup, OrderInfo, XImg, Sos, Subscribe, ApplyTip, XTextarea, XButton, FirstTip, FirstHb, XInput, Previewer
   },
   filters: {
     dateformat: function (value) {
@@ -365,7 +387,8 @@ export default {
       showServiceModal: false,
       serviceContent: '',
       showSmoneyModal: '',
-      serviceMoney: ''
+      serviceMoney: '',
+      previewerPhoto: []
     }
   },
   watch: {
@@ -381,6 +404,17 @@ export default {
       this.showFirst = false
       this.showHb = false
       this.deliverdata = { delivercompany: '-1', delivercode: '' }
+    },
+    viewBigImg (index) {
+      const self = this
+      if (self.$util.isPC()) {
+        self.$refs.previewerPhoto.show(0)
+      } else {
+        window.WeixinJSBridge.invoke('imagePreview', {
+          current: this.data.proofphoto,
+          urls: [this.data.proofphoto]
+        })
+      }
     },
     serviceEvent (type) {
       const self = this
@@ -841,6 +875,14 @@ export default {
             self.showSos = false
             self.showContainer = true
             this.data.content = this.data.content.replace(/\n/g, '<br/>')
+            if (this.data.reasonreturn) {
+              this.data.reasonreturn = this.data.reasonreturn.replace(/\n/g, '<br/>')
+            }
+            if (this.data.proofphoto && this.data.proofphoto !== '') {
+              this.previewerPhoto = this.$util.previewerImgdata([this.data.proofphoto])
+            } else {
+              this.previewerPhoto = []
+            }
             if (self.data.flag !== 2 || (self.data.flag === 2 && !self.data.candeliver)) {
               self.bottomcss = 'nobottom'
             }
