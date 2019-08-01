@@ -5,12 +5,16 @@
     </template>
     <template v-if="showContainer">
       <div class="pagemiddle scroll-container">
+<<<<<<< HEAD
         <!-- <div v-if="data.seller && data.seller.username">
+=======
+        <div v-if="orderData.seller && orderData.seller.username">
+>>>>>>> 92b2a7479af60d83c87a856c17e25066925c138d
           <div class="b_bottom_after padding10 bg-white">
             <div class="t-table">
               <div class="t-cell w100">返点客：</div>
               <div class="t-cell sellername align_right clamp1">
-                <div class="clamp1">{{ data.seller.username }}</div>
+                <div class="clamp1">{{ orderData.seller.username }}</div>
               </div>
             </div>
           </div>
@@ -18,47 +22,47 @@
         </div> -->
         <div class="bg-white b_bottom_after padding10">
           <div class="flex_left">
-            <router-link class="flex_cell" :to="{path:'/store',query:{wid:data.retailer.uid}}">
+            <router-link class="flex_cell" :to="{path:'/store',query:{wid:orderData.retailer.uid}}">
               <i class="al al-dianpufill v_middle color-red font20"></i>
-              <span class="v_middle">{{data.retailer.title}}</span>
+              <span class="v_middle">{{orderData.retailer.title}}</span>
             </router-link>
             <div class="w80 align_right">
-              <router-link class="qbtn bg-red color-white font12" :to="{path:'/chat',query:{uid:data.retailer.uid, from: query.from}}">联系卖家</router-link>
+              <router-link class="qbtn bg-red color-white font12" :to="{path:'/chat',query:{uid:orderData.retailer.uid, from: query.from}}">联系卖家</router-link>
             </div>
           </div>
         </div>
         <div class="bg-white b_bottom_after padding10">
-          <div class="flex_left">买家：{{ data.username }}  累计消费：<span class="color-red">{{ $t('RMB') }}{{ data.summoney }}</span></div>
+          <div class="flex_left">买家：{{ orderData.username }}  累计消费：<span class="color-red">{{ $t('RMB') }}{{ orderData.summoney }}</span></div>
         </div>
-        <div v-if="data.flag != 0" class="bg-white b_bottom_after padding10">
-          <div v-if="data.flag != 0 && data.flag != 1 && data.flag != 2" class="t-table mb10">
-            <div class="t-cell v_middle">{{ data.delivercompanyname }} {{ data.delivercode }}</div>
+        <div v-if="orderData.flag != 0" class="bg-white b_bottom_after padding10">
+          <div v-if="orderData.flag != 0 && orderData.flag != 1 && orderData.flag != 2" class="t-table mb10">
+            <div class="t-cell v_middle">{{ orderData.delivercompanyname }} {{ orderData.delivercode }}</div>
             <div class="t-cell v_middle align_right w60">
-              <router-link :to="{path: '/deliverinfo', query: {id: data.id}}" class="font12 color-orange5">查看详情</router-link>
+              <router-link :to="{path: '/deliverinfo', query: {id: orderData.id}}" class="font12 color-orange5">查看详情</router-link>
             </div>
           </div>
           <div class="t-table">
-            <div class="t-cell v_middle">{{ $t('Addressee')}}：{{ data.linkman ? data.linkman : '无' }}</div>
-            <div class="t-cell v_middle align_right" style="width:110px;">{{ data.telephone }}</div>
+            <div class="t-cell v_middle">{{ $t('Addressee')}}：{{ orderData.linkman ? orderData.linkman : '无' }}</div>
+            <div class="t-cell v_middle align_right" style="width:110px;">{{ orderData.telephone }}</div>
           </div>
-          <div class="font12 color-gray mt5">{{ $t('Shipping Address')}}：{{ data.address ? data.address : '无' }}</div>
-          <div class="font12 color-gray mt5">{{ $t('Order Number')}}：{{ data.orderno }}</div>
+          <div class="font12 color-gray mt5">{{ $t('Shipping Address')}}：{{ orderData.address ? orderData.address : '无' }}</div>
+          <div class="font12 color-gray mt5">{{ $t('Order Number')}}：{{ orderData.orderno }}</div>
           <div class="color-red mt5 align_right">
-            <div class="qbtn color-orange5" @click="copyTxt(data)" style="position:relative;">
+            <div class="qbtn color-orange5" @click="copyTxt(orderData)" style="position:relative;">
               <span>复制</span>
-              <div class="deliver_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ data.linkman ? data.linkman + ', ' : '' }}{{ data.telephone ? data.telephone + ', ' : '' }}{{ data.address ? data.address : '' }}</div>
+              <div class="deliver_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ orderData.linkman ? orderData.linkman + ', ' : '' }}{{ orderData.telephone ? orderData.telephone + ', ' : '' }}{{ orderData.address ? orderData.address : '' }}</div>
             </div>
           </div>
         </div>
         <div class="mt10 bg-white padding10 b_bottom_after">
           <div class="t-table font12">
-            <div class="t-cell" style="width:165px;">创建时间: {{ data.dateline | dateformat }}</div>
-            <div class="t-cell align_right color-orange5">{{ data.flagstr }}</div>
+            <div class="t-cell" style="width:165px;">创建时间: {{ orderData.dateline | dateformat }}</div>
+            <div class="t-cell align_right color-orange5">{{ orderData.flagstr }}</div>
           </div>
         </div>
         <div class="bg-white">
           <div class="scroll_list productlist color_gray appendarea" ajaxurl="" template=".template">
-            <div v-for="(item,index) in data.orderlist" :key="item.id" @click="toProduct(item)" class="scroll_item db padding10 bg-gray4">
+            <div v-for="(item,index) in orderData.orderlist" :key="item.id" @click="toProduct(item)" class="scroll_item db padding10 bg-gray4">
               <div class="t-table">
                 <div class="t-cell v_middle w60 algin_left">
                   <template v-if="item.options && item.options.id">
@@ -82,27 +86,27 @@
           <div class="align_right padding10 flex_right">
             <div>合计:{{ $t('RMB') }} <span class="font16">{{ totalPrice }}</span></div>
           </div>
-          <div class="pl10 pr10 pb10 flex_right color-gray font12" v-if="data.delivertype == 2">到店自提</div>
+          <div class="pl10 pr10 pb10 flex_right color-gray font12" v-if="orderData.delivertype == 2">到店自提</div>
         </div>
         <div class="align_right">
-          <div v-if="!data.payorder && data.flag != 1" class="b_bottom_after pl10 pr10 pb10 bg-white">
+          <div v-if="!orderData.payorder && orderData.flag != 1" class="b_bottom_after pl10 pr10 pb10 bg-white">
             <div class="t-table">
               <div class="t-cell v_middle align_right cancelarea">
-                <div v-if="data.flag == 0" class="color-red">交易已关闭</div>
+                <div v-if="orderData.flag == 0" class="color-red">交易已关闭</div>
                 <div v-else class="db-in color-blue" @click="cancelorder">关闭交易</div>
               </div>
-              <router-link v-if="data.flag != 0" class="t-cell w80 color-blue" :to="{path: '/retailerAddorder', query: {id: data.id}}" >修改订单</router-link>
+              <router-link v-if="orderData.flag != 0" class="t-cell w80 color-blue" :to="{path: '/retailerAddorder', query: {id: orderData.id}}" >修改订单</router-link>
             </div>
           </div>
-          <div v-if="data.nexttime" class="align_left padding10 color-gray2 font12">回访时间：{{ data.nexttime | dateformat }}</div>
+          <div v-if="orderData.nexttime" class="align_left padding10 color-gray2 font12">回访时间：{{ orderData.nexttime | dateformat }}</div>
         </div>
-        <div class="padding10" v-if="data.flag == 2 && data.backflag == 20">
+        <div class="padding10" v-if="orderData.flag == 2 && orderData.backflag == 20">
           <div class="flex_right font12">
             <div class="flex_center mr10" @click="agreeEvent(0)" style="border:#999 1px solid;height:25px;border-radius:5px;color:#999;width:75px;">拒绝退款</div>
             <div class="flex_center" @click="agreeEvent(1)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">同意退款</div>
           </div>
         </div>
-        <template v-if="data.flag == 3 && data.backflag == 120">
+        <template v-if="orderData.flag == 3 && orderData.backflag == 120">
           <div class="padding10">
             <div class="flex_right font12">
               <div class="flex_center mr10" @click="serviceEvent(1)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">全额退款</div>
@@ -128,8 +132,8 @@
           </div>
         </div>
       </div>
-      <div v-if="data.flag == 2 && data.candeliver" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">{{ $t('Deliver goods') }}</div>
-      <div v-else-if="data.flag == 3" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">{{ $t('Update deliver info') }}</div>
+      <div v-if="orderData.flag == 2 && orderData.candeliver" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">{{ $t('Deliver goods') }}</div>
+      <div v-else-if="orderData.flag == 3" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">{{ $t('Update deliver info') }}</div>
       <div v-transfer-dom class="x-popup popup-deliver">
         <popup v-model="showpopup" height="100%">
           <div class="popup1 font14">
@@ -223,7 +227,7 @@
         <div class="scroll_item padding10 form-item">
           <div class="t-table">
             <div class="t-cell w80">补偿金额<span class="al al-xing color-red font12" style="vertical-align: 3px;"></span></div>
-            <div class="t-cell">
+            <div class="t-cell" style="vertical-align:middle;">
               <x-input v-model="serviceMoney" type="text" class="input" placeholder="补偿金额"></x-input>
             </div>
           </div>
@@ -240,7 +244,7 @@
   </div>
 </template>
 <script>
-import { Group, Cell, Sticky, XDialog, TransferDom, Popup, XImg, XTextarea, Previewer } from 'vux'
+import { Group, Cell, Sticky, XDialog, TransferDom, Popup, XImg, XTextarea, Previewer, XInput } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
 import Sos from '@/components/Sos'
 import Time from '#/time'
@@ -253,7 +257,7 @@ export default {
     TransferDom
   },
   components: {
-    Group, Cell, Sticky, XDialog, Popup, OrderInfo, XImg, Sos, XTextarea, Previewer
+    Group, Cell, Sticky, XDialog, Popup, OrderInfo, XImg, Sos, XTextarea, Previewer, XInput
   },
   filters: {
     dateformat: function (value) {
@@ -267,7 +271,7 @@ export default {
       showContainer: false,
       query: {},
       loginUser: {},
-      data: {},
+      orderData: {},
       totalPrice: '0.00',
       bottomcss: '',
       showpopup: false,
@@ -283,8 +287,8 @@ export default {
     }
   },
   watch: {
-    data () {
-      return this.data
+    orderData () {
+      return this.orderData
     }
   },
   computed: {
@@ -314,7 +318,7 @@ export default {
             onConfirm: () => {
               self.$vux.loading.show()
               self.$http.post(`${ENV.BokaApi}/api/order/dealService`, {
-                id: self.data.id, agree: 1
+                id: self.orderData.id, agree: 1
               }).then((res) => {
                 self.$vux.loading.hide()
                 const data = res.data
@@ -325,7 +329,7 @@ export default {
                   time: self.$util.delay(error),
                   onHide: () => {
                     if (data.flag === 1) {
-                      self.data.flag = 0
+                      self.orderData.flag = 0
                     }
                   }
                 })
@@ -354,7 +358,7 @@ export default {
       }
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/order/dealService`, {
-        id: this.data.id, agree: 2, rejectreason: this.serviceContent
+        id: this.orderData.id, agree: 2, rejectreason: this.serviceContent
       }).then(res => {
         this.$vux.loading.hide()
         const data = res.data
@@ -364,7 +368,7 @@ export default {
           time: this.$util.delay(data.error)
         })
         if (data.flag === 1) {
-          this.data.backflag = 0
+          this.orderData.backflag = 0
           this.showServiceModal = false
         }
       })
@@ -383,13 +387,13 @@ export default {
         return false
       }
       let money = parseFloat(this.serviceMoney.replace(/,/g, ''))
-      if (money > parseFloat(this.data.paymoney)) {
+      if (money > parseFloat(this.orderData.paymoney)) {
         this.$vux.toast.text('补偿金额不能超过支付金额', 'middle')
         return false
       }
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/order/dealService`, {
-        id: this.data.id, agree: 3, payout: this.serviceMoney
+        id: this.orderData.id, agree: 3, payout: this.serviceMoney
       }).then(res => {
         this.$vux.loading.hide()
         const data = res.data
@@ -399,7 +403,7 @@ export default {
           time: this.$util.delay(data.error)
         })
         if (data.flag === 1) {
-          this.data.flag = 4
+          this.orderData.flag = 4
           this.showSmoneyModal = false
         }
       })
@@ -437,7 +441,7 @@ export default {
               time: self.$util.delay(data.error),
               onHide: function () {
                 if (data.flag === 1) {
-                  self.data.flag = 0
+                  self.orderData.flag = 0
                 }
               }
             })
@@ -471,14 +475,14 @@ export default {
           onHide: function () {
             if (data.flag === 1) {
               self.showpopup = false
-              self.data.delivercompany = self.deliverdata.delivercompany
-              self.data.delivercode = self.deliverdata.delivercode
-              self.data.flag = 3
-              if (self.data.delivercompany !== '-1') {
+              self.orderData.delivercompany = self.deliverdata.delivercompany
+              self.orderData.delivercode = self.deliverdata.delivercode
+              self.orderData.flag = 3
+              if (self.orderData.delivercompany !== '-1') {
                 for (let i = 0; i < self.delivercompany.length; i++) {
                   let d = self.delivercompany[i]
-                  if (d.id === self.data.delivercompany) {
-                    self.data.delivercompanyname = d.name
+                  if (d.id === self.orderData.delivercompany) {
+                    self.orderData.delivercompanyname = d.name
                     break
                   }
                 }
@@ -574,9 +578,9 @@ export default {
                 time: self.$util.delay(data.error),
                 onHide: () => {
                   if (data.flag === 1) {
-                    this.data.backflag = 0
-                    this.data.flag = 0
-                    this.data.flagstr = '订单取消'
+                    this.orderData.backflag = 0
+                    this.orderData.flag = 0
+                    this.orderData.flagstr = '订单取消'
                   }
                 }
               })
@@ -605,8 +609,8 @@ export default {
           time: self.$util.delay(data.error),
           onHide: () => {
             if (data.flag === 1) {
-              this.data.backflag = 0
-              this.data.flagstr = '待发货'
+              this.orderData.backflag = 0
+              this.orderData.flagstr = '待发货'
             }
           }
         })
@@ -628,27 +632,27 @@ export default {
           self.showSos = true
           self.showContainer = false
         } else {
-          self.data = data.data
-          if (self.data.length === 0) {
+          self.orderData = data.data
+          if (self.orderData.length === 0) {
             self.showSos = true
             self.sosTitle = '该订单不存在'
             self.showContainer = false
           } else {
             self.showSos = false
             self.showContainer = true
-            this.data.content = this.data.content.replace(/\n/g, '<br/>')
-            if (!(self.data.flag === 2 && self.data.candeliver) && self.data.flag !== 3) {
+            this.orderData.content = this.orderData.content.replace(/\n/g, '<br/>')
+            if (!(self.orderData.flag === 2 && self.orderData.candeliver) && self.orderData.flag !== 3) {
               self.bottomcss = 'nobottom'
             }
             let total = 0
-            for (let i = 0; i < self.data.orderlist.length; i++) {
-              let o = self.data.orderlist[i]
+            for (let i = 0; i < self.orderData.orderlist.length; i++) {
+              let o = self.orderData.orderlist[i]
               total += parseFloat(o.special.replace(/,/g, '')) * parseInt(o.quantity)
             }
             self.totalPrice = total.toFixed(2)
-            if (self.data.delivercompany && self.$util.trim(self.data.delivercompany) !== '') {
-              self.deliverdata.delivercompany = self.data.delivercompany
-              self.deliverdata.delivercode = self.data.delivercode
+            if (self.orderData.delivercompany && self.$util.trim(self.orderData.delivercompany) !== '') {
+              self.deliverdata.delivercompany = self.orderData.delivercompany
+              self.deliverdata.delivercode = self.orderData.delivercode
             }
             return this.$http.post(`${ENV.BokaApi}/api/order/recordList`, {
               type: 'service', id: this.query.id

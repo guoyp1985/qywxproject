@@ -556,10 +556,10 @@ export default {
           }
         })
       } else {
-        let cururl = `/store?wid=${self.query.wid}`
+        let cururl = `/store?wid=${self.retailerInfo.uid}`
         self.$vux.loading.show()
         self.$http.get(`${ENV.BokaApi}/api/user/favorite/add`,
-          { params: { module: self.module, id: self.query.wid, wid: self.retailerInfo.uid, currenturl: encodeURIComponent(cururl) } }
+          { params: { module: self.module, id: self.retailerInfo.uid, wid: self.retailerInfo.uid, currenturl: encodeURIComponent(cururl) } }
         ).then(function (res) {
           let data = res.data
           self.$vux.loading.hide()

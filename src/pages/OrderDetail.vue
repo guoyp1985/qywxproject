@@ -39,24 +39,24 @@
           <cell class="shipping-address font12 color-gray" :title="`${$t('Order Number')}: ${shippingOrderon}`"></cell>
         </group>
       -->
-        <div v-if="data.flag != 0" class="bg-white b_bottom_after padding10">
-          <div v-if="data.flag != 0 && data.flag != 1 && data.flag != 2" class="t-table mb10">
-            <div class="t-cell v_middle">{{ data.delivercompanyname }} {{ data.delivercode }}</div>
+        <div v-if="orderData.flag != 0" class="bg-white b_bottom_after padding10">
+          <div v-if="orderData.flag != 0 && orderData.flag != 1 && orderData.flag != 2" class="t-table mb10">
+            <div class="t-cell v_middle">{{ orderData.delivercompanyname }} {{ orderData.delivercode }}</div>
             <div class="t-cell v_middle align_right w60">
-              <router-link :to="{path: '/deliverinfo', query: {id: data.id}}" class="font12 color-orange5">查看详情</router-link>
+              <router-link :to="{path: '/deliverinfo', query: {id: orderData.id}}" class="font12 color-orange5">查看详情</router-link>
             </div>
           </div>
           <div class="t-table">
-            <div class="t-cell v_middle">{{ $t('Addressee')}}：{{ data.linkman ? data.linkman : '无' }}</div>
-            <div class="t-cell v_middle align_right" style="width:110px;">{{ data.telephone }}</div>
+            <div class="t-cell v_middle">{{ $t('Addressee')}}：{{ orderData.linkman ? orderData.linkman : '无' }}</div>
+            <div class="t-cell v_middle align_right" style="width:110px;">{{ orderData.telephone }}</div>
           </div>
-          <div class="font12 color-gray mt5">{{ $t('Shipping Address')}}：{{ data.address ? data.address : '无' }}</div>
-          <div class="font12 color-gray mt5">{{ $t('Order Number')}}：{{ data.orderno }}</div>
+          <div class="font12 color-gray mt5">{{ $t('Shipping Address')}}：{{ orderData.address ? orderData.address : '无' }}</div>
+          <div class="font12 color-gray mt5">{{ $t('Order Number')}}：{{ orderData.orderno }}</div>
           <!--
           <div class="color-red mt5 align_right">
-            <div class="qbtn color-orange5" @click="copyTxt(data)" style="position:relative;">
+            <div class="qbtn color-orange5" @click="copyTxt(orderData)" style="position:relative;">
               <span>复制</span>
-              <div class="deliver_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ data.linkman ? data.linkman + ', ' : '' }}{{ data.telephone ? data.telephone + ', ' : '' }}{{ data.address ? data.address : '' }}</div>
+              <div class="deliver_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ orderData.linkman ? orderData.linkman + ', ' : '' }}{{ orderData.telephone ? orderData.telephone + ', ' : '' }}{{ orderData.address ? orderData.address : '' }}</div>
             </div>
           </div>
         -->
@@ -83,10 +83,10 @@
           <cell-form-preview v-if="priceInfos.length" :list="priceInfos"></cell-form-preview>
           <cell>
             <div class="color-orange">
-              <span class="v_middle font12">商品: </span><span class="v_middle font14">{{ $t('RMB') }}{{data.special}}</span>
-              <template v-if="!data.delivertype && data.postage && data.postage != ''">
-                <span class="v_middle font12 color-gray" v-if="data.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
-                <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ data.postage }} )</span>
+              <span class="v_middle font12">商品: </span><span class="v_middle font14">{{ $t('RMB') }}{{orderData.special}}</span>
+              <template v-if="!orderData.delivertype && orderData.postage && orderData.postage != ''">
+                <span class="v_middle font12 color-gray" v-if="orderData.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
+                <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ orderData.postage }} )</span>
               </template>
             </div>
           </cell>
@@ -94,33 +94,33 @@
         <group>
           <cell>
             <div>
-              <span class="v_middle font12 color-orange">实际支付: </span><span class="v_middle font14 color-orange">{{ $t('RMB') }}{{data.needpaymoney}}</span>
-              <template v-if="data.carddeduct > 0">
-                <span class="v_middle font12 ml10 color-gray">优惠券抵扣: </span><span class="v_middle font14 color-gray">{{ $t('RMB') }}{{data.carddeduct}}</span>
+              <span class="v_middle font12 color-orange">实际支付: </span><span class="v_middle font14 color-orange">{{ $t('RMB') }}{{orderData.needpaymoney}}</span>
+              <template v-if="orderData.carddeduct > 0">
+                <span class="v_middle font12 ml10 color-gray">优惠券抵扣: </span><span class="v_middle font14 color-gray">{{ $t('RMB') }}{{orderData.carddeduct}}</span>
               </template>
             </div>
           </cell>
         </group>
         <group>
           <div class="padding10 font12 color-gray flex_left">
-            <div class="flex_cell flex_left">创建时间: {{ data.dateline | dateformat }}</div>
-            <div class="flex_right w60" v-if="data.delivertype == 2">到店自提</div>
+            <div class="flex_cell flex_left">创建时间: {{ orderData.dateline | dateformat }}</div>
+            <div class="flex_right w60" v-if="orderData.delivertype == 2">到店自提</div>
           </div>
-          <div class="pl10 pr10 pb10 font12 color-gray" v-if="data.flag == 3">发货时间: {{ data.delivertime | dateformat }}</div>
-          <div v-if="data && data.content != ''"  class="pl10 pr10 pb10 color-gray">
+          <div class="pl10 pr10 pb10 font12 color-gray" v-if="orderData.flag == 3">发货时间: {{ orderData.delivertime | dateformat }}</div>
+          <div v-if="orderData && orderData.content != ''"  class="pl10 pr10 pb10 color-gray">
             <div class="flex_left font12">
               <div class="w40">留言: </div>
-              <div class="flex_cell" v-html="data.content"></div>
+              <div class="flex_cell" v-html="orderData.content"></div>
             </div>
           </div>
         </group>
         <div class="padding10 align_right">
-          <x-button v-if="data.flag == 1" mini @click.native="cancel" class="font12">取消订单</x-button>
-          <x-button v-if="data.flag == 1 && data.payorder == '' && query.fromapp != 'factory'" :link="{path: '/pay', query: {id: data.id}}" mini class="font12">去支付</x-button>
-          <x-button v-if="data.flag == 2 && data.canback && data.backflag != 20" mini @click.native="refund" class="font12">申请退款</x-button>
-          <x-button v-if="data.flag == 3 && data.backflag != 120" mini @click.native="afterSale" class="font12">申请售后</x-button>
-          <x-button v-if="data.flag == 3" mini @click.native="confirm" class="font12">确认收货</x-button>
-          <x-button v-if="data.flag == 4" mini @click.native="evaluate" class="font12">评价</x-button>
+          <x-button v-if="orderData.flag == 1" mini @click.native="cancel" class="font12">取消订单</x-button>
+          <x-button v-if="orderData.flag == 1 && orderData.payorder == '' && query.fromapp != 'factory'" :link="{path: '/pay', query: {id: orderData.id}}" mini class="font12">去支付</x-button>
+          <x-button v-if="orderData.flag == 2 && orderData.canback && orderData.backflag != 20" mini @click.native="refund" class="font12">申请退款</x-button>
+          <x-button v-if="orderData.flag == 3 && orderData.backflag != 120" mini @click.native="afterSale" class="font12">申请售后</x-button>
+          <x-button v-if="orderData.flag == 3" mini @click.native="confirm" class="font12">确认收货</x-button>
+          <x-button v-if="orderData.flag == 4" mini @click.native="evaluate" class="font12">评价</x-button>
         </div>
         <div class="bg-white" v-if="recordData.length">
           <div class="padding10 b_bottom_after">售后记录</div>
@@ -236,7 +236,7 @@
   </div>
 </template>
 <script>
-import { Group, Cell, Sticky, XDialog, CellFormPreview, TransferDom, XImg, XButton, XTextarea, Previewer } from 'vux'
+import { Group, Cell, Sticky, XDialog, CellFormPreview, TransferDom, XImg, XButton, XTextarea, Previewer, XInput } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
 import Sos from '@/components/Sos'
 import Time from '#/time'
@@ -247,7 +247,7 @@ export default {
     TransferDom
   },
   components: {
-    Group, Cell, Sticky, XDialog, CellFormPreview, OrderInfo, XImg, XButton, Sos, XTextarea, Previewer
+    Group, Cell, Sticky, XDialog, CellFormPreview, OrderInfo, XImg, XButton, Sos, XTextarea, Previewer, XInput
   },
   filters: {
     dateformat: function (value) {
@@ -260,7 +260,7 @@ export default {
       sosTitle: '该订单不存在',
       showContainer: false,
       id: 0,
-      data: {},
+      orderData: {},
       retailerInfo: {},
       receiver: 'unkown',
       receiverPhone: '13500000000',
@@ -357,14 +357,14 @@ export default {
       }
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/order/applyService`, {
-        id: this.data.id, reasonreturn: this.serviceContent, proofphoto: this.servicePhoto
+        id: this.orderData.id, reasonreturn: this.serviceContent, proofphoto: this.servicePhoto
       }).then(res => {
         this.$vux.loading.hide()
         const data = res.data
         this.$vux.toast.text(data.error)
         if (data.flag) {
           this.showServiceModal = false
-          this.data.backflag = 120
+          this.orderData.backflag = 120
         }
       })
     },
@@ -405,7 +405,7 @@ export default {
       curArea.updateAutosize()
     },
     evaluate () {
-      this.$router.push({path: '/evaluation', query: {id: this.data.id}})
+      this.$router.push({path: '/evaluation', query: {id: this.orderData.id}})
     },
     wxContact () {
       if (!this.retailerInfo.qrcode || this.retailerInfo.qrcode === '') {
@@ -419,7 +419,7 @@ export default {
         title: '您是否确认收货？',
         content: '请确认货物已收到',
         onConfirm () {
-          self.$http.post(`${ENV.BokaApi}/api/order/receive`, {id: self.data.id})
+          self.$http.post(`${ENV.BokaApi}/api/order/receive`, {id: self.orderData.id})
           .then(res => {
             let data = res.data
             self.$vux.toast.show({
@@ -441,7 +441,7 @@ export default {
       this.$vux.confirm.show({
         title: '您确认取消订单？',
         onConfirm () {
-          self.$http.post(`${ENV.BokaApi}/api/order/cancel`, {id: self.data.id})
+          self.$http.post(`${ENV.BokaApi}/api/order/cancel`, {id: self.orderData.id})
           .then(res => {
             let data = res.data
             self.$vux.toast.show({
@@ -468,7 +468,7 @@ export default {
       const self = this
       self.$vux.loading.show()
       this.showRefundModal = false
-      self.$http.post(`${ENV.BokaApi}/api/order/applyRefund`, {id: this.data.id, reasonreturn: this.refundContent})
+      self.$http.post(`${ENV.BokaApi}/api/order/applyRefund`, {id: this.orderData.id, reasonreturn: this.refundContent})
       .then(res => {
         self.$vux.loading.hide()
         const data = res.data
@@ -478,7 +478,7 @@ export default {
           time: self.$util.delay(data.error),
           onHide: () => {
             if (data.flag) {
-              self.data.backflag = 20
+              self.orderData.backflag = 20
             }
           }
         })
@@ -531,8 +531,8 @@ export default {
             self.showSos = false
             self.showContainer = true
             const retdata = data.data
-            self.data = retdata
-            this.data.content = this.data.content.replace(/\n/g, '<br/>')
+            self.orderData = retdata
+            this.orderData.content = this.orderData.content.replace(/\n/g, '<br/>')
             self.orders = retdata.orderlist
             self.special = retdata.special
             self.retailerInfo = retdata.retailer
