@@ -223,7 +223,7 @@
         <div class="scroll_item padding10 form-item">
           <div class="t-table">
             <div class="t-cell w80">补偿金额<span class="al al-xing color-red font12" style="vertical-align: 3px;"></span></div>
-            <div class="t-cell">
+            <div class="t-cell" style="vertical-align:middle;">
               <x-input v-model="serviceMoney" type="text" class="input" placeholder="补偿金额"></x-input>
             </div>
           </div>
@@ -240,7 +240,7 @@
   </div>
 </template>
 <script>
-import { Group, Cell, Sticky, XDialog, TransferDom, Popup, XImg, XTextarea, Previewer } from 'vux'
+import { Group, Cell, Sticky, XDialog, TransferDom, Popup, XImg, XTextarea, Previewer, XInput } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
 import Sos from '@/components/Sos'
 import Time from '#/time'
@@ -253,7 +253,7 @@ export default {
     TransferDom
   },
   components: {
-    Group, Cell, Sticky, XDialog, Popup, OrderInfo, XImg, Sos, XTextarea, Previewer
+    Group, Cell, Sticky, XDialog, Popup, OrderInfo, XImg, Sos, XTextarea, Previewer, XInput
   },
   filters: {
     dateformat: function (value) {

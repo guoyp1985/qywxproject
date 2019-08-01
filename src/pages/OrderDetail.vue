@@ -236,7 +236,7 @@
   </div>
 </template>
 <script>
-import { Group, Cell, Sticky, XDialog, CellFormPreview, TransferDom, XImg, XButton, XTextarea, Previewer } from 'vux'
+import { Group, Cell, Sticky, XDialog, CellFormPreview, TransferDom, XImg, XButton, XTextarea, Previewer, XInput } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
 import Sos from '@/components/Sos'
 import Time from '#/time'
@@ -247,7 +247,7 @@ export default {
     TransferDom
   },
   components: {
-    Group, Cell, Sticky, XDialog, CellFormPreview, OrderInfo, XImg, XButton, Sos, XTextarea, Previewer
+    Group, Cell, Sticky, XDialog, CellFormPreview, OrderInfo, XImg, XButton, Sos, XTextarea, Previewer, XInput
   },
   filters: {
     dateformat: function (value) {
