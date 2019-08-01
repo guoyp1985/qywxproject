@@ -122,23 +122,22 @@
           <x-button v-if="data.flag == 3" mini @click.native="confirm" class="font12">确认收货</x-button>
           <x-button v-if="data.flag == 4" mini @click.native="evaluate" class="font12">评价</x-button>
         </div>
-        <group v-if="(data.reasonreturn && data.reasonreturn != '') || (data.proofphoto && data.proofphoto != '') || (data.rejectreason && data.rejectreason != '')">
-          <template v-if="(data.reasonreturn && data.reasonreturn != '') || (data.proofphoto && data.proofphoto != '')">
-            <div class="b_bottom_after padding10 font14">售后申请</div>
-            <div class="padding10 font12" v-if="data.reasonreturn != ''" v-html="data.reasonreturn"></div>
-            <div class="padding10" v-if="data.proofphoto && data.proofphoto != ''">
-              <img :src="data.proofphoto" style="width:100px;max-width:100%;" @click="viewBigImg" />
+        <div class="bg-white" v-if="recordData.length">
+          <div class="padding10 b_bottom_after">售后记录</div>
+          <div class="scroll_list mt12">
+            <div class="scroll_item padding10" v-for="(item, index) in recordData" :key="index">
+              <div class="color-theme">{{item.description}}</div>
+              <div class="mt5" v-html="item.content"></div>
+              <div class="mt5" v-if="item.photo && item.photo != ''">
+                <img :src="item.photo" style="width:100px;max-width:100%;" @click="viewBigImg(item.photo,index)" />
+                <div v-transfer-dom>
+                  <previewer :list="item.previewerPhoto" :ref="`previewerPhoto-${index}`"></previewer>
+                </div>
+              </div>
+              <div class="color-gray font12 mt5">{{item.dateline | dateformat}}</div>
             </div>
-            <div v-if="!data.flag" class="b_top_after">
-              <div class="b_bottom_after padding10 font14">售后反馈</div>
-              <div class="padding10 font12 color-theme">已全额退款</div>
-            </div>
-          </template>
-          <template v-if="data.rejectreason && data.rejectreason != ''">
-            <div class="b_bottom_after padding10 font14">拒绝退款</div>
-            <div class="padding10 font12" v-html="data.rejectreason"></div>
-          </template>
-        </group>
+          </div>
+        </div>
         <div v-transfer-dom class="qrcode-dialog">
           <x-dialog v-model="wxCardShow" class="dialog-demo">
             <template v-if="!retailerInfo || !retailerInfo.qrcode || retailerInfo.qrcode == ''">
@@ -234,9 +233,6 @@
         </div>
       </div>
     </div>
-    <div v-transfer-dom>
-      <previewer :list="previewerPhoto" ref="previewerPhoto"></previewer>
-    </div>
   </div>
 </template>
 <script>
@@ -284,7 +280,7 @@ export default {
       showServiceModal: false,
       serviceContent: '',
       servicePhoto: '',
-      previewerPhoto: []
+      recordData: []
     }
   },
   computed: {
@@ -296,14 +292,15 @@ export default {
     deletephoto () {
       this.servicePhoto = ''
     },
-    viewBigImg (index) {
+    viewBigImg (photo, index) {
       const self = this
       if (self.$util.isPC()) {
-        self.$refs.previewerPhoto.show(0)
+        let refarea = self.$refs[`previewerPhoto-${index}`][0] ? self.$refs[`previewerPhoto-${index}`][0] : self.$refs[`previewerPhoto-${index}`]
+        refarea.show(0)
       } else {
         window.WeixinJSBridge.invoke('imagePreview', {
-          current: this.data.proofphoto,
-          urls: [this.data.proofphoto]
+          current: photo,
+          urls: [photo]
         })
       }
     },
@@ -536,17 +533,6 @@ export default {
             const retdata = data.data
             self.data = retdata
             this.data.content = this.data.content.replace(/\n/g, '<br/>')
-            if (this.data.reasonreturn) {
-              this.data.reasonreturn = this.data.reasonreturn.replace(/\n/g, '<br/>')
-            }
-            if (this.data.rejectreason) {
-              this.data.rejectreason = this.data.rejectreason.replace(/\n/g, '<br/>')
-            }
-            if (this.data.proofphoto && this.data.proofphoto !== '') {
-              this.previewerPhoto = this.$util.previewerImgdata([this.data.proofphoto])
-            } else {
-              this.previewerPhoto = []
-            }
             self.orders = retdata.orderlist
             self.special = retdata.special
             self.retailerInfo = retdata.retailer
@@ -556,7 +542,24 @@ export default {
             self.receiverPhone = retdata.telephone
             self.expressCompany = retdata.delivercompanyname
             self.expressNumber = retdata.delivercode
+            return this.$http.post(`${ENV.BokaApi}/api/order/recordList`, {
+              type: 'service', id: this.query.id
+            })
           }
+        }
+      }).then(res => {
+        if (res) {
+          const data = res.data
+          let retdata = data.data ? data.data : data
+          for (let i in retdata) {
+            if (retdata[i].photo && retdata[i].photo !== '') {
+              retdata[i].previewerPhoto = this.$util.previewerImgdata([retdata[i].photo])
+            }
+            if (retdata[i].content && retdata[i].content !== '') {
+              retdata[i].content = retdata[i].content.replace(/\n/g, '<br/>')
+            }
+          }
+          this.recordData = retdata
         }
       })
     },
