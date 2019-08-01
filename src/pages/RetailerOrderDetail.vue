@@ -436,7 +436,7 @@ export default {
                   time: self.$util.delay(error),
                   onHide: () => {
                     if (data.flag === 1) {
-                      self.orderData.flag = 0
+                      self.orderData.candealservice = false
                     }
                   }
                 })
@@ -472,12 +472,14 @@ export default {
         this.$vux.toast.show({
           text: data.error,
           type: (data.flag !== 1 ? 'warn' : 'success'),
-          time: this.$util.delay(data.error)
+          time: this.$util.delay(data.error),
+          onHide: () => {
+            if (data.flag === 1) {
+              this.showServiceModal = false
+              this.orderData.candealservice = false
+            }
+          }
         })
-        if (data.flag === 1) {
-          this.orderData.backflag = 0
-          this.showServiceModal = false
-        }
       })
     },
     closeMoney () {
@@ -507,12 +509,14 @@ export default {
         this.$vux.toast.show({
           text: data.error,
           type: (data.flag !== 1 ? 'warn' : 'success'),
-          time: this.$util.delay(data.error)
+          time: this.$util.delay(data.error),
+          onHide: () => {
+            if (data.flag === 1) {
+              this.showServiceModal = false
+              this.orderData.candealservice = false
+            }
+          }
         })
-        if (data.flag === 1) {
-          this.showSmoneyModal = false
-          this.orderData.flag = 4
-        }
       })
     },
     submitFirstTip () {
