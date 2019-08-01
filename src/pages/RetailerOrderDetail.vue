@@ -509,14 +509,12 @@ export default {
         this.$vux.toast.show({
           text: data.error,
           type: (data.flag !== 1 ? 'warn' : 'success'),
-          time: this.$util.delay(data.error),
-          onHide: () => {
-            if (data.flag === 1) {
-              this.showServiceModal = false
-              this.orderData.candealservice = false
-            }
-          }
+          time: this.$util.delay(data.error)
         })
+        if (data.flag === 1) {
+          this.showSmoneyModal = false
+          this.orderData.candealservice = false
+        }
       })
     },
     submitFirstTip () {
