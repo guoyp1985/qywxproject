@@ -702,6 +702,8 @@ export default {
       self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/retailer/changeInfo`, self.submitdata).then(function (res) {
         let data = res.data
+        console.log('----------')
+        console.log(data.error)
         self.$vux.loading.hide()
         self.$vux.toast.show({
           text: data.error,
@@ -717,14 +719,7 @@ export default {
                 } else {
                   self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
                 }
-                console.log('--------self.query.minibackurl-------')
-                console.log(self.query.minibackurl)
               } else {
-                // console.log('走这了')
-                // console.log(self.query)
-                // if (self.query.from === 'miniprogram') {
-                //   console.log('这这这，看这')
-                // }
                 self.$router.push({path: '/centerSales'})
               }
             }
