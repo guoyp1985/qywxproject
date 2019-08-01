@@ -194,12 +194,6 @@
             <div class="font12 color-gray2">收藏</div>
           </div>
         </div>
-        <div class="radius-item flex_center">
-          <div class="align_center">
-            <span class="al al-fenxiang1 font14" style="color:#f2463b;"></span>
-            <div class="font12 color-gray2">分享</div>
-          </div>
-        </div>
       </div>
       <div v-transfer-dom class="x-popup">
         <popup v-model="showqrcode" height="100%">
