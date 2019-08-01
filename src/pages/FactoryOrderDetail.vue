@@ -5,11 +5,7 @@
     </template>
     <template v-if="showContainer">
       <div class="pagemiddle scroll-container">
-<<<<<<< HEAD
-        <!-- <div v-if="data.seller && data.seller.username">
-=======
-        <div v-if="orderData.seller && orderData.seller.username">
->>>>>>> 92b2a7479af60d83c87a856c17e25066925c138d
+        <!-- <div v-if="orderData.seller && orderData.seller.username">
           <div class="b_bottom_after padding10 bg-white">
             <div class="t-table">
               <div class="t-cell w100">返点客：</div>
