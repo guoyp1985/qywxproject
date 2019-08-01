@@ -327,6 +327,7 @@ export default {
                     if (data.flag === 1) {
                       self.orderData.candealservice = false
                       self.orderData.flag = 0
+                      self.orderData.flagstr = '已退款'
                     }
                   }
                 })
@@ -367,6 +368,7 @@ export default {
             if (data.flag === 1) {
               this.showServiceModal = false
               this.orderData.candealservice = false
+              self.orderData.flagstr = '已发货'
             }
           }
         })
@@ -405,6 +407,7 @@ export default {
           this.showSmoneyModal = false
           this.orderData.candealservice = false
           this.orderData.flag = 4
+          self.orderData.flagstr = '已收货'
         }
       })
     },
