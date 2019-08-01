@@ -102,6 +102,24 @@
             <div class="flex_center" @click="agreeEvent(1)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">同意退款</div>
           </div>
         </div>
+        <template v-if="data.flag == 3 && data.backflag == 120">
+          <group v-if="(data.reasonreturn && data.reasonreturn != '') || (data.proofphoto && data.proofphoto != '')">
+            <template v-if="(data.reasonreturn && data.reasonreturn != '') || (data.proofphoto && data.proofphoto != '')">
+              <div class="b_bottom_after padding10 font14">售后申请</div>
+              <div class="padding10 font12" v-if="data.reasonreturn != ''" v-html="data.reasonreturn"></div>
+              <div class="padding10" v-if="data.proofphoto && data.proofphoto != ''">
+                <img :src="data.proofphoto" style="width:100px;max-width:100%;" @click="viewBigImg" />
+              </div>
+            </template>
+          </group>
+          <div class="padding10">
+            <div class="flex_right font12">
+              <div class="flex_center mr10" @click="serviceEvent(1)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">全额退款</div>
+              <div class="flex_center mr10" @click="serviceEvent(2)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">售后反馈</div>
+              <div class="flex_center" @click="serviceEvent(3)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">部分补偿</div>
+            </div>
+          </div>
+        </template>
       </div>
       <div v-if="data.flag == 2 && data.candeliver" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">{{ $t('Deliver goods') }}</div>
       <div v-else-if="data.flag == 3" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">{{ $t('Update deliver info') }}</div>
@@ -167,13 +185,58 @@
         </div>
       </div>
     </div>
+    <div v-if="showServiceModal" class="auto-modal refund-modal flex_center">
+      <div class="modal-inner border-box" style="width:80%;">
+        <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">售后反馈</div>
+        <div class="align_left txt padding10">
+          <group class="textarea-outer" style="padding:0;">
+            <x-textarea
+              ref="serviceTextarea"
+              v-model="serviceContent"
+              name="title" class="x-textarea noborder"
+              placeholder="请输入售后反馈"
+              :show-counter="false"
+              :rows="6"
+              :max="200"
+              @on-change="textareaChange('serviceTextarea')"
+              @on-focus="textareaFocus('serviceTextarea')"
+              autosize>
+            </x-textarea>
+          </group>
+        </div>
+        <div class="flex_center b_top_after" style="height:50px;">
+          <div class="flex_cell flex_center h_100 b_right_after" @click="closeService">取消</div>
+          <div class="flex_cell flex_center h_100 color-orange" @click="submitService">提交</div>
+        </div>
+      </div>
+    </div>
+    <div v-if="showSmoneyModal" class="auto-modal refund-modal flex_center">
+      <div class="modal-inner border-box" style="width:80%;">
+        <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">部分补偿</div>
+        <div class="scroll_item padding10 form-item">
+          <div class="t-table">
+            <div class="t-cell w80">补偿金额<span class="al al-xing color-red font12" style="vertical-align: 3px;"></span></div>
+            <div class="t-cell">
+              <input v-model="serviceMoney" type="text" class="input" placeholder="补偿金额" />
+            </div>
+          </div>
+        </div>
+        <div class="flex_center b_top_after" style="height:50px;">
+          <div class="flex_cell flex_center h_100 b_right_after" @click="closeMoney">取消</div>
+          <div class="flex_cell flex_center h_100 color-orange" @click="submitMoney">提交</div>
+        </div>
+      </div>
+    </div>
     <div class="bg-theme flex_center color-white fix-home-icon" @click="toHome" v-if="query.from">
       <i class="al al-home1"></i>
+    </div>
+    <div v-transfer-dom>
+      <previewer :list="previewerPhoto" ref="previewerPhoto"></previewer>
     </div>
   </div>
 </template>
 <script>
-import { Group, Cell, Sticky, XDialog, TransferDom, Popup, XImg, XTextarea } from 'vux'
+import { Group, Cell, Sticky, XDialog, TransferDom, Popup, XImg, XTextarea, Previewer } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
 import Sos from '@/components/Sos'
 import Time from '#/time'
@@ -186,7 +249,7 @@ export default {
     TransferDom
   },
   components: {
-    Group, Cell, Sticky, XDialog, Popup, OrderInfo, XImg, Sos, XTextarea
+    Group, Cell, Sticky, XDialog, Popup, OrderInfo, XImg, Sos, XTextarea, Previewer
   },
   filters: {
     dateformat: function (value) {
@@ -207,7 +270,12 @@ export default {
       delivercompany: [],
       deliverdata: { delivercompany: '-1', delivercode: '' },
       showRefundModal: false,
-      refundContent: ''
+      refundContent: '',
+      showServiceModal: false,
+      serviceContent: '',
+      showSmoneyModal: '',
+      serviceMoney: '',
+      previewerPhoto: []
     }
   },
   watch: {
@@ -220,6 +288,116 @@ export default {
   methods: {
     initData () {
       this.deliverdata = { delivercompany: '-1', delivercode: '' }
+    },
+    viewBigImg (index) {
+      const self = this
+      if (self.$util.isPC()) {
+        self.$refs.previewerPhoto.show(0)
+      } else {
+        window.WeixinJSBridge.invoke('imagePreview', {
+          current: this.data.proofphoto,
+          urls: [this.data.proofphoto]
+        })
+      }
+    },
+    serviceEvent (type) {
+      const self = this
+      switch (type) {
+        case 1:
+          self.$vux.confirm.show({
+            content: '确定要全额退款给买家吗？',
+            onConfirm: () => {
+              self.$vux.loading.show()
+              self.$http.post(`${ENV.BokaApi}/api/order/dealService`, {
+                id: self.data.id, agree: 1
+              }).then((res) => {
+                self.$vux.loading.hide()
+                const data = res.data
+                let error = data.flag ? '成功' : data.error
+                self.$vux.toast.show({
+                  text: error,
+                  type: (data.flag !== 1 ? 'warn' : 'success'),
+                  time: self.$util.delay(error),
+                  onHide: () => {
+                    if (data.flag === 1) {
+                      self.data.flag = 0
+                    }
+                  }
+                })
+              })
+            }
+          })
+          break
+        case 2:
+          this.serviceContent = ''
+          this.showServiceModal = true
+          break
+        case 3:
+          this.serviceMoney = ''
+          this.showSmoneyModal = true
+          break
+      }
+    },
+    closeService () {
+      this.showServiceModal = false
+      this.serviceContent = ''
+    },
+    submitService () {
+      if (this.$util.trim(this.serviceContent) === '') {
+        this.$vux.toast.text('请完善信息', 'middle')
+        return false
+      }
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/order/dealService`, {
+        id: this.data.id, agree: 2, rejectreason: this.serviceContent
+      }).then(res => {
+        this.$vux.loading.hide()
+        const data = res.data
+        this.$vux.toast.show({
+          text: data.error,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: this.$util.delay(data.error)
+        })
+        if (data.flag === 1) {
+          this.data.backflag = 0
+          this.showServiceModal = false
+        }
+      })
+    },
+    closeMoney () {
+      this.showSmoneyModal = false
+      this.serviceMoney = ''
+    },
+    submitMoney () {
+      if (this.$util.trim(this.serviceMoney) === '') {
+        this.$vux.toast.text('请输入补偿金额', 'middle')
+        return false
+      }
+      if (isNaN(this.serviceMoney) || parseFloat(this.serviceMoney.replace(/,/g, '')) <= 0) {
+        this.$vux.toast.text('请输入正确的补偿金额', 'middle')
+        return false
+      }
+      let money = parseFloat(this.serviceMoney.replace(/,/g, ''))
+      if (money > parseFloat(this.data.paymoney)) {
+        this.$vux.toast.text('补偿金额不能超过支付金额', 'middle')
+        return false
+      }
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/order/dealService`, {
+        id: this.data.id, agree: 3, payout: this.serviceMoney
+      }).then(res => {
+        this.$vux.loading.hide()
+        const data = res.data
+        this.$vux.toast.show({
+          text: data.error,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: this.$util.delay(data.error)
+        })
+        if (data.flag === 1) {
+          this.data.flag = 4
+          this.showSmoneyModal = false
+        }
+      })
     },
     toProduct (item) {
       if (this.query.fromapp === 'factory') {
@@ -453,7 +631,16 @@ export default {
           } else {
             self.showSos = false
             self.showContainer = true
-            if (self.data.flag !== 2 || (self.data.flag === 2 && !self.data.candeliver)) {
+            this.data.content = this.data.content.replace(/\n/g, '<br/>')
+            if (this.data.reasonreturn) {
+              this.data.reasonreturn = this.data.reasonreturn.replace(/\n/g, '<br/>')
+            }
+            if (this.data.proofphoto && this.data.proofphoto !== '') {
+              this.previewerPhoto = this.$util.previewerImgdata([this.data.proofphoto])
+            } else {
+              this.previewerPhoto = []
+            }
+            if (!(self.data.flag === 2 && self.data.candeliver) && self.data.flag !== 3) {
               self.bottomcss = 'nobottom'
             }
             let total = 0

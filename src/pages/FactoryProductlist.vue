@@ -245,41 +245,22 @@ export default {
           confirmText: '复制',
           onConfirm: () => {
             self.$vux.loading.show()
-            let postdata = {
-              photo: this.clickdata.photo,
-              classid: this.clickdata.classid,
-              title: this.clickdata.title,
-              oriprice: this.clickdata.oriprice,
-              price: this.clickdata.price,
-              tb_price: this.clickdata.tb_price,
-              jd_price: this.clickdata.jd_price,
-              profit: this.clickdata.profit,
-              salesrebate: this.clickdata.salesrebate,
-              superrebate: this.clickdata.superrebate,
-              storage: this.clickdata.storage,
-              postage: this.clickdata.postage,
-              options: this.clickdata.options,
-              sellingpoint: this.clickdata.sellingpoint,
-              content: this.clickdata.content,
-              contentphoto: this.clickdata.contentphoto,
-              video: this.clickdata.video,
-              seotitle: this.clickdata.seotitle,
-              seodescription: this.clickdata.seodescription,
-              fid: this.clickdata.fid
-            }
-            self.$http.post(`${ENV.BokaApi}/api/add/factoryproduct`, postdata).then(res => {
+            self.$http.post(`${ENV.BokaApi}/api/copy/factoryproduct`, {
+              id: this.clickdata.id
+            }).then(res => {
               let data = res.data
               self.$vux.loading.hide()
+              let error = data.flag ? '成功' : data.error
               self.$vux.toast.show({
-                text: data.error,
+                text: error,
                 type: data.flag !== 1 ? 'warn' : 'success',
-                time: self.$util.delay(data.error),
+                time: self.$util.delay(error),
                 onHide: () => {
                   if (data.flag === 1) {
                     if (self.productdata.length === (pageStart1 + 1) * limit) {
                       self.productdata.splice(self.productdata.length - 1, 1)
                     }
-                    self.productdata = [data.datainfo].concat(self.productdata)
+                    self.productdata = [data.data].concat(self.productdata)
                   }
                 }
               })

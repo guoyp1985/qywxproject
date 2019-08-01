@@ -93,6 +93,53 @@
         </div>
       </div>
     </div>
+    <div v-if="showServiceModal" class="auto-modal refund-modal flex_center">
+      <div class="modal-inner border-box" style="width:80%;">
+        <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">申请售后</div>
+        <div class="align_left txt padding10 b_bottom_after">
+          <group class="textarea-outer" style="padding:0;">
+            <x-textarea
+              ref="serviceTextarea"
+              v-model="serviceContent"
+              name="title" class="x-textarea noborder"
+              placeholder="请输入售后原因"
+              :show-counter="false"
+              :rows="6"
+              :max="200"
+              @on-change="textareaChange('serviceTextarea')"
+              @on-focus="textareaFocus('serviceTextarea')"
+              autosize>
+            </x-textarea>
+          </group>
+        </div>
+        <form enctype="multipart/form-data">
+          <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange" />
+        </form>
+        <div class="q_photolist align_left bg-white">
+          <template v-if="servicePhoto && servicePhoto != ''">
+            <div class="photoitem" style="width:100px;">
+              <div class="inner photo imgcover">
+                <img :src="servicePhoto" class="pic" @click="uploadPhoto('fileInput')" />
+                <div class="close" @click.stop="deletephoto()">×</div>
+              </div>
+            </div>
+          </template>
+          <div v-else class="photoitem add" @click="uploadPhoto('fileInput')" style="width:100px;">
+            <div class="inner">
+              <div class="innerlist">
+                <div class="flex_center h_100">
+                  <i class="al al-zhaopian" style="color:#bbb;line-height:30px;"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex_center b_top_after" style="height:50px;">
+          <div class="flex_cell flex_center h_100 b_right_after" @click="closeService">取消</div>
+          <div class="flex_cell flex_center h_100 color-orange" @click="submitService">提交</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -131,7 +178,10 @@ export default {
       refundContent: '',
       clickOrder: {},
       clickIndex: 0,
-      pageTop: 0
+      pageTop: 0,
+      showServiceModal: false,
+      serviceContent: '',
+      servicePhoto: ''
     }
   },
   computed: {
@@ -173,6 +223,51 @@ export default {
       this.clickOrder = {}
       this.clickIndex = 0
     },
+    deletephoto () {
+      this.servicePhoto = ''
+    },
+    photoCallback (data) {
+      const self = this
+      if (data.flag === 1) {
+        self.servicePhoto = data.data
+      } else if (data.error) {
+        self.$vux.toast.show({
+          text: data.error,
+          time: self.$util.delay(data.error)
+        })
+      }
+    },
+    uploadPhoto (refname) {
+      const self = this
+      const fileInput = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      if (self.$util.isPC()) {
+        fileInput.click()
+      } else {
+        self.$wechat.ready(function () {
+          self.$util.wxUploadImage({
+            maxnum: 1,
+            handleCallback: function (data) {
+              self.photoCallback(data)
+            }
+          })
+        })
+      }
+    },
+    fileChange (refname) {
+      const self = this
+      const target = event.target
+      const files = target.files
+      if (files.length > 0) {
+        let fileForm = target.parentNode
+        const filedata = new FormData(fileForm)
+        self.$vux.loading.show()
+        self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(res => {
+          self.$vux.loading.hide()
+          let data = res.data
+          self.photoCallback(data)
+        })
+      }
+    },
     toRetailerOrders () {
       let params = this.$util.handleAppParams(this.query, {})
       this.$router.push({path: '/retailerOrders', query: params})
@@ -208,11 +303,16 @@ export default {
             }
             break
           case 3:
-            item.buttons = [
-              {id: 4, name: '查看物流'},
-              // {id: 5, name: '申请售后'},
-              {id: 6, name: '确认收货'}
-            ]
+            // item.buttons = [
+            //   {id: 4, name: '查看物流'},
+            //   {id: 5, name: '申请售后'},
+            //   {id: 6, name: '确认收货'}
+            // ]
+            item.buttons = [{id: 4, name: '查看物流'}]
+            if (item.backflag !== 120) {
+              item.buttons.push({id: 5, name: '申请售后'})
+            }
+            item.buttons.push({id: 6, name: '确认收货'})
             break
           case 4:
             item.buttons = [
@@ -262,8 +362,6 @@ export default {
     },
     refund (order, index) {
       this.showRefundModal = true
-      this.clickOrder = order
-      this.clickIndex = index
     },
     closeRefund () {
       this.showRefundModal = false
@@ -320,7 +418,50 @@ export default {
     viewShipping (order) {
       this.$router.push({path: `/deliverinfo`, query: {id: order.id}})
     },
+    closeService () {
+      this.showServiceModal = false
+      this.serviceContent = ''
+      this.servicePhoto = ''
+    },
+    submitService () {
+      if (this.$util.trim(this.serviceContent) === '' && this.$util.trim(this.servicePhoto) === '') {
+        this.$vux.toast.text('请完善售后信息', 'middle')
+        return false
+      }
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/order/applyService`, {
+        id: this.clickOrder.id, reasonreturn: this.serviceContent, proofphoto: this.servicePhoto
+      }).then(res => {
+        this.$vux.loading.hide()
+        const data = res.data
+        this.$vux.toast.text(data.error)
+        if (data.flag) {
+          this.showServiceModal = false
+          if (this.selectedIndex === 0) {
+            this.tabdata1[this.clickIndex].backflag = 120
+            this.tabdata1[this.clickIndex].buttons.splice(1, 1)
+            for (let i in this.tabdata3) {
+              if (this.tabdata3[i].id === this.clickOrder.id) {
+                this.tabdata3[i].buttons.splice(1, 1)
+              }
+            }
+          } else {
+            this.tabdata3[this.clickIndex].backflag = 120
+            this.tabdata3[this.clickIndex].buttons.splice(1, 1)
+            for (let i in this.tabdata1) {
+              if (this.tabdata1[i].id === this.clickOrder.id) {
+                this.tabdata1[i].buttons.splice(1, 1)
+              }
+            }
+          }
+        }
+      })
+    },
     afterSale (order) {
+      // 售后
+      this.serviceContent = ''
+      this.servicePhoto = ''
+      this.showServiceModal = true
     },
     payment (order) {
       if (this.query.from) {
@@ -330,6 +471,8 @@ export default {
       }
     },
     orderProcess (type, order, index) {
+      this.clickOrder = order
+      this.clickIndex = index
       switch (type) {
         case 1:
           this.cancel(order)
