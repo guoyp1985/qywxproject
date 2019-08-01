@@ -5,7 +5,7 @@
     </template>
     <template v-if="showContainer">
       <div class="pagemiddle scroll-container">
-        <div v-if="orderData.seller && orderData.seller.username">
+        <!-- <div v-if="orderData.seller && orderData.seller.username">
           <div class="b_bottom_after padding10 bg-white">
             <div class="t-table">
               <div class="t-cell w100">返点客：</div>
@@ -15,7 +15,7 @@
             </div>
           </div>
           <div style="height:10px;"></div>
-        </div>
+        </div> -->
         <div class="bg-white b_bottom_after padding10">
           <div class="flex_left">
             <router-link class="flex_cell" :to="{path:'/store',query:{wid:orderData.retailer.uid}}">
