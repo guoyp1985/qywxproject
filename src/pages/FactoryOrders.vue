@@ -34,9 +34,9 @@
                       </template>
                     </span>
                   </div>
-                  <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right color-lightgray font12">
+                  <!-- <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right color-lightgray font12">
                     <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
-                  </div>
+                  </div> -->
                 </div>
                 <div class="t-table pt5 color-lightgray font13 deliverarea" >
                   <div class="t-cell middle-cell appendcontrol align_right w80" v-if="item.flag == 2 && item.candeliver">
@@ -72,9 +72,9 @@
                       </template>
                     </span>
                   </div>
-                  <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right color-lightgray font12">
+                  <!-- <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right color-lightgray font12">
                     <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </orderitemplate>
@@ -135,9 +135,9 @@
                       </template>
                     </span>
                   </div>
-                  <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right color-lightgray font12">
+                  <!-- <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right color-lightgray font12">
                     <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
-                  </div>
+                  </div> -->
                 </div>
                 <div v-if="item.candeliver" class="t-table pt5 color-lightgray font13 deliverarea">
                   <div class="t-cell middle-cell appendcontrol align_right w80">
@@ -170,9 +170,9 @@
                       </template>
                     </span>
                   </div>
-                  <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right color-lightgray font12">
+                  <!-- <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right color-lightgray font12">
                     <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
-                  </div>
+                  </div> -->
                 </div>
                 <div class="t-table pt5 color-lightgray font13 deliverarea">
                   <div class="t-cell middle-cell appendcontrol align_right w80">
@@ -207,9 +207,9 @@
                       </template>
                     </span>
                   </div>
-                  <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right color-lightgray font12">
+                  <!-- <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right color-lightgray font12">
                     <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
-                  </div>
+                  </div> -->
                 </div>
                 <div class="t-table pt5 color-lightgray font13 deliverarea">
                   <div class="t-cell middle-cell appendcontrol align_right w80">
