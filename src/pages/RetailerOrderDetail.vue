@@ -437,6 +437,7 @@ export default {
                   onHide: () => {
                     if (data.flag === 1) {
                       self.orderData.candealservice = false
+                      self.orderData.flag = 0
                     }
                   }
                 })
@@ -514,6 +515,7 @@ export default {
         if (data.flag === 1) {
           this.showSmoneyModal = false
           this.orderData.candealservice = false
+          this.orderData.flag = 4
         }
       })
     },
