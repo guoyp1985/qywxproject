@@ -9,7 +9,7 @@
       @on-cancel="onCancel"
       ref="search">
     </search>
-    <div class="menu-swiper-outer">
+    <div v-show="menuFlag" class="menu-swiper-outer" ref="swiperOuter">
       <swiper class="menu-swiper">
         <swiper-item class="swiper-item"  v-for="(items,index) in classDataArry" :key="index">
           <div :class="`inner flex_center ${selectedIndex == index*colCount+index1 ? 'active' : ''}`" v-for="(tab,index1) in items" :key="index1" @click="onItemClick(index*colCount+index1)">
@@ -90,6 +90,9 @@
           <div class="al al-close"></div>
         </div>
       </div>
+    </div>
+    <div class="flex_center color-white font12" style="height:50px;width:50px;border-radius:50px;background-color:#ff6a61;position:fixed;top:308px;right:10px;opacity:0.8">
+      <div @click="hideMenu">{{flagTxt}}菜单</div>
     </div>
     <template v-if="showTip">
       <template v-if="VipFree">
@@ -174,7 +177,9 @@ export default {
       classDataArry: [],
       activeColor: '',
       clicked: false,
-      isDone: false
+      isDone: false,
+      menuFlag: true,
+      flagTxt: '收起'
     }
   },
   watch: {
@@ -183,6 +188,14 @@ export default {
     }
   },
   methods: {
+    hideMenu () {
+      this.menuFlag = !this.menuFlag
+      if (this.menuFlag) {
+        this.flagTxt = '收起'
+      } else {
+        this.flagTxt = '打开'
+      }
+    },
     closeSubscribe () {
       this.showSubscribe = false
     },
@@ -338,10 +351,15 @@ export default {
       this.$router.push({path: '/factoryProduct', query: params})
     },
     handleScroll (refname) {
+      console.log('-------滚动操作------')
+      // let swiperOuter = self.$refs['swiperOuter']
+      // swiperOuter.style.height = 100 + 'px'
+      // console.log(swiperOuter)
       let scrollArea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
         element: scrollArea,
         callback: function () {
+          console.log('-------里面的到底分页回调------')
           if (self.productData.length === (pageStart + 1) * limit) {
             pageStart++
             self.$vux.loading.show()
@@ -462,7 +480,7 @@ export default {
           // 拼接成十个一组的对象数组
           for (let i = 0; i < col; i++) { // 循环页数 i:0,1,2
             let arr = []
-            for (let j = 0; j < (i + 1) * colcount; j++) { // 循环每页保存的类目数 j:1-30
+            for (let j = 0; j < 10; j++) { // 循环每页保存的类目数 j:1-30  每页10个类目
               if (retdata[j + i * colcount] == null) {
                 break
               }
@@ -470,7 +488,7 @@ export default {
             }
             this.classDataArry.push(arr)
           }
-          console.log(this.classDataArry);
+          console.log(this.classDataArry)
           // for (var i = 0; i < self.classData.length; i++) {
           //   this.classItem.push = self.classData[i]
           // }

@@ -709,7 +709,22 @@ export default {
           onHide: function () {
             if (data.flag === 1) {
               if (self.query.minibackurl) {
+                let minibackurl = decodeURIComponent(self.query.minibackurl)
+                if (self.query.backtype === 'relaunch') {
+                  self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+                } else if (self.query.backtype === 'redirect') {
+                  self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+                } else {
+                  self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+                }
+                console.log('--------self.query.minibackurl-------')
+                console.log(self.query.minibackurl)
               } else {
+                // console.log('走这了')
+                // console.log(self.query)
+                // if (self.query.from === 'miniprogram') {
+                //   console.log('这这这，看这')
+                // }
                 self.$router.push({path: '/centerSales'})
               }
             }
