@@ -309,9 +309,9 @@ export default {
             //   {id: 6, name: '确认收货'}
             // ]
             item.buttons = [{id: 4, name: '查看物流'}]
-            // if (item.backflag !== 120) {
-            //   item.buttons.push({id: 5, name: '申请售后'})
-            // }
+            if (item.backflag !== 120) {
+              item.buttons.push({id: 5, name: '申请售后'})
+            }
             item.buttons.push({id: 6, name: '确认收货'})
             break
           case 4:
