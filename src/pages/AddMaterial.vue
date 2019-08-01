@@ -98,8 +98,7 @@ export default {
     refresh () {
       this.photoarr1 = []
       this.videoarr = []
-      this.submitdata.title = ''
-      this.submitdata.contentphoto = ''
+      this.submitdata = {title: '', contentphoto: '', video: ''}
     },
     // textareaChange (refname) {
     //   let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
@@ -184,11 +183,7 @@ export default {
           self.submitdata.contentphoto = self.photoarr1.join(',')
         } else if (type === 'video') {
           if (data.data.lastIndexOf('.mp4') < 0 && data.data.lastIndexOf('.MOV') < 0) {
-            let error = '请上传正确的视频文件'
-            self.$vux.toast.show({
-              text: error,
-              time: self.$util.delay(error)
-            })
+            self.$vux.toast.text('请上传正确的视频文件', 'middle')
           } else {
             self.videoarr.push(data.data)
             self.submitdata.video = self.videoarr.join(',')
@@ -197,6 +192,7 @@ export default {
       } else if (data.error) {
         self.$vux.toast.show({
           text: data.error,
+          type: 'warn',
           time: self.$util.delay(data.error)
         })
       }
