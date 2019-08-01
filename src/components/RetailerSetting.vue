@@ -709,7 +709,14 @@ export default {
           onHide: function () {
             if (data.flag === 1) {
               if (self.query.minibackurl) {
+                console.log('--------self.query.minibackurl-------')
+                console.log(self.query.minibackurl)
               } else {
+                console.log('走这了')
+                console.log(self.query.from)
+                if (self.query.from === 'minigxk') {
+                  console.log('这这这，看这')
+                }
                 self.$router.push({path: '/centerSales'})
               }
             }
