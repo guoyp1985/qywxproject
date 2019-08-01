@@ -121,12 +121,6 @@
           <div v-if="data.nexttime" class="align_left padding10 color-gray2 font12">回访时间：{{ data.nexttime | dateformat }}</div>
         </div>
         <template v-if="data.cancensorback == 1">
-          <template v-if="data.reasonreturn != ''">
-            <div class="bg-white">
-              <div class="padding10 b_bottom_after">退款理由</div>
-              <div class="padding10">{{data.reasonreturn}}</div>
-            </div>
-          </template>
           <div class="padding10">
             <div class="flex_right font12">
               <div class="flex_center mr10" @click="agreeEvent(0)" style="border:#999 1px solid;height:25px;border-radius:5px;color:#999;width:75px;">拒绝退款</div>
@@ -135,15 +129,6 @@
           </div>
         </template>
         <template v-if="data.flag == 3 && data.backflag == 120">
-          <group v-if="(data.reasonreturn && data.reasonreturn != '') || (data.proofphoto && data.proofphoto != '')">
-            <template v-if="(data.reasonreturn && data.reasonreturn != '') || (data.proofphoto && data.proofphoto != '')">
-              <div class="b_bottom_after padding10 font14">售后申请</div>
-              <div class="padding10 font12" v-if="data.reasonreturn != ''" v-html="data.reasonreturn"></div>
-              <div class="padding10" v-if="data.proofphoto && data.proofphoto != ''">
-                <img :src="data.proofphoto" style="width:100px;max-width:100%;" @click="viewBigImg" />
-              </div>
-            </template>
-          </group>
           <div class="padding10" v-if="!data.fid">
             <div class="flex_right font12">
               <div class="flex_center mr10" @click="serviceEvent(1)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">全额退款</div>
@@ -152,6 +137,22 @@
             </div>
           </div>
         </template>
+        <div class="bg-white" v-if="recordData.length">
+          <div class="padding10 b_bottom_after">售后记录</div>
+          <div class="scroll_list mt12">
+            <div class="scroll_item padding10" v-for="(item, index) in recordData" :key="index">
+              <div class="color-theme">{{item.description}}</div>
+              <div class="mt5" v-html="item.content"></div>
+              <div class="mt5" v-if="item.photo && item.photo != ''">
+                <img :src="item.photo" style="width:100px;max-width:100%;" @click="viewBigImg(item.photo,index)" />
+                <div v-transfer-dom>
+                  <previewer :list="item.previewerPhoto" :ref="`previewerPhoto-${index}`"></previewer>
+                </div>
+              </div>
+              <div class="color-gray font12 mt5">{{item.dateline | dateformat}}</div>
+            </div>
+          </div>
+        </div>
       </div>
       <template v-if="data.flag == 1 && data.fid == 0 && data.crowdid == 0">
         <div v-if="data.retailer.orderonline == 0 && data.frommin && data.frommin != ''" class="pagebottom flex_center font16 bg-orange5 color-white" @click="confirmPrice">确认收款</div>
@@ -318,7 +319,7 @@
           <div class="t-table">
             <div class="t-cell w80">补偿金额<span class="al al-xing color-red font12" style="vertical-align: 3px;"></span></div>
             <div class="t-cell">
-              <input v-model="serviceMoney" type="text" class="input" placeholder="补偿金额" />
+              <x-input v-model="serviceMoney" type="text" class="input" placeholder="补偿金额"></x-input>
             </div>
           </div>
         </div>
@@ -327,9 +328,6 @@
           <div class="flex_cell flex_center h_100 color-orange" @click="submitMoney">提交</div>
         </div>
       </div>
-    </div>
-    <div v-transfer-dom>
-      <previewer :list="previewerPhoto" ref="previewerPhoto"></previewer>
     </div>
   </div>
 </template>
@@ -388,7 +386,8 @@ export default {
       serviceContent: '',
       showSmoneyModal: '',
       serviceMoney: '',
-      previewerPhoto: []
+      previewerPhoto: [],
+      recordData: []
     }
   },
   watch: {
@@ -405,14 +404,15 @@ export default {
       this.showHb = false
       this.deliverdata = { delivercompany: '-1', delivercode: '' }
     },
-    viewBigImg (index) {
+    viewBigImg (photo, index) {
       const self = this
       if (self.$util.isPC()) {
-        self.$refs.previewerPhoto.show(0)
+        let refarea = self.$refs[`previewerPhoto-${index}`][0] ? self.$refs[`previewerPhoto-${index}`][0] : self.$refs[`previewerPhoto-${index}`]
+        refarea.show(0)
       } else {
         window.WeixinJSBridge.invoke('imagePreview', {
-          current: this.data.proofphoto,
-          urls: [this.data.proofphoto]
+          current: photo,
+          urls: [photo]
         })
       }
     },
@@ -896,8 +896,25 @@ export default {
               self.deliverdata.delivercompany = self.data.delivercompany
               self.deliverdata.delivercode = self.data.delivercode
             }
-            return this.$http.get(`${ENV.BokaApi}/api/retailer/info`)
+            return this.$http.post(`${ENV.BokaApi}/api/order/recordList`, {
+              type: 'service', id: this.query.id
+            })
           }
+        }
+      }).then(res => {
+        if (res) {
+          const data = res.data
+          let retdata = data.data ? data.data : data
+          for (let i in retdata) {
+            if (retdata[i].photo && retdata[i].photo !== '') {
+              retdata[i].previewerPhoto = this.$util.previewerImgdata([retdata[i].photo])
+            }
+            if (retdata[i].content && retdata[i].content !== '') {
+              retdata[i].content = retdata[i].content.replace(/\n/g, '<br/>')
+            }
+          }
+          this.recordData = retdata
+          return this.$http.get(`${ENV.BokaApi}/api/retailer/info`)
         }
       }).then(res => {
         if (res) {
