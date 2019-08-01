@@ -128,8 +128,8 @@
             </div>
           </div>
         </template>
-        <template v-if="orderData.flag == 3 && orderData.backflag == 120">
-          <div class="padding10" v-if="!orderData.fid">
+        <template v-if="orderData.candealservice && !orderData.fid">
+          <div class="padding10">
             <div class="flex_right font12">
               <div class="flex_center mr10" @click="serviceEvent(1)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">全额退款</div>
               <div class="flex_center mr10" @click="serviceEvent(2)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">售后反馈</div>
@@ -510,8 +510,8 @@ export default {
           time: this.$util.delay(data.error)
         })
         if (data.flag === 1) {
-          this.orderData.flag = 4
           this.showSmoneyModal = false
+          this.orderData.flag = 4
         }
       })
     },

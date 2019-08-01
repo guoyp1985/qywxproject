@@ -102,7 +102,7 @@
             <div class="flex_center" @click="agreeEvent(1)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">同意退款</div>
           </div>
         </div>
-        <template v-if="orderData.flag == 3 && orderData.backflag == 120">
+        <template v-if="orderData.candealservice">
           <div class="padding10">
             <div class="flex_right font12">
               <div class="flex_center mr10" @click="serviceEvent(1)" style="border:#ff4400 1px solid;height:25px;border-radius:5px;color:#ff4400;width:75px;">全额退款</div>
@@ -399,8 +399,8 @@ export default {
           time: this.$util.delay(data.error)
         })
         if (data.flag === 1) {
-          this.orderData.flag = 4
           this.showSmoneyModal = false
+          this.orderData.flag = 4
         }
       })
     },
