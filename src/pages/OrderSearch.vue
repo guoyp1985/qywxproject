@@ -308,11 +308,12 @@ export default {
             //   {id: 5, name: '申请售后'},
             //   {id: 6, name: '确认收货'}
             // ]
-            item.buttons = [{id: 4, name: '查看物流'}]
+            let arr = [{id: 4, name: '查看物流'}]
             if (item.backflag !== 120) {
-              item.buttons.push({id: 5, name: '申请售后'})
+              arr.push({id: 5, name: '申请售后'})
             }
-            item.buttons.push({id: 6, name: '确认收货'})
+            arr.push({id: 6, name: '确认收货'})
+            item.buttons = arr
             break
           case 4:
             item.buttons = [
