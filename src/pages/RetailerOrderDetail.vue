@@ -433,15 +433,13 @@ export default {
                 self.$vux.toast.show({
                   text: error,
                   type: (data.flag !== 1 ? 'warn' : 'success'),
-                  time: self.$util.delay(error),
-                  onHide: () => {
-                    if (data.flag === 1) {
-                      self.orderData.candealservice = false
-                      self.orderData.flag = 0
-                      self.orderData.flagstr = '已退款'
-                    }
-                  }
+                  time: self.$util.delay(error)
                 })
+                if (data.flag === 1) {
+                  self.orderData.candealservice = false
+                  self.orderData.flag = 0
+                  self.orderData.flagstr = '已退款'
+                }
               })
             }
           })
@@ -474,15 +472,13 @@ export default {
         this.$vux.toast.show({
           text: data.error,
           type: (data.flag !== 1 ? 'warn' : 'success'),
-          time: this.$util.delay(data.error),
-          onHide: () => {
-            if (data.flag === 1) {
-              this.showServiceModal = false
-              this.orderData.candealservice = false
-              this.orderData.flagstr = '已发货'
-            }
-          }
+          time: this.$util.delay(data.error)
         })
+        if (data.flag === 1) {
+          this.showServiceModal = false
+          this.orderData.candealservice = false
+          this.orderData.flagstr = '已发货'
+        }
       })
     },
     closeMoney () {
