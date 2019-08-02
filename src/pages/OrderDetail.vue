@@ -233,6 +233,9 @@
         </div>
       </div>
     </div>
+    <div class="bg-theme flex_center color-white fix-home-icon" @click="toHome" v-if="query.from || query.fromapp">
+      <i class="al al-home1"></i>
+    </div>
   </div>
 </template>
 <script>
@@ -289,6 +292,9 @@ export default {
     }
   },
   methods: {
+    toHome () {
+      this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage})
+    },
     deletephoto () {
       this.servicePhoto = ''
     },

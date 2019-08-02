@@ -327,6 +327,9 @@
             <div class="flex_cell flex_center h_100 color-orange" @click="submitMoney">提交</div>
           </div>
         </div>
+        <div class="bg-theme flex_center color-white fix-home-icon" @click="toHome" v-if="query.from || query.fromapp">
+          <i class="al al-home1"></i>
+        </div>
       </div>
     </template>
   </div>
@@ -398,6 +401,9 @@ export default {
   computed: {
   },
   methods: {
+    toHome () {
+      this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage})
+    },
     initData () {
       this.isFirst = false
       this.showFirst = false
