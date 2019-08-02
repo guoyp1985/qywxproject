@@ -91,8 +91,8 @@
         </div>
       </div>
     </div>
-    <div class="flex_center color-white font12" style="height:50px;width:50px;border-radius:50px;background-color:#ff6a61;position:fixed;top:308px;right:10px;opacity:0.8">
-      <div @click="hideMenu">{{flagTxt}}菜单</div>
+    <div class="flex_center color-white font12 flbtn">
+      <div @click="hideMenu">{{flagTxt}}分类</div>
     </div>
     <template v-if="showTip">
       <template v-if="VipFree">
@@ -179,7 +179,8 @@ export default {
       clicked: false,
       isDone: false,
       menuFlag: true,
-      flagTxt: '收起'
+      flagTxt: '收起',
+      times: 0
     }
   },
   watch: {
@@ -193,7 +194,7 @@ export default {
       if (this.menuFlag) {
         this.flagTxt = '收起'
       } else {
-        this.flagTxt = '打开'
+        this.flagTxt = '展开'
       }
     },
     closeSubscribe () {
@@ -352,10 +353,33 @@ export default {
     },
     handleScroll (refname) {
       console.log('-------滚动操作------')
-      // let swiperOuter = self.$refs['swiperOuter']
-      // swiperOuter.style.height = 100 + 'px'
-      // console.log(swiperOuter)
+      let swiperOuter = self.$refs['swiperOuter']
+      swiperOuter.style.height = 100 + 'px'
+      this.colCount = 5
+      let len = this.classData.length
+      let col = Math.ceil(len / this.colCount) // 获取swiper-items的数量，向上取整
+      if (col > 1) {
+        this.showDot = true
+      } else {
+        this.showDot = false
+      }
+      if (this.times < 1) {
+        this.times += 1
+        this.classDataArry = []
+      // 拼接成5个一组的对象数组
+        for (let i = 0; i < col; i++) { // 循环页数 i:0,1,2
+          let arr = []
+          for (let j = 0; j < 5; j++) { // 循环每页保存的类目数 j:1-30  每页10个类目
+            if (this.classData[j + i * this.colCount] == null) {
+              break
+            }
+            arr.push(this.classData[j + i * this.colCount]) // 第一页存前十个，即 j+0*10，j的取值范围，j<10（0-9） retdata[0-9]
+          }
+          this.classDataArry.push(arr)
+        }
+      }
       let scrollArea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      console.log(scrollArea)
       self.$util.scrollEvent({
         element: scrollArea,
         callback: function () {
@@ -575,5 +599,6 @@ export default {
   // .flex_center.active{
   //   color: #ff6a61;
   // }
+  .flbtn{height:50px;width:50px;border-radius:50px;background-color:#ff6a61;position:fixed;top:308px;right:12px;opacity:0.8}
 }
 </style>
