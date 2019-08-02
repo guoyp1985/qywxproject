@@ -180,20 +180,19 @@
                 </div>
                 <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
                   <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span class="color-999">{{ item.products }}</span><span v-if="item.options && item.options != ''">({{item.options}})</span></div>
-                  <div class="clamp1 font14 color-gray" v-if="item.buchang && item.buchang != '0.00' && item.buchang != 0">
-                    <span class="v_middle">售后补偿: ￥{{ item.buchang }}</span>
+                  <div class="clamp1 font14 color-gray">
+                    <span class="v_middle">金额: ￥{{ item.special }}</span>
+                    <template v-if="item.postage && item.postage != ''">
+                      <span class="v_middle font12 color-gray" v-if="item.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
+                      <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ item.postage }} )</span>
+                    </template>
                   </div>
-                  <template v-else>
-                    <div class="clamp1 font14 color-gray">
-                      <span class="v_middle">金额: ￥{{ item.special }}</span>
-                      <template v-if="item.postage && item.postage != ''">
-                        <span class="v_middle font12 color-gray" v-if="item.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
-                        <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ item.postage }} )</span>
-                      </template>
-                    </div>
-                    <div class="clamp1 font14 color-gray" v-if="item.carddeduct && item.carddeduct != '0.00'">优惠券抵扣: -￥{{ item.carddeduct }}</div>
-                    <div class="clamp1 font14 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml20">手续费: -￥{{ item.commission }}</span></div>
-                  </template>
+                  <div class="clamp1 font14 color-gray" v-if="item.carddeduct && item.carddeduct != '0.00'">优惠券抵扣: -￥{{ item.carddeduct }}</div>
+                  <div class="clamp1 font14 color-gray">
+                    <span class="db-in">佣金: -￥{{ item.income }}</span>
+                    <span class="db-in ml20">手续费: -￥{{ item.commission }}</span>
+                    <span class="db-in ml20" v-if="item.buchang && item.buchang != '0.00' && item.buchang != 0">售后补偿: ￥{{ item.buchang }}</span>
+                  </div>
                 </div>
                 <div class="pl12 pr12 pt10 pb10 flex_right">
                   <div class="font14 color-999">实际收入：</div>
