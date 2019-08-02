@@ -164,7 +164,7 @@
         <i class="al al-home1"></i>
       </div> -->
     </template>
-    <div v-if="showRefundModal" class="auto-modal refund-modal flex_center">
+    <div v-show="showRefundModal" class="auto-modal refund-modal flex_center">
       <div class="modal-inner border-box" style="width:80%;">
         <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">申请退款</div>
         <div class="align_left txt padding10">
@@ -189,7 +189,7 @@
         </div>
       </div>
     </div>
-    <div v-if="showServiceModal" class="auto-modal refund-modal flex_center">
+    <div v-show="showServiceModal" class="auto-modal refund-modal flex_center">
       <div class="modal-inner border-box" style="width:80%;">
         <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">申请售后</div>
         <div class="align_left txt padding10 b_bottom_after">

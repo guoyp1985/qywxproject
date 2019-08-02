@@ -264,7 +264,7 @@
           <firstHb action="orderdeliver"></firstHb>
         </template>
       </template>
-      <div class="auto-modal flex_center confirm-tip-modal" v-if="showConfirmModal">
+      <div class="auto-modal flex_center confirm-tip-modal" v-show="showConfirmModal">
         <div class="modal-inner border-box">
           <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">确认收到买家转账了吗？</div>
           <div class="padding20 font16">
@@ -286,7 +286,7 @@
           </div>
         </div>
       </div>
-      <div v-if="showServiceModal" class="auto-modal refund-modal flex_center">
+      <div v-show="showServiceModal" class="auto-modal refund-modal flex_center">
         <div class="modal-inner border-box" style="width:80%;">
           <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">售后反馈</div>
           <div class="align_left txt padding10">
@@ -311,7 +311,7 @@
           </div>
         </div>
       </div>
-      <div v-if="showSmoneyModal" class="auto-modal refund-modal flex_center">
+      <div v-show="showSmoneyModal" class="auto-modal refund-modal flex_center">
         <div class="modal-inner border-box" style="width:80%;">
           <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">部分补偿</div>
           <div class="scroll_item padding10 form-item">

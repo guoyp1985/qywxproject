@@ -167,7 +167,7 @@
         </popup>
       </div>
     </template>
-    <div v-if="showRefundModal" class="auto-modal refund-modal flex_center">
+    <div v-show="showRefundModal" class="auto-modal refund-modal flex_center">
       <div class="modal-inner border-box" style="width:80%;">
         <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">拒绝退款</div>
         <div class="align_left txt padding10">
@@ -192,7 +192,7 @@
         </div>
       </div>
     </div>
-    <div v-if="showServiceModal" class="auto-modal refund-modal flex_center">
+    <div v-show="showServiceModal" class="auto-modal refund-modal flex_center">
       <div class="modal-inner border-box" style="width:80%;">
         <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">售后反馈</div>
         <div class="align_left txt padding10">
@@ -217,7 +217,7 @@
         </div>
       </div>
     </div>
-    <div v-if="showSmoneyModal" class="auto-modal refund-modal flex_center">
+    <div v-show="showSmoneyModal" class="auto-modal refund-modal flex_center">
       <div class="modal-inner border-box" style="width:80%;">
         <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">部分补偿</div>
         <div class="scroll_item padding10 form-item">
@@ -366,7 +366,7 @@ export default {
         if (data.flag === 1) {
           this.showServiceModal = false
           this.orderData.candealservice = false
-          self.orderData.flagstr = '已发货'
+          this.orderData.flagstr = '已发货'
         }
       })
     },
@@ -403,7 +403,7 @@ export default {
           this.showSmoneyModal = false
           this.orderData.candealservice = false
           this.orderData.flag = 4
-          self.orderData.flagstr = '已收货'
+          this.orderData.flagstr = '已收货'
         }
       })
     },

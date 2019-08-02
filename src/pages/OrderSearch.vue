@@ -638,6 +638,7 @@ export default {
       switch (flag) {
         case 2:
           if (this.query.refresh) {
+            this.selectedIndex = 1
             this.pagestart2 = 0
             this.tabdata2 = []
             this.toggleTab()
@@ -648,6 +649,7 @@ export default {
           break
         case 3:
           if (this.query.refresh) {
+            this.selectedIndex = 2
             this.pagestart3 = 0
             this.tabdata3 = []
             this.toggleTab()
@@ -658,6 +660,7 @@ export default {
           break
         case 4:
           if (this.query.refresh) {
+            this.selectedIndex = 3
             this.pagestart4 = 0
             this.tabdata4 = []
             this.toggleTab()
@@ -668,6 +671,7 @@ export default {
           break
         default :
           if (this.query.refresh) {
+            this.selectedIndex = 0
             this.pagestart1 = 0
             this.tabdata1 = []
             this.toggleTab()
