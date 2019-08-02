@@ -234,9 +234,9 @@
         </div>
       </div>
     </div>
-    <div class="bg-theme flex_center color-white fix-home-icon" @click="toHome" v-if="query.from || query.fromapp">
+    <!-- <div class="bg-theme flex_center color-white fix-home-icon" @click="toHome" v-if="query.from || query.fromapp">
       <i class="al al-home1"></i>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
