@@ -122,7 +122,7 @@
           <x-button v-if="orderData.flag == 3" mini @click.native="confirm" class="font12">确认收货</x-button>
           <x-button v-if="orderData.flag == 4" mini @click.native="evaluate" class="font12">评价</x-button>
         </div>
-        <div class="bg-white" v-if="recordData.length">
+        <div class="bg-white mt12" v-if="recordData.length">
           <div class="padding10 b_bottom_after">售后记录</div>
           <div class="scroll_list mt12">
             <div class="scroll_item padding10" v-for="(item, index) in recordData" :key="index">
@@ -381,6 +381,14 @@ export default {
         this.$vux.toast.text('请完善售后信息', 'middle')
         return false
       }
+      let newData = {description: '申请售后'}
+      if (this.$util.trim(this.serviceContent) !== '') {
+        newData.content = this.serviceContent.replace(/\n/g, '<br/>')
+      }
+      if (this.$util.trim(this.servicePhoto) !== '') {
+        newData.photo = this.servicePhoto
+        newData.previewerPhoto = this.$util.previewerImgdata([this.servicePhoto])
+      }
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/order/applyService`, {
         id: this.orderData.id, reasonreturn: this.serviceContent, proofphoto: this.servicePhoto
@@ -391,6 +399,10 @@ export default {
         if (data.flag) {
           this.showServiceModal = false
           this.orderData.canservice = false
+          if (this.recordData.length === (this.recordPageStart + 1) * this.limit) {
+            this.recordData.splice(this.recordData.length - 1, 1)
+          }
+          this.recordData = [newData].concat(this.recordData)
         }
       })
     },
@@ -595,6 +607,8 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       if (this.id !== this.$route.query.id) {
+        this.recordData = []
+        this.recordPageStart = 0
         this.getData()
       }
     }

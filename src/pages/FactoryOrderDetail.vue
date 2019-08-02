@@ -111,7 +111,7 @@
             </div>
           </div>
         </template>
-        <div class="bg-white" v-if="recordData.length">
+        <div class="bg-white mt12" v-if="recordData.length">
           <div class="padding10 b_bottom_after">售后记录</div>
           <div class="scroll_list mt12">
             <div class="scroll_item padding10" v-for="(item, index) in recordData" :key="index">
@@ -293,6 +293,8 @@ export default {
   },
   methods: {
     initData () {
+      this.recordData = []
+      this.recordPageStart = 0
       this.deliverdata = { delivercompany: '-1', delivercode: '' }
     },
     handleScroll (refname, type) {
@@ -691,9 +693,7 @@ export default {
               self.deliverdata.delivercompany = self.orderData.delivercompany
               self.deliverdata.delivercode = self.orderData.delivercode
             }
-            if (!this.recordData.length) {
-              this.getRecordData()
-            }
+            this.getRecordData()
           }
         }
       })
