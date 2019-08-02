@@ -160,7 +160,7 @@
       <div v-if="query.fromapp != 'factory'" class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white" style="height:50px;">
         <div @click="toCenter" class="flex_cell flex_center color-white btn-bottom-red">进入个人中心</div>
       </div>
-      <div class="bg-theme flex_center color-white fix-home-icon" @click="toHome" v-if="query.from !== 'miniprogram' && query.fromapp === 'qxb'">
+      <div class="bg-theme flex_center color-white fix-home-icon" @click="toHome" v-if="query.from || query.fromapp">
         <i class="al al-home1"></i>
       </div>
     </template>
