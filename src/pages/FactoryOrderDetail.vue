@@ -370,6 +370,10 @@ export default {
         this.$vux.toast.text('请完善信息', 'middle')
         return false
       }
+      let newData = {description: '售后反馈'}
+      if (this.$util.trim(this.serviceContent) !== '') {
+        newData.content = this.serviceContent.replace(/\n/g, '<br/>')
+      }
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/order/dealService`, {
         id: this.orderData.id, agree: 2, rejectreason: this.serviceContent
@@ -385,6 +389,10 @@ export default {
           this.showServiceModal = false
           this.orderData.candealservice = false
           this.orderData.flagstr = '已发货'
+          if (this.recordData.length === (this.recordPageStart + 1) * this.limit) {
+            this.recordData.splice(this.recordData.length - 1, 1)
+          }
+          this.recordData = [newData].concat(this.recordData)
         }
       })
     },
