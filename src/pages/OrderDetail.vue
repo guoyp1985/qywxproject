@@ -364,7 +364,7 @@ export default {
         this.$vux.toast.text(data.error)
         if (data.flag) {
           this.showServiceModal = false
-          this.orderData.backflag = 120
+          this.orderData.canservice = false
         }
       })
     },
