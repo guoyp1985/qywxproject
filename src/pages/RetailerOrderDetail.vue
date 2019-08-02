@@ -4,7 +4,7 @@
     <apply-tip v-if="showApply"></apply-tip>
     <Sos v-if="showSos" :title="sosTitle"></Sos>
     <template v-if="showContainer">
-      <div class="pagemiddle scroll-container">
+      <div class="pagemiddle scroll-container" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
         <div v-if="orderData.seller && orderData.seller.username && (!orderData.frommin || orderData.frommin == '')">
           <div class="b_bottom_after padding10 bg-white">
             <div class="t-table">
@@ -390,7 +390,9 @@ export default {
       showSmoneyModal: '',
       serviceMoney: '',
       previewerPhoto: [],
-      recordData: []
+      recordData: [],
+      recordPageStart: 0,
+      limit: 10
     }
   },
   watch: {
@@ -401,6 +403,20 @@ export default {
   computed: {
   },
   methods: {
+    handleScroll (refname, type) {
+      const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      self.$util.scrollEvent({
+        element: scrollarea,
+        callback: function () {
+          if (self.recordData.length === (self.recordPageStart + 1) * self.limit) {
+            self.recordPageStart++
+            self.$vux.loading.show()
+            self.getRecordData()
+          }
+        }
+      })
+    },
     toHome () {
       if (this.query.fromapp && ENV.AppHomePage[this.query.fromapp]) {
         this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage[this.query.fromapp]})
@@ -863,6 +879,24 @@ export default {
         })
       }, 200)
     },
+    getRecordData () {
+      this.$http.post(`${ENV.BokaApi}/api/order/recordList`, {
+        type: 'service', id: this.query.id, pagestart: this.recordPageStart, limit: 10
+      }).then(res => {
+        this.$vux.loading.hide()
+        const data = res.data
+        let retdata = data.data ? data.data : data
+        for (let i in retdata) {
+          if (retdata[i].photo && retdata[i].photo !== '') {
+            retdata[i].previewerPhoto = this.$util.previewerImgdata([retdata[i].photo])
+          }
+          if (retdata[i].content && retdata[i].content !== '') {
+            retdata[i].content = retdata[i].content.replace(/\n/g, '<br/>')
+          }
+        }
+        this.recordData = this.recordData.concat(retdata)
+      })
+    },
     getData () {
       const self = this
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
@@ -909,25 +943,9 @@ export default {
               self.deliverdata.delivercompany = self.orderData.delivercompany
               self.deliverdata.delivercode = self.orderData.delivercode
             }
-            return this.$http.post(`${ENV.BokaApi}/api/order/recordList`, {
-              type: 'service', id: this.query.id
-            })
+            this.getRecordData()
+            return this.$http.get(`${ENV.BokaApi}/api/retailer/info`)
           }
-        }
-      }).then(res => {
-        if (res) {
-          const data = res.data
-          let retdata = data.data ? data.data : data
-          for (let i in retdata) {
-            if (retdata[i].photo && retdata[i].photo !== '') {
-              retdata[i].previewerPhoto = this.$util.previewerImgdata([retdata[i].photo])
-            }
-            if (retdata[i].content && retdata[i].content !== '') {
-              retdata[i].content = retdata[i].content.replace(/\n/g, '<br/>')
-            }
-          }
-          this.recordData = retdata
-          return this.$http.get(`${ENV.BokaApi}/api/retailer/info`)
         }
       }).then(res => {
         if (res) {

@@ -9,7 +9,7 @@
       <Sos :title="sosTitle"></Sos>
     </template>
     <template v-if="showContainer">
-      <div class="pagemiddle" style="top:0;">
+      <div class="pagemiddle" style="top:0;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
         <sticky scroll-box="order-detail">
           <div class="order-service">
             <div class="seller-cell flex_left">
@@ -283,7 +283,9 @@ export default {
       showServiceModal: false,
       serviceContent: '',
       servicePhoto: '',
-      recordData: []
+      recordData: [],
+      recordPageStart: 0,
+      limit: 10
     }
   },
   computed: {
@@ -292,6 +294,20 @@ export default {
     }
   },
   methods: {
+    handleScroll (refname, type) {
+      const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      self.$util.scrollEvent({
+        element: scrollarea,
+        callback: function () {
+          if (self.recordData.length === (self.recordPageStart + 1) * self.limit) {
+            self.recordPageStart++
+            self.$vux.loading.show()
+            self.getRecordData()
+          }
+        }
+      })
+    },
     toHome () {
       if (this.query.fromapp && ENV.AppHomePage[this.query.fromapp]) {
         this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage[this.query.fromapp]})
@@ -522,6 +538,24 @@ export default {
         })
       }, 200)
     },
+    getRecordData () {
+      this.$http.post(`${ENV.BokaApi}/api/order/recordList`, {
+        type: 'service', id: this.query.id, pagestart: this.recordPageStart, limit: 10
+      }).then(res => {
+        this.$vux.loading.hide()
+        const data = res.data
+        let retdata = data.data ? data.data : data
+        for (let i in retdata) {
+          if (retdata[i].photo && retdata[i].photo !== '') {
+            retdata[i].previewerPhoto = this.$util.previewerImgdata([retdata[i].photo])
+          }
+          if (retdata[i].content && retdata[i].content !== '') {
+            retdata[i].content = retdata[i].content.replace(/\n/g, '<br/>')
+          }
+        }
+        this.recordData = this.recordData.concat(retdata)
+      })
+    },
     getData () {
       const self = this
       this.id = this.$route.query.id
@@ -552,24 +586,8 @@ export default {
             self.receiverPhone = retdata.telephone
             self.expressCompany = retdata.delivercompanyname
             self.expressNumber = retdata.delivercode
-            return this.$http.post(`${ENV.BokaApi}/api/order/recordList`, {
-              type: 'service', id: this.query.id
-            })
+            self.getRecordData()
           }
-        }
-      }).then(res => {
-        if (res) {
-          const data = res.data
-          let retdata = data.data ? data.data : data
-          for (let i in retdata) {
-            if (retdata[i].photo && retdata[i].photo !== '') {
-              retdata[i].previewerPhoto = this.$util.previewerImgdata([retdata[i].photo])
-            }
-            if (retdata[i].content && retdata[i].content !== '') {
-              retdata[i].content = retdata[i].content.replace(/\n/g, '<br/>')
-            }
-          }
-          this.recordData = retdata
         }
       })
     },

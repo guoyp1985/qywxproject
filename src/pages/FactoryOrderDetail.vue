@@ -4,7 +4,7 @@
       <Sos :title="sosTitle"></Sos>
     </template>
     <template v-if="showContainer">
-      <div class="pagemiddle scroll-container">
+      <div class="pagemiddle scroll-container" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
         <!-- <div v-if="orderData.seller && orderData.seller.username">
           <div class="b_bottom_after padding10 bg-white">
             <div class="t-table">
@@ -279,7 +279,9 @@ export default {
       serviceContent: '',
       showSmoneyModal: '',
       serviceMoney: '',
-      recordData: []
+      recordData: [],
+      recordPageStart: 0,
+      limit: 10
     }
   },
   watch: {
@@ -292,6 +294,20 @@ export default {
   methods: {
     initData () {
       this.deliverdata = { delivercompany: '-1', delivercode: '' }
+    },
+    handleScroll (refname, type) {
+      const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      self.$util.scrollEvent({
+        element: scrollarea,
+        callback: function () {
+          if (self.recordData.length === (self.recordPageStart + 1) * self.limit) {
+            self.recordPageStart++
+            self.$vux.loading.show()
+            self.getRecordData()
+          }
+        }
+      })
     },
     viewBigImg (photo, index) {
       const self = this
@@ -621,6 +637,24 @@ export default {
         this.refresh()
       })
     },
+    getRecordData () {
+      this.$http.post(`${ENV.BokaApi}/api/order/recordList`, {
+        type: 'service', id: this.query.id, pagestart: this.recordPageStart, limit: 10
+      }).then(res => {
+        this.$vux.loading.hide()
+        const data = res.data
+        let retdata = data.data ? data.data : data
+        for (let i in retdata) {
+          if (retdata[i].photo && retdata[i].photo !== '') {
+            retdata[i].previewerPhoto = this.$util.previewerImgdata([retdata[i].photo])
+          }
+          if (retdata[i].content && retdata[i].content !== '') {
+            retdata[i].content = retdata[i].content.replace(/\n/g, '<br/>')
+          }
+        }
+        this.recordData = this.recordData.concat(retdata)
+      })
+    },
     getData () {
       const self = this
       this.deliverdata.id = this.query.id
@@ -657,24 +691,10 @@ export default {
               self.deliverdata.delivercompany = self.orderData.delivercompany
               self.deliverdata.delivercode = self.orderData.delivercode
             }
-            return this.$http.post(`${ENV.BokaApi}/api/order/recordList`, {
-              type: 'service', id: this.query.id
-            })
-          }
-        }
-      }).then(res => {
-        if (res) {
-          const data = res.data
-          let retdata = data.data ? data.data : data
-          for (let i in retdata) {
-            if (retdata[i].photo && retdata[i].photo !== '') {
-              retdata[i].previewerPhoto = this.$util.previewerImgdata([retdata[i].photo])
-            }
-            if (retdata[i].content && retdata[i].content !== '') {
-              retdata[i].content = retdata[i].content.replace(/\n/g, '<br/>')
+            if (!this.recordData.length) {
+              this.getRecordData()
             }
           }
-          this.recordData = retdata
         }
       })
     },
