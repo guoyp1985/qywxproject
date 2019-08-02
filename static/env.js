@@ -61,7 +61,7 @@ var ENV = {
   UidArr: [1, 2, 9, 139, 1406],
   FactoryManagerUid: 9,
   SuggestFid: 2,
-  AppHomePage: '/pages/wymh',
+  AppHomePage: '/pages/',
   FactoryLoginUrl: 'http://laravelcms.boka.cn/admin/login/login?role=factory',
   RetailerLoginUrl: 'http://laravelcms.boka.cn/admin/login/login?role=retailer',
   AdminLoginUrl: 'http://laravelcms.boka.cn/admin/login/login?role=admin',
