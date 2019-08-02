@@ -995,4 +995,8 @@ export default {
     .btn-save{background-color:#ff6a61 !important;}
   }
 }
+.fix-home-icon{
+  position:absolute;right:20px;bottom:80px;
+  width:50px;height:50px;border-radius:50%;
+}
 </style>
