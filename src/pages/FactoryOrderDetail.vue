@@ -417,7 +417,11 @@ export default {
       }
     },
     toHome () {
-      this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage})
+      if (this.query.fromapp && ENV.AppHomePage[this.query.fromapp]) {
+        this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage[this.query.fromapp]})
+      } else {
+        this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage.default})
+      }
     },
     evaluate () {
       this.$router.push({name: 'evaluation', params: {order: this.order}})
