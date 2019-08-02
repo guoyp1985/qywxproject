@@ -234,9 +234,9 @@
         </div>
       </div>
     </div>
-    <div class="bg-theme flex_center color-white fix-home-icon" @click="toHome" v-if="query.from || query.fromapp">
+    <!-- <div class="bg-theme flex_center color-white fix-home-icon" @click="toHome" v-if="query.from || query.fromapp">
       <i class="al al-home1"></i>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
@@ -417,7 +417,11 @@ export default {
       }
     },
     toHome () {
-      this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage})
+      if (this.query.fromapp && ENV.AppHomePage[this.query.fromapp]) {
+        this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage[this.query.fromapp]})
+      } else {
+        this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage.default})
+      }
     },
     evaluate () {
       this.$router.push({name: 'evaluation', params: {order: this.order}})

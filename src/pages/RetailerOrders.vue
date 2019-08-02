@@ -1115,6 +1115,10 @@ export default {
     .btn-save{background-color:#ff6a61 !important;}
   }
 }
+.fix-home-icon{
+  position:absolute;right:20px;bottom:80px;
+  width:50px;height:50px;border-radius:50%;
+}
 .yjfhimg{max-width: 100%}
 .czlc{text-align: center;color: rgb(234, 58, 58);font-size: 18px;padding: 10px;}
 .tab-num{color: rgb(234, 58, 58);font-size: 16px;font-weight: bolder;text-align: center;padding: 5px}

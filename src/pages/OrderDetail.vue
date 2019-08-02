@@ -160,6 +160,9 @@
       <div v-if="query.fromapp != 'factory'" class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white" style="height:50px;">
         <div @click="toCenter" class="flex_cell flex_center color-white btn-bottom-red">进入个人中心</div>
       </div>
+      <!-- <div class="bg-theme flex_center color-white fix-home-icon" @click="toHome" v-if="query.from || query.fromapp">
+        <i class="al al-home1"></i>
+      </div> -->
     </template>
     <div v-show="showRefundModal" class="auto-modal refund-modal flex_center">
       <div class="modal-inner border-box" style="width:80%;">
@@ -233,9 +236,6 @@
         </div>
       </div>
     </div>
-    <div class="bg-theme flex_center color-white fix-home-icon" @click="toHome" v-if="query.from || query.fromapp">
-      <i class="al al-home1"></i>
-    </div>
   </div>
 </template>
 <script>
@@ -293,7 +293,11 @@ export default {
   },
   methods: {
     toHome () {
-      this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage})
+      if (this.query.fromapp && ENV.AppHomePage[this.query.fromapp]) {
+        this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage[this.query.fromapp]})
+      } else {
+        this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage.default})
+      }
     },
     deletephoto () {
       this.servicePhoto = ''
@@ -644,7 +648,10 @@ export default {
   margin-top: 8px;
   margin-bottom: 8px;
 }
-
+.fix-home-icon{
+  position:absolute;right:20px;bottom:80px;
+  width:50px;height:50px;border-radius:50%;
+}
 /* vui css hack */
 #order-detail .shipping-address:before {
   height: 0;

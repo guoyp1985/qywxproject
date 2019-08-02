@@ -327,11 +327,11 @@
             <div class="flex_cell flex_center h_100 color-orange" @click="submitMoney">提交</div>
           </div>
         </div>
-        <div class="bg-theme flex_center color-white fix-home-icon" @click="toHome" v-if="query.from || query.fromapp">
-          <i class="al al-home1"></i>
-        </div>
       </div>
     </template>
+    <!-- <div class="bg-theme flex_center color-white fix-home-icon" @click="toHome" v-if="query.from || query.fromapp">
+      <i class="al al-home1"></i>
+    </div> -->
   </div>
 </template>
 <script>
@@ -402,7 +402,11 @@ export default {
   },
   methods: {
     toHome () {
-      this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage})
+      if (this.query.fromapp && ENV.AppHomePage[this.query.fromapp]) {
+        this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage[this.query.fromapp]})
+      } else {
+        this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage.default})
+      }
     },
     initData () {
       this.isFirst = false
@@ -994,5 +998,9 @@ export default {
     .btn-cancel{background-color:#bdbdbd !important;}
     .btn-save{background-color:#ff6a61 !important;}
   }
+}
+.fix-home-icon{
+  position:absolute;right:20px;bottom:80px;
+  width:50px;height:50px;border-radius:50%;
 }
 </style>
