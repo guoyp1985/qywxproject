@@ -168,7 +168,27 @@ export default {
       this.$vux.confirm.show({
         content: '确定要删除吗？',
         onConfirm: () => {
-          this.areaData.splice(index, 1)
+          let deleteData = this.areaData[index]
+          if (deleteData.id) {
+            this.$vux.loading.show()
+            this.$http.post(`${ENV.BokaApi}/api/delete/postage`, {
+              id: deleteData.id
+            }).then((res) => {
+              this.$vux.loading.hide()
+              let data = res.data
+              let error = data.flag ? '删除成功' : data.error
+              this.$vux.toast.show({
+                text: error,
+                type: data.flag ? 'success' : 'warn',
+                time: this.$util.delay(error)
+              })
+              if (data.flag) {
+                this.areaData.splice(index, 1)
+              }
+            })
+          } else {
+            this.areaData.splice(index, 1)
+          }
         }
       })
     },
@@ -176,7 +196,27 @@ export default {
       this.$vux.confirm.show({
         content: '确定要删除吗？',
         onConfirm: () => {
-          this.sendData.splice(index, 1)
+          let deleteData = this.sendData[index]
+          if (deleteData.id) {
+            this.$vux.loading.show()
+            this.$http.post(`${ENV.BokaApi}/api/delete/postage`, {
+              id: deleteData.id
+            }).then((res) => {
+              this.$vux.loading.hide()
+              let data = res.data
+              let error = data.flag ? '删除成功' : data.error
+              this.$vux.toast.show({
+                text: error,
+                type: data.flag ? 'success' : 'warn',
+                time: this.$util.delay(error)
+              })
+              if (data.flag) {
+                this.sendData.splice(index, 1)
+              }
+            })
+          } else {
+            this.sendData.splice(index, 1)
+          }
         }
       })
     },
