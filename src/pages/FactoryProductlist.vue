@@ -72,6 +72,9 @@
                 <div class="inner" @click="clickpopup('recommend')" v-if="clickdata.recommend == 0">商品推荐</div>
                 <div class="inner" @click="clickpopup('recommend')" v-else>取消推荐</div>
               </div>
+              <div class="item">
+                <router-link class="inner" :to="{path: '/postageArea', query: {type: 'factoryproduct',id: clickdata.id}}">偏远地区运费</router-link>
+              </div>
               <div class="item" v-if="!clickdata.activityid || clickdata.activityid == 0">
                 <router-link class="inner" :to="{path: '/addFactoryProduct', query: {id: clickdata.id, fid: query.fid}}">编辑</router-link>
               </div>
