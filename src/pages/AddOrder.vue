@@ -668,6 +668,12 @@ export default {
             })
             return false
           }
+          if (!this.allowSend) {
+            self.$vux.toast.show({
+              text: '该地区不在派送范围内'
+            })
+            return
+          }
           self.submitdata.addressid = self.selectaddress.id
           this.payData = this.submitdata
           if (this.curOrder.accounttype === 1 && !this.curOrder.info[0].fid) {
