@@ -80,7 +80,8 @@
             </div>
           </div>
           <div class="align_right padding10 flex_right">
-            <div>合计:{{ $t('RMB') }} <span class="font16">{{ totalPrice }}</span></div>
+            <div class="flex_cell flex_left">邮费:<span v-if="orderData.postage == 0 || orderData.postage== '0.00'">包邮</span><span v-else>{{ $t('RMB') }}{{orderData.postage}}</span></div>
+            <div class="flex_cell flex_right">合计:{{ $t('RMB') }} <span class="font16">{{ totalPrice }}</span></div>
           </div>
           <div class="pl10 pr10 pb10 flex_right color-gray font12" v-if="orderData.delivertype == 2">到店自提</div>
         </div>
