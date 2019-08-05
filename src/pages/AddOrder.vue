@@ -546,8 +546,14 @@ export default {
         let curpostage = this.postPostage
         total += parseFloat(curpostage)
       }
-      this.payPrice = total.toFixed(2)
-      this.orderPrice = this.payPrice
+      this.orderPrice = total
+      if (this.selectedCard) {
+        let cha = parseFloat(this.orderPrice) - parseFloat(this.postPostage.replace(/,/g, '')) - parseFloat(this.selectedCard.money)
+        cha = cha < 0 ? 0 : cha
+        this.payPrice = (cha + parseFloat(this.postPostage.replace(/,/g, ''))).toFixed(2)
+      } else {
+        this.payPrice = total.toFixed(2)
+      }
     },
     showaddress () {
       this.showpopup = true
@@ -845,9 +851,9 @@ export default {
             if (self.cardPrice >= item.ordermoney && ((self.cardPrice - item.money - self.curOrder.rebate) >= 0 || (item.money > self.cardPrice && self.curOrder.rebate <= 0))) {
               self.selectedCard = item
               self.cardList[i].checked = true
-              let cha = parseFloat(self.orderPrice) - parseFloat(self.postage.replace(/,/g, '')) - parseFloat(item.money)
+              let cha = parseFloat(this.orderPrice) - parseFloat(this.postPostage.replace(/,/g, '')) - parseFloat(this.selectedCard.money)
               cha = cha < 0 ? 0 : cha
-              self.payPrice = (cha + parseFloat(self.postage.replace(/,/g, ''))).toFixed(2)
+              this.payPrice = (cha + parseFloat(this.postPostage.replace(/,/g, ''))).toFixed(2)
               break
             }
           }
