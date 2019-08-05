@@ -713,6 +713,8 @@ export default {
           onHide: () => {
             if (data.flag === 1) {
               this.orderData.backflag = 0
+              this.recordData = []
+              this.recordPageStart = 0
               this.getData()
             }
           }
@@ -976,6 +978,8 @@ export default {
       self.showApply = false
       self.showSos = false
       self.showContainer = false
+      this.recordPageStart = 0
+      this.recordData = []
     },
     refresh () {
       const self = this
@@ -991,12 +995,10 @@ export default {
         } else {
           this.$vux.loading.hide()
           document.title = this.loginUser.retailerinfo.title
-          if (this.query.id !== this.$route.query.id) {
-            self.initContainer()
-            this.query = this.$route.query
-            this.$vux.loading.show()
-            this.getData()
-          }
+          self.initContainer()
+          this.query = this.$route.query
+          this.$vux.loading.show()
+          this.getData()
         }
       }
     }
