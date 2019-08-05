@@ -31,6 +31,7 @@
                     <div class="title-cell1 flex_left">选择地区</div>
                     <div class="border-cell flex_left flex_cell">
                       <select v-model="item.province" class="w_100 h_100">
+                        <option value=''>请选择</option>
                         <option v-for="(item,index) in provinceData" :key="index" :value="item.name">{{item.name}}</option>
                       </select>
                     </div>
@@ -63,6 +64,7 @@
                     <div class="title-cell1 flex_left">选择地区</div>
                     <div class="border-cell flex_left flex_cell">
                       <select v-model="item.province" class="w_100 h_100">
+                        <option value=''>请选择</option>
                         <option v-for="(item,index) in provinceData" :key="index" :value="item.name">{{item.name}}</option>
                       </select>
                     </div>
@@ -155,10 +157,10 @@ export default {
   },
   methods: {
     addArea () {
-      this.areaData.push({province: this.provinceData[0].name})
+      this.areaData.push({province: ''})
     },
     addSend () {
-      this.sendData.push({province: this.provinceData[0].name})
+      this.sendData.push({province: ''})
     },
     postageChange (index) {
       let val = event.target.value
