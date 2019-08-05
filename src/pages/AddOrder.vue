@@ -86,7 +86,7 @@
                 </div>
               </div>
             </div>
-            <div class="b_bottom_after padding10" v-if="onlineVal && item.postage && item.postage != ''">
+            <!-- <div class="b_bottom_after padding10" v-if="onlineVal && item.postage && item.postage != ''">
               <div class="t-table">
                 <div class="t-cell v_middle" style="width:40px;">{{ $t('Postage') }}</div>
                 <div class="t-cell v_middle">
@@ -94,7 +94,19 @@
                   <span>{{ $t('RMB') }}{{ item.postage }}</span>
                 </div>
               </div>
-            </div>
+            </div> -->
+            <template v-if="disPostageArea">
+              <div class="b_bottom_after padding10" v-if="onlineVal && postPostage && postPostage != '' && allowSend">
+                <div class="t-table">
+                  <div class="t-cell v_middle" style="width:40px;">{{ $t('Postage') }}</div>
+                  <div class="t-cell v_middle">
+                    <span v-if="postPostage == 0">包邮</span>
+                    <span v-else>{{ $t('RMB') }}{{ postPostage }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="b_bottom_after padding10 color-theme" v-if="!allowSend">该地区不在派送范围内</div>
+            </template>
             <div class="b_bottom_after padding10">
               <div class="t-table">
                 <div class="t-cell v_middle" style="width:40px;">留言</div>
@@ -300,6 +312,7 @@ export default {
       orderPrice: '0.00',
       cardPrice: '0.00',
       postage: 0,
+      postPostage: 0,
       selectaddress: null,
       orderdata: [],
       showpopup: false,
@@ -324,7 +337,9 @@ export default {
       payData: {},
       showLineArea: false,
       sellerUser: {},
-      defaultIng: false
+      defaultIng: false,
+      allowSend: true,
+      disPostageArea: false
     }
   },
   watch: {
@@ -477,7 +492,7 @@ export default {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
       curArea.updateAutosize()
     },
-    changenumber () {
+    changenumber1111 () {
       const self = this
       let total = 0
       for (let i = 0; i < self.orderdata.length; i++) {
@@ -503,6 +518,34 @@ export default {
         }
       }
     },
+    changenumber () {
+      this.selectedCard = null
+      for (let d of this.cardList) {
+        if (d.checked) {
+          delete d.checked
+          break
+        }
+      }
+      this.computePrice()
+    },
+    computePrice () {
+      let total = 0
+      for (let i = 0; i < this.orderdata.length; i++) {
+        let order = this.orderdata[i]
+        let productinfos = order.info
+        for (let j = 0; j < productinfos.length; j++) {
+          let pd = productinfos[j]
+          total += parseFloat(pd.special) * this.submitdata.quantity
+        }
+      }
+      this.cardPrice = total
+      if (this.postPostage) {
+        let curpostage = this.postPostage.replace(/,/g, '')
+        total += parseFloat(curpostage)
+      }
+      this.payPrice = total.toFixed(2)
+      this.orderPrice = this.payPrice
+    },
     showaddress () {
       this.showpopup = true
     },
@@ -523,6 +566,7 @@ export default {
     clickAddress (data, index) {
       this.selectaddress = data
       this.showpopup = false
+      this.changeAddress()
     },
     radioclick (data, index) {
       const self = this
@@ -568,6 +612,7 @@ export default {
         if (self.selectedCard) {
           postData.cardid = self.selectedCard.id
         }
+        postData.postage = this.postPostage
         self.$http.post(`${ENV.BokaApi}/api/order/addOrder`, postData).then(function (res) {
           let data = res.data
           self.isShowLoading = false
@@ -623,6 +668,12 @@ export default {
             })
             return false
           }
+          if (!this.allowSend) {
+            self.$vux.toast.show({
+              text: '该地区不在派送范围内'
+            })
+            return
+          }
           self.submitdata.addressid = self.selectaddress.id
           this.payData = this.submitdata
           if (this.curOrder.accounttype === 1 && !this.curOrder.info[0].fid) {
@@ -640,6 +691,31 @@ export default {
     closeModal () {
       this.showModal = false
       this.payData = {}
+    },
+    changeAddress () {
+      const selectedProvince = this.selectaddress.province
+      const postageSetting = this.curOrder.postageSetting
+      let isset = false
+      if (postageSetting && postageSetting.length) {
+        for (let i = 0; i < postageSetting.length; i++) {
+          const curProvince = postageSetting[i].province
+          if (selectedProvince === curProvince || selectedProvince.indexOf(curProvince) > -1 || curProvince.indexOf(selectedProvince) > -1) {
+            if (postageSetting[i].postage !== -1 && postageSetting[i].postage !== '-1' && postageSetting[i].postage !== '-1.00') {
+              this.postPostage = postageSetting[i].postage
+              this.allowSend = true
+            } else {
+              this.allowSend = false
+            }
+            isset = true
+            break
+          }
+        }
+      }
+      if (!isset) {
+        this.postPostage = this.curOrder.postage
+      }
+      this.disPostageArea = true
+      this.computePrice()
     },
     handleAddress () {
       const self = this
@@ -666,6 +742,7 @@ export default {
       }
       if (self.selectaddress) {
         self.submitdata.addressid = self.selectaddress.id
+        this.changeAddress()
       }
     },
     getData () {
@@ -694,7 +771,7 @@ export default {
           let curpostage = self.curOrder.postage.replace(/,/g, '')
           self.curOrder.postageNumber = parseFloat(curpostage).toFixed(2)
           self.curOrder.rebate = parseFloat(self.curOrder.rebate).toFixed(2)
-          let total = 0
+          // let total = 0
           let total1 = 0
           for (let i = 0; i < self.orderdata.length; i++) {
             let order = self.orderdata[i]
@@ -704,7 +781,7 @@ export default {
               let info = productinfos[j]
               let p = { shopid: info.id, quantity: info.quantity }
               postd.shopinfo.push(p)
-              total += parseFloat(info.special) * info.quantity
+              // total += parseFloat(info.special) * info.quantity
               total1 += parseFloat(info.special) * info.quantity
               if (info.fid) {
                 this.showLineArea = false
@@ -713,13 +790,16 @@ export default {
               }
             }
             if (order.postage) {
-              total += parseFloat(order.postage.replace(/,/g, ''))
+              // total += parseFloat(order.postage.replace(/,/g, ''))
+              total1 += parseFloat(order.postage.replace(/,/g, ''))
             }
             self.postage = parseFloat(order.postage.replace(/,/g, ''))
+            self.postPostage = parseFloat(order.postage.replace(/,/g, ''))
           }
           self.cardPrice = total1
-          self.payPrice = total.toFixed(2)
-          self.orderPrice = self.payPrice
+          // self.payPrice = total.toFixed(2)
+          // self.orderPrice = self.payPrice
+          this.computePrice()
           return self.$http.get(`${ENV.BokaApi}/api/user/address/list`)
         }
       }).then(res => {

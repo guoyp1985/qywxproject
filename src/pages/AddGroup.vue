@@ -182,8 +182,12 @@ export default {
       }
     },
     afterAdd () {
-      let params = this.$util.handleAppParams(this.query, {})
-      this.$router.push({path: '/roomList', query: params})
+      if (this.query.minibackurl) {
+        this.$util.routerMiniUrl(this.query)
+      } else {
+        let params = this.$util.handleAppParams(this.query, {})
+        this.$router.push({path: '/roomList', query: params})
+      }
     },
     reset () {
       this.crypto = ''

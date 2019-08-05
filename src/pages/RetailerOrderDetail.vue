@@ -4,7 +4,7 @@
     <apply-tip v-if="showApply"></apply-tip>
     <Sos v-if="showSos" :title="sosTitle"></Sos>
     <template v-if="showContainer">
-      <div class="pagemiddle scroll-container">
+      <div class="pagemiddle scroll-container" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
         <div v-if="orderData.seller && orderData.seller.username && (!orderData.frommin || orderData.frommin == '')">
           <div class="b_bottom_after padding10 bg-white">
             <div class="t-table">
@@ -137,7 +137,7 @@
             </div>
           </div>
         </template>
-        <div class="bg-white" v-if="recordData.length">
+        <div class="bg-white mt12" v-if="recordData.length">
           <div class="padding10 b_bottom_after">售后记录</div>
           <div class="scroll_list mt12">
             <div class="scroll_item padding10" v-for="(item, index) in recordData" :key="index">
@@ -390,7 +390,9 @@ export default {
       showSmoneyModal: '',
       serviceMoney: '',
       previewerPhoto: [],
-      recordData: []
+      recordData: [],
+      recordPageStart: 0,
+      limit: 10
     }
   },
   watch: {
@@ -401,6 +403,20 @@ export default {
   computed: {
   },
   methods: {
+    handleScroll (refname, type) {
+      const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      self.$util.scrollEvent({
+        element: scrollarea,
+        callback: function () {
+          if (self.recordData.length === (self.recordPageStart + 1) * self.limit) {
+            self.recordPageStart++
+            self.$vux.loading.show()
+            self.getRecordData()
+          }
+        }
+      })
+    },
     toHome () {
       if (this.query.fromapp && ENV.AppHomePage[this.query.fromapp]) {
         this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage[this.query.fromapp]})
@@ -412,6 +428,8 @@ export default {
       this.isFirst = false
       this.showFirst = false
       this.showHb = false
+      this.recordData = []
+      this.recordPageStart = 0
       this.deliverdata = { delivercompany: '-1', delivercode: '' }
     },
     viewBigImg (photo, index) {
@@ -473,6 +491,10 @@ export default {
         this.$vux.toast.text('请完善信息', 'middle')
         return false
       }
+      let newData = {description: '售后反馈'}
+      if (this.$util.trim(this.serviceContent) !== '') {
+        newData.content = this.serviceContent.replace(/\n/g, '<br/>')
+      }
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/order/dealService`, {
         id: this.orderData.id, agree: 2, rejectreason: this.serviceContent
@@ -488,6 +510,10 @@ export default {
           this.showServiceModal = false
           this.orderData.candealservice = false
           this.orderData.flagstr = '已发货'
+          if (this.recordData.length === (this.recordPageStart + 1) * this.limit) {
+            this.recordData.splice(this.recordData.length - 1, 1)
+          }
+          this.recordData = [newData].concat(this.recordData)
         }
       })
     },
@@ -863,6 +889,24 @@ export default {
         })
       }, 200)
     },
+    getRecordData () {
+      this.$http.post(`${ENV.BokaApi}/api/order/recordList`, {
+        type: 'service', id: this.query.id, pagestart: this.recordPageStart, limit: 10
+      }).then(res => {
+        this.$vux.loading.hide()
+        const data = res.data
+        let retdata = data.data ? data.data : data
+        for (let i in retdata) {
+          if (retdata[i].photo && retdata[i].photo !== '') {
+            retdata[i].previewerPhoto = this.$util.previewerImgdata([retdata[i].photo])
+          }
+          if (retdata[i].content && retdata[i].content !== '') {
+            retdata[i].content = retdata[i].content.replace(/\n/g, '<br/>')
+          }
+        }
+        this.recordData = this.recordData.concat(retdata)
+      })
+    },
     getData () {
       const self = this
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
@@ -909,25 +953,9 @@ export default {
               self.deliverdata.delivercompany = self.orderData.delivercompany
               self.deliverdata.delivercode = self.orderData.delivercode
             }
-            return this.$http.post(`${ENV.BokaApi}/api/order/recordList`, {
-              type: 'service', id: this.query.id
-            })
+            this.getRecordData()
+            return this.$http.get(`${ENV.BokaApi}/api/retailer/info`)
           }
-        }
-      }).then(res => {
-        if (res) {
-          const data = res.data
-          let retdata = data.data ? data.data : data
-          for (let i in retdata) {
-            if (retdata[i].photo && retdata[i].photo !== '') {
-              retdata[i].previewerPhoto = this.$util.previewerImgdata([retdata[i].photo])
-            }
-            if (retdata[i].content && retdata[i].content !== '') {
-              retdata[i].content = retdata[i].content.replace(/\n/g, '<br/>')
-            }
-          }
-          this.recordData = retdata
-          return this.$http.get(`${ENV.BokaApi}/api/retailer/info`)
         }
       }).then(res => {
         if (res) {

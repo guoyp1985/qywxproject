@@ -138,6 +138,9 @@
               <div v-if="clickdata.fpid > 0" class="inner" @click="clickpopup('fee')">设置返点佣金</div>
               <div v-else class="inner"  @click="clickpopup('edit')">编辑</div>
             </div>
+            <div class="item" v-if="!clickdata.fpid">
+              <router-link class="inner" :to="{path: '/postageArea', query: {type: 'product',id: clickdata.id}}">偏远地区运费</router-link>
+            </div>
             <div class="item" v-if="clickdata.moderate == 0">
               <div class="inner" @click="clickpopup('up')">上架</div>
             </div>
