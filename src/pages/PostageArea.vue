@@ -262,6 +262,9 @@ export default {
           onHide: () => {
             this.submitIng = false
             if (data.flag === 1) {
+              for (let i = 0; i < this.areaData.length; i++) {
+                this.areaObject[this.areaData[i].province] = this.areaData[i]
+              }
             }
           }
         })
@@ -304,6 +307,9 @@ export default {
           onHide: () => {
             this.submitIng = false
             if (data.flag === 1) {
+              for (let i = 0; i < this.sendData.length; i++) {
+                this.sendObject[this.sendData[i].province] = this.sendData[i]
+              }
             }
           }
         })
