@@ -695,6 +695,7 @@ export default {
     changeAddress () {
       const selectedProvince = this.selectaddress.province
       const postageSetting = this.curOrder.postageSetting
+      this.allowSend = true
       let isset = false
       if (postageSetting && postageSetting.length) {
         for (let i = 0; i < postageSetting.length; i++) {
