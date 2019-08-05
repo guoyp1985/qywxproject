@@ -131,7 +131,7 @@
           </div>
         </form>
       </div>
-      <div class="s-bottom toolbar_bg">
+      <div class="s-bottom toolbar_bg" v-if="disPostageArea">
         <div class="t-table h_100 align_center">
   				<div class="t-cell h_100 v_middle">需付：<span class="color-orange1">{{ $t('RMB') }}{{ payPrice }}</span></div>
   				<div class="t-cell h_100 v_middle w100 bg-orange1 color-white" v-if="allowSend" @click="submitOrder">确认订单</div>
