@@ -170,27 +170,28 @@ export default {
       this.$vux.confirm.show({
         content: '确定要删除吗？',
         onConfirm: () => {
-          let deleteData = this.areaData[index]
-          if (deleteData.id) {
-            this.$vux.loading.show()
-            this.$http.post(`${ENV.BokaApi}/api/delete/postage`, {
-              id: deleteData.id
-            }).then((res) => {
-              this.$vux.loading.hide()
-              let data = res.data
-              let error = data.flag ? '删除成功' : data.error
-              this.$vux.toast.show({
-                text: error,
-                type: data.flag ? 'success' : 'warn',
-                time: this.$util.delay(error)
-              })
-              if (data.flag) {
-                this.areaData.splice(index, 1)
-              }
-            })
-          } else {
-            this.areaData.splice(index, 1)
-          }
+          this.areaData.splice(index, 1)
+          // let deleteData = this.areaData[index]
+          // if (deleteData.id) {
+          //   this.$vux.loading.show()
+          //   this.$http.post(`${ENV.BokaApi}/api/delete/postage`, {
+          //     id: deleteData.id
+          //   }).then((res) => {
+          //     this.$vux.loading.hide()
+          //     let data = res.data
+          //     let error = data.flag ? '删除成功' : data.error
+          //     this.$vux.toast.show({
+          //       text: error,
+          //       type: data.flag ? 'success' : 'warn',
+          //       time: this.$util.delay(error)
+          //     })
+          //     if (data.flag) {
+          //       this.areaData.splice(index, 1)
+          //     }
+          //   })
+          // } else {
+          //   this.areaData.splice(index, 1)
+          // }
         }
       })
     },
@@ -198,27 +199,28 @@ export default {
       this.$vux.confirm.show({
         content: '确定要删除吗？',
         onConfirm: () => {
-          let deleteData = this.sendData[index]
-          if (deleteData.id) {
-            this.$vux.loading.show()
-            this.$http.post(`${ENV.BokaApi}/api/delete/postage`, {
-              id: deleteData.id
-            }).then((res) => {
-              this.$vux.loading.hide()
-              let data = res.data
-              let error = data.flag ? '删除成功' : data.error
-              this.$vux.toast.show({
-                text: error,
-                type: data.flag ? 'success' : 'warn',
-                time: this.$util.delay(error)
-              })
-              if (data.flag) {
-                this.sendData.splice(index, 1)
-              }
-            })
-          } else {
-            this.sendData.splice(index, 1)
-          }
+          this.sendData.splice(index, 1)
+          // let deleteData = this.sendData[index]
+          // if (deleteData.id) {
+          //   this.$vux.loading.show()
+          //   this.$http.post(`${ENV.BokaApi}/api/delete/postage`, {
+          //     id: deleteData.id
+          //   }).then((res) => {
+          //     this.$vux.loading.hide()
+          //     let data = res.data
+          //     let error = data.flag ? '删除成功' : data.error
+          //     this.$vux.toast.show({
+          //       text: error,
+          //       type: data.flag ? 'success' : 'warn',
+          //       time: this.$util.delay(error)
+          //     })
+          //     if (data.flag) {
+          //       this.sendData.splice(index, 1)
+          //     }
+          //   })
+          // } else {
+          //   this.sendData.splice(index, 1)
+          // }
         }
       })
     },
@@ -230,10 +232,10 @@ export default {
       // console.log('已存在的不派送地区')
       // console.log(this.sendObject)
       if (this.submitIng) return false
-      if (!this.areaData.length) {
-        this.$vux.toast.text('请设置运费信息', 'middle')
-        return false
-      }
+      // if (!this.areaData.length) {
+      //   this.$vux.toast.text('请设置运费信息', 'middle')
+      //   return false
+      // }
       let iscontinue = true
       for (let i = 0; i < this.areaData.length; i++) {
         let curData = this.areaData[i]
@@ -287,10 +289,10 @@ export default {
       // console.log('已存在的不派送地区')
       // console.log(this.sendObject)
       if (this.submitIng) return false
-      if (!this.sendData.length) {
-        this.$vux.toast.text('请设置运费信息', 'middle')
-        return false
-      }
+      // if (!this.sendData.length) {
+      //   this.$vux.toast.text('请设置运费信息', 'middle')
+      //   return false
+      // }
       let iscontinue = true
       for (let i = 0; i < this.sendData.length; i++) {
         let curData = this.sendData[i]

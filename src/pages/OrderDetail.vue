@@ -517,6 +517,7 @@ export default {
           onHide: () => {
             if (data.flag) {
               self.orderData.backflag = 20
+              self.getData()
             }
           }
         })
@@ -598,6 +599,8 @@ export default {
             self.receiverPhone = retdata.telephone
             self.expressCompany = retdata.delivercompanyname
             self.expressNumber = retdata.delivercode
+            this.recordData = []
+            this.recordPageStart = 0
             self.getRecordData()
           }
         }

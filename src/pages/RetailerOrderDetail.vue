@@ -680,10 +680,10 @@ export default {
                 time: self.$util.delay(data.error),
                 onHide: () => {
                   if (data.flag === 1) {
-                    this.orderData.cancensorback = 0
-                    this.orderData.backflag = 0
-                    this.orderData.flag = 0
-                    this.orderData.flagstr = '已退款'
+                    // this.orderData.cancensorback = 0
+                    // this.orderData.backflag = 0
+                    // this.orderData.flag = 0
+                    // this.orderData.flagstr = '已退款'
                     this.getData()
                   }
                 }
@@ -712,6 +712,7 @@ export default {
           time: self.$util.delay(data.error),
           onHide: () => {
             if (data.flag === 1) {
+              this.refundContent = ''
               this.orderData.backflag = 0
               this.getData()
             }
@@ -940,7 +941,7 @@ export default {
             } else {
               this.previewerPhoto = []
             }
-            if (!(self.orderData.flag === 2 && self.orderData.candeliver) && self.orderData.flag !== 3) {
+            if ((self.orderData.flag !== 2 || !self.orderData.candeliver) && (!self.orderData.flag === 3 || self.orderData.fid)) {
               self.bottomcss = 'nobottom'
             }
             let total = 0
@@ -953,6 +954,8 @@ export default {
               self.deliverdata.delivercompany = self.orderData.delivercompany
               self.deliverdata.delivercode = self.orderData.delivercode
             }
+            this.recordData = []
+            this.recordPageStart = 0
             this.getRecordData()
             return this.$http.get(`${ENV.BokaApi}/api/retailer/info`)
           }
@@ -976,6 +979,8 @@ export default {
       self.showApply = false
       self.showSos = false
       self.showContainer = false
+      this.recordPageStart = 0
+      this.recordData = []
     },
     refresh () {
       const self = this
@@ -991,12 +996,10 @@ export default {
         } else {
           this.$vux.loading.hide()
           document.title = this.loginUser.retailerinfo.title
-          if (this.query.id !== this.$route.query.id) {
-            self.initContainer()
-            this.query = this.$route.query
-            this.$vux.loading.show()
-            this.getData()
-          }
+          self.initContainer()
+          this.query = this.$route.query
+          this.$vux.loading.show()
+          this.getData()
         }
       }
     }

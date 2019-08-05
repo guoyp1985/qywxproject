@@ -134,7 +134,8 @@
       <div class="s-bottom toolbar_bg">
         <div class="t-table h_100 align_center">
   				<div class="t-cell h_100 v_middle">需付：<span class="color-orange1">{{ $t('RMB') }}{{ payPrice }}</span></div>
-  				<div class="t-cell h_100 v_middle w100 bg-orange1 color-white" @click="submitOrder">确认订单</div>
+  				<div class="t-cell h_100 v_middle w100 bg-orange1 color-white" v-if="allowSend" @click="submitOrder">确认订单</div>
+  				<div class="t-cell h_100 v_middle w100 bg-gray color-white" v-else>确认订单</div>
   			</div>
       </div>
       <div v-transfer-dom class="x-popup">
@@ -695,6 +696,7 @@ export default {
     changeAddress () {
       const selectedProvince = this.selectaddress.province
       const postageSetting = this.curOrder.postageSetting
+      this.allowSend = true
       let isset = false
       if (postageSetting && postageSetting.length) {
         for (let i = 0; i < postageSetting.length; i++) {
