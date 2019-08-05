@@ -699,6 +699,9 @@ export default {
               let o = self.orderData.orderlist[i]
               total += parseFloat(o.special.replace(/,/g, '')) * parseInt(o.quantity)
             }
+            if (self.orderData.postage) {
+              total += parseFloat(self.orderData.postage)
+            }
             self.totalPrice = total.toFixed(2)
             if (self.orderData.delivercompany && self.$util.trim(self.orderData.delivercompany) !== '') {
               self.deliverdata.delivercompany = self.orderData.delivercompany
