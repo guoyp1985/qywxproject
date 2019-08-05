@@ -940,7 +940,7 @@ export default {
             } else {
               this.previewerPhoto = []
             }
-            if (!(self.orderData.flag === 2 && self.orderData.candeliver) && self.orderData.flag !== 3) {
+            if ((self.orderData.flag !== 2 || !self.orderData.candeliver) && (!self.orderData.flag === 3 || self.orderData.fid)) {
               self.bottomcss = 'nobottom'
             }
             let total = 0
