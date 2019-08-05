@@ -684,8 +684,6 @@ export default {
                     // this.orderData.backflag = 0
                     // this.orderData.flag = 0
                     // this.orderData.flagstr = '已退款'
-                    this.recordData = []
-                    this.recordPageStart = 0
                     this.getData()
                   }
                 }
@@ -715,8 +713,6 @@ export default {
           onHide: () => {
             if (data.flag === 1) {
               this.orderData.backflag = 0
-              this.recordData = []
-              this.recordPageStart = 0
               this.getData()
             }
           }
@@ -957,6 +953,8 @@ export default {
               self.deliverdata.delivercompany = self.orderData.delivercompany
               self.deliverdata.delivercode = self.orderData.delivercode
             }
+            this.recordData = []
+            this.recordPageStart = 0
             this.getRecordData()
             return this.$http.get(`${ENV.BokaApi}/api/retailer/info`)
           }
