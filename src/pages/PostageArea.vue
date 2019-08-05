@@ -250,6 +250,18 @@ export default {
           iscontinue = false
           break
         }
+        let isSame = false
+        for (let j = 0; j < this.areaData.length; j++) {
+          if (j !== i && this.areaData[i].province === this.areaData[j].province) {
+            this.$vux.toast.text('偏远地区不可重复', 'middle')
+            isSame = true
+            break
+          }
+        }
+        if (isSame) {
+          iscontinue = false
+          break
+        }
         if (isNaN(curPostage) || parseFloat(curPostage) <= 0) {
           this.$vux.toast.text('运费金额必须大于0', 'middle')
           iscontinue = false
@@ -304,6 +316,18 @@ export default {
         }
         if (this.areaObject[curProvince]) {
           this.$vux.toast.text('偏远地区和不派送地区不可重复', 'middle')
+          iscontinue = false
+          break
+        }
+        let isSame = false
+        for (let j = 0; j < this.sendData.length; j++) {
+          if (j !== i && this.sendData[i].province === this.sendData[j].province) {
+            this.$vux.toast.text('偏远地区不可重复', 'middle')
+            isSame = true
+            break
+          }
+        }
+        if (isSame) {
           iscontinue = false
           break
         }
