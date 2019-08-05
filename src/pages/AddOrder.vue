@@ -540,8 +540,10 @@ export default {
         }
       }
       this.cardPrice = total
+      console.log('进入到了计算价格')
+      console.log(this.postPostage)
       if (this.postPostage) {
-        let curpostage = this.postPostage.replace(/,/g, '')
+        let curpostage = this.postPostage
         total += parseFloat(curpostage)
       }
       this.payPrice = total.toFixed(2)
@@ -698,12 +700,13 @@ export default {
       const postageSetting = this.curOrder.postageSetting
       this.allowSend = true
       let isset = false
+      this.postPostage = 0
       if (postageSetting && postageSetting.length) {
         for (let i = 0; i < postageSetting.length; i++) {
           const curProvince = postageSetting[i].province
           if (selectedProvince === curProvince || selectedProvince.indexOf(curProvince) > -1 || curProvince.indexOf(selectedProvince) > -1) {
             if (postageSetting[i].postage !== -1 && postageSetting[i].postage !== '-1' && postageSetting[i].postage !== '-1.00') {
-              this.postPostage = postageSetting[i].postage
+              this.postPostage = postageSetting[i].postage.replace(/,/g, '')
               this.allowSend = true
             } else {
               this.allowSend = false
@@ -714,7 +717,7 @@ export default {
         }
       }
       if (!isset) {
-        this.postPostage = this.curOrder.postage
+        this.postPostage = this.curOrder.postage.replace(/,/g, '')
       }
       this.disPostageArea = true
       this.computePrice()
