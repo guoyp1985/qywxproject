@@ -223,6 +223,12 @@ export default {
       })
     },
     saveEvent () {
+      // console.log('当前列表中的地区')
+      // console.log(this.areaData)
+      // console.log('已存在的偏远地区')
+      // console.log(this.areaObject)
+      // console.log('已存在的不派送地区')
+      // console.log(this.sendObject)
       if (this.submitIng) return false
       if (!this.areaData.length) {
         this.$vux.toast.text('请设置运费信息', 'middle')
@@ -264,6 +270,7 @@ export default {
           onHide: () => {
             this.submitIng = false
             if (data.flag === 1) {
+              this.areaObject = {}
               for (let i = 0; i < this.areaData.length; i++) {
                 this.areaObject[this.areaData[i].province] = this.areaData[i]
               }
@@ -273,6 +280,12 @@ export default {
       })
     },
     saveSend () {
+      // console.log('当前列表中的不派送地区')
+      // console.log(this.sendData)
+      // console.log('已存在的偏远地区')
+      // console.log(this.areaObject)
+      // console.log('已存在的不派送地区')
+      // console.log(this.sendObject)
       if (this.submitIng) return false
       if (!this.sendData.length) {
         this.$vux.toast.text('请设置运费信息', 'middle')
@@ -309,6 +322,7 @@ export default {
           onHide: () => {
             this.submitIng = false
             if (data.flag === 1) {
+              this.sendObject = {}
               for (let i = 0; i < this.sendData.length; i++) {
                 this.sendObject[this.sendData[i].province] = this.sendData[i]
               }
