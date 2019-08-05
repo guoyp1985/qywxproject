@@ -638,6 +638,7 @@ export default {
           time: self.$util.delay(data.error),
           onHide: () => {
             if (data.flag === 1) {
+              this.refundContent = ''
               this.orderData.backflag = 0
               this.orderData.flagstr = '待发货'
             }
