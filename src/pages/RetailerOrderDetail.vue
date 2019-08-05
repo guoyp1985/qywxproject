@@ -680,10 +680,12 @@ export default {
                 time: self.$util.delay(data.error),
                 onHide: () => {
                   if (data.flag === 1) {
-                    this.orderData.cancensorback = 0
-                    this.orderData.backflag = 0
-                    this.orderData.flag = 0
-                    this.orderData.flagstr = '已退款'
+                    // this.orderData.cancensorback = 0
+                    // this.orderData.backflag = 0
+                    // this.orderData.flag = 0
+                    // this.orderData.flagstr = '已退款'
+                    this.recordData = []
+                    this.recordPageStart = 0
                     this.getData()
                   }
                 }

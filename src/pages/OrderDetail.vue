@@ -517,6 +517,9 @@ export default {
           onHide: () => {
             if (data.flag) {
               self.orderData.backflag = 20
+              self.recordPageStart = 0
+              self.recordData = []
+              self.getRecordData()
             }
           }
         })
