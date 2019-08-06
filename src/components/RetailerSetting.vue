@@ -673,6 +673,9 @@ export default {
     },
     submitevent () {
       const self = this
+      if (this.query.fromapp === 'factory') {
+        this.requireddata = {title: ''}
+      }
       console.log(self.submitdata)
       self.submitdata.productclass = self.productClass
       if (self.submitdata.shopmodel === '') {
@@ -684,10 +687,12 @@ export default {
         v[key] = self.submitdata[key] ? self.submitdata[key] : ''
         validateData.push(v)
       }
+      console.log(validateData)
       let iscontinue = self.$util.validateQueue(validateData,
         model => {
           switch (model.key) {
             default:
+              console.log(model.key)
               self.$vux.toast.text('必填项不能为空', 'middle')
           }
         }
@@ -695,7 +700,7 @@ export default {
       if (!iscontinue) {
         return false
       }
-      if (!self.productClass.length) {
+      if (!self.productClass.length && self.query.fromapp !== 'factory') {
         self.$vux.toast.text('请选择经营范围', 'middle')
         return false
       }
