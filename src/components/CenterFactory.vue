@@ -377,8 +377,9 @@ export default {
 .centersales .weui-grids .gridlist:nth-child(4) .weui-grid{background: linear-gradient(#3eb4f1, #099ded);}
 .centersales .weui-grids .gridlist:nth-child(5) .weui-grid{background: linear-gradient(#f25c7d, #ed2d5a);}
 .centersales .weui-grids .gridlist:nth-child(6) .weui-grid{background: linear-gradient(#7974f6, #615aec);}
-.centersales .weui-grids .gridlist:nth-child(7) .weui-grid{background: linear-gradient(#2498e0, #226ab2);}
-.centersales .weui-grids .gridlist:nth-child(8) .weui-grid{background: linear-gradient(#f98, #f99);}
+.centersales .weui-grids .gridlist:nth-child(7) .weui-grid{background: linear-gradient(#9364f2, #694ba6);}
+.centersales .weui-grids .gridlist:nth-child(8) .weui-grid{background: linear-gradient(#fac45b, #efac2c);}
+.centersales .weui-grids .gridlist:nth-child(8) .weui-grid{background: linear-gradient(#3f9ccc, #3480a8);}
 .centersales .weui-grids .gridlist.disabled .weui-grid{background: linear-gradient(#b9b9b9, #afafaf);}
 .listitem.disabled {position:relative;background-color:#d8d8d8;}
 

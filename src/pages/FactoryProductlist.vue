@@ -66,6 +66,9 @@
                 <div class="inner" @click="clickpopup('copy')">复制商品信息</div>
               </div>
               <div class="item">
+                <router-link class="inner" :to="{path: '/agentLevel', query: {pid: clickdata.id}}">经销商价格</router-link>
+              </div>
+              <div class="item">
                 <router-link class="inner" :to="{path: '/materialbank', query: {pid: clickdata.id}}">素材库</router-link>
               </div>
               <div class="item" v-if="clickdata.moderate == 1">

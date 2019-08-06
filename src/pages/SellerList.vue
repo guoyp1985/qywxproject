@@ -313,6 +313,9 @@
                 <div class="inner" @click="clickPopup('up')">升级到C</div>
               </div>
               <div class="item" >
+                <div class="inner" @click="clickPopup('level')">更改等级</div>
+              </div>
+              <div class="item" >
                 <div class="inner" @click="clickPopup('uploader')">更改推荐人</div>
               </div>
               <div class="item" v-if="clickData.fulltime">
@@ -844,16 +847,25 @@ export default {
         content: '确定将选中的用户通过审核？',
         onConfirm: () => {
           this.$vux.loading.show()
-          this.$http.post(`${ENV.BokaApi}/api/factory/censorRetailer`, {
-            fid: this.fid, uids: this.idArr, ok: 1
-          }).then((res) => {
+          let postParams = {fid: this.fid, uids: this.idArr, ok: 1}
+          if (this.selectedIndex === 4) {
+            postParams.agent = 1
+          }
+          this.$http.post(`${ENV.BokaApi}/api/factory/censorRetailer`, postParams).then((res) => {
             console.log('-------------')
             console.log(res)
             this.$vux.loading.hide()
-            this.disTabData3 = false
-            this.tabData3 = []
-            this.pageStart3 = 0
-            this.getData3()
+            if (this.selectedIndex === 4) {
+              this.disTabData5 = false
+              this.tabData5 = []
+              this.pageStart5 = 0
+              this.getData5()
+            } else {
+              this.disTabData3 = false
+              this.tabData3 = []
+              this.pageStart3 = 0
+              this.getData3()
+            }
           })
         }
       })
@@ -890,17 +902,26 @@ export default {
       console.log('-----拒绝原因------')
       console.log(this.refuseContent)
       this.$vux.loading.show()
-      this.$http.post(`${ENV.BokaApi}/api/factory/censorRetailer`, {
-        fid: this.fid, uids: this.idArr, ok: 0, reason: this.refuseContent
-      }).then((res) => {
+      let postParams = {fid: this.fid, uids: this.idArr, ok: 0, reason: this.refuseContent}
+      if (this.selectedIndex === 4) {
+        postParams.agent = 1
+      }
+      this.$http.post(`${ENV.BokaApi}/api/factory/censorRetailer`, postParams).then((res) => {
         console.log('-------------')
         console.log(res)
         this.$vux.loading.hide()
-        this.disTabData3 = false
-        this.tabData3 = []
-        this.pageStart3 = 0
         this.refuseContent = ''
-        this.getData3()
+        if (this.selectedIndex === 4) {
+          this.disTabData5 = false
+          this.tabData5 = []
+          this.pageStart5 = 0
+          this.getData5()
+        } else {
+          this.disTabData3 = false
+          this.tabData3 = []
+          this.pageStart3 = 0
+          this.getData3()
+        }
       })
     },
     submitLevel () {
@@ -1040,7 +1061,7 @@ export default {
     },
     getData3 (isone) {
       const self = this
-      let params = {fid: self.query.id, pagestart: self.pageStart3, limit: self.limit}
+      let params = {fid: self.query.id, pagestart: self.pageStart3, limit: self.limit, agent: 0}
       if (isone) {
         params.pagestart = self.tabData3.length
         params.limit = 1
@@ -1056,7 +1077,7 @@ export default {
     },
     getData4 (isone) {
       const self = this
-      let params = {fid: self.query.id, fulltime: 2, pagestart: self.pageStart4, limit: self.limit}
+      let params = {fid: self.query.id, agent: 1, pagestart: self.pageStart4, limit: self.limit}
       if (isone) {
         params.pagestart = self.tabData4.length
         params.limit = 1
@@ -1074,7 +1095,7 @@ export default {
     },
     getData5 (isone) {
       const self = this
-      let params = {fid: self.query.id, pagestart: self.pageStart5, limit: self.limit}
+      let params = {fid: self.query.id, pagestart: self.pageStart5, limit: self.limit, agent: 1}
       if (isone) {
         params.pagestart = self.tabData5.length
         params.limit = 1

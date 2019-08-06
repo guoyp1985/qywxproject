@@ -181,7 +181,9 @@ export default {
         } else if (self.loginUser.isretailer === 1 || self.loginUser.isretailer === 2) {
           if (self.query.type === 'agent' && self.query.fromapp === 'factory') {
             this.$http.post(`${ENV.BokaApi}/api/factory/applyAgent`, {
-              fid: this.query.fid, wid: this.query.uid
+              fid: this.query.fid, wid: this.loginUser.uid
+            }).then(res => {
+              self.bindFactory()
             })
           } else {
             self.bindFactory()
