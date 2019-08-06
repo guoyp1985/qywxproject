@@ -79,9 +79,11 @@
               </div>
             </div>
           </div>
-          <div class="align_right padding10 flex_right">
-            <div>合计:{{ $t('RMB') }} <span class="font16">{{ totalPrice }}</span></div>
+          <div class="align_right pt10 pl10 pr10 flex_right">
+            <span class="v_middle">商品: {{ $t('RMB') }}</span><span class="font16 v_middle">{{ orderData.special }}</span>
+            <span class="v_middle font12 color-gray ml5">( 运费:<span v-if="orderData.postage == 0 || orderData.postage== '0.00'">包邮</span><span v-else>{{ $t('RMB') }}{{orderData.postage}}</span> )</span>
           </div>
+          <div class="align_right padding10 flex_right">合计:{{ $t('RMB') }} <span class="font16">{{ totalPrice }}</span></div>
           <div class="pl10 pr10 pb10 flex_right color-gray font12" v-if="orderData.delivertype == 2">到店自提</div>
         </div>
         <div class="align_right">
@@ -696,6 +698,9 @@ export default {
             for (let i = 0; i < self.orderData.orderlist.length; i++) {
               let o = self.orderData.orderlist[i]
               total += parseFloat(o.special.replace(/,/g, '')) * parseInt(o.quantity)
+            }
+            if (self.orderData.postage) {
+              total += parseFloat(self.orderData.postage)
             }
             self.totalPrice = total.toFixed(2)
             if (self.orderData.delivercompany && self.$util.trim(self.orderData.delivercompany) !== '') {

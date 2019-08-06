@@ -131,11 +131,11 @@
           </div>
         </form>
       </div>
-      <div class="s-bottom toolbar_bg">
+      <div class="s-bottom toolbar_bg" v-if="disPostageArea">
         <div class="t-table h_100 align_center">
   				<div class="t-cell h_100 v_middle">需付：<span class="color-orange1">{{ $t('RMB') }}{{ payPrice }}</span></div>
   				<div class="t-cell h_100 v_middle w100 bg-orange1 color-white" v-if="allowSend" @click="submitOrder">确认订单</div>
-  				<div class="t-cell h_100 v_middle w100 bg-gray color-white" v-else>确认订单</div>
+  				<div class="t-cell h_100 v_middle bg-gray color-white" style="width:130px;" v-else>该地区无法派送</div>
   			</div>
       </div>
       <div v-transfer-dom class="x-popup">
@@ -540,12 +540,20 @@ export default {
         }
       }
       this.cardPrice = total
+      console.log('进入到了计算价格')
+      console.log(this.postPostage)
       if (this.postPostage) {
-        let curpostage = this.postPostage.replace(/,/g, '')
+        let curpostage = this.postPostage
         total += parseFloat(curpostage)
       }
-      this.payPrice = total.toFixed(2)
-      this.orderPrice = this.payPrice
+      this.orderPrice = total
+      if (this.selectedCard) {
+        let cha = parseFloat(this.orderPrice) - parseFloat(this.postPostage.replace(/,/g, '')) - parseFloat(this.selectedCard.money)
+        cha = cha < 0 ? 0 : cha
+        this.payPrice = (cha + parseFloat(this.postPostage.replace(/,/g, ''))).toFixed(2)
+      } else {
+        this.payPrice = total.toFixed(2)
+      }
     },
     showaddress () {
       this.showpopup = true
@@ -698,12 +706,13 @@ export default {
       const postageSetting = this.curOrder.postageSetting
       this.allowSend = true
       let isset = false
+      this.postPostage = 0
       if (postageSetting && postageSetting.length) {
         for (let i = 0; i < postageSetting.length; i++) {
           const curProvince = postageSetting[i].province
           if (selectedProvince === curProvince || selectedProvince.indexOf(curProvince) > -1 || curProvince.indexOf(selectedProvince) > -1) {
             if (postageSetting[i].postage !== -1 && postageSetting[i].postage !== '-1' && postageSetting[i].postage !== '-1.00') {
-              this.postPostage = postageSetting[i].postage
+              this.postPostage = postageSetting[i].postage.replace(/,/g, '')
               this.allowSend = true
             } else {
               this.allowSend = false
@@ -714,7 +723,7 @@ export default {
         }
       }
       if (!isset) {
-        this.postPostage = this.curOrder.postage
+        this.postPostage = this.curOrder.postage.replace(/,/g, '')
       }
       this.disPostageArea = true
       this.computePrice()
@@ -842,9 +851,9 @@ export default {
             if (self.cardPrice >= item.ordermoney && ((self.cardPrice - item.money - self.curOrder.rebate) >= 0 || (item.money > self.cardPrice && self.curOrder.rebate <= 0))) {
               self.selectedCard = item
               self.cardList[i].checked = true
-              let cha = parseFloat(self.orderPrice) - parseFloat(self.postage.replace(/,/g, '')) - parseFloat(item.money)
+              let cha = parseFloat(this.orderPrice) - parseFloat(this.postPostage.replace(/,/g, '')) - parseFloat(this.selectedCard.money)
               cha = cha < 0 ? 0 : cha
-              self.payPrice = (cha + parseFloat(self.postage.replace(/,/g, ''))).toFixed(2)
+              this.payPrice = (cha + parseFloat(this.postPostage.replace(/,/g, ''))).toFixed(2)
               break
             }
           }

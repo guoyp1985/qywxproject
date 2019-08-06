@@ -135,7 +135,8 @@ export default {
         {name: '河南省', value: '410000'},
         {name: '湖北省', value: '420000'},
         {name: '湖南省', value: '430000'},
-        {name: '广东省', value: '450000'},
+        {name: '广东省', value: '440000'},
+        {name: '广西壮族自治区', value: '450000'},
         {name: '海南省', value: '460000'},
         {name: '重庆市', value: '500000'},
         {name: '四川省', value: '510000'},
@@ -170,28 +171,27 @@ export default {
       this.$vux.confirm.show({
         content: '确定要删除吗？',
         onConfirm: () => {
-          this.areaData.splice(index, 1)
-          // let deleteData = this.areaData[index]
-          // if (deleteData.id) {
-          //   this.$vux.loading.show()
-          //   this.$http.post(`${ENV.BokaApi}/api/delete/postage`, {
-          //     id: deleteData.id
-          //   }).then((res) => {
-          //     this.$vux.loading.hide()
-          //     let data = res.data
-          //     let error = data.flag ? '删除成功' : data.error
-          //     this.$vux.toast.show({
-          //       text: error,
-          //       type: data.flag ? 'success' : 'warn',
-          //       time: this.$util.delay(error)
-          //     })
-          //     if (data.flag) {
-          //       this.areaData.splice(index, 1)
-          //     }
-          //   })
-          // } else {
-          //   this.areaData.splice(index, 1)
-          // }
+          let deleteData = this.areaData[index]
+          if (deleteData.id) {
+            this.$vux.loading.show()
+            this.$http.post(`${ENV.BokaApi}/api/delete/postage`, {
+              id: deleteData.id
+            }).then((res) => {
+              this.$vux.loading.hide()
+              let data = res.data
+              let error = data.flag ? '删除成功' : data.error
+              this.$vux.toast.show({
+                text: error,
+                type: data.flag ? 'success' : 'warn',
+                time: this.$util.delay(error)
+              })
+              if (data.flag) {
+                this.areaData.splice(index, 1)
+              }
+            })
+          } else {
+            this.areaData.splice(index, 1)
+          }
         }
       })
     },
@@ -199,28 +199,27 @@ export default {
       this.$vux.confirm.show({
         content: '确定要删除吗？',
         onConfirm: () => {
-          this.sendData.splice(index, 1)
-          // let deleteData = this.sendData[index]
-          // if (deleteData.id) {
-          //   this.$vux.loading.show()
-          //   this.$http.post(`${ENV.BokaApi}/api/delete/postage`, {
-          //     id: deleteData.id
-          //   }).then((res) => {
-          //     this.$vux.loading.hide()
-          //     let data = res.data
-          //     let error = data.flag ? '删除成功' : data.error
-          //     this.$vux.toast.show({
-          //       text: error,
-          //       type: data.flag ? 'success' : 'warn',
-          //       time: this.$util.delay(error)
-          //     })
-          //     if (data.flag) {
-          //       this.sendData.splice(index, 1)
-          //     }
-          //   })
-          // } else {
-          //   this.sendData.splice(index, 1)
-          // }
+          let deleteData = this.sendData[index]
+          if (deleteData.id) {
+            this.$vux.loading.show()
+            this.$http.post(`${ENV.BokaApi}/api/delete/postage`, {
+              id: deleteData.id
+            }).then((res) => {
+              this.$vux.loading.hide()
+              let data = res.data
+              let error = data.flag ? '删除成功' : data.error
+              this.$vux.toast.show({
+                text: error,
+                type: data.flag ? 'success' : 'warn',
+                time: this.$util.delay(error)
+              })
+              if (data.flag) {
+                this.sendData.splice(index, 1)
+              }
+            })
+          } else {
+            this.sendData.splice(index, 1)
+          }
         }
       })
     },
@@ -251,6 +250,18 @@ export default {
           iscontinue = false
           break
         }
+        let isSame = false
+        for (let j = 0; j < this.areaData.length; j++) {
+          if (j !== i && this.areaData[i].province === this.areaData[j].province) {
+            this.$vux.toast.text('偏远地区不可重复', 'middle')
+            isSame = true
+            break
+          }
+        }
+        if (isSame) {
+          iscontinue = false
+          break
+        }
         if (isNaN(curPostage) || parseFloat(curPostage) <= 0) {
           this.$vux.toast.text('运费金额必须大于0', 'middle')
           iscontinue = false
@@ -272,10 +283,11 @@ export default {
           onHide: () => {
             this.submitIng = false
             if (data.flag === 1) {
-              this.areaObject = {}
-              for (let i = 0; i < this.areaData.length; i++) {
-                this.areaObject[this.areaData[i].province] = this.areaData[i]
-              }
+              this.refreshData()
+              // this.areaObject = {}
+              // for (let i = 0; i < this.areaData.length; i++) {
+              //   this.areaObject[this.areaData[i].province] = this.areaData[i]
+              // }
             }
           }
         })
@@ -308,6 +320,18 @@ export default {
           iscontinue = false
           break
         }
+        let isSame = false
+        for (let j = 0; j < this.sendData.length; j++) {
+          if (j !== i && this.sendData[i].province === this.sendData[j].province) {
+            this.$vux.toast.text('偏远地区不可重复', 'middle')
+            isSame = true
+            break
+          }
+        }
+        if (isSame) {
+          iscontinue = false
+          break
+        }
       }
       if (!iscontinue) return false
       this.submitIng = true
@@ -324,10 +348,11 @@ export default {
           onHide: () => {
             this.submitIng = false
             if (data.flag === 1) {
-              this.sendObject = {}
-              for (let i = 0; i < this.sendData.length; i++) {
-                this.sendObject[this.sendData[i].province] = this.sendData[i]
-              }
+              this.refreshData()
+              // this.sendObject = {}
+              // for (let i = 0; i < this.sendData.length; i++) {
+              //   this.sendObject[this.sendData[i].province] = this.sendData[i]
+              // }
             }
           }
         })
@@ -353,6 +378,13 @@ export default {
         }
       })
     },
+    refreshData () {
+      this.areaObject = {}
+      this.sendObject = {}
+      this.areaData = []
+      this.sendData = []
+      this.getData()
+    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$vux.loading.show()
@@ -364,11 +396,7 @@ export default {
       if (this.query.id) {
         this.moduleid = this.query.id
       }
-      this.areaObject = {}
-      this.sendObject = {}
-      this.areaData = []
-      this.sendData = []
-      this.getData()
+      this.refreshData()
     }
   },
   activated () {

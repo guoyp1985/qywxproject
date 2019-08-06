@@ -81,6 +81,8 @@ export default {
           for (let key in retdata) {
             self.getProfile[key] = retdata[key]
           }
+          let dstr = new Date().getTime()
+          self.getProfile.avatar = `${self.getProfile.avatar}?_dt=${dstr}`
           User.set({
             ...user,
             ...self.getProfile
