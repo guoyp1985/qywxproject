@@ -353,7 +353,6 @@ export default {
       this.$router.push({path: '/factoryProduct', query: params})
     },
     handleScroll (refname) {
-      console.log('-------滚动操作------')
       let swiperOuter = self.$refs['swiperOuter']
       swiperOuter.style.height = 100 + 'px'
       this.colCount = 5
@@ -380,11 +379,9 @@ export default {
         }
       }
       let scrollArea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
-      console.log(scrollArea)
       self.$util.scrollEvent({
         element: scrollArea,
         callback: function () {
-          console.log('-------里面的到底分页回调------')
           if (self.productData.length === (pageStart + 1) * limit) {
             pageStart++
             self.$vux.loading.show()
