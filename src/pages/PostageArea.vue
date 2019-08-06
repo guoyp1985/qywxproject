@@ -283,10 +283,11 @@ export default {
           onHide: () => {
             this.submitIng = false
             if (data.flag === 1) {
-              this.areaObject = {}
-              for (let i = 0; i < this.areaData.length; i++) {
-                this.areaObject[this.areaData[i].province] = this.areaData[i]
-              }
+              this.refreshData()
+              // this.areaObject = {}
+              // for (let i = 0; i < this.areaData.length; i++) {
+              //   this.areaObject[this.areaData[i].province] = this.areaData[i]
+              // }
             }
           }
         })
@@ -347,10 +348,11 @@ export default {
           onHide: () => {
             this.submitIng = false
             if (data.flag === 1) {
-              this.sendObject = {}
-              for (let i = 0; i < this.sendData.length; i++) {
-                this.sendObject[this.sendData[i].province] = this.sendData[i]
-              }
+              this.refreshData()
+              // this.sendObject = {}
+              // for (let i = 0; i < this.sendData.length; i++) {
+              //   this.sendObject[this.sendData[i].province] = this.sendData[i]
+              // }
             }
           }
         })
@@ -376,6 +378,13 @@ export default {
         }
       })
     },
+    refreshData () {
+      this.areaObject = {}
+      this.sendObject = {}
+      this.areaData = []
+      this.sendData = []
+      this.getData()
+    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$vux.loading.show()
@@ -387,11 +396,7 @@ export default {
       if (this.query.id) {
         this.moduleid = this.query.id
       }
-      this.areaObject = {}
-      this.sendObject = {}
-      this.areaData = []
-      this.sendData = []
-      this.getData()
+      this.refreshData()
     }
   },
   activated () {
