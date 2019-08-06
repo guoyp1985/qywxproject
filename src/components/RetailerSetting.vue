@@ -758,17 +758,10 @@ export default {
         self.$vux.toast.show({
           text: data.error,
           time: self.$util.delay(data.error),
-          onHide: function () {
+          onHide: () => {
             if (data.flag === 1) {
               if (self.query.minibackurl) {
-                let minibackurl = decodeURIComponent(self.query.minibackurl)
-                if (self.query.backtype === 'relaunch') {
-                  self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
-                } else if (self.query.backtype === 'redirect') {
-                  self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
-                } else {
-                  self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
-                }
+                self.$util.routerMiniUrl(self.query)
               } else {
                 self.$router.push({path: '/centerSeller', query: {uid: self.loginUser.uid}})
               }
