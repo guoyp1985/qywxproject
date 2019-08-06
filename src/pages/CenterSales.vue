@@ -30,6 +30,9 @@
       <template v-if="showFactory">
         <bind-factory :login-user="loginUser" :query="query"></bind-factory>
       </template>
+      <template v-if="showAgent">
+        <bind-agent :login-user="loginUser" :query="query"></bind-agent>
+      </template>
     </template>
     <open-vip v-if="showVip && retailerInfo.isretailer == 2" :retailer-info="retailerInfo" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
     <vip v-if="showVip && retailerInfo.isretailer == 1" :retailer-info="retailerInfo" @hide-vip="hideVip" @open-vip="openVip1"></vip>
@@ -41,6 +44,7 @@ import { Swiper, SwiperItem } from 'vux'
 import CenterSales from '@/components/CenterSales'
 import RetailerApply from '@/components/RetailerApply'
 import BindFactory from '@/components/BindFactory'
+import BindAgent from '@/components/BindAgent'
 import Subscribe from '@/components/Subscribe'
 import OpenVip from '@/components/OpenVip'
 import Vip from '@/components/Vip'
@@ -49,7 +53,7 @@ import { User, SystemParams } from '#/storage'
 
 export default {
   components: {
-    Swiper, SwiperItem, CenterSales, RetailerApply, Subscribe, Vip, OpenVip, BindFactory
+    Swiper, SwiperItem, CenterSales, RetailerApply, Subscribe, Vip, OpenVip, BindFactory, BindAgent
   },
   data () {
     return {
@@ -57,6 +61,7 @@ export default {
       showApply: false,
       afterApply: false,
       showFactory: false,
+      showAgent: false,
       selectedIndex: 0,
       retailerInfo: {},
       loginUser: null,
@@ -102,9 +107,11 @@ export default {
     },
     bindFactory () {
       if (this.query.fromapp === 'factory') {
-        this.$http.post(`${ENV.FactoryApi}/api/miniopen/bindRetailer`, {
-          uid: this.query.uid, wid: this.loginUser.uid
-        })
+        let params = {uid: this.query.uid, wid: this.loginUser.uid}
+        if (this.query.type === 'agent') {
+          params.agent = 1
+        }
+        this.$http.post(`${ENV.FactoryApi}/api/miniopen/bindRetailer`, params)
       }
     },
     applySuccess () {
@@ -112,7 +119,11 @@ export default {
       if (self.query.fromapp === 'factory') {
         this.initContainer()
         this.bindFactory()
-        this.showFactory = true
+        if (self.query.type === 'agent') {
+          self.showAgent = true
+        } else {
+          self.showFactory = true
+        }
         this.$vux.loading.hide()
       } else {
         if (self.query.minibackurl) {
@@ -168,7 +179,13 @@ export default {
             }
           })
         } else if (self.loginUser.isretailer === 1 || self.loginUser.isretailer === 2) {
-          self.bindFactory()
+          if (self.query.type === 'agent' && self.query.fromapp === 'factory') {
+            this.$http.post(`${ENV.BokaApi}/api/factory/applyAgent`, {
+              fid: this.query.fid, wid: this.query.uid
+            })
+          } else {
+            self.bindFactory()
+          }
           self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
             module: 'retailer', action: 'index'
           }).then(function (res) {
@@ -176,7 +193,11 @@ export default {
               self.initContainer()
               if (self.query.fromapp === 'factory') {
                 self.$vux.loading.hide()
-                self.showFactory = true
+                if (self.query.type === 'agent') {
+                  self.showAgent = true
+                } else {
+                  self.showFactory = true
+                }
               } else {
                 self.showCenter = true
                 let shareParams = {
@@ -223,6 +244,7 @@ export default {
       self.showCenter = false
       self.showApply = false
       this.showFactory = false
+      this.showAgent = false
       document.title = '卖家中心'
     },
     refresh (query) {

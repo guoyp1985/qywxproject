@@ -1,7 +1,7 @@
 /*
-* @description: 厂家介绍页
+* @description: 经销商介绍页
 * @auther: gyp
-* @created_date: 2019-02-12
+* @created_date: 2019-08-06
 */
 <template>
   <div class="containerarea font14 fd-page bg-white">
@@ -110,7 +110,7 @@
         </tab>
       </div>
     </div>
-    <router-link v-if="showEdit" :to="{path: '/sellerSetting', query: {fid: fid}}" class="fixed-layer flex_center">编辑</router-link>
+    <router-link v-if="showEdit" :to="{path: '/factorySetting', query: {fid: fid}}" class="fixed-layer flex_center">编辑</router-link>
     <div v-transfer-dom>
       <previewer :list="previewerPhotoarr" ref="previewer"></previewer>
     </div>

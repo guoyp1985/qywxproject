@@ -696,6 +696,9 @@ export default {
         if (self.$route.query.wid) {
           self.submitdata.wid = self.$route.query.wid
         }
+        if (self.$route.query.type === 'agent') {
+          self.submitdata.agent = 1
+        }
         if (self.query.share_uid) {
           self.submitdata.share_uid = self.query.share_uid
         }

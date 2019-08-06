@@ -150,6 +150,12 @@
           <span class="font15">{{$t('Factory introduction')}}</span>
         </div>
       </cell>
+      <cell :link="{path:'/sellerDetail'}" style="position:relative">
+        <div slot="icon" class="pr10"><i class="al al-kehu1 color-blue db-in font18"></i></div>
+        <div slot="inline-desc">
+          <span class="font15">经销商介绍</span>
+        </div>
+      </cell>
       <cell :link="{path:'/factoryReport', query:{fid: factoryInfo.id}}" style="position:relative">
         <div slot="icon" class="pr10"><i class="al al-zongshuju db-in font18" style="color:#efa42e;"></i></div>
         <div slot="inline-desc">

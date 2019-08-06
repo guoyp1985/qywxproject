@@ -15,7 +15,7 @@
             @on-cancel="onCancel1"
             ref="search">
           </search>
-          <template v-if="disSearchData">
+          <template v-if="disSearchList">
             <div class="flex_center" style="width:100%;height:44px;">搜索结果</div>
           </template>
           <template v-else>
@@ -26,10 +26,10 @@
         </div>
       </div>
       <div class="s-container scroll-container" style="top:99px;" ref="scrollContainer">
-        <template v-if="disSearchData">
-          <div class="swiper-inner" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',2)">
-            <template v-if="disTabData3">
-              <template v-if="!tabData3.length">
+        <template v-if="disSearchList">
+          <div class="swiper-inner" ref="searchScrollContainer" @scroll="handleSearchScroll('searchScrollContainer')">
+            <template v-if="disSearchData">
+              <template v-if="!searchData.length">
                 <div class="scroll_list">
                   <div class="emptyitem">
                     <div class="t-table" style="padding-top:20%;">
@@ -42,7 +42,7 @@
               </template>
               <template v-else>
                 <div class="scroll_list ">
-                  <div class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData3" :key="item.id" style="color:inherit;">
+                  <div class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in searchData" :key="item.id" style="color:inherit;">
                     <div class="t-table bg-white pl10 pr10 pt10 pb10 border-box">
                       <div class="t-cell v_middle w70">
                         <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
@@ -168,7 +168,100 @@
             </template>
           </div>
           <!-- 待审核卖家 -->
-          <div v-show="(selectedIndex == 2)" class="swiper-inner" ref="scrollContainer4" @scroll="handleScroll('scrollContainer4',3)">
+          <div v-show="(selectedIndex == 2)" class="swiper-inner" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',3)">
+            <template v-if="disTabData3">
+              <template v-if="!tabData3.length">
+                <div class="scroll_list">
+                  <div class="emptyitem">
+                    <div class="t-table" style="padding-top:20%;">
+                      <div class="t-cell padding10">
+                        <div>分享【厂家介绍】给好友，好友申请加盟即可成为兼职卖家帮你销售商品</div>
+                        <div class="color-blue"><router-link :to="{path: '/factoryDetail',query:{fid:fid}}">分享厂家介绍</router-link></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+              <template v-else>
+                <div class="scroll_list " >
+                  <div class="flex_around">
+                    <div class="doBtn" @click="allchoose()">全选</div>
+                    <div class="doBtn" @click="agree()">同意</div>
+                    <div class="doBtn" @click="refuse()">拒绝</div>
+                  </div>
+                  <div class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData3" :key="item.id" style="color:inherit;">
+                    <div class="t-table bg-white pl10 pr10 pt10 pb10 border-box">
+                      <div class="t-cell v_middle w70">
+                        <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                      </div>
+                      <div class="t-cell v_middle pr10" style="box-sizing:border-box;">
+                        <div class="clamp1 font16">{{item.linkman}}</div>
+                        <div class="clamp1 font12 color-gray" v-if="item.identity && item.identity != 'W'">卖家等级: {{item.identity}}</div>
+                        <div class="clamp1 font12 color-gray">店铺: {{item.title}}</div>
+                        <div class="clamp1 font12 color-gray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
+                        <div class="clamp1 font12 color-orange">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
+                      </div>
+                      <div class="align_right t-cell v_middle w80" >
+                        <input ref="inputCheckbox" type="checkbox" :value="item.uid" :data-uid="item.uid"/>
+                      </div>
+                		</div>
+                  </div>
+                </div>
+              </template>
+            </template>
+          </div>
+          <!-- 经销商 -->
+          <div v-show="(selectedIndex == 3)" class="swiper-inner" ref="scrollContainer4" @scroll="handleScroll('scrollContainer4',1)">
+            <template v-if="disTabData4">
+              <template v-if="!tabData4.length">
+                <div class="scroll_list">
+                  <div class="emptyitem">
+                    <div class="t-table" style="padding-top:20%;">
+                      <div class="t-cell padding10">
+                        <div>分享【厂家介绍】给好友，好友申请加盟即可成为兼职卖家帮你销售商品</div>
+                        <div class="color-blue"><router-link :to="{path: '/factoryDetail',query:{fid:fid}}">分享厂家介绍</router-link></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+              <template v-else>
+                <div class="pro_box bg-page list_shadow pl12 pr12 pb15 border-box">
+                  <div class="pro_list_top"></div>
+                  <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white font12" style="margin-top: -4px;">
+                    <div>什么是兼职卖家？</div>
+                    <div>指拥有自己的店铺，利用自己的客户群体兼职销售本厂家商品的卖家。</div>
+                    <div>如何发展兼职卖家？</div>
+                    <div>1、通过厂家介绍界面申请加盟的卖家即可成为兼职卖家。</div>
+                    <div>2、卖家通过渠道列表选择并加盟厂家商品时，即可成为兼职卖家。</div>
+                  </div>
+                </div>
+                <div class="scroll_list ">
+                  <div class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData4" :key="item.id" style="color:inherit;">
+                    <div class="t-table bg-white pl10 pr10 pt10 pb10 border-box">
+                      <div class="t-cell v_middle w70">
+                        <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                      </div>
+                      <div class="t-cell v_middle pr10" style="box-sizing:border-box;">
+                        <div class="clamp1 font16">{{item.linkman}}</div>
+                        <div class="clamp1 font12 color-gray" v-if="item.identity && item.identity != 'W'">卖家等级: {{item.identity}}</div>
+                        <div class="clamp1 font12 color-gray">店铺: {{item.title}}</div>
+                        <div class="clamp1 font12 color-gray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
+                        <div class="clamp1 font12 color-orange">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
+                      </div>
+                      <div class="align_right t-cell v_middle w80">
+                        <div class="btnicon bg-red color-white font12" @click="controlPopup1(item,index)">
+                          <i class="al al-asmkticon0165 v_middle"></i>
+                        </div>
+                      </div>
+                		</div>
+                  </div>
+                </div>
+              </template>
+            </template>
+          </div>
+          <!-- 待审核卖家 -->
+          <div v-show="(selectedIndex == 4)" class="swiper-inner" ref="scrollContainer5" @scroll="handleScroll('scrollContainer5',3)">
             <template v-if="disTabData5">
               <template v-if="!tabData5.length">
                 <div class="scroll_list">
@@ -380,19 +473,25 @@ export default {
       query: {},
       fid: 0,
       loginUser: {},
-      tabtxts: ['全职卖家', '兼职卖家', '待审核卖家'],
+      tabtxts: ['全职卖家', '兼职卖家', '待审核卖家', '经销商', '待审核经销商'],
       selectedIndex: 0,
       searchword1: '',
       searchword2: '',
       autofixed: false,
+      searchData: [],
       tabData1: [],
       tabData2: [],
       tabData3: [],
+      tabData4: [],
       tabData5: [],
+      disSearchData: false,
       disTabData1: false,
       disTabData2: false,
       disTabData3: false,
+      disTabData4: false,
       disTabData5: false,
+      userPpageStart: 0,
+      searchPageStart: 0,
       pageStart1: 0,
       pageStart2: 0,
       pageStart3: 0,
@@ -407,7 +506,7 @@ export default {
       levelData: [],
       levelName: {},
       selectLevel: null,
-      disSearchData: false,
+      disSearchList: false,
       showUploaderPopup: false,
       selectUploader: null,
       userData: [],
@@ -423,20 +522,18 @@ export default {
     },
     onCancel1 () {
       this.searchword1 = ''
-      this.disSearchData = false
+      this.disSearchList = false
     },
     onSubmit1 () {
       const kw = this.searchword1
-      // this.searchword1 = ''
-      // this.$router.push({path: '/SellerSearch', query: {fid: this.query.id, keyword: kw}})
       if (kw === '') {
-        this.disSearchData = false
+        this.disSearchList = false
       } else {
-        this.disSearchData = true
-        this.disTabData3 = false
-        this.tabData3 = []
-        this.pageStart3 = 0
-        this.getData3()
+        this.disSearchList = true
+        this.disSearchData = false
+        this.searchData = []
+        this.searchPageStart = 0
+        this.getSearchData()
       }
     },
     onChange2 (val) {
@@ -446,13 +543,13 @@ export default {
       this.searchword2 = ''
       this.disUserData = false
       this.userData = []
-      this.pageStart4 = 0
+      this.userPpageStart = 0
       this.searchUser()
     },
     onSubmit2 () {
       this.disUserData = false
       this.userData = []
-      this.pageStart4 = 0
+      this.userPpageStart = 0
       this.searchUser()
     },
     getPhoto (src) {
@@ -481,9 +578,24 @@ export default {
     closeQrcode () {
       this.showQrcode = false
     },
-    handleScroll: function (refname, index) {
+    handleSearchScroll (refname) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      self.$util.scrollEvent({
+        element: scrollarea,
+        callback: () => {
+          if (self.searchData.length === (self.searchPageStart + 1) * self.limit) {
+            self.searchPageStart++
+            self.$vux.loading.show()
+            self.getSearchData()
+          }
+        }
+      })
+    },
+    handleScroll: function (refname) {
+      const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      const index = this.selectedIndex
       self.$util.scrollEvent({
         element: scrollarea,
         callback: () => {
@@ -506,6 +618,12 @@ export default {
               self.getData3()
             }
           } else if (index === 3) {
+            if (self.tabData4.length === (self.pageStart4 + 1) * self.limit) {
+              self.pageStart4++
+              self.$vux.loading.show()
+              self.getData4()
+            }
+          } else if (index === 4) {
             if (self.tabData5.length === (self.pageStart5 + 1) * self.limit) {
               self.pageStart5++
               self.$vux.loading.show()
@@ -521,8 +639,8 @@ export default {
       self.$util.scrollEvent({
         element: scrollarea,
         callback: () => {
-          if (self.userData.length === (self.pageStart4 + 1) * self.limit) {
-            self.pageStart4++
+          if (self.userData.length === (self.userPpageStart + 1) * self.limit) {
+            self.userPpageStart++
             self.$vux.loading.show()
             self.searchUser()
           }
@@ -555,12 +673,29 @@ export default {
           }
           break
         case 2:
+          if (this.tabData3.length < this.limit) {
+            self.pageStart3 = 0
+            self.disTabData3 = false
+            this.tabData3 = []
+            self.getData3()
+          }
+          break
+        case 3:
+          if (this.tabData4.length < this.limit) {
+            self.pageStart4 = 0
+            self.disTabData4 = false
+            this.tabData4 = []
+            self.getData4()
+          }
+          break
+        case 4:
           if (this.tabData5.length < this.limit) {
             self.pageStart5 = 0
             self.disTabData5 = false
             this.tabData5 = []
             self.getData5()
           }
+          break
       }
     },
     controlPopup1 (item, index) {
@@ -715,10 +850,10 @@ export default {
             console.log('-------------')
             console.log(res)
             this.$vux.loading.hide()
-            this.disTabData5 = false
-            this.tabData5 = []
-            this.pageStart5 = 0
-            this.getData5()
+            this.disTabData3 = false
+            this.tabData3 = []
+            this.pageStart3 = 0
+            this.getData3()
           })
         }
       })
@@ -761,11 +896,11 @@ export default {
         console.log('-------------')
         console.log(res)
         this.$vux.loading.hide()
-        this.disTabData5 = false
-        this.tabData5 = []
-        this.pageStart5 = 0
+        this.disTabData3 = false
+        this.tabData3 = []
+        this.pageStart3 = 0
         this.refuseContent = ''
-        this.getData5()
+        this.getData3()
       })
     },
     submitLevel () {
@@ -785,7 +920,7 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              if (self.disSearchData) {
+              if (self.disSearchList) {
                 self.tabData3[self.clickIndex].level = self.selectLevel.id
               } else {
                 if (self.selectedIndex === 0) {
@@ -832,7 +967,7 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              if (self.disSearchData) {
+              if (self.disSearchList) {
                 self.tabData3[self.clickIndex].uploader = self.selectUploader.wid
                 self.tabData3[self.clickIndex].uploadname = self.selectUploader.linkman
               } else {
@@ -848,6 +983,23 @@ export default {
             }
           }
         })
+      })
+    },
+    getSearchData () {
+      const self = this
+      const params = {fid: self.query.id, pagestart: self.searchPageStart, limit: self.limit}
+      let keyword = self.searchword1
+      if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
+        params.keyword = keyword
+      }
+      self.$http.get(`${ENV.BokaApi}/api/factory/retailerList`, {
+        params: params
+      }).then(function (res) {
+        const data = res.data
+        self.$vux.loading.hide()
+        const retdata = data.data ? data.data : data
+        self.searchData = self.searchData.concat(retdata)
+        self.disSearchData = true
       })
     },
     getData1 (isone) {
@@ -886,21 +1038,38 @@ export default {
         self.disTabData2 = true
       })
     },
-    getData3 () {
+    getData3 (isone) {
       const self = this
-      const params = {fid: self.query.id, pagestart: self.pageStart3, limit: self.limit}
-      let keyword = self.searchword1
-      if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
-        params.keyword = keyword
+      let params = {fid: self.query.id, pagestart: self.pageStart3, limit: self.limit}
+      if (isone) {
+        params.pagestart = self.tabData3.length
+        params.limit = 1
       }
-      self.$http.get(`${ENV.BokaApi}/api/factory/retailerList`, {
-        params: params
-      }).then(function (res) {
-        const data = res.data
+      this.$http.post(`${ENV.BokaApi}/api/factory/getCensorRetailers`, params)
+      .then(res => {
         self.$vux.loading.hide()
+        const data = res.data
         const retdata = data.data ? data.data : data
         self.tabData3 = self.tabData3.concat(retdata)
         self.disTabData3 = true
+      })
+    },
+    getData4 (isone) {
+      const self = this
+      let params = {fid: self.query.id, fulltime: 2, pagestart: self.pageStart4, limit: self.limit}
+      if (isone) {
+        params.pagestart = self.tabData4.length
+        params.limit = 1
+      }
+      this.$http.get(`${ENV.BokaApi}/api/factory/retailerList`, {
+        params: params
+      })
+      .then(res => {
+        self.$vux.loading.hide()
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        self.tabData4 = self.tabData4.concat(retdata)
+        self.disTabData4 = true
       })
     },
     getData5 (isone) {
@@ -921,7 +1090,7 @@ export default {
     },
     searchUser () {
       const self = this
-      const params = {fid: self.query.id, pagestart: self.pageStart4, limit: self.limit}
+      const params = {fid: self.query.id, pagestart: self.userPpageStart, limit: self.limit}
       let keyword = self.searchword2
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         params.keyword = keyword
