@@ -1168,9 +1168,9 @@ export default {
             let levelpolicy = retdata.levelpolicy
             self.levelName = retdata.levelname
             self.levelData = []
-            for (let key in levelpolicy) {
-              self.levelData.push({id: key, money: levelpolicy[key], levelname: self.levelName[key]})
-            }
+            // for (let key in levelpolicy) {
+            //   self.levelData.push({id: key, money: levelpolicy[key], levelname: self.levelName[key]})
+            // }
             if (self.tabData1.length < self.limit) {
               self.disTabData1 = false
               self.tabData1 = []
@@ -1178,6 +1178,10 @@ export default {
               self.pageStart1 = 0
               self.getData1()
             }
+            return self.$http.post(`${ENV.BokaApi}/api/factory/getPolicy`)
+          }).then(res => {
+            const data = res.data
+            self.levelData = data.data ? data.data : data
           })
         }
       }

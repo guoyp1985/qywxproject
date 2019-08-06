@@ -5,40 +5,23 @@
     </template>
     <template v-if="showContainer">
       <div class="pagemiddle">
-        <div class="scroll_list" v-if="productData && productData.id">
-          <div class="scroll_item mb10 font14 bg-white db list-shadow " style="color:inherit;">
-            <div v-if="productData.moderate == 0" class="ico down"></div>
-            <div class="t-table bg-white pt10 pb10">
-              <div class="t-cell pl12 v_middle" style="width:110px;">
-                <img class="imgcover v_middle" :src="getPhoto(productData.photo)" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
-              </div>
-              <div class="t-cell v_middle">
-                <div class="clamp1 font16 pr10 color-lightgray">{{productData.title}}</div>
-                <div class="t-table pr12 border-box mt15">
-                  <div class="t-cell color-999 font14">
-                    <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ productData.price }}</span></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
         <div class="listarea">
           <div v-for="(item,index) in levelData" :key="index" class="itemarea">
             <div class="form-item">
               <div class="t-table">
-                <div class="t-cell title-cell w80 font14 v_middle bold">{{ index + 1 }}级经销商</div>
-              </div>
-            </div>
-            <div class="form-item">
-              <div class="t-table">
-                <div class="t-cell title-cell w80 font14 v_middle">价格</div>
+                <div class="t-cell title-cell w100 font14 v_middle">经销商名称<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
                 <div class="t-cell input-cell v_middle" style="position:relative;">
-                  <input v-model="item.money" type="text" class="input" placeholder="价格" />
+                  <input v-model="item.levelname" type="text" class="input" placeholder="经销商名称" />
                 </div>
               </div>
             </div>
+            <div class="flex_right padding10" v-if="index > 0 && item.isAdd">
+              <div class="db-in color-red" @click="deleteItem(index)">删除</div>
+            </div>
           </div>
+        </div>
+        <div class="padding10 flex_center">
+          <div class="qbtn bg-green color-white" @click="addItem">添加一项</div>
         </div>
       </div>
       <div class="pagebottom flex_center pl12 pr12 list-shadow02 bg-white">
@@ -67,86 +50,79 @@ export default {
       showContainer: false,
       query: {},
       loginUser: {},
-      productData: {},
-      levelData: [{money: ''}, {money: ''}, {money: ''}, {money: ''}],
-      isSubmitIng: false
+      levelData: []
     }
   },
   methods: {
     initData () {
-      this.isSubmitIng = false
-      this.productData = {}
-      this.levelData = [{money: ''}, {money: ''}, {money: ''}, {money: ''}]
+      this.levelData = []
     },
-    getPhoto (src) {
-      return this.$util.getPhoto(src)
+    addItem () {
+      const self = this
+      self.levelData.push({levelname: '', money: '', isAdd: true})
+    },
+    deleteItem (index) {
+      const self = this
+      self.$vux.confirm.show({
+        content: '确定要删除该项吗？',
+        onConfirm () {
+          self.levelData.splice(index, 1)
+        }
+      })
     },
     submitEvent () {
       const self = this
-      if (this.isSubmitIng) return false
+      if (self.levelData.length === 0) {
+        self.$vux.toast.text('请添加经销商等级', 'middle')
+        return false
+      }
       let iscontinue = true
-      let agentfee = []
+      let levelname = {}
+      let salesmoney = {}
+      let tipTxt = ''
       for (let i = 0; i < self.levelData.length; i++) {
-        let curmoney = self.levelData[i].money
-        if (self.$util.trim(curmoney) === '') {
-          agentfee.push('')
-        } else if (isNaN(curmoney)) {
+        if (self.$util.trim(self.levelData[i].levelname) === '') {
           iscontinue = false
-          self.$vux.toast.text('请输入正确的经销商价格', 'middle')
-          break
-        } else if (isNaN(curmoney) || parseFloat(curmoney.replace(/,/g, '')) < 0) {
-          iscontinue = false
-          self.$vux.toast.text('经销商价格不能小于0', 'middle')
-          break
-        } else if (parseFloat(curmoney.replace(/,/g, '')) > parseFloat(this.productData.price.replace(/,/g, ''))) {
-          iscontinue = false
-          self.$vux.toast.text('经销商价格不能大于商品价格', 'middle')
+          self.$vux.toast.text('必填项不能为空', 'middle')
           break
         } else {
-          agentfee.push(curmoney.replace(/,/g, ''))
+          let level = i + 1
+          levelname[level] = self.levelData[i].levelname
+          salesmoney[level] = ''
         }
       }
       if (!iscontinue) {
+        self.$vux.toast.text(tipTxt, 'middle')
         return false
       }
-      this.isSubmitIng = true
-      let postData = {agentfee: agentfee, id: this.query.pid}
-      if (this.query.fid) {
-        postData.fid = this.query.fid
-      }
-      self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/factory/addAgentFee`, postData).then(res => {
-        this.isSubmitIng = false
-        self.$vux.loading.hide()
-        let data = res.data
-        self.$vux.toast.show({
-          text: data.error,
-          type: data.flag === 1 ? 'success' : 'warn',
-          time: self.$util.delay(data.error)
-        })
+      self.$vux.confirm.show({
+        content: '等级创建成功后，只能修改不能删除，确定保存吗？',
+        onConfirm () {
+          // let postData = { fid: self.query.id, salesmoney: salesmoney, levelname: levelname }
+          let postData = { fid: self.query.id, levelname: levelname }
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/factory/addPolicy`, postData).then(function (res) {
+            self.$vux.loading.hide()
+            let data = res.data
+            self.$vux.toast.show({
+              text: data.error,
+              type: data.flag === 1 ? 'success' : 'warn',
+              time: self.$util.delay(data.error)
+            })
+          })
+        }
       })
     },
     getData () {
       const self = this
-      self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
-        params: {id: self.query.pid, module: 'factoryproduct'}
+      self.$http.post(`${ENV.BokaApi}/api/factory/getPolicy`, {
+        fid: self.query.fid
       }).then(res => {
         const data = res.data
-        if (data.flag) {
-          this.productData = data.data
-          let postParams = {id: this.query.pid}
-          if (this.query.fid) {
-            postParams.fid = this.query.fid
-          }
-          return self.$http.post(`${ENV.BokaApi}/api/factory/getAgentFee`, postParams)
-        }
-      }).then(res => {
-        const data = res.data
-        const retdata = data.data
-        if (data.flag) {
-          for (let key in retdata.agentfee) {
-            this.levelData[key - 1].money = retdata.agentfee[key]
-          }
+        const retdata = data.data ? data.data : data
+        this.levelData = []
+        for (let key in retdata) {
+          this.levelData.push({levelname: retdata[key]})
         }
       })
     },
@@ -171,9 +147,11 @@ export default {
           self.showSos = false
           self.showContainer = true
           this.$vux.loading.hide()
-          this.initData()
-          this.query = this.$route.query
-          this.getData()
+          if (this.query.id !== this.$route.query.id) {
+            this.initData()
+            this.query = this.$route.query
+            this.getData()
+          }
         }
       }
     }
