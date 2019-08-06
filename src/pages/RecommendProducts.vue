@@ -191,11 +191,12 @@ export default {
   methods: {
     hideMenu () {
       this.menuFlag = !this.menuFlag
-      if (this.menuFlag) {
-        this.flagTxt = '收起'
-      } else {
-        this.flagTxt = '展开'
-      }
+      this.menuFlag ? this.flagTxt = '收起' : this.flagTxt = '展开'
+      // if (this.menuFlag) {
+      //   this.flagTxt = '收起'
+      // } else {
+      //   this.flagTxt = '展开'
+      // }
     },
     closeSubscribe () {
       this.showSubscribe = false
