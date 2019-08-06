@@ -118,7 +118,7 @@
           <x-button v-if="orderData.flag == 1" mini @click.native="cancel" class="font12">取消订单</x-button>
           <x-button v-if="orderData.flag == 1 && orderData.payorder == '' && query.fromapp != 'factory'" :link="{path: '/pay', query: {id: orderData.id}}" mini class="font12">去支付</x-button>
           <x-button v-if="orderData.flag == 2 && orderData.canback && orderData.backflag != 20" mini @click.native="refund" class="font12">申请退款</x-button>
-          <x-button v-if="orderData.canservice && query.from != 'wl'" mini @click.native="afterSale" class="font12">申请售后</x-button>
+          <x-button v-if="orderData.canservice && query.fromapp != 'wl'" mini @click.native="afterSale" class="font12">申请售后</x-button>
           <x-button v-if="orderData.flag == 3" mini @click.native="confirm" class="font12">确认收货</x-button>
           <x-button v-if="orderData.flag == 4" mini @click.native="evaluate" class="font12">评价</x-button>
         </div>
