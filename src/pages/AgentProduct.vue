@@ -149,8 +149,8 @@ export default {
           this.levelData = []
           for (let key in retdata) {
             this.levelName.push(retdata[key])
-            this.levelData.push({levelname: retdata[key]})
           }
+          console.log(this.levelData)
           let postParams = {id: this.query.pid}
           if (this.query.fid) {
             postParams.fid = this.query.fid
@@ -162,8 +162,10 @@ export default {
           const data = res.data
           const retdata = data.data
           if (data.flag) {
-            for (let key in retdata.agentfee) {
-              this.levelData[key - 1].money = retdata.agentfee[key]
+            let agentfee = retdata.agentfee
+            for (let key in agentfee) {
+              const index = key - 1
+              this.levelData.push({levelname: this.levelName[index], money: agentfee[key]})
             }
             console.log(this.levelData)
           }
