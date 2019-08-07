@@ -301,7 +301,7 @@ export default {
                   self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
                 }
               } else {
-                self.$router.push({path: '/sellerDetail', query: {fid: self.query.fid}})
+                self.$router.push({path: '/agentDetail', query: {fid: self.query.fid}})
               }
             }
           }

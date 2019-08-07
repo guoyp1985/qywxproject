@@ -74,7 +74,7 @@
           </grid-item>
         </div>
         <div class="gridlist">
-          <grid-item :label="$t('Level')" :link="{path:`/agentLevel?id=${factoryInfo.id}`}" style="position:relative;">
+          <grid-item label="经销商等级" :link="{path:`/agentLevel?id=${factoryInfo.id}`}" style="position:relative;">
             <div slot="icon">
               <i class="al al-dengji"></i>
             </div>
@@ -150,7 +150,7 @@
           <span class="font15">{{$t('Factory introduction')}}</span>
         </div>
       </cell>
-      <cell :link="{path:'/sellerDetail'}" style="position:relative">
+      <cell :link="{path:'/agentDetail'}" style="position:relative">
         <div slot="icon" class="pr10"><i class="al al-kehu1 color-blue db-in font18"></i></div>
         <div slot="inline-desc">
           <span class="font15">经销商介绍</span>

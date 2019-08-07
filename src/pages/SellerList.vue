@@ -218,24 +218,14 @@
                   <div class="emptyitem">
                     <div class="t-table" style="padding-top:20%;">
                       <div class="t-cell padding10">
-                        <div>分享【厂家介绍】给好友，好友申请加盟即可成为兼职卖家帮你销售商品</div>
-                        <div class="color-blue"><router-link :to="{path: '/factoryDetail',query:{fid:fid}}">分享厂家介绍</router-link></div>
+                        <div>分享【经销商介绍】给好友，好友申请加盟即可成为经销商</div>
+                        <div class="color-blue"><router-link :to="{path: '/factoryDetail',query:{fid:fid}}">经销商介绍</router-link></div>
                       </div>
                     </div>
                   </div>
                 </div>
               </template>
               <template v-else>
-                <div class="pro_box bg-page list_shadow pl12 pr12 pb15 border-box">
-                  <div class="pro_list_top"></div>
-                  <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white font12" style="margin-top: -4px;">
-                    <div>什么是兼职卖家？</div>
-                    <div>指拥有自己的店铺，利用自己的客户群体兼职销售本厂家商品的卖家。</div>
-                    <div>如何发展兼职卖家？</div>
-                    <div>1、通过厂家介绍界面申请加盟的卖家即可成为兼职卖家。</div>
-                    <div>2、卖家通过渠道列表选择并加盟厂家商品时，即可成为兼职卖家。</div>
-                  </div>
-                </div>
                 <div class="scroll_list ">
                   <div class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData4" :key="item.id" style="color:inherit;">
                     <div class="t-table bg-white pl10 pr10 pt10 pb10 border-box">
@@ -244,10 +234,7 @@
                       </div>
                       <div class="t-cell v_middle pr10" style="box-sizing:border-box;">
                         <div class="clamp1 font16">{{item.linkman}}</div>
-                        <div class="clamp1 font12 color-gray" v-if="item.identity && item.identity != 'W'">卖家等级: {{item.identity}}</div>
-                        <div class="clamp1 font12 color-gray">店铺: {{item.title}}</div>
-                        <div class="clamp1 font12 color-gray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
-                        <div class="clamp1 font12 color-orange">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
+                        <div class="clamp1 font12 color-gray">级别: {{item.levelname}}</div>
                       </div>
                       <div class="align_right t-cell v_middle w80">
                         <div class="btnicon bg-red color-white font12" @click="controlPopup1(item,index)">
@@ -268,8 +255,8 @@
                   <div class="emptyitem">
                     <div class="t-table" style="padding-top:20%;">
                       <div class="t-cell padding10">
-                        <div>分享【厂家介绍】给好友，好友申请加盟即可成为兼职卖家帮你销售商品</div>
-                        <div class="color-blue"><router-link :to="{path: '/factoryDetail',query:{fid:fid}}">分享厂家介绍</router-link></div>
+                        <div>分享【经销商介绍】给好友，好友申请加盟即可成为经销商</div>
+                        <div class="color-blue"><router-link :to="{path: '/agentDetail',query:{fid:fid}}">经销商介绍</router-link></div>
                       </div>
                     </div>
                   </div>
@@ -289,10 +276,6 @@
                       </div>
                       <div class="t-cell v_middle pr10" style="box-sizing:border-box;">
                         <div class="clamp1 font16">{{item.linkman}}</div>
-                        <div class="clamp1 font12 color-gray" v-if="item.identity && item.identity != 'W'">卖家等级: {{item.identity}}</div>
-                        <div class="clamp1 font12 color-gray">店铺: {{item.title}}</div>
-                        <div class="clamp1 font12 color-gray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
-                        <div class="clamp1 font12 color-orange">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
                       </div>
                       <div class="align_right t-cell v_middle w80" >
                         <input ref="inputCheckbox" type="checkbox" :value="item.uid" :data-uid="item.uid"/>
@@ -312,8 +295,8 @@
               <div class="item" v-if="clickData.identity == 'D'">
                 <div class="inner" @click="clickPopup('up')">升级到C</div>
               </div>
-              <div class="item" >
-                <div class="inner" @click="clickPopup('level')">更改等级</div>
+              <div class="item" v-if="selectedIndex == 3">
+                <div class="inner" @click="clickPopup('level')">更改级别</div>
               </div>
               <div class="item" >
                 <div class="inner" @click="clickPopup('uploader')">更改推荐人</div>
@@ -356,7 +339,7 @@
       <div v-transfer-dom class="x-popup">
         <popup v-model="showLevelPopup" height="100%">
           <div class="popup1">
-            <div class="popup-top flex_center">设置代理级别</div>
+            <div class="popup-top flex_center">更改经销商级别</div>
             <div class="popup-middle font14">
               <div class="pt10 pb10 scroll_list">
                 <div v-for="(item,index) in levelData" :key="index" class="scroll_item">
@@ -364,7 +347,6 @@
                     <div class="t-table">
                       <div class="t-cell v_middle" style="color:inherit;">
                         <div class="clamp1 font14 color-999">等级名称: {{item.levelname}}</div>
-                        <div class="clamp1 font14 color-999">销售额: {{ $t('RMB') }}{{item.money}}</div>
                       </div>
                     </div>
                   </check-icon>
@@ -516,7 +498,8 @@ export default {
       disUserData: false,
       idArr: [],
       refuseContent: '',
-      showRefuseModal: false
+      showRefuseModal: false,
+      levelPolicy: {}
     }
   },
   methods: {
@@ -942,13 +925,11 @@ export default {
           onHide: function () {
             if (data.flag === 1) {
               if (self.disSearchList) {
-                self.tabData3[self.clickIndex].level = self.selectLevel.id
+                self.searchData[self.clickIndex].level = self.selectLevel.id
+                self.searchData[self.clickIndex].levelname = self.levelPolicy[self.selectLevel.id]
               } else {
-                if (self.selectedIndex === 0) {
-                  self.tabData1[self.clickIndex].level = self.selectLevel.id
-                } else {
-                  self.tabData2[self.clickIndex].level = self.selectLevel.id
-                }
+                self.tabData4[self.clickIndex].level = self.selectLevel.id
+                self.tabData4[self.clickIndex].levelname = self.levelPolicy[self.selectLevel.id]
               }
               self.showLevelPopup = false
             }
@@ -1165,7 +1146,6 @@ export default {
             self.$vux.loading.hide()
             let data = res.data
             let retdata = data.data ? data.data : data
-            let levelpolicy = retdata.levelpolicy
             self.levelName = retdata.levelname
             self.levelData = []
             // for (let key in levelpolicy) {
@@ -1181,7 +1161,11 @@ export default {
             return self.$http.post(`${ENV.BokaApi}/api/factory/getPolicy`)
           }).then(res => {
             const data = res.data
-            self.levelData = data.data ? data.data : data
+            const retdata = data.data ? data.data : data
+            this.levelPolicy = retdata
+            for (let key in retdata) {
+              self.levelData.push({id: key, key: key, levelname: retdata[key]})
+            }
           })
         }
       }
