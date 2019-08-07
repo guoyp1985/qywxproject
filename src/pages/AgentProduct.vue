@@ -70,7 +70,8 @@ export default {
       productData: {},
       levelData: [],
       levelName: [],
-      isSubmitIng: false
+      isSubmitIng: false,
+      levelPolicy: {}
     }
   },
   methods: {
@@ -146,6 +147,7 @@ export default {
         if (res) {
           const data = res.data
           const retdata = data.data ? data.data : data
+          this.levelPolicy = retdata
           this.levelData = []
           for (let key in retdata) {
             this.levelName.push(retdata[key])
@@ -163,11 +165,14 @@ export default {
           const retdata = data.data
           if (data.flag) {
             let agentfee = retdata.agentfee
-            for (let key in agentfee) {
+            for (let key in this.levelPolicy) {
               const index = key - 1
-              this.levelData.push({levelname: this.levelName[index], money: agentfee[key]})
+              let addp = {levelname: this.levelName[index], money: ''}
+              if (agentfee[key]) {
+                addp.money = agentfee[key]
+              }
+              this.levelData.push(addp)
             }
-            console.log(this.levelData)
           }
         }
       })
