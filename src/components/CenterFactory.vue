@@ -74,7 +74,7 @@
           </grid-item>
         </div>
         <div class="gridlist">
-          <grid-item :label="$t('Level')" :link="{path:`/agentLevel?id=${factoryInfo.id}`}" style="position:relative;">
+          <grid-item label="经销商等级" :link="{path:`/agentLevel?id=${factoryInfo.id}`}" style="position:relative;">
             <div slot="icon">
               <i class="al al-dengji"></i>
             </div>
