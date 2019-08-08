@@ -9,7 +9,7 @@
           <div v-for="(item,index) in levelData" :key="index" class="itemarea">
             <div class="form-item">
               <div class="t-table">
-                <div class="t-cell title-cell w100 font14 v_middle">经销商名称<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
+                <div class="t-cell title-cell w100 font14 v_middle">等级名称<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
                 <div class="t-cell input-cell v_middle" style="position:relative;">
                   <x-input v-model="item.levelname" type="text" class="input" placeholder="经销商名称" ></x-input>
                 </div>
