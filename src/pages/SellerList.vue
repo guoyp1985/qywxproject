@@ -1018,10 +1018,6 @@ export default {
           params.agent = 1
           break
       }
-      console.log('------请求路径-----')
-      console.log(`${ENV.BokaApi}/${url}`)
-      console.log('-----params------')
-      console.log(params)
       if (self.selectedIndex === 0 || self.selectedIndex === 1 || self.selectedIndex === 3) {
         self.$http.get(`${ENV.BokaApi}/${url}`, {
           params: params
