@@ -835,7 +835,7 @@ export default {
               break
             }
           }
-          if (this.query.wid) {
+          if (this.query.wid && !this.query.ordertype) {
             this.$http.get(`${ENV.BokaApi}/api/getUser/${this.query.wid}`).then(res => {
               this.sellerUser = res.data
             })
