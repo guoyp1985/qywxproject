@@ -342,8 +342,8 @@ clearCache()
 
 // 页面入口
 if (!Token.get() || Token.isExpired()) {
-  alert('页面入口')
   access(path => {
+    alert('path')
     console.log(`Entry: ${path}`)
     router.push({path: path})
     render()
