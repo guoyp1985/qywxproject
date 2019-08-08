@@ -242,7 +242,6 @@ const access = success => {
   //   )
   // } else
   if (from === 'miniprogram') {
-    alert('进入到了miniprogram')
     // if (miniAppId && miniAppId !== '') {
     //   const redirectUri = location.href.replace(/(?:&from=miniprogram)|(?:from=miniprogram&)/g, '')
     //   const originHref = encodeURIComponent(redirectUri)
