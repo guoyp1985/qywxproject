@@ -21,7 +21,7 @@
               v-model="item.content"
               style="padding:5px;"
               class="x-textarea noborder"
-              placeholder="可输入品牌介绍、加盟优势、加盟案例等内容，吸引更多卖家加盟"
+              placeholder="经销商介绍"
               :show-counter="false"
               :rows="1"
               @on-change="textareaChange(`contentTextarea${index+1}`, index)"
@@ -269,9 +269,9 @@ export default {
       }
       self.$vux.loading.show()
       if (conArr.length > 0) {
-        this.submitdata.content = JSON.stringify(conArr)
+        this.submitdata.agentcontent = JSON.stringify(conArr)
       } else {
-        this.submitdata.content = ''
+        this.submitdata.agentcontent = ''
       }
       self.$http.post(`${ENV.BokaApi}/api/factory/add`, {
         ...self.submitdata, id: self.query.fid
@@ -322,7 +322,7 @@ export default {
         this.submitdata.title = this.factoryInfo.title
         this.submitdata.photo = this.factoryInfo.photo
         this.submitdata.content = this.factoryInfo.content
-        let content = this.factoryInfo.content
+        let content = this.factoryInfo.agentcontent
         if (content && content !== '') {
           this.contentArr = JSON.parse(content)
         }

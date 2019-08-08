@@ -4,7 +4,7 @@
 * @created_date: 2019-08-06
 */
 <template>
-  <div class="containerarea font14 fd-page bg-white">
+  <div class="containerarea font14 agent-detail-page bg-white nobottom">
     <div class="pagetop flex_center b_bottom_after">
       <div class="flex_cell flex_left">
         <div class="flex_left" style="width:45px;" v-if="factoryInfo.photo && factoryInfo.photo != ''">
@@ -22,24 +22,22 @@
       </div>
     </div>
     <div class="pagemiddle">
-      <div v-if="(selectedIndex == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', 0)">
-        <template v-if="factoryInfo.id">
-          <div v-if="!contentArr.length" class="flex_empty">
-            <div>
-              <div class="align_center">经销介绍，正在路上</div>
-              <router-link v-if="showEdit" :to="{path: '/agentSetting', query: {fid: fid}}" class="align_center mt10 color-blue db">设置经销介绍</router-link>
-            </div>
+      <template v-if="factoryInfo.id">
+        <div v-if="!contentArr.length" class="flex_empty">
+          <div>
+            <div class="align_center">经销商介绍，正在路上</div>
+            <router-link v-if="showEdit" :to="{path: '/agentSetting', query: {fid: fid}}" class="align_center mt10 color-blue db">设置经销商介绍</router-link>
           </div>
-          <div v-else v-for="(item,index1) in contentArr" :key="index1">
-            <div class="padding10" v-html="item.content"></div>
-            <div class="flex_center" v-for="(photo,index2) in item.photoarr" :key="index2">
-              <img :src="photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" @click="viewBigImg(index2,index1)"/>
-            </div>
+        </div>
+        <div v-else v-for="(item,index1) in contentArr" :key="index1">
+          <div class="padding10" v-html="item.content"></div>
+          <div class="flex_center" v-for="(photo,index2) in item.photoarr" :key="index2">
+            <img :src="photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" @click="viewBigImg(index2,index1)"/>
           </div>
-        </template>
-      </div>
+        </div>
+      </template>
     </div>
-    <router-link v-if="showEdit" :to="{path: '/factorySetting', query: {fid: fid}}" class="fixed-layer flex_center">编辑</router-link>
+    <router-link v-if="showEdit" :to="{path: '/agentSetting', query: {fid: fid}}" class="fixed-layer flex_center">编辑</router-link>
     <div v-transfer-dom>
       <previewer :list="previewerPhotoarr" ref="previewer"></previewer>
     </div>
@@ -208,62 +206,6 @@ export default {
         }
       })
     },
-    getProduct () {
-      const self = this
-      const params = { fid: self.fid, pagestart: self.pagestart1, limit: self.limit, wid: this.loginUser.uid }
-      this.$http.get(`${ENV.BokaApi}/api/list/factoryproduct`, {
-        params: params
-      })
-      .then(res => {
-        self.$vux.loading.hide()
-        const data = res.data
-        const retdata = data.data ? data.data : data
-        self.productData = self.productData.concat(retdata)
-        self.disProductData = true
-      })
-    },
-    getNews () {
-      const self = this
-      const params = { fid: self.fid, pagestart: self.pagestart2, limit: self.limit, wid: this.loginUser.uid }
-      self.$http.get(`${ENV.BokaApi}/api/list/factorynews`, {
-        params: params
-      }).then(function (res) {
-        self.$vux.loading.hide()
-        const data = res.data
-        const retdata = data.data ? data.data : data
-        self.newsData = self.newsData.concat(retdata)
-        self.disNewsData = true
-      })
-    },
-    clickTab () {
-      this.swiperChange()
-    },
-    swiperChange (index) {
-      const self = this
-      if (index !== undefined) {
-        this.selectedIndex = index
-      }
-      switch (this.selectedIndex) {
-        case 0:
-          break
-        case 1:
-          if (this.productData.length < this.limit) {
-            self.pagestart1 = 0
-            self.disProductData = false
-            self.productData = []
-            self.getProduct()
-          }
-          break
-        case 2:
-          if (this.newsData.length < this.limit) {
-            self.pagestart2 = 0
-            self.disNewsData = false
-            self.newsData = []
-            self.getNews()
-          }
-          break
-      }
-    },
     getDateState (dt) {
       return this.$util.getDateState(dt)
     },
@@ -271,20 +213,6 @@ export default {
       let ret = this.$util.getDateClass(dt)
       ret = `${ret} mr5`
       return ret
-    },
-    getData () {
-      const self = this
-      const params = { pagestart: this.pagestart, limit: this.limit }
-      this.$http.get(`${ENV.BokaApi}/api/user/creditsList`, {
-        params: params
-      })
-      .then(res => {
-        self.$vux.loading.hide()
-        let data = res.data
-        let retdata = data.data ? data.data : data
-        self.list = self.list.concat(retdata)
-        self.disList = true
-      })
     },
     init () {
     },
@@ -337,7 +265,7 @@ export default {
         const data = res.data
         this.factoryInfo = data.data
         document.title = this.factoryInfo.title
-        let content = this.factoryInfo.content
+        let content = this.factoryInfo.agentcontent
         if (content && content !== '') {
           this.contentArr = JSON.parse(content)
         }
@@ -388,7 +316,7 @@ export default {
 </script>
 
 <style lang="less">
-.fd-page{
+.agent-detail-page{
   .pagetop{
     height:60px;padding-left:10px;box-sizing: border-box;box-shadow: 0 1px 5px 0px #e4e4e4;
     .box-area{
