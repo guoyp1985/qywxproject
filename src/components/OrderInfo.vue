@@ -54,7 +54,7 @@
           <span class="v_middle font12 color-gray" v-if="item.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
           <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ item.postage }} )</span>
         </template>
-        <template v-if="item.carddeduct > 0">
+        <template v-if="item.carddeduct && item.carddeduct != '0' && item.carddeduct != '0.00'">
           <span class="v_middle font12 color-gray">优惠券抵扣: {{ $t('RMB') }}{{ item.carddeduct }}</span>
         </template>
       </div>
