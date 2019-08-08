@@ -836,7 +836,9 @@ export default {
           if (this.selectedIndex === 4) {
             postParams.agent = 1
           }
-          this.$http.post(`${ENV.BokaApi}/api/factory/censorRetailer`, postParams).then((res) => {
+          this.$http.get(`${ENV.BokaApi}/api/factory/censorRetailer`, {
+            params: postParams
+          }).then((res) => {
             console.log('-------------')
             console.log(res)
             this.$vux.loading.hide()
@@ -891,7 +893,9 @@ export default {
       if (this.selectedIndex === 4) {
         postParams.agent = 1
       }
-      this.$http.post(`${ENV.BokaApi}/api/factory/censorRetailer`, postParams).then((res) => {
+      this.$http.post(`${ENV.BokaApi}/api/factory/censorRetailer`, {
+        params: postParams
+      }).then((res) => {
         console.log('-------------')
         console.log(res)
         this.$vux.loading.hide()
