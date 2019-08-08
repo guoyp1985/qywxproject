@@ -80,7 +80,6 @@ export default {
       let iscontinue = true
       let levelname = {}
       let salesmoney = {}
-      let tipTxt = ''
       for (let i = 0; i < self.levelData.length; i++) {
         if (self.$util.trim(self.levelData[i].levelname) === '') {
           iscontinue = false
@@ -93,7 +92,6 @@ export default {
         }
       }
       if (!iscontinue) {
-        self.$vux.toast.text(tipTxt, 'middle')
         return false
       }
       self.$vux.confirm.show({
