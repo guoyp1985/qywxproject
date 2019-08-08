@@ -180,7 +180,6 @@ Vue.http.interceptors.response.use(response => {
 })
 
 const access = success => {
-  alert ('in access')
   let query = ''
   const url = location.href
               .replace(/(.+?\/)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
@@ -197,6 +196,7 @@ const access = success => {
   const code = lUrl.query.code
   const state = lUrl.query.state
   const from = lUrl.query.from
+  alert (state)
   // const miniHeight = parseInt(lUrl.query.miniHeight)
   // const miniAppId = lUrl.query.miniappid
   // const miniOpenId = lUrl.query.miniopenid
