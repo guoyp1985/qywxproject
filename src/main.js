@@ -168,6 +168,7 @@ Vue.http.interceptors.response.use(response => {
   return response
 }, error => {
   if (error.response) {
+    alert('未授权请求')
     if (error.response.status === 401) {
       console.error('未授权请求')
       Vue.access(isPC => {
