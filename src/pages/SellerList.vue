@@ -893,7 +893,7 @@ export default {
       if (this.selectedIndex === 4) {
         postParams.agent = 1
       }
-      this.$http.post(`${ENV.BokaApi}/api/factory/censorRetailer`, {
+      this.$http.get(`${ENV.BokaApi}/api/factory/censorRetailer`, {
         params: postParams
       }).then((res) => {
         console.log('-------------')
@@ -1022,26 +1022,15 @@ export default {
           params.agent = 1
           break
       }
-      if (self.selectedIndex === 0 || self.selectedIndex === 1 || self.selectedIndex === 3) {
-        self.$http.get(`${ENV.BokaApi}/${url}`, {
-          params: params
-        }).then(function (res) {
-          const data = res.data
-          self.$vux.loading.hide()
-          const retdata = data.data ? data.data : data
-          self.searchData = self.searchData.concat(retdata)
-          self.disSearchData = true
-        })
-      }
-      if (self.selectedIndex === 2 || self.selectedIndex === 4) {
-        self.$http.post(`${ENV.BokaApi}/${url}`, params).then(function (res) {
-          const data = res.data
-          self.$vux.loading.hide()
-          const retdata = data.data ? data.data : data
-          self.searchData = self.searchData.concat(retdata)
-          self.disSearchData = true
-        })
-      }
+      self.$http.get(`${ENV.BokaApi}/${url}`, {
+        params: params
+      }).then(function (res) {
+        const data = res.data
+        self.$vux.loading.hide()
+        const retdata = data.data ? data.data : data
+        self.searchData = self.searchData.concat(retdata)
+        self.disSearchData = true
+      })
     },
     getData1 (isone) {
       const self = this
@@ -1122,7 +1111,9 @@ export default {
         params.pagestart = self.tabData5.length
         params.limit = 1
       }
-      this.$http.post(`${ENV.BokaApi}/api/factory/getCensorRetailers`, params)
+      this.$http.get(`${ENV.BokaApi}/api/factory/getCensorRetailers`, {
+        params: params
+      })
       .then(res => {
         self.$vux.loading.hide()
         const data = res.data
