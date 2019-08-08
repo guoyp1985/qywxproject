@@ -621,6 +621,9 @@ export default {
         if (self.selectedCard) {
           postData.cardid = self.selectedCard.id
         }
+        if (this.query.ordertype) {
+          postData.ordertype = this.query.ordertype
+        }
         postData.postage = this.postPostage
         self.$http.post(`${ENV.BokaApi}/api/order/addOrder`, postData).then(function (res) {
           let data = res.data
