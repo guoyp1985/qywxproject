@@ -512,6 +512,8 @@ export default {
     },
     onSubmit1 () {
       const kw = this.searchword1
+      console.log('------进入搜索方法------')
+      console.log(kw)
       if (kw === '') {
         this.disSearchList = false
       } else {
@@ -989,20 +991,57 @@ export default {
     },
     getSearchData () {
       const self = this
-      const params = {fid: self.query.id, pagestart: self.searchPageStart, limit: self.limit}
       let keyword = self.searchword1
+      let params = {fid: self.query.id, pagestart: self.searchPageStart, limit: self.limit}
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         params.keyword = keyword
       }
-      self.$http.get(`${ENV.BokaApi}/api/factory/retailerList`, {
-        params: params
-      }).then(function (res) {
-        const data = res.data
-        self.$vux.loading.hide()
-        const retdata = data.data ? data.data : data
-        self.searchData = self.searchData.concat(retdata)
-        self.disSearchData = true
-      })
+      let url = ''
+      switch (self.selectedIndex) {
+        case 0:
+          url = 'api/factory/retailerList'
+          params.fulltime = 1
+          break
+        case 1:
+          url = 'api/factory/retailerList'
+          params.fulltime = 2
+          break
+        case 2:
+          url = 'api/factory/getCensorRetailers'
+          params.agent = 0
+          break
+        case 3:
+          url = 'api/factory/retailerList'
+          break
+        case 4:
+          url = 'api/factory/getCensorRetailers'
+          params.agent = 1
+          break
+      }
+      console.log('------请求路径-----')
+      console.log(`${ENV.BokaApi}/${url}`)
+      console.log('-----params------')
+      console.log(params)
+      if (self.selectedIndex === 0 || self.selectedIndex === 1 || self.selectedIndex === 3) {
+        self.$http.get(`${ENV.BokaApi}/${url}`, {
+          params: params
+        }).then(function (res) {
+          const data = res.data
+          self.$vux.loading.hide()
+          const retdata = data.data ? data.data : data
+          self.searchData = self.searchData.concat(retdata)
+          self.disSearchData = true
+        })
+      }
+      if (self.selectedIndex === 2 || self.selectedIndex === 4) {
+        self.$http.post(`${ENV.BokaApi}/${url}`, params).then(function (res) {
+          const data = res.data
+          self.$vux.loading.hide()
+          const retdata = data.data ? data.data : data
+          self.searchData = self.searchData.concat(retdata)
+          self.disSearchData = true
+        })
+      }
     },
     getData1 (isone) {
       const self = this
