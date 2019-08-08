@@ -802,6 +802,7 @@ export default {
               } else {
                 this.showLineArea = true
               }
+              this.submitdata.quantity = info.quantity
             }
             if (order.postage) {
               // total += parseFloat(order.postage.replace(/,/g, ''))
