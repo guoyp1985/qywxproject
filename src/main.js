@@ -180,6 +180,7 @@ Vue.http.interceptors.response.use(response => {
 })
 
 const access = success => {
+  alert ('in access')
   let query = ''
   const url = location.href
               .replace(/(.+?\/)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
@@ -343,7 +344,6 @@ clearCache()
 // 页面入口
 if (!Token.get() || Token.isExpired()) {
   access(path => {
-    alert('path')
     console.log(`Entry: ${path}`)
     router.push({path: path})
     render()
