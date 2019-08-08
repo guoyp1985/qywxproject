@@ -1086,7 +1086,9 @@ export default {
         params.pagestart = self.tabData3.length
         params.limit = 1
       }
-      this.$http.post(`${ENV.BokaApi}/api/factory/getCensorRetailers`, params)
+      this.$http.get(`${ENV.BokaApi}/api/factory/getCensorRetailers`, {
+        params: params
+      })
       .then(res => {
         self.$vux.loading.hide()
         const data = res.data
