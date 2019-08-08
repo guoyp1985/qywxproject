@@ -134,7 +134,7 @@
       <div class="s-bottom toolbar_bg" v-if="disPostageArea">
         <div class="t-table h_100 align_center">
   				<div class="t-cell h_100 v_middle">需付：<span class="color-orange1">{{ $t('RMB') }}{{ payPrice }}</span></div>
-  				<div class="t-cell h_100 v_middle w100 bg-orange1 color-white" v-if="allowSend" @click="submitOrder">确认订单</div>
+  				<div class="t-cell h_100 v_middle w100 bg-orange1 color-white" v-if="allowSend || offlineVal" @click="submitOrder">确认订单</div>
   				<div class="t-cell h_100 v_middle bg-gray color-white" style="width:130px;" v-else>该地区无法派送</div>
   			</div>
       </div>
@@ -477,12 +477,17 @@ export default {
         this.buyType = 'online'
         this.onlineVal = true
         this.offlineVal = false
-        this.payPrice = (total + curpostage).toFixed(2)
+        if (this.orderdata[0].postage) {
+          this.postPostage = parseFloat(this.orderdata[0].postage.replace(/,/g, ''))
+        } else {
+          this.postPostage = 0
+        }
+        this.computePrice()
       } else {
         this.buyType = 'offline'
         this.onlineVal = false
         this.offlineVal = true
-        this.payPrice = (total - curpostage).toFixed(2)
+        this.payPrice = (total - this.postPostage).toFixed(2)
       }
     },
     textareaChange (refname) {
@@ -492,32 +497,6 @@ export default {
     textareaFocus (refname) {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
       curArea.updateAutosize()
-    },
-    changenumber1111 () {
-      const self = this
-      let total = 0
-      for (let i = 0; i < self.orderdata.length; i++) {
-        let order = self.orderdata[i]
-        let productinfos = order.info
-        for (let j = 0; j < productinfos.length; j++) {
-          let pd = productinfos[j]
-          total += parseFloat(pd.special) * self.submitdata.quantity
-        }
-      }
-      self.cardPrice = total
-      if (self.orderdata[0].postage) {
-        let curpostage = self.orderdata[0].postage.replace(/,/g, '')
-        total += parseFloat(curpostage)
-      }
-      self.payPrice = total.toFixed(2)
-      self.orderPrice = self.payPrice
-      self.selectedCard = null
-      for (let d of self.cardList) {
-        if (d.checked) {
-          delete d.checked
-          break
-        }
-      }
     },
     changenumber () {
       this.selectedCard = null
