@@ -105,7 +105,7 @@
                   </div>
                 </div>
               </div>
-              <div class="b_bottom_after padding10 color-theme" v-if="!allowSend">该地区不在派送范围内</div>
+              <div class="b_bottom_after padding10 color-theme" v-if="!allowSend && !offlineVal">该地区不在派送范围内</div>
             </template>
             <div class="b_bottom_after padding10">
               <div class="t-table">
@@ -477,17 +477,12 @@ export default {
         this.buyType = 'online'
         this.onlineVal = true
         this.offlineVal = false
-        if (this.orderdata[0].postage) {
-          this.postPostage = parseFloat(this.orderdata[0].postage.replace(/,/g, ''))
-        } else {
-          this.postPostage = 0
-        }
-        this.computePrice()
+        this.changeAddress()
       } else {
         this.buyType = 'offline'
         this.onlineVal = false
         this.offlineVal = true
-        this.payPrice = (total - this.postPostage).toFixed(2)
+        this.payPrice = (total - parseFloat(this.postPostage)).toFixed(2)
       }
     },
     textareaChange (refname) {

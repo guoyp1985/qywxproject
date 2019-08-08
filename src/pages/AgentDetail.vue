@@ -18,8 +18,7 @@
         </div>
       </div>
       <div class="w100 flex_center">
-        <div class="box-area bg-theme color-white flex_center" v-if="isJoin">已加盟</div>
-        <div class="box-area bg-theme color-white flex_center" @click="toJoin" v-else>申请加盟</div>
+        <div class="box-area bg-theme color-white flex_center" v-if="!isJoin" @click="toJoin">成为经销商</div>
       </div>
     </div>
     <div class="pagemiddle">
@@ -27,8 +26,8 @@
         <template v-if="factoryInfo.id">
           <div v-if="!contentArr.length" class="flex_empty">
             <div>
-              <div class="align_center">品牌介绍，正在路上</div>
-              <router-link v-if="showEdit" :to="{path: '/factorySetting', query: {fid: fid}}" class="align_center mt10 color-blue db">设置品牌介绍</router-link>
+              <div class="align_center">经销介绍，正在路上</div>
+              <router-link v-if="showEdit" :to="{path: '/agentSetting', query: {fid: fid}}" class="align_center mt10 color-blue db">设置经销介绍</router-link>
             </div>
           </div>
           <div v-else v-for="(item,index1) in contentArr" :key="index1">
@@ -38,76 +37,6 @@
             </div>
           </div>
         </template>
-      </div>
-      <div v-if="(selectedIndex == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', 1)">
-        <template v-if="disProductData">
-          <div v-if="!productData.length" class="flex_empty">
-            <div>
-              <div class="align_center">上等好货，敬请期待</div>
-              <router-link v-if="showEdit" :to="{path: '/addFactoryProduct', query: {fid: fid}}" class="align_center mt10 color-blue db">添加商品信息</router-link>
-            </div>
-          </div>
-          <div v-else :class="`productlist ${productData.length == 0 ? '' : 'squarepic'}`">
-            <div @click="toFactoryProduct(item)" :data="item" v-for="(item,index) in productData" :key="item.id" class="bk-productitem scroll_item font14">
-          		<div class="inner list-shadow">
-          			<div class="picarea">
-          				<div class="pic">
-                    <img class="imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-                    <div class="t-icon color-theme">佣金: {{$t('RMB')}}<template v-if="item.salesrebate">{{item.salesrebate}}</template><template v-else>{{item.levelagent}}</template></div>
-          				</div>
-          			</div>
-          			<div class="desbox" style="overflow:hidden;">
-          				<div class="align_left pl5 pr5 clamp2 distitle" style="line-height:18px;height:36px;">
-                    <span style="word-break:break-all;">{{ item.title }}</span>
-                  </div>
-                  <div class="clamp1">
-          					<div class="flex_table padding5 pro-desc">
-          						<span class="color-red font14 flex_cell" style="overflow: hidden;margin-right: 10px;white-space: nowrap;text-overflow: ellipsis;">{{ $t('RMB') }} <span style="margin-left:1px;">{{ item.price }}</span></span>
-                    </div>
-          				</div>
-          			</div>
-          		</div>
-            </div>
-          </div>
-        </template>
-      </div>
-      <div v-if="(selectedIndex == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3', 2)">
-        <template v-if="disNewsData">
-          <div v-if="!newsData.length" class="flex_empty">
-            <div>
-              <div class="align_center">品牌资讯，码字中...</div>
-              <router-link v-if="showEdit" :to="{path: '/addFactoryNews', query: {fid: fid}}" class="align_center mt10 color-blue db">创建品牌资讯</router-link>
-            </div>
-          </div>
-          <div v-else class="scroll_list ">
-            <div v-if="!newsData.length" class="scroll_item padding10 color-gray align_center">
-                <div class="t-table">
-                  <div class="t-cell v_middle">暂无数据</div>
-                </div>
-            </div>
-            <div v-else @click="toFactoryNews(item)" v-for="(item,index1) in newsData" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
-              <div class="t-table">
-                <div class="t-cell v_middle w70">
-                  <img class="imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-                </div>
-                <div class="t-cell v_middle">
-                  <div class="clamp1 font14 color-lightgray"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
-                  <div class="clamp1 font14 color-gray v_middle mt5">
-                      <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.views}}</span>
-                      <span class="v_middle"><i class="al al-ai-share font14 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.shares}}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </template>
-      </div>
-    </div>
-    <div class="pagebottom db-flex bg-page">
-      <div class="flex_cell">
-        <tab v-model="selectedIndex" class="v-tab">
-          <tab-item v-for="(item,index) in tabtxts" :selected="index == selectedIndex" :key="index" @on-item-click="clickTab">{{item}}</tab-item>
-        </tab>
       </div>
     </div>
     <router-link v-if="showEdit" :to="{path: '/factorySetting', query: {fid: fid}}" class="fixed-layer flex_center">编辑</router-link>
