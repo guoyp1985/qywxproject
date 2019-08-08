@@ -253,7 +253,6 @@ const access = success => {
     // if (miniHeight) { // 适配小程序web-view高度上的bug
     //   AdapterHeight.set(miniHeight)
     // }
-    alert(token)
     if (token && token !== '') {
       Token.set({token: token, expired_at: expiredAt})
       // console.log(`miniprogram: /user/show`)
