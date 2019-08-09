@@ -18,7 +18,7 @@ selectAddress<!-- /* -->
             <div class="flex_left flex_cell">
               <div class="w_100">
                 <div>{{productInfo.p_title}}</div>
-                <div><span>未提库存: {{productInfo.waitdeliver}}</span><span class="ml5">本地库存: {{productInfo.localstorage}}</span></div>
+                <div><span>未提库存: {{productInfo.waitdeliver}}</span><span class="ml5">已提库存: {{productInfo.localstorage}}</span></div>
               </div>
             </div>
           </div>
