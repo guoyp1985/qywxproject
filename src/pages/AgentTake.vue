@@ -101,7 +101,7 @@ selectAddress<!-- /* -->
   </div>
 </template>
 <script>
-import { Group, Cell, Sticky, XDialog, CellFormPreview, TransferDom, XImg, XButton, XTextarea, Previewer, XInput, Popup, CheckIcon } from 'vux'
+import { Group, Cell, TransferDom, XImg, XButton, XTextarea, Previewer, XInput, Popup, CheckIcon } from 'vux'
 import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
