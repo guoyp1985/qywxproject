@@ -364,7 +364,7 @@ export default {
         this.$vux.toast.text('请选择收货地址', 'middle')
         return false
       }
-      let postData = {fpid: this.productInfo.fpid, poid: this.productInfo.poid, quantity: this.takeQuantity, appid: this.query.appid, addressid: this.selectAddress.id}
+      let postData = {id: this.query.id, quantity: this.takeQuantity, appid: this.query.appid, addressid: this.selectAddress.id}
       this.submitIng = true
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/agent/applyDeliver`, postData).then(res => {
