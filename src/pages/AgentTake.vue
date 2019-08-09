@@ -4,7 +4,7 @@ selectAddress<!-- /* -->
 * @created_date: 2018-09-08
 */
 <template>
-  <div id="order-detail" class="containerarea font14 bg-page">
+  <div id="order-detail" class="containerarea font14 bg-page nobottom agent-take-page">
     <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
     </template>
@@ -59,9 +59,6 @@ selectAddress<!-- /* -->
           </div>
         </div>
       </div>
-      <!-- <div class="bg-theme flex_center color-white fix-home-icon" @click="toHome" v-if="query.from || query.fromapp">
-        <i class="al al-home1"></i>
-      </div> -->
     </template>
     <div v-transfer-dom class="x-popup">
       <popup v-model="showpopup" height="100%">
@@ -105,18 +102,16 @@ selectAddress<!-- /* -->
 </template>
 <script>
 import { Group, Cell, Sticky, XDialog, CellFormPreview, TransferDom, XImg, XButton, XTextarea, Previewer, XInput, Popup, CheckIcon } from 'vux'
-import OrderInfo from '@/components/OrderInfo'
 import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
-import jQuery from 'jquery'
 import { User } from '#/storage'
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Group, Cell, Sticky, XDialog, CellFormPreview, OrderInfo, XImg, XButton, Sos, XTextarea, Previewer, XInput, Popup, CheckIcon
+    Group, Cell, XImg, XButton, Sos, XTextarea, Previewer, XInput, Popup, CheckIcon
   },
   filters: {
     dateformat: function (value) {
@@ -336,34 +331,6 @@ export default {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
       curArea.updateAutosize()
     },
-    copyTxt () {
-      const self = this
-      let eleobj = jQuery('#order-detail .deliver_txt')[0]
-      let range = null
-      let save = function (e) {
-        e.clipboardData.setData('text/plain', eleobj.innerHTML)
-        e.preventDefault()
-      }
-      if (self.$util.isIOS()) { // ios设备
-        window.getSelection().removeAllRanges()
-        range = document.createRange()
-        range.selectNode(eleobj)
-        window.getSelection().addRange(range)
-        document.execCommand('copy')
-        window.getSelection().removeAllRanges()
-      } else { // 安卓设备
-        console.log('in android')
-        document.addEventListener('copy', save)
-        document.execCommand('copy')
-        document.removeEventListener('copy', save)
-      }
-      setTimeout(function () {
-        self.$vux.toast.show({
-          text: '复制成功',
-          time: 1500
-        })
-      }, 200)
-    },
     getRecordData () {
       this.$http.post(`${ENV.BokaApi}/api/agent/dealList`, {
         wid: this.loginUser.uid, fpid: this.productInfo.fpid, poid: this.productInfo.poid
@@ -475,94 +442,82 @@ export default {
 </script>
 
 <style lang="less">
-#order-detail .pagemiddle{bottom:50px;}
-/* css extension */
-#order-detail .order-service {
-  display: flex;
-  background-color: #ffffff;
-  padding: 10px 2px 10px 10px;
-}
-#order-detail .order-service:after {
-  content: ' ';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 1px;
-  border-bottom: 1px solid #dfdfdf;
-  color: #c7c7c7;
-}
-#order-detail .seller-cell {
-  overflow: hidden;
-}
-#order-detail .contact-cell {
-  width : 180px;
-  display: flex;
-}
-#order-detail .order-service,
-#order-detail .ol-contact,
-#order-detail .wx-contact {
-  position: relative;
-}
-#order-detail .seller-cell,
-#order-detail .ol-contact,
-#order-detail .wx-contact {
-  flex: 1;
-}
-#order-detail .ol-contact,
-#order-detail .wx-contact {
-  text-align: center;
-}
-#order-detail .seller-cell span,
-#order-detail .contact-cell span {
-  vertical-align: middle;
-}
-#order-detail .ol-contact:after {
-  content: ' ';
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 1px;
-  bottom: 0;
-  border-right: 1px solid #dfdfdf;
-  color: #dfdfdf;
-}
-.qrcode-dialog .img-box {
-  height: 350px;
-  overflow: hidden;
-}
-.qrcode-dialog .vux-close {
-  margin-top: 8px;
-  margin-bottom: 8px;
-}
-.fix-home-icon{
-  position:absolute;right:20px;bottom:80px;
-  width:50px;height:50px;border-radius:50%;
-}
-/* vui css hack */
-#order-detail .shipping-address:before {
-  height: 0;
-  border-top: none;
-}
-#order-detail .shipping-card .weui-cell {
-  padding: 5px 10px 0px 0px
-}
-#order-detail .shipping-card .weui-cells{
-  padding:5px 0 10px 0
-}
-#order-detail .express-info .weui-cell__ft{
-  font-size: 12px;
-}
-#order-detail .weui-cells {
-  margin-top: 10px !important;
-}
-#order-detail .vux-cell-primary {
-  padding-left: 10px;
-}
-#order-detail .vux-label {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  width: 80%;
+.agent-take-page{
+  .order-service {
+    display: flex;
+    background-color: #ffffff;
+    padding: 10px 2px 10px 10px;
+  }
+  .order-service:after {
+    content: ' ';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    border-bottom: 1px solid #dfdfdf;
+    color: #c7c7c7;
+  }
+  .seller-cell {
+    overflow: hidden;
+  }
+  .contact-cell {
+    width : 180px;
+    display: flex;
+  }
+  .order-service,
+  .ol-contact,
+  .wx-contact {
+    position: relative;
+  }
+  .seller-cell,
+  .ol-contact,
+  .wx-contact {
+    flex: 1;
+  }
+  .ol-contact,
+  .wx-contact {
+    text-align: center;
+  }
+  .seller-cell span,
+  .contact-cell span {
+    vertical-align: middle;
+  }
+  .ol-contact:after {
+    content: ' ';
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 1px;
+    bottom: 0;
+    border-right: 1px solid #dfdfdf;
+    color: #dfdfdf;
+  }
+  /* vui css hack */
+  .shipping-address:before {
+    height: 0;
+    border-top: none;
+  }
+  .shipping-card .weui-cell {
+    padding: 5px 10px 0px 0px
+  }
+  .shipping-card .weui-cells{
+    padding:5px 0 10px 0
+  }
+  .express-info .weui-cell__ft{
+    font-size: 12px;
+  }
+  .weui-cells {
+    margin-top: 10px !important;
+  }
+  .vux-cell-primary {
+    padding-left: 10px;
+  }
+  .vux-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 80%;
+  }
 }
 </style>
