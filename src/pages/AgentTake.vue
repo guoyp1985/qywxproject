@@ -55,7 +55,7 @@ selectAddress<!-- /* -->
               </div>
               <div class="padding10">
                 <div>收货地址: {{item.address}}</div>
-                <div><span>提货数量: </span><span class="color-theme">{{productInfo.localstorage}}件</span><span class="ml5">待提库存: </span><span class="color-theme">{{productInfo.waitdeliver}}</span></div>
+                <div><span>提货数量: </span><span class="color-theme">{{item.quantity}}件</span></div>
                 <div v-if="item.dealed" class="mt5">
                   <div v-if="item.content && item.content != ''">备注: {{item.content}}</div>
                   <div v-if="item.contentphoto && item.contentphoto != ''">
