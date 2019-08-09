@@ -19,7 +19,7 @@ selectAddress<!-- /* -->
               <div class="w_100">
                 <div>{{productInfo.p_title}}</div>
                 <div v-if="productInfo.poid" class="color-gray font12">规格: {{productInfo.po_title}}</div>
-                <div class="mt5 color-gray font12"><span>未提库存: {{productInfo.waitdeliver}}</span><span class="ml5">已提库存: {{productInfo.localstorage}}</span></div>
+                <div class="mt5 color-gray font12"><span>待提库存: {{productInfo.waitdeliver}}</span><span class="ml5">已提库存: {{productInfo.localstorage}}</span></div>
               </div>
             </div>
           </div>
@@ -47,7 +47,7 @@ selectAddress<!-- /* -->
           <div class="scroll_list mt12">
             <div class="scroll_item padding10" v-for="(item, index) in recordData" :key="index">
               <div>收货地址: {{item.address}}</div>
-              <div><span>提货数量: </span><span class="color-theme">{{productInfo.localstorage}}件</span><span class="ml5">未提库存: </span><span class="color-theme">{{productInfo.waitdeliver}}</span></div>
+              <div><span>提货数量: </span><span class="color-theme">{{productInfo.localstorage}}件</span><span class="ml5">待提库存: </span><span class="color-theme">{{productInfo.waitdeliver}}</span></div>
               <template v-if="item.dealed">
                 <div>状态: 已发货</div>
                 <div class="color-gray font12 mt5">发货时间: {{item.dealtime | dateformat}}</div>
