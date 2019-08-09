@@ -372,7 +372,12 @@ export default {
         const data = res.data
         this.$vux.toast.show({
           text: data.error,
-          time: this.$util.delay(data.error)
+          time: this.$util.delay(data.error),
+          onHide: () => {
+            if (data.flag) {
+              this.refresh()
+            }
+          }
         })
       })
     },
@@ -430,6 +435,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.query = this.$route.query
+      this.takeQuantity = ''
       this.recordData = []
       this.recordPageStart = 0
       this.getData()
