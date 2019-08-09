@@ -392,6 +392,8 @@ export default {
       this.offlineVal = false
     },
     setDefault (item, index) {
+      console.log('设置默认')
+      console.log(this.defaultIng)
       if (this.defaultIng) {
         return false
       }
@@ -415,14 +417,12 @@ export default {
                 this.addressdata[i].isdefault = 0
                 this.$http.post(`${ENV.BokaApi}/api/setModulePara/address`, {
                   module: 'address', param: 'isdefault', paramvalue: 0, id: this.addressdata[i].id
-                }).then(res1 => {
-                  this.defaultIng = false
                 })
+                break
               }
             }
-          } else {
-            this.defaultIng = false
           }
+          this.defaultIng = false
         } else {
           this.defaultIng = false
         }

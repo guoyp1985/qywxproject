@@ -42,20 +42,30 @@ selectAddress<!-- /* -->
         <div class="flex_center pl12 pr12" style="height:50px;margin-top:20px;">
           <div class="flex_center color-white btn-bottom-red" style="width:80%;" @click="submitEvent">提交申请</div>
         </div>
-        <div class="bg-white" style="margin-top:20px;" v-if="recordData.length && selectAddress">
-          <div class="padding10 b_bottom_after flex_center bold font16">提货记录</div>
-          <div class="scroll_list mt12">
-            <div class="scroll_item padding10" v-for="(item, index) in recordData" :key="index">
-              <div>收货地址: {{item.address}}</div>
-              <div><span>提货数量: </span><span class="color-theme">{{productInfo.localstorage}}件</span><span class="ml5">待提库存: </span><span class="color-theme">{{productInfo.waitdeliver}}</span></div>
-              <template v-if="item.dealed">
-                <div>状态: 已发货</div>
-                <div class="color-gray font12 mt5">发货时间: {{item.dealtime | dateformat}}</div>
-              </template>
-              <template v-else>
-                <div>状态: 待发货</div>
-                <div class="color-gray font12 mt5">申请时间: {{item.dateline | dateformat}}</div>
-              </template>
+        <div style="margin-top:20px;" v-if="recordData.length && selectAddress">
+          <div class="padding10 flex_center bold font16">提货记录</div>
+          <div class="scroll_list mt12 record-list">
+            <div class="scroll_item" v-for="(item, index) in recordData" :key="index">
+              <div class="padding10 b_bottom_after flex_left">
+                <div class="flex_left color-gray">
+                  <template v-if="item.dealed">{{item.dealtime | dateformat}}</template>
+                  <template v-else>{{item.dateline | dateformat}}</template>
+                </div>
+                <div class="flex_cell flex_right color-theme">{{item.dealed ? '已发货' : '待发货'}}</div>
+              </div>
+              <div class="padding10">
+                <div>收货地址: {{item.address}}</div>
+                <div><span>提货数量: </span><span class="color-theme">{{productInfo.localstorage}}件</span><span class="ml5">待提库存: </span><span class="color-theme">{{productInfo.waitdeliver}}</span></div>
+                <div v-if="item.dealed" class="mt5">
+                  <div v-if="item.content && item.content != ''">备注: {{item.content}}</div>
+                  <div v-if="item.contentphoto && item.contentphoto != ''">
+                    <img :src="item.contentphoto" style="width:100px;" @click="viewBigImg(item.contentphoto,index)" />
+                    <div v-transfer-dom>
+                      <previewer :list="item.previewerPhoto" :ref="`previewerPhoto-${index}`"></previewer>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -340,8 +350,8 @@ export default {
         const data = res.data
         let retdata = data.data ? data.data : data
         for (let i in retdata) {
-          if (retdata[i].photo && retdata[i].photo !== '') {
-            retdata[i].previewerPhoto = this.$util.previewerImgdata([retdata[i].photo])
+          if (retdata[i].contentphoto && retdata[i].contentphoto !== '') {
+            retdata[i].previewerPhoto = this.$util.previewerImgdata([retdata[i].contentphoto])
           }
           if (retdata[i].content && retdata[i].content !== '') {
             retdata[i].content = retdata[i].content.replace(/\n/g, '<br/>')
@@ -450,6 +460,10 @@ export default {
 
 <style lang="less">
 .agent-take-page{
+  .record-list{
+    .scroll_item{background-color:#fff;box-shadow: 0px 0px 3px 1px #e6ebed;}
+    .scroll_item:not(:last-child){margin-bottom:12px;}
+  }
   .order-service {
     display: flex;
     background-color: #ffffff;
