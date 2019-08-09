@@ -420,6 +420,8 @@ export default {
                 })
               }
             }
+          } else {
+            this.defaultIng = false
           }
         } else {
           this.defaultIng = false
