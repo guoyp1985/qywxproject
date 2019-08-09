@@ -144,6 +144,12 @@
           <div class="numicon" v-if="factoryInfo.neworders >= 100">···</div>
         </div>
       </cell>
+      <cell :link="{path:'/PickUpManage'}" style="position:relative">
+        <div slot="icon" class="pr10"><i class="al al-dingdan color-blue11 db-in font18"></i></div>
+        <div slot="inline-desc">
+          <span class="font15">提货订单管理</span>
+        </div>
+      </cell>
       <cell :link="{path:'/factoryDetail'}" style="position:relative">
         <div slot="icon" class="pr10"><i class="al al-shouye1 color-red db-in font18"></i></div>
         <div slot="inline-desc">
