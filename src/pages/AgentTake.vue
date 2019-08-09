@@ -18,7 +18,8 @@ selectAddress<!-- /* -->
             <div class="flex_left flex_cell">
               <div class="w_100">
                 <div>{{productInfo.p_title}}</div>
-                <div><span>未提库存: {{productInfo.waitdeliver}}</span><span class="ml5">已提库存: {{productInfo.localstorage}}</span></div>
+                <div v-if="productInfo.poid" class="color-gray font12">{{productInfo.po_title}}</div>
+                <div class="mt5 color-gray font12"><span>未提库存: {{productInfo.waitdeliver}}</span><span class="ml5">已提库存: {{productInfo.localstorage}}</span></div>
               </div>
             </div>
           </div>
