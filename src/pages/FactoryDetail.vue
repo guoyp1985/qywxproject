@@ -110,7 +110,7 @@
         </tab>
       </div>
     </div>
-    <router-link v-if="showEdit" :to="{path: '/factorySetting', query: {fid: fid}}" class="fixed-layer flex_center">编辑</router-link>
+    <div v-if="showEdit" class="fixed-layer flex_center" @click="toEdit">编辑</div>
     <div v-transfer-dom>
       <previewer :list="previewerPhotoarr" ref="previewer"></previewer>
     </div>
@@ -165,6 +165,9 @@ export default {
     }
   },
   methods: {
+    toEdit () {
+      this.$router.push({path: 'factorySetting', query: {fid: this.fid}})
+    },
     toFactoryProduct (item) {
       let params = this.$util.handleAppParams(this.query, {id: item.id, fid: this.fid})
       if (this.query.wid) {

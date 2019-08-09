@@ -263,10 +263,11 @@ export default {
                 time: self.$util.delay(error),
                 onHide: () => {
                   if (data.flag === 1) {
-                    if (self.productdata.length === (pageStart1 + 1) * limit) {
-                      self.productdata.splice(self.productdata.length - 1, 1)
-                    }
-                    self.productdata = [data.data].concat(self.productdata)
+                    this.$router.push({path: '/addFactoryProduct', query: {id: data.data.id}})
+                    // if (self.productdata.length === (pageStart1 + 1) * limit) {
+                    //   self.productdata.splice(self.productdata.length - 1, 1)
+                    // }
+                    // self.productdata = [data.data].concat(self.productdata)
                   }
                 }
               })

@@ -280,7 +280,7 @@ export default {
         if (this.previewerPhotoarr.length) {
           this.previewerPhotoarr = this.$util.previewerImgdata(this.previewerPhotoarr)
         }
-        let shareUrl = `${ENV.Host}/#/factoryDetail?fid=${this.fid}&share_uid=${this.loginUser.uid}`
+        let shareUrl = `${ENV.Host}/#/agentDetail?fid=${this.fid}&share_uid=${this.loginUser.uid}`
         if (this.query.wid) {
           shareUrl = `${shareUrl}&wid=${this.query.wid}`
         }

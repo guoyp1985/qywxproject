@@ -168,7 +168,7 @@
             </template>
           </div>
           <!-- 待审核卖家 -->
-          <div v-show="(selectedIndex == 2)" class="swiper-inner" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',3)">
+          <div v-show="(selectedIndex == 2)" class="swiper-inner" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',2)">
             <template v-if="disTabData3">
               <template v-if="!tabData3.length">
                 <div class="scroll_list">
@@ -211,7 +211,7 @@
             </template>
           </div>
           <!-- 经销商 -->
-          <div v-show="(selectedIndex == 3)" class="swiper-inner" ref="scrollContainer4" @scroll="handleScroll('scrollContainer4',1)">
+          <div v-show="(selectedIndex == 3)" class="swiper-inner" ref="scrollContainer4" @scroll="handleScroll('scrollContainer4',3)">
             <template v-if="disTabData4">
               <template v-if="!tabData4.length">
                 <div class="scroll_list">
@@ -248,7 +248,7 @@
             </template>
           </div>
           <!-- 待审核卖家 -->
-          <div v-show="(selectedIndex == 4)" class="swiper-inner" ref="scrollContainer5" @scroll="handleScroll('scrollContainer5',3)">
+          <div v-show="(selectedIndex == 4)" class="swiper-inner" ref="scrollContainer5" @scroll="handleScroll('scrollContainer5',4)">
             <template v-if="disTabData5">
               <template v-if="!tabData5.length">
                 <div class="scroll_list">
