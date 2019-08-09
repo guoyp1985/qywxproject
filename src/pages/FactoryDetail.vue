@@ -166,7 +166,7 @@ export default {
   },
   methods: {
     toEdit () {
-      alert('编辑')
+      this.$router.push({path: 'factorySetting', query: {fid: this.fid}})
     },
     toFactoryProduct (item) {
       let params = this.$util.handleAppParams(this.query, {id: item.id, fid: this.fid})
