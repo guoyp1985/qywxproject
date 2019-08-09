@@ -110,7 +110,7 @@
         </tab>
       </div>
     </div>
-    <div v-if="showEdit" :to="{path: '/factorySetting', query: {fid: fid}}" class="fixed-layer flex_center" @click="toEdit">编辑</div>
+    <div v-if="showEdit" class="fixed-layer flex_center" @click="toEdit">编辑</div>
     <div v-transfer-dom>
       <previewer :list="previewerPhotoarr" ref="previewer"></previewer>
     </div>
