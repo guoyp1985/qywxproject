@@ -21,7 +21,7 @@
           </div>
         </div>
         <div class="padding10 flex_center">
-          <div class="qbtn bg-green color-white" @click="addItem">添加一项</div>
+          <div class="qbtn bg-gray color-white" @click="addItem">添加一项</div>
         </div>
       </div>
       <div class="pagebottom flex_center pl12 pr12 list-shadow02 bg-white">
