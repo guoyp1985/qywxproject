@@ -99,7 +99,7 @@ export default {
           break
         } else if (isNaN(curmoney) || parseFloat(curmoney.replace(/,/g, '')) <= 0) {
           iscontinue = false
-          self.$vux.toast.text('经销商价格不能小于0', 'middle')
+          self.$vux.toast.text('经销商价格不能小于等于0元', 'middle')
           break
         } else if (parseFloat(curmoney.replace(/,/g, '')) > parseFloat(this.productData.price.replace(/,/g, ''))) {
           iscontinue = false
