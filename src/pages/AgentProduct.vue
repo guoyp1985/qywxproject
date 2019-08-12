@@ -97,7 +97,7 @@ export default {
           iscontinue = false
           self.$vux.toast.text('请输入正确的经销商价格', 'middle')
           break
-        } else if (isNaN(curmoney) || parseFloat(curmoney.replace(/,/g, '')) < 0) {
+        } else if (isNaN(curmoney) || parseFloat(curmoney.replace(/,/g, '')) <= 0) {
           iscontinue = false
           self.$vux.toast.text('经销商价格不能小于0', 'middle')
           break
