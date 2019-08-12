@@ -34,7 +34,7 @@
               <div class="t-table">
                 <div class="t-cell title-cell w80 font14 v_middle">价格</div>
                 <div class="t-cell input-cell v_middle" style="position:relative;">
-                  <input v-model="item.money" type="text" class="input" placeholder="价格" />
+                  <x-input v-model="item.money" type="text" class="input" placeholder="价格"></x-input>
                 </div>
               </div>
             </div>
@@ -52,13 +52,14 @@
 </i18n>
 
 <script>
+import { XInput } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
 
 export default {
   components: {
-    Sos
+    Sos, XInput
   },
   data () {
     return {
