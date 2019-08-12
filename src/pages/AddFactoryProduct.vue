@@ -486,6 +486,7 @@ export default {
       this.optionsData = []
       this.selectedOptionIndex = 0
       this.optionsPhoto = []
+      this.videoarr = []
     },
     movePhoto (type, index, move) {
       let moveindex
