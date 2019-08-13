@@ -179,7 +179,7 @@
             <div class="popup-bottom flex_center">
               <div class="h_100 flex_center bg-gray color-white w80" @click="closepopup">{{ $t('Close') }}</div>
               <div @click="toNewAddress" class="flex_cell h_100 flex_center bg-red color-white">新建地址</div>
-              <div v-if="!query.from" class="flex_cell h_100 flex_center bg-green color-white" @click="clickWxAddress">使用微信地址</div>
+              <div v-if="!query.from && !query.fromapp" class="flex_cell h_100 flex_center bg-green color-white" @click="clickWxAddress">使用微信地址</div>
             </div>
           </div>
         </popup>
