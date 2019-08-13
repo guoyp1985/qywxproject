@@ -344,7 +344,7 @@ export default {
     },
     getRecordData () {
       this.$http.post(`${ENV.BokaApi}/api/agent/dealList`, {
-        wid: this.loginUser.uid, fpid: this.productInfo.fpid, poid: this.productInfo.poid
+        wid: this.loginUser.uid, fpid: this.productInfo.fpid, poid: this.productInfo.poid, pagestart: this.recordPageStart, limit: this.limit
       }).then(res => {
         this.$vux.loading.hide()
         const data = res.data
