@@ -134,7 +134,8 @@ export default {
     },
     getData () {
       const user = User.get()
-      if (!user || user.subscribe !== 1 || this.$route.query.factoryuid) {
+      let query = this.$util.query()
+      if (!user || user.subscribe !== 1 || query.factoryuid) {
         let params = {}
         if (this.$route.query.factoryuid) {
           params.factoryuid = this.$route.query.factoryuid
