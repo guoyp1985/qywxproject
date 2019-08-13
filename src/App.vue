@@ -134,9 +134,14 @@ export default {
     },
     getData () {
       const user = User.get()
-      if (!user || user.subscribe !== 1) {
-        this.$http.get(`${ENV.BokaApi}/api/user/show`)
-        .then(res => {
+      if (!user || user.subscribe !== 1 || this.$route.query.factoryuid) {
+        let params = {}
+        if (this.$route.query.factoryuid) {
+          params.factoryuid = this.$route.query.factoryuid
+        }
+        this.$http.get(`${ENV.BokaApi}/api/user/show`, {
+          params: params
+        }).then(res => {
           if (res && res.status === 200) {
             User.set(res.data)
           }
