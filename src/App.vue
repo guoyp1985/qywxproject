@@ -135,10 +135,12 @@ export default {
     getData () {
       const user = User.get()
       let query = this.$util.query()
+      console.log('进入到了app页面')
+      console.log(query)
       if (!user || user.subscribe !== 1 || query.factoryuid) {
         let params = {}
-        if (this.$route.query.factoryuid) {
-          params.factoryuid = this.$route.query.factoryuid
+        if (query.factoryuid) {
+          params.factoryuid = query.factoryuid
         }
         this.$http.get(`${ENV.BokaApi}/api/user/show`, {
           params: params
