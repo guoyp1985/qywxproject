@@ -142,6 +142,9 @@ export default {
         if (query.factoryuid) {
           params.factoryuid = query.factoryuid
         }
+        if (query.miniuid) {
+          params.miniuid = query.miniuid
+        }
         this.$http.get(`${ENV.BokaApi}/api/user/show`, {
           params: params
         }).then(res => {
