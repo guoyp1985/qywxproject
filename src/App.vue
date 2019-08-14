@@ -137,7 +137,7 @@ export default {
       let query = this.$util.query()
       console.log('进入到了app页面')
       console.log(query)
-      if (!user || user.subscribe !== 1 || query.factoryuid) {
+      if (!user || user.subscribe !== 1 || query.factoryuid || query.miniuid) {
         let params = {}
         if (query.factoryuid) {
           params.factoryuid = query.factoryuid
