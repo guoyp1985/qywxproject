@@ -6,6 +6,12 @@
 <template>
   <div id="new-address">
     <group label-width="6em">
+        <x-input :title="$t('Detailed Address')" :placeholder="`${$t('Selectable')}${$t('Detailed Address')}`" v-model="details"></x-input>
+    </group>
+    <box gap="20px 10px">
+      <x-button type="primary" @click.native="identify">{{$t('Identify')}}</x-button>
+    </box>
+    <group label-width="6em">
       <x-input :title="$t('Addressee')" required :placeholder="`${$t('Necessary')}${$t('Addressee')}`" v-model="item.linkman"></x-input>
       <x-input :title="$t('Cell Phone Number')" required :placeholder="`${$t('Necessary')}${$t('Cell Phone Number')}`" mask="999 9999 9999" :max="13" is-type="china-mobile" v-model="item.telephone"></x-input>
       <x-address :title="$t('Select Address')" raw-value v-model="item.area" :list="addressData" :placeholder="`${$t('Necessary')}${$t('Please Select Address')}`">
@@ -28,6 +34,7 @@
 <script>
 import { Group, XInput, XAddress, XSwitch, Box, XButton, ChinaAddressV4Data, Value2nameFilter as value2name } from 'vux'
 import ENV from 'env'
+import Reg from '#/reg'
 export default {
   components: {
     Group, XInput, XAddress, XSwitch, Box, XButton
@@ -42,6 +49,7 @@ export default {
         area: [],
         address: ''
       },
+      details: '',
       switcher: false,
       isSubmitIng: false,
       queryData: {}
@@ -128,6 +136,26 @@ export default {
           })
         }
       }
+    },
+    identify () {
+      if (!Reg.rNoSpace.test(this.details)) {
+        this.$vux.toast.text('请输入地址详情', 'middle')
+        return
+      }
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/order/getAddressinfo`, {text: this.details})
+      .then(res => {
+        this.$vux.loading.hide()
+        const data = res.data
+        if (data.flag === 1) {
+          const info = data.data
+          this.item.area = [info.province_name, info.city_name, info.county_name]
+          this.item.address = info.detail
+          this.item.telephone = info.mobile
+        } else {
+          this.$vux.toast.text('无法识别的地址', 'middle')
+        }
+      })
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
