@@ -689,13 +689,10 @@ export default {
       if (postageSetting && postageSetting.length) {
         for (let i = 0; i < postageSetting.length; i++) {
           const curProvince = postageSetting[i].province
-          let isXg = false
           let isTw = false
           let isAm = false
           if ((curProvince.indexOf('臺灣') > -1 || curProvince.indexOf('台湾') > -1) && (selectedProvince.indexOf('臺灣') > -1 || selectedProvince.indexOf('台湾') > -1)) {
             isTw = true
-          } else if (curProvince.indexOf('香港') > -1) {
-            isXg = true
           } else if ((curProvince.indexOf('澳門') > -1 || curProvince.indexOf('澳门') > -1) && (selectedProvince.indexOf('澳門') > -1 || selectedProvince.indexOf('澳门') > -1)) {
             isAm = true
           }
