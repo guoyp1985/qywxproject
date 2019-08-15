@@ -809,7 +809,7 @@ export default {
               self.addressdata = retdata
               self.handleAddress()
             } else {
-              if (!this.query.from) {
+              if (!this.query.from && !this.query.fromapp) {
                 this.$wechat.ready(() => {
                   this.$vux.confirm.show({
                     content: '是否使用微信地址？',
