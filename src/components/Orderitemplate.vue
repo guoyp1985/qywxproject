@@ -1,16 +1,16 @@
 <template>
-  <router-link :to="{path: orderLink, query: {id: data.id, from: from}}" class="bk-orderitem order-item scroll_item mb10 font14 db list-shadow">
-    <div class="bg-white padding12 b_bottom_after font13 flex_center ">
-        <div class="flex_cell color-lightgray"><!-- 创建时间：<slot name="createdate"></slot> -->
-          {{ $t('Order Number')}}：<slot name="orderno"></slot>
-        </div>
-        <div class="align_right color-red4" style="width:100px;"><slot name="flagstr"></slot></div>
+  <div class="bk-orderitem order-item scroll_item mb10 font14 db list-shadow">
+    <div @click="toOrder(data)" class="bg-white padding10 b_bottom_after font12 flex_center ">
+        <div class="color-lightgray" style="width:190px;">订单号: {{data.orderno}}</div>
+        <div class="flex_cell align_right color-red4">{{data.flagstr}}</div>
     </div>
-    <slot name="productlist"></slot>
+    <div @click="toOrder(data)">
+      <slot name="productlist"></slot>
+    </div>
     <div class="bg-white padding10 b_top_after b_bottom_after color-gray5">
         <slot name="receivearea"></slot>
     </div>
-  </router-link>
+  </div>
 </template>
 
 <script>
@@ -25,6 +25,12 @@ export default {
     from: {
       type: String,
       default: ''
+    }
+  },
+  methods: {
+    toOrder (data) {
+      let params = this.$util.handleAppParams(this.$route.query, {id: data.id})
+      this.$router.push({path: this.orderLink, query: params})
     }
   }
 }

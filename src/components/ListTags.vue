@@ -22,11 +22,13 @@
         </div>
         <div class="info-bottom">
           <span class="time">{{tag.time}}</span>
-          <span class="delete" v-if="teamInfo.manager > 0" @click="deleteTag(tag.id, index)">删除</span>
+          <span class="delete" v-if="teamInfo.manager > 0" @click="deleteTag(tag.moduleid, index)">删除</span>
         </div>
       </div>
     </div>
     <div class="tip-message" v-if="!tags.length && loaded"><span>暂无素材</span></div>
+    <!-- 数据加载完毕提示 -->
+    <div class="end-area" v-if="tags.length && endShow"><span>--没有更多数据啦--</span></div>
   </div>
 </template>
 
@@ -42,7 +44,9 @@ export default {
       pagestart: 0,
       limit: 5,
       currentPhotos: [],
-      loaded: false
+      loaded: false,
+      endShow: false,
+      isloading: false
     }
   },
   props: {
@@ -65,7 +69,8 @@ export default {
   methods: {
     getTags () {
       console.log('in listtags getTags')
-      if (this.tags.length === this.pagestart * this.limit) {
+      if (this.tags.length === this.pagestart * this.limit && !this.isloading) {
+        this.isloading = true
         this.$http({
           url: `${Env.BokaApi}/api/team/link`,
           method: 'post',
@@ -77,6 +82,7 @@ export default {
           }
         }).then(res => {
           console.log(res)
+          this.isloading = false
           let data = res.data
           for (let i = 0; i < data.data.length; i++) {
             data.data[i].photosSplited = data.data[i].photo.split(',')
@@ -92,6 +98,9 @@ export default {
               this.$parent.refresh()
             })
             this.pagestart++
+          }
+          if (data.length < this.limit) {
+            this.endShow = true
           }
           this.loaded = true
         })
@@ -195,7 +204,7 @@ export default {
       border-top: 1px solid #e4e4e4;
       border-bottom: 1px solid #e4e4e4;
       background-color: #fff;
-      margin-bottom: 20px;
+      margin-bottom: 5px;
       .avatar{
         width: 50px;
         height: 50px;
@@ -212,6 +221,7 @@ export default {
           margin-bottom:6px;
           align-items: center;
           .username{
+            color: #5b6a92;
             width:70px;
             font-size: 16px;
           }
@@ -297,5 +307,6 @@ export default {
       color: #c9c9c9;
       margin-top: 30px;
     }
+    .end-area{width:100%;height:50px;color:#ccc;display:flex;align-items:center;justify-content: center;}
   }
 </style>

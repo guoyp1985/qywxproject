@@ -7,17 +7,22 @@
   <div id="chat-room" class="font14">
     <template v-if="allowChat || loginUser.isretailer === 1">
       <div style="opacity:0;position:absolute;z-index:-1;" class="copy_txt">{{clickMsgItem.content}}</div>
-      <div v-if="retailerInfo.uid && showTip" ref="topTipArea" class="db-flex w_100 border-box padding10 bg-white b_bottom_after font13 color-gray" @click="toStore" style="color:inherit;">
+      <div v-if="retailerInfo.uid && showTip" ref="topTipArea" class="db-flex w_100 border-box padding10 bg-white b_bottom_after font13 color-gray" style="color:inherit;">
         <div class="flex_left" style="width:70px;">
           <img class="v_middle imgcover" style="width:60px;height:60px;" :src="retailerInfo.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
         </div>
         <div class="flex_cell flex_left">
           <div class="w_100">
-            <div class="clamp2">{{ retailerInfo.title }}</div>
+            <div class="flex_left" @click="clickQrcode">
+              <span>{{storeTitle}}</span><span class="al al-erweima1 font14 color-theme bold ml5" v-if="retailerInfo.qrcode && retailerInfo.qrcode != ''"></span>
+            </div>
+            <!-- <div class="flex_left" @click="clickQrcode">
+              <span class="al al-erweima1 font14 color-black"></span>
+            </div> -->
             <div class="clamp2 color-gray font12 mt5">全部宝贝: {{ retailerInfo.productcount }}件</div>
           </div>
         </div>
-        <div class="flex_right" style="width:80px;">
+        <div class="flex_right" style="width:80px;" @click="toStore">
           <div class="qbtn4 color-orange5 font12 border-color-orange5" style="padding: 1px 8px;">进店逛逛</div>
         </div>
       </div>
@@ -156,13 +161,13 @@
             </div>
             <div class="b_top_after" style="position:absolute;left:0;top:95px;right:0;height:54px;">
               <tab v-model="tabmodel" class="v-tab">
-                <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
+                <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="swiperChange">{{item}}</tab-item>
               </tab>
             </div>
             <div class="popup-middle font14" style="top:149px;">
-              <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
-                <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-                  <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll1">
+              <!-- <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
+                <swiper-item v-for="(tabitem, index) in tabtxts" :key="index"> -->
+                  <div v-show="(tabmodel == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1')">
                     <div v-if="disNewsData" class="scroll_list">
                       <div v-if="!newsData || newsData.length === 0" class="scroll_item padding10 color-gray align_center">
                         <template v-if="searchresult1">
@@ -184,7 +189,7 @@
                       </check-icon>
                     </div>
                   </div>
-                  <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll2">
+                  <div v-show="(tabmodel == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2')">
                     <div v-if="disProductsData" class="scroll_list">
                       <div v-if="!productsData || productsData.length === 0" class="scroll_item padding10 color-gray align_center">
                         <template v-if="searchresult2">
@@ -207,8 +212,8 @@
                       </check-icon>
                     </div>
                   </div>
-                </swiper-item>
-              </swiper>
+                <!-- </swiper-item>
+              </swiper> -->
             </div>
             <div class="popup-bottom flex_center">
               <div class="flex_cell flex_center h_100 bg-gray color-white" @click="closeImgTxtPopup">{{ $t('Close') }}</div>
@@ -216,6 +221,19 @@
             </div>
           </div>
         </popup>
+      </div>
+      <div class="auto-modal flex_center qrcode-modal" v-show="showQrcodeModal">
+        <div class="modal-inner border-box" style="width:80%;">
+          <div class="flex_center b_bottom_after padding10 bold font16">识别二维码加卖家微信</div>
+          <div class="flex_center padding10">
+            <div class="w_100">
+              <img :src="retailerInfo.qrcode" style="max-width:100%;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+            </div>
+          </div>
+          <div class="close-area flex_center" @click="closeQrcodeModal">
+            <i class="al al-close"></i>
+          </div>
+        </div>
       </div>
     </template>
   </div>
@@ -262,7 +280,7 @@ export default {
       diffSeconds: 300,
       msgType: 'text',
       tabmodel: 0,
-      tabtxts: [ '文章', '产品' ],
+      tabtxts: [ '文章', '商品' ],
       autofixed: false,
       searchword: '',
       showSearchEmpty: false,
@@ -274,18 +292,19 @@ export default {
       disProductsData: false,
       pagestart1: 0,
       pagestart2: 0,
-      limit1: 10,
+      limit1: 20,
       selectNewsData: null,
       selectProductsData: null,
       showUserInfo: false,
-      fromProduct: {},
-      showTip: true,
+      showTip: false,
       recordCheck: false,
-      allowChatModule: ['news', 'product', 'store', 'messagelist', 'retailer', 'order'],
+      allowChatModule: ['news', 'product', 'store', 'messagelist', 'retailer', 'order', 'factory'],
       allowChat: false,
       retailerInfo: {},
       bottomPos: 0,
-      clickMsgItem: {}
+      clickMsgItem: {},
+      showQrcodeModal: false,
+      storeTitle: ''
     }
   },
   filters: {
@@ -305,6 +324,14 @@ export default {
     }
   },
   methods: {
+    clickQrcode () {
+      if (this.retailerInfo.qrcode && this.retailerInfo.qrcode !== '') {
+        this.showQrcodeModal = true
+      }
+    },
+    closeQrcodeModal () {
+      this.showQrcodeModal = false
+    },
     copyTxt (item) {
       console.log('拷贝方法')
       console.log(this)
@@ -743,6 +770,23 @@ export default {
     },
     sendImgTxt () {
       const self = this
+      if (self.tabmodel === 0) {
+        if (!self.selectNewsData || !self.selectNewsData.id) {
+          self.$vux.toast.show({
+            text: '请选择文章',
+            type: 'text'
+          })
+          return false
+        }
+      } else {
+        if (!self.selectProductsData || !self.selectProductsData.id) {
+          self.$vux.toast.show({
+            text: '请选择商品',
+            type: 'text'
+          })
+          return false
+        }
+      }
       let postdata = {
         touid: self.query.uid,
         sendtype: 'news',
@@ -791,38 +835,39 @@ export default {
       }
     },
     swiperChange (index) {
+      console.log(this.tabmodel)
       const self = this
       this.clearSelectData()
-      if (index === 0 && self.newsData.length === 0) {
-        self.$vux.loading.show()
-        self.getNewsData()
-      } else if (index === 1 && self.productsData.length === 0) {
-        self.$vux.loading.show()
-        self.getProductData()
+      if (this.tabmodel === 0) {
+        if (!self.newsData.length) {
+          self.$vux.loading.show()
+          self.getNewsData()
+        }
+      } else {
+        if (!self.productsData.length) {
+          self.$vux.loading.show()
+          self.getProductData()
+        }
       }
     },
-    handleScroll1 () {
+    handleScroll (refname) {
       const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
-        element: self.$refs.scrollContainer1[0],
-        callback: function () {
-          if (self.newsData.length === (self.pagestart1 + 1) * self.limit1) {
-            self.pagestart1++
-            self.$vux.loading.show()
-            self.getNewsData()
-          }
-        }
-      })
-    },
-    handleScroll2 () {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.$refs.scrollContainer2[0],
-        callback: function () {
-          if (self.productsData.length === (self.pagestart2 + 1) * self.limit1) {
-            self.pagestart2++
-            self.$vux.loading.show()
-            self.getProductData()
+        element: scrollarea,
+        callback: () => {
+          if (self.tabmodel === 0) {
+            if (self.newsData.length === (self.pagestart1 + 1) * self.limit1) {
+              self.pagestart1++
+              self.$vux.loading.show()
+              self.getNewsData()
+            }
+          } else {
+            if (self.productsData.length === (self.pagestart2 + 1) * self.limit1) {
+              self.pagestart2++
+              self.$vux.loading.show()
+              self.getProductData()
+            }
           }
         }
       })
@@ -882,16 +927,16 @@ export default {
     getProductData () {
       const self = this
       let keyword = self.searchword
-      let params = { pagestart: self.pagestart2, limit: self.limit1 }
+      let params = {pagestart: self.pagestart2, limit: self.limit1, wid: this.loginUser.uid}
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         self.searchresult2 = true
         params.keyword = keyword
       } else {
         self.searchresult2 = false
       }
-      self.$http.get(`${ENV.BokaApi}/api/list/product?from=retailer`, {
+      self.$http.get(`${ENV.BokaApi}/api/retailer/getRetailerProducts`, {
         params: params
-      }).then(function (res) {
+      }).then(res => {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
@@ -1003,49 +1048,22 @@ export default {
         })
       })
     },
-    getProduct () {
-      const self = this
-      if (self.query.fromModule === 'product' && self.query.fromId) {
-        self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
-          params: { id: self.query.fromId, module: self.query.fromModule }
-        }).then(function (res) {
-          if (res && res.status === 200) {
-            const data = res.data
-            const retdata = data.data
-            self.fromProduct = retdata
-            self.retailerInfo = retdata.retailerinfo
-            // setTimeout(function () {
-            //   self.showTip = false
-            // }, 10000)
-          }
-        })
-      }
-    },
-    _getRetailerInfo () {
-      const self = this
-      if ((self.query.fromModule === 'store' || self.query.fromModule === 'news') && self.query.wid) {
-        self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
-          params: { uid: self.query.wid }
-        }).then(function (res) {
-          if (res && res.status === 200) {
-            const data = res.data
-            self.retailerInfo = data.data
-            // setTimeout(function () {
-            //   self.showTip = false
-            // }, 10000)
-          }
-        })
-      }
-    },
     getRetailerInfo () {
       const self = this
       self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
         params: { uid: self.query.uid }
-      }).then(function (res) {
+      }).then((res) => {
         if (res && res.status === 200) {
           const data = res.data
           if (data.flag) {
             self.retailerInfo = data.data
+            let title = self.retailerInfo.title
+            if (title.length > 10) {
+              title = title.substr(0, 10)
+              this.storeTitle = `${title}...`
+            } else {
+              this.storeTitle = title
+            }
             self.setViewHeight()
           }
         }
@@ -1072,8 +1090,10 @@ export default {
       return this.$http.get(`${ENV.BokaApi}/api/getUser/${this.query.uid}`)
     },
     refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       const self = this
       self.retailerInfo = {}
+      this.showQrcodeModal = false
       room = ''
       minIdFlag = 0
       this.message = ''
@@ -1086,8 +1106,12 @@ export default {
       this.isUserTouch = false
       this.hasNewMessage = false
       this.loginUser = User.get()
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
+      if (this.query.miniconfig === 'wechat.mini_program.qxb' || this.query.fromapp === 'factory' || this.query.fromapp === 'qxb') {
+        this.showTip = false
+      } else {
+        this.showTip = true
+      }
       for (var i = 0; i < self.allowChatModule.length; i++) {
         if (this.query.fromModule === self.allowChatModule[i]) {
           self.allowChat = true
@@ -1106,7 +1130,6 @@ export default {
         }
         this.setViewHeight()
         this.getData()
-        this.getProduct()
         this.getRetailerInfo()
         this.createSocket()
       } else if (this.loginUser.isretailer === 2) {
@@ -1134,6 +1157,7 @@ export default {
   },
   activated () {
     this.$util.miniPost()
+    this.showQrcodeModal = false
     this.refresh()
   }
 }
@@ -1141,6 +1165,11 @@ export default {
 <style lang="less">
 #chat-room {
   height: 100%;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 #chat-room .bottom-area {
   position: absolute;

@@ -1,29 +1,29 @@
 <template>
-  <div class="containerarea bg-white font14 product notop">
+  <div id="product-page" class="containerarea bg-white font14 product notop">
     <template v-if="showSos">
       <sos :title="sosTitle"></sos>
     </template>
     <template v-if="showcontainer">
       <div v-if="playVideo" class="videoarea">
-        <video
-          ref="productVideo"
-          :src="productdata.video"
-          controls
-          autoplay="true"
-          webkit-playsinline=""
-          playsinline="true"
-          x-webkit-airplay="true"
-          raw-controls=""
-          x5-video-player-type="h5"
-          x5-video-player-fullscreen="true"
-          x5-video-orientation="portrait">
-        </video>
-        <div class="close-icon flex_center" @click="stopPlay('productVideo')">关闭</div>
-        <!--
-        <div class="close-icon flex_center" @click="stopPlay('productVideo')">
-          <i class="al al-guanbi"></i>
+        <div class="video-inner">
+          <video
+            ref="productVideo"
+            :src="productdata.video"
+            controls
+            autoplay="true"
+            webkit-playsinline=""
+            playsinline="true"
+            x-webkit-airplay="true"
+            raw-controls=""
+            x5-video-player-type="h5"
+            x5-video-player-fullscreen="true"
+            x5-video-orientation="portrait">
+          </video>
         </div>
-      -->
+        <div class="btn-area flex_center">
+          <div class="btn-item flex_center" @click="saveVideo('productVideo')">保存</div>
+          <div class="btn-item flex_center" @click="stopPlay('productVideo')">关闭</div>
+        </div>
       </div>
       <div id="scroll-container" class="pagemiddle scroll-container">
         <title-tip scroll-box="scroll-container" @access="access" :user="loginUser" :messages="messages" :avatar-href="loginUser.avatar" :user-name="loginUser.linkman" :user-credit="loginUser.credit"></title-tip>
@@ -56,32 +56,71 @@
   			</div>
         <div class="pt12 pb12 bg-white pl10 pr10 b_bottom_after">
       		<div class="clamp2">
-            <span class="v_middle db-in bold"><span v-if="productdata.moderate != 1" class="color-gray bold">【已下架】</span>{{ productdata.title }}</span>
+            <span class="v_middle db-in bold" @click="copyTxt" style="position:relative;">
+              <span v-if="productdata.moderate != 1" class="color-gray bold">【已下架】</span>{{ productdata.title }}
+              <div class="copy_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ productdata.title }}</div>
+            </span>
             <span v-if="loginUser && loginUser.groupid == 1" class="v_middle db-in color-gray font12">分享次数:{{ productdata.shares }}</span>
           </div>
+          <div v-if="productdata.sellingpoint && productdata.sellingpoint != ''" class="color-theme">{{productdata.sellingpoint}}</div>
           <div class="color-red">
             <span class="font18 mr3 v_middle">{{ $t('RMB') }}</span>
             <span class="font18 mr5 v_middle">{{ productdata.price }}</span>
-            <span class="color-gray font14 line-through" v-if="productdata.oriprice">
+            <span class="color-gray font14 line-through" v-if="productdata.oriprice && productdata.oriprice > 0">
               <span class="mr3 v_middle">{{ $t('RMB') }}</span>
               <span class="v_middle">{{ productdata.oriprice }}</span>
             </span>
           </div>
-          <div class="t-table font12 mt5 color-gray2">
-            <template v-if="productdata.postage">
-    					<div v-if="productdata.postage == 0" class="t-cell v_middle">{{ $t('Postage') }}: 包邮</div>
-    					<div v-else class="t-cell v_middle">{{ $t('Postage') }}: {{ $t('RMB') }}{{ productdata.postage }}</div>
-    					<div class="t-cell v_middle pl10 align_right">销量: {{ productdata.saled }}{{ productdata.unit }}</div>
+          <div class="flex_left mt5 color-gray" v-if="(productdata.tb_price != '' && productdata.tb_price > 0) || (productdata.jd_price != '' && productdata.jd_price > 0)">
+            <span v-if="productdata.tb_price != '' && productdata.tb_price > 0">猫价: ￥{{productdata.tb_price}}</span><span :class="{'ml10': (productdata.tb_price != '' && productdata.jd_price > 0)}" v-if="productdata.jd_price != '' && productdata.jd_price > 0">狗价: ￥{{productdata.jd_price}}</span>
+          </div>
+          <div class="flex_left font12 mt5 color-gray2">
+  					<div v-if="productdata.postage == 0" class="flex_left">{{ $t('Postage') }}: 包邮</div>
+  					<div v-else class="flex_left w90">{{ $t('Postage') }}: {{ $t('RMB') }}{{ productdata.postage }}</div>
+            <template v-if="productdata.uploader != -1 && (productdata.buyonline == 1 && (!activityInfo.id || (activityInfo.id && activityInfo.type == 'bargainbuy')) && ((loginUser && loginUser.uid == retailerInfo.uid) || productdata.identity != 'user'))">
+              <div class="flex_cell flex_center">销量: {{ productdata.saled }}{{ productdata.unit }}</div>
+              <div class="flex_right color-red" @click="clickSeller"><span class="al al-bangzhu font15"></span><span>返点客佣金: {{ $t('RMB') }}{{ productdata.rebate }}</span>
+              </div>
             </template>
-            <div v-else class="t-cell v_middle align_left">销量: {{ productdata.saled }}{{ productdata.unit }}</div>
-            <div v-if="productdata.buyonline == 1 && (!activityInfo.id || (activityInfo.id && activityInfo.type == 'bargainbuy')) && ((loginUser && loginUser.uid == retailerInfo.uid) || productdata.identity != 'user')" class="t-cell v_middle border-box align_right">
-              <span class="color-red">佣金: {{ $t('RMB') }}{{ productdata.rebate }}</span>
-            </div>
-  					<div v-if="productdata.buyonline != 1" class="t-cell v_middle align_right " @click="popupbuy">
-  						<span class="help-icon">?</span>了解购买流程
-  					</div>
+            <template v-else-if="productdata.buyonline != 1">
+              <div class="flex_cell flex_center">销量: {{ productdata.saled }}{{ productdata.unit }}</div>
+    					<div class="flex_cell flex_right" @click="popupbuy">
+    						<span class="help-icon">?</span>了解购买流程
+    					</div>
+            </template>
+            <template v-else>
+              <div class="flex_cell flex_right">销量: {{ productdata.saled }}{{ productdata.unit }}</div>
+            </template>
   				</div>
     		</div>
+        <template v-if="productdata.options && productdata.options.length">
+          <div class="bg-page" style="height:10px;"></div>
+          <div class="b_top_after"></div>
+          <div class="padding10 b_bottom_after" @click="buyevent">
+            <div class="flex_left">
+              <div class="w40 flex_left">规格</div>
+              <div class="flex_cell flex_left color-gray" v-if="selectedOption && selectedOption.id">{{selectedOption.title}}</div>
+              <div class="flex_cell flex_left color-gray" v-else>请选择</div>
+            </div>
+            <div class="card-options">
+              <template v-for="(item,index) in productdata.options">
+                <!-- <div v-if="item.photo !== ''">
+                  <img v-if="index < 5" :src="item.photo" />
+                </div>
+                <div v-else>
+                  <img v-if="index < 5" :src="notgeimg" />
+                </div> -->
+                <div v-if="index < 5">
+                  <img v-if="item.photo && item.photo !== ''" :src="item.photo" />
+                  <img v-else :src="photoarr[0]" />
+                </div>
+              </template>
+              <div class="flex_center txt-item">
+                <div class="btn flex_center">共{{productdata.options.length}}种规格可选</div>
+              </div>
+            </div>
+          </div>
+        </template>
   			<div class="groupbuarea" v-if="activityInfo.id && activityInfo.type == 'groupbuy' && activitydata.length > 0">
   				<div class="bg-page" style="height:10px;"></div>
   				<div class="bg-white">
@@ -229,7 +268,12 @@
           <div v-html="productdata.content"></div>
           <img v-for="(item,index) in previewerPhotoarr" :key="index" :src="item.src" @click="showBigimg(index)" />
         </div>
-        <div class="productarea scrollendarea scrollend" style="background-color:#f6f6f6;"></div>
+        <div class="productarea scrollendarea scrollend">
+          <div class="inner">
+            <div class="txt1">{{WeixinName}}</div>
+            <div class="txt2">-- 社交电商2.0 --</div>
+          </div>
+        </div>
       </div>
   		<div class="pagebottom b_top_after" v-if="productdata.moderate != 1">
   			<div class="t-table h_100">
@@ -425,23 +469,70 @@
         <div class="btnknow" @click="closeShareLayer">知道了</div>
       </div>
     </div>
+    <template v-if="showSellerTip">
+      <tip-layer title="返点客佣金" content="当你成为某个卖家的返点客用户时，你销售该卖家的某件商品所得到的佣金，返点客佣金只有返点客才能看到。" @clickClose="closeSellerTip"></tip-layer>
+    </template>
+    <div v-transfer-dom class="x-popup buy-popup-layer">
+      <popup v-model="showBuy" height="100%">
+        <div class="product-options-area columnarea">
+          <div class="column-content" @click="closeOptions"></div>
+          <div class="options-box columnarea">
+            <div class="close-area flex_center color-gray" @click="closeOptions"><span class="al al-close"></span></div>
+            <div class="column-content columnarea">
+              <div class="part1 flex_left">
+                <div class="pic flex_left" v-if="selectedOption.photo !== ''">
+                  <img :src="selectedOption.photo" @click="viewBigImg(0)" />
+                </div>
+                <div class="pic flex_left" v-else>
+                  <img :src="photoarr[0]" @click="viewBigImg(0)" />
+                </div>
+                <div class="flex_cell flex_left">
+                  <div class="w_100">
+                    <div class="color-theme" v-if="!clickBuytype || clickBuytype == ''"><span>￥</span><span class="bold font16">{{productdata.price}}</span></div>
+                    <div class="color-theme" v-else><span>￥</span><span class="bold font16">{{activityInfo.groupprice}}</span></div>
+                    <div class="mt10 color-gray">库存{{selectedOption.storage}}{{productdata.unit}}</div>
+                    <div class="mt10" v-if="selectedOption.title">已选: {{selectedOption.title}}</div>
+                    <div class="mt10" v-else>请选择 规格</div>
+                  </div>
+                </div>
+              </div>
+              <div class="part2 column-content">
+                <div class="pt10">规格</div>
+                <div class="options-list">
+                  <div v-for="(item,index) in productdata.options" :class="`options-item ${(selectedOptionIndex == index && item.storage > 0) ? 'active' : ''} ${item.storage <= 0 ? 'disabled' : ''}`" @click="clickOptions(item,index)">
+                    <div class="flex_center" v-if="item.photo && item.photo !== ''">
+                      <img :src="item.photo" /><span class="ml5">{{item.title}}</span>
+                    </div>
+                    <div class="flex_center" v-else>
+                      <img :src="photoarr[0]" /><span class="ml5">{{item.title}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="options-bottom flex_center">
+              <div class="flex_cell h_100 flex_center">
+                <template v-if="clickBuytype == 'groupbuy'">
+                  <div class="bg-theme color-white flex_center btn" @click="buyOption('groupbuy')">一键拼团</div>
+                </template>
+                <template v-else-if="clickBuytype == 'group'">
+                  <div class="bg-theme color-white flex_center btn" @click="buyOption('group')">去参团</div>
+                </template>
+                <template v-else>
+                  <div v-if="activityInfo.id && activityInfo.type == 'groupbuy'" class="bg-theme color-white flex_center btn" @click="buyOption">原价购买</div>
+                  <div v-else class="bg-theme color-white flex_center btn" @click="buyOption">立即购买</div>
+                </template>
+              </div>
+            </div>
+          </div>
+        </div>
+      </popup>
+    </div>
+    <div v-transfer-dom>
+      <previewer :list="previewerOptionsPhoto" ref="previewerOption"></previewer>
+    </div>
   </div>
 </template>
-
-<i18n>
-Selection promotion:
-  zh-CN: 精选促销
-All products:
-  zh-CN: 全部商品
-Online consulting:
-  zh-CN: 在线咨询
-Wechat contact:
-  zh-CN: 微信联系
-Shop topline:
-  zh-CN: 店铺头条
-Another batch:
-  zh-CN: 换一批
-</i18n>
 
 <script>
 import { Previewer, Swiper, SwiperItem, TransferDom, Popup, Marquee, MarqueeItem, XImg } from 'vux'
@@ -451,7 +542,9 @@ import ShareSuccess from '@/components/ShareSuccess'
 import CommentPopup from '@/components/CommentPopup'
 import Sos from '@/components/Sos'
 import TitleTip from '@/components/TitleTip'
+import TipLayer from '@/components/TipLayer'
 import Time from '#/time'
+import jQuery from 'jquery'
 import ENV from 'env'
 import { User } from '#/storage'
 import Socket from '#/socket'
@@ -464,7 +557,7 @@ export default {
     TransferDom
   },
   components: {
-    Previewer, Swiper, SwiperItem, Popup, Marquee, MarqueeItem, Groupbuyitemplate, Bargainbuyitemplate, ShareSuccess, CommentPopup, Sos, XImg, TitleTip
+    Previewer, Swiper, SwiperItem, Popup, Marquee, MarqueeItem, Groupbuyitemplate, Bargainbuyitemplate, ShareSuccess, CommentPopup, Sos, XImg, TitleTip, TipLayer
   },
   filters: {
     dateformat: function (value) {
@@ -518,7 +611,15 @@ export default {
       pageStart2: 0,
       showMoreFriends: false,
       startcss: 'start',
-      showShareLayer: false
+      showShareLayer: false,
+      WeixinName: ENV.WeixinName,
+      showSellerTip: false,
+      showBuy: false,
+      selectedOption: {},
+      selectedOptionIndex: 0,
+      previewerOptionsPhoto: [],
+      clickBuytype: null,
+      clickGoupData: null
     }
   },
   watch: {
@@ -569,6 +670,10 @@ export default {
     },
     evluatedata: function () {
       return this.evluatedata
+    },
+    previewerOptionsPhoto () {
+      console.log('监控规格图片的变化')
+      return this.previewerOptionsPhoto
     }
   },
   computed: {
@@ -620,9 +725,105 @@ export default {
       this.playVideo = false
       this.startcss = 'start'
       this.showShareLayer = false
+      this.showBuy = false
+      this.selectedOption = {}
+      this.selectedOptionIndex = 0
+      this.previewerOptionsPhoto = []
+      this.clickBuytype = null
+      this.clickGoupData = null
     },
     filterEmot (text) {
       return this.$util.emotPrase(text)
+    },
+    closeOptions () {
+      this.showBuy = false
+    },
+    clickOptions (item, index) {
+      this.selectedOption = item
+      this.selectedOptionIndex = index
+      this.previewerOptionsPhoto = this.$util.previewerImgdata([this.selectedOption.photo])
+    },
+    addShop (buytype) {
+      let isActivity = false
+      this.$vux.loading.show()
+      let postData = this.submitdata
+      if (buytype === 'group') {
+        postData.crowdowner = this.clickGoupData.uid
+      }
+      if (buytype === 'groupbuy' && this.activityInfo.id) {
+        postData.activityid = this.activityInfo.id
+        isActivity = true
+      }
+      postData.id = this.productdata.id
+      postData.wid = this.retailerInfo.uid
+      if (this.query.wechatorderid) {
+        postData.wechatorderid = this.query.wechatorderid
+      }
+      if (this.productdata.options.length && this.selectedOption && this.selectedOption.id) {
+        postData.poid = this.selectedOption.id
+      }
+      this.$http.post(`${ENV.BokaApi}/api/order/addShop`, postData).then((res) => {
+        let data = res.data
+        this.$vux.loading.hide()
+        if (data.flag === 1) {
+          let rparams = {id: data.data}
+          if (isActivity) {
+            rparams['activityid'] = this.activityInfo.id
+          }
+          this.$router.push({ path: '/addOrder', query: rparams })
+        } else if (data.error) {
+          this.$vux.toast.show({
+            text: data.error,
+            type: 'text',
+            time: this.$util.delay(data.error)
+          })
+        }
+      })
+    },
+    buyOption (buytype) {
+      if (!this.selectedOption || !this.selectedOption.id) {
+        this.$vux.toast.text('请选择商品规格', 'middle')
+        return false
+      }
+      if (this.selectedOption.storage <= 0) {
+        this.$vux.toast.text('该规格商品库存不足', 'middle')
+        return false
+      }
+      this.addShop(buytype)
+    },
+    clickSeller () {
+      this.showSellerTip = true
+    },
+    closeSellerTip () {
+      this.showSellerTip = false
+    },
+    copyTxt () {
+      const self = this
+      let eleobj = jQuery('#product-page .copy_txt')[0]
+      let range = null
+      let save = function (e) {
+        e.clipboardData.setData('text/plain', eleobj.innerHTML)
+        e.preventDefault()
+      }
+      if (self.$util.isIOS()) { // ios设备
+        window.getSelection().removeAllRanges()
+        range = document.createRange()
+        range.selectNode(eleobj)
+        window.getSelection().addRange(range)
+        document.execCommand('copy')
+        window.getSelection().removeAllRanges()
+      } else { // 安卓设备
+        console.log('in android')
+        document.addEventListener('copy', save)
+        document.execCommand('copy')
+        document.removeEventListener('copy', save)
+      }
+      setTimeout(function () {
+        self.$vux.toast.show({
+          text: '复制成功',
+          time: 1500
+        })
+      }, 200)
     },
     closeShareLayer () {
       this.showShareLayer = false
@@ -630,9 +831,12 @@ export default {
     clickPlay (refname) {
       const self = this
       this.playVideo = true
-      setTimeout(function () {
+      setTimeout(() => {
         self.$refs[refname].play()
       }, 100)
+    },
+    saveVideo () {
+      location.replace(this.productdata.video)
     },
     stopPlay (refname) {
       this.playVideo = false
@@ -731,7 +935,7 @@ export default {
         }
         self.$vux.loading.show()
         self.$http.get(`${ENV.BokaApi}/api/user/favorite/add`,
-          { params: { module: self.module, id: self.productid, currenturl: encodeURIComponent(cururl) } }
+          { params: { module: self.module, id: self.productid, wid: self.retailerInfo.uid, currenturl: encodeURIComponent(cururl) } }
         ).then(function (res) {
           let data = res.data
           self.$vux.loading.hide()
@@ -748,37 +952,23 @@ export default {
       this.isfavorite = !this.isfavorite
     },
     buyevent (buytype) {
-      const self = this
-      let isActivity = false
-      self.$vux.loading.show()
-      if (buytype === 'groupbuy' && self.activityInfo.id) {
-        self.submitdata['activityid'] = self.activityInfo.id
-        isActivity = true
+      if (buytype === 'group' || buytype === 'groupbuy') {
+        this.clickBuytype = buytype
       } else {
-        delete self.submitdata.activityid
+        this.clickBuytype = null
       }
-      self.submitdata.id = self.productdata.id
-      self.submitdata.wid = self.retailerInfo.uid
-      let postData = self.submitdata
-      if (self.query.wechatorderid) {
-        postData.wechatorderid = self.query.wechatorderid
-      }
-      self.$http.post(`${ENV.BokaApi}/api/order/addShop`, postData).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        if (data.flag === 1) {
-          let rparams = {id: data.data}
-          if (isActivity) {
-            rparams['activityid'] = self.activityInfo.id
-          }
-          self.$router.push({ path: '/addOrder', query: rparams })
-        } else if (data.error) {
-          self.$vux.toast.show({
-            text: data.error,
-            time: self.$util.delay(data.error)
-          })
+      console.log('buytype')
+      console.log(this.clickBuytype)
+      if (this.productdata.options.length) {
+        if (!this.selectedOption || !this.selectedOption.id) {
+          this.selectedOption = this.productdata.options[0]
+          this.selectedOptionIndex = 0
+          this.previewerOptionsPhoto = this.$util.previewerImgdata([this.selectedOption.photo])
         }
-      })
+        this.showBuy = true
+      } else {
+        this.addShop(buytype)
+      }
     },
     showBigimg (index) {
       const self = this
@@ -805,6 +995,17 @@ export default {
         })
       }
     },
+    viewBigImg (index) {
+      const self = this
+      if (self.$util.isPC()) {
+        self.$refs.previewerOption.show(0)
+      } else {
+        window.WeixinJSBridge.invoke('imagePreview', {
+          current: this.selectedOption.photo,
+          urls: [this.selectedOption.photo]
+        })
+      }
+    },
     closeShareSuccess () {
       this.showShareSuccess = false
       this.showVideo = true
@@ -822,7 +1023,7 @@ export default {
       let shareData = {
         module: self.module,
         moduleid: self.productid,
-        link: `${ENV.Host}/#/product?id=${self.productid}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}&wechatorderid=${this.query.wechatorderid}`,
+        link: `${ENV.Host}/#/product?id=${self.productid}&wid=${self.productdata.wid}&share_uid=${self.loginUser.uid}&wechatorderid=${this.query.wechatorderid}`,
         successCallback: function () {
           self.showShareSuccess = true
           self.showVideo = false
@@ -877,24 +1078,20 @@ export default {
       }, 1000)
     },
     addGroup (item) {
-      const self = this
-      self.$vux.loading.show()
-      let postdata = self.submitdata
-      postdata.crowdowner = item.uid
-      postdata.activityid = item.activityid
-      postdata.id = self.productdata.id
-      self.$http.post(`${ENV.BokaApi}/api/order/addShop`, postdata).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        if (data.flag === 1) {
-          self.$router.push({ path: '/addOrder', query: { id: data.data } })
-        } else if (data.error) {
-          self.$vux.toast.show({
-            text: data.error,
-            time: self.$util.delay(data.error)
-          })
-        }
-      })
+      this.clickGoupData = item
+      this.buyevent('group')
+      // self.$http.post(`${ENV.BokaApi}/api/order/addShop`, postdata).then(function (res) {
+      //   let data = res.data
+      //   self.$vux.loading.hide()
+      //   if (data.flag === 1) {
+      //     self.$router.push({ path: '/addOrder', query: { id: data.data } })
+      //   } else if (data.error) {
+      //     self.$vux.toast.show({
+      //       text: data.error,
+      //       time: self.$util.delay(data.error)
+      //     })
+      //   }
+      // })
     },
     onReply (item) {
       this.replyData = item
@@ -943,7 +1140,7 @@ export default {
       }
       this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
         params: infoparams
-      }).then(function (res) {
+      }).then((res) => {
         if (res && res.status === 200) {
           let data = res.data
           self.$vux.loading.hide()
@@ -953,6 +1150,11 @@ export default {
           } else {
             self.showcontainer = true
             self.productdata = data.data
+            this.createSocket()
+            if (this.productdata.options.length) {
+              this.selectedOption = {storage: this.productdata.storage, photo: this.productdata.options[0].photo}
+              this.previewerOptionsPhoto = this.$util.previewerImgdata([this.productdata.options[0].photo])
+            }
             self.retailerInfo = self.productdata.retailerinfo
             if (self.productdata.activityinfo) {
               self.activityInfo = self.productdata.activityinfo
@@ -1049,7 +1251,7 @@ export default {
       const uid = this.loginUser.uid
       const linkman = this.loginUser.linkman
       // const fromId = this.query.fromId
-      room = `${this.module}-${this.query.id}`
+      room = `${this.module}-${this.query.id}-${this.productdata.wid}`
       Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module, fromId: this.query.id})
     },
     handleScroll2 (refname) {
@@ -1117,12 +1319,14 @@ export default {
         this.showShareSuccess = false
         this.showVideo = true
         this.query = this.$route.query
-        if (this.query.wechatorderid) {
+        if (this.query.module) {
+          this.module = this.query.module
+        }
+        if (this.query.iswechat) {
           this.showShareLayer = true
         }
         this.$vux.loading.show()
         this.getData()
-        this.createSocket()
       }
       window.onresize = function () {
         if (self.buyuserdata.length > 0) {
@@ -1132,6 +1336,7 @@ export default {
     }
   },
   created () {
+    console.log(this.$wechat)
     this.init()
   },
   activated () {
@@ -1147,15 +1352,32 @@ export default {
 
 <style lang="less">
 .notop .pagetop{display:none;}
+.product{
+  .card-options{
+    display: flex;flex-wrap: wrap;
+    img{width:30px;height:30px;margin-right:10px;object-fit:cover;margin-top:10px;}
+    .txt-item{margin-top:10px;}
+    .btn{border-radius:10px;background-color:#ccc;color:#999;font-size:12px;height:22px;padding:0 10px;}
+  }
+}
 .product .videobg{width:100%;height:100%;background-size:cover;background-position:center;position:relative;}
 .product .play-icon{
   width:60px;height:60px;background: rgba(0,0,0,.4);border-radius: 50%;color:#fff;
   position:absolute;left:50%;top:50%;margin-left:-30px;margin-top:-30px;
 }
 .product .play-icon .al{margin-left:4px;}
-.product .videoarea{position:absolute;left:0;top:0;right:0;bottom:0;z-index:9999;background-color:#000;color:#fff;}
-.product .videoarea video{position: absolute;width: 100%;height: 100%;}
-.product .videoarea .close-icon{position:absolute;left:50%;top:7px;width:60px;height:30px;margin-left:-30px;background-color:#232323;color:#fff;border-radius:10px;}
+.product .videoarea{
+  position:absolute;left:0;top:0;right:0;bottom:0;z-index:9999;background-color:#000;color:#fff;
+  .btn-area{
+    position:absolute;left:0;top:7px;right:0;height:50px;z-index:10;
+    .btn-item:not(:last-child){margin-right:20px;}
+    .btn-item{width:60px;height:30px;background-color:#232323;color:#fff;border-radius:10px;}
+  }
+  .video-inner{
+    position:absolute;left:0;top:0;right:0;bottom:0;
+    video{position: absolute;width: 100%;height: 100%;}
+  }
+}
 .product .fixed-topcoll{position:absolute;right:0;top:20px;z-index:10;width:80px;height:35px;border-top-left-radius:20px;border-bottom-left-radius:20px;background-color:rgba(153,153,153,0.8);color:#fff;}
 .product .fixed-topcoll.start{top:60px;}
 .vline{position:relative;}

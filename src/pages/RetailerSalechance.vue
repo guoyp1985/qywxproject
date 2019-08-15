@@ -19,68 +19,64 @@
           </div>
         </div>
         <tab v-model="selectedIndex" class="v-tab">
-          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
+          <tab-item v-for="(item,index) in tabtxts" :selected="index == selectedIndex" :key="index" @on-item-click="clickTab">{{item}}</tab-item>
         </tab>
       </div>
       <div class="pagemiddle bg-white pl12 pr12">
-        <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
-          <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
-            <div v-if="index === 0" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)">
-              <template v-if="disdatalist1">
-                <div v-if="tabdata1.length == 0" class="scroll_item padding10 color-gray align_center">
-                  <div class="t-table ml10">
-                    <div class="t-cell">
-                      <div><i class="al al-yulan3 font70 pt20"></i></div>
-                      <div class="mt5">暂无分享数据，将商品、活动或文章分享给好友或朋友圈，即可获得更多销售机会！</div>
-                    </div>
+        <div v-show="selectedIndex === 0" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',0)">
+          <template v-if="disdatalist1">
+            <div v-if="tabdata1.length == 0" class="scroll_item padding10 color-gray align_center">
+              <div class="t-table ml10">
+                <div class="t-cell">
+                  <div><i class="al al-yulan3 font70 pt20"></i></div>
+                  <div class="mt5">暂无分享数据，将商品、活动或文章分享给好友或朋友圈，即可获得更多销售机会！</div>
+                </div>
+              </div>
+            </div>
+            <timeline v-else class="x-timeline">
+              <timeline-item v-for="(item, index) in tabdata1" :key="item.id">
+                <div class="color-lightgray font14 ddate">{{ item.dateline | dateformat }}</div>
+                <div class="color-999 font12 dtime">{{ item.dateline | dateformat1 }}</div>
+                <div class="t-table ml10">
+                  <div @click="toMembersView(item)" class="t-cell">
+                    <div class="color-orange7 font14">{{ item.linkman }}</div>
+                    <div class="color-gray font12 pr10">{{ item.content }}</div>
+                  </div>
+                  <div @click="toChat(item)" class="t-cell w50 align_right v_middle">
+                    <div class="qbtn bg-red color-white">{{ $t('Contact') }}</div>
                   </div>
                 </div>
-                <timeline v-else class="x-timeline">
-                  <timeline-item v-for="(item, index) in tabdata1" :key="item.id">
-                    <div class="color-lightgray font14 ddate">{{ item.dateline | dateformat }}</div>
-                    <div class="color-999 font12 dtime">{{ item.dateline | dateformat1 }}</div>
-                    <div class="t-table ml10">
-                      <div @click="toMembersView(item)" class="t-cell">
-                        <div class="color-orange7 font14">{{ item.linkman }}</div>
-                        <div class="color-gray font12 pr10">{{ item.content }}</div>
-                      </div>
-                      <div @click="toChat(item)" class="t-cell w50 align_right v_middle">
-                        <div class="qbtn bg-red color-white">{{ $t('Contact') }}</div>
-                      </div>
-                    </div>
-                  </timeline-item>
-                </timeline>
-              </template>
+              </timeline-item>
+            </timeline>
+          </template>
+        </div>
+        <div v-show="selectedIndex === 1" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',1)">
+          <template v-if="disdatalist2">
+            <div v-if="tabdata2.length == 0" class="scroll_item padding10 color-gray align_center">
+              <div class="t-table ml10">
+                <div class="t-cell">
+                  <div><i class="al al-yulan3 font70 pt20"></i></div>
+                  <div class="mt5">暂无浏览数据，将商品、活动或文章分享给好友或朋友圈，即可获得更多销售机会！</div>
+                </div>
+              </div>
             </div>
-            <div v-else-if="index === 1" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',index)">
-              <template v-if="disdatalist2">
-                <div v-if="tabdata2.length == 0" class="scroll_item padding10 color-gray align_center">
-                  <div class="t-table ml10">
-                    <div class="t-cell">
-                      <div><i class="al al-yulan3 font70 pt20"></i></div>
-                      <div class="mt5">暂无浏览数据，将商品、活动或文章分享给好友或朋友圈，即可获得更多销售机会！</div>
-                    </div>
+            <timeline v-else class="x-timeline vux-tab">
+              <timeline-item v-for="(item, index) in tabdata2" :key="item.id">
+                <div class="color-lightgray font14 ddate">{{ item.dateline | dateformat }}</div>
+                <div class="color-gray font12 dtime">{{ item.dateline | dateformat1 }}</div>
+                <div class="t-table ml10">
+                  <div @click="toMembersView(item)" class="t-cell">
+                    <div class="color-orange7 font14">{{ item.linkman }}</div>
+                    <div class="color-gray font12 pr10">{{ item.content }}</div>
+                  </div>
+                  <div @click="toChat(item)" class="t-cell w50 align_right v_middle">
+                    <div class="qbtn bg-red color-white">{{ $t('Contact') }}</div>
                   </div>
                 </div>
-                <timeline v-else class="x-timeline vux-tab">
-                  <timeline-item v-for="(item, index) in tabdata2" :key="item.id">
-                    <div class="color-lightgray font14 ddate">{{ item.dateline | dateformat }}</div>
-                    <div class="color-gray font12 dtime">{{ item.dateline | dateformat1 }}</div>
-                    <div class="t-table ml10">
-                      <div @click="toMembersView(item)" class="t-cell">
-                        <div class="color-orange7 font14">{{ item.linkman }}</div>
-                        <div class="color-gray font12 pr10">{{ item.content }}</div>
-                      </div>
-                      <div @click="toChat(item)" class="t-cell w50 align_right v_middle">
-                        <div class="qbtn bg-red color-white">{{ $t('Contact') }}</div>
-                      </div>
-                    </div>
-                  </timeline-item>
-                </timeline>
-              </template>
-            </div>
-          </swiper-item>
-        </swiper>
+              </timeline-item>
+            </timeline>
+          </template>
+        </div>
       </div>
     </template>
   </div>
@@ -165,17 +161,11 @@ export default {
   },
   methods: {
     toMembersView (item) {
-      let params = {uid: item.uid}
-      if (this.query.from) {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {uid: item.uid})
       this.$router.push({path: '/membersView', query: params})
     },
     toChat (item) {
-      let params = {uid: item.uid, fromModule: 'retailer'}
-      if (this.query.from) {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {uid: item.uid, fromModule: 'retailer'})
       this.$router.push({path: '/chat', query: params})
     },
     handleScroll: function (refname, index) {
@@ -223,6 +213,9 @@ export default {
         self.tabdata2 = self.tabdata2.concat(retdata)
         self.disdatalist2 = true
       })
+    },
+    clickTab () {
+      this.swiperChange()
     },
     swiperChange (index) {
       if (index !== undefined) {
@@ -284,6 +277,7 @@ export default {
           this.showApply = true
         } else {
           self.initContainer()
+          document.title = this.loginUser.retailerinfo.title
           this.showContainer = true
           this.swiperChange()
         }

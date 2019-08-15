@@ -3,17 +3,17 @@
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
-      <div class="s-topbanner s-topbanner1 bg-white">
+      <!-- <div class="s-topbanner s-topbanner1 bg-white">
         <div class="row">
           <tab v-model="selectedIndex" class="v-tab">
             <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
           </tab>
         </div>
-      </div>
-      <div class="s-container s-container1">
+      </div> -->
+      <div class="s-container s-container1" style="top:0;">
         <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
           <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
-            <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll1">
+            <!-- <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll1">
               <div class="font15 pt15 pl10 pr10">搜索关键词采集文章</div>
               <div class="font12 color-gray mt5 pl10 pr10">在搜索框内输入文章关键词，点击“搜索”按钮搜索相关文章后，即可预览或采集文章素材。</div>
               <div class="mb15" style="position:relative;">
@@ -66,8 +66,8 @@
                   </div>
                 </div>
               </div>
-            </div>
-            <div v-if="(index == 1)" class="swiper-inner scroll-container2">
+            </div> -->
+            <div class="swiper-inner scroll-container2">
               <div class="pl10 pr10">
                 <div class="font15 pt15">文章链接采集文章</div>
                 <div class="font12 color-gray mt5">请从微信公众号中复制文章链接，粘贴在文本框内，点击“采集”按钮，采集成功后即可编辑分享</div>
@@ -120,13 +120,16 @@
           </swiper-item>
         </swiper>
       </div>
-      <!-- <div class="s-bottom bottomnaviarea b_top_after" v-if="query.from != 'miniprogram'">
-        <div class="t-table bottomnavi">
-          <router-link class="t-cell item" :to="{path: '/store', query: {wid: loginUser.uid}}">{{ $t('My shop') }}</router-link>
-          <router-link class="t-cell item" to="/centerSales">{{ $t('Sales center') }}</router-link>
-          <router-link class="t-cell item" to="/retailerOrders">{{ $t('My orders') }}</router-link>
-        </div>
-      </div> -->
+      <template v-if="showFirst">
+        <firstTip @submitFirstTip="submitFirstTip">
+          <div class="font15 bold txt">
+            <div class="flex_center">{{sysParams.advance_grabnews}}</div>
+          </div>
+        </firstTip>
+      </template>
+      <template v-if="showHb">
+        <firstHb action="grabnews" @closeFirstHb="closeFirstHb"></firstHb>
+      </template>
     </template>
   </div>
 </template>
@@ -138,13 +141,15 @@
 import { Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, Checker, CheckerItem, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
-import { User } from '#/storage'
+import { User, SystemParams } from '#/storage'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
+import FirstTip from '@/components/FirstTip'
+import FirstHb from '@/components/FirstHb'
 
 export default {
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, Checker, CheckerItem, XImg, Sos, Subscribe
+    Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, Checker, CheckerItem, XImg, Sos, Subscribe, FirstTip, FirstHb
   },
   filters: {
     dateformat: function (value) {
@@ -157,6 +162,7 @@ export default {
       showContainer: false,
       query: {},
       loginUser: {},
+      retailerInfo: {},
       autofixed: false,
       tabtxts: [ '关键词', '链接' ],
       selectedIndex: 0,
@@ -174,10 +180,29 @@ export default {
       limit1: 10,
       clickSearchword: '',
       historyLimit: 15,
-      newsCount: 0
+      newsCount: 0,
+      isFirst: false,
+      showFirst: false,
+      showHb: false,
+      routerParams: {},
+      sysParams: {}
     }
   },
   methods: {
+    initData () {
+      this.isFirst = false
+      this.showFirst = false
+      this.showHb = false
+      this.routerParams = {}
+    },
+    submitFirstTip () {
+      this.showFirst = false
+    },
+    closeFirstHb () {
+      this.isFirst = false
+      this.showHb = false
+      this.afterCollect1()
+    },
     delKey (e) {
       console.log(e)
       console.log('删除标签')
@@ -418,13 +443,13 @@ export default {
         self.$vux.loading.show()
         self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`,
           { do: 'download', url: self.collecturl }
-        ).then(function (res) {
+        ).then((res) => {
           const data = res.data
           self.$vux.loading.hide()
           self.$vux.toast.show({
             text: data.error,
             time: self.$util.delay(data.error),
-            onHide: function () {
+            onHide: () => {
               if (data.flag === 1) {
                 self.collecturl = ''
                 let queryParmas = {id: data.data.id, control: 'edit'}
@@ -432,12 +457,20 @@ export default {
                   queryParmas.minibackurl = self.query.minibackurl
                   queryParmas.backtype = self.query.backtype
                 }
-                self.$router.push({path: '/news', query: queryParmas})
+                this.routerParams = queryParmas
+                if (this.isFirst) {
+                  this.showHb = true
+                } else {
+                  this.afterCollect1()
+                }
               }
             }
           })
         })
       }
+    },
+    afterCollect1 () {
+      this.$router.push({path: '/news', query: this.routerParams})
     },
     init () {
       const self = this
@@ -459,7 +492,19 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.query = this.$route.query
-      console.log(this.query)
+      this.initData()
+      if (`${this.loginUser.retailerinfo.firstinfo.grabnews}` === '0' && this.query.from) {
+        this.$http.get(`${ENV.BokaApi}/api/user/show`).then((res) => {
+          this.loginUser = res.data
+          User.set(this.loginUser)
+          if (`${this.loginUser.retailerinfo.firstinfo.grabnews}` === '0' && this.query.from) {
+            this.isFirst = true
+            // if (`${this.loginUser.retailerinfo.firstinfo.addnews}` !== '0') {
+            //   this.showFirst = true
+            // }
+          }
+        })
+      }
       if (self.selectedIndex === 1) {
         let curArea = self.$refs.urlTextarea[0] ? self.$refs.urlTextarea[0] : self.$refs.urlTextarea
         curArea.updateAutosize()
@@ -480,6 +525,7 @@ export default {
         } else {
           self.initContainer()
           self.showContainer = true
+          document.title = this.loginUser.retailerinfo.title
           if (self.loginUser.isretailer === 2) {
             self.$http.get(`${ENV.BokaApi}/api/list/news`, {
               params: { from: 'retailer', pagestart: 0, limit: 5 }
@@ -501,6 +547,9 @@ export default {
   },
   activated () {
     this.refresh()
+    this.$util.getSystemParams(() => {
+      this.sysParams = SystemParams.get()
+    })
     this.$util.miniPost()
   }
 }

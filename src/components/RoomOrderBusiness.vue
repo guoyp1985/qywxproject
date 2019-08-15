@@ -6,7 +6,7 @@
 <template>
   <div class="room-order-business">
     <div class="room-order-business-info">
-      <router-link :to="{ name: 'tRoomOrderBusiness', query: {id: item.id} }">
+      <div @click="toDetail">
         <div class="db-flex">
           <div class="order-avatar flex_cell">
             <img class="v_middle imgcover" :src="item.product_photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
@@ -23,7 +23,7 @@
         <div class="order-status">
           <span class="font13">{{statusName}}</span>
         </div>
-      </router-link>
+      </div>
     </div>
     <div v-if="item.flag === -1" class="stats-area font14">
       <div class="info-area align_right">
@@ -108,8 +108,22 @@ export default {
     }
   },
   methods: {
+    toDetail () {
+      let from = this.$route.query.from
+      let params = {id: this.item.id}
+      if (from) {
+        params.from = from
+      }
+      this.$router.push({path: '/roomOrderBusiness', query: params})
+    },
     toPay () {
-      location.replace(`${ENV.Host}/#/pay?id=${this.item.orderid}&module=payorders`)
+      let from = this.$route.query.from
+      if (from) {
+        this.$wechat.miniProgram.navigateTo({url: `/packageB/pages/pay?id=${this.item.orderid}&module=payorders&weburl=roomOrders`})
+      } else {
+        let backurl = encodeURIComponent('/roomOrders')
+        location.replace(`${ENV.Host}/#/pay?id=${this.item.orderid}&module=payorders&backurl=${backurl}`)
+      }
     }
   }
 }

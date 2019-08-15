@@ -192,6 +192,10 @@ export default {
   props: {
     elem: String,
     query: Object,
+    loginUser: {
+      type: Object,
+      default: {}
+    },
     module: {
       type: String,
       default: 'news'
@@ -352,12 +356,14 @@ export default {
       })
     },
     getProductData () {
-      let params = { params: { from: 'retailer', pagestart: self.pagestart1, limit: self.limit } }
+      let params = {pagestart: self.pagestart1, limit: self.limit, wid: this.loginUser.uid}
       let keyword = self.searchword
       if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
-        params.params.keyword = keyword
+        params.keyword = keyword
       }
-      self.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(function (res) {
+      self.$http.get(`${ENV.BokaApi}/api/retailer/getRetailerProducts`, {
+        params: params
+      }).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
         if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
@@ -454,11 +460,15 @@ export default {
                 maxnum: 1,
                 handleCallback: function (data) {
                   if (data.flag === 1 && data.data) {
-                    self.$emit('on-auto-save')
                     callback && callback(data.data)
+                    self.$emit('on-auto-save')
+                    // self.$vux.toast.show({
+                    //   text: data.data,
+                    //   time: 5000
+                    // })
                   } else if (data.error) {
                     self.$vux.toast.show({
-                      text: 'data.error',
+                      text: data.error,
                       time: self.$util.delay(data.error)
                     })
                   }
@@ -681,9 +691,9 @@ export default {
         let pquery = self.$route.query
         if (pquery.from === 'miniprogram') {
           const params = self.$util.query(linkurl)
-          self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}`})
+          self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}&module=product`})
         } else {
-          self.$router.push(linkurl)
+          self.$router.push({path: linkurl})
         }
       }
     }

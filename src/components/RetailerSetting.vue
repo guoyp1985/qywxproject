@@ -2,207 +2,227 @@
   <div class="containerarea bg-white font14 retailersetting">
     <div class="pagetop">
       <tab v-model="selectedIndex" class="v-tab">
-        <tab-item v-if="query.from == 'miniprogram'">卖家信息设置</tab-item>
+        <tab-item v-if="query.from">卖家信息设置</tab-item>
         <tab-item
           v-else
           v-for="(item,index) in tabtxts"
           :selected="query.from == 'seller' && index == 1"
           :key="index">{{item}}</tab-item>
-        <!--
-        <tab-item
-          v-else
-          v-for="(item,index) in tabtxts"
-          :selected="(!query.from && index == selectedIndex) || (query.from == 'seller' && index == 1) || (query.from == 'miniprogram' && query.from_type != 'activity' && index == 1) || (query.from == 'miniprogram' && query.from_type == 'activity' && index == 0)"
-          :key="index">{{item}}</tab-item>
-        -->
       </tab>
     </div>
-    <div class="s-container" style="top:44px;">
-      <form enctype="multipart/form-data">
-        <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange('qrcode','fileInput')" />
-      </form>
-      <form enctype="multipart/form-data">
-        <input ref="fileInput1" class="hide" type="file" name="files" @change="fileChange('showphoto','fileInput1')" />
-      </form>
-      <swiper v-model="selectedIndex" class="x-swiper no-indicator">
-        <swiper-item v-if="selectedIndex === 0">
-          <div class="swiper-inner" style="bottom:50px;">
-            <form>
-              <forminputplate class="required">
-                <span slot="title">{{ $t('Shop name') }}</span>
-                <input v-model="submitdata.title" type="text" name="title" class="input border-box" :placeholder="$t('Shop name')" />
-              </forminputplate>
-              <div class="form-item required">
-                <div class="pb5">{{ $t('Wechat qrcode') }} <span class="al al-xing color-red font12" style="vertical-align: 3px;"></span><span class="color-gray">({{ $t('Upload wechat qrcode') }})</span></div>
-                <div>
-                  <input v-model="submitdata.qrcode" type="hidden" name="qrcode" />
-                  <div class="q_photolist align_left">
-                    <template v-if="photoarr.length > 0">
-                      <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
-                        <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
-                          <div class="close" @click="deletephoto(item,index,'qrcode')">×</div>
-                          <div class="clip"><i class="al al-set"></i></div>
-                        </div>
-                      </div>
-                    </template>
-                    <div v-if="photoarr.length < maxnum" class="photoitem add" @click="uploadPhoto('fileInput','qrcode')">
-                      <div class="inner">
-                        <div class="innerlist">
-                          <div class="flex_center h_100">
-                            <div class="txt">
-                              <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
-                              <div>点击上传</div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+    <form enctype="multipart/form-data">
+      <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange('qrcode','fileInput')" />
+    </form>
+    <form enctype="multipart/form-data">
+      <input ref="fileInput1" class="hide" type="file" name="files" @change="fileChange('showphoto','fileInput1')" />
+    </form>
+    <div v-show="selectedIndex == 0" class="s-container" style="top:44px;">
+      <div class="swiper-inner" style="bottom:50px;">
+        <form>
+          <forminputplate class="required">
+            <span slot="title">{{ $t('Shop name') }}</span>
+            <input v-model="submitdata.title" type="text" name="title" class="input border-box" :placeholder="$t('Shop name')" />
+          </forminputplate>
+          <div class="form-item required" v-if="query.fromapp != 'factory'">
+            <div class="pb5">{{ $t('Wechat qrcode') }} <span class="al al-xing color-red font12" style="vertical-align: 3px;"></span><span class="color-gray">({{ $t('Upload wechat qrcode') }})</span></div>
+            <div>
+              <input v-model="submitdata.qrcode" type="hidden" name="qrcode" />
+              <div class="q_photolist align_left">
+                <template v-if="photoarr.length > 0">
+                  <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
+                    <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
+                      <div class="close" @click="deletephoto(item,index,'qrcode')">×</div>
+                      <div class="clip"><i class="al al-set"></i></div>
                     </div>
                   </div>
-                  <div class="font12 color-blue3 mt5" @click="disqrcode">{{ $t('Upload qrcode text') }}</div>
-                </div>
-              </div>
-              <forminputplate class="required" v-if="query.from != 'miniprogram'">
-                <span slot="title">{{ $t('Pay type') }}</span>
-                <div>
-                  <!-- <check-icon class="red-check" :value.sync="submitdata.buyonline === 1" @click.native.stop="setbuyonline(1)">在线支付</check-icon>
-                  <check-icon class="red-check" :value.sync="submitdata.buyonline !== 1" @click.native.stop="setbuyonline(0)">线下支付</check-icon> -->
-                  <check-icon class="red-check" :value.sync="online" @click.native.stop="setbuyonline(1)">在线支付</check-icon>
-                  <check-icon class="red-check" :value.sync="offline" @click.native.stop="setbuyonline(0)">线下支付</check-icon>
-                </div>
-              </forminputplate>
-              <div v-show="showmore">
-                <forminputplate>
-                  <span slot="title">{{ $t('Shop description') }}</span>
-                  <group class="textarea-outer" style="padding:0;">
-                    <x-textarea
-                      name="text1"
-                      ref="contentTextarea"
-                      v-model="submitdata.content"
-                      style="padding:5px;"
-                      class="x-textarea noborder"
-                      :placeholder="$t('Shop description')"
-                      :show-counter="false"
-                      :rows="1"
-                      @on-change="textareaChange('contentTextarea')"
-                      @on-focus="textareaFocus('contentTextarea')"
-                      autosize>
-                    </x-textarea>
-                  </group>
-                </forminputplate>
-                <forminputplate v-if="query.from != 'miniprogram'">
-                  <span slot="title">{{ $t('Auto reply') }}</span>
-                  <group class="textarea-outer" style="padding:0;">
-                    <x-textarea
-                      name="text2"
-                      ref="fastreplyTextarea"
-                      v-model="submitdata.fastreply"
-                      style="padding:5px;"
-                      class="x-textarea noborder"
-                      :placeholder="$t('Auto reply')"
-                      :show-counter="false"
-                      :rows="1"
-                      @on-change="textareaChange('fastreplyTextarea')"
-                      @on-focus="textareaFocus('fastreplyTextarea')"
-                      autosize>
-                    </x-textarea>
-                  </group>
-                </forminputplate>
-                <div class="form-item required padding10" v-if="classData.length > 0"> <!-- //v-if="classData.length > 0 && classDataShow" -->
-                  <input v-model="productClass" type="hidden" name="productclass" />
-                  <div class="pb10">经营产品或服务<span class="color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
-                  <checker
-                  class="x-checker"
-                  type="checkbox"
-                  v-model="productClass"
-                  :max="3"
-                  default-item-class="ck-item"
-                  selected-item-class="ck-item-selected">
-                    <checker-item class="border1px color-gray" v-for="(item, index) in classData" :key="index" :value="item.id">{{ item.title }}</checker-item>
-                  </checker>
-                </div>
-              </div>
-              <div v-if="showmore" @click="expandevent" class="padding15 font14 align_center color-gray">{{ $t('Up text') }}<i class="al al-jiantou2-up font14 middle-cell"></i></div>
-              <div v-else class="padding15 font14 align_center color-gray"  @click="expandevent">{{ $t('Epand text') }}<i class="al al-jiantouyoushuang- font14"></i></div>
-            </form>
-          </div>
-          <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white" @click="submitevent">
-            <div class="flex_cell flex_center btn-bottom-red">{{ $t('Save') }}</div>
-          </div>
-        </swiper-item>
-        <swiper-item v-if="selectedIndex === 1 && query.from != 'miniprogram'">
-          <div class="swiper-inner" style="bottom:50px;">
-            <form>
-              <div class="form-item required">
-                <div class="pb5">{{ $t('Personal image') }} <span class="al al-xing color-red font12" style="vertical-align: 3px;"></span></div>
-                <div>
-                  <div class="q_photolist align_left">
-                    <template v-if="showphotoArr.length > 0">
-                      <div v-for="(item,index) in showphotoArr" :key="index" class="photoitem">
-                        <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
-                          <div class="close" @click="deletephoto(item,index,'showphoto')">×</div>
-                          <div class="clip"><i class="al al-set"></i></div>
-                        </div>
-                      </div>
-                    </template>
-                    <div v-if="showphotoArr.length < maxnum1" class="photoitem add" @click="uploadPhoto('fileInput1','showphoto')">
-                      <div class="inner">
-                        <div class="innerlist">
-                          <div class="flex_center h_100">
-                            <div class="txt">
-                              <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
-                              <div><span class="havenum">{{ showphotoArr.length }}</span><span class="ml5 mr5">/</span><span class="maxnum">{{ maxnum1 }}</span></div>
-                            </div>
-                          </div>
+                </template>
+                <div v-if="photoarr.length < maxnum" class="photoitem add" @click="uploadPhoto('fileInput','qrcode')">
+                  <div class="inner">
+                    <div class="innerlist">
+                      <div class="flex_center h_100">
+                        <div class="txt">
+                          <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
+                          <div>点击上传</div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <forminputplate>
-                <span slot="title">{{ $t('Seller said') }} <span class="al al-xing color-red font12" style="vertical-align: 3px;"></span></span>
-                <group class="textarea-outer" style="padding:0;">
-                  <x-textarea
-                    ref="sloganTextarea"
-                    v-model="submitdata1.slogan"
-                    style="padding:5px;"
-                    class="x-textarea noborder"
-                    :placeholder="$t('Seller said')"
-                    :show-counter="false"
-                    :rows="1"
-                    @on-change="textareaChange('sloganTextarea')"
-                    @on-focus="textareaFocus('sloganTextarea')"
-                    :autosize="true">
-                  </x-textarea>
-                </group>
-              </forminputplate>
-              <div class="form-item bg-white">
-                <div class="pt10 pb5">
-                  <div class="flex_left">
-                    <span class="v_middle">{{ $t('My tags') }}</span>
-                    <span class="font12 color-gray v_middle">(一次可添加多个标签，用英文逗号隔开)</span>
-                  </div>
+              <div class="font12 color-blue3 mt5" @click="disqrcode">{{ $t('Upload qrcode text') }}</div>
+            </div>
+          </div>
+          <forminputplate class="required" v-if="!query.from && query.fromapp != 'factory'">
+            <span slot="title">{{ $t('Pay type') }}</span>
+            <div>
+              <!-- <check-icon class="red-check" :value.sync="submitdata.buyonline === 1" @click.native.stop="setbuyonline(1)">在线支付</check-icon>
+              <check-icon class="red-check" :value.sync="submitdata.buyonline !== 1" @click.native.stop="setbuyonline(0)">线下支付</check-icon> -->
+              <check-icon class="red-check" :value.sync="online" @click.native.stop="setbuyonline(1)">在线支付</check-icon>
+              <check-icon class="red-check" :value.sync="offline" @click.native.stop="setbuyonline(0)">线下支付</check-icon>
+            </div>
+          </forminputplate>
+          <forminputplate class="required" v-if="query.miniconfig != 'wechat.mini_program.tljk' && query.fromapp != 'qxb' && query.fromapp != 'factory'">
+            <span slot="title">超值优惠</span>
+            <div>
+              <check-icon class="red-check" :value.sync="suggestOpen" @click.native.stop="clickSuggest(1)">开启</check-icon>
+              <check-icon class="red-check" :value.sync="suggestClose" @click.native.stop="clickSuggest(0)">关闭</check-icon>
+            </div>
+          </forminputplate>
+          <forminputplate class="required">
+            <span slot="title">店铺模板</span>
+            <div>
+              <check-icon class="red-check" :value.sync="template1" @click.native.stop="clickTemplate(1)">通用版</check-icon>
+              <check-icon class="red-check" :value.sync="template2" @click.native.stop="clickTemplate(2)">大图版</check-icon>
+              <check-icon class="red-check" :value.sync="template3" @click.native.stop="clickTemplate(3)">时尚黑</check-icon>
+              <check-icon class="red-check" :value.sync="template4" @click.native.stop="clickTemplate(4)">清新蓝</check-icon>
+            </div>
+          </forminputplate>
+          <div class="form-item" v-if="query.fromapp != 'qxb' && query.fromapp != 'factory'">
+            <div class="t-table">
+              <div class="t-cell title-cell font14 v_middle">
+                <span>到账方式</span><span class="al al-wenhao font20 color-theme" style="vertical-align:-2px;" @click="clickHelp"></span>
+              </div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <div>
+                  <check-icon class="red-check" :value.sync="accountPlat" @click.native.stop="setAccounttype(0)">平台担保</check-icon>
+                  <check-icon class="red-check" :value.sync="accountQuick" @click.native.stop="setAccounttype(1)">立即到账</check-icon>
                 </div>
-                <div class="taglist">
-                  <div class="tagitem" v-for="(item,index) in retailerInfo.tags">
-                    <div class="inner">
-                      <span class="v_middle">{{item.title}}</span>
-                      <div class="del" @click="deleteTag(item,index)">×</div>
-                      <div class="edit" @click="addTag(item,index)"><i class="al al-bianji1 font14"></i></div>
+              </div>
+            </div>
+          </div>
+          <div v-show="showmore || query.fromapp == 'factory'">
+            <forminputplate>
+              <span slot="title">{{ $t('Shop description') }}</span>
+              <group class="textarea-outer" style="padding:0;">
+                <x-textarea
+                  name="text1"
+                  ref="contentTextarea"
+                  v-model="submitdata.content"
+                  style="padding:5px;"
+                  class="x-textarea noborder"
+                  :placeholder="$t('Shop description')"
+                  :show-counter="false"
+                  :rows="1"
+                  @on-change="textareaChange('contentTextarea')"
+                  @on-focus="textareaFocus('contentTextarea')"
+                  autosize>
+                </x-textarea>
+              </group>
+            </forminputplate>
+            <forminputplate v-if="!query.from && query.fromapp != 'factory' && query.fromapp != 'qxb'">
+              <span slot="title">{{ $t('Auto reply') }}</span>
+              <group class="textarea-outer" style="padding:0;">
+                <x-textarea
+                  name="text2"
+                  ref="fastreplyTextarea"
+                  v-model="submitdata.fastreply"
+                  style="padding:5px;"
+                  class="x-textarea noborder"
+                  :placeholder="$t('Auto reply')"
+                  :show-counter="false"
+                  :rows="1"
+                  @on-change="textareaChange('fastreplyTextarea')"
+                  @on-focus="textareaFocus('fastreplyTextarea')"
+                  autosize>
+                </x-textarea>
+              </group>
+            </forminputplate>
+            <div class="form-item required padding10" v-if="classData.length > 0 && query.fromapp != 'factory'"> <!-- //v-if="classData.length > 0 && classDataShow" -->
+              <input v-model="productClass" type="hidden" name="productclass" />
+              <div class="pb10">经营产品或服务<span class="color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+              <checker
+              class="x-checker"
+              type="checkbox"
+              v-model="productClass"
+              :max="3"
+              default-item-class="ck-item"
+              selected-item-class="ck-item-selected">
+                <checker-item class="border1px color-gray" v-for="(item, index) in classData" :key="index" :value="item.id">{{ item.title }}</checker-item>
+              </checker>
+            </div>
+          </div>
+          <template v-if="query.fromapp != 'factory'">
+            <div v-if="showmore" @click="expandevent" class="padding15 font14 align_center color-gray">{{ $t('Up text') }}<i class="al al-jiantou2-up font14 middle-cell"></i></div>
+            <div v-else class="padding15 font14 align_center color-gray"  @click="expandevent">{{ $t('Epand text') }}<i class="al al-jiantouyoushuang- font14"></i></div>
+          </template>
+        </form>
+      </div>
+      <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white" @click="submitevent">
+        <div class="flex_cell flex_center btn-bottom-red">{{ $t('Save') }}</div>
+      </div>
+    </div>
+    <div v-show="selectedIndex == 1 && !query.from" class="s-container" style="top:44px;">
+      <div class="swiper-inner" style="bottom:50px;">
+        <form>
+          <div class="form-item required">
+            <div class="pb5">{{ $t('Personal image') }} <span class="al al-xing color-red font12" style="vertical-align: 3px;"></span></div>
+            <div>
+              <div class="q_photolist align_left">
+                <template v-if="showphotoArr.length > 0">
+                  <div v-for="(item,index) in showphotoArr" :key="index" class="photoitem">
+                    <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
+                      <div class="close" @click="deletephoto(item,index,'showphoto')">×</div>
+                      <div class="clip"><i class="al al-set"></i></div>
                     </div>
                   </div>
-                  <div class="tagitem add" @click="addTag">
-                    <div class="inner">添加</div>
+                </template>
+                <div v-if="showphotoArr.length < maxnum1" class="photoitem add" @click="uploadPhoto('fileInput1','showphoto')">
+                  <div class="inner">
+                    <div class="innerlist">
+                      <div class="flex_center h_100">
+                        <div class="txt">
+                          <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
+                          <div><span class="havenum">{{ showphotoArr.length }}</span><span class="ml5 mr5">/</span><span class="maxnum">{{ maxnum1 }}</span></div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </form>
+            </div>
           </div>
-          <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white" @click="submitevent1">
-            <div class="flex_cell flex_center btn-bottom-red">{{ $t('Save') }}</div>
+          <forminputplate>
+            <span slot="title">{{ $t('Seller said') }} <span class="al al-xing color-red font12" style="vertical-align: 3px;"></span></span>
+            <group class="textarea-outer" style="padding:0;">
+              <x-textarea
+                ref="sloganTextarea"
+                v-model="submitdata1.slogan"
+                style="padding:5px;"
+                class="x-textarea noborder"
+                :placeholder="$t('Seller said')"
+                :show-counter="false"
+                :rows="1"
+                @on-change="textareaChange('sloganTextarea')"
+                @on-focus="textareaFocus('sloganTextarea')"
+                :autosize="true">
+              </x-textarea>
+            </group>
+          </forminputplate>
+          <div class="form-item bg-white">
+            <div class="pt10 pb5">
+              <div class="flex_left">
+                <span class="v_middle">{{ $t('My tags') }}</span>
+                <span class="font12 color-gray v_middle">(一次可添加多个标签，用英文逗号隔开)</span>
+              </div>
+            </div>
+            <div class="taglist">
+              <div class="tagitem" v-for="(item,index) in retailerInfo.tags">
+                <div class="inner">
+                  <span class="v_middle">{{item.title}}</span>
+                  <div class="del" @click="deleteTag(item,index)">×</div>
+                  <div class="edit" @click="addTag(item,index)"><i class="al al-bianji1 font14"></i></div>
+                </div>
+              </div>
+              <div class="tagitem add" @click="addTag">
+                <div class="inner">添加</div>
+              </div>
+            </div>
           </div>
-        </swiper-item>
-      </swiper>
+        </form>
+      </div>
+      <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white" @click="submitevent1">
+        <div class="flex_cell flex_center btn-bottom-red">{{ $t('Save') }}</div>
+      </div>
     </div>
     <div v-transfer-dom class="x-popup">
       <popup v-model="showonline" height="100%">
@@ -215,17 +235,17 @@
               <div class="bold mt5">第二条 提现</div>
               <div>买家通过线上支付购买商品，需待买家确认收货后，卖家才可以通过“我的收入”提现收益。</div>
               <div class="bold mt5">第三条 手续费</div>
-              <div>聚客365卖家需按订单交易额（含运费）的1%承担交易手续费，最低收费金额0.01元，不足0.01元按照0.01元收取。</div>
+              <div>共销客卖家需按订单交易额（含运费）的1%承担交易手续费，最低收费金额0.01元，不足0.01元按照0.01元收取。</div>
               <div class="bold mt5">退款订单处理规则：</div>
-              <div>（1）当订单为“待发货”状态时，买家可主动发起交易退款，聚客365将整单全额退款，不收取手续费。</div>
+              <div>（1）当订单为“待发货”状态时，买家可主动发起交易退款，共销客将整单全额退款，不收取手续费。</div>
               <div>（2）当订单为“已发货或已收货”状态时，线上无法申请及处理交易退款，买家可通过“申请维权”与卖家互加好友，线下协商解决，手续费不予退还。</div>
               <div class="bold mt5">第四条 交易规则</div>
-              <div>（1）除买卖双方协商一致的，聚客365平台卖家需在买家付款后的72小时内操作发货。</div>
+              <div>（1）除买卖双方协商一致的，共销客平台卖家需在买家付款后的72小时内操作发货。</div>
               <div>（2）卖家应当将商品通过物流配送至买家订单收货地址，并由收件人本人签收，需买家至指定地点提取的，应当事先予以显著明示或征得买家同意。</div>
               <div>（3）卖家优先选择有签收凭证的物流公司发货，若买卖双方使用当面交易交付货物，交易风险由买卖双方自行承担。</div>
               <div>（4）卖家违反发货规范导致买家未收到商品或拒收商品的，由此产生的相关费用及商品损毁或灭失风险，由卖家自行承担。</div>
               <div class="bold mt5">第五条 交易纠纷</div>
-              <div>聚客365平台仅提供商品展示，不做任何担保交易，买卖双方在交易过程中出现的任何问题，由买卖双方协商解决。</div>
+              <div>共销客平台仅提供商品展示，不做任何担保交易，买卖双方在交易过程中出现的任何问题，由买卖双方协商解决。</div>
               <div class="bold mt5">第六条 信息完善</div>
               <div>开通在线支付后，请及时对已有商品设置“库存”及“运费”，在商品列表中，点击“操作”-->点击“编辑”，即可设置商品的“库存”及“运费”。</div>
             </div>
@@ -243,7 +263,7 @@
               <div class="bold">第一条 定义</div>
               <div>线下支付，是指买家可通过商品页面与卖家互加好友，以传统微商（线下聊天转账）的交易方式进行交易。</div>
               <div class="bold mt5">第二条 交易纠纷</div>
-              <div>聚客365平台仅提供商品展示，不做任何担保交易，买卖双方在交易过程中出现的任何问题，由买卖双方协商解决。</div>
+              <div>共销客平台仅提供商品展示，不做任何担保交易，买卖双方在交易过程中出现的任何问题，由买卖双方协商解决。</div>
               <div class="bold mt5">第三条 功能变更</div>
               <div>由“在线支付”模式更改为“线下支付”时，所有正在进行的促销活动将全部失效，再次更改为"在线支付"模式时，原有促销活动需重新创建，请谨慎更改。</div>
             </div>
@@ -275,6 +295,22 @@
           <div class="popup-bottom flex_center bg-orange color-white" @click="closeQrcodePopup">{{ $t('Close') }}</div>
         </div>
       </popup>
+    </div>
+    <div class="auto-modal flex_center" v-if="showHelpModal">
+      <div class="modal-inner border-box" style="width:85%;">
+        <div class="flex_center padding10 b_bottom_after font16">到账方式</div>
+        <div class="middle-con flex_center">
+          <div class="w_100 padding10">
+            <div class="color-theme">什么是平台担保</div>
+            <div>平台担保是指用户购买商品后，订单金额需要等待你发货并且买家进行确认收货后，这笔订单金额才可进行提现。</div>
+            <div class="color-theme mt10">什么是立即到账</div>
+            <div>立即到账是指用户购买商品后，订单金额只需等待你进行发货后便可直接进行提现，无需等待买家确认收货。</div>
+          </div>
+        </div>
+        <div class="close-area flex_center" @click="closeModal">
+          <i class="al al-close"></i>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -334,7 +370,7 @@ export default {
     },
     submitdata: {
       type: Object,
-      default: { title: '', qrcode: '', buyonline: 1, content: '', fastreply: '你好，请稍等，一会为你服务' }
+      default: { title: '', qrcode: '', buyonline: 1, shopmodel: '1', accounttype: 0, content: '', fastreply: '你好，请稍等，一会为你服务' }
     },
     submitdata1: {
       type: Object,
@@ -352,13 +388,9 @@ export default {
       type: Array,
       default: []
     },
-    buyonline: {
+    submitSuggest: {
       type: Boolean,
       default: true
-    },
-    buyoffline: {
-      type: Boolean,
-      default: false
     }
   },
   directives: {
@@ -371,54 +403,137 @@ export default {
     return {
       maxnum: 1,
       maxnum1: 9,
-      showmore: false,
+      showmore: true,
       requireddata: {title: '', 'qrcode': ''},
       requireddata1: {showphoto: '', slogan: ''},
-      showonline: false,
-      showoffline: false,
       showqrcode: false,
       selectedIndex: 0,
       tabtxts: [ '基本设置', '卖家秀设置' ],
       classDataShow: false,
-      online: true,
+      online: false,
       offline: false,
+      showonline: false,
+      showoffline: false,
       isFirst: true,
-      isFirst1: true
+      isFirst1: true,
+      suggestOpen: false,
+      suggestClose: false,
+      template1: false,
+      template2: false,
+      template3: false,
+      template4: false,
+      haveSelected: true,
+      noSelected: false,
+      accountPlat: false,
+      accountQuick: false,
+      showHelpModal: false
     }
   },
   watch: {
+    retailerInfo () {
+      if (this.retailerInfo.uid) {
+        this.watchTemplate(`${this.retailerInfo.shopmodel}`)
+      }
+    },
     photoarr: function () {
       return this.photoarr
     },
     submitdata: function () {
+      console.log('监控到submitdata的变化')
       console.log('in watch sumitdata')
-      if (this.submitdata.buyonline) {
-        this.online = true
-        this.offline = false
-      } else {
-        this.online = false
-        this.offline = true
-      }
+      this.watchBuyline()
+      this.watchTemplate()
+      this.watchAccount()
       return this.submitdata
     },
-    buyonline: function () {
-      console.log('in watch bunonline')
-      if (this.isFirst) {
-        this.online = this.buyonline
-        this.isFirst = false
-      }
-      return this.buyonline
-    },
-    buyoffline: function () {
-      console.log('in watch buyoffline')
-      if (this.isFirst1) {
-        this.offline = this.buyoffline
-        this.isFirst1 = false
-      }
-      return this.buyoffline
+    submitSuggest: function () {
+      console.log('in watch submitSuggest')
+      this.watchSuggest()
+      return this.submitSuggest
     }
   },
   methods: {
+    clickHelp () {
+      this.showHelpModal = true
+    },
+    closeModal () {
+      this.showHelpModal = false
+    },
+    watchBuyline () {
+      if (this.submitdata.buyonline === undefined || this.submitdata.buyonline === 'undefined') {
+        this.online = false
+        this.offline = false
+      } else {
+        if (this.submitdata.buyonline) {
+          this.online = true
+          this.offline = false
+        } else {
+          this.online = false
+          this.offline = true
+        }
+      }
+    },
+    watchSuggest () {
+      if (this.submitSuggest === undefined || this.submitSuggest === 'undefined') {
+        this.suggestOpen = false
+        this.suggestClose = false
+      } else {
+        if (this.submitSuggest) {
+          this.suggestOpen = true
+          this.suggestClose = false
+        } else {
+          this.suggestOpen = false
+          this.suggestClose = true
+        }
+      }
+    },
+    watchTemplate (val) {
+      let param = val
+      if (val === undefined || val === 'undefined') {
+        param = this.retailerInfo.shopmodel
+      }
+      if (param === undefined || param === 'undefined') {
+        this.template1 = false
+        this.template2 = false
+        this.template3 = false
+        this.template4 = false
+      } else {
+        param = parseInt(param)
+        console.log('in watchtemplate')
+        console.log(param)
+        this.template1 = false
+        this.template2 = false
+        this.template3 = false
+        this.template4 = false
+        if (param === 2) {
+          this.template2 = true
+          this.submitdata.shopmodel = 2
+        } else if (param === 3) {
+          this.template3 = true
+          this.submitdata.shopmodel = 3
+        } else if (param === 4) {
+          this.template4 = true
+          this.submitdata.shopmodel = 4
+        } else {
+          this.template1 = true
+          this.submitdata.shopmodel = 1
+        }
+      }
+    },
+    watchAccount () {
+      if (this.submitdata.accounttype === undefined || this.submitdata.accounttype === 'undefined') {
+        this.accountPlat = false
+        this.accountQuick = false
+      } else {
+        if (this.submitdata.accounttype) {
+          this.accountPlat = false
+          this.accountQuick = true
+        } else {
+          this.accountPlat = true
+          this.accountQuick = false
+        }
+      }
+    },
     textareaChange (refname) {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
       curArea.updateAutosize()
@@ -494,18 +609,54 @@ export default {
     setbuyonline (val) {
       if (val === 1) {
         this.showonline = true
-        this.submitdata.buyonline = 1
-        // this.buyonline = true
-        // this.buyoffline = false
-        this.online = true
-        this.offline = false
       } else {
         this.showoffline = true
-        this.submitdata.buyonline = 0
-        // this.buyonline = false
-        // this.buyoffline = true
-        this.online = false
-        this.offline = true
+      }
+      if (parseInt(val) !== this.submitdata.buyonline) {
+        this.$emit('clickBuyline', val, () => {
+          this.watchBuyline()
+        })
+      } else {
+        this.watchBuyline()
+      }
+    },
+    clickSuggest (val) {
+      console.log(val)
+      if ((val === 1 && this.suggestClose) || (val === 0 && this.suggestOpen)) {
+        let con = (val === 1 ? '确认要展示超值优惠商品？' : '确认要取消展示超值优惠商品？')
+        if (val === 1) {
+          this.suggestOpen = false
+        } else {
+          this.suggestClose = false
+        }
+        this.$vux.confirm.show({
+          content: con,
+          onConfirm: () => {
+            this.$emit('clickSuggest', val, () => {
+              this.watchSuggest()
+            })
+          }
+        })
+      } else {
+        if (val === 1) {
+          this.suggestOpen = true
+        } else {
+          this.suggestClose = true
+        }
+      }
+    },
+    setAccounttype (val) {
+      this.$emit('clickAccount', val, () => {
+        this.watchAccount()
+      })
+    },
+    clickTemplate (val) {
+      if (parseInt(val) !== this.submitdata.shopmodel) {
+        this.$emit('clickTemplate', val, () => {
+          this.watchTemplate(`${val}`)
+        })
+      } else {
+        this.watchTemplate(`${val}`)
       }
     },
     closeOnPopup () {
@@ -522,17 +673,26 @@ export default {
     },
     submitevent () {
       const self = this
+      if (this.query.fromapp === 'factory') {
+        this.requireddata = {title: ''}
+      }
+      console.log(self.submitdata)
       self.submitdata.productclass = self.productClass
+      if (self.submitdata.shopmodel === '') {
+        self.submitdata.shopmodel = 1
+      }
       let validateData = []
       for (let key in self.requireddata) {
         let v = {}
         v[key] = self.submitdata[key] ? self.submitdata[key] : ''
         validateData.push(v)
       }
+      console.log(validateData)
       let iscontinue = self.$util.validateQueue(validateData,
         model => {
           switch (model.key) {
             default:
+              console.log(model.key)
               self.$vux.toast.text('必填项不能为空', 'middle')
           }
         }
@@ -540,9 +700,15 @@ export default {
       if (!iscontinue) {
         return false
       }
+      if (!self.productClass.length && self.query.fromapp !== 'factory') {
+        self.$vux.toast.text('请选择经营范围', 'middle')
+        return false
+      }
       self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/retailer/changeInfo`, self.submitdata).then(function (res) {
         let data = res.data
+        console.log('----------')
+        console.log(data.error)
         self.$vux.loading.hide()
         self.$vux.toast.show({
           text: data.error,
@@ -559,7 +725,7 @@ export default {
                   self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
                 }
               } else {
-                self.$router.push('/centerSales')
+                self.$router.push({path: '/centerSales'})
               }
             }
           }
@@ -592,17 +758,10 @@ export default {
         self.$vux.toast.show({
           text: data.error,
           time: self.$util.delay(data.error),
-          onHide: function () {
+          onHide: () => {
             if (data.flag === 1) {
               if (self.query.minibackurl) {
-                let minibackurl = decodeURIComponent(self.query.minibackurl)
-                if (self.query.backtype === 'relaunch') {
-                  self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
-                } else if (self.query.backtype === 'redirect') {
-                  self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
-                } else {
-                  self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
-                }
+                self.$util.routerMiniUrl(self.query)
               } else {
                 self.$router.push({path: '/centerSeller', query: {uid: self.loginUser.uid}})
               }
@@ -704,11 +863,21 @@ export default {
         }
       })
     }
+  },
+  mounted () {
+    console.log('in mounted')
+    this.watchBuyline()
+    this.watchSuggest()
+    this.watchTemplate()
+    this.watchAccount()
   }
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
+.retailersetting{
+  .title-cell{width:80px;}
+}
 .retailersetting .x-checker .ck-item{
   font-size:13px;
   display: inline-block;

@@ -32,6 +32,8 @@ export default {
   },
   data () {
     return {
+      query: {},
+      loginUser: {},
       option: '',
       options: [
         {
@@ -69,14 +71,18 @@ export default {
   methods: {
     syncWxProfile () {
       const self = this
+      this.$vux.loading.show()
       this.$http.get(`${ENV.BokaApi}/api/user/refresh/0`)
       .then(res => {
+        this.$vux.loading.hide()
         if (res.data.flag) {
           const user = User.get()
           const retdata = res.data.data
           for (let key in retdata) {
             self.getProfile[key] = retdata[key]
           }
+          let dstr = new Date().getTime()
+          self.getProfile.avatar = `${self.getProfile.avatar}?_dt=${dstr}`
           User.set({
             ...user,
             ...self.getProfile
@@ -84,6 +90,22 @@ export default {
           self.$vux.toast.text(res.data.error, 'middle')
         }
       })
+    },
+    handleBack () {
+      if (this.query.minibackurl) {
+        let minibackurl = decodeURIComponent(this.query.minibackurl)
+        if (this.loginUser.fid) {
+          if (minibackurl.indexOf('?') < 0) {
+            minibackurl = `${minibackurl}?`
+          } else {
+            minibackurl = `${minibackurl}&`
+          }
+          minibackurl = `${minibackurl}gxkfid=${this.loginUser.fid}`
+        }
+        this.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+      } else {
+        this.$router.go(-1)
+      }
     },
     onConfirm () {
       const self = this
@@ -106,8 +128,7 @@ export default {
           mobile: this.getProfile.mobile,
           sex: this.getProfile.sex,
           company: this.getProfile.company
-        })
-        .then(res => {
+        }).then(res => {
           const user = User.get()
           User.set({
             ...user,
@@ -115,19 +136,25 @@ export default {
           })
           self.$vux.toast.text(res.data.error, 'middle')
           setTimeout(() => {
-            self.$router.go(-1)
+            self.handleBack()
           }, 1000)
         })
       }
     },
     onCancel () {
-      this.$router.go(-1)
+      this.handleBack()
     },
     init () {
       this.getProfile = User.get()
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.loginUser = User.get()
+      this.query = this.$route.query
+      this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
+        this.loginUser = res.data
+        User.set(this.loginUser)
+      })
     }
   },
   created () {

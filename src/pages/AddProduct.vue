@@ -5,10 +5,13 @@
     <template v-if="showContainer">
       <div class="s-container">
         <form ref="fileForm" enctype="multipart/form-data">
-          <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange('fileForm', 'photo')" />
+          <input ref="fileInput" class="hide" type="file" multiple="multiple" name="files" @change="fileMulChange('fileForm', 'photo')" />
         </form>
         <form ref="fileForm1" enctype="multipart/form-data">
-          <input ref="fileInput1" class="hide" type="file" name="files" @change="fileChange('fileForm1', 'contentphoto')" />
+          <input ref="fileInput1" class="hide" type="file" multiple="multiple" name="files" @change="fileMulChange('fileForm1', 'contentphoto')" />
+        </form>
+        <form ref="optioinsForm" enctype="multipart/form-data">
+          <input ref="optionsInput" class="hide" type="file" name="files" @change="fileOptionChange('optioinsForm')" />
         </form>
         <div class="list-shadow01">
           <div class="form-item no-after pt15 bg-gray10">
@@ -22,8 +25,11 @@
               <div class="q_photolist align_left">
                 <template v-if="photoarr.length > 0">
                   <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
-                    <div class="inner photo" :photo="item" :style="`background-image: url('${item}');`">
-                      <div class="close" @click="deletephoto(item,index,'photo')">×</div>
+                    <div class="inner photo" :photo="item">
+                      <img :src="item" class="pic" @click="uploadPhoto('fileInput','photo',index)" />
+                      <div class="close" @click.stop="deletephoto(item,index,'photo')">×</div>
+                      <div class="move-ico prev" v-if="index > 0" @click.stop="movePhoto('photo',index,'prev')"><span class="al al-qianyi"></span></div>
+                      <div class="move-ico next" v-if="photoarr.length > 1 && index < photoarr.length - 1" @click.stop="movePhoto('photo',index,'next')"><span class="al al-houyi"></span></div>
                     </div>
                   </div>
                 </template>
@@ -77,39 +83,53 @@
               </div>
             </div>
           </div>
-          <div class="form-item required bg-white">
-            <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">商品原价</div>
-              <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input v-model="submitdata.oriprice" @keyup="priceChange('oriprice')" maxlength="7" size="7" type="text" class="input priceInput" name="oriprice" placeholder="商品原价" />
-              </div>
-              <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
-            </div>
-          </div>
-          <div class="form-item required bg-white">
+          <div class="flex_center">
+          <div class="form-item required bg-white b_right">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">商品现价<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input v-model="submitdata.price" @keyup="priceChange('price')" maxlength="7" size="7" type="text" class="input priceInput" name="price" :placeholder="$t('User final purchase price')" />
+                <x-input v-model="submitdata.price" @keyup="priceChange('price')" maxlength="9" size="9" type="text" class="input priceInput" name="price" placeholder="现价" ></x-input>
               </div>
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>
           </div>
-          <div class="form-item required bg-white">
+            <div class="form-item required bg-white">
+              <div class="t-table">
+                <div class="t-cell title-cell w80 font14 v_middle">商品原价</div>
+                <div class="t-cell input-cell v_middle" style="position:relative;">
+                  <x-input v-model="submitdata.oriprice" @keyup="priceChange('oriprice')" maxlength="9" size="9" type="text" class="input priceInput" name="oriprice" placeholder="原价" ></x-input>
+                </div>
+                <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
+              </div>
+            </div>
+          </div>
+          <div class="flex_center">
+            <div class="form-item required bg-white b_right">
+              <div class="t-table">
+                <div class="t-cell title-cell w80 font14 v_middle">猫价</div>
+                <div class="t-cell input-cell v_middle" style="position:relative;">
+                  <x-input v-model="submitdata.tb_price" @keyup="priceChange('tb_price')" maxlength="9" size="9" type="text" class="input priceInput" name="tb_price" placeholder="猫价" ></x-input>
+                </div>
+                <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
+              </div>
+            </div>
+            <div class="form-item required bg-white">
+              <div class="t-table">
+                <div class="t-cell title-cell w80 font14 v_middle">狗价</div>
+                <div class="t-cell input-cell v_middle" style="position:relative;">
+                  <x-input v-model="submitdata.jd_price" @keyup="priceChange('jd_price')" maxlength="9" size="9" type="text" class="input priceInput" name="jd_price" placeholder="狗价" ></x-input>
+                </div>
+                <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-item required bg-white" v-if="!optionsData.length">
             <div class="flex_row">
               <div class="flex_cell">
                 <div class="t-table">
                   <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product') }}{{ $t('Storage') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
                   <div class="t-cell input-cell v_middle" style="position:relative;">
-                    <input v-model="submitdata.storage" type="tel" class="input" name="storage" :placeholder="$t('Storage')" maxlength="5" size="5" />
-                  </div>
-                </div>
-              </div>
-              <div style="width:30%;">
-                <div class="t-table">
-                  <div class="t-cell title-cell font14 v_middle">{{ $t('Storage unit') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
-                  <div class="t-cell input-cell v_middle" style="position:relative;">
-                    <input v-model="submitdata.unit" type="text" class="input align_center" name="unit" size="1" maxlength="1" :placeholder="$t('Storage unit')" />
+                    <x-input v-model="submitdata.storage" type="tel" class="input" name="storage" :placeholder="$t('Storage')" maxlength="5" size="5" ></x-input>
                   </div>
                 </div>
               </div>
@@ -119,7 +139,7 @@
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Postage') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input v-model="submitdata.postage" @keyup="priceChange('postage')" type="text" class="input priceInput" name="postage" :placeholder="$t('Postage')" />
+                <x-input v-model="submitdata.postage" @keyup="priceChange('postage')" type="text" class="input priceInput" name="postage" :placeholder="$t('Postage')" ></x-input>
               </div>
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>
@@ -128,9 +148,51 @@
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Rebate Commission') }}</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input v-model="submitdata.rebate" @keyup="priceChange('rebate')" type="text" class="input rebateInput" name="rebate" :placeholder="$t('Goods sold to rebate user commission')" />
+                <x-input v-model="submitdata.rebate" @keyup="priceChange('rebate')" type="text" class="input rebateInput" name="rebate" :placeholder="$t('Goods sold to rebate user commission')" ></x-input>
               </div>
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
+            </div>
+          </div>
+          <div class="form-item bg-white">
+            <div class="t-cell title-cell w80 font14 v_middle">商品规格</div>
+            <div class="option-list">
+              <div class="option-item" v-for="(item,index) in optionsData" :key="index">
+                  <div class="option-title flex_left">
+                    <div class="flex_cell flex_left">规格 {{index + 1}}</div>
+                    <div class="w60 flex_right color-theme" @click="deleteOption(index)">删除</div>
+                  </div>
+                  <div class="option-con">
+                    <div class="flex_left con-item">
+                      <div class="title-cell1 flex_left">规格名称</div>
+                      <div class="border-cell flex_left flex_cell">
+                        <x-input v-model="item.title" :max="15" class="input" type="text" placeholder="规格名称"></x-input>
+                      </div>
+                    </div>
+                    <div class="flex_left mt10 con-item">
+                      <div class="title-cell1 flex_left">图片</div>
+                      <div class="border-cell flex_left flex_cell">
+                        <div class="flex_left flex_cell option-pic-list">
+                          <img v-if="optionsPhoto[index] && optionsPhoto[index] != ''" class="option-pic" :src="optionsPhoto[index]" @click="previewImg(index,item.photoarr,`previewer${index}`)"/>
+                        </div>
+                        <div class="icon-cell flex_center" @click="uploadOptionPhoto('optionsInput',index)"><span class="al al-zhaoxiangji font18 color-theme"></span></div>
+                      </div>
+                      <template v-if="optionsPhoto[index] && optionsPhoto[index] != ''">
+                        <div v-transfer-dom>
+                          <previewer :list="item.previewerPhoto" :ref="`previewer${index}`"></previewer>
+                        </div>
+                      </template>
+                    </div>
+                    <div class="flex_left mt10 con-item">
+                      <div class="title-cell1 flex_left">库存</div>
+                      <div class="border-cell flex_left flex_cell">
+                        <x-input v-model="item.storage" class="input" @keyup="optionStorageChange(index)" type="tel" placeholder="库存" maxlength="5" size="5"></x-input>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <div class="flex_center pt10 pb10" @click="addOption">
+              <div class="color-theme btn-add flex_center">添加一项</div>
             </div>
           </div>
           <div class="form-item bg-white" v-if="showRebate">
@@ -139,7 +201,7 @@
               <div class="t-cell title-cell font14 v_middle" style="width:120px;">是否允许使用卡券</div>
             -->
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <x-switch title='是否允许使用卡券' v-model="submitdata.allowcard"></x-switch>
+                <x-switch title='是否允许使用优惠券' v-model="submitdata.allowcard"></x-switch>
               </div>
             </div>
           </div>
@@ -164,8 +226,11 @@
             <div class="q_photolist align_left bg-white">
               <template v-if="photoarr1.length > 0">
                 <div v-for="(item,index) in photoarr1" :key="index" class="photoitem">
-                  <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
-                    <div class="close" @click="deletephoto(item,index,'contentphoto')">×</div>
+                  <div class="inner photo imgcover" :photo="item">
+                    <img :src="item" class="pic" @click="uploadPhoto('fileInput1','contentphoto',index)" />
+                    <div class="close" @click.stop="deletephoto(item,index,'contentphoto')">×</div>
+                    <div class="move-ico prev" v-if="index > 0" @click.stop="movePhoto('content',index,'prev')"><span class="al al-qianyi"></span></div>
+                    <div class="move-ico next" v-if="photoarr1.length > 1 && index < photoarr1.length - 1" @click.stop="movePhoto('content',index,'next')"><span class="al al-houyi"></span></div>
                   </div>
                 </div>
               </template>
@@ -188,13 +253,6 @@
               <div class="t-cell title-cell w80 font14 v_middle">视频</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
                 <div class="q_photolist align_left" style="overflow:hidden;">
-                  <!--
-                  <div v-if="videoarr.length == 0" @click="uploadPhoto('videoInput','video')">
-                    <div class="button_video flex_center">
-                      <i class="al al-ai-video color-white"></i>
-                    </div>
-                  </div>
-                -->
                   <form ref="videoForm" class="db" enctype="multipart/form-data" v-if="videoarr.length == 0">
                     <div class="button_video flex_center">
                       <i class="al al-ai-video color-white"></i>
@@ -218,7 +276,7 @@
               <div class="t-table">
                 <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Share title') }}</div>
                 <div class="t-cell input-cell v_middle" style="position:relative;">
-                  <input v-model="submitdata.seotitle" type="text" class="input" name="seotitle" :placeholder="$t('Product share title placeholder')" />
+                  <x-input v-model="submitdata.seotitle" type="text" class="input" name="seotitle" :placeholder="$t('Product share title placeholder')" ></x-input>
                 </div>
               </div>
             </div>
@@ -259,7 +317,7 @@
 </i18n>
 
 <script>
-import { Group, XInput, XTextarea, XSwitch } from 'vux'
+import { TransferDom, Group, XInput, XTextarea, XSwitch, Previewer } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
@@ -268,8 +326,11 @@ import ApplyTip from '@/components/ApplyTip'
 import OpenVip from '@/components/OpenVip'
 
 export default {
+  directives: {
+    TransferDom
+  },
   components: {
-    Group, XInput, XTextarea, Sos, Subscribe, ApplyTip, OpenVip, XSwitch
+    Group, XInput, XTextarea, Sos, Subscribe, ApplyTip, OpenVip, XSwitch, Previewer
   },
   data () {
     return {
@@ -282,7 +343,8 @@ export default {
       maxnum: 9,
       havenum: 0,
       photoarr1: [],
-      maxnum1: 19,
+      photoarr2: [],
+      maxnum1: 29,
       havenum1: 0,
       videoarr: [],
       maxnum2: 1,
@@ -293,8 +355,9 @@ export default {
         title: '',
         price: '',
         oriprice: '',
+        tb_price: '',
+        jd_price: '',
         storage: '',
-        unit: '件',
         postage: '0.00',
         rebate: '',
         photo: '',
@@ -306,10 +369,15 @@ export default {
         allowcard: false
       },
       allowsubmit: true,
-      requireddata: { title: '', 'price': '', 'storage': '', 'unit': '', 'postage': '', 'photo': '' },
+      requireddata: {'photo': '', classid: '', title: '', 'price': '', 'storage': '', 'postage': ''},
       showRebate: false,
       classData: [],
-      submitIng: false
+      submitIng: false,
+      // optionsData: [{title: '', photo: '', storage: ''}],
+      optionsData: [],
+      selectedOptionIndex: 0,
+      optionsPhoto: [],
+      clickPhotoIndex: -1
     }
   },
   watch: {
@@ -332,6 +400,146 @@ export default {
   computed: {
   },
   methods: {
+    movePhoto (type, index, move) {
+      let moveindex
+      let curphoto = ''
+      let movephoto = ''
+      if (move === 'prev') {
+        moveindex = index - 1
+      } else {
+        moveindex = index + 1
+      }
+      if (type === 'photo') {
+        curphoto = this.photoarr[index]
+        movephoto = this.photoarr[moveindex]
+        this.photoarr[index] = movephoto
+        this.photoarr[moveindex] = curphoto
+        let lastphoto = this.photoarr.splice(this.photoarr.length - 1, 1)
+        this.photoarr.push(lastphoto)
+      } else {
+        curphoto = this.photoarr1[index]
+        movephoto = this.photoarr1[moveindex]
+        this.photoarr1[index] = movephoto
+        this.photoarr1[moveindex] = curphoto
+        let lastphoto = this.photoarr1.splice(this.photoarr1.length - 1, 1)
+        this.photoarr1.push(lastphoto)
+      }
+    },
+    addOption () {
+      this.optionsData.push({})
+    },
+    optionStorageChange (index) {
+      let val = event.target.value
+      this.optionsData[index].storage = val
+    },
+    deleteOption (index) {
+      this.$vux.confirm.show({
+        content: '确定要删除吗？',
+        onConfirm: () => {
+          let deleteOptions = this.optionsData[index]
+          if (deleteOptions.id) {
+            this.$vux.loading.show()
+            this.$http.post(`${ENV.BokaApi}/api/delete/productoptions`, {
+              id: deleteOptions.id
+            }).then((res) => {
+              this.$vux.loading.hide()
+              let data = res.data
+              let error = data.flag ? '删除成功' : data.error
+              this.$vux.toast.show({
+                text: error,
+                type: data.flag ? 'success' : 'warn',
+                time: this.$util.delay(error)
+              })
+              if (data.flag) {
+                this.optionsData.splice(index, 1)
+                this.optionsPhoto.splice(index, 1)
+                if (!this.optionsData.length) {
+                  this.submitdata.storage = 0
+                }
+              }
+            })
+          } else {
+            this.optionsData.splice(index, 1)
+            this.optionsPhoto.splice(index, 1)
+          }
+        }
+      })
+    },
+    previewImg (index, arr, refname) {
+      const self = this
+      if (self.$util.isPC()) {
+        let view = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+        view.show(index)
+      } else {
+        if (window.WeixinJSBridge) {
+          window.WeixinJSBridge.invoke('imagePreview', {
+            current: arr[0],
+            urls: arr
+          })
+        }
+      }
+    },
+    handleOptionPhoto (photo) {
+      if (!this.optionsData[this.selectedOptionIndex]) {
+        this.optionsData[this.selectedOptionIndex] = {}
+      }
+      this.optionsData[this.selectedOptionIndex].photo = photo
+      this.optionsData[this.selectedOptionIndex].photoarr = [photo]
+      this.optionsData[this.selectedOptionIndex].previewerPhoto = this.$util.previewerImgdata(this.optionsData[this.selectedOptionIndex].photoarr)
+      if (this.optionsPhoto.length > this.selectedOptionIndex) {
+        this.optionsPhoto.splice(this.selectedOptionIndex, 1, photo)
+        console.log('上传后')
+        console.log(this.optionsPhoto)
+      } else {
+        this.optionsPhoto.push(photo)
+      }
+    },
+    fileOptionChange (refname) {
+      const self = this
+      const target = event.target
+      const files = target.files
+      if (files.length > 0) {
+        let fileForm = target.parentNode
+        const filedata = new FormData(fileForm)
+        self.$vux.loading.show()
+        self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then((res) => {
+          let data = res.data
+          self.$vux.loading.hide()
+          if (data.flag) {
+            this.handleOptionPhoto(data.data)
+          } else if (data.error) {
+            self.$vux.toast.show({
+              text: data.error,
+              time: self.$util.delay(data.error)
+            })
+          }
+        })
+      }
+    },
+    uploadOptionPhoto (refname, index) {
+      const self = this
+      const fileInput = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      this.selectedOptionIndex = index
+      if (self.$util.isPC()) {
+        fileInput.click()
+      } else {
+        self.$wechat.ready(function () {
+          self.$util.wxUploadImage({
+            maxnum: 1,
+            handleCallback: (data) => {
+              if (data.flag === 1) {
+                self.handleOptionPhoto(data.data)
+              } else if (data.error) {
+                self.$vux.toast.show({
+                  text: data.error,
+                  time: self.$util.delay(data.error)
+                })
+              }
+            }
+          })
+        })
+      }
+    },
     initSubmitData () {
       this.videoarr = []
       this.submitdata = {
@@ -339,8 +547,9 @@ export default {
         title: '',
         oriprice: '',
         price: '',
+        tb_price: '',
+        jd_price: '',
         storage: '',
-        unit: '件',
         postage: '0.00',
         rebate: '',
         photo: '',
@@ -353,6 +562,10 @@ export default {
       }
       this.photoarr = []
       this.photoarr1 = []
+      // this.optionsData = [{title: '', photo: '', storage: ''}]
+      this.optionsData = []
+      this.selectedOptionIndex = 0
+      this.optionsPhoto = []
     },
     textareaChange (refname) {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
@@ -368,15 +581,50 @@ export default {
     photoCallback (data, type) {
       const self = this
       if (data.flag === 1) {
-        if (type === 'photo' && self.photoarr.length < self.maxnum) {
-          self.photoarr.push(data.data)
-          self.submitdata.photo = self.photoarr.join(',')
-        } else if (type === 'contentphoto' && self.photoarr1.length < self.maxnum1) {
-          self.photoarr1.push(data.data)
-          self.submitdata.contentphoto = self.photoarr1.join(',')
-        } else if (type === 'video') {
-          self.videoarr.push(data.data)
-          self.submitdata.video = self.videoarr.join(',')
+        if (this.clickPhotoIndex > -1) {
+          if (type === 'photo') {
+            self.photoarr[this.clickPhotoIndex] = data.data
+            let lastphoto = this.photoarr.splice(this.photoarr.length - 1, 1)
+            this.photoarr.push(lastphoto)
+            self.submitdata.photo = self.photoarr.join(',')
+          } else if (type === 'contentphoto') {
+            self.photoarr1[this.clickPhotoIndex] = data.data
+            let lastphoto = this.photoarr1.splice(this.photoarr1.length - 1, 1)
+            this.photoarr1.push(lastphoto)
+            self.submitdata.contentphoto = self.photoarr1.join(',')
+          } else if (type === 'video') {
+            if (data.data.lastIndexOf('.mp4') < 0 && data.data.lastIndexOf('.MOV') < 0) {
+              let error = '请上传正确的视频文件'
+              self.$vux.toast.show({
+                text: error,
+                time: self.$util.delay(error)
+              })
+            } else {
+              self.videoarr[this.clickPhotoIndex] = data.data
+              let lastphoto = this.videoarr.splice(this.videoarr.length - 1, 1)
+              this.videoarr.push(lastphoto)
+              self.submitdata.video = self.videoarr.join(',')
+            }
+          }
+        } else {
+          if (type === 'photo' && self.photoarr.length < self.maxnum) {
+            self.photoarr.push(data.data)
+            self.submitdata.photo = self.photoarr.join(',')
+          } else if (type === 'contentphoto' && self.photoarr1.length < self.maxnum1) {
+            self.photoarr1.push(data.data)
+            self.submitdata.contentphoto = self.photoarr1.join(',')
+          } else if (type === 'video') {
+            if (data.data.lastIndexOf('.mp4') < 0 && data.data.lastIndexOf('.MOV') < 0) {
+              let error = '请上传正确的视频文件'
+              self.$vux.toast.show({
+                text: error,
+                time: self.$util.delay(error)
+              })
+            } else {
+              self.videoarr.push(data.data)
+              self.submitdata.video = self.videoarr.join(',')
+            }
+          }
         }
       } else if (data.error) {
         self.$vux.toast.show({
@@ -385,9 +633,14 @@ export default {
         })
       }
     },
-    uploadPhoto (refname, type) {
+    uploadPhoto (refname, type, index) {
       const self = this
       const fileInput = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      if (index !== undefined && index !== 'undefined') {
+        this.clickPhotoIndex = index
+      } else {
+        this.clickPhotoIndex = -1
+      }
       if (self.$util.isPC() || type === 'video') {
         fileInput.click()
       } else {
@@ -413,7 +666,7 @@ export default {
         })
       }
     },
-    fileChange (refname, type) {
+    fileChange (refname, type, index) {
       const self = this
       const target = event.target
       const files = target.files
@@ -424,10 +677,80 @@ export default {
         }
         const filedata = new FormData(fileForm)
         self.$vux.loading.show()
-        self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
-          let data = res.data
+        self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(res => {
           self.$vux.loading.hide()
+          let data = res.data
           self.photoCallback(data, type)
+        })
+      }
+    },
+    fileMulChange (refname, type) {
+      const self = this
+      const index = this.clickPhotoIndex
+      const target = event.target
+      const files = target.files
+      console.log('进入到了新的多选文件file的change事件中')
+      console.log(index)
+      if (files.length > 0) {
+        let filedata = new FormData()
+        for (let i = 0; i < files.length; i++) {
+          filedata.append(`files[${i}]`, files[i])
+        }
+        self.$vux.loading.show()
+        self.$http.post(`${ENV.BokaApi}/api/uploadFiles`, filedata).then(res => {
+          self.$vux.loading.hide()
+          let data = res.data
+          if (data.flag === 1) {
+            let retdata = data.data
+            if (index > -1) {
+              console.log('进入到了编辑')
+              if (type === 'photo') {
+                let allowNum = self.maxnum - self.photoarr.length + 1
+                let addNum = retdata.length > allowNum ? allowNum : retdata.length
+                let addData = retdata.slice(0, addNum)
+                if (addData.length > 1) {
+                  self.photoarr.splice(index, 1, ...addData)
+                } else {
+                  self.photoarr[index] = addData[0]
+                  let lastphoto = self.photoarr.splice(self.photoarr.length - 1, 1)
+                  self.photoarr.push(lastphoto)
+                }
+                self.submitdata.photo = self.photoarr.join(',')
+              } else if (type === 'contentphoto') {
+                let allowNum = self.maxnum1 - self.photoarr1.length + 1
+                let addNum = retdata.length > allowNum ? allowNum : retdata.length
+                let addData = retdata.slice(0, addNum)
+                if (addData > 1) {
+                  self.photoarr1.splice(index, 1, ...addData)
+                } else {
+                  self.photoarr1[index] = addData[0]
+                  let lastphoto = self.photoarr1.splice(self.photoarr1.length - 1, 1)
+                  self.photoarr1.push(lastphoto)
+                }
+                self.submitdata.contentphoto = self.photoarr1.join(',')
+              }
+            } else {
+              console.log('进入到了上传')
+              if (type === 'photo' && self.photoarr.length < self.maxnum) {
+                let allowNum = self.maxnum - self.photoarr.length
+                let addNum = retdata.length > allowNum ? allowNum : retdata.length
+                let addData = retdata.slice(0, addNum)
+                self.photoarr = self.photoarr.concat(addData)
+                self.submitdata.photo = self.photoarr.join(',')
+              } else if (type === 'contentphoto' && self.photoarr1.length < self.maxnum1) {
+                let allowNum = self.maxnum1 - self.photoarr1.length
+                let addNum = retdata.length > allowNum ? allowNum : retdata.length
+                let addData = retdata.slice(0, addNum)
+                self.photoarr1 = self.photoarr1.concat(addData)
+                self.submitdata.contentphoto = self.photoarr1.join(',')
+              }
+            }
+          } else if (data.error) {
+            self.$vux.toast.show({
+              text: data.error,
+              time: self.$util.delay(data.error)
+            })
+          }
         })
       }
     },
@@ -450,35 +773,63 @@ export default {
     savedata (postdata) {
       const self = this
       if (!self.submitIng) {
-        if (self.classData.length && !parseInt(self.submitdata.classid)) {
-          self.$vux.toast.text('必填项不能为空', 'middle')
+        if (self.$util.trim(postdata.photo) === '') {
+          self.$vux.toast.text('请先上传封面图像', 'middle')
           return false
         }
-        let validateData = []
-        for (let key in self.requireddata) {
-          let v = {}
-          v[key] = self.submitdata[key]
-          validateData.push(v)
+        if (self.classData.length && !parseInt(postdata.classid)) {
+          self.$vux.toast.text('请选择商品类别', 'middle')
+          return false
         }
-        let iscontinue = self.$util.validateQueue(validateData,
-          model => {
-            switch (model.key) {
-              default:
-                self.$vux.toast.text('必填项不能为空', 'middle')
-            }
-          }
-        )
-        if (!iscontinue) {
+        if (self.$util.trim(postdata.title) === '') {
+          self.$vux.toast.text('请输入商品名称', 'middle')
+          return false
+        }
+        if (self.$util.trim(postdata.price) === '') {
+          self.$vux.toast.text('请输入商品价格', 'middle')
           return false
         }
         let price = postdata.price.toString().replace(/,/g, '')
         let oriprice = postdata.oriprice.toString().replace(/,/g, '')
+        let tbprice = postdata.tb_price.toString().replace(/,/g, '')
+        let jdprice = postdata.jd_price.toString().replace(/,/g, '')
+        let postage = postdata.postage.toString().replace(/,/g, '')
         let rebate = postdata.rebate
         if (self.$util.trim(rebate) !== '') {
           rebate = rebate.toString().replace(/,/g, '')
         }
         if ((self.$util.trim(oriprice) !== '' && (isNaN(oriprice) || parseFloat(oriprice) < 0)) || isNaN(price) || parseFloat(price) <= 0 || (self.$util.trim(rebate) !== '' && (isNaN(rebate) || parseFloat(rebate) < 0))) {
           self.$vux.toast.text('请输入正确的价格', 'middle')
+          return false
+        }
+        if ((self.$util.trim(tbprice) !== '' && (isNaN(tbprice) || parseFloat(tbprice) < 0))) {
+          self.$vux.toast.text('请输入正确的猫价', 'middle')
+          return false
+        }
+        if ((self.$util.trim(jdprice) !== '' && (isNaN(jdprice) || parseFloat(jdprice) < 0))) {
+          self.$vux.toast.text('请输入正确的狗价', 'middle')
+          return false
+        }
+        if (self.$util.trim(oriprice) !== '' && parseFloat(oriprice) <= parseFloat(price)) {
+          self.$vux.toast.text('商品现价不能大于等于原价', 'middle')
+          return false
+        }
+        if (!self.optionsData.length) {
+          if (self.$util.trim(postdata.storage) === '') {
+            self.$vux.toast.text('请输入商品库存', 'middle')
+            return false
+          }
+          if (isNaN(postdata.storage) || parseFloat(postdata.storage) <= 0) {
+            self.$vux.toast.text('库存必须大于0', 'middle')
+            return false
+          }
+        }
+        if (self.$util.trim(postdata.postage) === '') {
+          self.$vux.toast.text('请输入运费', 'middle')
+          return false
+        }
+        if (isNaN(postage) || postage < 0) {
+          self.$vux.toast.text('请输入正确的运费', 'middle')
           return false
         }
         if (!isNaN(rebate)) {
@@ -488,6 +839,29 @@ export default {
             return false
           }
         }
+        let iscontinue = true
+        if (this.optionsData.length) {
+          for (let i = 0; i < this.optionsData.length; i++) {
+            let curOption = this.optionsData[i]
+            let curTitle = curOption.title
+            // let curPhoto = curOption.photo
+            let curStorage = curOption.storage
+            console.log(curOption)
+            if (self.$util.trim(curTitle) === '' || self.$util.trim(curStorage) === '') {
+              self.$vux.toast.text('请完善规格信息', 'middle')
+              iscontinue = false
+              break
+            }
+            if (isNaN(curStorage) || parseFloat(curStorage) <= 0) {
+              self.$vux.toast.text('库存必须大于0', 'middle')
+              iscontinue = false
+              break
+            }
+          }
+        }
+        if (!iscontinue) {
+          return false
+        }
         if (self.$util.trim(postdata.content) === '' && self.$util.trim(postdata.contentphoto) === '') {
           self.$vux.toast.text('请完善商品介绍或者详情图片', 'middle')
           return false
@@ -495,8 +869,23 @@ export default {
         self.submitIng = true
         postdata.price = price
         postdata.oriprice = oriprice
+        postdata.tb_price = tbprice
+        postdata.jd_price = jdprice
         postdata.rebate = rebate
         postdata.postage = postdata.postage.toString().replace(/,/g, '')
+        let postOptions = []
+        if (this.optionsData.length) {
+          for (let i = 0; i < this.optionsData.length; i++) {
+            let curOption = this.optionsData[i]
+            let oPhoto = curOption.photo ? curOption.photo : self.photoarr[0]
+            let addoption = {title: curOption.title, photo: oPhoto, storage: curOption.storage}
+            if (curOption.id) {
+              addoption.id = curOption.id
+            }
+            postOptions.push(addoption)
+          }
+        }
+        postdata.options = postOptions
         self.$vux.loading.show()
         if (self.query.id) {
           postdata.id = self.query.id
@@ -586,7 +975,22 @@ export default {
         const params2 = { params: { id: this.query.id, module: 'product', from: 'edit' } }
         this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, params2).then(res => {
           const data = res.data
-          self.data = data.data ? data.data : data
+          let retdata = data.data ? data.data : data
+          if (parseInt(retdata.oriprice) === 0) {
+            retdata.oriprice = ''
+          }
+          if (retdata.options && retdata.options.length) {
+            let retOptions = retdata.options
+            this.optionsPhoto = []
+            for (let i = 0; i < retOptions.length; i++) {
+              this.optionsPhoto.push(retOptions[i].photo)
+              retOptions[i].previewerPhoto = this.$util.previewerImgdata([retOptions[i].photo])
+            }
+            console.log('处理过的规格参数')
+            this.optionsData = retOptions
+            console.log(this.optionsData)
+          }
+          self.data = retdata
           self.activityInfo = self.data.activitinfo
           for (let key in self.submitdata) {
             if (key === 'allowcard') {
@@ -682,19 +1086,24 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-.addproduct .s-container{top:0;}
+<style lang="less">
+.addproduct{
+  line-height: 1.4;
+  .s-container{top:0;}
+  .vux-x-input.align_right input{text-align:right;}
+}
 .form-item{position:relative;padding:10px 12px;}
 .form-item:after{
   content:"";display:block;
 	background-color:@list-border-color;height:1px;overflow:hidden;
-	position: absolute;left: 12px;right: 0;bottom:1px;
+	position: absolute;right: 0;bottom:0px;
 	-webkit-transform: scaleY(0.5) translateY(0.5px);
 	transform: scaleY(0.5) translateY(0.5px);
 	-webkit-transform-origin: 0% 0%;
 	transform-origin: 0% 0%;
 }
 .b_top_after:after,.b_bottom_after:after{left:12px;}
+.bright{border-right: 1px solid #ddd}
 .button_photo{
   position:relative;
   display: flex;
@@ -722,5 +1131,31 @@ export default {
   position:absolute;
   left:0;top:0;right:0;bottom:0;
   opacity:0;
+}
+.input.align_right input{text-align:right;}
+.addproduct .btn-add{width:100px;height:30px;border:#ccc 1px solid;border-radius:10px;}
+.addproduct .option-list{
+  .option-item{
+    border:#ccc 1px solid;margin-top:10px;
+    .option-title{border-bottom:#ccc 1px solid;padding:10px;}
+    .option-con{
+      padding:10px;
+      .con-item:not(:last-child) {margin-bottom:10px;}
+      .con-item{
+        width:100%;height:30px;
+        .title-cell1{width:60px;height:100%;}
+        .border-cell{
+          border:#ccc 1px solid;height:100%;
+          .input{width:100%;height:100%;padding:0 5px;box-sizing: border-box;}
+        }
+        .icon-cell{
+          width:30px;height:100%;
+        }
+      }
+    }
+    .option-pic-list{
+      .option-pic{width:30px;height:30px;object-fit:cover;}
+    }
+  }
 }
 </style>

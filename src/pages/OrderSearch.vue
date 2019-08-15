@@ -4,7 +4,7 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div id="order-search" class="containerarea font14 nobottom">
+  <div id="order-search" :class="`containerarea font14 ${(loginUser.isretailer && query.fromapp != 'factory') ? 's-havebottom' : ''}`">
     <div class="s-topbanner s-topbanner1">
       <tab class="b-tab" v-model="selectedIndex">
         <tab-item :selected="selectedIndex==0" @on-item-click="toggleTab">{{ $t('All') }}</tab-item>
@@ -17,7 +17,7 @@
       <div v-show="selectedIndex===0">
         <template v-if="distabdata1">
           <template v-if="tabdata1.length">
-            <order-info v-for="(item, index) in getList1" :item="item" :key="index" @on-process="orderProcess"></order-info>
+            <order-info v-for="(item, index) in tabdata1" :item="item" :key="index" :index="index" @on-process="orderProcess"></order-info>
           </template>
           <template v-else>
             <div class="no-related-x color-gray">
@@ -29,7 +29,7 @@
       <div v-show="selectedIndex===1">
         <template v-if="distabdata2">
           <template v-if="tabdata2.length">
-            <order-info v-for="(item, index) in getList2" :item="item" :key="index" @on-process="orderProcess"></order-info>
+            <order-info v-for="(item, index) in tabdata2" :item="item" :key="index" :index="index" @on-process="orderProcess"></order-info>
           </template>
           <template v-else>
             <div class="no-related-x color-gray">
@@ -41,7 +41,7 @@
       <div v-show="selectedIndex===2">
         <template v-if="distabdata3">
           <template v-if="tabdata3.length">
-            <order-info v-for="(item, index) in getList3" :item="item" :key="index" @on-process="orderProcess"></order-info>
+            <order-info v-for="(item, index) in tabdata3" :item="item" :key="index" :index="index" @on-process="orderProcess"></order-info>
           </template>
           <template v-else>
             <div class="no-related-x color-gray">
@@ -53,7 +53,7 @@
       <div v-show="selectedIndex===3">
         <template v-if="distabdata4">
           <template v-if="tabdata4.length">
-            <order-info v-for="(item, index) in getList4" :item="item" :key="index" @on-process="orderProcess"></order-info>
+            <order-info v-for="(item, index) in tabdata4" :item="item" :key="index" :index="index" @on-process="orderProcess"></order-info>
           </template>
           <template v-else>
             <div class="no-related-x color-gray">
@@ -63,6 +63,83 @@
         </template>
       </div>
     </div>
+    <div class="s-bottom flex_center pl12 pr12 list-shadow02" v-if="loginUser.isretailer && query.fromapp != 'factory'">
+      <div class="flex_cell flex_center">
+        <div class="color-white flex_center btn-bottom-red" @click="toRetailerOrders" style="width:85%;">我的销售订单</div>
+      </div>
+    </div>
+    <div v-if="showRefundModal" class="auto-modal refund-modal flex_center">
+      <div class="modal-inner border-box" style="width:80%;">
+        <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">申请退款</div>
+        <div class="align_left txt padding10">
+          <group class="textarea-outer" style="padding:0;">
+            <x-textarea
+              ref="titleTextarea"
+              v-model="refundContent"
+              name="title" class="x-textarea noborder"
+              placeholder="请输入退款原因"
+              :show-counter="false"
+              :rows="6"
+              :max="200"
+              @on-change="textareaChange('titleTextarea')"
+              @on-focus="textareaFocus('titleTextarea')"
+              autosize>
+            </x-textarea>
+          </group>
+        </div>
+        <div class="flex_center b_top_after" style="height:50px;">
+          <div class="flex_cell flex_center h_100 b_right_after" @click="closeRefund">取消</div>
+          <div class="flex_cell flex_center h_100 color-orange" @click="submitRefund">提交</div>
+        </div>
+      </div>
+    </div>
+    <div v-if="showServiceModal" class="auto-modal refund-modal flex_center">
+      <div class="modal-inner border-box" style="width:80%;">
+        <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">申请售后</div>
+        <div class="align_left txt padding10 b_bottom_after">
+          <group class="textarea-outer" style="padding:0;">
+            <x-textarea
+              ref="serviceTextarea"
+              v-model="serviceContent"
+              name="title" class="x-textarea noborder"
+              placeholder="请输入售后原因"
+              :show-counter="false"
+              :rows="6"
+              :max="200"
+              @on-change="textareaChange('serviceTextarea')"
+              @on-focus="textareaFocus('serviceTextarea')"
+              autosize>
+            </x-textarea>
+          </group>
+        </div>
+        <form enctype="multipart/form-data">
+          <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange" />
+        </form>
+        <div class="q_photolist align_left bg-white">
+          <template v-if="servicePhoto && servicePhoto != ''">
+            <div class="photoitem" style="width:100px;">
+              <div class="inner photo imgcover">
+                <img :src="servicePhoto" class="pic" @click="uploadPhoto('fileInput')" />
+                <div class="close" @click.stop="deletephoto()">×</div>
+              </div>
+            </div>
+          </template>
+          <div v-else class="photoitem add" @click="uploadPhoto('fileInput')" style="width:100px;">
+            <div class="inner">
+              <div class="innerlist">
+                <div class="flex_center h_100">
+                  <i class="al al-zhaopian" style="color:#bbb;line-height:30px;"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex_center b_top_after" style="height:50px;">
+          <div class="flex_cell flex_center h_100 b_right_after" @click="closeService">取消</div>
+          <div class="flex_cell flex_center h_100 color-orange" @click="submitService">提交</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -70,17 +147,19 @@
 </i18n>
 
 <script>
-import { Sticky, Tab, TabItem } from 'vux'
+import { Sticky, Tab, TabItem, Group, XTextarea } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
+import {User} from '#/storage'
 import ENV from 'env'
 
 export default {
   components: {
-    Sticky, Tab, TabItem, OrderInfo
+    Sticky, Tab, TabItem, OrderInfo, Group, XTextarea
   },
   data () {
     return {
       query: {},
+      loginUser: {},
       selectedIndex: 0,
       distabdata1: false,
       distabdata2: false,
@@ -94,7 +173,15 @@ export default {
       pagestart1: 1,
       pagestart2: 1,
       pagestart3: 1,
-      pagestart4: 1
+      pagestart4: 1,
+      showRefundModal: false,
+      refundContent: '',
+      clickOrder: {},
+      clickIndex: 0,
+      pageTop: 0,
+      showServiceModal: false,
+      serviceContent: '',
+      servicePhoto: ''
     }
   },
   computed: {
@@ -117,6 +204,85 @@ export default {
     }
   },
   methods: {
+    initData () {
+      // this.selectedIndex = 0
+      // this.distabdata1 = false
+      // this.distabdata2 = false
+      // this.distabdata3 = false
+      // this.distabdata4 = false
+      // this.tabdata1 = []
+      // this.tabdata2 = []
+      // this.tabdata3 = []
+      // this.tabdata4 = []
+      // this.pagestart1 = 1
+      // this.pagestart2 = 1
+      // this.pagestart3 = 1
+      // this.pagestart4 = 1
+      this.showRefundModal = false
+      this.refundContent = ''
+      this.clickOrder = {}
+      this.clickIndex = 0
+    },
+    deletephoto () {
+      this.servicePhoto = ''
+    },
+    photoCallback (data) {
+      const self = this
+      if (data.flag === 1) {
+        self.servicePhoto = data.data
+      } else if (data.error) {
+        self.$vux.toast.show({
+          text: data.error,
+          time: self.$util.delay(data.error)
+        })
+      }
+    },
+    uploadPhoto (refname) {
+      const self = this
+      const fileInput = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      if (self.$util.isPC()) {
+        fileInput.click()
+      } else {
+        self.$wechat.ready(function () {
+          self.$util.wxUploadImage({
+            maxnum: 1,
+            handleCallback: function (data) {
+              self.photoCallback(data)
+            }
+          })
+        })
+      }
+    },
+    fileChange (refname) {
+      const self = this
+      const target = event.target
+      const files = target.files
+      if (files.length > 0) {
+        let fileForm = target.parentNode
+        const filedata = new FormData(fileForm)
+        self.$vux.loading.show()
+        self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(res => {
+          self.$vux.loading.hide()
+          let data = res.data
+          self.photoCallback(data)
+        })
+      }
+    },
+    toRetailerOrders () {
+      let params = this.$util.handleAppParams(this.query, {})
+      this.$router.push({path: '/retailerOrders', query: params})
+    },
+    textareaChange (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
+      setTimeout(function () {
+        curArea.updateAutosize()
+      }, 50)
+    },
+    textareaFocus (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
+    },
     setListButton (list) {
       for (let item of list) {
         switch (item.flag) {
@@ -130,18 +296,24 @@ export default {
             ]
             break
           case 2:
-            if (item.canback) {
+            if (item.canback && item.backflag !== 20 && (!item.frommin || item.frommin === '' || (item.frommin !== '' && (item.orderonline !== 0 || (item.orderonline === 0 && item.fid))))) {
               item.buttons = [
                 {id: 3, name: '申请退款'}
               ]
             }
             break
           case 3:
-            item.buttons = [
-              {id: 4, name: '查看物流'},
-              // {id: 5, name: '申请售后'},
-              {id: 6, name: '确认收货'}
-            ]
+            // item.buttons = [
+            //   {id: 4, name: '查看物流'},
+            //   {id: 5, name: '申请售后'},
+            //   {id: 6, name: '确认收货'}
+            // ]
+            let arr = [{id: 4, name: '查看物流'}]
+            if (item.backflag !== 120) {
+              arr.push({id: 5, name: '申请售后'})
+            }
+            arr.push({id: 6, name: '确认收货'})
+            item.buttons = arr
             break
           case 4:
             item.buttons = [
@@ -189,30 +361,119 @@ export default {
         }
       })
     },
-    refund (order) {
+    refund (order, index) {
+      this.showRefundModal = true
+    },
+    closeRefund () {
+      this.showRefundModal = false
+    },
+    submitRefund () {
       const self = this
-      this.$vux.confirm.show({
-        title: '您是否要申请退款？',
-        onConfirm () {
-          self.$vux.loading.show()
-          self.$http.post(`${ENV.BokaApi}/api/order/refund`, {id: order.id, from: order.from})
-          .then(res => {
-            self.$vux.loading.hide()
-            self.$vux.toast.text(res.data.error)
-            self.changeOrderView(order, 0, [])
-          })
-        }
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/order/applyRefund`, {id: this.clickOrder.id, reasonreturn: this.refundContent})
+      .then(res => {
+        self.$vux.loading.hide()
+        this.showRefundModal = false
+        this.refundContent = ''
+        const data = res.data
+        self.$vux.toast.show({
+          text: data.error,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: self.$util.delay(data.error),
+          onHide: () => {
+            if (data.flag) {
+              // self.changeOrderView(this.clickOrder, 0, [])
+              switch (this.selectedIndex) {
+                case 0:
+                  this.tabdata1[this.clickIndex].backflag = 20
+                  this.tabdata1[this.clickIndex].flagstr = '待发货(退款申请中)'
+                  this.tabdata1[this.clickIndex].buttons = []
+                  for (let i = 0; i < this.tabdata2.length; i++) {
+                    if (this.tabdata2[i].id === this.clickData.id) {
+                      this.tabdata2[i].backflag = 20
+                      this.tabdata2[i].flagstr = '待发货(退款申请中)'
+                      this.tabdata2[i].buttons = []
+                      break
+                    }
+                  }
+                  break
+                case 1:
+                  this.tabdata2[this.clickIndex].backflag = 20
+                  this.tabdata2[this.clickIndex].flagstr = '待发货(退款申请中)'
+                  this.tabdata2[this.clickIndex].buttons = []
+                  for (let i = 0; i < this.tabdata1.length; i++) {
+                    if (this.tabdata1[i].id === this.clickData.id) {
+                      this.tabdata1[i].backflag = 20
+                      this.tabdata1[i].flagstr = '待发货(退款申请中)'
+                      this.tabdata1[i].buttons = []
+                      break
+                    }
+                  }
+                  break
+              }
+            }
+          }
+        })
       })
     },
     viewShipping (order) {
       this.$router.push({path: `/deliverinfo`, query: {id: order.id}})
     },
+    closeService () {
+      this.showServiceModal = false
+      this.serviceContent = ''
+      this.servicePhoto = ''
+    },
+    submitService () {
+      if (this.$util.trim(this.serviceContent) === '' && this.$util.trim(this.servicePhoto) === '') {
+        this.$vux.toast.text('请完善售后信息', 'middle')
+        return false
+      }
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/order/applyService`, {
+        id: this.clickOrder.id, reasonreturn: this.serviceContent, proofphoto: this.servicePhoto
+      }).then(res => {
+        this.$vux.loading.hide()
+        const data = res.data
+        this.$vux.toast.text(data.error)
+        if (data.flag) {
+          this.showServiceModal = false
+          if (this.selectedIndex === 0) {
+            this.tabdata1[this.clickIndex].backflag = 120
+            this.tabdata1[this.clickIndex].buttons.splice(1, 1)
+            for (let i in this.tabdata3) {
+              if (this.tabdata3[i].id === this.clickOrder.id) {
+                this.tabdata3[i].buttons.splice(1, 1)
+              }
+            }
+          } else {
+            this.tabdata3[this.clickIndex].backflag = 120
+            this.tabdata3[this.clickIndex].buttons.splice(1, 1)
+            for (let i in this.tabdata1) {
+              if (this.tabdata1[i].id === this.clickOrder.id) {
+                this.tabdata1[i].buttons.splice(1, 1)
+              }
+            }
+          }
+        }
+      })
+    },
     afterSale (order) {
+      // 售后
+      this.serviceContent = ''
+      this.servicePhoto = ''
+      this.showServiceModal = true
     },
     payment (order) {
-      location.replace(`${ENV.Host}/#/pay?id=${order.id}`)
+      if (this.query.from) {
+        this.$wechat.miniProgram.navigateTo({url: `/packageB/pages/pay?id=${order.id}&weburl=orderSearch`})
+      } else {
+        location.replace(`${ENV.Host}/#/pay?id=${order.id}`)
+      }
     },
-    orderProcess (type, order) {
+    orderProcess (type, order, index) {
+      this.clickOrder = order
+      this.clickIndex = index
       switch (type) {
         case 1:
           this.cancel(order)
@@ -221,7 +482,7 @@ export default {
           this.payment(order)
           break
         case 3:
-          this.refund(order)
+          this.refund(order, index)
           break
         case 4:
           this.viewShipping(order)
@@ -309,10 +570,11 @@ export default {
       this.$vux.loading.show()
       const self = this
       let params = { params: { flag: flag, pagestart: 0, limit: self.limit } }
-      this.$http.get(`${ENV.BokaApi}/api/order/orderList/user`, params).then(function (res) {
+      this.$http.get(`${ENV.BokaApi}/api/order/orderList/user`, params).then((res) => {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
+        retdata = this.setListButton(retdata)
         switch (flag) {
           case 0:
             self.tabdata1 = retdata
@@ -343,6 +605,7 @@ export default {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
+        retdata = self.setListButton(retdata)
         switch (flag) {
           case 0:
             retdata.length && self.pagestart1++
@@ -368,24 +631,55 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      if ((this.query.flag === undefined && this.$route.query.flag === undefined) || this.query.flag !== this.$route.query.flag) {
-        this.query = this.$route.query
-        let flag = parseInt(this.query.flag)
-        switch (flag) {
-          case 2:
+      this.loginUser = User.get()
+      this.initData()
+      this.query = this.$route.query
+      let flag = parseInt(this.query.flag)
+      switch (flag) {
+        case 2:
+          if (this.query.refresh) {
             this.selectedIndex = 1
-            break
-          case 3:
+            this.pagestart2 = 0
+            this.tabdata2 = []
+            this.toggleTab()
+          } else if (!this.tabdata2.length) {
+            this.selectedIndex = 1
+            this.toggleTab()
+          }
+          break
+        case 3:
+          if (this.query.refresh) {
             this.selectedIndex = 2
-            break
-          case 4:
+            this.pagestart3 = 0
+            this.tabdata3 = []
+            this.toggleTab()
+          } else if (!this.tabdata3.length) {
+            this.selectedIndex = 2
+            this.toggleTab()
+          }
+          break
+        case 4:
+          if (this.query.refresh) {
             this.selectedIndex = 3
-            break
-          default :
+            this.pagestart4 = 0
+            this.tabdata4 = []
+            this.toggleTab()
+          } else if (!this.tabdata4.length) {
+            this.selectedIndex = 3
+            this.toggleTab()
+          }
+          break
+        default :
+          if (this.query.refresh) {
             this.selectedIndex = 0
-            break
-        }
-        this.toggleTab()
+            this.pagestart1 = 0
+            this.tabdata1 = []
+            this.toggleTab()
+          } else if (!this.tabdata1.length) {
+            this.selectedIndex = 0
+            this.toggleTab()
+          }
+          break
       }
     }
   },
@@ -393,11 +687,28 @@ export default {
     this.init()
   },
   activated () {
+    if (this.$refs.scrollContainer) {
+      this.$refs.scrollContainer.scrollTop = this.pageTop
+    }
+    if (document.querySelector('.vux-tab')) {
+      document.querySelector('.vux-tab').scrollLeft = this.tabLeft
+    }
     this.refresh()
     this.$util.miniPost()
+  },
+  beforeRouteLeave (to, from, next) {
+    if (this.$refs.scrollContainer) {
+      this.pageTop = this.$refs.scrollContainer.scrollTop
+    }
+    if (document.querySelector('.vux-tab')) {
+      this.tabLeft = document.querySelector('.vux-tab').scrollLeft
+    }
+    next()
   }
 }
 </script>
 
 <style lang="less">
+.b-tab .vux-tab .vux-tab-item.vux-tab-selected{color:#ea3a3a;}
+.b-tab .vux-tab-ink-bar{background-color:#ea3a3a;}
 </style>

@@ -160,6 +160,7 @@ export default {
       }
     },
     fileUpload (filedata, callback) {
+      filedata.append('needcompress', 1)
       self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()

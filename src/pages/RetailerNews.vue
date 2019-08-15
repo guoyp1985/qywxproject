@@ -245,7 +245,7 @@ export default {
   methods: {
     getNewsData () {
       this.$http.get(`${ENV.BokaApi}/api/list/factorynews`, {
-        params: {pagestart: this.pageStartNews, limit: this.limit, fid: this.retailerInfo.fid}
+        params: {pagestart: this.pageStartNews, limit: this.limit, fid: this.retailerInfo.fid, wid: this.loginUser.uid}
       }).then(res => {
         const data = res.data
         const retdata = data.data ? data.data : data
@@ -320,14 +320,14 @@ export default {
       if (this.loginUser.isretailer === 2 && this.newsCount >= 5) {
         this.openVip()
       } else {
-        this.$router.push('/retailerGoodeazy')
+        this.$router.push({path: '/retailerGoodeazy'})
       }
     },
     toAdd () {
       if (this.loginUser.isretailer === 2 && this.newsCount >= 5) {
         this.openVip()
       } else {
-        this.$router.push('/addNews')
+        this.$router.push({path: '/addNews'})
       }
     },
     handleScroll (refname, type) {
@@ -493,6 +493,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.retailerInfo = this.loginUser.retailerinfo
+      document.title = this.retailerInfo.title
       self.pagestart1 = 0
       this.distabdata1 = false
       this.tabdata1 = []

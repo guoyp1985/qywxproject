@@ -1,15 +1,24 @@
 <template>
   <div class="data">
-    <div v-for="(item, index) in data" :key="item.id" class="item" @click="toItem(item)">
-      <img class="avatar" :src="item.photo"/>
-      <div class="info">
-        <span class="title">{{item.title}}</span>
-        <span class="price" v-if="module === 'product'">¥ {{item.price}}</span>
+    <div v-for="(item, index) in data" :key="item.id" class="item flex_left">
+      <div class="pic flex_left" @click="toItem(item)">
+        <img class="avatar" :src="item.photo"/>
       </div>
-      <button class="ope-btn" v-if="teamInfo.manager > 0" @click.stop="onDelete(item.id, index)">删除</button>
-      <button class="ope-btn" v-if="userInfo.uid !== teamInfo.uploader && teamInfo.join" @click.stop="onImport(item.id)">导入</button>
-    </div>
+      <div class="info flex_left flex_cell" @click="toItem(item)">
+        <div class="w_100">
+          <div class="font14 clamp1">{{item.title}}</div>
+          <div class="price" v-if="module === 'product'">¥ {{item.price}}</div>
+        </div>
+      </div>
+      <div class="ope-all flex_right">
+        <button class="ope-btn flex_center" v-if="teamInfo.manager > 0" @click.stop="onDelete(item.moduleid, index)">删除</button>
+        <button class="ope-btn flex_center" v-if="!item.haveimport" @click.stop="onImport(item.id,index)">导入</button>
+        <button class="ope-btn flex_center" v-else>已导入</button>
+      </div>
+  </div>
     <div class="tip-message" v-if="!data.length && loaded"><span>暂无{{moduleTransfer}}</span></div>
+    <!-- 数据加载完毕提示 -->
+    <div class="end-area" v-if="data.length && endShow"><span>--没有更多数据啦--</span></div>
   </div>
 </template>
 
@@ -25,7 +34,10 @@ export default {
       data: [],
       pagestart: 0,
       limit: 5,
-      loaded: false
+      loaded: false,
+      submitIng: false,
+      error: '',
+      endShow: false
     }
   },
   props: {
@@ -42,6 +54,14 @@ export default {
       default: null
     },
     teamInfo: {
+      type: Object,
+      default: null
+    },
+    backurl: {
+      type: String,
+      default: ''
+    },
+    loginUser: {
       type: Object,
       default: null
     }
@@ -97,6 +117,9 @@ export default {
           } else {
             this.data.push(...res.data.data)
           }
+          if (res.data.data.length < this.limit) {
+            this.endShow = true
+          }
           this.$nextTick(() => {
             this.$parent.refresh()
           })
@@ -136,22 +159,73 @@ export default {
         }
       })
     },
-    onImport (moduleid) {
-      this.$http({
-        url: `${Env.BokaApi}/api/team/copy`,
-        method: 'POST',
-        data: {
-          id: moduleid,
-          module: this.module
-        }
-      }).then(res => {
-        console.log(res)
-        if (res.data.flag) {
-          this.$vux.toast.show({
-            text: `导入${this.moduleTransfer}成功！`
-          })
-        }
-      })
+    importData (itemid, index) {
+      const _this = this
+      if (!this.submitIng) {
+        this.submitIng = true
+        _this.$http({
+          url: `${Env.BokaApi}/api/team/copy`,
+          method: 'POST',
+          data: {
+            id: itemid,
+            module: _this.module
+          }
+        }).then(res => {
+          this.submitIng = false
+          console.log(res)
+          const data = res.data
+          if (data.flag) {
+            this.data[index].haveimport = 1
+            _this.$vux.toast.show({
+              text: `导入${_this.moduleTransfer}成功！`
+            })
+          } else {
+            _this.$vux.toast.show({
+              text: data.error
+            })
+          }
+        })
+      }
+    },
+    onImport (itemid, index) {
+      let _this = this
+      if (!this.loginUser.isretailer || this.loginUser.retailerinfo.moderate !== 1) {
+        this.$vux.confirm.show({
+          title: `你还没有注册卖家哦，注册成功可免费导入该团队的所有信息哦，一键导入便可快速使用！`,
+          onConfirm () {
+            let url = '/pages/vip'
+            if (_this.$route.query.weburl) {
+              let weburl = encodeURIComponent(_this.$route.query.weburl)
+              let webquery = encodeURIComponent(_this.$route.query.webquery)
+              url = `${url}?weburl=${weburl}&webquery=${webquery}`
+              _this.backurl = url
+            }
+            _this.$wechat.miniProgram.navigateTo({url: url})
+          }
+        })
+      } else if (!this.teamInfo.join) {
+        this.$vux.confirm.show({
+          title: `您还没有加入团队，确定加入该团队并导入吗？`,
+          onConfirm () {
+            _this.$http({
+              url: `${Env.BokaApi}/api/team/teamset`,
+              method: 'post',
+              data: {
+                id: _this.id,
+                type: 'addMember'
+              }
+            }).then(res => {
+              console.log(res)
+              if (res.data.flag) {
+                _this.teamInfo.join = 1
+                _this.importData(itemid, index)
+              }
+            })
+          }
+        })
+      } else {
+        _this.importData(itemid, index)
+      }
     },
     toItem (item) {
       console.log('toItem')
@@ -168,7 +242,7 @@ export default {
         case 'product':
           path = '/product'
           query = {
-            id: item.id,
+            id: item.moduleid,
             wid: this.teamInfo.uid
           }
           break
@@ -180,13 +254,13 @@ export default {
             path = '/product'
           }
           query = {
-            id: item.id
+            id: item.moduleid
           }
           break
         case 'news':
           path = '/news'
           query = {
-            id: item.id
+            id: item.moduleid
           }
           break
       }
@@ -202,61 +276,36 @@ export default {
 <style lang="less" scoped="">
   .data{
     .item{
-      display: flex;
-      align-items: center;
-      width: 100%;
-      justify-content: space-between;
-      padding: 20px;
+      width: 100%;padding:20px 10px;box-sizing: border-box;
       background-color: #fff;
-      margin-bottom: 20px;
-      border-top: 1px solid #e4e4e4;
       border-bottom: 1px solid #e4e4e4;
-      box-sizing: border-box;
-      .avatar{
-        width: 50px;
-        height: 50px;
-        border-radius: 10px;
-        margin-right: 20px;
-        object-fit: cover;
+      .pic{
+        width:60px;
+        .avatar{width: 50px;height: 50px;border-radius: 6px;object-fit: cover;}
       }
       .info{
-        flex: 1;
-        width: 50%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        .title{
-          font-size: 14px;
-          overflow: hidden;
-          text-overflow:ellipsis;
-          white-space: nowrap;
-        }
-        .price{
-          font-size: 14px;
-          color: #ff6a61;
-          margin-top: 10px;
-        }
+        .price{font-size: 14px;color: #ff6a61;margin-top: 10px;}
       }
-      .ope-btn{
-        margin-right: 5px;
-        padding: 5px 8px;
-        border-radius: 10px;
-        background-color: #ff6a61;
-        color: #fff;
-        flex: 0 0 50px;
-        border: none;
+      .ope-all{
+        width:120px;
+        .ope-btn{
+          width:50px;height:25px;
+          border-radius: 10px;
+          background-color: #ff6a61;
+          color: #fff;
+          border: none;
+          outline: 0;
+        }
+        .ope-btn:not(:last-child){margin-right:10px;}
       }
     }
-    .item:first-child{
-      border-top: none;
-    }
-    .item:last-child{
-      margin-bottom: 0;
-    }
+    .item:not(:first-child){border-top: 1px solid #e4e4e4;}
+    .item:not(:last-child){margin-bottom:5px;}
     .tip-message{
       text-align: center;
       color: #c9c9c9;
       margin-top: 30px;
     }
+    .end-area{width:100%;height:50px;color:#ccc;display:flex;align-items:center;justify-content: center;}
   }
 </style>

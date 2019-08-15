@@ -23,6 +23,9 @@
         <div class="article-view">
           <div class="article-title">
             <h2>{{article.title}}</h2>
+            <div class="flex_right mt5 mb5" v-if="editIng && article.uploader == reward.uid">
+              <div @click="toEditTitle" class="flex_center bg-theme color-white" style="border-radius:20px;height:25px;width:90px;">修改标题</div>
+            </div>
           </div>
           <div class="article-vice-title">
             <h4>{{article.vicetitle}}</h4>
@@ -39,14 +42,26 @@
             </div>
           </div>
           <template v-if="showArticle">
-            <template v-if="article.uploader == reward.uid">
-              <div id="editor-content" :class="`article-content ${article.content == '' ? 'color-gray font16' : ''}`">
-                <p v-if="article.content == ''">文章内容为空，点击【编辑】按钮可修改内容哦！</p>
-                <div v-else v-html="article.content"></div>
-              </div>
+            <template v-if="article.c_format == 'json'">
+              <template v-for="(item, index) in article.content">
+                <div v-if="item.content && item.content != ''" class="padding10">{{item.content}}</div>
+                <template v-for="(photo,index1) in item.photo" index="index1" item="photo">
+                  <div class="flex_center">
+                    <img :src="photo" style="max-width:100%;"/>
+                  </div>
+                </template>
+              </template>
             </template>
             <template v-else>
-              <div class="article-content" v-html="article.content"></div>
+              <template v-if="article.uploader == reward.uid">
+                <div v-if="article.content == '' && !afterEdit" id="editor-content" class="article-content color-gray font16">
+                  <p>文章内容为空，点击【编辑】按钮可修改内容哦！</p>
+                </div>
+                <div v-else id="editor-content" class="article-content" v-html="article.content"></div>
+              </template>
+              <template v-else>
+                <div class="article-content" v-html="article.content"></div>
+              </template>
             </template>
           </template>
           <template v-if="query.control != 'edit'">
@@ -102,7 +117,7 @@
         :module="module"
         :on-close="closeShareSuccess">
       </share-success>
-      <editor v-if="reward.uid == article.uploader && showEditor && !(article.fid > 0)" elem="#editor-content" :query="query" @on-auto-save="autoSave" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
+      <editor v-if="reward.uid == article.uploader && showEditor && article.c_format != 'json'" elem="#editor-content" :loginUser="loginUser" :query="query" @on-edit="clickEdit" @on-auto-save="autoSave" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
       <comment-popup :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-cancel="commentPopupCancel"></comment-popup>
       <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
       <div v-transfer-dom class="x-popup">
@@ -178,7 +193,9 @@ export default {
       replyData: null,
       messages: 0,
       showEditor: false,
-      showArticle: false
+      showArticle: false,
+      editIng: false,
+      afterEdit: false
     }
   },
   filters: {
@@ -198,13 +215,16 @@ export default {
     access () {
       this.$util.wxAccess()
     },
+    clickEdit () {
+      this.editIng = true
+    },
     clickInsertProduct (url) {
       console.log('in in in clickInsertProduct')
       if (self.query.from === 'miniprogram') {
         const params = self.$util.query(url)
-        self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}`})
+        self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}&module=product`})
       } else {
-        self.$router.push(url)
+        self.$router.push({path: url})
       }
     },
     popupSubscribe () {
@@ -344,9 +364,9 @@ export default {
           console.log(linkurl)
           if (self.query.from === 'miniprogram') {
             const params = self.$util.query(linkurl)
-            self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}`})
+            self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}&module=product`})
           } else {
-            self.$router.push(linkurl)
+            self.$router.push({path: linkurl})
           }
         }
       }
@@ -374,21 +394,24 @@ export default {
           if (res.data.flag) {
             self.reward = User.get()
             self.article = res.data.data
-            self.article.content = this.article.content ? self.article.content
-              .replace(/[\r\n]/g, '')
-              .replace(/\s{2,}/g, '')
-              .match(Reg.rSplitAllTags).map(fragment => {
-                if (Reg.rTestSelfCloseTag.test(fragment)) {
-                  fragment = fragment.replace(Reg.filterSpecAttr('style'), (match, p1, p2, p3, p4, p5) => {
-                    return `${p1}${p5}`
-                  })
-                  if (!Reg.rTestSelfCloseOKTag.test(fragment)) {
-                    fragment = fragment.replace(Reg.rInsertSlash, '$1/$2')
+            self.createSocket()
+            if (self.article.c_format !== 'json') {
+              self.article.content = this.article.content ? self.article.content
+                .replace(/[\r\n]/g, '')
+                .replace(/\s{2,}/g, '')
+                .match(Reg.rSplitAllTags).map(fragment => {
+                  if (Reg.rTestSelfCloseTag.test(fragment)) {
+                    fragment = fragment.replace(Reg.filterSpecAttr('style'), (match, p1, p2, p3, p4, p5) => {
+                      return `${p1}${p5}`
+                    })
+                    if (!Reg.rTestSelfCloseOKTag.test(fragment)) {
+                      fragment = fragment.replace(Reg.rInsertSlash, '$1/$2')
+                    }
+                    return fragment
                   }
                   return fragment
-                }
-                return fragment
-              }).join('') : ''
+                }).join('') : ''
+            }
             self.showArticle = true
             self.showEditor = true
             document.title = self.article.title
@@ -425,8 +448,10 @@ export default {
             }
           }
           self.handleImg()
-          if (self.query.control === 'edit') {
-            jQuery('.news .edit-btn')[0].click()
+          if (self.query.control === 'edit' && parseInt(self.reward.uid) === parseInt(self.article.uploader)) {
+            setTimeout(() => {
+              jQuery('.news .edit-btn')[0].click()
+            }, 100)
           }
           const data = res.data
           if (data.flag === 1) {
@@ -452,7 +477,7 @@ export default {
         if (self.query.wid) {
           cururl = `${cururl}&wid=${self.query.wid}`
         }
-        this.$http.post(`${ENV.BokaApi}/api/user/favorite/add`, {id: this.article.id, module: self.module, currenturl: encodeURIComponent(cururl)})
+        this.$http.post(`${ENV.BokaApi}/api/user/favorite/add`, {id: this.article.id, module: self.module, wid: this.article.uploader, currenturl: encodeURIComponent(cururl)})
         .then(res => {
           if (res.data.flag) {
             self.$vux.toast.text(self.$t('Favorite Success'))
@@ -492,25 +517,36 @@ export default {
     onShare () {
     },
     save (callback) {
-      let editorContent = document.querySelector('#editor-content')
+      let editorContent = document.querySelector('#editor-content .post-content-area')
+      if (!editorContent) {
+        editorContent = document.querySelector('#editor-content')
+      }
       self.$vux.loading.show()
+      let con = editorContent.innerHTML
+        .replace(/Eleditor-active/g, '')
+        .replace('<p class="">文章内容为空，点击【编辑】按钮可修改内容哦！</p>', '')
+        .replace('<p>文章内容为空，点击【编辑】按钮可修改内容哦！</p>', '')
+        .replace('<p class="Eleditor-active">文章内容为空，点击【编辑】按钮可修改内容哦！</p>', '')
       self.$http.post(`${ENV.BokaApi}/api/editContent/news`, {
         id: self.query.id,
-        content: editorContent.innerHTML
-      }).then(function (res) {
+        content: con
+      }).then((res) => {
         let data = res.data
         self.$vux.loading.hide()
-        let toasttype = data.flag !== 1 ? 'warn' : 'success'
+        if (data.flag === 1) {
+          console.log('编辑完成后的商品内容')
+          console.log(con)
+          if (con !== '') {
+            self.article.content = con
+            self.afterEdit = true
+          }
+          self.handleImg()
+          callback && callback()
+        }
         self.$vux.toast.show({
           text: data.error,
-          type: toasttype,
-          time: self.$util.delay(data.error),
-          onHide: function () {
-            if (data.flag === 1) {
-              self.handleImg()
-              callback && callback()
-            }
-          }
+          type: data.flag ? 'success' : 'warn',
+          time: self.$util.delay(data.error)
         })
       })
     },
@@ -518,6 +554,7 @@ export default {
       this.save()
     },
     editSave () {
+      this.editIng = false
       this.save(function () {
         if (self.query.minibackurl) {
           let minibackurl = decodeURIComponent(self.query.minibackurl)
@@ -535,6 +572,10 @@ export default {
           }
         }
       })
+    },
+    toEditTitle () {
+      let params = this.$util.handleAppParams(this.query, {id: this.query.id, callback: 'edit'})
+      this.$router.push({path: 'addNews', query: params})
     },
     editSetting () {
       this.$router.push({name: 'tAddNews', params: {id: this.article.id}})
@@ -622,7 +663,7 @@ export default {
       const uid = this.loginUser.uid
       const linkman = this.loginUser.linkman
       // const fromId = this.query.fromId
-      room = `${this.module}-${this.query.id}`
+      room = `${this.module}-${this.query.id}-${this.article.wid}`
       Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module, fromId: this.query.id})
     },
     init () {
@@ -633,6 +674,13 @@ export default {
       this.showArticle = false
       this.showEditor = false
       this.showsharetip = false
+      this.afterEdit = false
+      this.editIng = false
+      if (query.edit === 'control') {
+        this.editIng = true
+      } else {
+        this.editIng = false
+      }
       if (this.query.id !== query.id) {
         room = ''
         this.comments = []
@@ -641,7 +689,6 @@ export default {
       }
       this.getData()
       this.loginUser = User.get()
-      this.createSocket()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
         let data = res.data
@@ -753,7 +800,7 @@ export default {
 
 .news .insertproduct{
   display:block;padding:5px !important;position:relative;text-indent: 0 !important;text-align:center;
-  color:inherit !important;border:#e3e3e3 1px solid !important;border-radius:5px !important;
+  color:inherit !important;border:#e3e3e3 1px solid !important;border-radius:5px !important;margin:10px auto;
 }
 .news .insertproduct img{vertical-align: middle !important;}
 .news .insertproduct .iteminfo{

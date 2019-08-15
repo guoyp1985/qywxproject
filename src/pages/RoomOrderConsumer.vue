@@ -7,13 +7,13 @@
   <div id="room-order-consumer">
     <div class="order-title db-flex font14">
       <div class="flex_cell flex_left">
-        <span class="font14 clamp1" style="width:220px">客户: {{item.retailer}}</span>
+        <span class="font14 clamp1" style="width:220px">卖家: {{item.retailer}}</span>
       </div>
       <div class="flex_cell flex_right color-red">
         <span>{{statusName}}</span>
       </div>
     </div>
-    <router-link class="order-desc db-flex w_100" :to="{ name: 'tProduct', query: {id: item.pid, wid: item.wid, wechatorderid: item.id} }">
+    <div class="order-desc db-flex w_100" @click="toProduct(item)">
       <div class="pic flex_left">
         <img class="v_middle imgcover" :src="item.product_photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
       </div>
@@ -31,10 +31,18 @@
       <div class="w100 flex_center">
         <div class="qbtn bg-theme color-white font12">分享到群</div>
       </div>
-    </router-link>
+    </div>
+    <div class="traffic-price db-flex font14">
+      <div class="flex_left w100">
+        <span>群名称</span>
+      </div>
+      <div class="flex_cell flex_right">
+        <span>{{item.grouptitle}}</span>
+      </div>
+    </div>
     <template v-if="item.flag === 1 || item.flag === 100">
       <div class="traffic-price db-flex font14">
-        <div class="flex_cell flex_left">
+        <div class="flex_left w100">
           <span>点击次数</span>
         </div>
         <div class="flex_cell flex_right">
@@ -42,8 +50,8 @@
         </div>
       </div>
       <div class="traffic-price db-flex font14">
-        <div class="flex_cell flex_left">
-          <span>共购买</span>
+        <div class="flex_left w100">
+          <span>已销售</span>
         </div>
         <div class="flex_cell flex_right">
           <span>{{item.saled}}件</span>
@@ -52,7 +60,7 @@
     </template>
     <template v-if="item.flag > -1">
       <div class="traffic-price db-flex font14">
-        <div class="flex_cell flex_left">
+        <div class="flex_left w100">
           <span>点击价格</span>
         </div>
         <div class="flex_cell flex_right">
@@ -60,7 +68,7 @@
         </div>
       </div>
       <div class="order-id db-flex font14">
-        <div class="flex_cell flex_left">
+        <div class="flex_left w100">
           <span>订单编号</span>
         </div>
         <div class="flex_cell flex_right">
@@ -69,7 +77,7 @@
       </div>
     </template>
     <div class="create-time db-flex font14">
-      <div class="flex_cell flex_left">
+      <div class="flex_left w100">
         <span>创建时间</span>
       </div>
       <div class="flex_cell flex_right">
@@ -78,7 +86,7 @@
     </div>
     <template v-if="item.flag === 100">
       <div class="create-time db-flex font14">
-        <div class="flex_cell flex_left">
+        <div class="flex_left w100">
           <span>结束时间</span>
         </div>
         <div class="flex_cell flex_right">
@@ -109,6 +117,7 @@ export default {
   },
   data () {
     return {
+      query: {},
       item: {}
     }
   },
@@ -123,6 +132,13 @@ export default {
     }
   },
   methods: {
+    toProduct (item) {
+      if (this.query.from) {
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&wid=${item.wid}&module=product&wechatorderid=${item.id}&iswechat=1`})
+      } else {
+        this.$router.push({path: '/product', query: {id: item.pid, wid: item.wid, wechatorderid: item.id, iswechat: 1}})
+      }
+    },
     loadData () {
       const id = this.$route.query.id
       this.$vux.loading.show()
@@ -137,6 +153,7 @@ export default {
     }
   },
   activated () {
+    this.query = this.$route.query
     this.loadData()
   }
 }

@@ -12,9 +12,10 @@
             <previewer :list="factoryInfo.photoArr" ref="previewer"></previewer>
           </div>
         </div>
-        <div class="txt-cell pl10">
-          <div class="font17 color-white">{{ factoryInfo.title }}</div>
+        <div class="txt-cell pl10" style="padding-right:50px;">
+          <div class="font17 color-white">{{ factoryInfo.company }}旗舰店</div>
           <div class="font13 color-white mt5">{{ factoryInfo.summary }}</div>
+          <div class="font13 mt5" style="color:#f1f78f;" @click="showToast">厂家使用期至：{{endTime}}</div>
         </div>
       </div>
       <div class="font0" style="position:absolute;top:20px;right:14px;height:35px;">
@@ -27,12 +28,12 @@
       <div class="header-nav flex_table list-shadow02">
         <div class="flex_cell flex_center color-gray2" @click="disJoinQrcode">
           <span class="nav_icon bg-blue11 al al-a166 font16"></span>
-          <span class="ml10 font15">{{$t('Join qrcode')}}</span>
+          <span class="ml10 font15">全职加盟码</span>
         </div>
-        <router-link class="flex_cell flex_center color-gray2" to="/factoryRevenue">
+        <div class="flex_cell flex_center color-gray2" to="/factoryRevenue" @click="toRevenue">
           <span class="nav_icon bg-red al al-qitashouru font16"></span>
           <span class="ml10 font15">{{$t('Myrevenue')}}</span>
-        </router-link>
+        </div>
       </div>
     </div>
     <div class="bg-white" style="height:40px;"></div>
@@ -44,6 +45,15 @@
                 <i class="al al-guanlizhongxin1"></i>
                 <div class="numicon" v-if="factoryInfo.newproduct > 0 && factoryInfo.newproduct < 100">{{ factoryInfo.newproduct }}</div>
                 <div class="numicon" v-if="factoryInfo.newproduct >= 100">···</div>
+              </div>
+          </grid-item>
+        </div>
+        <div class="gridlist" v-if="query.from">
+          <grid-item :label="$t('Activity')" :link="{path:'/factoryActivitylist'}">
+              <div slot="icon" style="position:relative;">
+                <i class="al al-huodong"></i>
+                <div class="numicon" v-if="factoryInfo.newactivity > 0 && factoryInfo.newactivity < 100">{{ factoryInfo.newactivity }}</div>
+                <div class="numicon" v-if="factoryInfo.newactivity >= 100">···</div>
               </div>
           </grid-item>
         </div>
@@ -64,7 +74,7 @@
           </grid-item>
         </div>
         <div class="gridlist">
-          <grid-item :label="$t('Level')" :link="{path:`/factoryLevel?id=${factoryInfo.id}`}" style="position:relative;">
+          <grid-item label="经销商等级" :link="{path:`/agentLevel?id=${factoryInfo.id}`}" style="position:relative;">
             <div slot="icon">
               <i class="al al-dengji"></i>
             </div>
@@ -93,6 +103,34 @@
             </div>
           </grid-item>
         </div>
+        <!-- <div class="gridlist">
+          <grid-item label="权限管理" :link="{path:`/factoryUser?id=${factoryInfo.id}`}" style="position:relative;">
+            <div slot="icon">
+              <i class="al al-icon12345" style="font-size:30px;"></i>
+            </div>
+          </grid-item>
+        </div> -->
+        <div class="gridlist">
+          <grid-item label="厂家电脑后台" :link="{path:'/FactoryLink'}" style="position:relative;">
+            <div slot="icon">
+              <i class="al al-guanlifill" style="font-size:30px;"></i>
+            </div>
+          </grid-item>
+        </div>
+        <div class="gridlist">
+          <grid-item label="客户管理" :link="{path:'/factoryCustomer'}" style="position:relative;">
+            <div slot="icon">
+              <i class="al al-lianxiren"></i>
+            </div>
+          </grid-item>
+        </div>
+        <div class="gridlist">
+          <grid-item label="厂家管理" :link="{path:'/factoryManagerList', query: {fid: loginUser.fid}}" style="position:relative;">
+            <div slot="icon">
+              <i class="al al-peoplefill"></i>
+            </div>
+          </grid-item>
+        </div>
       </grid>
     </div>
     <group class="list-shadow02 order_list_show posi_r">
@@ -104,6 +142,24 @@
         <div slot="child">
           <div class="numicon" v-if="factoryInfo.neworders > 0 && factoryInfo.neworders < 100">{{ factoryInfo.neworders }}</div>
           <div class="numicon" v-if="factoryInfo.neworders >= 100">···</div>
+        </div>
+      </cell>
+      <cell :link="{path:'/PickUpManage'}" style="position:relative">
+        <div slot="icon" class="pr10"><i class="al al-dingdan color-blue11 db-in font18"></i></div>
+        <div slot="inline-desc">
+          <span class="font15">提货订单管理</span>
+        </div>
+      </cell>
+      <cell :link="{path:'/factoryDetail'}" style="position:relative">
+        <div slot="icon" class="pr10"><i class="al al-shouye1 color-red db-in font18"></i></div>
+        <div slot="inline-desc">
+          <span class="font15">{{$t('Factory introduction')}}</span>
+        </div>
+      </cell>
+      <cell :link="{path:'/agentDetail'}" style="position:relative">
+        <div slot="icon" class="pr10"><i class="al al-kehu1 color-blue db-in font18"></i></div>
+        <div slot="inline-desc">
+          <span class="font15">经销商介绍</span>
         </div>
       </cell>
       <cell :link="{path:'/factoryReport', query:{fid: factoryInfo.id}}" style="position:relative">
@@ -122,7 +178,7 @@
     <div v-transfer-dom class="x-popup">
       <popup v-model="showQrcode" height="100%">
         <div class="popup1 font14">
-          <div class="popup-top flex_center">{{$t('Join qrcode')}}</div>
+          <div class="popup-top flex_center">全职加盟码</div>
           <div class="popup-middle padding10 border-box flex_center" style="bottom:86px;">
             <img ref="joinQrcode" class="qrcode" style="max-width:100%;max-height:100%;" />
           </div>
@@ -177,6 +233,10 @@ import ENV from 'env'
 export default {
   name: 'CenterFactory',
   props: {
+    query: {
+      type: Object,
+      default: {}
+    },
     loginUser: {
       type: Object,
       default: {}
@@ -184,6 +244,10 @@ export default {
     factoryInfo: {
       type: Object,
       default: {}
+    },
+    endTime: {
+      type: String,
+      default: ''
     },
     messages: {
       type: Number,
@@ -209,6 +273,14 @@ export default {
   watch: {
   },
   methods: {
+    showToast () {
+      let _this = this
+      _this.$vux.toast.show({
+        text: '请联系管理员进行续费',
+        type: 'text',
+        width: '220px'
+      })
+    },
     disJoinQrcode () {
       const self = this
       self.showQrcode = true
@@ -242,6 +314,9 @@ export default {
           urls: [self.factoryInfo.photo]
         })
       }
+    },
+    toRevenue () {
+      this.$router.push({path: 'factoryRevenue', query: {fid: this.loginUser.fid}})
     }
   }
 }
@@ -308,6 +383,9 @@ export default {
 .centersales .weui-grids .gridlist:nth-child(4) .weui-grid{background: linear-gradient(#3eb4f1, #099ded);}
 .centersales .weui-grids .gridlist:nth-child(5) .weui-grid{background: linear-gradient(#f25c7d, #ed2d5a);}
 .centersales .weui-grids .gridlist:nth-child(6) .weui-grid{background: linear-gradient(#7974f6, #615aec);}
+.centersales .weui-grids .gridlist:nth-child(7) .weui-grid{background: linear-gradient(#9364f2, #694ba6);}
+.centersales .weui-grids .gridlist:nth-child(8) .weui-grid{background: linear-gradient(#fac45b, #efac2c);}
+.centersales .weui-grids .gridlist:nth-child(9) .weui-grid{background: linear-gradient(#3f9ccc, #3480a8);}
 .centersales .weui-grids .gridlist.disabled .weui-grid{background: linear-gradient(#b9b9b9, #afafaf);}
 .listitem.disabled {position:relative;background-color:#d8d8d8;}
 

@@ -5,19 +5,21 @@
 */
 <template>
   <div class="order-info">
-    <router-link :to="{path:'/store',query:{wid:item.wid}}">
+    <div @click="toStore">
       <div class="store-info">
         <div class="info-cell">
-          <span :class="`al ${storeType} font22`"></span>
-          <span class="font14">{{item.retailertitle}}</span>
-          <span class="al al-mjiantou-copy font16"></span>
+          <template v-if="item.retailertitle && item.retailertitle != ''">
+            <span :class="`al ${storeType} font22`"></span>
+            <span class="font14">{{item.retailertitle}}</span>
+            <span class="al al-mjiantou-copy font16"></span>
+          </template>
         </div>
         <div class="status-cell font12 color-orange6" v-if="item.flagstr">
           <span>{{item.flagstr}}</span>
         </div>
       </div>
-    </router-link>
-    <router-link :to="{path:'/orderDetail',query:{id:item.id}}">
+    </div>
+    <div @click="toDetail">
       <div class="products-info" v-if="item.orderlist.length > 1">
         <div class="product-img">
           <img v-for="(order, index) in item.orderlist" :key="index" class="v_middle imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
@@ -25,35 +27,43 @@
       </div>
       <div class="product-info" v-else>
         <div class="product-img" style="position:relative;">
-          <img class="v_middle imgcover" :src="item.orderlist[0].photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+          <template v-if="item.orderlist[0].options && item.orderlist[0].options.id">
+            <img class="v_middle imgcover" :src="item.orderlist[0].options.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+          </template>
+          <template v-else>
+            <img class="v_middle imgcover" :src="item.orderlist[0].photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+          </template>
           <img v-if="item.carddeduct > 0" class="yhq" src="https://tossharingsales.boka.cn/minigxk/yhq.png"/>
         </div>
-        <div class="flex_cell">
-          <div class="product-name font12">
-            {{item.orderlist[0].name}}
-          </div>
-          <div class="mt5 db-flex font14">
-            <div class="flex_cell flex_left color-red4">{{ $t('RMB') }} {{ item.orderlist[0].special }}</div>
-            <div class="flex_cell flex_right color-999">× <span class="font12">{{ item.orderlist[0].quantity }}</span></div>
+        <div class="flex_cell flex_left">
+          <div class="w_100">
+            <div class="product-name font12 clamp1">{{item.orderlist[0].name}}</div>
+            <div class="color-gray font12" v-if="item.orderlist[0].options && item.orderlist[0].options.id">{{item.orderlist[0].options.title}}</div>
+            <div class="db-flex font14">
+              <div class="flex_cell flex_left color-red4">{{ $t('RMB') }} {{ item.orderlist[0].special }}</div>
+              <div class="flex_cell flex_right color-999">× <span class="font12">{{ item.orderlist[0].quantity }}</span></div>
+            </div>
           </div>
         </div>
       </div>
-    </router-link>
+    </div>
     <div class="pay-info flex_right">
       <div class="clamp1 w_100">
-        <span class="v_middle font12">实际支付: </span><span class="v_middle font14">{{ $t('RMB') }}{{item.paymoney}}</span>
-        <template v-if="item.postage && item.postage != ''">
+        <span class="v_middle font12">实际支付: </span><span class="v_middle font14">{{ $t('RMB') }}{{item.needpaymoney}}</span>
+        <template v-if="!item.delivertype && item.postage && item.postage != ''">
           <span class="v_middle font12 color-gray" v-if="item.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
           <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ item.postage }} )</span>
         </template>
-        <template v-if="item.carddeduct > 0">
+        <template v-if="item.carddeduct && item.carddeduct != '0' && item.carddeduct != '0.00'">
           <span class="v_middle font12 color-gray">优惠券抵扣: {{ $t('RMB') }}{{ item.carddeduct }}</span>
         </template>
       </div>
     </div>
     <div class="operate-area" v-if="item.buttons && item.buttons.length">
       <div class="db-in" v-for="(button, index) in item.buttons" :key="index">
-        <x-button mini @click.native="buttonClick(button.id)" class="font12">{{button.name}}</x-button>
+        <template v-if="!(query.fromapp == 'factory' && button.id == 2)">
+          <x-button mini @click.native="buttonClick(button.id)" class="font12">{{button.name}}</x-button>
+        </template>
       </div>
     </div>
   </div>
@@ -61,6 +71,7 @@
 
 <script>
 import { XImg, XButton } from 'vux'
+import ENV from 'env'
 export default {
   name: 'OrderInfo',
   components: {
@@ -88,10 +99,15 @@ export default {
     buttons: {
       type: Array,
       default: () => []
+    },
+    index: {
+      type: Number,
+      default: 0
     }
   },
   data () {
     return {
+      query: {},
       statusButtons: [
         {id: 1, name: '取消订单'},
         {id: 2, name: '去支付'},
@@ -124,9 +140,31 @@ export default {
     }
   },
   methods: {
+    toStore () {
+      if (this.item.retailertitle && this.item.retailertitle !== '') {
+        let params = {wid: this.item.wid}
+        if (this.$route.query.from) {
+          if (this.$route.query.fromapp === 'qxb') {
+            this.$wechat.miniProgram.reLaunch({url: `/pages/store?wid=${this.item.wid}`})
+            console.log(params)
+          } else {
+            this.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.store}?wid=${this.item.wid}`})
+          }
+        } else {
+          this.$router.push({path: '/store', query: params})
+        }
+      }
+    },
+    toDetail () {
+      let params = this.$util.handleAppParams(this.$route.query, {id: this.item.id})
+      this.$router.push({path: '/orderDetail', query: params})
+    },
     buttonClick (type) {
-      this.$emit('on-process', type, this.item)
+      this.$emit('on-process', type, this.item, this.index)
     }
+  },
+  created () {
+    this.query = this.$route.query
   }
 }
 </script>

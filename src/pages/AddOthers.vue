@@ -1,7 +1,7 @@
 <template>
   <scroll-view ref="wraper" @scrollEnd="scrollEnd">
     <div slot="content" ref="content" class="data">
-        <div v-for="item in data" :key="item.id" class="item" @click="onCheck(item)">
+        <div v-for="(item, index) in data" :key="item.id" class="item" @click="onCheck(item)">
           <div :class="{'selected' : item.isChecked}" class="icon">
             <span class="al al-gou" v-if="item.isChecked"></span>
           </div>
@@ -11,7 +11,7 @@
             <span class="price" v-if="module === 'product'">{{item.price}}</span>
           </div>
         </div>
-        <div class="tip-message" v-if="!data.length && loaded"><span>暂无{{moduleTransfer}}</span></div>
+        <div class="tip-message" v-if="!data.length"><span>暂无{{moduleTransfer}}</span></div>
     </div>
     <div slot="ope-btns" class="ope-btns">
       <button class="cancel-btn" @click="onCancel">取消</button>
@@ -36,6 +36,7 @@ export default {
   },
   data () {
     return {
+      userInfo: {},
       module: '',
       data: [],
       pagestart: 0,
@@ -75,7 +76,9 @@ export default {
       let height = contentHeight - wraperHeight
       if (Math.abs(y) >= height) {
         console.log('滑动到底部了！')
-        this.getData(this.module)
+        if (this.loaded) {
+          this.getData(this.module)
+        }
       }
     },
     getData (module) {
@@ -97,55 +100,60 @@ export default {
             params: params
           }).then(res => {
             console.log(res)
-            const data = res.data.data
-            for (let i = 0; i < data.length; i++) {
-              data[i].isChecked = false
-            }
-            if (!this.pagestart) {
-              this.data = data
-            } else {
-              this.data.push(...data)
-            }
-            console.log(data)
-            this.pagestart++
-            this.loaded = true
-            this.$nextTick(() => {
-              this.$refs.wraper.bscroll.refresh()
-            })
+            const data = res.data
+            this.handleModuleData(data)
           })
         } else {
-          url = `${Env.BokaApi}/api/list/${module}`
+          let type = 'POST'
+          if (module === 'news') {
+            url = `${Env.BokaApi}/api/list/news?from=retaile`
+            type = 'GET'
+          } else if (module === 'product') {
+            url = `${Env.BokaApi}/api/retailer/getRetailerProducts`
+            type = 'GET'
+          } else {
+            url = `${Env.BokaApi}/api/list/${module}`
+          }
           params = {
             ...params,
-            uploader: this.userInfo.uid
+            uploader: this.userInfo.uid,
+            wid: this.userInfo.uid
           }
-          this.$http({
-            url: url,
-            method: 'POST',
-            data: params
-          }).then(res => {
-            console.log(res)
-            const data = res.data
-            for (let i = 0; i < data.length; i++) {
-              data[i].isChecked = false
-            }
-            if (!this.pagestart) {
-              this.data = data
-            } else {
-              this.data.push(...data)
-            }
-            console.log(data)
-            console.log(this)
-            this.pagestart++
-            this.loaded = true
-            this.$nextTick(() => {
-              this.$refs.wraper.bscroll.refresh()
+          console.log('进入请求')
+          console.log(params)
+          if (type === 'POST') {
+            this.$http.post(url, params).then(res => {
+              const data = res.data
+              this.handleModuleData(data)
             })
-          })
+          } else {
+            this.$http.get(url, {params: params}).then(res => {
+              const data = res.data
+              this.handleModuleData(data)
+            })
+          }
         }
       } else {
         console.log('没有更多数据了！')
       }
+    },
+    handleModuleData (data) {
+      let retdata = data.data ? data.data : data
+      for (let i = 0; i < retdata.length; i++) {
+        retdata[i].isChecked = false
+      }
+      if (!this.pagestart) {
+        this.data = retdata
+      } else {
+        this.data.push(...retdata)
+      }
+      console.log(retdata)
+      console.log(this)
+      this.pagestart++
+      this.loaded = true
+      this.$nextTick(() => {
+        this.$refs.wraper.bscroll.refresh()
+      })
     },
     onCheck (item) {
       if (!item.isChecked) {
@@ -195,6 +203,7 @@ export default {
   .data{
     width: 100vw;
     padding-bottom: 45px;
+    touch-action: pan-y;
     .item{
       display: flex;
       width: 100%;
@@ -255,6 +264,7 @@ export default {
     }
   }
   .tip-message{
+    padding-top:70%;
     text-align: center;
     color: #c9c9c9;
     margin-top: 30px;

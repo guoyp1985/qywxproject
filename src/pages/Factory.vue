@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea bg-white font14 notop">
+  <div :class="`containerarea bg-white font14 notop ${((selectedIndex == 1 && !tabData2.length) || (loginUser.retailerinfo.fid && loginUser.retailerinfo.fid != query.id)) ? 'nobottom' : ''}`">
     <div class="s-topbanner">
       <div class="flex_left border-box padding10 color-white" style="height:88px;">
         <div v-if="viewData.photo && viewData.photo != ''" class="w70">
@@ -21,7 +21,7 @@
       <template v-if="selectedIndex == 0">
         <div v-if="disTabData1" class="productlist squarepic pb10">
           <div v-if="tabData1.length == 0" class="emptyitem flex_center flex_cell">暂无商品</div>
-          <router-link v-else v-for="(item,index) in tabData1" :key="index" :to="{path: '/factoryProduct', query: {id: item.id, fid: query.id}}" class="bk-productitem scroll_item font14 db ">
+          <div v-else v-for="(item,index) in tabData1" :key="index" @click="toProduct(item)"  class="bk-productitem scroll_item font14 db ">
         		<div class="inner list-shadow">
         			<div class="picarea">
         				<div class="pic">
@@ -38,7 +38,7 @@
         				</div>
         			</div>
         		</div>
-          </router-link>
+          </div>
         </div>
       </template>
       <template v-if="selectedIndex == 1">
@@ -63,17 +63,28 @@
       </template>
     </div>
     <template v-if="showBottom">
-      <div v-if="loginUser.isretailer" class="s-bottom list-shadow flex_center bg-white pl12 pr12">
-        <div v-if="tabData1 && tabData1.length > 0 && selectedIndex == 0" class="align_center flex_center flex_cell">
-          <div class="flex_center btn-bottom-orange" style="width:85%;" @click="upAll('product')">一键上架商品</div>
-        </div>
-        <div v-if="tabData2 && tabData2.length > 0 && selectedIndex == 1" class="align_center flex_center flex_cell">
-          <div class="flex_center btn-bottom-red" style="width:85%;" @click="upAll('factorynews')">导入文章</div>
-        </div>
-      </div>
-      <div v-if="!loginUser.isretailer" class="s-bottom list-shadow flex_center bg-white pl12 pr12">
+      <template v-if="loginUser.isretailer">
+        <template v-if="selectedIndex == 0">
+          <div class="s-bottom list-shadow flex_center bg-white pl12 pr12">
+            <div v-if="tabData1 && tabData1.length > 0 && (!loginUser.retailerinfo.fid || loginUser.retailerinfo.fid == query.id)" class="align_center flex_center flex_cell">
+              <div class="flex_center btn-bottom-red" style="width:85%;" @click="upAll('product')">一键上架商品</div>
+            </div>
+            <div class="align_center flex_center flex_cell">
+              <div class="flex_center btn-bottom-orange" style="width:85%;" @click="toStore">我的店铺</div>
+            </div>
+          </div>
+        </template>
+        <template v-else>
+          <div v-if="tabData2 && tabData2.length > 0 && (!loginUser.retailerinfo.fid || loginUser.retailerinfo.fid == query.id)" class="s-bottom list-shadow flex_center bg-white pl12 pr12">
+            <div class="align_center flex_center flex_cell">
+              <div class="flex_center btn-bottom-red" style="width:85%;" @click="upAll('factorynews')">导入文章</div>
+            </div>
+          </div>
+        </template>
+      </template>
+      <div v-else class="s-bottom list-shadow flex_center bg-white pl12 pr12">
         <div class="align_center flex_center flex_cell">
-          <router-link class="flex_center btn-bottom-red" style="width:85%;" to="/centerSales">入驻聚客365</router-link>
+          <router-link class="flex_center btn-bottom-red" style="width:85%;" to="/centerSales">入驻共销客</router-link>
         </div>
       </div>
     </template>
@@ -117,7 +128,9 @@ export default {
       tabData2: [],
       disTabData1: false,
       disTabData2: false,
-      showBottom: false
+      showBottom: false,
+      productCount: 0,
+      newsCount: 0
     }
   },
   watch: {
@@ -137,11 +150,24 @@ export default {
       this.disTabData1 = false
       this.disTabData2 = false
       this.showBottom = false
+      this.productCount = 0
+      this.newsCount = 0
+    },
+    toProduct (item) {
+      let params = this.$util.handleAppParams(this.query, {id: item.id, fid: this.query.id})
+      this.$router.push({path: '/factoryProduct', query: params})
+    },
+    toStore () {
+      if (this.query.from) {
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.store}?wid=${this.loginUser.uid}`})
+      } else {
+        this.$router.push({path: '/store', query: {wid: this.loginUser.uid}})
+      }
     },
     joinEvent () {
       const self = this
       self.$vux.confirm.show({
-        content: '确定要申请加入该厂商吗？',
+        content: '确定要申请加入该厂家吗？',
         onConfirm () {
           self.$vux.loading.show()
           self.$http.post(`${ENV.BokaApi}/api/factory/join`, {
@@ -163,10 +189,10 @@ export default {
       let con = ''
       let ajaxUrl = ''
       if (type === 'product') {
-        con = '确定要上架该厂商的所有商品？'
+        con = `确定要上架该厂家的${this.productCount}件商品？`
         ajaxUrl = `${ENV.BokaApi}/api/factory/fastImportFactoryProduct`
       } else if (type === 'factorynews') {
-        con = '确定要导入该厂商的所有文章？'
+        con = `确定要导入该厂家的${this.newsCount}篇文章？`
         ajaxUrl = `${ENV.BokaApi}/api/factory/fastImportFactoryNews`
       }
       self.$vux.confirm.show({
@@ -241,8 +267,12 @@ export default {
       self.$util.scrollEvent({
         element: scrollArea,
         callback: function () {
-          switch (this.selectedIndex) {
+          console.log('in handlescroll')
+          console.log(pageStart1)
+          console.log(self.selectedIndex)
+          switch (self.selectedIndex) {
             case 0:
+              console.log('in case 0 zhuangtai')
               if (self.tabData1.length === (pageStart1 + 1) * limit) {
                 pageStart1++
                 self.$vux.loading.show()
@@ -250,6 +280,7 @@ export default {
               }
               break
             case 1:
+              console.log('in case 1 zhuangtai')
               if (self.tabData2.length === (pageStart2 + 1) * limit) {
                 pageStart2++
                 self.$vux.loading.show()
@@ -289,11 +320,12 @@ export default {
     getData1 () {
       const self = this
       self.$http.get(`${ENV.BokaApi}/api/list/factoryproduct`, {
-        params: { fid: self.query.id, pageStart: pageStart1, limit: limit }
-      }).then(function (res) {
+        params: { fid: self.query.id, pagestart: pageStart1, limit: limit, wid: this.loginUser.uid }
+      }).then(res => {
         const data = res.data
         self.$vux.loading.hide()
         const retdata = data.data ? data.data : data
+        this.productCount = data.allcount
         self.tabData1 = self.tabData1.concat(retdata)
         self.disTabData1 = true
         if (self.loginUser.isretailer && (self.tabData1.length > 0 || self.tabData2.length > 0)) {
@@ -304,11 +336,12 @@ export default {
     getData2 () {
       const self = this
       self.$http.get(`${ENV.BokaApi}/api/list/factorynews`, {
-        params: { fid: self.query.id, pageStart: pageStart2, limit: limit }
-      }).then(function (res) {
+        params: { fid: self.query.id, pagestart: pageStart2, limit: limit, wid: this.loginUser.uid }
+      }).then(res => {
         const data = res.data
         self.$vux.loading.hide()
         const retdata = data.data ? data.data : data
+        this.newsCount = data.allcount
         self.tabData2 = self.tabData2.concat(retdata)
         self.disTabData2 = true
         if (self.loginUser.isretailer && (self.tabData1.length > 0 || self.tabData2.length > 0)) {
@@ -319,25 +352,30 @@ export default {
     refresh () {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.initData()
-      this.loginUser = User.get()
-      if (!self.loginUser.isretailer) {
-        self.showBottom = true
-      } else {
-        self.showBottom = false
+      console.log(this.query)
+      if (!this.query.id || this.query.id !== parseInt(this.$route.query.id)) {
+        this.initData()
+        this.loginUser = User.get()
+        if (!self.loginUser.isretailer) {
+          self.showBottom = true
+        } else {
+          self.showBottom = false
+        }
+        this.query = this.$route.query
+        self.$vux.loading.show()
+        self.$http.get(`${ENV.BokaApi}/api/factory/info`, {
+          params: { fid: self.query.id }
+        }).then(function (res) {
+          self.$vux.loading.hide()
+          let data = res.data
+          let retdata = data.data ? data.data : data
+          self.viewData = retdata
+          self.swiperChange()
+        })
       }
-      this.query = this.$route.query
-      self.$vux.loading.show()
-      self.$http.get(`${ENV.BokaApi}/api/factory/info`, {
-        params: { fid: self.query.id }
-      }).then(function (res) {
-        self.$vux.loading.hide()
-        let data = res.data
-        let retdata = data.data ? data.data : data
-        self.viewData = retdata
-        self.swiperChange()
-      })
     }
+  },
+  created () {
   },
   activated () {
     this.refresh()

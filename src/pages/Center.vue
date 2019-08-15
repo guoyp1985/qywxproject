@@ -38,21 +38,84 @@
           </cell>
         </group>
       </template>
-      <div v-if="showBtn1" class=" mt10 list-shadow radius5">
+      <div class=" mt10 list-shadow radius5">
         <group class="bg-white radius5">
           <cell>
             <div slot="inline-desc">{{ $t('Service') }}</div>
           </cell>
         </group>
         <grid class="pt10 pb10" :cols="4" :show-lr-borders="false" :show-vertical-dividers="false">
-          <grid-item :label="$t(btn.name)" v-for="(btn, index) in btns1" :key="index" @click.native="buttonClick(btn)">
-            <div slot="icon" :class="`circle-icon-bg ${btn.color} color-white flex_center mb10`">
-              <span :class="`al ${btn.icon} font20`"></span>
+          <grid-item label="朋友圈获客" @click.native="toLink('/friendRecommend')">
+            <div slot="icon" class="circle-icon-bg rgba09 color-white flex_center mb10">
+              <span class="al al-pengyouquan font20"></span>
+            </div>
+          </grid-item>
+          <grid-item v-if="showCenter" label="卖家中心" @click.native="toLink('/centerSales')">
+            <div slot="icon" class="circle-icon-bg rgba01 color-white flex_center mb10">
+              <span class="al al-fuwu font20"></span>
+            </div>
+          </grid-item>
+          <grid-item v-if="showFactory" label="厂家中心" @click.native="clickFactoryCenter">
+            <div slot="icon" class="circle-icon-bg rgba05 color-white flex_center mb10">
+              <span class="al al-kehu1 font20"></span>
+            </div>
+          </grid-item>
+          <grid-item v-if="showManager" label="厂家管理" @click.native="toLink('/factoryManage')">
+            <div slot="icon" class="circle-icon-bg rgba06 color-white flex_center mb10">
+              <span class="al al-guanlizhongxin1 font20"></span>
+            </div>
+          </grid-item>
+          <grid-item label="我的地址" @click.native="toLink('/address')">
+            <div slot="icon" class="circle-icon-bg rgba02 color-white flex_center mb10">
+              <span class="al al-wodedizhi font20"></span>
+            </div>
+          </grid-item>
+          <grid-item label="我的分享" @click.native="toLink('/share')">
+            <div slot="icon" class="circle-icon-bg rgba03 color-white flex_center mb10">
+              <span class="al al-ai-share font20"></span>
+            </div>
+          </grid-item>
+          <grid-item label="我的收藏" @click.native="toLink('/favorite')">
+            <div slot="icon" class="circle-icon-bg rgba04 color-white flex_center mb10">
+              <span class="al al-qietu19 font20"></span>
+            </div>
+          </grid-item>
+          <grid-item label="我的优惠券" @click.native="toLink('/cardList')">
+            <div slot="icon" class="circle-icon-bg rgba07 color-white flex_center mb10">
+              <span class="al al-tubiaozhizuomoban font20"></span>
+            </div>
+          </grid-item>
+          <grid-item label="群群推" @click.native="toLink('/roomList')">
+            <div slot="icon" class="circle-icon-bg rgba08 color-white flex_center mb10">
+              <span class="al al-banjiqunliao font20"></span>
+            </div>
+          </grid-item>
+          <grid-item label="找群推广" @click.native="toLink('/rooms')">
+            <div slot="icon" class="circle-icon-bg rgba07 color-white flex_center mb10">
+              <span class="al al-shouhouwuyou font20"></span>
+            </div>
+          </grid-item>
+          <grid-item v-if="showApply && (!loginUser.fid || (loginUser.factoryinfo && loginUser.factoryinfo.moderate != 1))" label="申请厂家" @click.native="toLink('/centerFactory')">
+            <div slot="icon" class="circle-icon-bg rgba07 color-white flex_center mb10">
+              <span class="al al-shouhouwuyou font20"></span>
+            </div>
+          </grid-item>
+          <grid-item v-if="showManager" label="管理后台" @click.native="clickManager">
+            <div slot="icon" class="circle-icon-bg rgba06 color-white flex_center mb10">
+              <span class="al al-set font20"></span>
+            </div>
+          </grid-item>
+          <grid-item v-if="showQuit" label="退出" @click.native="clickQuit">
+            <div slot="icon" class="circle-icon-bg rgba05 color-white flex_center mb10">
+              <span class="al al-tuichu3 font20"></span>
             </div>
           </grid-item>
         </grid>
         </div>
       </div>
+      <template v-if="showTip">
+        <tip-layer buttonTxt="点击此处联系管理员" content="请联系管理员续费后，再来使用厂家功能哦！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
+      </template>
     </div>
 </template>
 
@@ -62,98 +125,20 @@
 <script>
 import { Grid, GridItem, Group, Cell } from 'vux'
 import CTitle from '@/components/CTitle'
+import TipLayer from '@/components/TipLayer'
 import ENV from 'env'
+import Time from '#/time'
 import Reg from '#/reg'
-import { Token, User } from '#/storage'
+import { Token, User, FirstInfo } from '#/storage'
 let self = {}
-let sellerBtn = [
-  // {
-  //   name: 'Seller center',
-  //   icon: 'al-fuwu',
-  //   color: 'rgba01',
-  //   link: '/centerSales'
-  // }
-  {
-    name: 'Friend Customer',
-    icon: 'al-pengyouquan',
-    color: 'rgba09',
-    link: '/friendRecommend'
-  }
-]
-let factoryBtn = [
-  {
-    name: 'Factory center',
-    icon: 'al-kehu1',
-    color: 'rgba05',
-    link: '/centerFactory'
-  }
-]
-let manageBtn = [
-  {
-    name: 'Manage center',
-    icon: 'al-guanlizhongxin1',
-    color: 'rgba06',
-    link: '/factoryManage'
-  }
-]
-let featureBtns = [
-  {
-    name: 'My Address',
-    icon: 'al-wodedizhi',
-    color: 'rgba02',
-    link: '/address'
-  },
-  {
-    name: 'My Shares',
-    icon: 'al-ai-share',
-    color: 'rgba03',
-    link: '/share'
-  },
-  {
-    name: 'My Favorites',
-    icon: 'al-qietu19',
-    color: 'rgba04',
-    link: '/favorite'
-  },
-  {
-    name: 'My CardList',
-    icon: 'al-tubiaozhizuomoban',
-    color: 'rgba07',
-    link: '/cardList'
-  },
-  {
-    name: 'Qun Qun Tui',
-    icon: 'al-banjiqunliao',
-    color: 'rgba08',
-    link: '/roomList'
-  },
-  {
-    name: 'Qun Tui Guang',
-    icon: 'al-shouhouwuyou',
-    color: 'rgba07',
-    link: '/rooms'
-  }
-]
-if (!Reg.rPlatfrom.test(navigator.userAgent)) {
-  featureBtns.push({
-    name: 'Exit',
-    icon: 'al-tuichu3',
-    color: 'rgba05',
-    react: function () {
-      Token.remove()
-      User.remove()
-      // if (this.$util.isPC()) {
-      this.$router.push({name: 'tLogin'})
-      // } else {
-      //   this.$router.push({name: 'tUserproducts'})
-      // }
-    }
-  })
-}
-
 export default {
   components: {
-    Grid, GridItem, CTitle, Group, Cell
+    Grid, GridItem, CTitle, Group, Cell, TipLayer
+  },
+  filters: {
+    dateformat: function (value) {
+      return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
+    }
   },
   data () {
     // const self = this
@@ -188,24 +173,61 @@ export default {
           link: '/orderSearch?flag=4'
         }
       ],
-      showBtn1: false,
-      btns1: featureBtns,
       avatarHref: 'https://tossharingsales.boka.cn/images/user.jpg',
+      query: {},
       linkMan: '',
       userCredits: 0,
       userLevels: 0,
       profile: {},
       messages: 0,
       direct: '',
-      loginUser: {}
+      loginUser: {},
+      showCenter: false,
+      showFactory: false,
+      showManager: false,
+      showQuit: false,
+      showTip: false,
+      showApply: false
     }
   },
   methods: {
+    closeTip () {
+      this.showTip = false
+    },
+    toApply () {
+      let params = this.$util.handleAppParams(this.query, {uid: ENV.FactoryManagerUid, fromModule: 'retailer'})
+      this.$router.push({path: '/chat', query: params})
+    },
+    initData () {
+      this.showCenter = false
+      this.showFactory = false
+      this.showManager = false
+      this.showQuit = false
+    },
     buttonClick (btn) {
       if (btn.link) {
         this.$router.push({path: btn.link})
       } else {
         btn.react.call(this)
+      }
+    },
+    toLink (link) {
+      this.$router.push({path: link})
+    },
+    clickManager () {
+      window.open(`${ENV.AdminUrl}?unionid=${self.loginUser.unionid}`)
+    },
+    clickQuit () {
+      Token.remove()
+      User.remove()
+      FirstInfo.remove()
+      this.$router.push({name: 'tLogin'})
+    },
+    clickFactoryCenter () {
+      if (this.loginUser.factory_expired === 1) {
+        this.showTip = true
+      } else {
+        this.$router.push('/centerFactory')
       }
     },
     setUserInfo () {
@@ -221,38 +243,6 @@ export default {
         mobile: user.mobile,
         company: user.company
       }
-      if (!this.showBtn1) {
-        let isAdmin = false
-        for (let i = 0; i < user.usergroup.length; i++) {
-          if (user.usergroup[i] === 1) {
-            isAdmin = true
-            break
-          }
-        }
-        if (isAdmin) {
-          this.btns1 = manageBtn.concat(this.btns1)
-        }
-        if (this.loginUser.fid > 0) {
-          this.btns1 = factoryBtn.concat(this.btns1)
-        }
-        if (this.loginUser.isretailer) {
-          for (let i = 0; i < ENV.UidArr.length; i++) {
-            if (ENV.UidArr[i] === this.loginUser.uid) {
-              let arr = [
-                {
-                  name: 'Seller center',
-                  icon: 'al-fuwu',
-                  color: 'rgba01',
-                  link: '/centerSales'
-                }
-              ]
-              this.btns1 = arr.concat(this.btns1)
-            }
-          }
-          this.btns1 = sellerBtn.concat(this.btns1)
-        }
-        this.showBtn1 = true
-      }
       this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
         if (!res) return
         let data = res.data
@@ -266,40 +256,26 @@ export default {
       })
     },
     getData () {
-      self.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
+      self.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
         if (!res) return
         self.loginUser = res.data
         User.set(self.loginUser)
         self.setUserInfo()
-        let isAdmin = false
+        if (this.loginUser.factoryinfo && this.loginUser.factoryinfo.moderate === 1) {
+          this.showFactory = true
+        }
+        this.showApply = true
         for (let i = 0; i < self.loginUser.usergroup.length; i++) {
-          if (self.loginUser.usergroup[i] === 1) {
-            isAdmin = true
+          if (this.loginUser.usergroup[i] === 1) {
+            this.showManager = true
             break
           }
         }
-        if (isAdmin) {
-          let btnData = {
-            name: 'Admin Manage',
-            icon: 'al-set',
-            color: 'rgba06',
-            react: function () {
-              window.open(`${ENV.AdminUrl}?unionid=${self.loginUser.unionid}`)
-            }
-          }
-          let isAdd = true
-          for (let i = 0; i < self.btns1.length; i++) {
-            if (self.btns1[i].name === 'Admin Manage') {
-              isAdd = false
+        if (this.loginUser.isretailer) {
+          for (let i = 0; i < ENV.UidArr.length; i++) {
+            if (ENV.UidArr[i] === this.loginUser.uid) {
+              this.showCenter = true
               break
-            }
-          }
-          if (isAdd) {
-            if (!Reg.rPlatfrom.test(navigator.userAgent)) {
-              let insertIndex = self.btns1.length - 1
-              self.btns1.splice(insertIndex, 0, btnData)
-            } else {
-              self.btns1.push(btnData)
             }
           }
         }
@@ -307,6 +283,11 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.initData()
+      if (!Reg.rPlatfrom.test(navigator.userAgent)) {
+        this.showQuit = true
+      }
+      this.$util.getSystemParams()
       this.getData()
     }
   },

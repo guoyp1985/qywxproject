@@ -6,113 +6,154 @@
       <div class="s-topbanner s-topbanner1">
         <div class="row">
           <tab v-model="selectedIndex" class="v-tab">
-            <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
+            <tab-item v-for="(item,index) in tabtxts" :selected="selectedIndex == index" :key="index" @on-item-click="swiperChange">{{item}}</tab-item>
           </tab>
         </div>
       </div>
       <div class="s-container s-container1">
-        <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
-          <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-            <template v-if="(index == 0)">
-              <div class="flex_center bg-white" style="height:55px;position:absolute;left:0;top:0;right:0;">
-                <search
-                  class="v-search bg-white"
-                  v-model="searchword1"
-                  :auto-fixed="autofixed"
-                  @on-submit="onSubmit1"
-                  @on-change="onChange1"
-                  @on-cancel="onCancel1"
-                  ref="search">
-                </search>
-              </div>
-              <div v-if="distabdata1" class="scroll_list swiper-inner scroll-container1" style="top:55px;" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)">
-                <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 color-gray align_center">
-                  <template v-if="searchresult1">
-                    <div class="flex_center" style="height:80px;">暂无搜索结果</div>
-                  </template>
-                  <template v-else>
-                    <div><i class="al al-qiangkehu font60 pt20"></i></div>
-                    <div class="mt5">竟然没有返点客，点击【邀请返点客】，选择客户并【邀请】，与返点客一起赚钱吧！</div>
-                  </template>
+        <template v-if="(selectedIndex == 0)">
+          <div class="flex_center bg-white" style="height:55px;position:absolute;left:0;top:0;right:0;">
+            <search
+              class="v-search bg-white"
+              v-model="searchword1"
+              :auto-fixed="autofixed"
+              @on-submit="onSubmit1"
+              @on-change="onChange1"
+              @on-cancel="onCancel1"
+              ref="search">
+            </search>
+          </div>
+          <div v-if="distabdata1" class="scroll_list swiper-inner scroll-container1" style="top:55px;" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',selectedIndex)">
+            <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 color-gray align_center">
+              <template v-if="searchresult1">
+                <div class="flex_center" style="height:80px;">暂无搜索结果</div>
+              </template>
+              <template v-else>
+                <div><i class="al al-qiangkehu font60 pt20"></i></div>
+                <div class="mt5">竟然没有返点客，点击【邀请返点客】，选择客户并【邀请】，与返点客一起赚钱吧！</div>
+              </template>
+            </div>
+            <div v-else class="scroll_item pt10 pb10  pl12 pr12 bg-white mt10 list-shadow" v-for="(item,index1) in tabdata1" :key="item.id">
+              <div class="t-table">
+                <div @click="toSaleview(item)" class="t-cell v_middle" style="width:70px;">
+                  <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                 </div>
-                <div v-else class="scroll_item pt10 pb10  pl12 pr12 bg-white mt10 list-shadow" v-for="(item,index1) in tabdata1" :key="item.id">
-                  <div class="t-table">
-                    <router-link :to="{ path: '/retailerSaleview', query: { uid: item.uid } }" class="t-cell v_middle" style="width:70px;">
-                      <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-                    </router-link>
-                    <router-link :to="{ path: '/retailerSaleview', query: { uid: item.uid } }" class="t-cell v_middle">
-                      <div class="clamp1 font14 color-lightgray">{{item.username}}({{item.linkman}})</div>
-                      <div class="clamp1 mt5 font14 color-gray">带来消费: ￥{{item.sales}}</div>
-                    </router-link>
-                    <router-link :to="{path: '/chat', query: {uid: item.uid, from: query.from}}" class="t-cell w60 align_right v_middle">
-                      <div class="qbtn bg-red color-white">联系</div>
-                    </router-link>
-                  </div>
+                <div @click="toSaleview(item)" class="t-cell v_middle">
+                  <div class="clamp1 font14 color-lightgray">{{item.username}}({{item.linkman}})</div>
+                  <div class="clamp1 mt5 font14 color-gray">带来消费: ￥{{item.sales}}</div>
                 </div>
-              </div>
-            </template>
-            <template v-if="(index == 1)">
-              <div class="flex_center bg-white" style="height:55px;position:absolute;left:0;top:0;right:0;">
-                <search
-                  class="v-search bg-white"
-                  v-model="searchword2"
-                  :auto-fixed="autofixed"
-                  @on-submit="onSubmit2"
-                  @on-change="onChange2"
-                  @on-cancel="onCancel2"
-                  ref="search">
-                </search>
-              </div>
-              <div v-if="distabdata2" class="scroll_list swiper-inner scroll-container2" style="top:55px;" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',index)">
-                <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item color-gray padding10 align_center">
-                  <template v-if="searchresult2">
-                    <div class="flex_center" style="height:80px;">暂无搜索结果</div>
-                  </template>
-                  <template v-else>
-                  <div><i class="al al-qiangkehu font60 pt20"></i></div>
-                  <div class="mt5">竟然没有客户！将商品、活动或文章分享给好友或朋友圈，获得客户后即可将客户邀请成返点客啦！</div>
-                  </template>
+                <div @click="toChat(item)" class="t-cell w60 align_right v_middle">
+                  <div class="qbtn bg-red color-white">联系</div>
                 </div>
-                <div v-else class="scroll_item pt10 pb10  pl12 pr12 bg-white mt10 list-shadow" v-for="(item,index1) in tabdata2" :key="item.id">
-                  <div class="t-table">
-                    <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle " style="width: 70px;">
-                      <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-                    </router-link>
-                    <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle">
-                      <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
-                      <div class="clamp1 mt5 font14 color-gray">返点客: {{item.uploadname}}</div>
-                      <div class="clamp1 font14 color-gray">成为客户时间: {{ item.dateline | dateformat }}</div>
-                    </router-link>
-                    <div class="t-cell v_middle align_right w60">
-                      <div class="qbtn bg-red color-white" @click="inviteevent(item,index1)">邀请</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </template>
-            <div v-if="(index == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',index)">
-              <div v-if="distabdata3" class="scroll_list cols-2">
-                <div v-if="!tabdata3 || tabdata3.length == 0" class="scroll_item color-gray padding10 align_center">
-                  <div><i class="al al-wushuju font60 pt20"></i></div>
-                  <div class="mt5">暂无返点记录，返点客帮你带来消费后，系统即可自动返点并记录！</div>
-                </div>
-                <router-link :to="{ path: '/accountDetail', query: { id: item.id } }" v-else class="scroll_item db pt10 pb10 pl12 pr12 bg-white mt10 list-shadow" v-for="(item,index1) in tabdata3" :key="item.id">
-                  <div class="t-table">
-                    <div class="t-cell v_middle" style="width:70px;">
-                      <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-                    </div>
-                    <div class="t-cell v_middle">
-                      <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
-                      <div class="clamp1 mt5 font14 color-gray">返点金额: ￥{{item.money}}</div>
-                      <div class="clamp1 font14 color-gray">返点时间: {{ item.dateline | dateformat }} </div>
-                    </div>
-                  </div>
-                </router-link>
               </div>
             </div>
-          </swiper-item>
-        </swiper>
+          </div>
+        </template>
+        <template v-if="(selectedIndex == 1)">
+          <div class="flex_center bg-white" style="height:55px;position:absolute;left:0;top:0;right:0;">
+            <search
+              class="v-search bg-white"
+              v-model="searchword2"
+              :auto-fixed="autofixed"
+              @on-submit="onSubmit2"
+              @on-change="onChange2"
+              @on-cancel="onCancel2"
+              ref="search">
+            </search>
+          </div>
+          <div v-if="distabdata2" class="scroll_list swiper-inner scroll-container2" style="top:55px;" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',selectedIndex)">
+            <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item color-gray padding10 align_center">
+              <template v-if="searchresult2">
+                <div class="flex_center" style="height:80px;">暂无搜索结果</div>
+              </template>
+              <template v-else>
+              <div><i class="al al-qiangkehu font60 pt20"></i></div>
+              <div class="mt5">竟然没有客户！将商品、活动或文章分享给好友或朋友圈，获得客户后即可将客户邀请成返点客啦！</div>
+              </template>
+            </div>
+            <div v-else class="scroll_item pt10 pb10  pl12 pr12 bg-white mt10 list-shadow" v-for="(item,index1) in tabdata2" :key="item.id">
+              <div class="t-table">
+                <div @click="toMemberView(item)" class="t-cell v_middle " style="width: 70px;">
+                  <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                </div>
+                <div class="t-cell v_middle">
+                  <div @click="toMemberView(item)">
+                    <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
+                    <!-- <div class="clamp1 font14 color-gray">成为客户时间: {{ item.dateline | dateformat }}</div> -->
+                  </div>
+                  <div class="clamp1 font14 color-gray" style="width:120px;" @click="influence">影响力:
+                    <span class="color-red4">{{item.yingxiangli}}</span>
+                    <span class="al al-wenhao font20 ml5 v_middle"></span>
+                  </div>
+                  <div @click="toMemberView(item)">
+                    <div class="clamp1 font14 color-gray">返点客: {{item.uploadname}}</div>
+                  </div>
+                </div>
+                <div class="t-cell v_middle align_right w60">
+                  <div class="qbtn bg-red color-white" @click="inviteevent(item,index1)">邀请</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+        <div v-if="(selectedIndex == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',selectedIndex)">
+          <div v-if="distabdata3" class="scroll_list cols-2">
+            <div v-if="!tabdata3 || tabdata3.length == 0" class="scroll_item color-gray padding10 align_center">
+              <div><i class="al al-wushuju font60 pt20"></i></div>
+              <div class="mt5">暂无返点记录，返点客帮你带来消费后，系统即可自动返点并记录！</div>
+            </div>
+            <div @click="toDetail(item)" v-else class="scroll_item db pt10 pb10 pl12 pr12 bg-white mt10 list-shadow" v-for="(item,index1) in tabdata3" :key="item.id">
+              <div class="t-table">
+                <div class="t-cell v_middle" style="width:70px;">
+                  <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                </div>
+                <div class="t-cell v_middle">
+                  <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
+                  <div class="clamp1 mt5 font14 color-gray">返点金额: ￥{{item.money}}</div>
+                  <div class="clamp1 font14 color-gray">返点时间: {{ item.dateline | dateformat }} </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+    </template>
+    <div v-transfer-dom class="x-popup">
+      <popup v-model="isshowfluence" height="100%">
+        <div class="popup1 font14">
+          <div class="percentlayer">
+            <div class="bg"></div>
+            <div class="w_100 h_100 flex_center">
+              <div class="layerinner align_left probability">
+                <div class="inner">
+                  <div class="pro" >
+                    <div class="pro-sucess">
+                      <div class="flex_left">
+                        <img class="v_middle" src="https://tossharingsales.boka.cn/images/infor.png"/>
+                        <div class="color-blue">什么是影响力</div>
+                      </div>
+                      <div class="font12" >影响力是指客户通过分享动作所带来的访问量，影响力数值越大，表示该客户越受朋友欢迎，所分享的内容打开率越高，可将影响力高的客户发展成代理，通过他的资源为你带来更多销量！</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="pro-know">
+                  <span class="close" @click="closepopup">知道了</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </popup>
+    </div>
+    <template v-if="showFirst">
+      <firstTip @submitFirstTip="submitFirstTip">
+        <div class="font15 bold txt">
+          <div class="flex_center">{{sysParams.advance_seller}}</div>
+        </div>
+      </firstTip>
+    </template>
+    <template v-if="showHb">
+      <firstHb action="seller" @closeFirstHb="closeFirstHb" @afterOpen="afterClickOpen"></firstHb>
     </template>
   </div>
 </template>
@@ -121,16 +162,21 @@
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, XImg } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, TransferDom, Popup, Group, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
-import { User } from '#/storage'
+import { User, FirstInfo, SystemParams } from '#/storage'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
+import FirstTip from '@/components/FirstTip'
+import FirstHb from '@/components/FirstHb'
 
 export default {
+  directives: {
+    TransferDom
+  },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, XImg, Subscribe, ApplyTip
+    Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, XImg, Subscribe, Popup, ApplyTip, FirstTip, FirstHb
   },
   filters: {
     dateformat: function (value) {
@@ -140,6 +186,7 @@ export default {
   data () {
     return {
       loginUser: {},
+      retailerInfo: {},
       query: {},
       showApply: false,
       showContainer: false,
@@ -161,10 +208,58 @@ export default {
       pagestart2: 0,
       pagestart3: 0,
       salesCount: 0,
-      isFirst: true
+      isFirstLoad: true,
+      isshowfluence: false,
+      showFirst: false,
+      isFirst: false,
+      showHb: false,
+      sysParams: {}
     }
   },
   methods: {
+    initData () {
+      this.isFirst = false
+      this.showFirst = false
+      this.showHb = false
+    },
+    submitFirstTip () {
+      this.showFirst = false
+      // if (this.selectedIndex !== 1) {
+      //   this.selectedIndex = 1
+      //   this.swiperChange()
+      // }
+    },
+    closeFirstHb () {
+      this.isFirst = false
+      this.showHb = false
+    },
+    afterClickOpen () {
+      this.isFirst = false
+    },
+    toSaleview (item) {
+      let params = this.$util.handleAppParams(this.query, {uid: item.uid})
+      this.$router.push({path: '/retailerSaleview', query: params})
+    },
+    toChat (item) {
+      let params = this.$util.handleAppParams(this.query, {uid: item.uid})
+      this.$router.push({path: '/chat', query: params})
+    },
+    toMemberView (item) {
+      let params = this.$util.handleAppParams(this.query, {uid: item.uid})
+      this.$router.push({path: '/membersView', query: params})
+    },
+    toDetail (item) {
+      if (item.ordertype === 'orders') {
+        let params = this.$util.handleAppParams(this.query, {uid: item.id})
+        this.$router.push({path: '/accountDetail', query: params})
+      }
+    },
+    influence () {
+      this.isshowfluence = true
+    },
+    closepopup () {
+      this.isshowfluence = false
+    },
     openVip () {
       const self = this
       self.$vux.confirm.show({
@@ -223,9 +318,9 @@ export default {
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.distabdata1 = true
-        if (self.isFirst) {
+        if (self.isFirstLoad) {
           self.salesCount = self.tabdata1.length
-          self.isFirst = false
+          self.isFirstLoad = false
         }
       })
     },
@@ -343,19 +438,21 @@ export default {
         }
         self.$vux.confirm.show({
           content: content,
-          onConfirm () {
+          onConfirm: () => {
             self.$vux.loading.show()
-            self.$http.post(`${ENV.BokaApi}/api/retailer/inviteSeller`, { inviteuid: item.uid })
-            .then(res => {
+            self.$http.post(`${ENV.BokaApi}/api/retailer/inviteSeller`, { inviteuid: item.uid }).then(res => {
               const data = res.data
               self.$vux.loading.hide()
               self.$vux.toast.show({
                 text: data.error,
                 time: self.$util.delay(data.error),
-                onHide: function () {
+                onHide: () => {
                   if (data.flag === 1) {
                     self.salesCount++
                     self.tabdata2.splice(index, 1)
+                    if (this.isFirst) {
+                      this.showHb = true
+                    }
                   }
                 }
               })
@@ -379,26 +476,55 @@ export default {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$vux.loading.show()
+      this.initData()
       this.loginUser = User.get()
-      if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
-        // if (self.loginUser.isretailer === 2) {
-        //   self.initContainer()
-        //   self.$vux.loading.hide()
-        //   let backUrl = encodeURIComponent(location.href)
-        //   location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
-        // } else {
-        self.initContainer()
-        self.$vux.loading.hide()
-        if (!self.loginUser.isretailer) {
+      this.retailerInfo = this.loginUser.retailerinfo
+      this.query = this.$route.query
+      this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
+        const data = res.data
+        this.loginUser = data
+        User.set(data)
+        if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
           self.initContainer()
-          self.showApply = true
-        } else {
-          self.initContainer()
-          this.showContainer = true
-          this.swiperChange()
+          self.$vux.loading.hide()
+          if (!self.loginUser.isretailer) {
+            self.initContainer()
+            self.showApply = true
+          } else {
+            self.initContainer()
+            this.showContainer = true
+            if (this.query.flag === '1' || this.query.flag === 1) {
+              this.selectedIndex = 1
+            } else if (this.query.flag === '2' || this.query.flag === 2) {
+              this.selectedIndex = 2
+            }
+            document.title = this.retailerInfo.title
+            this.swiperChange()
+          }
+          if (`${this.loginUser.retailerinfo.firstinfo.seller}` === '0' && this.query.from) {
+            this.$http.get(`${ENV.BokaApi}/api/retailer/info`).then(res => {
+              const data = res.data
+              if (data.flag) {
+                this.retailerInfo = data.data
+                this.loginUser.retailerinfo = this.retailerInfo
+                User.set(this.loginUser)
+                if (`${this.retailerInfo.firstinfo.seller}` === '0' && this.query.from) {
+                  this.isFirst = true
+                  let finfo = FirstInfo.get()
+                  if (!finfo) {
+                    finfo = this.retailerInfo.firstinfo
+                  }
+                  if (`${finfo.seller}` === '0') {
+                    this.showFirst = true
+                    finfo.seller = 1
+                  }
+                  FirstInfo.set(finfo)
+                }
+              }
+            })
+          }
         }
-        // }
-      }
+      })
     }
   },
   created () {
@@ -406,6 +532,9 @@ export default {
   },
   activated () {
     this.refresh()
+    this.$util.getSystemParams(() => {
+      this.sysParams = SystemParams.get()
+    })
     this.$util.miniPost()
   }
 }

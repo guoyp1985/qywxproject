@@ -16,217 +16,223 @@
         </tab>
       </div>
       <div class="s-container" style="top:88px;">
-        <!-- <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
-          <swiper-item v-for="(tabitem, index) in tabtxts" :key="index"> -->
-            <div v-show="(selectedIndex == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', selectedIndex)">
-              <div v-if="disData1" class="scroll_list listarea">
-                <div v-if="!tabdata1 || tabdata1.length == 0" class="scroll_item color-gray padding10 align_center">
-                  <div><i class="al al-wushuju font60" ></i></div>
-                  <div class="mt5">暂无待结算记录！</div>
-                  <div>客户在线购买成功后，待结算订单金额方可显示在此处！</div>
-                </div>
-                <div v-else v-for="(item,index1) in tabdata1" :key="index1" class="scroll_item bg-white mt10 list-shadow">
-                  <template v-if="item.content.indexOf('厂商佣金') > -1">
-                    <div class="pl12 pr12 pt10 pb10">
-                      <div class="t-table">
-                        <div class="t-cell pic v_middle w45 pr10 border-box">
-                          <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
-                        </div>
-                        <div class="t-cell v_middle" style="color:inherit;">
-                          <div class="clamp1 color-999">{{item.buyername}}</div>
-                        </div>
-                        <div class="t-cell v_middle" style="color:inherit;">
-                          <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateformat }}</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
-                      <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{ item.products }}</span></div>
-                      <div class="clamp1 font14 color-gray">厂商佣金: +￥{{ item.special }}</div>
-                      <div class="clamp1 font14 color-gray"><span class="db-in">返点佣金: -￥{{ item.income }}</span></div>
-                    </div>
-                    <div class="pl12 pr12 pt10 pb10 flex_right">
-                      <div class="font14 color-999">实际收入：</div>
-                      <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
-                    </div>
-                  </template>
-                  <template v-else-if="item.isaward == 1">
-                    <div class="pl12 pr12 pt10 pb10">
-                    <div class="t-table">
-                      <div class="t-cell pic v_middle w45 pr10 border-box">
-                        <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
-                      </div>
-                      <div class="t-cell v_middle" style="color:inherit;">
-                        <div class="clamp1 color-999">{{item.linkman}}</div>
-                      </div>
-                      <div class="t-cell v_middle" style="color:inherit;">
-                        <div class="clamp1 font12 color-gray disdate align_right">{{ item.dateline | dateformat }}</div>
-                      </div>
-                    </div>
-                    </div>
-                    <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
-                      <div class="clamp1 font14 color-999">
-                        <span class="v_middle color-orange7 mr5">{{ item.content }}</span>
-                        <span class="v_middle">{{ item.products }}</span>
-                      </div>
-                    </div>
-                    <div class="pl12 pr12 pt10 pb10 flex_right">
-                      <div class="font14 color-999">实际收入：</div>
-                      <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
-                    </div>
-                  </template>
-                  <template v-else>
-                    <div class="pl12 pr12 pt10 pb10">
-                      <div class="t-table">
-                        <div class="t-cell pic v_middle w45 pr10 border-box">
-                          <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
-                        </div>
-                        <div class="t-cell v_middle" style="color:inherit;">
-                          <div class="clamp1 color-999">{{item.buyername}}</div>
-                        </div>
-                        <div class="t-cell v_middle" style="color:inherit;">
-                          <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateformat }}</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
-                      <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{ item.products }}</span></div>
-                      <div class="clamp1 font14 color-gray">
-                        <span class="v_middle">订单金额: ￥{{ item.special }}</span>
-                        <template v-if="item.postage && item.postage != ''">
-                          <span class="v_middle font12 color-gray" v-if="item.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
-                          <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ item.postage }} )</span>
-                        </template>
-                      </div>
-                      <div class="clamp1 font14 color-gray" v-if="item.carddeduct && item.carddeduct != '0.00'">优惠券抵扣: -￥{{ item.carddeduct }}</div>
-                      <div class="clamp1 font14 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml20">手续费: -￥{{ item.commission }}</span></div>
-                    </div>
-                    <div class="pl12 pr12 pt10 pb10 flex_right">
-                      <div class="font14 color-999">实际收入：</div>
-                      <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
-                    </div>
-                  </template>
-                </div>
-              </div>
+        <div v-show="(selectedIndex == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', selectedIndex)">
+          <div v-if="disData1" class="scroll_list listarea">
+            <div v-if="!tabdata1 || tabdata1.length == 0" class="scroll_item color-gray padding10 align_center">
+              <div><i class="al al-wushuju font60" ></i></div>
+              <div class="mt5">暂无待结算记录！</div>
+              <div>客户在线购买成功后，待结算金额方可显示在此处！</div>
             </div>
-            <div v-show="(selectedIndex == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', selectedIndex)">
-              <div v-if="disData2" class="scroll_list">
-                <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item color-gray padding10 align_center">
-                  <div><i class="al al-wushuju font60" ></i></div>
-                  <div class="mt5">暂无已提现记录！</div>
-                  <div>请到【待提现】页面进行提现，提现后的订单金额方可显示在此处！</div>
+            <div v-else v-for="(item,index1) in tabdata1" :key="index1" class="scroll_item bg-white mt10 list-shadow">
+              <template v-if="item.content.indexOf('厂家佣金') > -1">
+                <div class="pl12 pr12 pt10 pb10">
+                  <div class="t-table">
+                    <div class="t-cell pic v_middle w45 pr10 border-box">
+                      <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
+                    </div>
+                    <div class="t-cell v_middle" style="color:inherit;">
+                      <div class="clamp1 color-999">{{item.buyername}}</div>
+                    </div>
+                    <div class="t-cell v_middle" style="color:inherit;">
+                      <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateformat }}</div>
+                    </div>
+                  </div>
                 </div>
-                <div v-else v-for="(item,index1) in tabdata2" :key="index1" class="scroll_item bg-white mt10 list-shadow">
-                  <template v-if="item.content.indexOf('厂商佣金') > -1">
-                    <div class="pl12 pr12 pt10 pb10">
-                      <div class="t-table">
-                        <div class="t-cell pic v_middle w45 pr10 border-box">
-                          <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
-                        </div>
-                        <div class="t-cell v_middle" style="color:inherit;">
-                          <div class="clamp1 color-999">{{item.buyername}}</div>
-                        </div>
-                        <div class="t-cell v_middle" style="color:inherit;">
-                          <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateformat }}</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
-                      <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{ item.products }}</span></div>
-                      <div class="clamp1 font14 color-gray">厂商佣金: +￥{{ item.special }}</div>
-                      <div class="clamp1 font14 color-gray"><span class="db-in">返点佣金: -￥{{ item.income }}</span></div>
-                    </div>
-                    <div class="pl12 pr12 pt10 pb10 flex_right">
-                      <div class="font14 color-999">实际收入：</div>
-                      <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
-                    </div>
-                  </template>
-                  <template v-else-if="item.isaward == 1">
-                    <div class="pl12 pr12 pt10 pb10">
-                    <div class="t-table">
-                      <div class="t-cell pic v_middle w45 pr10 border-box">
-                        <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
-                      </div>
-                      <div class="t-cell v_middle" style="color:inherit;">
-                        <div class="clamp1 color-999">{{item.linkman}}</div>
-                      </div>
-                      <div class="t-cell v_middle" style="color:inherit;">
-                        <div class="clamp1 font12 color-gray disdate align_right">{{ item.dateline | dateformat }}</div>
-                      </div>
-                    </div>
-                    </div>
-                    <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
-                      <div class="clamp1 font14 color-999">
-                        <span class="v_middle color-orange7 mr5">{{ item.content }}</span>
-                        <span class="v_middle">{{ item.products }}</span>
-                      </div>
-                    </div>
-                    <div class="pl12 pr12 pt10 pb10 flex_right">
-                      <div class="font14 color-999">实际收入：</div>
-                      <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
-                    </div>
-                  </template>
-                  <template v-else>
-                    <div class="pl12 pr12 pt10 pb10">
-                      <div class="t-table">
-                        <div class="t-cell pic v_middle w45 pr10 border-box">
-                          <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
-                        </div>
-                        <div class="t-cell v_middle" style="color:inherit;">
-                          <div class="clamp1 color-999">{{item.buyername}}</div>
-                        </div>
-                        <div class="t-cell v_middle" style="color:inherit;">
-                          <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateformat }}</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
-                      <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span class="color-999">{{ item.products }}</span></div>
-                      <div class="clamp1 font14 color-gray">
-                        <span class="v_middle">订单金额: ￥{{ item.special }}</span>
-                        <template v-if="item.postage && item.postage != ''">
-                          <span class="v_middle font12 color-gray" v-if="item.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
-                          <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ item.postage }} )</span>
-                        </template>
-                      </div>
-                      <div class="clamp1 font14 color-gray" v-if="item.carddeduct && item.carddeduct != '0.00'">优惠券抵扣: -￥{{ item.carddeduct }}</div>
-                      <div class="clamp1 font14 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml20">手续费: -￥{{ item.commission }}</span></div>
-                    </div>
-                    <div class="pl12 pr12 pt10 pb10 flex_right">
-                      <div class="font14 color-999">实际收入：</div>
-                      <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
-                    </div>
-                  </template>
+                <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
+                  <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{ item.products }}</span><span v-if="item.options && item.options != ''">({{item.options}})</span></div>
+                  <div class="clamp1 font14 color-gray">厂家佣金: +￥{{ item.special }}</div>
+                  <div class="clamp1 font14 color-gray"><span class="db-in">返点佣金: -￥{{ item.income }}</span></div>
                 </div>
-              </div>
+                <div class="pl12 pr12 pt10 pb10 flex_right">
+                  <div class="font14 color-999">实际收入：</div>
+                  <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
+                </div>
+              </template>
+              <template v-else-if="item.isaward == 1">
+                <div class="pl12 pr12 pt10 pb10">
+                <div class="t-table">
+                  <div class="t-cell pic v_middle w45 pr10 border-box">
+                    <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
+                  </div>
+                  <div class="t-cell v_middle" style="color:inherit;">
+                    <div class="clamp1 color-999">{{item.linkman}}</div>
+                  </div>
+                  <div class="t-cell v_middle" style="color:inherit;">
+                    <div class="clamp1 font12 color-gray disdate align_right">{{ item.dateline | dateformat }}</div>
+                  </div>
+                </div>
+                </div>
+                <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
+                  <div class="clamp1 font14 color-999">
+                    <span class="v_middle color-orange7 mr5">{{ item.content }}</span>
+                    <span class="v_middle">{{ item.products }}</span><span v-if="item.options && item.options != ''">({{item.options}})</span>
+                  </div>
+                </div>
+                <div class="pl12 pr12 pt10 pb10 flex_right">
+                  <div class="font14 color-999">实际收入：</div>
+                  <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
+                </div>
+              </template>
+              <template v-else>
+                <div class="pl12 pr12 pt10 pb10">
+                  <div class="t-table">
+                    <div class="t-cell pic v_middle w45 pr10 border-box">
+                      <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
+                    </div>
+                    <div class="t-cell v_middle" style="color:inherit;">
+                      <div class="clamp1 color-999">{{item.buyername}}</div>
+                    </div>
+                    <div class="t-cell v_middle" style="color:inherit;">
+                      <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateformat }}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
+                  <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{ item.products }}</span><span v-if="item.options && item.options != ''">({{item.options}})</span></div>
+                  <div class="clamp1 font14 color-gray">
+                    <span class="v_middle">金额: ￥{{ item.special }}</span>
+                    <template v-if="item.postage && item.postage != ''">
+                      <span class="v_middle font12 color-gray" v-if="item.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
+                      <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ item.postage }} )</span>
+                    </template>
+                  </div>
+                  <div class="clamp1 font14 color-gray" v-if="item.carddeduct && item.carddeduct != '0.00'">优惠券抵扣: -￥{{ item.carddeduct }}</div>
+                  <div class="clamp1 font14 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml20">手续费: -￥{{ item.commission }}</span></div>
+                </div>
+                <div class="pl12 pr12 pt10 pb10 flex_right">
+                  <div class="font14 color-999">实际收入：</div>
+                  <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
+                </div>
+              </template>
             </div>
-            <div v-show="(selectedIndex == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3', selectedIndex)">
-              <div v-if="disData3" class="scroll_list">
-                <div v-if="!tabdata3 || tabdata3.length == 0" class="scroll_item color-gray padding10 align_center">
-                  <div><i class="al al-wushuju font60" ></i></div>
-                  <div class="mt5">暂无已提现记录！</div>
-                </div>
-                <div v-else v-for="(item,index1) in tabdata3" :key="index1" class="scroll_item bg-white mt10 list-shadow">
-                  <div class="pl12 pr12 pt10 pb10">
-                    <div class="db-flex">
-                      <div class="flex_cell flex_left">
-                        <div class="w_100">
-                          <div><span>{{item.cashtypetext}}</span><span v-if="item.status == 1" class="color-green2">【{{item.statustext}}】</span><span v-else class="color-theme">【{{item.statustext}}】</span></div>
-                          <div class="mt5 color-gray" v-if="item.cmms && item.cmms > 0">手续费: {{ $t('RMB') }}{{item.cmms}}</div>
-                          <div class="color-theme mt5" v-if="item.reason && item.reason != ''">{{item.reason}}</div>
-                          <div class="mt5 font12 clamp1 color-gray">{{ item.dateline | dateformat }}</div>
-                        </div>
-                      </div>
-                      <div class="w100 flex_right">
-                        <div class="clamp1">{{ $t('RMB') }}{{item.money}}</div>
-                      </div>
+          </div>
+        </div>
+        <div v-show="(selectedIndex == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', selectedIndex)">
+          <div v-if="disData2" class="scroll_list">
+            <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item color-gray padding10 align_center">
+              <div><i class="al al-wushuju font60" ></i></div>
+              <div class="mt5">暂无已提现记录！</div>
+              <div>请到【待提现】页面进行提现，提现后的金额方可显示在此处！</div>
+            </div>
+            <div v-else v-for="(item,index1) in tabdata2" :key="index1" class="scroll_item bg-white mt10 list-shadow">
+              <template v-if="item.content.indexOf('厂家佣金') > -1">
+                <div class="pl12 pr12 pt10 pb10">
+                  <div class="t-table">
+                    <div class="t-cell pic v_middle w45 pr10 border-box">
+                      <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
                     </div>
+                    <div class="t-cell v_middle" style="color:inherit;">
+                      <div class="clamp1 color-999">{{item.buyername}}</div>
+                    </div>
+                    <div class="t-cell v_middle" style="color:inherit;">
+                      <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateformat }}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
+                  <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{ item.products }}</span><span v-if="item.options && item.options != ''">({{item.options}})</span></div>
+                  <div class="clamp1 font14 color-gray">厂家佣金: +￥{{ item.special }}</div>
+                  <div class="clamp1 font14 color-gray"><span class="db-in">返点佣金: -￥{{ item.income }}</span></div>
+                </div>
+                <div class="pl12 pr12 pt10 pb10 flex_right">
+                  <div class="font14 color-999">实际收入：</div>
+                  <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
+                </div>
+              </template>
+              <template v-else-if="item.isaward == 1">
+                <div class="pl12 pr12 pt10 pb10">
+                <div class="t-table">
+                  <div class="t-cell pic v_middle w45 pr10 border-box">
+                    <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
+                  </div>
+                  <div class="t-cell v_middle" style="color:inherit;">
+                    <div class="clamp1 color-999">{{item.linkman}}</div>
+                  </div>
+                  <div class="t-cell v_middle" style="color:inherit;">
+                    <div class="clamp1 font12 color-gray disdate align_right">{{ item.dateline | dateformat }}</div>
+                  </div>
+                </div>
+                </div>
+                <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
+                  <div class="clamp1 font14 color-999">
+                    <span class="v_middle color-orange7 mr5">{{ item.content }}</span>
+                    <span class="v_middle">{{ item.products }}</span><span v-if="item.options && item.options != ''">({{item.options}})</span>
+                  </div>
+                </div>
+                <div class="pl12 pr12 pt10 pb10 flex_right">
+                  <div class="font14 color-999">实际收入：</div>
+                  <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
+                </div>
+              </template>
+              <template v-else>
+                <div class="pl12 pr12 pt10 pb10">
+                  <div class="t-table">
+                    <div class="t-cell pic v_middle w45 pr10 border-box">
+                      <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
+                    </div>
+                    <div class="t-cell v_middle" style="color:inherit;">
+                      <div class="clamp1 color-999">{{item.buyername}}</div>
+                    </div>
+                    <div class="t-cell v_middle" style="color:inherit;">
+                      <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateformat }}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
+                  <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span class="color-999">{{ item.products }}</span><span v-if="item.options && item.options != ''">({{item.options}})</span></div>
+                  <div class="clamp1 font14 color-gray">
+                    <span class="v_middle">金额: ￥{{ item.special }}</span>
+                    <template v-if="item.postage && item.postage != ''">
+                      <span class="v_middle font12 color-gray" v-if="item.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
+                      <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ item.postage }} )</span>
+                    </template>
+                  </div>
+                  <div class="clamp1 font14 color-gray" v-if="item.carddeduct && item.carddeduct != '0.00'">优惠券抵扣: -￥{{ item.carddeduct }}</div>
+                  <div class="clamp1 font14 color-gray">
+                    <span class="db-in">佣金: -￥{{ item.income }}</span>
+                    <span class="db-in ml20">手续费: -￥{{ item.commission }}</span>
+                    <span class="db-in ml20" v-if="item.buchang && item.buchang != '0.00' && item.buchang != 0">售后补偿: ￥{{ item.buchang }}</span>
+                  </div>
+                </div>
+                <div class="pl12 pr12 pt10 pb10 flex_right">
+                  <div class="font14 color-999">实际收入：</div>
+                  <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
+                </div>
+              </template>
+            </div>
+          </div>
+        </div>
+        <div v-show="(selectedIndex == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3', selectedIndex)">
+          <div v-if="disData3" class="scroll_list">
+            <div v-if="!tabdata3 || tabdata3.length == 0" class="scroll_item color-gray padding10 align_center">
+              <div><i class="al al-wushuju font60" ></i></div>
+              <div class="mt5">暂无已提现记录！</div>
+            </div>
+            <div v-else v-for="(item,index1) in tabdata3" :key="index1" class="scroll_item bg-white mt10 list-shadow">
+              <div class="pl12 pr12 pt10 pb10">
+                <div class="db-flex">
+                  <div class="flex_left w100" v-if="item.photo && item.photo != ''">
+                    <img @click="viewBigImg(`previewer-${index1}`,item.photo)" :src="item.photo" style="width:90px;height:90px;object-fit:cover;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+                    <div v-transfer-dom>
+                      <previewer :list="item.previewerPhoto" :ref="`previewer-${index1}`"></previewer>
+                    </div>
+                  </div>
+                  <div class="flex_cell flex_left">
+                    <div class="w_100">
+                      <div><span>{{item.cashtypetext}}</span><span v-if="item.status == 1" class="color-green2">【{{item.statustext}}】</span><span v-else class="color-theme">【{{item.statustext}}】</span></div>
+                      <div class="mt5 color-gray" v-if="item.cmms && item.cmms > 0">手续费: {{ $t('RMB') }}{{item.cmms}}</div>
+                      <div class="color-theme mt5" v-if="item.reason && item.reason != ''">{{item.reason}}</div>
+                      <div class="mt5 font12 clamp1 color-gray">{{ item.dateline | dateformat }}</div>
+                    </div>
+                  </div>
+                  <div class="w100 flex_right">
+                    <div class="clamp1">{{ $t('RMB') }}{{item.money}}</div>
                   </div>
                 </div>
               </div>
             </div>
-          <!-- </swiper-item>
-        </swiper> -->
+          </div>
+        </div>
       </div>
       <div v-transfer-dom class="x-popup">
         <popup v-model="showpopup" height="100%">
@@ -235,7 +241,7 @@
             <div class="popup-middle font14">
               <div class="padding10">
                 <div class="bold">第一条 手续费</div>
-                <div>1. 交易手续费：聚客365卖家需按订单交易额（含运费）的0.6%承担交易手续费，最低收费金额0.01元，不足0.01元按照0.01元收取。</div>
+                <div>1. 交易手续费：共销客卖家需按订单交易额（含运费）的0.6%承担交易手续费，最低收费金额0.01元，不足0.01元按照0.01元收取。</div>
                 <div>2. 提现手续费：</div>
                 <div>提现至微信零钱：无需支付手续费。</div>
                 <div>提现至银行卡：每笔提现扣除提现金额的0.1%，最低1元，最高25元。</div>
@@ -245,7 +251,7 @@
                 <div>3. 微信规定每日提现至微信零钱的额度为5千元，每日提现至银行卡的额度为2万元。</div>
                 <div>4. 提现至银行卡的到账时间为1-3日内，具体以银行到账时间为准。</div>
                 <div class="bold mt5">第三条 退款订单处理规则</div>
-                <div>1. 当订单为“待发货”状态时，买家可主动发起交易退款，聚客365将整单全额退款，不收取手续费。</div>
+                <div>1. 当订单为“待发货”状态时，买家可主动发起交易退款，共销客将整单全额退款，不收取手续费。</div>
                 <div>2. 当订单为“已发货或已收货”状态时，线上无法申请及处理交易退款，买家可与卖家互加好友，线下协商解决，手续费不予退还。</div>
                 <div class="bold mt5">第四条 确认收货规则</div>
                 <div>线上交易的订单，若买家没有主动确认收货，系统将在卖家发货后的第7天自动确认收货。</div>
@@ -346,6 +352,17 @@ export default {
         this.wechatCash = true
       }
     },
+    viewBigImg (refname, url) {
+      const self = this
+      if (self.$util.isPC()) {
+        self.$refs[refname].show(0)
+      } else {
+        window.WeixinJSBridge.invoke('imagePreview', {
+          current: url,
+          urls: [url]
+        })
+      }
+    },
     handleScroll (refname, index) {
       const self = this
       let scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
@@ -405,6 +422,14 @@ export default {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
+        for (var i = 0; i < retdata.length; i++) {
+          let photoarr = []
+          let photo = retdata[i].photo
+          if (photo && self.$util.trim(photo) !== '') {
+            photoarr = photo.split(',')
+          }
+          retdata[i].previewerPhoto = self.$util.previewerImgdata(photoarr)
+        }
         self.tabdata3 = self.tabdata3.concat(retdata)
         self.disData3 = true
       })
@@ -423,8 +448,10 @@ export default {
         } else {
           this.showMoneyPopup = false
           let cashstr = '微信'
+          let cashtype = 'lingqian'
           if (this.bankCash) {
             cashstr = '银行卡'
+            cashtype = 'yinhang'
           }
           if (this.bankCash && (!this.loginUser.bankcardno || this.loginUser.bankcardno === '')) {
             self.$vux.confirm.show({
@@ -441,11 +468,11 @@ export default {
             onConfirm: () => {
               self.eventIng = true
               self.$vux.loading.show()
-              let postData = {}
+              let postData = {type: cashtype, money: self.summoney}
               if (self.query.appid) {
                 postData.appid = self.query.appid
               }
-              self.$http.post(`${ENV.BokaApi}/api/accounting/getCash`, postData).then(function (res) {
+              self.$http.post(`${ENV.BokaApi}/api/accounting/cashMoney`, postData).then(function (res) {
                 let data = res.data
                 self.$vux.loading.hide()
                 self.$vux.toast.show({

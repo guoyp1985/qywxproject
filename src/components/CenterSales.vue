@@ -14,7 +14,7 @@
             <span class="vip-icon bg-gray color-white" v-if="retailerInfo.isretailer == 2" @click="onVip">VIP</span>
             <span class="vip-icon bg-orange color-white" v-if="retailerInfo.isretailer == 1" @click="onVip">VIP</span>
           </div>
-          <div class="font13 color-white mt5">聚客365—{{ $t('Business tool') }}</div>
+          <div class="font13 color-white mt5">共销客—{{ $t('Business tool') }}</div>
         </div>
       </div>
       <div class="font0" style="position:absolute;top:20px;right:14px;height:35px;">
@@ -141,6 +141,12 @@
       </grid>
     </div>
     <group class="list-shadow02 order_list_show posi_r">
+      <cell :link="{path:'/subCommission'}" style="position:relative">
+        <div slot="icon" class="pr10" style="width:18px;overflow:hidden;"><i class="al al-maijiaxiu21 color-orange db-in bold font20" style="margin-left:-4px;"></i></div>
+        <div slot="inline-desc">
+          <span class="font15">每月分佣</span>
+        </div>
+      </cell>
       <cell :link="{path:'/centerSeller',query: {uid:retailerInfo.uid,wid:retailerInfo.uid}}" style="position:relative">
         <div slot="icon" class="pr10" style="width:18px;overflow:hidden;"><i class="al al-maijiaxiu21 color-orange db-in bold font20" style="margin-left:-4px;"></i></div>
         <div slot="inline-desc">
@@ -175,12 +181,12 @@
       </cell>
 
       <!-- 我的推荐 -->
-      <cell :link="{path:'/retailerRecommands', query:{wid: retailerInfo.uid}}" style="position:relative">
+      <!-- <cell :link="{path:'/retailerRecommands', query:{wid: retailerInfo.uid}}" style="position:relative">
         <div slot="icon" class="pr10"><i class="al al-kehu1 db-in font18 color-red4"></i></div>
         <div slot="inline-desc">
           <span class="font15">{{$t('Retailer recommand')}}</span>
         </div>
-      </cell>
+      </cell> -->
 
       <template>
         <cell :link="{path:'/retailerSetting'}" style="position:relative">
@@ -369,14 +375,14 @@ export default {
         content: '请先添加商品再使用该功能哦！',
         confirmText: '添加商品',
         onConfirm () {
-          self.$router.push('/addProduct')
+          self.$router.push({path: '/addProduct'})
         }
       })
     },
     inviteEvent () {
       this.$vux.alert.show({
         title: '',
-        content: '点击右上角“···”分享当前页面给好友，每成功邀请一位卖家入驻聚客365，即可获得30元推荐奖励金，推荐奖励金将发放到“我的收入”中，卖家入驻成功即可立即提现！'
+        content: '点击右上角“···”分享当前页面给好友，每成功邀请一位卖家入驻共销客，即可获得30元推荐奖励金，推荐奖励金将发放到“我的收入”中，卖家入驻成功即可立即提现！'
       })
     },
     clickStore () {

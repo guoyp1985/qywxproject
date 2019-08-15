@@ -1,6 +1,14 @@
 <template>
   <div class="containerarea bg-page font14 nobottom">
-    <div class="pagetop flex_left pl10 border-box font16">{{$t('Message')}}</div>
+    <div v-if="query.from && loginUser.subscribe != 1" class="pagetop border-box db-flex top-subscribe-tip">
+      <div class="flex_cell h_100 flex_left">
+        <i class="al al-gantanhaozhong font20"></i><span>关注公众号可及时接收私信提醒</span>
+      </div>
+      <div class="w80 h_100 flex_right">
+        <div class="btn flex_center" @click="toSubscribe">立即关注</div>
+      </div>
+    </div>
+    <div v-else class="pagetop flex_left pl10 border-box font16">{{$t('Message')}}</div>
     <div class="pagemiddle scroll-container bg-white">
       <div v-if="disData" class="scroll_list pl10 pr10">
         <div v-if="!data || data.length == 0" class="emptyitem flex_center">暂无消息</div>
@@ -28,6 +36,7 @@
 import { XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
+import { User } from '#/storage'
 
 export default {
   components: {
@@ -42,10 +51,14 @@ export default {
     return {
       data: [],
       disData: false,
-      query: {}
+      query: {},
+      loginUser: {}
     }
   },
   methods: {
+    toSubscribe () {
+      this.$wechat.miniProgram.navigateTo({url: '/pages/subscribe'})
+    },
     getDateState (dt) {
       return this.$util.getDateState(dt)
     },
@@ -64,11 +77,12 @@ export default {
       })
     },
     toChat (data) {
-      let param = {uid: data.uid, fromModule: 'messagelist', from: this.query.from}
+      let param = this.$util.handleAppParams(this.query, {uid: data.uid, fromModule: 'messagelist'})
       this.$router.push({path: '/chat', query: param})
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.loginUser = User.get()
       this.query = this.$route.query
       this.$vux.loading.show()
       this.getData()

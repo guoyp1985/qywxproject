@@ -5,7 +5,7 @@ import SHA1 from 'js-sha1'
 import Time from './time'
 import urlParse from 'url-parse'
 import jQuery from 'jquery'
-import { User, Roomid, Token } from './storage'
+import { User, Roomid, Token, SystemParams } from './storage'
 const Util = {}
 
 Util.install = function (Vue, options) {
@@ -236,7 +236,7 @@ Util.install = function (Vue, options) {
     },
     wxConfig: function (callback) {
       Vue.http.get(`${ENV.BokaApi}/api/jsconfig`,
-        { params: { url: encodeURIComponent(location.href) } }
+        { params: { url: encodeURIComponent(location.href.split('#')[0]) } }
       ).then(res => {
         if (!res) return
         Vue.wechat.config(res.data)
@@ -705,6 +705,76 @@ Util.install = function (Vue, options) {
           curFrame.attr('src', dataSrc)
         }
       })
+    },
+    handleAppParams: function (query, params) {
+      let arr = ['from', 'appid', 'minibackurl', 'backtype', 'control', 'miniconfig', 'fromapp', 'allowfirst', 'fromapp']
+      for (let i = 0; i < arr.length; i++) {
+        let pname = arr[i]
+        if (query[pname]) {
+          params[pname] = query[pname]
+        }
+      }
+      return params
+    },
+    getSystemParams: (callback) => {
+      Vue.http.post(`${ENV.BokaApi}/api/common/getSysParas`).then(res => {
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        SystemParams.set(retdata)
+        callback && callback()
+      })
+    },
+    remindQrcode: (wid) => {
+      Vue.http.post(`${ENV.BokaApi}/api/retailer/remindQrCode`, {
+        wid: wid
+      })
+    },
+    wxAddress: (callback) => {
+      Vue.wechat.openAddress({
+        success: res => {
+          // alert('22' + JSON.stringify(res))
+          if (res.errMsg === 'openAddress:ok') {
+            let postData = {isdefault: 1}
+            postData.province = res.provinceName
+            postData.city = (res.provinceName !== res.cityName) ? res.cityName : ''
+            postData.counties = res.countryName
+            postData.address = res.detailInfo
+            postData.linkman = res.userName
+            postData.telephone = res.telNumber
+            Vue.http.post(`${ENV.BokaApi}/api/user/address/add`, postData).then(res1 => {
+              const data1 = res1.data
+              if (callback) {
+                let newData = postData
+                if (data1.flag) {
+                  newData = data1.data
+                }
+                newData.fulladdress = `${postData.province}${postData.city}${postData.counties}${postData.address}`
+                callback(res1.data, newData)
+              }
+            })
+          }
+        },
+        fail: res => {
+          // alert('11' + JSON.stringify(res))
+          Vue.toast.show({
+            text: '微信地址获取失败'
+          })
+        }
+      })
+    },
+    routerMiniUrl: (query) => {
+      let minibackurl = decodeURIComponent(query.minibackurl)
+      console.log(minibackurl)
+      if (query.backtype === 'relaunch') {
+        console.log(1)
+        Vue.wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+      } else if (query.backtype === 'redirect') {
+        console.log(2)
+        Vue.wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+      } else {
+        console.log(3)
+        Vue.wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+      }
     }
   }
 }

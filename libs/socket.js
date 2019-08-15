@@ -16,10 +16,14 @@ const Socket = {
       return
     }
     ws.onopen = () => {
+      let linkman = params.linkman
+      if (linkman) {
+        linkman = linkman.replace(/"/g, '\\"')
+      }
       const loginData = {
         type: 'login',
         uid: params.uid,
-        client_name: params.linkman.replace(/"/g, '\\"'),
+        client_name: linkman,
         room_id: params.room,
         frommodule: params.fromModule,
         fromid: params.fromId

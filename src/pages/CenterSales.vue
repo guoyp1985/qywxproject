@@ -27,6 +27,12 @@
       <template v-if="showApply">
         <retailer-apply :login-user="loginUser" :after-apply="applySuccess" :class-data="classData" :systemParams="systemParams"></retailer-apply>
       </template>
+      <template v-if="showFactory">
+        <bind-factory :login-user="loginUser" :query="query"></bind-factory>
+      </template>
+      <template v-if="showAgent">
+        <bind-agent :login-user="loginUser" :query="query"></bind-agent>
+      </template>
     </template>
     <open-vip v-if="showVip && retailerInfo.isretailer == 2" :retailer-info="retailerInfo" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
     <vip v-if="showVip && retailerInfo.isretailer == 1" :retailer-info="retailerInfo" @hide-vip="hideVip" @open-vip="openVip1"></vip>
@@ -37,21 +43,25 @@
 import { Swiper, SwiperItem } from 'vux'
 import CenterSales from '@/components/CenterSales'
 import RetailerApply from '@/components/RetailerApply'
+import BindFactory from '@/components/BindFactory'
+import BindAgent from '@/components/BindAgent'
 import Subscribe from '@/components/Subscribe'
 import OpenVip from '@/components/OpenVip'
 import Vip from '@/components/Vip'
 import ENV from 'env'
-import { User } from '#/storage'
+import { User, SystemParams } from '#/storage'
 
 export default {
   components: {
-    Swiper, SwiperItem, CenterSales, RetailerApply, Subscribe, Vip, OpenVip
+    Swiper, SwiperItem, CenterSales, RetailerApply, Subscribe, Vip, OpenVip, BindFactory, BindAgent
   },
   data () {
     return {
       showCenter: false,
       showApply: false,
       afterApply: false,
+      showFactory: false,
+      showAgent: false,
       selectedIndex: 0,
       retailerInfo: {},
       loginUser: null,
@@ -95,21 +105,37 @@ export default {
         })
       }
     },
+    bindFactory () {
+      if (this.query.fromapp === 'factory') {
+        let params = {uid: this.query.uid, wid: this.loginUser.uid}
+        if (this.query.type === 'agent') {
+          params.agent = 1
+        }
+        this.$http.post(`${ENV.FactoryApi}/api/miniopen/bindRetailer`, params)
+      }
+    },
     applySuccess () {
       const self = this
-      if (self.query.minibackurl) {
-        let minibackurl = decodeURIComponent(self.query.minibackurl)
-        if (self.query.backtype === 'relaunch') {
-          self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
-        } else if (self.query.backtype === 'redirect') {
-          self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+      if (self.query.fromapp === 'factory') {
+        this.initContainer()
+        this.bindFactory()
+        if (self.query.type === 'agent') {
+          self.showAgent = true
         } else {
-          self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+          self.showFactory = true
         }
+        this.$vux.loading.hide()
       } else {
-        self.initContainer()
-        self.showCenter = true
-        self.$vux.loading.hide()
+        if (self.query.minibackurl) {
+          this.$util.routerMiniUrl(this.query)
+        } else if (self.query.backurl) {
+          let backurl = decodeURIComponent(self.query.backurl)
+          this.$router.push({path: backurl})
+        } else {
+          self.initContainer()
+          self.showCenter = true
+          self.$vux.loading.hide()
+        }
       }
     },
     inCenter () {
@@ -128,79 +154,90 @@ export default {
     getData () {
       const self = this
       self.$vux.loading.show()
-      self.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
-        if (res) {
-          if (res.status === 200) {
-            self.loginUser = res.data
-            User.set(self.loginUser)
-            if (!self.loginUser.isretailer) {
-              self.initContainer()
-              self.showApply = true
-              document.title = '申请卖家'
-              self.$http.post(`${ENV.BokaApi}/api/common/getSysParas`).then(function (res) {
-                self.$vux.loading.hide()
-                if (res.status === 200) {
-                  let data = res.data
-                  data = data.data ? data.data : data
-                  self.systemParams = data
-                }
-                return self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
-                  { params: { limit: 100 } }
-                )
-              }).then(function (res) {
-                self.$vux.loading.hide()
-                if (res.status === 200) {
-                  let data = res.data
-                  data = data.data ? data.data : data
-                  for (let i = 0; i < data.length; i++) {
-                    data[i].checked = false
-                  }
-                  self.classData = data
-                }
-              })
-            } else if (self.loginUser.isretailer === 1 || self.loginUser.isretailer === 2) {
-              self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-                module: 'retailer', action: 'index'
-              }).then(function (res) {
-                if (self.loginUser.isretailer) {
-                  self.initContainer()
-                  self.showCenter = true
-                  let shareParams = {
-                    module: 'retailer',
-                    moduleid: self.loginUser.uid,
-                    title: `${self.loginUser.linkman}邀请你一起入驻聚客365`,
-                    desc: '聚客365帮你解决微商创业难题',
-                    photo: self.loginUser.avatar,
-                    link: `${ENV.Host}/#/centerSales?&share_uid=${self.loginUser.uid}`
-                  }
-                  if (self.query.share_uid) {
-                    shareParams.link = `${shareParams.link}&lastshareuid=${self.query.share_uid}`
-                    shareParams.lastshareuid = self.query.share_uid
-                  }
-                  self.$util.handleWxShare(shareParams)
-                  self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
-                    if (res.status === 200) {
-                      let data = res.data
-                      self.retailerInfo = data.data ? data.data : data
-                      self.$vux.loading.hide()
-                      return self.$http.get(`${ENV.BokaApi}/api/message/newMessages`)
-                    }
-                  }).then(function (res) {
-                    if (res) {
-                      let data = res.data
-                      self.messages = data.data
-                      return self.$http.get(`${ENV.BokaApi}/api/retailer/shareview`)
-                    }
-                  }).then(function (res) {
-                    if (res) {
-                      let data = res.data
-                      self.marqueeData = data.data ? data.data : data
-                    }
-                  })
-                }
-              })
+      let uparams = {}
+      if (self.query.fromapp === 'factory') {
+        uparams = {fid: this.query.fid, uploader: this.query.wid}
+      }
+      self.$http.get(`${ENV.BokaApi}/api/user/show`, {
+        params: uparams
+      }).then(res => {
+        self.loginUser = res.data
+        User.set(self.loginUser)
+        if (!self.loginUser.isretailer || !self.loginUser.retailerinfo.moderate) {
+          self.initContainer()
+          self.showApply = true
+          document.title = '申请加入'
+          self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`, {params: {limit: 100}}).then((res) => {
+            self.$vux.loading.hide()
+            if (res.status === 200) {
+              let data = res.data
+              data = data.data ? data.data : data
+              for (let i = 0; i < data.length; i++) {
+                data[i].checked = false
+              }
+              self.classData = data
             }
+          })
+        } else if (self.loginUser.isretailer === 1 || self.loginUser.isretailer === 2) {
+          if (self.query.type === 'agent' && self.query.fromapp === 'factory') {
+            this.$http.post(`${ENV.BokaApi}/api/factory/applyAgent`, {
+              fid: this.query.fid, wid: this.loginUser.uid
+            }).then(res => {
+              self.bindFactory()
+            })
+          } else {
+            self.bindFactory()
           }
+          self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+            module: 'retailer', action: 'index'
+          }).then(function (res) {
+            if (self.loginUser.isretailer) {
+              self.initContainer()
+              if (self.query.fromapp === 'factory') {
+                self.$vux.loading.hide()
+                if (self.query.type === 'agent') {
+                  self.showAgent = true
+                } else {
+                  self.showFactory = true
+                }
+              } else {
+                self.showCenter = true
+                let shareParams = {
+                  module: 'retailer',
+                  moduleid: self.loginUser.uid,
+                  title: `${self.loginUser.linkman}邀请你一起入驻共销客`,
+                  desc: '共销客帮你解决微商创业难题',
+                  photo: self.loginUser.avatar,
+                  link: `${ENV.Host}/#/centerSales?&share_uid=${self.loginUser.uid}`
+                }
+                if (self.query.share_uid) {
+                  shareParams.link = `${shareParams.link}&lastshareuid=${self.query.share_uid}`
+                  shareParams.lastshareuid = self.query.share_uid
+                }
+                self.$util.handleWxShare(shareParams)
+                self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
+                  if (res.status === 200) {
+                    let data = res.data
+                    self.retailerInfo = data.data ? data.data : data
+                    document.title = self.retailerInfo.title
+                    self.$vux.loading.hide()
+                    return self.$http.get(`${ENV.BokaApi}/api/message/newMessages`)
+                  }
+                }).then(function (res) {
+                  if (res) {
+                    let data = res.data
+                    self.messages = data.data
+                    return self.$http.get(`${ENV.BokaApi}/api/retailer/shareview`)
+                  }
+                }).then(function (res) {
+                  if (res) {
+                    let data = res.data
+                    self.marqueeData = data.data ? data.data : data
+                  }
+                })
+              }
+            }
+          })
         }
       })
     },
@@ -208,14 +245,21 @@ export default {
       const self = this
       self.showCenter = false
       self.showApply = false
+      this.showFactory = false
+      this.showAgent = false
       document.title = '卖家中心'
     },
     refresh (query) {
-      // const self = this
-      console.log(this.$wechat)
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = query
       this.getData()
+      if (!SystemParams.get()) {
+        this.$util.getSystemParams(() => {
+          this.systemParams = SystemParams.get()
+        })
+      } else {
+        this.systemParams = SystemParams.get()
+      }
     }
   },
   activated () {

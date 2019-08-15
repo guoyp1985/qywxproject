@@ -1,5 +1,5 @@
 /*
-* @description: 厂商经营报告
+* @description: 厂家经营报告
 * @auther: gyp
 * @created_date: 2018-08-06
 */
@@ -33,7 +33,7 @@
       <div class="boxitem">
         <div class='title'>客户</div>
         <card>
-          <div slot="content" class="card-demo-flex card-demo-content01">
+          <div slot="content" class="card-demo-flex card-demo-content01" @click="toCustomer">
             <div class="vux-1px-r">
               <div class="color-red font18">{{ viewData.newcustomer }}</div>
               <div class="color-gray font14 mt5">新增客户</div>
@@ -52,7 +52,7 @@
       <div class="boxitem">
         <div class='title'>商品</div>
         <card>
-          <div slot="content" class="card-demo-flex card-demo-content01">
+          <div slot="content" class="card-demo-flex card-demo-content01" @click="toSales">
             <div class="vux-1px-r">
               <div class="color-red font18">{{ viewData.productviews }}</div>
               <div class="color-gray font14 mt5">浏览</div>
@@ -71,7 +71,7 @@
       <div class="boxitem">
         <div class='title'>文章</div>
         <card>
-          <div slot="content" class="card-demo-flex card-demo-content01">
+          <div slot="content" class="card-demo-flex card-demo-content01" @click="toSales">
             <div class="vux-1px-r">
               <div class="color-red font18">{{ viewData.newsviews }}</div>
               <div class="color-gray font14 mt5">浏览</div>
@@ -108,6 +108,7 @@ export default {
     return {
       query: {},
       loginUser: {},
+      retailerInfo: {},
       selectedIndex: 0,
       list: [],
       list1: [],
@@ -147,6 +148,16 @@ export default {
     closepopup () {
       this.isshowpopup = false
     },
+    toCustomer () {
+      if (this.retailerInfo.moderate && this.retailerInfo.vipvalidate) {
+        this.$router.push({path: '/retailerCustomerlist'})
+      }
+    },
+    toSales () {
+      if (this.retailerInfo.moderate && this.retailerInfo.vipvalidate) {
+        this.$router.push({path: '/retailerSalechance'})
+      }
+    },
     getData () {
       const self = this
       let params = {type: 'retailer', days: 7, id: self.wid}
@@ -163,6 +174,8 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
+      this.retailerInfo = this.loginUser.retailerinfo
+      document.title = this.retailerInfo.title
       this.query = this.$route.query
       this.wid = this.query.wid ? this.query.wid : this.loginUser.uid
       this.getData()

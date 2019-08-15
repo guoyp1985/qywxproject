@@ -22,11 +22,11 @@
               <div class="flex_center" style="height:80px;">暂无搜索结果</div>
             </template>
             <template v-else>
-              <div class="t-table">
+              <div class="t-table" style="padding-top:20%;">
                 <div class="t-cell v_middle">
                   <div><i class="al al-wushuju font60 pt20"></i></div>
                   <div class="mt5">空空如也~</div>
-                  <div class="align_left mt5">赶快<router-link :to="{path: '/addFactoryNews', query: {fid: query.fid}}" class="color-blue">创建文章</router-link>，为卖家提供素材可有效提高销量哦</div>
+                  <div class="align_center mt5">赶快<router-link :to="{path: '/addFactoryNews', query: {fid: query.fid}}" class="color-blue">创建文章</router-link>，为卖家提供素材可有效提高销量哦</div>
                 </div>
               </div>
             </template>
@@ -34,7 +34,7 @@
           <router-link :to="{path: '/factoryNews', query: {id: item.id, fid: query.fid}}" v-else v-for="(item,index1) in tabdata1" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
             <div class="t-table">
               <div class="t-cell v_middle w70">
-                <img class="imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                <img class="imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
               </div>
               <div class="t-cell v_middle">
                 <div class="clamp1 font14 color-lightgray"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
@@ -54,7 +54,12 @@
         </div>
       </div>
       <div class="s-bottom list-shadow flex_center bg-white pl12 pr12">
-        <router-link class="flex_cell flex_center btn-bottom-red" :to="{path: '/addFactoryNews', query: {fid: query.fid}}" >{{ $t('Create news') }}</router-link>
+        <div class="flex_cell flex_center">
+          <router-link class="flex_center btn-bottom-orange" style="width:80%;" :to="{path: '/factoryNewsClass', query: {fid: query.fid}}" >文章分类</router-link>
+        </div>
+        <div class="flex_cell flex_center">
+          <router-link class="flex_center btn-bottom-red" style="width:80%;" :to="{path: '/addFactoryNews', query: {fid: query.fid}}" >{{ $t('Create news') }}</router-link>
+        </div>
       </div>
       <div v-transfer-dom>
         <popup class="menuwrap" v-model="showpopup">
@@ -161,7 +166,10 @@ export default {
     },
     getData1 () {
       const self = this
-      const params = { fid: self.query.fid, pagestart: self.pagestart1, limit: self.limit }
+      const params = { fid: self.query.fid, pagestart: self.pagestart1, limit: self.limit, wid: this.loginUser.uid }
+      if (this.query.classid) {
+        params.classid = this.query.classid
+      }
       let keyword = self.searchword1
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         self.searchresult1 = true

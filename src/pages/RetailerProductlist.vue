@@ -1,45 +1,45 @@
 <template>
   <div class="containerarea bg-page font14 s-havebottom rproductlist">
-    <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
-      <template v-if="disproductdata">
-        <template v-if="!productdata || productdata.length == 0">
-          <div class="scroll_list">
-            <div class="emptyitem">
-              <div class="t-table" style="padding-top:20%;">
-                <div class="t-cell padding10">
-                  <i class="al al-chuangjianxiangmu" style="font-size:60px;"></i>
-                  <div>还没有添加商品哦，及时添加商品可以：</div>
-                  <div>1.创建促销活动 </div>
-                  <div>2.分享商品获得客户</div>
-                  <div>3.邀请返点客帮你赚钱</div>
-                </div>
-              </div>
-            </div>
+    <search
+      class="v-search bg-white"
+      v-model='searchword'
+      :auto-fixed="autofixed"
+      @on-submit="onSubmit"
+      @on-change="onChange"
+      @on-cancel="onCancel"
+      ref="search">
+    </search>
+    <tab v-model="selectedIndex" class="w_100 v-tab">
+      <tab-item v-for="(item,index) in tabtxts" :selected="selectedIndex == index" :key="index" @on-item-click="clickTab(index)">{{item}}</tab-item>
+    </tab>
+    <div class="s-container scroll-container" style="top:50px;">
+      <div v-show="(selectedIndex == 0)" class="swiper-inner" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', 0)">
+        <div class="pro_box bg-page list_shadow pl12 pr12 pb15 border-box">
+          <div class="pro_list_top"></div>
+          <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white font12" style="margin-top: -4px;">
+            <div>悄悄告诉你，立即分享新发布的商品可以：</div>
+            <div>1. 接收好友查看商品的通知；</div>
+            <div>2. 监控谁看过、分享过以及多次浏览过你的商品；</div>
+            <div>3. 获得到更多潜在客户及销售机会。</div>
           </div>
-        </template>
-        <template v-else>
-          <div class="pro_box bg-page list_shadow pl12 pr12 pb15">
-            <div class="pro_list_top bg-page color-lightgray pt10 pb10 pl12 pr12"></div>
-            <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white" style="margin-top: -4px;">
-              <div>悄悄告诉你，立即分享新发布的商品可以：</div>
-              <div>1. 接收好友查看商品的通知；</div>
-              <div>2. 监控谁看过、分享过以及多次浏览过你的商品；</div>
-              <div>3. 获得到更多潜在客户及销售机会。</div>
-            </div>
-          </div>
-          <div class="scroll_list ">
-            <router-link :to="{path:'/product',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
-              <div v-if="item.moderate == 0" class="ico down"></div>
+        </div>
+        <template v-if="disList1">
+          <template v-if="!tabData1 || !tabData1.length">
+            <div class="flex_center padding20 color-gray">暂无商品，快去添加商品吧！</div>
+          </template>
+          <div v-else class="scroll_list ">
+            <router-link :to="{path:'/product',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData1" :key="index" style="color:inherit;">
+              <div v-if="item.fpid" class="ico1">货源</div>
           		<div class="t-table bg-white pt10 pb10">
           			<div class="t-cell pl12 v_middle" style="width:110px;">
                   <img class="imgcover v_middle" :src="getPhoto(item.photo)" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                 </div>
           			<div class="t-cell v_middle">
-                  <div class="clamp1 font16 pr10 color-lightgray"><span v-if="item.priority == 1" style="color:#fd8c2c;">【精选】</span>{{item.title}}</div>
+                  <div class="clamp1 font16 pr10 color-lightgray"><span v-if="item.priority" style="color:#fd8c2c;">【精选】</span>{{item.title}}</div>
                   <div class="t-table pr12 border-box mt15">
                     <div class="t-cell color-999 font14">
                       <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ item.price }}</span></div>
-                      <div class="clamp1 mt5" v-if="item.fpid > 0">厂商佣金:<span class="color-red"> {{ $t('RMB') }}{{ item.rebatein }}</span></div>
+                      <div class="clamp1 mt5" v-if="item.fpid > 0">厂家佣金:<span class="color-red"> {{ $t('RMB') }}{{ item.rebatein }}</span></div>
                       <div class="clamp1 mt5 font12">
                           <span class="v_middle db-in mr5" v-if="item.fpid == 0">库存: {{ item.storage }}{{item.unit}}</span>
                           <span class="v_middle db-in">已售: {{ item.saled }}{{item.unit}}</span>
@@ -56,9 +56,51 @@
             </router-link>
           </div>
         </template>
-      </template>
+      </div>
+      <div v-show="(selectedIndex == 1)" class="swiper-inner" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', 1)">
+        <div class="pro_box bg-page list_shadow pl12 pr12 pb15 border-box">
+          <div class="pro_list_top"></div>
+          <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white font12" style="margin-top: -4px;">
+            <div>悄悄告诉你，立即分享新发布的商品可以：</div>
+            <div>1. 接收好友查看商品的通知；</div>
+            <div>2. 监控谁看过、分享过以及多次浏览过你的商品；</div>
+            <div>3. 获得到更多潜在客户及销售机会。</div>
+          </div>
+        </div>
+        <template v-if="disList2">
+          <div v-if="!tabData2 || !tabData2.length" class="flex_center padding20 color-gray">暂无下架商品！</div>
+          <div v-else class="scroll_list ">
+            <router-link :to="{path:'/product',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData2" :key="index" style="color:inherit;">
+              <div v-if="item.fpid" class="ico1">货源</div>
+          		<div class="t-table bg-white pt10 pb10">
+          			<div class="t-cell pl12 v_middle" style="width:110px;">
+                  <img class="imgcover v_middle" :src="getPhoto(item.photo)" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+                </div>
+          			<div class="t-cell v_middle">
+                  <div class="clamp1 font16 pr10 color-lightgray"><span v-if="item.priority" style="color:#fd8c2c;">【精选】</span>{{item.title}}</div>
+                  <div class="t-table pr12 border-box mt15">
+                    <div class="t-cell color-999 font14">
+                      <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ item.price }}</span></div>
+                      <div class="clamp1 mt5" v-if="item.fpid > 0">厂家佣金:<span class="color-red"> {{ $t('RMB') }}{{ item.rebatein }}</span></div>
+                      <div class="clamp1 mt5 font12">
+                          <span class="v_middle db-in mr5" v-if="item.fpid == 0">库存: {{ item.storage }}{{item.unit}}</span>
+                          <span class="v_middle db-in">已售: {{ item.saled }}{{item.unit}}</span>
+                      </div>
+                    </div>
+                    <div class="align_right t-cell v_bottom w50">
+                      <div class="btnicon bg-red color-white font12" @click="controlpopup1(item,index)">
+                        <i class="al al-asmkticon0165 v_middle"></i>
+                      </div>
+                    </div>
+                  </div>
+          			</div>
+          		</div>
+            </router-link>
+          </div>
+        </template>
+      </div>
     </div>
-    <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
+    <!-- <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
       <div class="flex_cell flex_center" v-if="retailerInfo.fid > 0">
         <div class="addproduct flex_center btn-bottom-red" style="width:85%;" @click="toUpdate">同步商品</div>
       </div>
@@ -69,15 +111,35 @@
         <div class="flex_cell flex_center">
           <div class="addproduct flex_center btn-bottom-red" style="width:85%;" @click="toAdd">{{ $t('Add product') }}</div>
         </div>
+        <div class="flex_cell flex_center">
+          <div class="addproduct flex_center btn-bottom-red" style="width:85%;" @click="toCollect">{{ $t('Collect product') }}</div>
+        </div>
       </template>
+    </div> -->
+    <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
+      <div class="flex_cell flex_center">
+        <div class="addproduct flex_center btn-bottom-orange" style="width:85%;" @click="toRecommend">{{ $t('Source of goods') }}</div>
+      </div>
+      <div class="flex_cell flex_center">
+        <div class="addproduct flex_center btn-bottom-red" style="width:85%;" @click="toAdd">{{ $t('Add product') }}</div>
+      </div>
     </div>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showpopup1">
         <div class="popup0">
           <div class="list" v-if="clickdata">
-            <div class="item" v-if="clickdata.activityid == 0">
+            <div class="item" v-if="clickdata.fpid > 0">
+              <router-link class="inner" :to="{path: '/materialbank', query: {pid: clickdata.fpid}}">素材库</router-link>
+            </div>
+            <div class="item" v-if="clickdata.moderate == 1">
+              <div class="inner" @click="clickpopup('activity')">创建活动</div>
+            </div>
+            <div class="item">
               <div v-if="clickdata.fpid > 0" class="inner" @click="clickpopup('fee')">设置返点佣金</div>
-              <router-link v-else class="inner" :to="{path: '/addProduct', query: {id: clickdata.id}}">编辑</router-link>
+              <div v-else class="inner"  @click="clickpopup('edit')">编辑</div>
+            </div>
+            <div class="item" v-if="!clickdata.fpid">
+              <router-link class="inner" :to="{path: '/postageArea', query: {type: 'product',id: clickdata.id}}">偏远地区运费</router-link>
             </div>
             <div class="item" v-if="clickdata.moderate == 0">
               <div class="inner" @click="clickpopup('up')">上架</div>
@@ -85,19 +147,21 @@
             <div class="item" v-else-if="clickdata.moderate == 1">
               <div class="inner" @click="clickpopup('down')">下架</div>
             </div>
-            <div class="item" v-if="clickdata.priority == 0">
-              <div class="inner" @click="clickpopup('top')">设置为精选</div>
-            </div>
-            <div class="item" v-else-if="clickdata.priority == 1">
-              <div class="inner" @click="clickpopup('bottom')">取消精选</div>
-            </div>
+            <template v-if="clickdata.moderate == 1">
+              <div class="item" v-if="!clickdata.priority">
+                <div class="inner" @click="clickpopup('top')">设置为精选</div>
+              </div>
+              <div class="item" v-else>
+                <div class="inner" @click="clickpopup('bottom')">取消精选</div>
+              </div>
+            </template>
             <div class="item">
               <router-link class="inner" :to="{path: '/stat', query: {id: clickdata.id, module: 'product'}}">统计</router-link>
             </div>
-            <div class="item">
+            <div class="item" v-if="clickdata.moderate == 1">
               <router-link class="inner" :to="{path: '/poster', query: {id: clickdata.id, module: 'product'}}">生成海报</router-link>
             </div>
-            <div class="item">
+            <div class="item" v-if="clickdata.moderate == 1">
               <div class="inner" @click="clickpopup('push')">推送给返点客</div>
             </div>
             <div class="item close mt10" @click="clickpopup('row.key')">
@@ -168,7 +232,7 @@
                   <div class="t-table pr12 border-box mt15">
                     <div class="t-cell color-999 font14">
                       <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ feeData.price }}</span></div>
-                      <div class="clamp1 mt5" v-if="feeData.fpid > 0">厂商佣金:<span class="color-red"> {{ $t('RMB') }}{{ feeData.rebatein }}</span></div>
+                      <div class="clamp1 mt5" v-if="feeData.fpid > 0">厂家佣金:<span class="color-red"> {{ $t('RMB') }}{{ feeData.rebatein }}</span></div>
                       <div class="clamp1 mt5">
                           <span class="v_middle db-in">已售: {{ feeData.saled }}{{feeData.unit}}</span>
                       </div>
@@ -197,6 +261,8 @@
 </template>
 
 <i18n>
+Collect product:
+  zh-CN: 采集商品
 Add product:
   zh-CN: 添加商品
 Back go shop:
@@ -204,26 +270,23 @@ Back go shop:
 </i18n>
 
 <script>
-import { TransferDom, Popup, Confirm, CheckIcon, XImg } from 'vux'
+import { TransferDom, Popup, Confirm, CheckIcon, XImg, Tab, TabItem, Swiper, SwiperItem, Search } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 
-let pageStart1 = 0
-let pageStart2 = 0
 const limit = 10
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Popup, Confirm, CheckIcon, XImg
+    Popup, Confirm, CheckIcon, XImg, Tab, TabItem, Swiper, SwiperItem, Search
   },
   data () {
     return {
       loginUser: {},
       retailerInfo: {},
       query: {},
-      productdata: [],
       controldata1: [
         { key: 'edit', title: '编辑' },
         { key: 'up', title: '上架' },
@@ -231,6 +294,16 @@ export default {
         { key: 'stat', title: '统计' },
         { key: 'createposter', title: '生成海报' }
       ],
+      selectedIndex: 0,
+      showTitle: '',
+      tabtxts: [ '已上架', '已下架' ],
+      disList1: false,
+      disList2: false,
+      tabData1: [],
+      tabData2: [],
+      pageStart1: 0,
+      pageStart2: 0,
+      pageStart4: 0,
       showpopup1: false,
       clickdata: {},
       clickindex: 0,
@@ -239,16 +312,12 @@ export default {
       customerdata: [],
       pushdata: [],
       checkAll: false,
-      disproductdata: false,
       discustomerdata: false,
       showFeePopup: false,
       feeData: {},
-      postFee: '0.00'
-    }
-  },
-  watch: {
-    productdata: function () {
-      return this.productdata
+      postFee: '0.00',
+      searchword: '',
+      autofixed: false
     }
   },
   computed: {
@@ -257,6 +326,36 @@ export default {
     }
   },
   methods: {
+    toMater () {
+      this.$router.push({path: '/MaterialBank'})
+    },
+    clickTab (index) {
+      this.selectedIndex = index
+      this.swiperChange()
+    },
+    swiperChange (index) {
+      if (index !== self.selectedIndex) {
+        self.selectedIndex = index
+      }
+      switch (this.selectedIndex) {
+        case 0:
+          if (this.tabData1.length < limit) {
+            this.pageStart1 = 0
+            this.disList1 = false
+            this.tabData1 = []
+            this.getData1()
+          }
+          break
+        case 1:
+          if (this.tabData2.length < limit) {
+            this.pageStart2 = 0
+            this.disList2 = false
+            this.tabData2 = []
+            this.getData2()
+          }
+          break
+      }
+    },
     toUpdate () {
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/factory/fastImportFactoryProduct`, {
@@ -287,32 +386,47 @@ export default {
       })
     },
     toRecommend () {
-      if (this.loginUser.isretailer === 2 && this.productdata.length >= 5) {
+      if (this.loginUser.isretailer === 2 && this.tabData1.length >= 5) {
         this.openVip()
       } else {
-        this.$router.push('/recommendProducts')
+        this.$router.push({path: '/recommendProducts'})
       }
     },
     toAdd () {
-      if (this.loginUser.isretailer === 2 && this.productdata.length >= 5) {
+      if (this.loginUser.isretailer === 2 && this.tabData1.length >= 5) {
         this.openVip()
       } else {
-        this.$router.push('/addProduct')
+        this.$router.push({path: '/addProduct'})
+      }
+    },
+    toCollect () {
+      if (this.loginUser.isretailer === 2 && this.tabData1.length >= 5) {
+        this.openVip()
+      } else {
+        this.$router.push({path: '/CollectProduct'})
       }
     },
     getPhoto (src) {
       return this.$util.getPhoto(src)
     },
-    handleScroll: function (refname) {
+    handleScroll (refname, index) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
         element: scrollarea,
-        callback: function () {
-          if (self.productdata.length === (pageStart1 + 1) * limit) {
-            pageStart1++
-            self.$vux.loading.show()
-            self.getData1()
+        callback: () => {
+          if (index === 0) {
+            if (self.tabData1.length === (self.pageStart1 + 1) * limit) {
+              self.pageStart1++
+              self.$vux.loading.show()
+              self.getData1()
+            }
+          } else if (index === 1) {
+            if (self.tabData2.length === (self.pageStart2 + 1) * limit) {
+              self.pageStart2++
+              self.$vux.loading.show()
+              self.getData2()
+            }
           }
         }
       })
@@ -322,9 +436,9 @@ export default {
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
         element: scrollarea,
-        callback: function () {
-          if (self.customerdata.length === (pageStart2 + 1) * limit) {
-            pageStart2++
+        callback: () => {
+          if (self.customerdata.length === (self.pageStart4 + 1) * limit) {
+            self.pageStart4++
             self.$vux.loading.show()
             self.getCustomerdata()
           }
@@ -337,54 +451,83 @@ export default {
       this.clickdata = item
       this.clickindex = index
     },
+    upEvent () {
+      const self = this
+      let params = { id: this.clickdata.id, moderate: 1 }
+      self.$http.post(`${ENV.BokaApi}/api/moderate/product`, params).then((res) => {
+        let data = res.data
+        self.$vux.loading.hide()
+        let error = data.flag ? '上架成功' : data.error
+        self.$vux.toast.show({
+          text: error,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: self.$util.delay(error),
+          onHide: function () {
+            if (data.flag === 1) {
+              self.clickdata.moderate = 1
+              self.tabData2.splice(self.clickindex, 1)
+              self.getData2(true)
+              if (self.tabData1.length === (self.pageStart1 + 1) * limit) {
+                self.tabData1.splice(self.tabData1.length - 1, 1)
+                self.tabData1 = [self.clickdata].concat(self.tabData1)
+              } else if (self.tabData1.length) {
+                self.tabData1 = [self.clickdata].concat(self.tabData1)
+              }
+            }
+          }
+        })
+      })
+    },
+    downEvent () {
+      const self = this
+      let params = { id: self.clickdata.id, moderate: 0 }
+      self.$http.post(`${ENV.BokaApi}/api/moderate/product`, params).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        let error = data.flag ? '下架成功' : data.error
+        self.$vux.toast.show({
+          text: error,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: self.$util.delay(error),
+          onHide: function () {
+            if (data.flag === 1) {
+              self.clickdata.moderate = 0
+              if (self.selectedIndex === 0) {
+                self.tabData1.splice(self.clickindex, 1)
+                self.getData1(true)
+                if (self.tabData2.length === (self.pageStart2 + 1) * limit) {
+                  self.tabData2.splice(self.tabData2.length - 1, 1)
+                  self.tabData2 = [self.clickdata].concat(self.tabData2)
+                } else if (self.tabData2.length) {
+                  self.tabData2 = [self.clickdata].concat(self.tabData2)
+                }
+              } else if (self.selectedIndex === 1) {
+                self.tabData2[self.clickindex].moderate = 0
+              }
+            }
+          }
+        })
+      })
+    },
     clickpopup (key) {
       const self = this
+      self.showpopup1 = false
       if (key === 'up') {
         self.$vux.confirm.show({
           title: '确定要上架该商品吗？',
-          onConfirm () {
+          onConfirm: () => {
             self.$vux.loading.show()
-            let params = { id: self.clickdata.id, moderate: 1 }
-            self.$http.post(`${ENV.BokaApi}/api/moderate/product`, params).then(function (res) {
-              let data = res.data
-              self.$vux.loading.hide()
-              self.$vux.toast.show({
-                text: data.error,
-                type: (data.flag !== 1 ? 'warn' : 'success'),
-                time: self.$util.delay(data.error),
-                onHide: function () {
-                  if (data.flag === 1) {
-                    self.clickdata.moderate = 1
-                    self.productdata[self.clickindex].moderate = 1
-                    self.showpopup1 = false
-                  }
-                }
-              })
-            })
+            self.upEvent()
           }
         })
       } else if (key === 'down') {
+        let content = '确定要下架该商品吗？'
         self.$vux.confirm.show({
-          title: '确定要下架该商品吗？',
+          title: '',
+          content: content,
           onConfirm () {
             self.$vux.loading.show()
-            let params = { id: self.clickdata.id, moderate: 0 }
-            self.$http.post(`${ENV.BokaApi}/api/moderate/product`, params).then(function (res) {
-              let data = res.data
-              self.$vux.loading.hide()
-              self.$vux.toast.show({
-                text: data.error,
-                type: (data.flag !== 1 ? 'warn' : 'success'),
-                time: self.$util.delay(data.error),
-                onHide: function () {
-                  if (data.flag === 1) {
-                    self.clickdata.moderate = 0
-                    self.productdata[self.clickindex].moderate = 0
-                    self.showpopup1 = false
-                  }
-                }
-              })
-            })
+            self.downEvent()
           }
         })
       } else if (key === 'top') {
@@ -403,8 +546,14 @@ export default {
                 onHide: function () {
                   if (data.flag === 1) {
                     self.clickdata.priority = 1
-                    self.productdata[self.clickindex].priority = 1
-                    self.showpopup1 = false
+                    switch (self.selectedIndex) {
+                      case 0:
+                        self.tabData1[self.clickindex].priority = 1
+                        break
+                      case 1:
+                        self.tabData2[self.clickindex].priority = 1
+                        break
+                    }
                   }
                 }
               })
@@ -427,8 +576,14 @@ export default {
                 onHide: function () {
                   if (data.flag === 1) {
                     self.clickdata.priority = 0
-                    self.productdata[self.clickindex].priority = 0
-                    self.showpopup1 = false
+                    switch (self.selectedIndex) {
+                      case 0:
+                        self.tabData1[self.clickindex].priority = 0
+                        break
+                      case 1:
+                        self.tabData2[self.clickindex].priority = 0
+                        break
+                    }
                   }
                 }
               })
@@ -436,21 +591,59 @@ export default {
           }
         })
       } else if (key === 'edit') {
-        self.showpopup1 = false
-        self.$router.push({ path: '/addProduct', query: { id: self.clickdata.id } })
+        if (self.clickdata.activityid) {
+          self.$vux.toast.show({
+            text: '该商品正在活动中，不能编辑！',
+            type: 'text',
+            time: 3000,
+            width: '200px'
+          })
+        } else {
+          self.$router.push({ path: '/addProduct', query: { id: self.clickdata.id } })
+        }
       } else if (key === 'push') {
-        self.showpopup1 = false
         self.showpush = true
         if (self.customerdata.length === 0) {
           self.getCustomerdata()
         }
       } else if (key === 'fee') {
-        self.showpopup1 = false
-        self.showFeePopup = true
-        self.feeData = self.clickdata
-        self.postFee = self.feeData.rebate
-      } else {
-        self.showpopup1 = false
+        if (self.clickdata.activityid) {
+          self.$vux.toast.show({
+            text: '该商品正在活动中，不能设置佣金！',
+            type: 'text',
+            time: 3000,
+            width: '200px'
+          })
+        } else {
+          self.showFeePopup = true
+          self.feeData = self.clickdata
+          self.postFee = self.feeData.rebate
+        }
+      } else if (key === 'activity') {
+        if (this.clickdata.activityid) {
+          self.$vux.toast.show({
+            text: '该商品已创建团购/砍价活动，不能重复创建！',
+            type: 'text',
+            time: 3000,
+            width: '200px'
+          })
+        } else {
+          if (this.clickdata.allowcard) {
+            self.$vux.confirm.show({
+              content: '该商品是可使用优惠券的商品，继续选择该商品将会导致两种优惠叠加使用',
+              confirmText: '继续创建',
+              cancelText: '取消',
+              onCancel () {
+                self.showpopup1 = false
+              },
+              onConfirm () {
+                self.$router.push({path: '/retailerActivitylist', query: {id: self.clickdata.id, type: 'add'}})
+              }
+            })
+          } else {
+            self.$router.push({path: '/retailerActivitylist', query: {id: self.clickdata.id, type: 'add'}})
+          }
+        }
       }
     },
     closeFeePopup () {
@@ -472,7 +665,7 @@ export default {
       }
       if (parseFloat(self.postFee) > parseFloat(self.clickdata.rebatein)) {
         self.$vux.toast.show({
-          text: '返点佣金不能高于厂商佣金'
+          text: '返点佣金不能高于厂家佣金'
         })
         return false
       }
@@ -480,6 +673,7 @@ export default {
         id: self.clickdata.id, rebate: self.postFee
       }).then(function (res) {
         let data = res.data
+        const retdata = data.data
         self.$vux.loading.hide()
         self.$vux.toast.show({
           text: data.error,
@@ -488,7 +682,14 @@ export default {
           onHide: function () {
             if (data.flag === 1) {
               self.showFeePopup = false
-              self.productdata[self.clickindex] = data.data
+              switch (self.selectedIndex) {
+                case 0:
+                  self.tabData1[self.clickindex] = retdata
+                  break
+                case 1:
+                  self.tabData2[self.clickindex] = retdata
+                  break
+              }
             }
           }
         })
@@ -497,7 +698,7 @@ export default {
     getCustomerdata () {
       const self = this
       self.$vux.loading.show()
-      let params = { params: { pagestart: pageStart2, limit: limit } }
+      let params = { params: { pagestart: this.pageStart4, limit: limit } }
       self.$http.get(`${ENV.BokaApi}/api/retailer/sellersList`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
@@ -553,16 +754,49 @@ export default {
         }
       }
     },
-    getData1 () {
+    getData1 (isone) {
       const self = this
-      const params = { params: { pagestart: pageStart1, limit: limit } }
-      this.$http.get(`${ENV.BokaApi}/api/list/product?from=retailer`, params)
+      let params = {moderate: 1, pagestart: this.pageStart1, limit: limit, wid: this.loginUser.uid}
+      if (isone) {
+        params.pagestart = this.tabData1.length
+        params.limit = 1
+      }
+      if (this.searchword !== '') {
+        params = {pagestart: this.pageStart1, limit: limit, wid: this.loginUser.uid}
+        params.keyword = this.searchword
+      }
+      this.$http.get(`${ENV.BokaApi}/api/retailer/getRetailerProducts`, {
+        params: params
+      })
       .then(res => {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
-        self.productdata = self.productdata.concat(retdata)
-        self.disproductdata = true
+        // console.log(retdata)
+        // console.log('------------查询前-----------')
+        // console.log(this.tabData1)
+        this.tabData1 = this.tabData1.concat(retdata)
+        // console.log('------------查询后-----------')
+        // console.log(this.tabData1)
+        this.disList1 = true
+      })
+    },
+    getData2 (isone) {
+      const self = this
+      const params = {moderate: 0, pagestart: this.pageStart2, limit: limit, wid: this.loginUser.uid}
+      if (isone) {
+        params.pagestart = this.tabData2.length
+        params.limit = 1
+      }
+      this.$http.get(`${ENV.BokaApi}/api/retailer/getRetailerProducts`, {
+        params: params
+      })
+      .then(res => {
+        self.$vux.loading.hide()
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        this.tabData2 = this.tabData2.concat(retdata)
+        this.disList2 = true
       })
     },
     init () {
@@ -576,11 +810,28 @@ export default {
       this.loginUser = User.get()
       this.query = this.$route.query
       this.retailerInfo = this.loginUser.retailerinfo
-      this.disproductdata = false
-      this.productdata = []
-      this.$vux.loading.show()
-      pageStart1 = 0
-      this.getData1()
+      document.title = this.retailerInfo.title
+      this.swiperChange()
+    },
+    onSubmit () {
+      const self = this
+      self.$vux.loading.show()
+      self.disProductData = false
+      self.tabData1 = []
+      self.pageStart1 = 0
+      self.getData1()
+    },
+    onChange (val) {
+      this.searchword = val
+    },
+    onCancel () {
+      const self = this
+      self.searchword = ''
+      self.$vux.loading.show()
+      self.disProductData = false
+      self.tabData1 = []
+      self.pageStart1 = 0
+      self.getData1()
     }
   },
   created () {
@@ -604,6 +855,12 @@ export default {
   transform: translate(30px,5px) rotate(45deg);
 }
 .rproductlist .scroll_item .down.ico:after{content:"已下架";}
+.rproductlist .scroll_item .ico1{
+  position:absolute;left:0;top:0;width:96px;height:25px;line-height:25px;
+  background-color:#ea3a3a;color:#fff;text-align:center;font-size: 12px;
+  -webkit-transform: translate(-40px,-2px) rotate(-45deg);
+  transform: translate(-26px,9px) rotate(-45deg);
+}
 .rproductlist .btnicon{
   display: inline-block;
   color: #ea3a3a;
@@ -623,13 +880,12 @@ export default {
 .rproductlist .s-container{bottom:50px;}
 .rproductlist .s-bottom{height: 50px;}
 .rproductlist .addproduct{border-radius: 50px;height: 36px;width: 100%;}
-.rproductlist .pro_list_top{
+.pro_list_top{
+  width:100%;padding-bottom:9%;
   background: url(../assets/images/product_list_top.png);
   background-repeat: no-repeat;
   background-position: center;
-  background-size: cover;
   background-size: 100%;
-  height: 20px;
 }
 
 </style>

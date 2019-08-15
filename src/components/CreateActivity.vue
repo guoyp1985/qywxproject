@@ -17,7 +17,7 @@
         <i class="al al-mjiantou-copy font14"></i>
       </div>
     </div>
-    <div class="db-flex pl12 pr12 pt10 pb10 mb5 bg-white" @click="clickadd('bargainbuy')">
+    <div v-if="!fid" class="db-flex pl12 pr12 pt10 pb10 mb5 bg-white" @click="clickadd('bargainbuy')">
       <div class="flex_left" style="width:110px;">
         <img class="disphoto db middle-cell" style="width:100px;height:100px;" src="https://tossharingsales.boka.cn/images/bargainbuy.jpg">
       </div>
@@ -158,6 +158,10 @@ export default {
     retailerInfo: {
       type: Object,
       default: {}
+    },
+    fid: {
+      type: Number,
+      default: 0
     }
   },
   data () {
@@ -188,7 +192,8 @@ export default {
     },
     toCreate (type) {
       const self = this
-      if (self.retailerInfo.buyonline !== 1) {
+      console.log(this.fid)
+      if (self.retailerInfo.buyonline !== 1 && !this.fid) {
         self.$vux.alert.show({
           title: '',
           content: '线下支付模式无法创建活动，请到设置中修改支付方式再来创建！'

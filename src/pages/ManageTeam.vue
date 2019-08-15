@@ -1,38 +1,37 @@
 <template>
-  <scroll-view ref="wraper" @scrollEnd="scrollEnd">
-    <div class="manage-team" slot="content" ref="content">
-      <div class="manage-item">
-        <div class="item-title"><span class="members-count">团队长</span></div>
-        <div class="member">
-          <div class="member-info">
-            <img class="avatar" :src="creater.avatar"/>
-            <span class="username">{{creater.username}}</span>
-          </div>
+  <div class="manage-team containerarea" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1')">
+    <div class="manage-item">
+      <div class="item-title"><span class="members-count">团队长</span></div>
+      <div class="member">
+        <div class="member-info">
+          <img class="avatar" :src="creater.avatar"/>
+          <span class="username">{{creater.username}}</span>
         </div>
       </div>
-      <div class="manage-item">
-        <div class="item-title"><span class="members-count">团队管理员（{{countManager}}人）</span></div>
-        <div class="member" v-for="(manager, index) in managers" :key="manager.uid">
-          <div class="member-info" @click="toggleOpeManger(index)">
-            <img class="avatar" :src="manager.avatar"/>
-            <span class="username">{{manager.username}}</span>
-            <div class="ope-btn">...</div>
-          </div>
-          <div v-if="manager.checked">
-            <div class="flex_center bg-white h40">
-              <div class="t-table align_center color-gray2 font14">
-                <div class="t-cell v_middle b_right_after" v-if="ismanager === 1" @click="delMember(manager.uid, index)">从团队中移除</div>
-                <div class="t-cell v_middle b_right_after" v-if="ismanager === 1" @click="disManger(manager.uid, index)">取消管理员</div>
-                <div class="t-cell v_middle" @click="toChat(manager.uid)">联系TA</div>
-              </div>
+    </div>
+    <div class="manage-item">
+      <div class="item-title"><span class="members-count">团队管理员（{{countManager}}人）</span></div>
+      <div class="member" v-for="(manager, index) in managers" :key="manager.uid">
+        <div class="member-info" @click="toggleOpeManger(index)">
+          <img class="avatar" :src="manager.avatar"/>
+          <span class="username">{{manager.username}}</span>
+          <div class="ope-btn">...</div>
+        </div>
+        <div v-if="manager.checked">
+          <div class="flex_center bg-white h40">
+            <div class="t-table align_center color-gray2 font14">
+              <div class="t-cell v_middle b_right_after" v-if="ismanager === 1" @click="delManager(manager.uid, index)">从团队中移除</div>
+              <div class="t-cell v_middle b_right_after" v-if="ismanager === 1" @click="disManger(manager.uid, index)">取消管理员</div>
+              <div class="t-cell v_middle" @click="toChat(manager.uid)">联系TA</div>
             </div>
           </div>
         </div>
-        <div class="tip-message" v-if="tipMessageShow1"><span>该团目前无管理员</span></div>
       </div>
-      <div class="manage-item">
-        <div class="item-title"><span class="members-count">团队成员（{{countNormal}}人）</span></div>
-        <div class="member" v-for="(member, index) in members" :key="member.uid">
+      <div class="tip-message" v-if="tipMessageShow1"><span>该团目前无管理员</span></div>
+    </div>
+    <div class="manage-item">
+      <div class="item-title"><span class="members-count">团队成员（{{countNormal}}人）</span></div>
+      <div class="member" v-for="(member, index) in members" :key="member.uid">
           <div class="member-info" @click="toggleOpePanel(index)">
             <img class="avatar" :src="member.avatar"/>
             <span class="username">{{member.username}}</span>
@@ -47,16 +46,14 @@
               </div>
             </div>
           </div>
-        </div>
-        <div class="tip-message" v-if="tipMessageShow2"><span>该团目前无团员</span></div>
       </div>
+      <div class="tip-message" v-if="tipMessageShow2"><span>该团目前无团员</span></div>
     </div>
-  </scroll-view>
+  </div>
 </template>
 
 <script type="text/javascript">
 import Env from 'env'
-import ScrollView from '@/components/ScrollView'
 export default {
   data () {
     return {
@@ -74,62 +71,72 @@ export default {
       ismanager: 0
     }
   },
-  components: {
-    ScrollView
-  },
   methods: {
-    scrollEnd (y) {
-      const wraperHeight = this.$refs.wraper.$el.offsetHeight
-      const contentHeight = this.$refs.content.offsetHeight
-      let height = contentHeight - wraperHeight
-      if (Math.abs(y) >= height) {
-        console.log('滑动到底部了！')
-        this.getMembers()
-      }
+    handleScroll: function (refname) {
+      const self = this
+      console.log('handleScroll')
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      self.$util.scrollEvent({
+        element: scrollarea,
+        callback: function () {
+          if (self.members.length === (self.pagestart + 1) * self.limit) {
+            self.pagestart++
+            self.getMembers()
+          }
+        }
+      })
     },
     getMembers () {
-      if (this.members.length === this.pagestart * this.limit) {
-        this.$http({
-          url: `${Env.BokaApi}/api/team/members?id=${this.id}`,
-          method: 'get'
-        }).then(res => {
-          console.log(res)
-          if (res.data.flag) {
-            if (!this.pagestart) {
-              this.countManager = res.data.count.manager
-              this.countNormal = res.data.count.normal
-              this.ismanager = res.data.data.ismanager
-              if (this.countManager) {
-                this.tipMessageShow1 = false
-              }
-              if (this.countNormal) {
-                this.tipMessageShow2 = false
-              }
-              this.creater = res.data.data.create[0]
-              const retdata = res.data.data.normal
-              for (var i = 0; i < retdata.length; i++) {
-                retdata[i].checked = false
-              }
-              const retdatamanager = res.data.data.manager
-              for (var m = 0; m < retdatamanager.length; m++) {
-                retdatamanager[m].checked = false
-              }
-              this.members = retdata
-              this.managers = retdatamanager
-            } else {
-              this.members.push(...res.data.data.normal)
-              this.managers.push(...res.data.data.managers)
-              for (var n = 0; n < this.managers.length; n++) {
-                this.managers[n].checked = false
-              }
-              for (var k = 0; i < this.members.length; k++) {
-                this.members[k].checked = false
+      this.$http({
+        url: `${Env.BokaApi}/api/team/members?id=${this.id}&pagestart=${this.pagestart}&limit=${this.limit}`,
+        method: 'get'
+      }).then(res => {
+        if (res.data.flag) {
+          if (!this.pagestart) {
+            console.log('111111111')
+            this.countManager = res.data.count.manager
+            this.countNormal = res.data.count.normal
+            this.ismanager = res.data.data.ismanager
+            if (this.countManager) {
+              this.tipMessageShow1 = false
+            }
+            if (this.countNormal) {
+              this.tipMessageShow2 = false
+            }
+            this.creater = res.data.data.create[0]
+            const retdata = res.data.data.normal
+            for (var i = 0; i < retdata.length; i++) {
+              retdata[i].checked = false
+            }
+            const retdatamanager = res.data.data.manager
+            for (var m = 0; m < retdatamanager.length; m++) {
+              retdatamanager[m].checked = false
+            }
+            this.members = retdata
+            this.managers = retdatamanager
+          } else {
+            console.log('2222222222')
+            const retdata1 = res.data.data.normal
+            if (retdata1 && retdata1 !== '') {
+              if (retdata1.length !== 0) {
+                for (var k = 0; k < retdata1.length; k++) {
+                  retdata1[k].checked = false
+                }
+                this.members.push(...retdata1)
               }
             }
-            this.pagestart++
+            const retdata2 = res.data.data.managers
+            if (retdata2 && retdata2 !== '') {
+              if (retdata2.length !== 0) {
+                for (var n = 0; n < retdata2.length; n++) {
+                  retdata2[k].checked = false
+                }
+                this.managers.push(...retdata2)
+              }
+            }
           }
-        })
-      }
+        }
+      })
     },
     toggleOpePanel (index) {
       for (var i = 0; i < this.members.length; i++) {
@@ -152,7 +159,7 @@ export default {
     disManger (setuid, index) {
       let _this = this
       _this.$vux.confirm.show({
-        title: `确定设置为管理员吗？`,
+        title: `确定取消管理员吗？`,
         onConfirm: () => {
           _this.$http({
             url: `${Env.BokaApi}/api/team/teamset`,
@@ -163,6 +170,8 @@ export default {
               uploade: setuid
             }
           }).then(res => {
+            this.tipMessageShow1 = true
+            this.tipMessageShow2 = true
             this.pagestart = 0
             this.members = []
             this.getMembers()
@@ -186,6 +195,8 @@ export default {
           }).then(res => {
             this.pagestart = 0
             this.members = []
+            this.tipMessageShow1 = true
+            this.tipMessageShow2 = true
             this.getMembers()
           })
         }
@@ -210,6 +221,36 @@ export default {
               _this.members.splice(index, 1)
               _this.count--
               _this.countNormal--
+              if (_this.countNormal === 0) {
+                _this.tipMessageShow2 = true
+              }
+            }
+          })
+        }
+      })
+    },
+    delManager (deluid, index) {
+      let _this = this
+      _this.$vux.confirm.show({
+        title: `确定删除该团员吗？`,
+        onConfirm () {
+          _this.$http({
+            url: `${Env.BokaApi}/api/team/teamset`,
+            method: 'post',
+            data: {
+              type: 'delMember',
+              id: _this.id,
+              deluid: deluid
+            }
+          }).then(res => {
+            console.log(res)
+            if (res.data.flag) {
+              _this.managers.splice(index, 1)
+              _this.count--
+              _this.countManager--
+              if (_this.countNormal === 0) {
+                _this.tipMessageShow1 = true
+              }
             }
           })
         }

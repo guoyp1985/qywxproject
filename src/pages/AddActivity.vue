@@ -1,44 +1,64 @@
 <template>
   <div class="containerarea s-havebottom bg-white font14 addActivity">
-    <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
+    <subscribe v-if="showSubscribe"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
       <div class="s-container">
         <form class="addForm">
-          <forminputplate class="required">
-            <span slot="title">{{ $t('Activity product') }}</span>
-            <div v-if="showselectproduct" class="qbtn flex_center color-orange" style="border:orange 1px solid;width:100%;line-height:1;padding:4px 0;" @click="selectevent">
-              <span class="mr5 v_middle db-in" style="margin-top:-3px;">+</span><span class="v_middle db-in">{{ $t('Select product') }}</span>
-            </div>
-            <div v-if="showproductitem" class="scroll_item border db">
-              <div class="t-table">
-                <div class="t-cell v_middle" style="width:50px;">
-                  <img class="v_middle imgcover" style="width:40px;height:40px;" :src="selectproduct.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-                </div>
-                <div class="t-cell v_middle">
-                  <div class="clamp1">{{ selectproduct.title }}</div>
-                  <div class="mt5 font12 clamp1"><span class="color-orange">{{ $t('RMB') }}{{ selectproduct.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }}{{ selectproduct.storage }}</span></div>
-                </div>
-                <div class="t-cell align_center v_middle" style="width:60px;">
-                  <div class="qbtn color-red btnchange" style="border:#ff3b30 1px solid;line-height:1;" @click="selectevent">修改</div>
-                </div>
+          <div class="form-item required">
+            <div class="t-table">
+              <div class="t-cell title-cell font14 v_middle w80">
+                <span>{{ $t('Activity product') }}</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span>
+              </div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <template v-if="showProductArea">
+                  <div v-if="showselectproduct && !query.id" class="qbtn flex_center color-orange" style="border:orange 1px solid;width:100%;line-height:1;padding:4px 0;" @click="selectevent">
+                    <span class="mr5 v_middle db-in" style="margin-top:-3px;">+</span><span class="v_middle db-in">{{ $t('Select product') }}</span>
+                  </div>
+                  <div v-if="showproductitem || query.id" class="scroll_item border db">
+                    <div class="t-table">
+                      <div class="t-cell v_middle" style="width:50px;">
+                        <img class="v_middle imgcover" style="width:40px;height:40px;" :src="selectproduct.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+                      </div>
+                      <div class="t-cell v_middle">
+                        <div class="clamp1">{{ selectproduct.title }}</div>
+                        <div class="mt5 font12 clamp1"><span class="color-orange">{{ $t('RMB') }}{{ selectproduct.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }}{{ selectproduct.storage }}</span></div>
+                      </div>
+                      <div class="t-cell align_center v_middle" style="width:60px;" v-if="!query.id">
+                        <div class="qbtn color-red btnchange" style="border:#ff3b30 1px solid;line-height:1;" @click="selectevent">修改</div>
+                      </div>
+                    </div>
+                  </div>
+                </template>
               </div>
             </div>
-          </forminputplate>
-          <forminputplate class="required">
-            <span slot="title">{{ $t('Starttime') }}</span>
-            <group class="x-datetime">
-              <datetime format="YYYY-MM-DD HH:mm" v-model='submitdata.starttime' :show.sync="visibility1" @on-change="datechange1" @on-cancel="datecancel1" @on-confirm="dateconfirm1"></datetime>
-            </group>
-            <div @click="showxdate1" class='font14 color-gray align_left' style="position:absolute;left:0;right:0;top:0;height:22px;background-color:transparent;z-index:10;">{{ selectdatetxt1 }}</div>
-          </forminputplate>
-          <forminputplate class="required">
-            <span slot="title">{{ $t('Endtime') }}</span>
-            <group class="x-datetime">
-              <datetime format="YYYY-MM-DD HH:mm" v-model='submitdata.endtime' :show.sync="visibility2" @on-change="datechange2" @on-cancel="datecancel2" @on-confirm="dateconfirm2"></datetime>
-            </group>
-            <div @click="showxdate2" class='font14 color-gray align_left' style="position:absolute;left:0;right:0;top:0;height:22px;background-color:transparent;z-index:10;">{{ selectdatetxt2 }}</div>
-          </forminputplate>
+          </div>
+          <div class="form-item required">
+            <div class="t-table">
+              <div class="t-cell title-cell font14 v_middle w80">
+                <span>{{ $t('Starttime') }}</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span>
+              </div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <group class="x-datetime">
+                  <datetime format="YYYY-MM-DD HH:mm" v-model='submitdata.starttime' :show.sync="visibility1" @on-change="datechange1" @on-cancel="datecancel1" @on-confirm="dateconfirm1"></datetime>
+                </group>
+                <div @click="showxdate1" class='font14 color-gray align_left' style="position:absolute;left:0;right:0;top:0;height:22px;background-color:transparent;z-index:10;">{{ selectdatetxt1 }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-item required">
+            <div class="t-table">
+              <div class="t-cell title-cell font14 v_middle w80">
+                <span>{{ $t('Endtime') }}</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span>
+              </div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <group class="x-datetime">
+                  <datetime format="YYYY-MM-DD HH:mm" v-model='submitdata.endtime' :show.sync="visibility2" @on-change="datechange2" @on-cancel="datecancel2" @on-confirm="dateconfirm2"></datetime>
+                </group>
+                <div @click="showxdate2" class='font14 color-gray align_left' style="position:absolute;left:0;right:0;top:0;height:22px;background-color:transparent;z-index:10;">{{ selectdatetxt2 }}</div>
+              </div>
+            </div>
+          </div>
           <div class="bg-gray6 font16 b_bottom_after padding10" style="padding:10px;">活动设置</div>
           <template v-if="activityType == 'groupbuy'">
             <form-groupbuy :submitdata="submitdata"></form-groupbuy>
@@ -68,8 +88,8 @@
                 @on-cancel="onCancel"
                 ref="search">
               </search>
-              <div class="scroll_list">
-                <div v-if="!productdata || productdata.length === 0" class="scroll_item padding10 color-gray align_center">
+              <div class="scroll_list" v-if="disProductData">
+                <div v-if="!productdata || !productdata.length" class="scroll_item padding10 color-gray align_center">
                   <template v-if="searchresult">
                     <div class="flex_center" style="height:80px;">暂无搜索结果</div>
                   </template>
@@ -77,18 +97,26 @@
                     <div class="flex_center" style="height:80px;">暂无商品</div>
                   </template>
                 </div>
-                <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in productdata" :key="item.id" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
-                  <div class="t-table">
-                    <div class="t-cell pic v_middle w50">
-                      <img class="v_middle imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" style="width:40px;height:40px;" />
+                <template v-else>
+                  <check-icon class="x-check-icon scroll_item" v-for="(item,index) in productdata" :key="item.id" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
+                    <div class="t-table">
+                      <div class="t-cell pic v_middle w50">
+                        <img class="v_middle imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" style="width:40px;height:40px;" />
+                      </div>
+                      <div class="t-cell v_middle" style="color:inherit;">
+                        <div class="clamp1">{{item.title}}</div>
+                        <div class="font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
+                        <div class="font12 clamp1 color-orange" v-if="item.allowcard">允许使用优惠券</div>
+                        <template v-if="productmodule == 'product'">
+                          <div class="font12 clamp1 color-orange" v-if="item.fid">厂家佣金: ¥{{ item.rebatein }}</div>
+                        </template>
+                        <template v-else-if="item.salesrebate">
+                          <div class="font12 clamp1 color-orange">销售佣金: ¥{{ item.salesrebate }}</div>
+                        </template>
+                      </div>
                     </div>
-                    <div class="t-cell v_middle" style="color:inherit;">
-                      <div class="clamp1">{{item.title}}</div>
-                      <div class="font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
-                      <div class="font12 clamp1 color-orange" v-if="item.allowcard">允许使用优惠券</div>
-                    </div>
-                  </div>
-                </check-icon>
+                  </check-icon>
+                </template>
               </div>
             </div>
             <div class="popup-bottom flex_center">
@@ -98,6 +126,17 @@
           </div>
         </popup>
       </div>
+      <template v-if="showFirst">
+        <firstTip @submitFirstTip="submitFirstTip">
+          <div class="font15 bold txt">
+            <div class="flex_center" v-if="query.type == 'groupbuy'">{{sysParams.advance_groupbuy}}</div>
+            <div class="flex_center" v-if="query.type == 'bargainbuy'">{{sysParams.advance_bargainbuy}}</div>
+          </div>
+        </firstTip>
+      </template>
+      <template v-if="showHb">
+        <firstHb :action="action" @closeFirstHb="closeFirstHb"></firstHb>
+      </template>
     </template>
   </div>
 </template>
@@ -125,23 +164,24 @@ Go to create:
 
 <script>
 import { Group, XInput, TransferDom, Popup, Datetime, Search, CheckIcon, XImg } from 'vux'
-import Forminputplate from '@/components/Forminputplate'
 import FormGroupbuy from '@/components/FormGroupbuy'
 import FormBargainbuy from '@/components/FormBargainbuy'
 import FormDiscount from '@/components/FormDiscount'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
+import FirstTip from '@/components/FirstTip'
+import FirstHb from '@/components/FirstHb'
 import Time from '#/time'
 import ENV from 'env'
-import { User } from '#/storage'
+import { User, SystemParams } from '#/storage'
 
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Group, XInput, Popup, Datetime, Search, CheckIcon, Forminputplate, FormGroupbuy, FormBargainbuy, FormDiscount, XImg, Sos, Subscribe, ApplyTip
+    Group, XInput, Popup, Datetime, Search, CheckIcon, FormGroupbuy, FormBargainbuy, FormDiscount, XImg, Sos, Subscribe, ApplyTip, FirstTip, FirstHb
   },
   data () {
     return {
@@ -169,7 +209,17 @@ export default {
       searchresult: false,
       limit: 20,
       pagestart1: 0,
-      selectProductIndex: -1
+      selectProductIndex: -1,
+      showProductArea: false,
+      showSubscribe: false,
+      showFirst: false,
+      isFirst: false,
+      showHb: false,
+      newData: {},
+      action: '',
+      sysParams: {},
+      disProductData: false,
+      productmodule: 'product'
     }
   },
   watch: {
@@ -199,6 +249,7 @@ export default {
       this.selectproduct = {}
       this.selectpopupdata = null
       this.showpopup = false
+      this.disProductData = false
       this.productdata = []
       this.radiodata = []
       this.visibility1 = false
@@ -212,6 +263,19 @@ export default {
       this.pagestart1 = 0
       this.showContainer = false
       this.showApply = false
+      this.showFirst = false
+      this.isFirst = false
+      this.showHb = false
+      this.newData = {}
+      this.action = ''
+    },
+    submitFirstTip () {
+      this.showFirst = false
+    },
+    closeFirstHb () {
+      this.isFirst = false
+      this.showHb = false
+      this.afterSave(this.newData)
     },
     dateformat (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
@@ -246,10 +310,15 @@ export default {
     confirmpopup () {
       const self = this
       if (!this.selectpopupdata || !this.selectpopupdata.id) {
-        self.$vux.alert.show({
-          title: '',
-          content: '请选择商品'
-        })
+        self.$vux.toast.text('请选择商品', 'middle')
+        return false
+      }
+      if (this.selectpopupdata.storage <= 0) {
+        self.$vux.toast.text('该商品库存为0，不能创建活动', 'middle')
+        return false
+      }
+      if (this.selectpopupdata.fid > 0 && parseFloat(this.selectpopupdata.rebatein) <= 0) {
+        self.$vux.toast.text('佣金为0的厂家商品不能创建活动', 'middle')
         return false
       }
       if (this.selectpopupdata.allowcard) {
@@ -257,18 +326,18 @@ export default {
           content: '该商品是可使用优惠券的商品，继续选择该商品将会导致两种优惠叠加使用',
           confirmText: '继续创建',
           cancelText: '停用优惠券',
-          onCancel () {
+          onCancel: () => {
             self.$vux.loading.show()
             self.$http.post(`${ENV.BokaApi}/api/setModulePara/product`, {
               module: 'product', id: self.selectpopupdata.id, param: 'allowcard', paramvalue: 0
-            }).then(function (res) {
+            }).then((res) => {
               self.$vux.loading.hide()
               self.selectpopupdata.allowcard = 0
               self.productdata[self.selectProductIndex].allowcard = 0
               self.afterSelectProduct()
             })
           },
-          onConfirm () {
+          onConfirm: () => {
             self.afterSelectProduct()
           }
         })
@@ -310,12 +379,21 @@ export default {
     },
     getProductData () {
       const self = this
-      let params = { params: { from: 'activity', pagestart: self.pagestart1, limit: self.limit } }
+      let ajaxurl = `${ENV.BokaApi}/api/retailer/getRetailerProducts`
+      let params = {from: 'activity', pagestart: self.pagestart1, limit: self.limit}
+      if (this.productmodule === 'factoryproduct') {
+        ajaxurl = `${ENV.BokaApi}/api/list/factoryproduct`
+        params.fid = this.query.fid
+      } else {
+        params.wid = this.loginUser.uid
+      }
       let keyword = self.searchword
       if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
-        params.params.keyword = keyword
+        params.keyword = keyword
       }
-      self.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(function (res) {
+      self.$http.get(ajaxurl, {
+        params: params
+      }).then((res) => {
         let data = res.data
         self.$vux.loading.hide()
         if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
@@ -325,6 +403,7 @@ export default {
         }
         let retdata = data.data ? data.data : data
         self.productdata = self.productdata.concat(retdata)
+        this.disProductData = true
       })
     },
     selectevent () {
@@ -361,32 +440,63 @@ export default {
     dateconfirm2 () {
       this.selectdatetxt2 = ''
     },
+    afterSave (data) {
+      const self = this
+      if (self.query.minibackurl) {
+        let minibackurl = decodeURIComponent(self.query.minibackurl)
+        if (minibackurl.indexOf('?') > -1) {
+          minibackurl = `${minibackurl}&id=${data.data}&type=${self.query.type}&productid=${self.submitdata.productid}`
+        } else {
+          minibackurl = `${minibackurl}?id=${data.data}&type=${self.query.type}&productid=${self.submitdata.productid}`
+        }
+        self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+      } else if (self.query.from) {
+        if (self.activityType === 'groupbuy') {
+          self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${self.submitdata.productid}&wid=${self.loginUser.uid}&module=${self.productmodule}`})
+        } else {
+          self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.activity}?id=${data.data}`})
+        }
+      } else {
+        if (self.query.id) {
+          if (self.activityType === 'groupbuy') {
+            self.$router.push({path: '/product', query: {id: self.query.id, wid: self.loginUser.uid, module: self.productmodule}})
+          } else {
+            self.$router.push({path: '/activity', query: {id: data.data}})
+          }
+        } else {
+          if (self.query.fid) {
+            self.$router.push({path: '/factoryActivitylist', query: {add: 1}})
+          } else {
+            self.$router.push({path: '/retailerActivitylist', query: {add: 1}})
+          }
+        }
+        if (self.query.type === 'bargainbuy') {
+          self.$refs.formBargainbuy.minprice = ''
+          self.$refs.formBargainbuy.everymin = ''
+          self.$refs.formBargainbuy.everymax = ''
+        }
+      }
+    },
     saveAjax () {
       const self = this
-      self.$http.post(`${ENV.BokaApi}/api/retailer/addActivity`, self.submitdata).then(function (res) {
+      let postData = self.submitdata
+      if (this.query.fid) {
+        postData.fid = this.query.fid
+      }
+      self.$http.post(`${ENV.BokaApi}/api/retailer/addActivity`, postData).then((res) => {
         let data = res.data
         self.$vux.loading.hide()
         self.$vux.toast.show({
           text: data.error,
           type: (data.flag !== 1 ? 'warn' : 'success'),
           time: self.$util.delay(data.error),
-          onHide: function () {
+          onHide: () => {
             if (data.flag === 1) {
-              if (self.query.minibackurl) {
-                let minibackurl = decodeURIComponent(self.query.minibackurl)
-                if (minibackurl.indexOf('?') > -1) {
-                  minibackurl = `${minibackurl}&id=${data.data}&type=${self.query.type}&productid=${self.submitdata.productid}`
-                } else {
-                  minibackurl = `${minibackurl}?id=${data.data}&type=${self.query.type}&productid=${self.submitdata.productid}`
-                }
-                self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+              if (this.isFirst) {
+                this.showHb = true
+                this.newData = data
               } else {
-                self.$router.push({path: '/retailerActivitylist', query: {from: 'add'}})
-                if (self.query.type === 'bargainbuy') {
-                  self.$refs.formBargainbuy.minprice = ''
-                  self.$refs.formBargainbuy.everymin = ''
-                  self.$refs.formBargainbuy.everymax = ''
-                }
+                this.afterSave(data)
               }
             }
           }
@@ -413,14 +523,12 @@ export default {
         return false
       }
       const priceval = parseFloat(self.selectproduct.price.replace(/,/g, ''))
-      const storage = parseInt(self.selectproduct.storage)
       if (self.activityType === 'bargainbuy') {
         let minprice = parseFloat(self.submitdata.param_minprice)
         let minval = parseFloat(self.submitdata.param_everymin)
         let maxval = parseFloat(self.submitdata.param_everymax)
-        let limitbuy = parseInt(self.submitdata.param_limitbuy)
-        let finishtime = parseInt(self.submitdata.param_finishtime)
-        if (isNaN(self.submitdata.param_minprice) || isNaN(self.submitdata.param_limitbuy) || isNaN(self.submitdata.param_finishtime) || isNaN(self.submitdata.param_everymin) || isNaN(self.submitdata.param_everymax)) {
+        let finishtime = parseFloat(self.submitdata.param_finishtime)
+        if (isNaN(self.submitdata.param_minprice) || isNaN(self.submitdata.param_finishtime) || isNaN(self.submitdata.param_everymin) || isNaN(self.submitdata.param_everymax)) {
           self.$vux.toast.show({
             text: '请输入正确的数字',
             type: 'warn',
@@ -436,9 +544,9 @@ export default {
           })
           return false
         }
-        if (minprice > priceval) {
+        if (minprice >= priceval) {
           self.$vux.toast.show({
-            text: '活动价格不能大于原价',
+            text: '活动价格应低于原价',
             type: 'warn',
             time: 1500
           })
@@ -454,22 +562,6 @@ export default {
             })
             return false
           }
-        }
-        if (isNaN(self.submitdata.param_limitbuy) || limitbuy <= 0 || self.submitdata.param_limitbuy.indexOf('.') > -1) {
-          self.$vux.toast.show({
-            text: '请输入正确的投放总数',
-            type: 'warn',
-            time: 1500
-          })
-          return false
-        }
-        if (limitbuy > storage) {
-          self.$vux.toast.show({
-            text: '投放总数不能大于商品库存',
-            type: 'warn',
-            time: 2000
-          })
-          return false
         }
         if (isNaN(self.submitdata.param_finishtime) || finishtime <= 0) {
           self.$vux.toast.show({
@@ -487,13 +579,20 @@ export default {
           })
           return false
         }
+        if (minval > maxval) {
+          self.$vux.toast.show({
+            text: '最大可砍金额应大于等于最小可砍金额',
+            type: 'warn',
+            time: 2000
+          })
+          return false
+        }
       } else if (self.activityType === 'groupbuy') {
         let groupprice = parseFloat(self.submitdata.param_groupprice)
         let numbers = parseInt(self.submitdata.param_numbers)
-        let limitbuy = parseInt(self.submitdata.param_limitbuy)
         let everybuy = parseInt(self.submitdata.param_everybuy)
-        let finishtime = parseInt(self.submitdata.param_finishtime)
-        if (isNaN(self.submitdata.param_groupprice) || isNaN(self.submitdata.param_numbers) || isNaN(self.submitdata.param_limitbuy) || isNaN(self.submitdata.param_everybuy) || isNaN(self.submitdata.param_finishtime)) {
+        let finishtime = parseFloat(self.submitdata.param_finishtime)
+        if (isNaN(self.submitdata.param_groupprice) || isNaN(self.submitdata.param_numbers) || isNaN(self.submitdata.param_everybuy) || isNaN(self.submitdata.param_finishtime)) {
           self.$vux.toast.show({
             text: '请输入正确的数字',
             type: 'warn',
@@ -509,9 +608,9 @@ export default {
           })
           return false
         }
-        if (groupprice > priceval) {
+        if (groupprice >= priceval) {
           self.$vux.toast.show({
-            text: '团购价不能大于原价',
+            text: '团购价应低于商品现价',
             type: 'warn',
             time: 1500
           })
@@ -519,6 +618,9 @@ export default {
         }
         if (self.selectproduct.fid > 0) {
           let minprice = (priceval - parseFloat(self.selectproduct.rebatein)).toFixed(2)
+          console.log('in fid > 0')
+          console.log(`grouprice=${groupprice}`)
+          console.log(`minprice=${minprice}`)
           if (groupprice < minprice) {
             self.$vux.toast.show({
               text: `团购价不能低于${minprice}`,
@@ -533,30 +635,6 @@ export default {
             text: '成团人数应大于1人',
             type: 'warn',
             time: 1500
-          })
-          return false
-        }
-        if (isNaN(self.submitdata.param_limitbuy) || limitbuy <= 0 || self.submitdata.param_limitbuy.indexOf('.') > -1) {
-          self.$vux.toast.show({
-            text: '请输入正确的投放总数',
-            type: 'warn',
-            time: 1500
-          })
-          return false
-        }
-        if (limitbuy > storage) {
-          self.$vux.toast.show({
-            text: '投放商品数量不能大于商品库存',
-            type: 'warn',
-            time: 2000
-          })
-          return false
-        }
-        if (limitbuy < numbers * everybuy) {
-          self.$vux.toast.show({
-            text: '投放商品数量应大于<br/>成团人数×限购件数',
-            type: 'warn',
-            time: 3000
           })
           return false
         }
@@ -615,76 +693,120 @@ export default {
         }
       })
     },
+    handleinit () {
+      const self = this
+      self.showContainer = true
+      this.query = this.$route.query
+      this.activityType = this.query.type
+      this.action = this.query.type
+      if (this.query.fid) {
+        this.productmodule = 'factoryproduct'
+      }
+      const nowdate = new Date().getTime()
+      const startime = this.dateformat(parseInt(nowdate / 1000))
+      const endtime = this.dateformat(parseInt((nowdate + 7 * 24 * 60 * 60 * 1000) / 1000))
+      this.selectdatetxt1 = ''
+      this.selectdatetxt2 = ''
+      this.showselectproduct = true
+      this.showproductitem = false
+      this.selectproduct = {}
+      this.productdata = []
+      this.radiodata = []
+      const submitdata = {
+        productid: '',
+        starttime: startime,
+        endtime: endtime
+      }
+      if (this.activityType === 'groupbuy') {
+        this.submitdata = {
+          ...submitdata,
+          param_groupprice: '',
+          param_numbers: '',
+          param_finishtime: '',
+          param_everybuy: ''
+        }
+      } else if (this.activityType === 'bargainbuy') {
+        this.submitdata = {
+          ...submitdata,
+          param_minprice: '',
+          param_finishtime: '',
+          param_everymin: '',
+          param_everymax: ''
+        }
+      } else if (this.activityType === 'discount') {
+        this.submitdata = {
+          ...submitdata,
+          param_price: '',
+          param_limitcount: '',
+          param_storage: ''
+        }
+      }
+      this.submitdata.type = this.query.type
+      this.requireddata = this.submitdata
+      if (this.query.id) {
+        this.submitdata.productid = this.query.id
+        this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
+          params: {id: this.query.id, module: this.productmodule}
+        }).then(res => {
+          let data = res.data
+          let retdata = data.data ? data.data : data
+          if (retdata.photo && retdata.photo !== '') {
+            retdata.photo = retdata.photo.split(',')[0]
+          }
+          this.selectproduct = retdata
+        })
+      }
+      this.showProductArea = true
+    },
     refresh () {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.initData()
       this.loginUser = User.get()
-      if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
-        this.initData()
-        let isAdmin = false
-        for (let i = 0; i < self.loginUser.usergroup.length; i++) {
-          if (self.loginUser.usergroup[i] === 1) {
-            isAdmin = true
-            break
+      if (this.loginUser.subscribe !== 1 && !this.loginUser.isretailer) {
+        this.showSubscribe = true
+        return false
+      }
+      if (this.$route.query.fid) {
+        this.handleinit()
+      } else {
+        if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
+          if (((`${this.loginUser.retailerinfo.firstinfo.groupbuy}` === '0' && this.$route.query.type === 'groupbuy') || (`${this.loginUser.retailerinfo.firstinfo.bargainbuy}` === '0' && this.$route.query.type === 'bargainbuy')) && this.$route.query.from) {
+            this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
+              const data = res.data
+              this.loginUser = data
+              User.set(this.loginUser)
+              if (((`${this.loginUser.retailerinfo.firstinfo.groupbuy}` === '0' && this.$route.query.type === 'groupbuy') || (`${this.loginUser.retailerinfo.firstinfo.bargainbuy}` === '0' && this.$route.query.type === 'bargainbuy')) && this.$route.query.from) {
+                this.isFirst = true
+                // if (!(`${this.loginUser.retailerinfo.firstinfo.groupbuy}` === '0' && `${this.loginUser.retailerinfo.firstinfo.bargainbuy}` === '0')) {
+                //   this.showFirst = true
+                // }
+              }
+            })
           }
-        }
-        if (!self.loginUser.isretailer && !isAdmin) {
-          this.$vux.loading.hide()
-          self.initData()
-          self.showApply = true
-        } else {
-          self.showContainer = true
-          this.query = this.$route.query
-          this.activityType = this.query.type
-          const nowdate = new Date().getTime()
-          const startime = this.dateformat(parseInt(nowdate / 1000))
-          const endtime = this.dateformat(parseInt((nowdate + 7 * 24 * 60 * 60 * 1000) / 1000))
-          this.selectdatetxt1 = ''
-          this.selectdatetxt2 = ''
-          this.showselectproduct = true
-          this.showproductitem = false
-          this.selectproduct = null
-          this.productdata = []
-          this.radiodata = []
-          const submitdata = {
-            productid: '',
-            starttime: startime,
-            endtime: endtime
-          }
-          if (this.activityType === 'groupbuy') {
-            this.submitdata = {
-              ...submitdata,
-              param_groupprice: '',
-              param_numbers: '',
-              param_limitbuy: '',
-              param_finishtime: '',
-              param_everybuy: ''
-            }
-          } else if (this.activityType === 'bargainbuy') {
-            this.submitdata = {
-              ...submitdata,
-              param_minprice: '',
-              param_limitbuy: '',
-              param_finishtime: '',
-              param_everymin: '',
-              param_everymax: ''
-            }
-          } else if (this.activityType === 'discount') {
-            this.submitdata = {
-              ...submitdata,
-              param_price: '',
-              param_limitcount: '',
-              param_storage: ''
+          let isAdmin = false
+          for (let i = 0; i < self.loginUser.usergroup.length; i++) {
+            if (self.loginUser.usergroup[i] === 1) {
+              isAdmin = true
+              break
             }
           }
-          this.submitdata.type = this.query.type
-          this.requireddata = this.submitdata
+          if (!self.loginUser.isretailer && !isAdmin) {
+            this.$vux.loading.hide()
+            self.initData()
+            self.showApply = true
+          } else {
+            this.handleinit()
+          }
         }
       }
     }
   },
   activated () {
     this.$util.miniPost()
+    this.$util.getSystemParams(() => {
+      this.sysParams = SystemParams.get()
+    })
     this.refresh()
   }
 }

@@ -96,7 +96,7 @@ import Productitemplate from '@/components/Productitemplate'
 let self = {}
 let pageStart = 0
 const limit = 10
-export default{
+export default {
   components: {
     Groupbuyitemplate, Bargainbuyitemplate, Productitemplate
   },
@@ -140,10 +140,11 @@ export default{
       })
     },
     getProduct () {
-      self.$http.get(`${ENV.BokaApi}/api/list/product`, {
-        params: { uploader: self.wid, pagestart: pageStart, limit: limit }
-      }).then(function (res) {
+      self.$http.get(`${ENV.BokaApi}/api/retailer/getRetailerProducts`, {
+        params: {wid: self.wid, pagestart: pageStart, limit: limit}
+      }).then(res => {
         self.$vux.loading.hide()
+        self.isGetProduct = true
         const data = res.data
         const retdata = data.data ? data.data : data
         self.productData = self.productData.concat(retdata)
@@ -152,6 +153,11 @@ export default{
     refresh () {
       self.query = self.$route.query
       self.wid = self.query.wid
+      if (self.query.wid) {
+        self.wid = self.query.wid
+      } else {
+        self.wid = self.loginUser.uid
+      }
       self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
         params: {uid: self.wid}
       }).then(res => {

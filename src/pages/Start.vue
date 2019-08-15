@@ -4,8 +4,8 @@
       <input type='checkbox' id="sidemenu" @click="onlayer" />
       <div class="aside">
           <div class="sideul">
-              <div class="txtgxh">聚客365</div>
-              <div class="txtgxk active" @click="getTogxk">聚客365</div>
+              <div class="txtgxh">共销客</div>
+              <div class="txtgxk active" @click="getTogxk">共销客</div>
           </div>
       </div>
       <div class='wrap'>
@@ -119,7 +119,7 @@ export default{
         phone2: 'https://tossharingsales.boka.cn/start/skill5phone2.png',
         skillMore: '微商创业难点就是一个人在卖卖卖，不如将现有客户发展成“返点客”，“返点客”自己购买以及带来好友购买均可获得佣金奖励，返点佣金系统自动分发，“返点客”让你不再一个人战斗。'
       }],
-      summaries: ['聚客365六脉神剑，助力新型微商', '轻松解决获客、销售双重难题'],
+      summaries: ['共销客六脉神剑，助力新型微商', '轻松解决获客、销售双重难题'],
       slogens: ['·会销售产品的人，能赚钱；', '·会销售产品又能使用系统的人，能赚更多的钱；', '·会销售产品，又会使用系统，还能够利用工具进行裂变的人，才能轻松挣大钱']
     }
   },
@@ -143,7 +143,7 @@ export default{
   },
   methods: {
     getTogxk () {
-      this.$router.push('/miniStart')
+      this.$router.push({path: '/miniStart'})
     },
     onlayer () {
       if (this.isShow === true) {
@@ -189,8 +189,8 @@ export default{
       let shareParams = {
         module: 'centerseller',
         moduleid: self.loginUser.uid,
-        title: '聚客365',
-        desc: '聚客365六脉神剑，助力新型微商',
+        title: '共销客',
+        desc: '共销客六脉神剑，助力新型微商',
         photo: 'https://tossharingsales.boka.cn/start/intro.jpg',
         link: `${ENV.Host}/#/miniStart?share_uid=${self.loginUser.uid}`
       }

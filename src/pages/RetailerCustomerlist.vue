@@ -6,255 +6,252 @@
       <div class="s-topbanner s-topbanner1 bg-white">
         <div class="row">
           <tab v-model="selectedIndex" class="v-tab">
-            <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
+            <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="clickTab">{{item}}</tab-item>
           </tab>
         </div>
       </div>
       <div class="s-container s-container1">
-        <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
-          <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-            <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', index)">
-              <search
-                class="v-search bg-white"
-                v-model='searchword1'
-                :auto-fixed="autofixed"
-                @on-submit="onSubmit1"
-                @on-change="onChange1"
-                @on-cancel="onCancel1"
-                ref="search">
-              </search>
-              <div v-if="disOrderArea" class="condition font14 pl12 pr12 bg-white border-box color-lightgray">
-                <div class="t-table w_100 orderbyarea">
-                  <div :class="`t-cell v_middle orderbyitem ${dateClass}`" @click="dateOrder">
-                    时间
-                    <span v-if="`${dateClass}` === 'active'" class="ico"></span>
-                    <span v-else class="al al-paixu font14"></span>
-                  </div>
-                  <div v-if="disAreaOrder" :class="`t-cell v_middle orderbyitem ${areaClass}`" @click="areaOrder">
-                    <div class="clamp1">
-                      <span class="v_middle">{{ $t('Region') }}</span>
-                      <span class="v_middle font12" v-if="selectedArea">( {{selectedArea}} )</span>
-                      <span v-if="`${areaClass}` === 'active'" class="ico"></span>
-                      <span v-else class="al al-paixu font14"></span>
-                    </div>
-                  </div>
-                  <div :class="`t-cell v_middle orderbyitem ${sexClass}`" @click="sexOrder">
-                    <div class="clamp1">
-                      <span class="v_middle">性别</span>
-                      <span class="v_middle font12" v-if="selectedSex">( {{selectedSex}} )</span>
-                      <span v-if="`${sexClass}` === 'active'" class="ico"></span>
-                      <span v-else class="al al-paixu font14"></span>
-                    </div>
-                  </div>
+        <div v-show="(selectedIndex == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', 0)">
+          <search
+            class="v-search bg-white"
+            v-model='searchword1'
+            :auto-fixed="autofixed"
+            @on-submit="onSubmit1"
+            @on-change="onChange1"
+            @on-cancel="onCancel1"
+            ref="search">
+          </search>
+          <div v-if="disOrderArea" class="condition font14 pl12 pr12 bg-white border-box color-lightgray">
+            <div class="t-table w_100 orderbyarea">
+              <div :class="`t-cell v_middle orderbyitem ${dateClass}`" @click="dateOrder">
+                时间
+                <span v-if="`${dateClass}` === 'active'" class="ico"></span>
+                <span v-else class="al al-paixu font14"></span>
+              </div>
+              <div v-if="disAreaOrder" :class="`t-cell v_middle orderbyitem ${areaClass}`" @click="areaOrder">
+                <div class="clamp1">
+                  <span class="v_middle">{{ $t('Region') }}</span>
+                  <span class="v_middle font12" v-if="selectedArea">( {{selectedArea}} )</span>
+                  <span v-if="`${areaClass}` === 'active'" class="ico"></span>
+                  <span v-else class="al al-paixu font14"></span>
                 </div>
               </div>
-              <div class="font12 pl12 pr12 b_bottom h35 list-shadow color-lightgray">
-                <div class="t-table w_100">
-                  <div class="t-cell align_left ">{{ $t('Customer text') }}(共{{ tabcount1 }}人)</div>
-                  <div class="t-cell align_right w80">{{ $t('Percent') }}</div>
-                  <div class="t-cell align_right w60">{{ $t('Contact customer') }}</div>
+              <div :class="`t-cell v_middle orderbyitem ${sexClass}`" @click="sexOrder">
+                <div class="clamp1">
+                  <span class="v_middle">性别</span>
+                  <span class="v_middle font12" v-if="selectedSex">( {{selectedSex}} )</span>
+                  <span v-if="`${sexClass}` === 'active'" class="ico"></span>
+                  <span v-else class="al al-paixu font14"></span>
                 </div>
               </div>
-              <div v-if="distabdata1" class="scroll_list">
-                <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 color-gray align_center">
-                  <template v-if="searchresult1">
-                    <div class="flex_center" style="height:80px;">暂无搜索结果</div>
-                  </template>
-                  <template v-else>
-                    <div><i class="al al-qiangkehu font60 pt20"></i></div>
-                    <!-- <div class="mt5">好可怜，一个客户都没有~<br />赶快分享<span @click="toStore" class="color-blue">商品</span>或<span @click="toNews" class="color-blue">文章</span>给微信好友获得客户吧！</div> -->
-                    <div class="mt5">好可怜，一个客户都没有~<br />赶快分享商品或文章给微信好友获得客户吧！</div>
-                  </template>
+            </div>
+          </div>
+          <div class="font12 pl12 pr12 b_bottom h35 list-shadow color-lightgray">
+            <div class="t-table w_100">
+              <div class="t-cell align_left ">{{ $t('Customer text') }}(共{{ tabcount1 }}人)</div>
+              <div class="t-cell align_right w80">{{ $t('Percent') }}</div>
+              <div class="t-cell align_right w60">{{ $t('Contact customer') }}</div>
+            </div>
+          </div>
+          <div v-if="distabdata1" class="scroll_list">
+            <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 color-gray align_center">
+              <template v-if="searchresult1">
+                <div class="flex_center" style="height:80px;">暂无搜索结果</div>
+              </template>
+              <template v-else>
+                <div><i class="al al-qiangkehu font60 pt20"></i></div>
+                <!-- <div class="mt5">好可怜，一个客户都没有~<br />赶快分享<span @click="toStore" class="color-blue">商品</span>或<span @click="toNews" class="color-blue">文章</span>给微信好友获得客户吧！</div> -->
+                <div class="mt5">好可怜，一个客户都没有~<br />赶快分享商品或文章给微信好友获得客户吧！</div>
+              </template>
+            </div>
+            <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item pt10 pl12 pr12 bg-white mb10 list-shadow">
+              <div class="t-table pb10">
+                <div class="t-cell v_middle w70" @click="btnDetail(index)">
+                  <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                 </div>
-                <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item pt10 pl12 pr12 bg-white mb10 list-shadow">
-                  <div class="t-table pb10">
-                    <div class="t-cell v_middle w70" @click="btnDetail(index)">
-                      <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-                    </div>
-                    <div class="t-cell v_middle" @click="btnDetail(index)">
-                      <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
-                      <div class="clamp1 mt5 font14 color-gray">推荐人：{{item.uploadname}}</div>
-                    </div>
-                    <div class="t-cell v_middle w60 h_100 align_right">
-                      <div class="percentarea db-in v_middle" @click="percentclick">
-                        <div class="inner" :style="`width:${item.percent}%`"></div>
-                        <div class="txt font12">{{ item.percent }}%</div>
-                      </div>
-                    </div>
-                    <!-- <router-link :to="{path: '/chat', query: {uid: item.uid, fromModule: 'retailer', from: query.from}}" class="t-cell v_middle w60 align_right">
-                      <div class="qbtnInfo bg-red color-white al al-asmkticon0165 font20"></div>
-                    </router-link> -->
-                    <div class="t-cell v_middle w60 align_right">
-                      <div class="qbtnInfo bg-red color-white al al-asmkticon0165 font20" @click="btnDetail(index)"></div>
-                    </div>
+                <div class="t-cell v_middle" @click="btnDetail(index)">
+                  <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
+                  <div class="clamp1 mt5 font14 color-gray">推荐人：{{item.recommendname}}</div>
+                </div>
+                <div class="t-cell v_middle w60 h_100 align_right">
+                  <div class="percentarea db-in v_middle" @click="percentclick">
+                    <div class="inner" :style="`width:${item.percent}%`"></div>
+                    <div class="txt font12">{{ item.percent }}%</div>
                   </div>
-                  <div v-if="item.checked">
-                    <div class="detailInfo w_100 font14 color-gray b_bottom_after">
-                      <div class="txt-item" @click="btnDetail(index)">性别: {{item.sexname}}</div>
-                      <div class="txt-item db-flex" v-if="item.mobile && item.mobile != ''" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font16"></span></div></div>
-                      <div class="txt-item" @click="btnDetail(index)">地区: {{ item.country }} {{ item.province }} {{ item.city }}</div>
-                      <div class="txt-item flex_left" @click="influence">影响力:
-                        <span class="color-red4">{{item.yingxiangli}}</span>
-                        <span class="al al-wenhao font20 ml5"></span>
-                      </div>
-                      <div class="txt-item">推荐人: {{item.uploadname}}</div>
-                      <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.customertype}}</div>
-                      <div class="txt-item">获客时间: {{item.dateline_str}}</div>
+                </div>
+                <!-- <router-link :to="{path: '/chat', query: {uid: item.uid, fromModule: 'retailer', from: query.from}}" class="t-cell v_middle w60 align_right">
+                  <div class="qbtnInfo bg-red color-white al al-asmkticon0165 font20"></div>
+                </router-link> -->
+                <div class="t-cell v_middle w60 align_right">
+                  <div class="qbtnInfo bg-red color-white al al-asmkticon0165 font20" @click="btnDetail(index)"></div>
+                </div>
+              </div>
+              <div v-if="item.checked">
+                <div class="detailInfo w_100 font14 color-gray b_bottom_after">
+                  <div class="txt-item" @click="btnDetail(index)">性别: {{item.sexname}}</div>
+                  <div class="txt-item db-flex" v-if="item.mobile && item.mobile != ''" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font16"></span></div></div>
+                  <div class="txt-item" @click="btnDetail(index)">地区: {{ item.country }} {{ item.province }} {{ item.city }}</div>
+                  <div class="txt-item flex_left" @click="influence">影响力:
+                    <span class="color-red4">{{item.yingxiangli}}</span>
+                    <span class="al al-wenhao font20 ml5"></span>
+                  </div>
+                  <div class="txt-item">推荐人: {{item.recommendname}}</div>
+                  <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.customertype}}</div>
+                  <div class="txt-item">获客时间: {{item.dateline_str}}</div>
+                </div>
+                <div class="flex_center bg-white h40">
+                  <div class="t-table align_center color-gray2 font14 color-gray2">
+                    <div class="t-cell v_middle b_right_after" v-if="query.from" @click="toCard(item)">专属优惠券</div>
+                    <div class="t-cell v_middle b_right_after" v-else @click="toTimeline(item)" :to="{path: '/timeline', query:{ uid: item.uid }}">客户行为</div>
+                    <div class="t-cell v_middle b_right_after" v-if="item.priority" @click="priorityEvent(item,index)">取消置顶</div>
+                    <div class="t-cell v_middle b_right_after" v-else @click="priorityEvent(item,index)">置顶</div>
+                    <div class="t-cell v_middle b_right_after" @click="toChat(item)">
+                      <div>联系TA</div>
                     </div>
-                    <div class="flex_center bg-white h40">
-                      <div class="t-table align_center color-gray2 font14 color-gray2">
-                        <div class="t-cell v_middle b_right_after" @click="toTimeline(item)" :to="{path: '/timeline', query:{ uid: item.uid }}">客户行为</div>
-                        <div class="t-cell v_middle b_right_after" v-if="item.priority" @click="priorityEvent(item,index)">取消置顶</div>
-                        <div class="t-cell v_middle b_right_after" v-else @click="priorityEvent(item,index)">置顶</div>
-                        <div class="t-cell v_middle b_right_after" @click="toChat(item)">
-                          <div>联系TA</div>
-                        </div>
-                        <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
-                      </div>
-                    </div>
+                    <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
                   </div>
                 </div>
               </div>
             </div>
-            <div v-if="(index == 1)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3', index)">
-              <search
-                class="v-search bg-white"
-                v-model='searchword3'
-                :auto-fixed="autofixed"
-                @on-submit="onSubmit3"
-                @on-change="onChange3"
-                @on-cancel="onCancel3"
-                ref="search">
-              </search>
-              <div class="font12 padding10 b_bottom color-lightgray">
-                <div class="t-table w_100">
-                  <div class="t-cell align_left pl10">{{ $t('Customer text') }}(共{{ tabcount3 }}人)</div>
-                  <div class="t-cell align_center w80">{{ $t('Degree of intention') }}</div>
-                  <div class="t-cell align_center w60">{{ $t('Contact customer') }}</div>
+          </div>
+        </div>
+        <div v-show="(selectedIndex == 1)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3', 1)">
+          <search
+            class="v-search bg-white"
+            v-model='searchword3'
+            :auto-fixed="autofixed"
+            @on-submit="onSubmit3"
+            @on-change="onChange3"
+            @on-cancel="onCancel3"
+            ref="search">
+          </search>
+          <div class="font12 padding10 b_bottom color-lightgray">
+            <div class="t-table w_100">
+              <div class="t-cell align_left pl10">{{ $t('Customer text') }}(共{{ tabcount3 }}人)</div>
+              <div class="t-cell align_center w80">{{ $t('Degree of intention') }}</div>
+              <div class="t-cell align_center w60">{{ $t('Contact customer') }}</div>
+            </div>
+          </div>
+          <div v-if="distabdata3" class="scroll_list ">
+            <div v-if="!tabdata3 || tabdata3.length === 0" class="scroll_item padding10 color-gray align_center">
+              <template v-if="searchresult3">
+                <div class="flex_center" style="height:80px;">暂无搜索结果</div>
+              </template>
+              <template v-else>
+                <div><i class="al al-qiangkehu font60 pt20"></i></div>
+                <div class="mt5">暂无意向客户，可到用户资料里设置客户意向程度</div>
+              </template>
+            </div>
+            <div v-else v-for="(item,index) in tabdata3" :key="item.id" class="scroll_item pt10 pl12 pr12 bg-white mb10 list-shadow">
+              <div class="t-table pb10" @click="btnDetail1(index)">
+                <div class="t-cell v_middle w70">
+                  <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                </div>
+                <div class="t-cell v_middle">
+                  <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
+                  <div class="clamp1 mt5 font14 color-gray">推荐人：{{item.recommendname}}</div>
+                </div>
+                <div class="t-cell v_middle w80 align_center color-orange">{{item.intentiondesc}}</div>
+                <div class="t-cell v_middle w60 align_right">
+                  <div class="qbtnInfo bg-red color-white al al-asmkticon0165 font20"></div>
                 </div>
               </div>
-              <div v-if="distabdata3" class="scroll_list ">
-                <div v-if="!tabdata3 || tabdata3.length === 0" class="scroll_item padding10 color-gray align_center">
-                  <template v-if="searchresult3">
-                    <div class="flex_center" style="height:80px;">暂无搜索结果</div>
-                  </template>
-                  <template v-else>
-                    <div><i class="al al-qiangkehu font60 pt20"></i></div>
-                    <div class="mt5">暂无意向客户，可到用户资料里设置客户意向程度</div>
-                  </template>
-                </div>
-                <div v-else v-for="(item,index) in tabdata3" :key="item.id" class="scroll_item pt10 pl12 pr12 bg-white mb10 list-shadow">
-                  <div class="t-table pb10" @click="btnDetail1(index)">
-                    <div class="t-cell v_middle w70">
-                      <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-                    </div>
-                    <div class="t-cell v_middle">
-                      <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
-                      <div class="clamp1 mt5 font14 color-gray">推荐人：{{item.uploadname}}</div>
-                    </div>
-                    <div class="t-cell v_middle w80 align_center color-orange">{{item.intentiondesc}}</div>
-                    <div class="t-cell v_middle w60 align_right">
-                      <div class="qbtnInfo bg-red color-white al al-asmkticon0165 font20"></div>
-                    </div>
+              <div v-if="item.checked">
+                <div class="detailInfo w_100 font14 color-gray b_bottom_after">
+                  <div class="txt-item" @click="btnDetail(index)">性别: {{item.sexname}}</div>
+                  <div class="txt-item db-flex" v-if="item.mobile && item.mobile != ''" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font16"></span></div></div>
+                  <div class="txt-item" @click="btnDetail(index)">地区: {{ item.country }} {{ item.province }} {{ item.city }}</div>
+                  <div class="txt-item flex_left" @click="influence">影响力:
+                    <span class="color-red4">{{item.yingxiangli}}</span>
+                    <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
                   </div>
-                  <div v-if="item.checked">
-                    <div class="detailInfo w_100 font14 color-gray b_bottom_after">
-                      <div class="txt-item" @click="btnDetail(index)">性别: {{item.sexname}}</div>
-                      <div class="txt-item db-flex" v-if="item.mobile && item.mobile != ''" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font16"></span></div></div>
-                      <div class="txt-item" @click="btnDetail(index)">地区: {{ item.country }} {{ item.province }} {{ item.city }}</div>
-                      <div class="txt-item flex_left" @click="influence">影响力:
-                        <span class="color-red4">{{item.yingxiangli}}</span>
-                        <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
-                      </div>
-                      <div class="txt-item">推荐人: {{item.uploadname}}</div>
-                      <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.customertype}}</div>
-                      <div class="txt-item">获客时间: {{item.dateline_str}}</div>
+                  <div class="txt-item">推荐人: {{item.recommendname}}</div>
+                  <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.customertype}}</div>
+                  <div class="txt-item">获客时间: {{item.dateline_str}}</div>
+                </div>
+                <div class="flex_center bg-white h40">
+                  <div class="t-table align_center color-gray2 font14 color-gray2">
+                    <div class="t-cell v_middle b_right_after" @click="toTimeline(item)" :to="{path: '/timeline', query:{ uid: item.uid }}">客户行为</div>
+                    <div class="t-cell v_middle b_right_after" v-if="item.priority" @click="priorityEvent(item,index)">取消置顶</div>
+                    <div class="t-cell v_middle b_right_after" v-else @click="priorityEvent(item,index)">置顶</div>
+                    <div class="t-cell v_middle b_right_after" @click="toChat(item)">
+                      <div>联系TA</div>
                     </div>
-                    <div class="flex_center bg-white h40">
-                      <div class="t-table align_center color-gray2 font14 color-gray2">
-                        <div class="t-cell v_middle b_right_after" @click="toTimeline(item)" :to="{path: '/timeline', query:{ uid: item.uid }}">客户行为</div>
-                        <div class="t-cell v_middle b_right_after" v-if="item.priority" @click="priorityEvent(item,index)">取消置顶</div>
-                        <div class="t-cell v_middle b_right_after" v-else @click="priorityEvent(item,index)">置顶</div>
-                        <div class="t-cell v_middle b_right_after" @click="toChat(item)">
-                          <div>联系TA</div>
-                        </div>
-                        <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
-                      </div>
-                    </div>
+                    <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
                   </div>
                 </div>
               </div>
             </div>
-            <div v-if="(index == 2)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', index)">
-              <search
-                class="v-search bg-white"
-                v-model='searchword2'
-                :auto-fixed="autofixed"
-                @on-submit="onSubmit2"
-                @on-change="onChange2"
-                @on-cancel="onCancel2"
-                ref="search">
-              </search>
-              <div class="font12 padding10 b_bottom color-lightgray">
-                <div class="t-table w_100">
-                  <div class="t-cell align_left pl10">{{ $t('Customer text') }}(共{{ tabcount2 }}人)</div>
-                  <div class="t-cell align_right ">{{ $t('Contact customer') }}</div>
+          </div>
+        </div>
+        <div v-show="(selectedIndex == 2)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', 2)">
+          <search
+            class="v-search bg-white"
+            v-model='searchword2'
+            :auto-fixed="autofixed"
+            @on-submit="onSubmit2"
+            @on-change="onChange2"
+            @on-cancel="onCancel2"
+            ref="search">
+          </search>
+          <div class="font12 padding10 b_bottom color-lightgray">
+            <div class="t-table w_100">
+              <div class="t-cell align_left pl10">{{ $t('Customer text') }}(共{{ tabcount2 }}人)</div>
+              <div class="t-cell align_right ">{{ $t('Contact customer') }}</div>
+            </div>
+          </div>
+          <div v-if="distabdata2" class="scroll_list">
+            <div v-if="!tabdata2 || tabdata2.length === 0" class="scroll_item padding10 color-gray align_center">
+              <template v-if="searchresult2">
+                <div class="flex_center" style="height:80px;">暂无搜索结果</div>
+              </template>
+              <template v-else>
+                <div><i class="al al-qiangkehu font60 pt20"></i></div>
+                <!-- <div class="mt5">好可怜，一个客户都没有~<br />赶快分享<span @click="toStore" class="color-blue">商品</span>或<span @click="toNews" class="color-blue">文章</span>给微信好友获得客户吧！</div> -->
+                <div class="mt5">好可怜，一个客户都没有~<br />赶快分享商品或文章给微信好友获得客户吧！</div>
+              </template>
+            </div>
+            <div v-else v-for="(item,index) in tabdata2" :key="item.id" class="scroll_item pt10 pl12 pr12 bg-white mb10 list-shadow">
+              <div class="t-table pb10" @click="btnDetail2(index)">
+                <div class="t-cell v_middle w70">
+                  <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                </div>
+                <div class="t-cell v_middle">
+                  <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
+                  <div class="clamp1 mt5 font14 color-gray">推荐人：{{item.recommendname}}</div>
+                </div>
+                <div class="t-cell v_middle w60 align_right">
+                  <div class="qbtnInfo bg-red color-white al al-asmkticon0165 font20"></div>
                 </div>
               </div>
-              <div v-if="distabdata2" class="scroll_list">
-                <div v-if="!tabdata2 || tabdata2.length === 0" class="scroll_item padding10 color-gray align_center">
-                  <template v-if="searchresult2">
-                    <div class="flex_center" style="height:80px;">暂无搜索结果</div>
-                  </template>
-                  <template v-else>
-                    <div><i class="al al-qiangkehu font60 pt20"></i></div>
-                    <!-- <div class="mt5">好可怜，一个客户都没有~<br />赶快分享<span @click="toStore" class="color-blue">商品</span>或<span @click="toNews" class="color-blue">文章</span>给微信好友获得客户吧！</div> -->
-                    <div class="mt5">好可怜，一个客户都没有~<br />赶快分享商品或文章给微信好友获得客户吧！</div>
-                  </template>
-                </div>
-                <div v-else v-for="(item,index) in tabdata2" :key="item.id" class="scroll_item pt10 pl12 pr12 bg-white mb10 list-shadow">
-                  <div class="t-table pb10" @click="btnDetail2(index)">
-                    <div class="t-cell v_middle w70">
-                      <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-                    </div>
-                    <div class="t-cell v_middle">
-                      <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
-                      <div class="clamp1 mt5 font14 color-gray">推荐人：{{item.uploadname}}</div>
-                    </div>
-                    <div class="t-cell v_middle w60 align_right">
-                      <div class="qbtnInfo bg-red color-white al al-asmkticon0165 font20"></div>
-                    </div>
+              <div v-if="item.checked">
+                <div class="detailInfo w_100 font14 color-gray b_bottom_after">
+                  <div class="txt-item" @click="btnDetail(index)">性别: {{item.sexname}}</div>
+                  <div class="txt-item db-flex" v-if="item.mobile && item.mobile != ''" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font16"></span></div></div>
+                  <div class="txt-item" @click="btnDetail(index)">地区: {{ item.country }} {{ item.province }} {{ item.city }}</div>
+                  <div class="txt-item flex_left" @click="influence">影响力:
+                    <span class="color-red4">{{item.yingxiangli}}</span>
+                    <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
                   </div>
-                  <div v-if="item.checked">
-                    <div class="detailInfo w_100 font14 color-gray b_bottom_after">
-                      <div class="txt-item" @click="btnDetail(index)">性别: {{item.sexname}}</div>
-                      <div class="txt-item db-flex" v-if="item.mobile && item.mobile != ''" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font16"></span></div></div>
-                      <div class="txt-item" @click="btnDetail(index)">地区: {{ item.country }} {{ item.province }} {{ item.city }}</div>
-                      <div class="txt-item flex_left" @click="influence">影响力:
-                        <span class="color-red4">{{item.yingxiangli}}</span>
-                        <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
-                      </div>
-                      <div class="txt-item">推荐人: {{item.uploadname}}</div>
-                      <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.customertype}}</div>
-                      <div class="txt-item">获客时间: {{item.dateline_str}}</div>
+                  <div class="txt-item">推荐人: {{item.recommendname}}</div>
+                  <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.customertype}}</div>
+                  <div class="txt-item">获客时间: {{item.dateline_str}}</div>
+                </div>
+                <div class="flex_center bg-white h40">
+                  <div class="t-table align_center color-gray2 font14 color-gray2">
+                    <div class="t-cell v_middle b_right_after" @click="toTimeline(item)" :to="{path: '/timeline', query:{ uid: item.uid }}">客户行为</div>
+                    <div class="t-cell v_middle b_right_after" v-if="item.priority" @click="priorityEvent(item,index)">取消置顶</div>
+                    <div class="t-cell v_middle b_right_after" v-else @click="priorityEvent(item,index)">置顶</div>
+                    <div class="t-cell v_middle b_right_after" @click="toChat(item)">
+                      <div>联系TA</div>
                     </div>
-                    <div class="flex_center bg-white h40">
-                      <div class="t-table align_center color-gray2 font14 color-gray2">
-                        <div class="t-cell v_middle b_right_after" @click="toTimeline(item)" :to="{path: '/timeline', query:{ uid: item.uid }}">客户行为</div>
-                        <div class="t-cell v_middle b_right_after" v-if="item.priority" @click="priorityEvent(item,index)">取消置顶</div>
-                        <div class="t-cell v_middle b_right_after" v-else @click="priorityEvent(item,index)">置顶</div>
-                        <div class="t-cell v_middle b_right_after" @click="toChat(item)">
-                          <div>联系TA</div>
-                        </div>
-                        <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
-                      </div>
-                    </div>
+                    <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
                   </div>
                 </div>
               </div>
             </div>
-          </swiper-item>
-        </swiper>
+          </div>
+        </div>
       </div>
       <div v-transfer-dom class="x-popup">
         <popup v-model="isshowfluence" height="100%">
@@ -461,25 +458,21 @@ export default {
       })
     },
     toMembersView (item) {
-      let params = {uid: item.uid}
-      if (this.query.from) {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {uid: item.uid})
       this.$router.push({path: '/membersView', query: params})
     },
     toChat (item) {
-      let params = {uid: item.uid, fromModule: 'retailer'}
-      if (this.query.from) {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {uid: item.uid, fromModule: 'retailer'})
       this.$router.push({path: '/chat', query: params})
     },
     toTimeline (item) {
-      let params = {uid: item.uid}
-      if (this.query.from) {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {uid: item.uid})
       this.$router.push({path: '/timeline', query: params})
+    },
+    toCard (item) {
+      if (this.query.from) {
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.addCard}?uid=${item.uid}`})
+      }
     },
     btnDetail (index) {
       for (var i = 0; i < this.tabdata1.length; i++) {
@@ -512,14 +505,14 @@ export default {
       if (this.query.from === 'miniprogram') {
         this.$wechat.miniProgram.navigateTo({url: ENV.MiniRouter.store})
       } else {
-        this.$router.push('/store')
+        this.$router.push({path: '/store'})
       }
     },
     toNews () {
       if (this.query.from === 'miniprogram') {
         this.$wechat.miniProgram.navigateTo({url: ENV.MiniRouter.contentsNews})
       } else {
-        this.$router.push('/store')
+        this.$router.push({path: '/store'})
       }
     },
     handleScroll (refname, index) {
@@ -764,6 +757,9 @@ export default {
       self.pagestart3 = 0
       self.getData3()
     },
+    clickTab () {
+      this.swiperChange()
+    },
     swiperChange (index) {
       const self = this
       if (index !== undefined) {
@@ -775,10 +771,17 @@ export default {
             self.pagestart1 = 0
             self.distabdata1 = false
             this.tabdata1 = []
-            self.orderbyParams = {}
-            if (self.dateClass.indexOf('active') > -1) {
-              self.orderbyParams = { orderby: 'dateline' }
+            if (!self.orderbyParams || !self.orderbyParams.orderby) {
+              if (this.query.type === 'customer') {
+                self.orderbyParams = {}
+              } else {
+                self.orderbyParams = {orderby: 'dateline'}
+              }
             }
+            // self.orderbyParams = {}
+            // if (self.dateClass.indexOf('active') > -1) {
+            //   self.orderbyParams = { orderby: 'dateline' }
+            // }
             self.getData1()
           }
           break
@@ -851,6 +854,7 @@ export default {
           this.showApply = true
         } else {
           self.initContainer()
+          document.title = this.loginUser.retailerinfo.title
           this.showContainer = true
           this.swiperChange()
         }

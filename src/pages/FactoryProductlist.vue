@@ -21,7 +21,7 @@
           </template>
           <template v-else>
             <div class="scroll_list ">
-              <router-link :to="{path:'/factoryProduct',query:{id: item.id, fid: query.fid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
+              <div @click="toFactoryProduct(item)" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
                 <div v-if="item.moderate == 0" class="ico down"></div>
             		<div class="t-table bg-white pt10 pb10">
             			<div class="t-cell pl12 v_middle" style="width:110px;">
@@ -38,25 +38,46 @@
                         </div>
                       </div>
                       <div class="align_right t-cell v_bottom w80">
-                        <div class="btnicon bg-red color-white font12" @click="controlpopup1(item,index)">
+                        <div class="btnicon bg-red color-white font12" @click.stop="controlpopup1(item,index)">
                           <i class="al al-asmkticon0165 v_middle"></i>
                         </div>
                       </div>
                     </div>
             			</div>
             		</div>
-              </router-link>
+              </div>
             </div>
           </template>
         </template>
       </div>
       <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
-        <router-link class="addproduct flex_cell flex_center btn-bottom-red" :to="{path: '/addFactoryProduct', query: {fid: query.fid}}">{{ $t('Add product') }}</router-link>
+        <!-- <div class="align_center flex_center flex_cell">
+          <router-link class="flex_center bg-orange color-white" style="width:85%;border-radius:50px;height:35px;" to="/factoryGoodeazy">采集商品</router-link>
+        </div> -->
+        <div class="flex_cell flex_center">
+          <div class="bg-red flex_center color-white" style="width:85%;border-radius:50px;height:35px;" @click="toAdd">{{ $t('Add product') }}</div>
+        </div>
       </div>
       <div v-transfer-dom>
         <popup class="menuwrap" v-model="showpopup1">
           <div class="popup0">
             <div class="list" v-if="clickdata">
+              <div class="item">
+                <div class="inner" @click="clickpopup('copy')">复制商品信息</div>
+              </div>
+              <div class="item">
+                <router-link class="inner" :to="{path: '/agentProduct', query: {pid: clickdata.id}}">经销商价格</router-link>
+              </div>
+              <div class="item">
+                <router-link class="inner" :to="{path: '/materialbank', query: {pid: clickdata.id}}">素材库</router-link>
+              </div>
+              <div class="item" v-if="clickdata.moderate == 1">
+                <div class="inner" @click="clickpopup('recommend')" v-if="clickdata.recommend == 0">商品推荐</div>
+                <div class="inner" @click="clickpopup('recommend')" v-else>取消推荐</div>
+              </div>
+              <div class="item">
+                <router-link class="inner" :to="{path: '/postageArea', query: {type: 'factoryproduct',id: clickdata.id}}">偏远地区运费</router-link>
+              </div>
               <div class="item" v-if="!clickdata.activityid || clickdata.activityid == 0">
                 <router-link class="inner" :to="{path: '/addFactoryProduct', query: {id: clickdata.id, fid: query.fid}}">编辑</router-link>
               </div>
@@ -79,6 +100,15 @@
           </div>
         </popup>
       </div>
+      <template v-if="showTip">
+        <tip-layer
+          @clickButton="recommendSubmit"
+          @clickClose="closeTipModal"
+          title="商品推荐优势"
+          content="推荐商品审核通过后，将自动推荐给平台所有卖家，帮助您卖货，快速提高销售额。"
+          buttonTxt="立即推荐">
+        </tip-layer>
+      </template>
     </template>
   </div>
 </template>
@@ -91,6 +121,7 @@ import { TransferDom, Popup, Confirm, CheckIcon, XImg } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
+import TipLayer from '@/components/TipLayer'
 
 let pageStart1 = 0
 const limit = 10
@@ -100,7 +131,7 @@ export default {
     TransferDom
   },
   components: {
-    Popup, Confirm, CheckIcon, XImg, Sos
+    Popup, Confirm, CheckIcon, XImg, Sos, TipLayer
   },
   data () {
     return {
@@ -113,7 +144,8 @@ export default {
       showpopup1: false,
       clickdata: {},
       clickindex: 0,
-      disproductdata: false
+      disproductdata: false,
+      showTip: false
     }
   },
   watch: {
@@ -122,6 +154,14 @@ export default {
     }
   },
   methods: {
+    toFactoryProduct (item) {
+      let params = this.$util.handleAppParams(this.query, {id: item.id, fid: this.query.fid})
+      this.$router.push({path: '/factoryProduct', query: params})
+    },
+    toAdd () {
+      let params = this.$util.handleAppParams(this.query, {fid: this.query.fid})
+      this.$router.push({path: '/addFactoryProduct', query: params})
+    },
     getPhoto (src) {
       return this.$util.getPhoto(src)
     },
@@ -197,9 +237,84 @@ export default {
             })
           }
         })
+      } else if (key === 'recommend') {
+        self.showpopup1 = false
+        if (this.clickdata.recommend) {
+          self.recommendSubmit()
+        } else {
+          self.showTip = true
+        }
+      } else if (key === 'copy') {
+        self.showpopup1 = false
+        self.$vux.confirm.show({
+          title: '复制成功将会重新生成与当前商品信息完全一致的新商品',
+          confirmText: '复制',
+          onConfirm: () => {
+            self.$vux.loading.show()
+            self.$http.post(`${ENV.BokaApi}/api/copy/factoryproduct`, {
+              id: this.clickdata.id
+            }).then(res => {
+              let data = res.data
+              self.$vux.loading.hide()
+              let error = data.flag ? '成功' : data.error
+              self.$vux.toast.show({
+                text: error,
+                type: data.flag !== 1 ? 'warn' : 'success',
+                time: self.$util.delay(error),
+                onHide: () => {
+                  if (data.flag === 1) {
+                    this.$router.push({path: '/addFactoryProduct', query: {id: data.data.id}})
+                    // if (self.productdata.length === (pageStart1 + 1) * limit) {
+                    //   self.productdata.splice(self.productdata.length - 1, 1)
+                    // }
+                    // self.productdata = [data.data].concat(self.productdata)
+                  }
+                }
+              })
+            })
+          }
+        })
       } else {
         self.showpopup1 = false
       }
+    },
+    closeTipModal () {
+      this.showTip = false
+    },
+    recommendSubmit () {
+      this.showTip = false
+      this.$vux.loading.show()
+      let oldValue = this.clickdata.recommend
+      let params = {param: 'recommend', paramvalue: 1, id: this.clickdata.id, module: 'factoryproduct'}
+      if (this.clickdata.recommend) {
+        params.paramvalue = 0
+      }
+      this.$http.post(`${ENV.BokaApi}/api/setModulePara/factoryproduct`, params).then(res => {
+        let data = res.data
+        this.$vux.loading.hide()
+        let error = data.error
+        if (data.flag === 1) {
+          if (oldValue) {
+            error = '取消成功'
+          } else {
+            error = '推荐成功'
+          }
+        }
+        this.$vux.toast.show({
+          text: error,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: this.$util.delay(error),
+          onHide: () => {
+            if (data.flag === 1) {
+              if (oldValue) {
+                this.productdata[this.clickindex].recommend = 0
+              } else {
+                this.productdata[this.clickindex].recommend = 1
+              }
+            }
+          }
+        })
+      })
     },
     getData1 () {
       const self = this
@@ -228,7 +343,7 @@ export default {
             break
           }
         }
-        if (!(self.loginUser.fid && parseInt(self.loginUser.fid) === parseInt(self.$route.query.fid)) && !isAdmin) {
+        if (!(self.loginUser.fid && parseInt(self.loginUser.fid) === parseInt(self.$route.query.fid)) && !isAdmin && self.$route.query.fromapp !== 'factory') {
           this.$vux.loading.hide()
           self.showSos = true
           self.showContainer = false

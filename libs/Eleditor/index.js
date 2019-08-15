@@ -189,8 +189,8 @@ var _buildEditorModule = function(_toolbars, _uid){
 						</ul>\
 					</div>\
 					<div class="Eleditor-textEditor-formats formats-area">\
-						<div class="Eleditor-textEditor-format"></div>\
-						<div class="Eleditor-textEditor-clean"></div>\
+						<div class="Eleditor-textEditor-format">格式刷</div>\
+						<div class="Eleditor-textEditor-clean">清空</div>\
 					</div>\
 					<div class="Eleditor-textEditor-formats btn-area">\
 						<div class="Eleditor-cancel"><text class="font12 color-gray">取消</text></div>\
@@ -591,7 +591,6 @@ var Eleditor = function(){
 				_appendHistory();
         // _appendHistory({ m: 'insertNode', node: _buildWordHtml });
         var _buildWordHtml = $('<img src="'+returl+'" style="display:block;margin:2px auto;" />');
-
         _$selected && _$selected.after(_buildWordHtml);
         _flushEditorControllerLayerPosi();
 

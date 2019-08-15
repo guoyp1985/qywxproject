@@ -1,127 +1,127 @@
 <template>
-  <scroll-view ref="wraper" @scrollEnd="scrollEnd" @scroll="scroll">
-    <div class="team" :class="{'pd30' : fixedTop}" slot="content" ref="content">
+  <div class="containerarea">
+    <scroll-view class="team-page" ref="wraper" @scrollEnd="scrollEnd" @scroll="scroll">
+      <div class="team" :class="{'pd30' : fixedTop}" slot="content" ref="content">
 
-      <!-- 背景图 -->
-      <div class="team-bg"><img src="../assets/images/team.png" ref="teamBg"></div>
+        <!-- 背景图 -->
+        <div class="team-bg"><img src="https://tossharingsales.boka.cn/minigxk/team_bg.png" ref="teamBg"></div>
 
-      <!-- 团队信息 -->
-      <div class="team-info" ref="teamInfo">
-        <div class="team-info-inner">
-          <div class="inner-item inner-item-left">
-            <img class="avatar" :src="teamInfo.avatar"/>
-            <button class="btn" v-if="teamInfo.manager > 0" @click="manageTeam">管理团队</button>
-            <button class="btn" v-if="!teamInfo.join" @click="joinTeam">加入团队</button>
-            <button class="btn" v-if="teamInfo.join && teamInfo.manager === 0" @click="outTeam">退出团队</button>
-          </div>
-          <div class="inner-item inner-item-right">
-            <div class="leader">
-              {{teamInfo.title}}
-              <div class="al al-fenxiang1 font20" style="position:absolute;right:20px;top:16px;color:#ff6a61;" @click="tabModal"></div>
+        <!-- 团队信息 -->
+        <div class="team-info" ref="teamInfo">
+          <div class="team-info-inner">
+            <div class="inner-item inner-item-left">
+              <img class="avatar" :src="teamInfo.avatar"/>
+              <button class="btn" v-if="teamInfo.manager > 0" @click="manageTeam">管理团队</button>
+              <button class="btn" v-if="!teamInfo.join" @click="joinTeam">加入团队</button>
+              <button class="btn" v-if="teamInfo.join && teamInfo.manager === 0" @click="outTeam">退出团队</button>
             </div>
-            <div class="counts">
-              <span>商品 {{teamInfo.product}}</span>
-              <span>文章 {{teamInfo.news}}</span>
-              <div>
-                <span>活动 {{teamInfo.activity}}</span>
-                <span>素材 {{teamInfo.teamsource}}</span>
-                <span>培训 {{teamInfo.courseclass}}</span>
+            <div class="inner-item inner-item-right">
+              <div class="leader">
+                {{teamInfo.title}}
+                <div class="al al-fenxiang1 font20" style="position:absolute;right:20px;top:16px;color:#ff6a61;" @click="tabModal"></div>
               </div>
+              <div class="counts">
+                <span>商品 {{teamInfo.product}}</span>
+                <span>文章 {{teamInfo.news}}</span>
+                <div>
+                  <span>活动 {{teamInfo.activity}}</span>
+                  <span>素材 {{teamInfo.teamsource}}</span>
+                  <span>培训 {{teamInfo.courseclass}}</span>
+                </div>
+              </div>
+              <div class="title">{{teamInfo.content}}</div>
             </div>
-            <div class="title">{{teamInfo.content}}</div>
-          </div>
-        </div>
-        <div class="modalshow" v-if="showModal" @click="closeShow">
-          <div class="modaInfo">
-            <div class="al al-feiji color-white"></div>
-            <div class="align_center color-white bold">点击" ··· "，" 转发 " 给队员邀请加入</div>
-            <div class="btnknow" @click="closeShow">知道了</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 团队内容 -->
-      <div class="team-content">
-
-        <!-- 导航 -->
-        <div class="team-content-nav" v-if="!fixedTop">
-          <div tag="div" v-for="(nav, index) in navs" :key="nav.id" class="nav-item" :class="{'nav-item-active' : currentTab === index}" @click="changeTab(index)">
-              <span>{{nav}}</span>
           </div>
         </div>
 
-        <div class="content-list">
+        <!-- 团队内容 -->
+        <div class="team-content">
 
-          <!-- 素材 -->
-          <list-tags ref="listTags" :userInfo="userInfo" :teamInfo="teamInfo" :id="id" v-if="currentTab === 0"></list-tags>
+          <!-- 导航 -->
+          <div class="team-content-nav" v-if="!fixedTop">
+            <div tag="div" v-for="(nav, index) in navs" :key="nav.id" class="nav-item" :class="{'nav-item-active' : currentTab === index}" @click="changeTab(index)">
+                <span>{{nav}}</span>
+            </div>
+          </div>
 
-          <!-- 商品、活动、文章、培训 -->
-          <list-others ref="listOthers" :userInfo="userInfo" :teamInfo="teamInfo" :id="id" :module="module" v-else></list-others>
+          <div class="content-list">
+
+            <!-- 素材 -->
+            <list-tags ref="listTags" :userInfo="userInfo" :teamInfo="teamInfo" :id="id" v-if="currentTab === 0"></list-tags>
+
+            <!-- 商品、活动、文章、培训 -->
+            <list-others ref="listOthers" :userInfo="userInfo" :teamInfo="teamInfo" :loginUser="loginUser" :backurl="backurl" :id="id" :module="module" v-else></list-others>
+
+          </div>
 
         </div>
-
       </div>
-    </div>
 
-    <div class="team-content-nav fixed-top" slot="team-content-nav" v-if="fixedTop">
-      <div tag="div" v-for="(nav, index) in navs" :key="nav.id" class="nav-item" :class="{'nav-item-active' : currentTab === index}" @click="changeTab(index)">
-          <span>{{nav}}</span>
+      <div class="team-content-nav fixed-top" slot="team-content-nav" v-if="fixedTop">
+        <div tag="div" v-for="(nav, index) in navs" :key="nav.id" class="nav-item" :class="{'nav-item-active' : currentTab === index}" @click="changeTab(index)">
+            <span>{{nav}}</span>
+        </div>
       </div>
-    </div>
 
-    <div class="add-import" slot="ope-btns">
-      <span class="add al al-add" v-if="teamInfo.manager > 0" @click="onAdd"></span>
-      <div class="import" v-if="teamInfo.manager === 0 && teamInfo.join && currentTab !== 0">
-        <button @click="importAll">导入全部{{moduleTransfer}}</button>
+      <div class="add-import" slot="ope-btns">
+        <span class="add al al-add" v-if="teamInfo.manager > 0" @click="onAdd"></span>
+        <!-- <div class="import" v-if="teamInfo.manager === 0 && teamInfo.join && currentTab !== 0">
+          <button @click="importAll">导入全部{{moduleTransfer}}</button>
+        </div> -->
+        <template v-else>
+          <div class="import" v-if="currentTab !== 0">
+            <button @click="importAll">导入全部{{moduleTransfer}}</button>
+          </div>
+        </template>
       </div>
+      <div class="modalshow" v-if="showModal" @click="closeShow" slot="ope-btns">
+        <div class="modaInfo">
+          <div class="al al-feiji color-white"></div>
+          <div class="align_center color-white bold">点击" ··· "，" 转发 " 给队员邀请加入</div>
+          <div class="btnknow" @click="closeShow">知道了</div>
+        </div>
+      </div>
+    </scroll-view>
+    <template v-if="showTip">
+      <tip-layer
+        @clickButton="joinTeam"
+        @clickClose="closeTipModal"
+        title="邀请加入"
+        content="加入团队即可免费导入商品、活动、文章、培训等信息到自己的账号内，一键导入便可马上使用，赶快加入吧"
+        buttonTxt="立即加入团队">
+      </tip-layer>
+    </template>
+    <div class="bg-theme flex_center color-white fix-home-icon" @click="toHome" v-if="query.from">
+      <i class="al al-home1"></i>
     </div>
-  </scroll-view>
+  </div>
 </template>
 
 <script type="text/javascript">
-import Env from 'env'
+import ENV from 'env'
 import ScrollView from '@/components/ScrollView'
 import ListTags from '@/components/ListTags'
 import ListOthers from '@/components/ListOthers'
+import TipLayer from '@/components/TipLayer'
 import { User } from '#/storage'
 export default {
-  created () {
-    this.userInfo = User.get()
-    this.id = this.$route.query.id
-    this.getTeamInfo(this.id).then(res => {
-      console.log(res)
-      this.teamInfo = res.data.data
-    })
-  },
-  activated () {
-    console.log('in team activated')
-    if (!this.currentTab) {
-      this.$refs.listTags.tags = []
-      this.$refs.listTags.pagestart = 0
-      this.$refs.listTags.getTags()
-      this.getTeamInfo(this.id).then(res => {
-        this.teamInfo = res.data.data
-      })
-    } else {
-      this.$refs.listOthers.data = []
-      this.$refs.listOthers.pagestart = 0
-      this.$refs.listOthers.getData()
-      this.getTeamInfo(this.id).then(res => {
-        console.log(res)
-        this.teamInfo = res.data.data
-      })
-    }
+  components: {
+    ScrollView, ListTags, ListOthers, TipLayer
   },
   data () {
     return {
+      query: {},
       navs: ['素材', '商品', '活动', '文章', '培训'],
       teamInfo: {},
       currentTab: 0,
       id: null,
       userInfo: {},
+      loginUser: {},
       module: '',
       fixedTop: false,
-      showModal: false
+      showModal: false,
+      backurl: '',
+      showTip: false
     }
   },
   computed: {
@@ -146,12 +146,60 @@ export default {
       return ret
     }
   },
-  components: {
-    ScrollView,
-    ListTags,
-    ListOthers
+  created () {
+    this.userInfo = User.get()
+    this.id = this.$route.query.id
+    this.getTeamInfo(this.id).then(res => {
+      console.log(res)
+      this.teamInfo = res.data.data
+      if (!this.teamInfo.join) {
+        this.showTip = true
+      }
+    })
+    let url = '/pages/vip'
+    if (this.$route.query.weburl) {
+      let weburl = encodeURIComponent(this.$route.query.weburl)
+      let webquery = encodeURIComponent(this.$route.query.webquery)
+      url = `${url}?weburl=${weburl}&webquery=${webquery}`
+      this.backurl = url
+    } else {
+      this.backurl = url
+    }
+    console.log('this.backurl')
+    console.log(this.backurl)
+  },
+  activated () {
+    this.fixedTop = false
+    this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
+      const data = res.data
+      this.loginUser = data
+      User.set(this.loginUser)
+      this.query = this.$route.query
+      if (!this.currentTab) {
+        this.$refs.listTags.tags = []
+        this.$refs.listTags.pagestart = 0
+        this.$refs.listTags.getTags()
+        this.getTeamInfo(this.id).then(res => {
+          this.teamInfo = res.data.data
+        })
+      } else {
+        this.$refs.listOthers.data = []
+        this.$refs.listOthers.pagestart = 0
+        this.$refs.listOthers.getData()
+        this.getTeamInfo(this.id).then(res => {
+          console.log(res)
+          this.teamInfo = res.data.data
+        })
+      }
+    })
   },
   methods: {
+    toHome () {
+      this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage})
+    },
+    closeTipModal () {
+      this.showTip = false
+    },
     tabModal () {
       this.showModal = true
     },
@@ -160,7 +208,7 @@ export default {
     },
     getTeamInfo (id) {
       return this.$http({
-        url: `${Env.BokaApi}/api/team/info`,
+        url: `${ENV.BokaApi}/api/team/info`,
         method: 'post',
         data: {
           id: id
@@ -171,9 +219,11 @@ export default {
       console.log(index)
       this.currentTab = index
       this.$refs.wraper.refresh()
+      this.fixedTop = false
       switch (index) {
         case 0:
           this.$nextTick(() => {
+            this.isloading = false
             this.$refs.listTags.tags = []
             this.$refs.listTags.pagestart = 0
             this.$refs.listTags.getTags()
@@ -223,21 +273,38 @@ export default {
       console.log(this.fixedTop)
     },
     onAdd () {
-      if (this.currentTab) {
-        this.$router.push({
-          path: '/addOthers',
-          query: {
-            module: this.module,
-            id: this.id
+      const _this = this
+      if (!this.loginUser.isretailer || this.loginUser.retailerinfo.moderate !== 1) {
+        this.$vux.confirm.show({
+          title: `申请卖家后才可操作,确定申请？`,
+          onConfirm () {
+            let url = '/pages/vip'
+            if (_this.query.weburl) {
+              let weburl = encodeURIComponent(_this.query.weburl)
+              let webquery = encodeURIComponent(_this.query.webquery)
+              url = `${url}?weburl=${weburl}&webquery=${webquery}`
+              _this.backurl = url
+            }
+            _this.$wechat.miniProgram.navigateTo({url: url})
           }
         })
       } else {
-        this.$router.push({
-          path: '/addTags',
-          query: {
-            id: this.id
-          }
-        })
+        if (this.currentTab) {
+          this.$router.push({
+            path: '/addOthers',
+            query: {
+              module: this.module,
+              id: this.id
+            }
+          })
+        } else {
+          this.$router.push({
+            path: '/addTags',
+            query: {
+              id: this.id
+            }
+          })
+        }
       }
     },
     manageTeam () {
@@ -250,8 +317,10 @@ export default {
     },
     joinTeam () {
       let _this = this
+      this.$vux.loading.show()
+      this.showTip = false
       this.$http({
-        url: `${Env.BokaApi}/api/team/teamset`,
+        url: `${ENV.BokaApi}/api/team/teamset`,
         method: 'post',
         data: {
           id: this.id,
@@ -259,6 +328,7 @@ export default {
         }
       }).then(res => {
         console.log(res)
+        this.$vux.loading.hide()
         if (res.data.flag) {
           this.$vux.toast.show({
             text: '加入团队成功!',
@@ -268,6 +338,40 @@ export default {
           })
         }
       })
+      // if (!this.loginUser.isretailer || this.loginUser.retailerinfo.moderate !== 1) {
+      //   this.$vux.confirm.show({
+      //     title: `申请卖家后才可加入团队,确定申请？`,
+      //     onConfirm () {
+      //       let url = '/pages/vip'
+      //       if (_this.query.weburl) {
+      //         let weburl = encodeURIComponent(_this.query.weburl)
+      //         let webquery = encodeURIComponent(_this.query.webquery)
+      //         url = `${url}?weburl=${weburl}&webquery=${webquery}`
+      //         _this.backurl = url
+      //       }
+      //       _this.$wechat.miniProgram.navigateTo({url: url})
+      //     }
+      //   })
+      // } else {
+      //   this.$http({
+      //     url: `${ENV.BokaApi}/api/team/teamset`,
+      //     method: 'post',
+      //     data: {
+      //       id: this.id,
+      //       type: 'addMember'
+      //     }
+      //   }).then(res => {
+      //     console.log(res)
+      //     if (res.data.flag) {
+      //       this.$vux.toast.show({
+      //         text: '加入团队成功!',
+      //         onHide () {
+      //           _this.teamInfo.join = 1
+      //         }
+      //       })
+      //     }
+      //   })
+      // }
     },
     outTeam () {
       let _this = this
@@ -275,7 +379,7 @@ export default {
         title: `确定退出该团队吗？`,
         onConfirm () {
           _this.$http({
-            url: `${Env.BokaApi}/api/team/teamset`,
+            url: `${ENV.BokaApi}/api/team/teamset`,
             method: 'post',
             data: {
               id: _this.id,
@@ -295,35 +399,80 @@ export default {
         }
       })
     },
+    importAllData () {
+      const _this = this
+      _this.$http({
+        url: `${ENV.BokaApi}/api/team/copy`,
+        method: 'post',
+        data: {
+          teamid: _this.id,
+          type: 'all',
+          module: _this.module
+        }
+      }).then(res => {
+        console.log(res)
+        const data = res.data
+        if (data.flag === 1) {
+          _this.$vux.toast.show({
+            text: `导入全部${_this.moduleTransfer}成功!`
+          })
+        } else if (data.flag === 3) {
+          _this.$vux.toast.show({
+            text: `没有内容可导入!`
+          })
+        } else {
+          _this.$vux.toast.show({
+            text: data.error
+          })
+        }
+      })
+    },
     importAll () {
       let _this = this
       console.log(this.teamInfo[this.module])
       if (this.teamInfo[this.module] > 0) {
-        this.$vux.confirm.show({
-          title: `确定要导入全部${this.moduleTransfer}吗？`,
-          onConfirm () {
-            _this.$http({
-              url: `${Env.BokaApi}/api/team/copy`,
-              method: 'post',
-              data: {
-                teamid: _this.id,
-                type: 'all',
-                module: _this.module
+        if (!this.loginUser.isretailer || this.loginUser.retailerinfo.moderate !== 1) {
+          this.$vux.confirm.show({
+            title: `你还没有注册卖家哦，注册成功可免费导入该团队的所有信息哦，一键导入便可快速使用！`,
+            onConfirm () {
+              let url = '/pages/vip'
+              if (_this.query.weburl) {
+                let weburl = encodeURIComponent(_this.query.weburl)
+                let webquery = encodeURIComponent(_this.query.webquery)
+                url = `${url}?weburl=${weburl}&webquery=${webquery}`
+                _this.backurl = url
               }
-            }).then(res => {
-              console.log(res)
-              if (res.data.flag === 1) {
-                _this.$vux.toast.show({
-                  text: `导入全部${_this.moduleTransfer}成功!`
-                })
-              } else if (res.data.flag === 3) {
-                _this.$vux.toast.show({
-                  text: `没有内容可导入!`
-                })
-              }
-            })
-          }
-        })
+              _this.$wechat.miniProgram.navigateTo({url: url})
+            }
+          })
+        } else if (!this.teamInfo.join) {
+          this.$vux.confirm.show({
+            title: `您还没有加入团队，确定加入该团队并导入吗？`,
+            onConfirm () {
+              _this.$http({
+                url: `${ENV.BokaApi}/api/team/teamset`,
+                method: 'post',
+                data: {
+                  id: _this.id,
+                  type: 'addMember'
+                }
+              }).then(res => {
+                console.log(res)
+                if (res.data.flag) {
+                  _this.teamInfo.join = 1
+                  _this.importAllData()
+                }
+              })
+            }
+          })
+        } else {
+          this.$vux.confirm.show({
+            title: `确定要导入全部${this.moduleTransfer}吗？`,
+            onConfirm () {
+              _this.importAllData()
+            }
+          })
+        }
       } else {
         this.$vux.toast.show({
           text: `没有内容可导入!`
@@ -335,16 +484,17 @@ export default {
 </script>
 
 <style lang="less">
+.team-page{
+  .modalshow{position:absolute;left:0;right:0;bottom:0;top:0;z-index:10;background-color:rgba(0,0,0,0.8);box-sizing: border-box;}
+  .modaInfo{
+    display:flex;flex-direction:column;margin-top: 60px;
+    .al{font-size:80px;margin-left:auto;margin-right: 100px;}
+  }
   .team{
     display: flex;
     flex-direction: column;
     min-height: 100vh;
     padding-bottom: 70px;
-    .modalshow{position:absolute;left:0;right:0;bottom:0;top:0;z-index:10;background-color:rgba(0,0,0,0.8);box-sizing: border-box;}
-    .modaInfo{
-      display:flex;flex-direction:column;margin-top: 60px;
-      .al{font-size:80px;margin-left:auto;margin-right: 100px;}
-    }
     .btnknow{padding:3px 25px;border:1px solid #fff;color:#fff;margin: 0 auto;border-radius:20px;font-size:14px;margin-top: 20px;}
     .team-bg{
       flex: 0 0 30%;
@@ -393,6 +543,8 @@ export default {
             font-size: 16px;
           }
           .counts, .title{
+            word-break: break-all;
+            white-space: pre-wrap;
             color: #7a7a7a;
             font-size: 14px;
           }
@@ -489,4 +641,9 @@ export default {
       border-bottom: 2px solid #ff6a61;
     }
   }
+}
+.fix-home-icon{
+  position:absolute;right:20px;bottom:80px;
+  width:50px;height:50px;border-radius:50%;
+}
 </style>

@@ -1,10 +1,12 @@
 <template>
 <div class="containerarea mpsetting font14">
-  <template v-if="showContainer">
+  <!-- <template v-if="!showContainer">
     <template v-if="!haveAppid">
       <div class="w_100 h_100 flex_center font18">授权过期，请重新授权</div>
     </template>
-    <template v-else>
+    <template v-else> -->
+  <template>
+    <template>
       <div class="pagetop">
         <tab v-model="selectedIndex" class="b-tab">
           <tab-item :selected="selectedIndex == 0">开发管理</tab-item>
@@ -16,11 +18,11 @@
           <swiper-item>
             <div class="boxlist">
               <div class="boxitem">
-                <div class="title">厂商</div>
+                <div class="title">厂家</div>
                 <template v-if="disFactory">
                   <div v-if="haveFactory" class="pt20 pb20 flex_left">{{factory.title}}</div>
                   <div v-else class="flex_right pr10">
-                    <div class="btn db" style="width:102px;" @click="showFactoryPopup">选择厂商</div>
+                    <div class="btn db" style="width:102px;" @click="showFactoryPopup">选择厂家</div>
                   </div>
                 </template>
               </div>
@@ -175,11 +177,11 @@
   <div v-transfer-dom class="x-popup">
     <popup v-model="showFactory" height="100%">
       <div class="popup1">
-        <div class="popup-top flex_center">选择厂商</div>
+        <div class="popup-top flex_center">选择厂家</div>
         <div ref="scrollProduct" @scroll="handleScroll('scrollProduct')" class="popup-middle">
           <div class="scroll_list" v-if="disFactoryList">
             <div v-if="!factoryData || !factoryData.length" class="scroll_item padding10 color-gray align_center">
-              <div class="flex_center" style="height:80px;">暂无厂商数据</div>
+              <div class="flex_center" style="height:80px;">暂无厂家数据</div>
             </div>
             <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in factoryData" :key="item.id" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
               <div class="t-table">

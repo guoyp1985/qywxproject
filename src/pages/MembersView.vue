@@ -16,7 +16,7 @@
           <!-- <div class="font13 clamp1" v-if="viewuser.uploadname && viewuser.uploadname != ''">返点客：{{ viewuser.uploadname }}</div> -->
         </div>
         <div v-if="loginUser.subscribe != 1 && query.from != 'miniprogram'" class="qbtn7 font14 bg-white color-red5" @click="toSubscribe">联系</div>
-        <router-link v-else :to="{path: '/chat', query: {uid: query.uid, from: query.from}}" class="qbtn7 font14 bg-white color-red5">联系</router-link>
+        <div v-else @click="toChat" class="qbtn7 font14 bg-white color-red5">联系</div>
       </div>
       <div class="s-container">
         <div class="list-shadow">
@@ -38,14 +38,14 @@
           </div>
           <div class="b_top_after flex_center bg-white h45">
             <div class="t-table align_center color-gray2">
-              <!-- <template v-if="viewuser.subscribe != 0">
+              <template v-if="viewuser.subscribe != 0">
                 <div v-if="!viewuser.isseller || viewuser.isseller == '0'" class="t-cell v_middle b_right_after" @click="inviteevent">
                   <i class="al al-account font16 mr5"></i><span style="vertical-align: 1px;">{{ $t('Rebate customer') }}</span>
                 </div>
-                <router-link v-else :to="{path: '/retailerSaleview', query: {uid: query.uid}}" class="t-cell v_middle b_right_after color-gray2">
+                <div v-else @click="toSaleview" class="t-cell v_middle b_right_after color-gray2">
                   <i class="al al-account font16 mr5"></i><span style="vertical-align: 1px;">{{ $t('Rebate manage') }}</span>
-                </router-link>
-              </template> -->
+                </div>
+              </template>
               <div @click="priorityevent" :class="`t-cell v_middle b_right_after priority ${getprioritycss}`">
                 <i class="al al-zhidinge79b font16 mr5"></i><span class="txt" style="vertical-align: 1px;"></span>
               </div>
@@ -117,12 +117,18 @@
               <div class="t-cell align_right color-gray">{{ viewuser.recommendname }}</div>
             </div>
           </div>
-          <!-- <div class="item padding10 b_bottom_after">
+          <div class="item padding10 b_bottom_after" v-if="viewuser.uploader">
+            <div class="t-table">
+              <div class="t-cell align_left w100">返点客</div>
+              <div class="t-cell align_right color-gray">{{ viewuser.uploadname }}</div>
+            </div>
+          </div>
+          <div class="item padding10 b_bottom_after">
             <div class="t-table">
               <div class="t-cell align_left w100">来源</div>
               <div class="t-cell align_right color-gray">{{ viewuser.comefrom }}</div>
             </div>
-          </div> -->
+          </div>
           <div class="item padding10 b_bottom_after">
             <div class="t-table">
               <div class="t-cell align_left w100">成为客户时间</div>
@@ -176,6 +182,9 @@
           </slot>
         </confirm>
       </div>
+      <template v-if="showHb">
+        <firstHb action="seller" @closeFirstHb="closeFirstHb"></firstHb>
+      </template>
     </template>
   </div>
 </template>
@@ -193,13 +202,14 @@ import ENV from 'env'
 import { User } from '#/storage'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
+import FirstHb from '@/components/FirstHb'
 
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Popup, Previewer, Sos, PopupHeader, Radio, Group, XImg, Subscribe, ApplyTip, XInput, Confirm
+    Popup, Previewer, Sos, PopupHeader, Radio, Group, XImg, Subscribe, ApplyTip, XInput, Confirm, FirstHb
   },
   filters: {
     dateformat: function (value) {
@@ -239,7 +249,9 @@ export default {
       showConfirm: false,
       confirmTitle: '',
       confirmData: '',
-      charName: ''
+      charName: '',
+      isFirst: false,
+      showHb: false
     }
   },
   watch: {
@@ -268,25 +280,32 @@ export default {
     }
   },
   methods: {
+    initData () {
+      this.isFirst = false
+      this.showHb = false
+    },
+    closeFirstHb () {
+      this.isFirst = false
+      this.showHb = false
+    },
+    toChat () {
+      let params = this.$util.handleAppParams(this.query, {uid: this.query.uid})
+      this.$router.push({path: '/chat', query: params})
+    },
+    toSaleview () {
+      let params = this.$util.handleAppParams(this.query, {uid: this.query.uid})
+      this.$router.push({path: '/retailerSaleview', query: params})
+    },
     toViewList () {
-      let params = {uid: this.viewuser.uid}
-      if (this.query.from === 'miniprogram') {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {uid: this.viewuser.uid})
       this.$router.push({path: '/viewList', query: params})
     },
     toShareList () {
-      let params = {uid: this.viewuser.uid}
-      if (this.query.from === 'miniprogram') {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {uid: this.viewuser.uid})
       this.$router.push({path: '/shareList', query: params})
     },
     toSalesList () {
-      let params = {uid: this.viewuser.uid}
-      if (this.query.from === 'miniprogram') {
-        params.from = this.query.from
-      }
+      let params = this.$util.handleAppParams(this.query, {uid: this.viewuser.uid})
       this.$router.push({path: '/salesList', query: params})
     },
     priorityevent () {
@@ -313,7 +332,7 @@ export default {
       let content = `<div class="font14">邀请成功后，返点客在本店购买以及带来客户购买，均可获得佣金奖励</div>`
       self.$vux.confirm.show({
         content: content,
-        onConfirm () {
+        onConfirm: () => {
           self.$vux.loading.show()
           self.$http.post(`${ENV.BokaApi}/api/retailer/inviteSeller`,
             { inviteuid: self.query.uid }
@@ -326,6 +345,9 @@ export default {
               onHide: () => {
                 if (data.flag === 1) {
                   self.viewuser.isseller = true
+                  if (this.isFirst) {
+                    this.showHb = true
+                  }
                 }
               }
             })
@@ -408,17 +430,20 @@ export default {
       ).then(res => {
         const data = res.data
         self.$vux.loading.hide()
+        let error = data.error
+        if (data.flag) {
+          error = '更新成功'
+        }
+        self.$vux.toast.show({
+          text: error,
+          type: data.flag ? 'success' : 'warn',
+          time: self.$util.delay(error)
+        })
         if (data.flag === 1) {
           let retdata = data.data
           self.viewuser.country = retdata.country
           self.viewuser.province = retdata.province
           self.viewuser.city = retdata.city
-        } else {
-          self.$vux.toast.show({
-            text: data.error,
-            type: 'warn',
-            time: self.$util.delay(data.error)
-          })
         }
       })
     },
@@ -485,15 +510,9 @@ export default {
     refresh () {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.initData()
       this.loginUser = User.get()
       if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
-        // if (self.loginUser.isretailer === 2) {
-        //   this.$vux.loading.hide()
-        //   self.initContainer()
-        //   self.$vux.loading.hide()
-        //   let backUrl = encodeURIComponent(location.href)
-        //   location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
-        // }
         if (!this.loginUser.isretailer) {
           self.initContainer()
           this.showApply = true
@@ -501,6 +520,15 @@ export default {
           self.initContainer()
           this.query = this.$route.query
           this.getData()
+          if (`${this.loginUser.retailerinfo.firstinfo.seller}` === '0' && this.query.from && (!this.viewuser.isseller || this.viewuser.isseller === 0)) {
+            this.$http.get(`${ENV.BokaApi}/api/user/show`).then((res) => {
+              this.loginUser = res.data
+              User.set(this.loginUser)
+              if (`${this.loginUser.retailerinfo.firstinfo.seller}` === '0' && this.query.from && (!this.viewuser.isseller || this.viewuser.isseller === 0)) {
+                this.isFirst = true
+              }
+            })
+          }
         }
       }
     },

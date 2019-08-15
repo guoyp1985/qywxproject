@@ -51,7 +51,7 @@
             </div>
           </div>
         </div>
-        <group class="option-area" label-width="6em">
+        <!-- <group class="option-area" label-width="6em">
           <x-textarea
             ref="descTextarea"
             class="font14"
@@ -74,12 +74,22 @@
             @on-focus="textareaFocus('summaryTextarea')"
             autosize>
           </x-textarea>
-        </group>
+        </group> -->
       </div>
       <div class="mt20 flex_center pl12 pr12">
-        <div class="flex_cell flex_center btn-bottom-red" @click="save">{{ $t('Save') }}</div>
+        <div class="flex_cell flex_center btn-bottom-red" @click="save">下一步，编辑内容</div>
       </div>
       <clip-popup :show="popupShow" :img="cutImg" :after-submit="popupSubmit" @on-cancel="popupCancel"></clip-popup>
+      <template v-if="showFirst">
+        <firstTip @submitFirstTip="submitFirstTip">
+          <div class="font15 bold txt">
+            <div class="flex_center">{{sysParams.advance_addnews}}</div>
+          </div>
+        </firstTip>
+      </template>
+      <template v-if="showHb">
+        <firstHb action="addnews" @closeFirstHb="closeFirstHb"></firstHb>
+      </template>
     </template>
   </div>
 </template>
@@ -87,14 +97,16 @@
 import { Group, XInput, XTextarea, Cell, XButton } from 'vux'
 import ClipPopup from '@/components/ClipPopup'
 import ENV from 'env'
-import { User } from '#/storage'
+import { User, SystemParams } from '#/storage'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
+import FirstTip from '@/components/FirstTip'
+import FirstHb from '@/components/FirstHb'
 
 export default {
   components: {
-    Group, XInput, XTextarea, Cell, XButton, ClipPopup, Sos, Subscribe, ApplyTip
+    Group, XInput, XTextarea, Cell, XButton, ClipPopup, Sos, Subscribe, ApplyTip, FirstTip, FirstHb
   },
   data () {
     return {
@@ -110,12 +122,23 @@ export default {
       havenum: 0,
       submitdata: { title: '', photo: '', seodescription: '', summary: '' },
       requireddata: { title: '', 'photo': '' },
-      submitIng: false
+      submitIng: false,
+      isFirst: false,
+      showFirst: false,
+      showHb: false,
+      newData: {},
+      sysParams: {}
     }
   },
   computed: {
   },
   methods: {
+    initFirstData () {
+      this.isFirst = false
+      this.showFirst = false
+      this.showHb = false
+      this.newData = {}
+    },
     initData () {
       this.cutImg = ''
       this.popupShow = false
@@ -124,6 +147,14 @@ export default {
       this.havenum = 0
       this.submitdata = { title: '', photo: '', seodescription: '', summary: '' }
       this.requireddata = { title: '', 'photo': '' }
+    },
+    submitFirstTip () {
+      this.showFirst = false
+    },
+    closeFirstHb () {
+      this.isFirst = false
+      this.showHb = false
+      this.afterSave()
     },
     textareaChange (refname) {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
@@ -153,7 +184,7 @@ export default {
       } else {
         self.$wechat.ready(function () {
           self.$util.wxUploadImage({
-            maxnum: 9 - self.photoarr.length,
+            maxnum: self.maxnum,
             handleCallback: function (data) {
               self.photoCallback(data)
             }
@@ -216,36 +247,46 @@ export default {
         } else {
           delete self.submitdata['id']
         }
-        self.$http.post(`${ENV.BokaApi}/api/add/news`, self.submitdata).then(function (res) {
+        self.$http.post(`${ENV.BokaApi}/api/add/news`, self.submitdata).then((res) => {
           let data = res.data
           self.$vux.loading.hide()
           self.$vux.toast.show({
             text: data.error,
             type: (data.flag !== 1 ? 'warn' : 'success'),
             time: self.$util.delay(data.error),
-            onHide: function () {
+            onHide: () => {
               self.submitIng = false
               if (data.flag === 1) {
-                if (self.query.minibackurl) {
-                  let minibackurl = decodeURIComponent(self.query.minibackurl)
-                  if (self.query.backtype === 'relaunch') {
-                    self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
-                  } else if (self.query.backtype === 'redirect') {
-                    self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
-                  } else {
-                    self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
-                  }
+                this.newData = data
+                if (this.isFirst) {
+                  this.showHb = true
                 } else {
-                  let params = { id: data.data }
-                  if (self.query.id) {
-                    params.newadd = 1
-                  }
-                  self.$router.push({ path: '/news', query: params })
+                  this.afterSave()
                 }
               }
             }
           })
         })
+      }
+    },
+    afterSave () {
+      const self = this
+      const data = this.newData
+      if (self.query.minibackurl) {
+        let minibackurl = decodeURIComponent(self.query.minibackurl)
+        if (self.query.backtype === 'relaunch') {
+          self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+        } else if (self.query.backtype === 'redirect') {
+          self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+        } else {
+          self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+        }
+      } else {
+        let params = this.$util.handleAppParams(this.query, {wid: this.loginUser.uid, id: data.data, control: 'edit'})
+        if (!self.query.id) {
+          params.newadd = 1
+        }
+        self.$router.push({ path: '/news', query: params })
       }
     },
     save () {
@@ -321,6 +362,7 @@ export default {
       self.$vux.loading.show()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
+      this.initFirstData()
       if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
         self.initContainer()
         let isAdmin = false
@@ -343,13 +385,28 @@ export default {
           }
           this.query = this.$route.query
           this.getData()
+          document.title = this.loginUser.retailerinfo.title
+          if (`${this.loginUser.retailerinfo.firstinfo.addnews}` === '0' && this.query.from) {
+            this.$http.get(`${ENV.BokaApi}/api/user/show`).then((res) => {
+              this.loginUser = res.data
+              User.set(this.loginUser)
+              if (`${this.loginUser.retailerinfo.firstinfo.addnews}` === '0' && this.query.from) {
+                this.isFirst = true
+                // if (`${this.loginUser.retailerinfo.firstinfo.grabnews}` !== '0') {
+                //   this.showFirst = true
+                // }
+              }
+            })
+          }
         }
-        // }
       }
     }
   },
   activated () {
     this.$util.miniPost()
+    this.$util.getSystemParams(() => {
+      this.sysParams = SystemParams.get()
+    })
     this.refresh()
   }
 }

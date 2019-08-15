@@ -9,17 +9,20 @@
       </div>
     </div>
     <div class="mt12">
-      <div class="btn bg-green color-white" @click="deleteEvent">删除</div>
+      <div class="btn bg-green color-white" @click="deleteEvent">删除博卡授权中心用户</div>
     </div>
     <div class="mt12">
-      <div class="btn bg-green color-white" @click="clearStorage">清除本地缓存</div>
+      <div class="btn bg-orange color-white" @click="deleteFactory">删除厂家小程序用户</div>
+    </div>
+    <div class="mt12">
+      <div class="btn bg-red color-white" @click="clearStorage">清除本地缓存</div>
     </div>
   </div>
 </template>
 
 <script>
 import ENV from 'env'
-import { User, Version, Token, Access } from '#/storage'
+import { User, Version, Token, Access, FirstInfo } from '#/storage'
 
 export default {
   data () {
@@ -33,15 +36,43 @@ export default {
       User.remove()
       Access.remove()
       Version.remove()
+      FirstInfo.remove()
     },
     deleteEvent () {
       const self = this
       self.$vux.confirm.show({
-        content: '确定要删除吗？',
+        content: '确定要删除博卡授权中心用户吗？',
         onConfirm () {
           self.$vux.loading.show()
           self.$http.get(`${ENV.BokaApi}/api/user/del`, {
             params: { uids: self.uids }
+          }).then(function (res) {
+            let data = res.data
+            self.$vux.loading.hide()
+            let error = data.flag === 1 ? '成功' : data.error
+            self.$vux.toast.show({
+              text: error,
+              type: (data.flag !== 1 ? 'warn' : 'success'),
+              time: self.$util.delay(error),
+              onHide: function () {
+                if (data.flag === 1) {
+                  self.uids = ''
+                  self.clearObject()
+                }
+              }
+            })
+          })
+        }
+      })
+    },
+    deleteFactory () {
+      const self = this
+      self.$vux.confirm.show({
+        content: '确定要删除厂家小程序用户吗？',
+        onConfirm () {
+          self.$vux.loading.show()
+          self.$http.get(`${ENV.FactoryApi}/delUser`, {
+            params: {uids: self.uids}
           }).then(function (res) {
             let data = res.data
             self.$vux.loading.hide()

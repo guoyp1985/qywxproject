@@ -1,25 +1,28 @@
 <template>
-  <div :class="`containerarea bg-white font14 product notop ${topcss}`">
+  <div :class="`containerarea bg-white font14 f-product-page notop ${topcss}`">
     <template v-if="showSos">
       <sos :title="sosTitle"></sos>
     </template>
     <template v-if="showContainer">
       <div v-if="playVideo" class="videoarea">
-        <video
-          ref="productVideo"
-          :src="productdata.video"
-          controls
-          autoplay="true"
-          webkit-playsinline=""
-          playsinline="true"
-          x-webkit-airplay="true"
-          raw-controls=""
-          x5-video-player-type="h5"
-          x5-video-player-fullscreen="true"
-          x5-video-orientation="portrait">
-        </video>
-        <div class="close-icon flex_center" @click="stopPlay('productVideo')">
-          <i class="al al-guanbi"></i>
+        <div class="video-inner">
+          <video
+            ref="productVideo"
+            :src="productdata.video"
+            controls
+            autoplay="true"
+            webkit-playsinline=""
+            playsinline="true"
+            x-webkit-airplay="true"
+            raw-controls=""
+            x5-video-player-type="h5"
+            x5-video-player-fullscreen="true"
+            x5-video-orientation="portrait">
+          </video>
+        </div>
+        <div class="btn-area flex_center">
+          <div class="btn-item flex_center" @click="saveVideo('productVideo')" v-if="!query.from">保存</div>
+          <div class="btn-item flex_center" @click="stopPlay('productVideo')">关闭</div>
         </div>
       </div>
       <div id="scroll-container" class="pagemiddle scroll-container">
@@ -45,25 +48,46 @@
       		<div class="clamp2">
             <span class="v_middle db-in bold"><span v-if="productdata.moderate != 1" class="color-gray bold">【已下架】</span>{{ productdata.title }}</span>
           </div>
+          <div v-if="productdata.sellingpoint && productdata.sellingpoint != ''" class="color-theme">{{productdata.sellingpoint}}</div>
           <div class="color-red">
             <span class="font18 mr3 v_middle">{{ $t('RMB') }}</span>
             <span class="font18 mr5 v_middle">{{ productdata.price }}</span>
-            <span class="color-gray font14 line-through" v-if="productdata.oriprice">
+            <span class="color-gray font14 line-through" v-if="productdata.oriprice && productdata.oriprice > 0">
               <span class="mr3 v_middle">{{ $t('RMB') }}</span>
               <span class="v_middle">{{ productdata.oriprice }}</span>
             </span>
           </div>
         </div>
+        <div class="flex_left padding10 color-gray b_bottom_after" v-if="(productdata.tb_price != '' && productdata.tb_price > 0) || (productdata.jd_price != '' && productdata.jd_price > 0)">
+          <span v-if="productdata.tb_price != '' && productdata.tb_price > 0">猫价: ￥{{productdata.tb_price}}</span><span :class="{'ml10': (productdata.tb_price != '' && productdata.jd_price > 0)}" v-if="productdata.jd_price != '' && productdata.jd_price > 0">狗价: ￥{{productdata.jd_price}}</span>
+        </div>
         <div class="bg-page" style="height:10px;"></div>
         <div class="b_top_after"></div>
+        <template v-if="productdata.options && productdata.options.length">
+          <div class="pl10 pr10 pb10 b_bottom_after flex_left" @click="clickOptionsArea">
+            <div class="w60 flex_left bold">规格</div>
+            <div class="flex_cell card-options">
+              <template v-for="(item,index) in productdata.options">
+                <div v-if="index < 5">
+                  <img v-if="item.photo && item.photo !== ''" :src="item.photo" />
+                  <img v-else :src="photoarr[0]" />
+                </div>
+              </template>
+              <div class="flex_center txt-item">
+                <div class="btn flex_center">共{{productdata.options.length}}种规格可选</div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-page" style="height:10px;"></div>
+        </template>
         <div class="padding10 b_bottom_after levelarea">
           <div class="levelitem">
-            <div>上级分润: {{ $t('RMB') }}{{ productdata.superiorrebate }}</div>
+            <div><span class="bold">推荐人佣金:</span><span class="bold">{{ $t('RMB') }}{{ productdata.superiorrebate }}</span><i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp"></i></div>
           </div>
         </div>
         <div class="padding10 b_bottom_after levelarea">
           <div class="levelitem">
-            <div>销售分润: {{ $t('RMB') }}{{ productdata.salesrebate }}</div>
+            <div><span class="bold">销售佣金:</span><span class="bold"> {{ $t('RMB') }}{{ productdata.salesrebate }}</span><i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp1"></i></div>
           </div>
         </div>
         <!-- <template v-if="feeData.length != 0 && (productdata.identity == 'factory' || productdata.joinstatus == 0)">
@@ -86,13 +110,13 @@
         </template>
         <div class="bg-page" style="height:10px;"></div>
         <div class="b_top_after"></div>
-        <div class="padding10 b_bottom_after">
+        <div class="padding10 b_bottom_after" @click="tofactoryDetail">
           <div class="t-table">
     				<div class="t-cell v_middle w70" v-if="factoryinfo.photo && factoryinfo.photo != ''">
               <img class="v_middle imgcover" style="width:60px;height:60px;" :src="factoryinfo.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
             </div>
     				<div class="t-cell v_middle">
-    					<div class="distitle clamp2">{{ factoryinfo.title }}</div>
+    					<div class="distitle clamp2">{{ factoryinfo.company }}旗舰店</div>
     					<div class="distitle clamp2 color-gray font12 mt5">{{ factoryinfo.summary }}</div>
     				</div>
           </div>
@@ -102,11 +126,22 @@
           <div v-html="productdata.content"></div>
           <img v-for="(item,index) in previewerPhotoarr" :key="index" :src="item.src" @click="showBigimg(index)" />
         </div>
-        <div class="productarea scrollendarea scrollend" style="background-color:#f6f6f6;"></div>
+        <div class="productarea scrollendarea scrollend">
+          <div class="inner">
+            <div class="txt1">{{WeixinName}}</div>
+            <div class="txt2">-- 社交电商2.0 --</div>
+          </div>
+        </div>
       </div>
-      <div v-if="productdata.identity == 'retailer' || productdata.retailerinfo.id > 0" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
+      <div v-if="loginUser.isretailer" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
+        <!-- <div class="align_center flex_center flex_cell" v-if="!loginUser.retailerinfo.fid || loginUser.retailerinfo.fid == query.fid"> -->
         <div class="align_center flex_center flex_cell">
-          <div class="flex_cell flex_center btn-bottom-red" @click="importEvent">我要代理</div>
+          <div class="btn-bottom-red flex_center" style="width:90%;" v-if="productdata.haveimport == 1">已上架</div>
+          <div class="btn-bottom-red flex_center" style="width:90%;" v-else-if="productdata.haveimport == -1" @click="importEvent">上架到店铺</div>
+          <div class="btn-bottom-red flex_center" style="width:90%;" v-else-if="productdata.haveimport == 0" @click="importEvent">重新上架到店铺</div>
+        </div>
+        <div class="align_center flex_center flex_cell">
+          <div @click="toStore" class="btn-bottom-orange flex_center" style="width:90%;">我的店铺</div>
         </div>
       </div>
       <div v-transfer-dom>
@@ -124,43 +159,94 @@
           :on-close="closeShareSuccess">
         </share-success>
       </template>
+      <template v-if="showTip">
+        <template v-if="VipFree">
+          <tip-layer buttonTxt="立即申请" content="注册成为卖家后，才可代理厂家商品哦，赶快注册吧！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
+        </template>
+        <template v-else>
+          <tip-layer buttonTxt="立即申请" content="会员卖家才可代理厂家商品，赶快入驻申请吧！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
+        </template>
+      </template>
     </template>
+    <template v-if="showHelpModal">
+      <tip-layer
+        @clickClose="closeHelpModal"
+        title="推荐人佣金"
+        content="推荐人佣金是指销售该商品的上级推荐人所得的佣金。">
+      </tip-layer>
+    </template>
+    <template v-if="showHelpModal1">
+      <tip-layer
+        @clickClose="closeHelpModal"
+        title="销售佣金"
+        content="销售佣金是指卖家销售厂家的商品后，卖家所得到的佣金。">
+      </tip-layer>
+    </template>
+    <template v-if="showHb">
+      <firstHb action="importproduct" @closeFirstHb="closeFirstHb"></firstHb>
+    </template>
+    <div v-transfer-dom class="x-popup buy-popup-layer">
+      <popup v-model="showOptions" height="100%">
+        <div class="product-options-area columnarea">
+          <div class="column-content" @click="closeOptions"></div>
+          <div class="options-box columnarea">
+            <div class="close-area flex_center color-gray" @click="closeOptions"><span class="al al-close"></span></div>
+            <div class="column-content columnarea">
+              <div class="part1 flex_left">
+                <div class="pic flex_left">
+                  <img :src="selectedOption.photo" @click="viewBigImg(0)" />
+                </div>
+                <div class="flex_cell flex_left">
+                  <div class="w_100">
+                    <div class="color-theme"><span>￥</span><span class="bold font16">{{productdata.price}}</span></div>
+                    <div class="mt10 color-gray">库存{{selectedOption.storage}}{{productdata.unit}}</div>
+                    <div class="mt10" v-if="selectedOption.title">规格: {{selectedOption.title}}</div>
+                    <div class="mt10" v-else>规格</div>
+                  </div>
+                </div>
+              </div>
+              <div class="part2 column-content">
+                <div class="pt10">规格</div>
+                <div class="options-list">
+                  <div v-for="(item,index) in productdata.options" :class="`options-item ${(selectedOptionIndex == index && item.storage > 0) ? 'active' : ''} ${item.storage <= 0 ? 'disabled' : ''}`" @click="clickOptions(item,index)">
+                    <div class="flex_center" v-if="item.photo && item.photo !== ''">
+                      <img :src="item.photo" /><span class="ml5">{{item.title}}</span>
+                    </div>
+                    <div class="flex_center" v-else>
+                      <img :src="photoarr[0]" /><span class="ml5">{{item.title}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </popup>
+    </div>
+    <div v-transfer-dom>
+      <previewer :list="previewerOptionsPhoto" ref="previewerOption"></previewer>
+    </div>
   </div>
 </template>
-
-<i18n>
-Selection promotion:
-  zh-CN: 精选促销
-All products:
-  zh-CN: 全部商品
-Online consulting:
-  zh-CN: 在线咨询
-Wechat contact:
-  zh-CN: 微信联系
-Shop topline:
-  zh-CN: 店铺头条
-Another batch:
-  zh-CN: 换一批
-</i18n>
 
 <script>
 import { Previewer, Swiper, SwiperItem, TransferDom, Popup, XImg } from 'vux'
 import ShareSuccess from '@/components/ShareSuccess'
+import TipLayer from '@/components/TipLayer'
 import Sos from '@/components/Sos'
 import TitleTip from '@/components/TitleTip'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
-import Socket from '#/socket'
 import OpenVip from '@/components/OpenVip'
+import FirstHb from '@/components/FirstHb'
 
-let room = ''
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Previewer, Swiper, SwiperItem, Popup, ShareSuccess, Sos, XImg, TitleTip, OpenVip
+    Previewer, Swiper, SwiperItem, Popup, ShareSuccess, Sos, XImg, TitleTip, OpenVip, TipLayer, FirstHb
   },
   filters: {
     dateformat: function (value) {
@@ -169,9 +255,13 @@ export default {
   },
   data () {
     return {
+      loginUser: {},
+      retailerInfo: {},
       module: 'factoryproduct',
       query: {},
       disTimeout: true,
+      showHelpModal: false,
+      showHelpModal1: false,
       showSos: false,
       sosTitle: '抱歉，您暂无权限访问此页面！',
       showContainer: false,
@@ -179,7 +269,6 @@ export default {
       productid: null,
       productdata: {},
       factoryinfo: {},
-      loginUser: {},
       isshowtop: false,
       waitgetcredit: 100,
       showFlash: false,
@@ -199,7 +288,16 @@ export default {
       levelNameData: {},
       topcss: '',
       showVideo: true,
-      playVideo: false
+      playVideo: false,
+      showTip: false,
+      WeixinName: ENV.WeixinName,
+      isFirst: false,
+      showHb: false,
+      showOptions: false,
+      selectedOption: {},
+      selectedOptionIndex: 0,
+      previewerOptionsPhoto: [],
+      VipFree: false
     }
   },
   watch: {
@@ -259,12 +357,100 @@ export default {
       this.previewerFlasharr = []
       this.ingdata = []
       this.messages = 0
+      this.isFirst = false
+      this.showHb = false
+      this.selectedOption = {}
+    },
+    closeFirstHb () {
+      this.isFirst = false
+      this.showHb = false
+    },
+    clickHelp () {
+      this.showHelpModal = true
+    },
+    clickHelp1 () {
+      this.showHelpModal1 = true
+    },
+    closeHelpModal () {
+      this.showHelpModal = false
+      this.showHelpModal1 = false
+    },
+    clickOptionsArea () {
+      if (!this.selectedOption || !this.selectedOption.id) {
+        this.selectedOption = this.productdata.options[0]
+        this.selectedOptionIndex = 0
+        this.previewerOptionsPhoto = this.$util.previewerImgdata([this.selectedOption.photo])
+      }
+      this.showOptions = true
+    },
+    closeOptions () {
+      this.showOptions = false
+    },
+    clickOptions (item, index) {
+      this.selectedOption = item
+      console.log(this.selectedOption)
+      this.selectedOptionIndex = index
+      this.previewerOptionsPhoto = this.$util.previewerImgdata([this.selectedOption.photo])
+    },
+    viewBigImg (index) {
+      const self = this
+      if (self.$util.isPC()) {
+        self.$refs.previewerOption.show(0)
+      } else {
+        window.WeixinJSBridge.invoke('imagePreview', {
+          current: this.selectedOption.photo,
+          urls: [this.selectedOption.photo]
+        })
+      }
+    },
+    tofactoryDetail () {
+      this.$router.push({path: '/factoryDetail', query: {fid: this.productdata.fid}})
     },
     filterEmot (text) {
       return this.$util.emotPrase(text)
     },
+    closeTip () {
+      this.showTip = false
+    },
+    toApply () {
+      this.showTip = false
+      if (this.query.from && this.query.fromapp !== 'ddzs') {
+        let webquery = encodeURIComponent(`id=${this.query.id}&from=${this.query.from}`)
+        this.$wechat.miniProgram.redirectTo({url: `/pages/vip?weburl=factoryProduct&webquery=${webquery}`})
+      } else {
+        let backurl = `/factoryProduct?id=${this.query.id}`
+        if (this.query.from) {
+          backurl = `${backurl}&from=${this.query.from}`
+        }
+        if (this.query.fid) {
+          backurl = `${backurl}&fid=${this.query.fid}`
+        }
+        if (this.query.allowfirst) {
+          backurl = `${backurl}&allowfirst=${this.query.allowfirst}`
+        }
+        if (this.query.allowfirst) {
+          backurl = `${backurl}&fromapp=${this.query.fromapp}`
+        }
+        backurl = encodeURIComponent(backurl)
+        this.$router.push({path: '/centerSales', query: {backurl: backurl}})
+      }
+    },
+    toStore () {
+      if (this.query.from) {
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.store}?wid=${this.loginUser.uid}`})
+      } else {
+        this.$router.push({path: '/store', query: {wid: this.loginUser.uid}})
+      }
+    },
     clickPlay (refname) {
+      const self = this
       this.playVideo = true
+      setTimeout(() => {
+        self.$refs[refname].play()
+      }, 100)
+    },
+    saveVideo () {
+      location.replace(this.productdata.video)
     },
     stopPlay (refname) {
       this.playVideo = false
@@ -273,7 +459,7 @@ export default {
       if (this.loginUser.subscribe === 0) {
         this.$util.wxAccess()
       } else {
-        this.$router.push('/center')
+        this.$router.push({path: '/center'})
       }
     },
     showBigimg (index) {
@@ -321,44 +507,59 @@ export default {
       shareData.data = self.productdata
       self.$util.handleWxShare(shareData)
     },
-    importProduct () {
+    ajaxImport () {
       const self = this
-      self.$vux.confirm.show({
-        content: '确定要代理该商品吗？',
-        onConfirm () {
-          self.$vux.loading.show()
-          self.$http.post(`${ENV.BokaApi}/api/factory/importFactoryProduct`, {
-            id: self.query.id
-          }).then(function (res) {
-            let data = res.data
-            self.$vux.loading.hide()
-            self.$vux.toast.show({
-              text: data.error,
-              type: data.flag === 1 ? 'success' : 'warn',
-              time: self.$util.delay(data.error)
-            })
-          })
+      let params = {id: self.query.id}
+      if (self.query.wid) {
+        params.wid = self.query.wid
+      }
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/factory/importFactoryProduct`, params).then((res) => {
+        let data = res.data
+        self.$vux.loading.hide()
+        let error = data.error
+        if (data.flag === 1) {
+          error = '上架成功！该商品已显示在你的店铺中！'
+          self.productdata.haveimport = 1
         }
-      })
-    },
-    importEvent () {
-      const self = this
-      if (self.loginUser.isretailer === 2) {
-        self.$vux.loading.show()
-        this.$http.get(`${ENV.BokaApi}/api/list/product?from=retailer`, {
-          params: { pagestart: 0, limit: 5 }
-        }).then(res => {
-          self.$vux.loading.hide()
-          const data = res.data
-          const retdata = data.data ? data.data : data
-          if (retdata.length < 5) {
-            self.importProduct()
-          } else {
-            self.openVip()
+        self.$vux.toast.show({
+          text: error,
+          type: data.flag === 1 ? 'success' : 'warn',
+          time: self.$util.delay(error),
+          onHide: () => {
+            if (this.isFirst && data.flag) {
+              this.showHb = true
+            }
           }
         })
-      } else if (self.loginUser.isretailer === 1) {
-        self.importProduct()
+      })
+    },
+    importProduct () {
+      const self = this
+      if (self.productdata.haveimport === 0) {
+        self.ajaxImport()
+      } else {
+        self.$vux.confirm.show({
+          content: '确定将该商品上架到店铺并进行出售吗？',
+          onConfirm: () => {
+            self.ajaxImport()
+          }
+        })
+      }
+    },
+    importEvent () {
+      if (this.VipFree) {
+        if (!this.loginUser.isretailer || !this.loginUser.retailerinfo.moderate) {
+          this.showTip = true
+        } else {
+          this.importProduct()
+        }
+      } else {
+        if (!this.loginUser.isretailer || !this.retailerInfo.vipvalidate) {
+          this.showTip = true
+        } else {
+          this.importProduct()
+        }
       }
     },
     openVip () {
@@ -387,7 +588,7 @@ export default {
       }
       this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
         params: infoparams
-      }).then(function (res) {
+      }).then((res) => {
         if (res && res.status === 200) {
           let data = res.data
           self.$vux.loading.hide()
@@ -419,7 +620,7 @@ export default {
               self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
             }
             self.handelShare()
-            if (self.productdata.identity !== 'retailer') {
+            if (!self.loginUser.isretailer) {
               self.topcss = 'nobottom'
             }
             self.feeData = self.productdata.agentfee ? self.productdata.agentfee : []
@@ -428,23 +629,35 @@ export default {
         }
       })
     },
-    createSocket () {
-      const uid = this.loginUser.uid
-      const linkman = this.loginUser.linkman
-      // const fromId = this.query.fromId
-      room = `${this.module}-${this.query.id}`
-      Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module, fromId: this.query.id})
-    },
     init () {
-      this.$util.wxAccessListening()
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.loginUser = User.get()
       this.initData()
-      this.query = this.$route.query
-      this.getData()
-      this.createSocket()
+      this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
+        const data = res.data
+        this.loginUser = data
+        User.set(data)
+        this.retailerInfo = this.loginUser.retailerinfo
+        this.query = this.$route.query
+        if (this.query.allowfirst !== 'false') {
+          if (this.retailerInfo && `${this.retailerInfo.firstinfo.importproduct}` === '0' && this.query.from) {
+            this.isFirst = true
+          } else {
+            this.isFirst = false
+          }
+        }
+        this.getData()
+        return this.$http.post(`${ENV.BokaApi}/api/common/getSysParas`)
+      }).then(res => {
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        if (parseFloat(retdata.retailer_apply_oneyear) === 0) {
+          this.VipFree = true
+        } else {
+          this.VipFree = false
+        }
+      })
     }
   },
   created () {
@@ -452,118 +665,153 @@ export default {
   },
   activated () {
     this.refresh()
+  },
+  deactivated () {
+    this.showContainer = false
   }
 }
 </script>
 
 <style lang="less">
 .notop .pagetop{display:none;}
-.product .videobg{width:100%;height:100%;background-size:cover;background-position:center;position:relative;}
-.product .play-icon{
-  width:60px;height:60px;background: rgba(0,0,0,.4);border-radius: 50%;color:#fff;
-  position:absolute;left:50%;top:50%;margin-left:-30px;margin-top:-30px;
-}
-.product .play-icon .al{margin-left:4px;}
-.product .videoarea{position:absolute;left:0;top:0;right:0;bottom:0;z-index:9999;background-color:#000;color:#fff;}
-.product .videoarea video{position: absolute;width: 100%;height: 100%;}
-.product .videoarea .close-icon{position:absolute;left:15px;top:15px;width:40px;height:40px;}
-.vline{position:relative;}
-.vline:after {
-  content: " ";
-  display: block;
-  position: absolute;
-  width: 2px;
-  top: 4px;
-  bottom: 4px;
-  margin: auto 0;
-  left: -1px;
-  background-color: #ff6600;
-}
-.product .buylist:after{
-  content:'';
-  display:block;
-  clear:both;
-}
-.product .buylist .item{
-  float: left;
-  width: 50px;
-  text-align: center;
-  display:block;
-  color:inherit;;
-}
-.productcontent{
-  padding:20px 15px;
-}
-.product .productcontent img{
-  max-width:100%;
-  vertical-align: middle;
-}
-.product .productarea.scrollend:after {
-    background-color: #f6f6f6;
-}
-
-.product .pagetop{
-  box-shadow: 0px 0px 10px 3px #d0d0d0;
-}
-.product.notop .pagemiddle{top:0px;}
-.product.nobottom .pagemiddle{bottom:0px;}
-.product .numicon {
+.f-product-page{
+  .options-list{
+    display: flex;flex-wrap: wrap;
+    .options-item:not(:last-child){margin-right:10px;}
+    .options-item.active{border-color:#ff6a61;color:#ff6a61;}
+    .options-item.disabled{background-color:#ccc;}
+    .options-item{
+      border:#ccc 1px solid;border-radius:5px;padding:5px;margin-top:10px;
+      img{width:30px;height:30px;}
+    }
+  }
+  .card-options{
+    display: flex;flex-wrap: wrap;
+    img{width:30px;height:30px;margin-right:10px;object-fit:cover;margin-top:10px;}
+    .txt-item{margin-top:10px;}
+    .btn{border-radius:10px;background-color:#ccc;color:#999;font-size:12px;height:22px;padding:0 10px;}
+  }
+  .videoarea{
+    position:absolute;left:0;top:0;right:0;bottom:0;z-index:9999;background-color:#000;color:#fff;
+    .btn-area{
+      position:absolute;left:0;top:7px;right:0;height:50px;z-index:10;
+      .btn-item:not(:last-child){margin-right:20px;}
+      .btn-item{width:60px;height:30px;background-color:#232323;color:#fff;border-radius:10px;}
+    }
+    .video-inner{
+      position:absolute;left:0;top:0;right:0;bottom:0;
+      video{position: absolute;width: 100%;height: 100%;}
+    }
+  }
+  .videobg{width:100%;height:100%;background-size:cover;background-position:center;position:relative;}
+  .play-icon{
+    width:60px;height:60px;background: rgba(0,0,0,.4);border-radius: 50%;color:#fff;
+    position:absolute;left:50%;top:50%;margin-left:-30px;margin-top:-30px;
+  }
+  .play-icon .al{margin-left:4px;}
+  .vline{position:relative;}
+  .vline:after {
+    content: " ";
+    display: block;
     position: absolute;
-    top: 0;
-    right: -15px;
-    background: #f06825;
-    padding: 0 1px;
-    border-radius: 16%;
-    color: #fff;
-    font-size: 10px;
-    min-width: 18px;
+    width: 2px;
+    top: 4px;
+    bottom: 4px;
+    margin: auto 0;
+    left: -1px;
+    background-color: #ff6600;
+  }
+  .buylist:after{
+    content:'';
+    display:block;
+    clear:both;
+  }
+  .buylist .item{
+    float: left;
+    width: 50px;
     text-align: center;
-}
-.product .pic-swiper{padding-bottom:100%;box-sizing: border-box;}
-.product .pic-swiper .vux-swiper{
-  position:absolute !important;left:0;top:0;right:0;bottom:0;height:100% !important;
-}
-.product .vux-swiper-item {}
-.product .vux-swiper-item img{}
-.product .vux-swiper-desc{display:none !important;}
-.product .grouptitle{
-  width:100%;
-  height: 45px;
-  color: #fff;
-  font-size: 12px;
-  background-image: url(../assets/images/productbg.png);
-  background-repeat: no-repeat;
-  background-position: left top;
-  background-size: cover;
-  position:relative;
-}
-.product .grouptitle .t-table{height:100%;}
-.product .grouptitle .t-cell{height:100%;vertical-align:middle;}
-.product .grouptitle .col1{padding-left:10px;padding-right:10px;display:inline-block;}
-.product .grouptitle .col2{display:inline-block;margin-top:2px;}
-.product .grouptitle .col3{
-	display:inline-block;border-radius:10px;padding:1px 10px;text-align:center;background-color:rgba(0,0,0,0.1);
-	position:absolute;right:10px;top:50%;margin-top:-9px;
-}
-.product .grouptitle .col2 .colicon{display:inline-block;border-radius:10px;border:#fff 1px solid;padding:1px 10px;text-align:center;}
-.product .help-icon{
-  color:#ff3b30;
-  border:#ff3b30 1px solid;
-  border-radius:50%;
-  display:inline-block;
-  width:13px;height:13px;
-  font-size:10px;
-  text-align:center;
-  line-height:14px;
-}
+    display:block;
+    color:inherit;;
+  }
+  .productcontent{
+    padding:20px 15px;
+  }
+  .productcontent img{
+    max-width:100%;
+    vertical-align: middle;
+  }
+  .productarea.scrollend:after {
+      background-color: #f6f6f6;
+  }
 
-.product .btnfavorite.have .al:before{content:"\e68c";color:red;}
-.product .btnfavorite.none .al:before{content:"\e68b";}
-.product .groupbybottom .btnfavorite:after{display:block;}
-.product .btnfavorite.none:after{content:"收藏";}
-.product .btnfavorite.have:after{content:"已收藏";}
+  .pagetop{
+    box-shadow: 0px 0px 10px 3px #d0d0d0;
+  }
+  .product.notop .pagemiddle{top:0px;}
+  .product.nobottom .pagemiddle{bottom:0px;}
+  .numicon {
+      position: absolute;
+      top: 0;
+      right: -15px;
+      background: #f06825;
+      padding: 0 1px;
+      border-radius: 16%;
+      color: #fff;
+      font-size: 10px;
+      min-width: 18px;
+      text-align: center;
+  }
+  .pic-swiper{padding-bottom:100%;box-sizing: border-box;}
+  .pic-swiper .vux-swiper{
+    position:absolute !important;left:0;top:0;right:0;bottom:0;height:100% !important;
+  }
+  .vux-swiper-item {}
+  .vux-swiper-item img{}
+  .vux-swiper-desc{display:none !important;}
+  .grouptitle{
+    width:100%;
+    height: 45px;
+    color: #fff;
+    font-size: 12px;
+    background-image: url(../assets/images/productbg.png);
+    background-repeat: no-repeat;
+    background-position: left top;
+    background-size: cover;
+    position:relative;
+  }
+  .grouptitle .t-table{height:100%;}
+  .grouptitle .t-cell{height:100%;vertical-align:middle;}
+  .grouptitle .col1{padding-left:10px;padding-right:10px;display:inline-block;}
+  .grouptitle .col2{display:inline-block;margin-top:2px;}
+  .grouptitle .col3{
+  	display:inline-block;border-radius:10px;padding:1px 10px;text-align:center;background-color:rgba(0,0,0,0.1);
+  	position:absolute;right:10px;top:50%;margin-top:-9px;
+  }
+  .grouptitle .col2 .colicon{display:inline-block;border-radius:10px;border:#fff 1px solid;padding:1px 10px;text-align:center;}
+  .help-icon{
+    color:#ff3b30;
+    border:#ff3b30 1px solid;
+    border-radius:50%;
+    display:inline-block;
+    width:13px;height:13px;
+    font-size:10px;
+    text-align:center;
+    line-height:14px;
+  }
 
-.product .pagemiddle{bottom:50px;}
-.product .pagebottom{height:50px;}
-.levelarea .levelitem:not(:last-child){margin-bottom:12px;}
+  .btnfavorite.have .al:before{content:"\e68c";color:red;}
+  .btnfavorite.none .al:before{content:"\e68b";}
+  .groupbybottom .btnfavorite:after{display:block;}
+  .btnfavorite.none:after{content:"收藏";}
+  .btnfavorite.have:after{content:"已收藏";}
+
+  .pagemiddle{bottom:50px;}
+  .pagebottom{height:50px;}
+  .levelarea .levelitem:not(:last-child){margin-bottom:12px;}
+}
+.options-popup-layer{
+  .vux-popup-dialog{
+    background:rgba(0,0,0,0.5)
+  }
+}
 </style>

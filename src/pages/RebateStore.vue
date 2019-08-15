@@ -21,7 +21,7 @@
           <a @click="onShareCard" class="qbtn4"><i class="al al-a166 font12" style="line-height:12px"></i> {{$t('To Recommend Store')}}</a>
         </div>
         <div class="flex_cell align_left pl20">
-          <router-link :to="{path: '/bringCustomer', query: {wid: query.wid}}" class="qbtn4">{{$t('Bring Customer')}}：{{rebateInfo.bringCustomers}}</router-link>
+          <div @click="toCustomer" class="qbtn4">{{$t('Bring Customer')}}：{{rebateInfo.bringCustomers}}</div>
         </div>
       </div>
     </div>
@@ -55,14 +55,14 @@
         <template v-if="distabdata1">
           <template v-if="tabdata1.length">
             <group v-for="(item, index) in tabdata1" :key="index">
-              <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/product?id=${item.id}&wid=${item.uploader}`">
+              <cell :title="item.title" class="list-item font14 clamp2" @click.native="toProduct(item)">
                 <img slot="icon" class="product-img imgcover" :src="getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                 <div slot="inline-desc" class="inline-desc font12 color-gray">
                   <span class="info-cell">
                     零售价：{{$t('RMB')}}{{item.price}}
                   </span>
                   <span class="date-cell color-red">
-                    佣金：{{$t('RMB')}}{{item.rebate}}
+                    返点客佣金：{{$t('RMB')}}{{item.rebate}}
                   </span>
                 </div>
               </cell>
@@ -79,22 +79,12 @@
         <template v-if="distabdata2">
           <template v-if="tabdata2.length">
             <group v-for="(item, index) in tabdata2" :key="index">
-              <template v-if="item.type == 'groupbuy'">
-                <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/product?id=${item.productid}&wid=${item.uploader}`">
-                  <img slot="icon" class="product-img imgcover" :src="getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
-                  <div slot="inline-desc" class="inline-desc font12 color-gray">
-                    <div class="clamp1">{{item.starttime | dateFormat}} 至 {{item.endtime | dateFormat}}</div>
-                  </div>
-                </cell>
-              </template>
-              <template v-else>
-                <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/activity?id=${item.id}`">
-                  <img slot="icon" class="product-img imgcover" :src="getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
-                  <div slot="inline-desc" class="inline-desc font12 color-gray">
-                    <div class="clamp1">{{item.starttime | dateFormat}} 至 {{item.endtime | dateFormat}}</div>
-                  </div>
-                </cell>
-              </template>
+              <cell :title="item.title" class="list-item font14 clamp2" @click.native="toProduct1(item)">
+                <img slot="icon" class="product-img imgcover" :src="getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+                <div slot="inline-desc" class="inline-desc font12 color-gray">
+                  <div class="clamp1">{{item.starttime | dateFormat}} 至 {{item.endtime | dateFormat}}</div>
+                </div>
+              </cell>
             </group>
           </template>
           <template v-else>
@@ -108,7 +98,7 @@
         <template v-if="distabdata3">
           <template v-if="tabdata3.length">
             <group v-for="(item, index) in tabdata3" :key="index">
-              <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/news?id=${item.id}&wid=${item.uploader}`">
+              <cell :title="item.title" class="list-item font14 clamp2" @click.native="toNews(item)">
                 <img slot="icon" class="product-img imgcover" :src="getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                 <div slot="inline-desc" class="inline-desc font12 color-gray">
                   <div class="clamp1">
@@ -169,7 +159,10 @@ export default {
       tabdata2: [],
       tabdata3: [],
       limit: 10,
-      storeQrcode: null
+      storeQrcode: null,
+      fPageStart: 0,
+      isGetProduct: false,
+      fProductLen: 0
     }
   },
   filters: {
@@ -191,9 +184,56 @@ export default {
       pageStart2 = 0
       pageStart3 = 0
       this.storeQrcode = null
+      this.fPageStart = 0
+      this.isGetProduct = false
+      this.fProductLen = 0
     },
     getPhoto: function (photo) {
       return this.$util.getPhoto(photo)
+    },
+    toCustomer () {
+      let params = this.$util.handleAppParams(this.query, {wid: this.query.wid})
+      this.$router.push({path: '/bringCustomer', query: params})
+    },
+    toProduct (item) {
+      if (this.query.from) {
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.id}&wid=${item.uploader}&module=product`})
+      } else {
+        this.$router.push({path: '/product', query: {id: item.id, wid: item.uploader}})
+      }
+    },
+    toProduct1 (item) {
+      if (this.query.from) {
+        if (item.type === 'groupbuy') {
+          this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.productid}&wid=${item.uploader}&module=product`})
+        } else {
+          this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.activity}?id=${item.id}&wid=${item.uploader}`})
+        }
+      } else {
+        if (item.type === 'groupbuy') {
+          let params = {id: item.productid, wid: item.uploader}
+          this.$router.push({path: '/product', query: params})
+        } else {
+          let params = {id: item.id, wid: item.uploader}
+          this.$router.push({path: '/activity', query: params})
+        }
+      }
+    },
+    toActivity (item) {
+      let params = {id: item.id}
+      if (this.query.from) {
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.activity}?id=${item.id}&wid=${item.uploader}`})
+      } else {
+        this.$router.push({path: '/activity', query: params})
+      }
+    },
+    toNews (item) {
+      let params = {id: item.id, wid: item.uploader}
+      if (this.query.from) {
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.news}?id=${item.id}&wid=${item.uploader}`})
+      } else {
+        this.$router.push({path: '/news', query: params})
+      }
     },
     handleScroll: function () {
       const self = this
@@ -228,8 +268,15 @@ export default {
     },
     getData1 () {
       const self = this
-      let params = { wid: self.query.wid, pagestart: pageStart1, limit: self.limit }
-      this.$http.post(`${ENV.BokaApi}/api/seller/shareList/product`, params)
+      let params = { pagestart: pageStart1, limit: self.limit }
+      if (self.query.wid) {
+        params.wid = self.query.wid
+      } else {
+        params.wid = self.loginUser.uid
+      }
+      this.$http.get(`${ENV.BokaApi}/api/retailer/getRetailerProducts`, {
+        params: params
+      })
       .then(res => {
         let data = res.data
         self.$vux.loading.hide()
@@ -314,14 +361,14 @@ export default {
     init () {
       this.$vux.loading.show()
       this.query = this.$route.query
-      this.getData()
+      // this.getData()
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      if (this.query.wid !== this.$route.query.wid) {
-        this.initData()
-        this.getData()
-      }
+      // if (this.query.wid !== this.$route.query.wid) {
+      this.initData()
+      this.getData()
+      // }
     }
   },
   created () {

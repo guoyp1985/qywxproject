@@ -13,8 +13,10 @@
         <div class="evaluation" v-for="(item, index) in list" :key="index">
           <group>
             <cell :title="item.name" class="product-rater font14">
-              <img class="product-img" slot="icon" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+              <img v-if="item.options && item.options.id" class="product-img" slot="icon" :src="item.options.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+              <img v-else class="product-img" slot="icon" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
               <div slot="inline-desc">
+                <div v-if="item.options && item.options.id" class="color-gray font12 pl5">{{item.options.title}}</div>
                 <rater v-model="item.stars"></rater>
               </div>
             </cell>
@@ -91,7 +93,8 @@ export default {
             time: self.$util.delay(data.error),
             onHide: function () {
               if (data.flag === 1) {
-                self.$router.go(-1)
+                // self.$router.go(-1)
+                self.$router.push({path: '/orderSearch?flag=4&refresh=1'})
               }
               self.eventIng = false
             }

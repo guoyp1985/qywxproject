@@ -28,9 +28,9 @@
                   <img class="v_middle imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" style="width:40px;height:40px;" />
                 </div>
                 <div class="t-cell v_middle" style="color:inherit;">
-                  <div class="clamp1">{{item.title}}</div>
+                  <div class="clamp1"><span v-if="item.fpid" class="color-red">【货源】</span>{{item.title}}</div>
                   <div class="font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
-                  <div class="font12" v-if="rebate">佣金: {{item.rebate}}</div>
+                  <div class="font12" v-if="rebate">返点客佣金: {{item.rebate}}</div>
                   <div class="font12 clamp1 color-orange" v-if="item.allowcard">允许使用优惠券</div>
                 </div>
               </div>
@@ -47,6 +47,7 @@
 </template>
 <script>
 import { TransferDom, Popup, Search, CheckIcon } from 'vux'
+import { User } from '#/storage'
 import ENV from 'env'
 export default {
   name: 'AppendProduct',
@@ -66,21 +67,24 @@ export default {
   },
   data () {
     return {
+      loginUser: {},
       limit: 20,
       pageStart: 0,
       searchWord: '',
       searchResult: false,
-      products: []
+      products: [],
+      checkData: {}
     }
   },
   methods: {
     handleScroll () {
+      console.log('in handlescroll ')
       const _this = this
       const scrollarea = _this.$refs.scrollProduct
       _this.$util.scrollEvent({
         element: scrollarea,
         callback: () => {
-          if (_this.productdata.length === (_this.pageStart + 1) * _this.limit) {
+          if (_this.products.length === (_this.pageStart + 1) * _this.limit) {
             _this.pageStart++
             _this.$vux.loading.show()
             _this.getProductData()
@@ -89,6 +93,7 @@ export default {
       })
     },
     handleCheck (data, index) {
+      this.checkData = data
       if (data.checked) {
         this.selectProdcut = data
         this.selectProductIndex = index
@@ -159,12 +164,22 @@ export default {
       }
     },
     getProductData () {
-      let params = { params: { from: this.from, pagestart: this.pageStart, limit: this.limit } }
+      console.log('in getProductData')
+      let ajaxUrl = `${ENV.BokaApi}/api/list/product`
+      let params = {pagestart: this.pageStart, limit: this.limit}
+      if (this.from === 'roomorder') {
+        ajaxUrl = `${ENV.BokaApi}/api/retailer/getRetailerProducts`
+        params.wid = this.loginUser.uid
+      } else {
+        params.from = this.from
+      }
       let keyword = this.searchWord
       if (typeof keyword !== 'undefined' && this.$util.trim(keyword) !== '') {
         params.params.keyword = keyword
       }
-      this.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(res => {
+      this.$http.get(ajaxUrl, {
+        params: params
+      }).then(res => {
         let data = res.data
         this.$vux.loading.hide()
         if (typeof keyword !== 'undefined' && this.$util.trim(keyword) !== '') {
@@ -178,7 +193,13 @@ export default {
     }
   },
   created () {
+    this.loginUser = User.get()
     this.getProductData()
+  },
+  watch: {
+    '$route' () {
+      this.checkData.checked = false
+    }
   }
 }
 </script>

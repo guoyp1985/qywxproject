@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea font14">
-    <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
+    <subscribe v-if="loginUser.subscribe != 0 && !loginUser.isretailer"></subscribe>
     <template v-if="showSetting">
       <retailer-setting
         ref="retailerSetting"
@@ -14,7 +14,12 @@
         :class-data="classData"
         :productClass="productClass"
         :buyonline="buyonline"
-        :buyoffline="buyoffline">
+        :buyoffline="buyoffline"
+        :submitSuggest="submitSuggest"
+        @clickBuyline="clickBuyline"
+        @clickSuggest="clickSuggest"
+        @clickAccount="clickAccount"
+        @clickTemplate="clickTemplate">
       </retailer-setting>
     </template>
     <template v-if="showApply">
@@ -44,14 +49,17 @@ export default {
       showSetting: false,
       showApply: false,
       retailerInfo: {},
-      submitdata: { title: '', productclass: '', qrcode: '', buyonline: 1, content: '', fastreply: '你好，请稍等，一会为你服务' },
+      submitkey: { title: '', productclass: '', qrcode: '', buyonline: 1, shopmodel: '1', accounttype: 0, content: '', fastreply: '你好，请稍等，一会为你服务' },
+      // submitdata: { title: '', productclass: '', qrcode: '', buyonline: 1, shopmodel: '1', accounttype: 0, content: '', fastreply: '你好，请稍等，一会为你服务' },
+      submitdata: {},
       submitdata1: { showphoto: '', slogan: '', tags: '' },
       photoarr: [],
       showphotoArr: [],
       classData: [],
       productClass: [],
       buyonline: true,
-      buyoffline: false
+      buyoffline: false,
+      submitSuggest: true
     }
   },
   methods: {
@@ -64,14 +72,15 @@ export default {
     getData () {
       const self = this
       self.loginUser = User.get()
-      self.$http.get(`${ENV.BokaApi}/api/retailer/home`)
+      self.$http.get(`${ENV.BokaApi}/api/retailer/info`)
       .then(res => {
         self.$vux.loading.hide()
         if (res) {
           let data = res.data
           self.$vux.loading.hide()
           self.retailerInfo = data.data ? data.data : data
-          for (let key in self.submitdata) {
+          self.submitdata = {}
+          for (let key in self.submitkey) {
             self.submitdata[key] = self.retailerInfo[key]
           }
           if (self.submitdata.buyonline) {
@@ -80,6 +89,13 @@ export default {
           } else {
             self.buyonline = false
             self.buyoffline = true
+          }
+          if (this.retailerInfo.params.suggest_open === '1' || this.retailerInfo.params.suggest_open === 1) {
+            console.log('进入到了开启')
+            this.submitSuggest = true
+          } else {
+            console.log('进入到了关闭')
+            this.submitSuggest = false
           }
           self.productClass = self.retailerInfo.productclass.split(',')
           for (let i = 0; i < self.productClass.length; i++) {
@@ -105,6 +121,60 @@ export default {
         }
       })
     },
+    clickBuyline (val, callback) {
+      if (val !== this.submitdata.buyonline) {
+        delete this.submitdata.buyonline
+        this.submitdata.buyonline = val
+      }
+      if (callback) {
+        callback()
+      }
+    },
+    clickSuggest (val, callback) {
+      this.$http.post(`${ENV.BokaApi}/api/card/setParas`, {
+        params: {suggest_open: val}
+      }).then(res => {
+        const data = res.data
+        if (data.flag) {
+          this.loginUser.retailerinfo.params = data.data
+          this.retailerInfo.params = data.data
+          User.set(this.loginUser)
+          if (val === '1' || val === 1) {
+            this.submitSuggest = true
+          } else {
+            this.submitSuggest = false
+          }
+          if (callback) {
+            callback()
+          }
+        }
+      })
+    },
+    clickTemplate (val, callback) {
+      if (parseInt(val) !== parseInt(this.submitdata.shopmodel)) {
+        delete this.submitdata.shopmodel
+        this.submitdata.shopmodel = val
+        console.log('进入到了删除')
+        console.log(this.submitdata)
+      }
+      if (callback) {
+        callback()
+      }
+    },
+    clickAccount (val, callback) {
+      console.log('in 点击到账方式')
+      console.log(val)
+      console.log(this.submitdata.accounttype)
+      if (val !== this.submitdata.accounttype) {
+        delete this.submitdata.accounttype
+        this.submitdata.accounttype = val
+        console.log('进入到了删除')
+        console.log(this.submitdata)
+      }
+      if (callback) {
+        callback()
+      }
+    },
     init () {
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
         module: 'retailer', action: 'setting'
@@ -118,14 +188,14 @@ export default {
     refresh () {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.$vux.loading.show()
       this.loginUser = User.get()
       this.query = this.$route.query
-      if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
+      if (this.loginUser && (this.loginUser.subscribe !== 0 || this.loginUser.isretailer)) {
+        this.$vux.loading.show()
         self.initContainer()
         self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
           { params: { limit: 100 } }
-        ).then(function (res) {
+        ).then(res => {
           self.$vux.loading.hide()
           if (res.status === 200) {
             let data = res.data
@@ -141,6 +211,7 @@ export default {
           } else {
             self.$vux.loading.hide()
             self.initContainer()
+            document.title = this.loginUser.retailerinfo.title
             self.showSetting = true
             self.getData()
           }

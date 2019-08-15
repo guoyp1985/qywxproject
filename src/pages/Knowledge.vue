@@ -197,6 +197,7 @@ export default {
           self.showSos = false
           self.showContainer = true
           self.article = res.data.data
+          self.createSocket()
           document.title = self.article.title
           self.$util.wxShare({
             data: {
@@ -233,7 +234,7 @@ export default {
       const self = this
       if (this.notFavorite) {
         this.notFavorite = false
-        this.$http.post(`${ENV.BokaApi}/api/user/favorite/add`, {id: this.article.id, module: this.module})
+        this.$http.post(`${ENV.BokaApi}/api/user/favorite/add`, {id: this.article.id, module: this.module, wid: this.article.uploader})
         .then(res => {
           if (res.data.flag) {
             self.$vux.toast.text(self.$t('Favorite Success'))
@@ -392,7 +393,7 @@ export default {
       const uid = this.loginUser.uid
       const linkman = this.loginUser.linkman
       // const fromId = this.query.fromId
-      room = `${this.module}-${this.query.id}`
+      room = `${this.module}-${this.query.id}-${this.article.wid}`
       Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module, fromId: this.query.id})
     },
     init () {
@@ -411,7 +412,6 @@ export default {
         self.messages = data.data
       })
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.createSocket()
     }
   },
   activated () {

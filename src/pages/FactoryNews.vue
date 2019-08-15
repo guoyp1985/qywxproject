@@ -4,7 +4,7 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div class="containerarea font14 bg-white news notop nobottom">
+  <div :class="`containerarea font14 bg-white news notop ${loginUser.isretailer ? '' : 'nobottom'}`">
     <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
     </template>
@@ -13,6 +13,9 @@
         <div class="article-view">
           <div class="article-title">
             <h2>{{article.title}}</h2>
+            <div class="flex_right mt5 mb5" v-if="editIng && article.uploader == reward.uid">
+              <router-link :to="{path:'/addFactoryNews',query:{id: query.id,fid:query.fid,callback: 'edit'}}" class="flex_center bg-theme color-white" style="border-radius:20px;height:25px;width:90px;">修改标题</router-link>
+            </div>
           </div>
           <div class="article-vice-title">
             <h4>{{article.vicetitle}}</h4>
@@ -24,14 +27,41 @@
             <router-link class="article-author" :to="{ name: '', params: {} }">{{article.author}}</router-link>
           </div>
           <template v-if="showArticle">
-            <template v-if="article.uploader == reward.uid">
-              <div id="editor-content" :class="`article-content ${article.content == '' ? 'color-gray font16' : ''}`">
-                <p v-if="article.content == ''">文章内容为空，点击【编辑】按钮可修改内容哦！</p>
-                <div v-else v-html="article.content"></div>
-              </div>
+            <video
+              style="max-width:100%;"
+              v-if="article.video && article.video != ''"
+              ref="newsVideo"
+              :src="article.video"
+              controls
+              autoplay="true"
+              webkit-playsinline=""
+              playsinline="true"
+              x-webkit-airplay="true"
+              raw-controls=""
+              x5-video-player-type="h5"
+              x5-video-player-fullscreen="true"
+              x5-video-orientation="portrait">
+            </video>
+            <template v-if="article.c_format == 'json'">
+              <template v-for="(item, index) in article.content">
+                <div v-if="item.content && item.content != ''" class="padding10">{{item.content}}</div>
+                <template v-for="(photo,index1) in item.photo" index="index1" item="photo">
+                  <div class="flex_center">
+                    <img :src="photo" style="max-width:100%;"/>
+                  </div>
+                </template>
+              </template>
             </template>
             <template v-else>
-              <div class="article-content" v-html="article.content"></div>
+              <template v-if="article.uploader == reward.uid">
+                <div v-if="article.content == '' && !afterEdit" id="editor-content" class="article-content color-gray font16">
+                  <p>文章内容为空，点击【编辑】按钮可修改内容哦！</p>
+                </div>
+                <div v-else id="editor-content" class="article-content" v-html="article.content"></div>
+              </template>
+              <template v-else>
+                <div class="article-content" v-html="article.content"></div>
+              </template>
             </template>
           </template>
           <div class="reading-info">
@@ -40,9 +70,10 @@
           </div>
         </div>
       </div>
-      <div v-if="article.identity == 'retailer'" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
+      <div v-if="loginUser.isretailer && !editIng" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
         <div class="align_center flex_center flex_cell">
-          <div class="flex_cell flex_center btn-bottom-red" @click="importEvent">引入到我的文章</div>
+          <div class="flex_cell flex_center btn-bottom-red" v-if="article.haveimport" >已导入</div>
+          <div class="flex_cell flex_center btn-bottom-red" v-else @click="importEvent">导入到我的文章</div>
         </div>
       </div>
       <share-success
@@ -53,7 +84,7 @@
         :module="module"
         :on-close="closeShareSuccess">
       </share-success>
-      <editor v-if="reward.uid == article.uploader && showEditor" elem="#editor-content" module="factorynews" :query="query" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
+      <editor v-if="reward.uid == article.uploader && showEditor && article.c_format != 'json'" elem="#editor-content" module="factorynews" :loginUser="loginUser" :query="query" @on-edit="clickEdit" @on-auto-save="autoSave" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
       <div v-transfer-dom class="x-popup">
         <popup v-model="showSubscribe" height="100%">
           <div class="popup1">
@@ -86,9 +117,7 @@ import Time from '#/time'
 import ENV from 'env'
 import jQuery from 'jquery'
 import { User } from '#/storage'
-import Socket from '#/socket'
 
-let room = ''
 export default {
   directives: {
     TransferDom
@@ -117,7 +146,9 @@ export default {
       messages: 0,
       topcss: '',
       showEditor: false,
-      showArticle: false
+      showArticle: false,
+      editIng: false,
+      afterEdit: false
     }
   },
   filters: {
@@ -137,8 +168,20 @@ export default {
     access () {
       this.$util.wxAccess()
     },
+    clickEdit () {
+      this.editIng = true
+    },
     clickInsertProduct (url) {
-      this.$router.push(url)
+      console.log('in in in clickInsertProduct')
+      if (self.query.from === 'miniprogram') {
+        const params = self.$util.query(url)
+        self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}&module=product`})
+      } else if (self.query.fromapp === 'factory') {
+        const params = self.$util.query(url)
+        self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&fid=${params.fid}&module=product`})
+      } else {
+        self.$router.push({path: url})
+      }
     },
     popupSubscribe () {
       this.showSubscribe = true
@@ -147,30 +190,51 @@ export default {
       this.showSubscribe = false
     },
     clickProduct (event) {
-      const self = this
-      let node = event.target
-      while (node) {
-        if (node.nodeType === 1 && node.getAttribute('class').indexOf('insertproduct') > -1) {
-          const linkurl = node.getAttribute('linkurl')
-          if (linkurl) {
-            self.$router.push(linkurl)
+      console.log('进入点出商品事件')
+      if (parseInt(self.reward.uid) !== parseInt(self.article.uploader)) {
+        console.log('in news clickproduct')
+        let node = event.target
+        let linkurl = null
+        while (node) {
+          if (node.nodeType === 1) {
+            let nodeClass = node.getAttribute('class')
+            if (nodeClass && nodeClass.indexOf('insertproduct') > -1) {
+              linkurl = node.getAttribute('linkurl')
+              break
+            }
           }
-          break
+          node = node.parentNode
         }
-        node = node.parentNode
+        if (linkurl) {
+          console.log(linkurl)
+          if (self.query.from === 'miniprogram') {
+            const params = self.$util.query(linkurl)
+            self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}&module=product`})
+          } else if (self.query.fromapp === 'factory') {
+            const params = self.$util.query(linkurl)
+            self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&fid=${params.fid}&module=product`})
+          } else {
+            self.$router.push({path: linkurl})
+          }
+        }
       }
     },
     importNews () {
       const self = this
       self.$vux.confirm.show({
-        content: '确定要引入到我的文章吗？',
-        onConfirm () {
+        content: '确定要导入到我的文章吗？',
+        onConfirm: () => {
           self.$vux.loading.show()
-          self.$http.post(`${ENV.BokaApi}/api/factory/importFactoryNews`, {
-            id: self.query.id
-          }).then(function (res) {
+          let params = {id: self.query.id}
+          if (self.query.wid) {
+            params.wid = self.query.wid
+          }
+          self.$http.post(`${ENV.BokaApi}/api/factory/importFactoryNews`, params).then(res => {
             let data = res.data
             self.$vux.loading.hide()
+            if (data.flag) {
+              self.article.haveimport = 1
+            }
             self.$vux.toast.show({
               text: data.error,
               type: data.flag === 1 ? 'success' : 'warn',
@@ -298,7 +362,7 @@ export default {
         if (self.query.wid) {
           cururl = `${cururl}&wid=${self.query.wid}`
         }
-        this.$http.post(`${ENV.BokaApi}/api/user/favorite/add`, {id: this.article.id, module: self.module, currenturl: encodeURIComponent(cururl)})
+        this.$http.post(`${ENV.BokaApi}/api/user/favorite/add`, {id: this.article.id, module: self.module, wid: this.article.uploader, currenturl: encodeURIComponent(cururl)})
         .then(res => {
           if (res.data.flag) {
             self.$vux.toast.text(self.$t('Favorite Success'))
@@ -329,28 +393,42 @@ export default {
     },
     onShare () {
     },
-    editSave () {
+    save (callback) {
       const self = this
       let editorContent = document.querySelector('#editor-content')
       self.$vux.loading.show()
+      let con = editorContent.innerHTML.replace(/Eleditor-active/g, '')
+        .replace('<p class="">文章内容为空，点击【编辑】按钮可修改内容哦！</p>', '')
+        .replace('<p>文章内容为空，点击【编辑】按钮可修改内容哦！</p>', '')
+        .replace('<p class="Eleditor-active">文章内容为空，点击【编辑】按钮可修改内容哦！</p>', '')
       self.$http.post(`${ENV.BokaApi}/api/editContent/factorynews`, {
         id: self.query.id,
-        content: editorContent.innerHTML
-      }).then(function (res) {
+        content: con
+      }).then(res => {
         let data = res.data
         self.$vux.loading.hide()
+        if (data.flag === 1) {
+          if (con !== '') {
+            self.article.content = con
+            self.afterEdit = true
+          }
+          self.handleImg()
+          callback && callback()
+        }
         let toasttype = data.flag !== 1 ? 'warn' : 'success'
         self.$vux.toast.show({
           text: data.error,
           type: toasttype,
-          time: self.$util.delay(data.error),
-          onHide: function () {
-            if (data.flag === 1) {
-              self.handleImg()
-            }
-          }
+          time: self.$util.delay(data.error)
         })
       })
+    },
+    autoSave () {
+      this.save()
+    },
+    editSave () {
+      this.editIng = false
+      this.save()
     },
     editSetting () {
       this.$router.push({name: 'tAddFacotryNews', params: {id: this.article.id, fid: this.article.fid}})
@@ -441,13 +519,6 @@ export default {
       const self = this
       self.$router.push({path: '/store', query: {wid: self.retailerInfo.uid}})
     },
-    createSocket () {
-      const uid = this.loginUser.uid
-      const linkman = this.loginUser.linkman
-      // const fromId = this.query.fromId
-      room = `${this.module}-${this.query.id}`
-      Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module, fromId: this.query.id})
-    },
     init () {
       this.$util.wxAccessListening()
     },
@@ -456,11 +527,11 @@ export default {
       this.loginUser = User.get()
       this.showArticle = false
       this.showEditor = false
+      this.editIng = false
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       if (this.query.id !== query.id) {
         self.showSos = false
         self.showContainer = false
-        room = ''
         this.query = query
       }
       this.getData()
@@ -472,10 +543,6 @@ export default {
   activated () {
     this.refresh(this.$route.query)
   }
-  // beforeRouteLeave (to, from, next) {
-  //   Socket.destory(room)
-  //   next()
-  // }
 }
 </script>
 <style lang="less">

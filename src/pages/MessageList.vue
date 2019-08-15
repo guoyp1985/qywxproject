@@ -71,7 +71,7 @@ export default {
       })
     },
     toChat (data) {
-      let param = {uid: data.uid, fromModule: 'messagelist', from: this.query.from}
+      let param = this.$util.handleAppParams(this.query, {uid: data.uid, fromModule: 'messagelist'})
       this.$router.push({path: '/chat', query: param})
     },
     refresh () {

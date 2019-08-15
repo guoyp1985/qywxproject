@@ -108,12 +108,12 @@
   export default {
     data () {
       return {
+        loginUser: {},
+        retailerInfo: {},
         selectedIndex: 0,
         articalData: [],
         listActivity: [],
         productData: [],
-        loginUser: {},
-        retailerInfo: {},
         disData1: false,
         disData2: false,
         disData3: false
@@ -162,7 +162,9 @@
       },
       getData3 () {
         const self = this
-        self.$http.get(`${ENV.BokaApi}/api/list/product?pagestart=0&limit=3&uploader=${this.loginUser.uid}`).then(res => {
+        self.$http.get(`${ENV.BokaApi}/api/retailer/getRetailerProducts`, {
+          params: {pagestart: 0, limit: 3, wid: this.loginUser.uid}
+        }).then(res => {
           let data = res.data
           let retdata = data.data ? data.data : data
           for (var i = 0; i < retdata.length; i++) {

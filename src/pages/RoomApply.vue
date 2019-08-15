@@ -5,23 +5,23 @@
 */
 <template>
   <div id="room-apply" class="containerarea font14 s-havebottom">
-    <form>
-      <forminputplate class="required">
-        <span slot="title">验证密钥</span>
-        <input v-model="crypto" type="text" name="key" class="input border-box" placeholder="请输入密钥" />
-      </forminputplate>
-      <div class="protocal-area">
-        <check-icon :value.sync="isAccept" type="plain">同意<a class="color-red" @click.stop="showProtocol">群群推协议</a></check-icon>
-      </div>
-    </form>
-    <div class="s-bottom submit-button color-white" @click="submitHandle">
+    <!-- <div class="s-bottom submit-button color-white" @click="submitHandle">
       <span>提交验证</span>
+    </div> -->
+    <div class="top-content">
+      <div class="color-red font16 align_center">微信群变现技巧</div>
+      <div class="font14 mt10 color-gray2" style="line-height:25px;">将你的微信群按照以下提示添加到群群推，待系统评估完成后等待接单就好啦，有订单时系统会通知你哦^_^</div>
+      <div class="color-red font14 align_center mt10" style="text-decoration:underline;" @click="toStart">了解更多技巧</div>
     </div>
-    <div class="step">
+    <div class="flex_center" style="position:relative;width:85%;margin:0 auto;">
+      <div class="litem" style="left:50px;"></div>
+      <div class="litem" style="right:50px;"></div>
+    </div>
+    <div class="step top-content">
       <div class="step-item">
         <div class="step-item-info db-flex">
           <div class="step-item-title">第一步:</div>
-          <div class="flex_cell color-gray">
+          <div class="flex_cell color-gray2">
             <span>添加官方客服微信</span>
             <span class="color-red" @click="wxContact"> 马上添加 ></span>
           </div>
@@ -31,7 +31,7 @@
       <div class="step-item">
         <div class="step-item-info db-flex">
           <div class="step-item-title">第二步:</div>
-          <div class="flex_cell color-gray">
+          <div class="flex_cell color-gray2">
             <span>拉官方客服进入微信群</span>
           </div>
         </div>
@@ -40,10 +40,20 @@
       <div class="step-item">
         <div class="step-item-info db-flex">
           <div class="step-item-title">第三步:</div>
-          <div class="flex_cell color-gray">
-            <span>客服向你发送密钥后，返回此页面输入验证密钥。如未收到任何信息，请在群内发任意信息后再试。</span>
+          <div class="flex_cell color-gray2">
+            <span>客服向你发送密钥后，返回此页面输入验证密钥。如未收到任何信息请在群内发任意信息后再试。</span>
           </div>
         </div>
+      </div>
+      <div class="protocal-area">
+        <check-icon :value.sync="isAccept">同意<a class="color-red" @click.stop="showProtocol">群群推协议</a></check-icon>
+      </div>
+      <div class="flex_center btnin">
+        <div class="inputs">
+          <x-input type="text" v-model="crypto" placeholder="请输入密钥"></x-input>
+        </div>
+        <div v-if="isAccept == true" @click="submitHandle" :class="`${rgbred} btn`">验证</div>
+        <div v-else disabled="true" class="btn">验证</div>
       </div>
     </div>
     <div v-transfer-dom>
@@ -72,43 +82,64 @@
         </div>
       </x-dialog>
     </div>
+    <div class="font12 color-red4 align_center mt10" style="padding:0 15px;box-sizing:border-box;">注意：请勿将官方客服踢出微信群，否则影响微信群接收订单！</div>
+    <template v-if="showHb">
+      <firstHb action="addgroup" @closeFirstHb="closeFirstHb"></firstHb>
+    </template>
   </div>
 </template>
 <script>
-import { CheckIcon, XButton, XDialog, TransferDom } from 'vux'
+import { CheckIcon, XButton, XDialog, TransferDom, XInput } from 'vux'
 import ENV from 'env'
-import forminputplate from '@/components/Forminputplate'
+import FirstHb from '@/components/FirstHb'
+import { User } from '#/storage'
 export default {
   directives: {
     TransferDom
   },
   components: {
-    CheckIcon, XButton, XDialog, forminputplate
+    CheckIcon, XButton, XDialog, XInput, FirstHb
   },
   data () {
     return {
+      query: {},
+      loginUser: {},
+      rgbred: 'rgba09red',
       crypto: '',
       isAccept: false,
       isSubmiting: false,
       showDialog: false,
       wxCardShow: false,
-      qrcode: ''
-      // roomCategory: [1],
-      // roomCategories: [
-      //   {id: 1, title: '夜跑群'},
-      //   {id: 2, title: '养生群'},
-      //   {id: 3, title: '追星群'}
-      // ]
+      qrcode: '',
+      isFirst: false,
+      showHb: false
     }
   },
   methods: {
+    initData () {
+      this.isFirst = false
+      this.showHb = false
+    },
+    closeFirstHb () {
+      this.isFirst = false
+      this.showHb = false
+      this.afterAdd()
+    },
+    toStart () {
+      this.$router.push({path: '/RoomStart'})
+    },
     wxContact () {
-      this.wxCardShow = true
+      if (this.query.from) {
+        this.$wechat.miniProgram.navigateTo({url: '/pages/subscribe?type=addkefu'})
+      } else {
+        this.wxCardShow = true
+      }
     },
     showProtocol () {
       this.showDialog = true
     },
     submitHandle () {
+      const _this = this
       if (!this.isSubmiting) {
         // const self = this
         const data = {
@@ -129,32 +160,87 @@ export default {
           }
           this.isSubmiting = true
           this.$vux.loading.show()
-          this.$http.post(`${ENV.BokaApi}/api/groups/addGroup`, data)
-          .then(res => {
+          this.$http.post(`${ENV.BokaApi}/api/groups/addGroup`, data).then(res => {
+            const data = res.data
             this.$vux.loading.hide()
-            this.$vux.toast.text(res.data.error, 'middle')
-            setTimeout(() => {
-              this.reset()
-              this.$router.back()
-              this.isSubmiting = false
-            }, 1000)
+            this.$vux.toast.show({
+              text: data.error,
+              type: 'text',
+              time: _this.$util.delay(data.error),
+              onHide: () => {
+                _this.isSubmiting = false
+                if (data.flag) {
+                  if (this.isFirst) {
+                    this.showHb = true
+                  } else {
+                    this.afterAdd()
+                  }
+                } else {
+                  _this.reset()
+                }
+              }
+            })
           })
         }
       }
+    },
+    afterAdd () {
+      let params = this.$util.handleAppParams(this.query, {})
+      this.$router.push({path: '/roomList', query: params})
     },
     reset () {
       this.crypto = ''
       this.isAccept = false
     }
+  },
+  activated () {
+    this.query = this.$route.query
+    this.loginUser = User.get()
+    this.initData()
+    if (`${this.loginUser.retailerinfo.firstinfo.addgroup}` === '0' && this.query.from) {
+      this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
+        const data = res.data
+        this.loginUser = data
+        User.set(data)
+        if (this.loginUser.retailerinfo.firstinfo.addgroup === '0' && this.query.from) {
+          this.isFirst = true
+        }
+      })
+    }
   }
 }
 </script>
 <style lang="less">
+.containerarea{
+  width:100%;height:100%;
+  .top-content{
+    width:85%;background-color:#fff;border:1px solid #e5e5e5;border-radius:5px;
+    padding:10px 15px;box-sizing:border-box;margin:0 auto;margin-top:50px;box-shadow: 0 0 5px 2px #e0e0e0;
+  }
+  .litem{
+    width:10px;height:30px;border:1px solid #e5e5e5;border-radius:20px;background-color:#fff;
+    position:absolute;bottom:-20px;
+  }
+}
+.rgba09red{background-color:#FB5657 !important;}
+.btnin{
+  .inputs{
+    border:1px solid #C3C3C3;height:31px;padding-left:10px;width:150px;margin-left:20px;
+    .weui-cell{padding:0;width:100%;height:100%;box-sizing:border-box;}
+  }
+  input{outline:none;width:100%;height:100%;}
+  .btn{
+    width:60px;height:33px;text-align:center;line-height:33px;color:#fff;background-color:#C3C3C3;border:0;
+    margin-left:-1px;
+  }
+}
+.weui-icon-circle{font-size:16px !important;}
+.weui-icon-success{font-size:16px !important;}
 #room-apply {
-  background-color: #ffffff;
+  background-color:#F2F2F2;
 }
 #room-apply .protocal-area {
-  padding: 20px 0;
+  padding: 20px 0 16px 0;
   text-align: center;
 }
 #room-apply .submit-button {
@@ -163,7 +249,7 @@ export default {
   text-align: center;
 }
 #room-apply .step {
-  padding: 20px 40px;
+  padding: 20px 15px;box-sizing:border-box;margin-top:10px;
 }
 #room-apply .step .step-item {
   position: relative;
