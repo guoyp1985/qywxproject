@@ -165,6 +165,7 @@ export default {
       console.log('$route.params')
       console.log(this.$route.params)
       this.isSubmitIng = false
+      this.details = ''
       this.initItem = {
         linkman: '',
         telephone: '',
