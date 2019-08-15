@@ -69,7 +69,7 @@
           </div>
           <div class="txt">恭喜 {{loginUser.linkman}}</div>
           <div class="txt">经销商资格申请成功</div>
-          <div class="txt" v-if="query.censor == '1'">管理大大正在审核中，请耐心等待哦^_^</div>
+          <div class="txt">管理大大正在审核中，请耐心等待哦^_^</div>
           <div class="btnarea flex_center mt20" v-if="query.minibackurl">
             <div class="btn flex_center dark" @click="toApp">回到首页</div>
           </div>
