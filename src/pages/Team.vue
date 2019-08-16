@@ -91,7 +91,7 @@
         buttonTxt="立即加入团队">
       </tip-layer>
     </template>
-    <div class="bg-theme flex_center color-white fix-home-icon" @click="toHome" v-if="query.from">
+    <div class="bg-theme flex_center color-white fix-home-icon" @click="goAppHome" v-if="query.from">
       <i class="al al-home1"></i>
     </div>
   </div>
@@ -194,6 +194,14 @@ export default {
     })
   },
   methods: {
+    goAppHome () {
+      let type = 'default'
+      if (this.query.fromapp) {
+        type = this.query.fromapp
+      }
+      let url = ENV.AppHomePage[type]
+      this.$wechat.miniProgram.reLaunch({url: '/pages/wymh'})
+    },
     toHome () {
       let type = 'default'
       if (this.query.fromapp) {
