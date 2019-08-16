@@ -148,6 +148,7 @@ export default {
     }
   },
   created () {
+    console.log('进入到了团队页面')
     this.userInfo = User.get()
     this.id = this.$route.query.id
     this.getTeamInfo(this.id).then(res => {
