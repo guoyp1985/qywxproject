@@ -17,7 +17,7 @@
             </div>
             <div class="inner-item inner-item-right">
               <div class="leader">
-                {{teamInfo.title}}
+                {{teamInfo.title}}{{navUrl}}
                 <div class="al al-fenxiang1 font20" style="position:absolute;right:20px;top:16px;color:#ff6a61;" @click="tabModal"></div>
               </div>
               <div class="counts">
@@ -91,7 +91,7 @@
         buttonTxt="立即加入团队">
       </tip-layer>
     </template>
-    <div class="bg-theme flex_center color-white fix-home-icon" @click="toHome" v-if="query.from">
+    <div class="bg-theme flex_center color-white fix-home-icon" @click="goAppHome" v-if="query.from">
       <i class="al al-home1"></i>
     </div>
   </div>
@@ -121,7 +121,8 @@ export default {
       fixedTop: false,
       showModal: false,
       backurl: '',
-      showTip: false
+      showTip: false,
+      navUrl: ''
     }
   },
   computed: {
@@ -147,6 +148,7 @@ export default {
     }
   },
   created () {
+    console.log('进入到了团队页面')
     this.userInfo = User.get()
     this.id = this.$route.query.id
     this.getTeamInfo(this.id).then(res => {
@@ -170,11 +172,19 @@ export default {
   },
   activated () {
     this.fixedTop = false
+    console.log('团队用户信息请求前')
     this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
       const data = res.data
       this.loginUser = data
       User.set(this.loginUser)
       this.query = this.$route.query
+      console.log('进入到了团队的用户信息之后')
+      let type = 'default'
+      if (this.query.fromapp) {
+        type = this.query.fromapp
+      }
+      let url = type
+      this.navUrl = url
       if (!this.currentTab) {
         this.$refs.listTags.tags = []
         this.$refs.listTags.pagestart = 0
@@ -194,6 +204,15 @@ export default {
     })
   },
   methods: {
+    goAppHome () {
+      let type = 'default'
+      if (this.query.fromapp) {
+        type = this.query.fromapp
+      }
+      let url = ENV.AppHomePage[type]
+      this.navUrl = url
+      this.$wechat.miniProgram.reLaunch({url: '/pages/wymh'})
+    },
     toHome () {
       let type = 'default'
       if (this.query.fromapp) {
