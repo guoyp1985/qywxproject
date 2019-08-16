@@ -436,11 +436,14 @@ export default {
       })
     },
     toProduct (item) {
-      if (this.query.fromapp === 'factory') {
-        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&module=product`})
-      } else if (this.query.from) {
-        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&wid=${item.wid}`})
-      } else {
+      // if (this.query.fromapp === 'factory') {
+      //   this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&module=product`})
+      // } else if (this.query.from) {
+      //   this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&wid=${item.wid}`})
+      // } else {
+      //   this.$router.push({path: '/product', query: {id: item.pid, wid: item.wid}})
+      // }
+      if (!this.query.from && this.query.fromapp) {
         this.$router.push({path: '/product', query: {id: item.pid, wid: item.wid}})
       }
     },
