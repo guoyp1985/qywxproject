@@ -176,6 +176,12 @@ export default {
       this.loginUser = data
       User.set(this.loginUser)
       this.query = this.$route.query
+      let type = 'default'
+      if (this.query.fromapp) {
+        type = this.query.fromapp
+      }
+      let url = ENV.AppHomePage[type]
+      this.navUrl = url
       if (!this.currentTab) {
         this.$refs.listTags.tags = []
         this.$refs.listTags.pagestart = 0
