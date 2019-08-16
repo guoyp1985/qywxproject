@@ -746,7 +746,7 @@ zh-CN:
   Groupprice: 团购价
   Group numbers: 成团人数
   Person: 人
-  Online consulting: 在线咨询
+  Online consulting: 在线联系
   I am the seller: 我是卖家
   Sales Assistant: 销售助手
   Newcomer Guide: 新手指南
@@ -952,4 +952,9 @@ zh-CN:
   PtIckUpManage: 提货申请管理
   tPickUpManage: 提货申请管理
   tAgentTake: 提货
+  AtDdFactoryCard: 创建厂家优惠券
+  tAddFactoryCard: 修改厂家优惠券
+  FtActoryCardList: 厂家优惠券管理
+  tFactoryCardDetailInfo: 厂家优惠券统计
+  FtActoryCardDetailInfo: 厂家优惠券统计
   Identify: 识别

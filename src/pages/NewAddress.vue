@@ -149,6 +149,7 @@ export default {
         const data = res.data
         if (data.flag === 1) {
           const info = data.data
+          this.item.linkman = info.name
           this.item.area = [info.province_name, info.city_name, info.county_name]
           this.item.address = info.detail
           this.item.telephone = info.mobile

@@ -198,6 +198,8 @@ export default {
       let type = 'default'
       alert(1)
       if (this.query.fromapp) {
+        console.log('====this.query.fromapp====')
+        console.log(this.query.fromapp)
         type = this.query.fromapp
       }
       let url = ENV.AppHomePage[type]

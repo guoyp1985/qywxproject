@@ -62,10 +62,10 @@ var ENV = {
   FactoryManagerUid: 9,
   SuggestFid: 2,
   AppHomePage: {
-    default: '/pages/wymh',
-    factory: '/pages/index',
-    qxb: '/pages/wymh',
-    wl: '/pages/index'
+    'default': '/pages/wymh',
+    'factory': '/pages/index',
+    'qxb': '/pages/wymh',
+    'wl': '/pages/index'
   },
   FactoryLoginUrl: 'http://laravelcms.boka.cn/admin/login/login?role=factory',
   RetailerLoginUrl: 'http://laravelcms.boka.cn/admin/login/login?role=retailer',
