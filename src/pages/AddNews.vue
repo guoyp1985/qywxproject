@@ -385,6 +385,7 @@ export default {
           }
           this.query = this.$route.query
           this.getData()
+          document.title = this.loginUser.retailerinfo.title
           if (`${this.loginUser.retailerinfo.firstinfo.addnews}` === '0' && this.query.from) {
             this.$http.get(`${ENV.BokaApi}/api/user/show`).then((res) => {
               this.loginUser = res.data

@@ -22,7 +22,7 @@
       </div>
       <template v-else>
         <template v-if="showCenter">
-          <center-factory :factory-info="factoryInfo" :endTime="endTime" :messages="messages" :login-user="loginUser"></center-factory>
+          <center-factory :query="query" :factory-info="factoryInfo" :endTime="endTime" :messages="messages" :login-user="loginUser"></center-factory>
         </template>
       </template>
     </template>
@@ -110,6 +110,8 @@ export default {
             for (let key in self.submitkey) {
               self.submitData[key] = self.factoryInfo[key]
             }
+          } else {
+            self.submitData = self.submitkey
           }
           self.$vux.loading.hide()
           return self.$http.get(`${ENV.BokaApi}/api/message/newMessages`)

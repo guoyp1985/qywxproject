@@ -71,6 +71,9 @@
               <span class="v_middle">{{ productdata.oriprice }}</span>
             </span>
           </div>
+          <div class="flex_left mt5 color-gray" v-if="(productdata.tb_price != '' && productdata.tb_price > 0) || (productdata.jd_price != '' && productdata.jd_price > 0)">
+            <span v-if="productdata.tb_price != '' && productdata.tb_price > 0">猫价: ￥{{productdata.tb_price}}</span><span :class="{'ml10': (productdata.tb_price != '' && productdata.jd_price > 0)}" v-if="productdata.jd_price != '' && productdata.jd_price > 0">狗价: ￥{{productdata.jd_price}}</span>
+          </div>
           <div class="flex_left font12 mt5 color-gray2">
   					<div v-if="productdata.postage == 0" class="flex_left">{{ $t('Postage') }}: 包邮</div>
   					<div v-else class="flex_left w90">{{ $t('Postage') }}: {{ $t('RMB') }}{{ productdata.postage }}</div>
@@ -1316,6 +1319,9 @@ export default {
         this.showShareSuccess = false
         this.showVideo = true
         this.query = this.$route.query
+        if (this.query.module) {
+          this.module = this.query.module
+        }
         if (this.query.iswechat) {
           this.showShareLayer = true
         }

@@ -460,8 +460,8 @@ export default {
                 maxnum: 1,
                 handleCallback: function (data) {
                   if (data.flag === 1 && data.data) {
-                    self.$emit('on-auto-save')
                     callback && callback(data.data)
+                    self.$emit('on-auto-save')
                     // self.$vux.toast.show({
                     //   text: data.data,
                     //   time: 5000
@@ -691,9 +691,9 @@ export default {
         let pquery = self.$route.query
         if (pquery.from === 'miniprogram') {
           const params = self.$util.query(linkurl)
-          self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}`})
+          self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}&module=product`})
         } else {
-          self.$router.push(linkurl)
+          self.$router.push({path: linkurl})
         }
       }
     }

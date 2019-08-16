@@ -296,14 +296,14 @@ export default {
       if (this.query.from === 'miniprogram') {
         this.$wechat.miniProgram.navigateTo({url: ENV.MiniRouter.store})
       } else {
-        this.$router.push('/store')
+        this.$router.push({path: '/store'})
       }
     },
     toNews () {
       if (this.query.from === 'miniprogram') {
         this.$wechat.miniProgram.navigateTo({url: ENV.MiniRouter.contentsNews})
       } else {
-        this.$router.push('/store')
+        this.$router.push({path: '/store'})
       }
     },
     handleScroll (refname, index) {

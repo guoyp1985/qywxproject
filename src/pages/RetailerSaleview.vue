@@ -378,7 +378,7 @@ export default {
       // if (item.module === 'news' && this.query.from) {
       //   this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.news}?id=${item.id}&wid=${item.kefuid}`})
       // } else if (item.module === 'product' && this.query.from) {
-      //   this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.id}&wid=${item.kefuid}`})
+      //   this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.id}&wid=${item.kefuid}&module=product`})
       // } else if (item.module === 'activity' && this.query.from) {
       //   this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.activity}?id=${item.id}&wid=${item.kefuid}`})
       // } else {

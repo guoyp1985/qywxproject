@@ -5,7 +5,7 @@
 */
 <template>
   <div class="order-info">
-    <div @click="toStore" :to="{path:'/store',query:{wid:item.wid}}">
+    <div @click="toStore">
       <div class="store-info">
         <div class="info-cell">
           <template v-if="item.retailertitle && item.retailertitle != ''">
@@ -49,19 +49,21 @@
     </div>
     <div class="pay-info flex_right">
       <div class="clamp1 w_100">
-        <span class="v_middle font12">实际支付: </span><span class="v_middle font14">{{ $t('RMB') }}{{item.paymoney}}</span>
+        <span class="v_middle font12">实际支付: </span><span class="v_middle font14">{{ $t('RMB') }}{{item.needpaymoney}}</span>
         <template v-if="!item.delivertype && item.postage && item.postage != ''">
           <span class="v_middle font12 color-gray" v-if="item.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
           <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ item.postage }} )</span>
         </template>
-        <template v-if="item.carddeduct > 0">
+        <template v-if="item.carddeduct && item.carddeduct != '0' && item.carddeduct != '0.00'">
           <span class="v_middle font12 color-gray">优惠券抵扣: {{ $t('RMB') }}{{ item.carddeduct }}</span>
         </template>
       </div>
     </div>
     <div class="operate-area" v-if="item.buttons && item.buttons.length">
       <div class="db-in" v-for="(button, index) in item.buttons" :key="index">
-        <x-button mini @click.native="buttonClick(button.id)" class="font12">{{button.name}}</x-button>
+        <template v-if="!(query.fromapp == 'factory' && button.id == 2)">
+          <x-button mini @click.native="buttonClick(button.id)" class="font12">{{button.name}}</x-button>
+        </template>
       </div>
     </div>
   </div>
@@ -105,6 +107,7 @@ export default {
   },
   data () {
     return {
+      query: {},
       statusButtons: [
         {id: 1, name: '取消订单'},
         {id: 2, name: '去支付'},
@@ -141,22 +144,27 @@ export default {
       if (this.item.retailertitle && this.item.retailertitle !== '') {
         let params = {wid: this.item.wid}
         if (this.$route.query.from) {
-          this.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.store}?wid=${this.item.wid}`})
+          if (this.$route.query.fromapp === 'qxb') {
+            this.$wechat.miniProgram.reLaunch({url: `/pages/store?wid=${this.item.wid}`})
+            console.log(params)
+          } else {
+            this.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.store}?wid=${this.item.wid}`})
+          }
         } else {
           this.$router.push({path: '/store', query: params})
         }
       }
     },
     toDetail () {
-      let params = {id: this.item.id}
-      if (this.$route.query.from) {
-        params.from = this.$route.query.from
-      }
+      let params = this.$util.handleAppParams(this.$route.query, {id: this.item.id})
       this.$router.push({path: '/orderDetail', query: params})
     },
     buttonClick (type) {
       this.$emit('on-process', type, this.item, this.index)
     }
+  },
+  created () {
+    this.query = this.$route.query
   }
 }
 </script>

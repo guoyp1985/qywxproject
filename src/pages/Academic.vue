@@ -23,7 +23,19 @@
             <router-link v-else to="/subscribeInfo" class="article-ex color-blue">{{ WeixinName }}</router-link>
             <router-link class="article-author" :to="{ name: '', params: {} }">{{article.author}}</router-link>
           </div>
-          <div id="editor-content" class="article-content" v-html="article.content"></div>
+          <template v-if="article.c_format == 'json'">
+            <template v-for="(item, index) in article.content">
+              <div v-if="item.content && item.content != ''" class="padding10">{{item.content}}</div>
+              <template v-for="(photo,index1) in item.photo" index="index1" item="photo">
+                <div class="flex_center">
+                  <img :src="photo" style="max-width:100%;"/>
+                </div>
+              </template>
+            </template>
+          </template>
+          <template v-else>
+            <div id="editor-content" class="article-content" v-html="article.content"></div>
+          </template>
           <div class="reading-info">
             <span class="font14 color-gray">{{$t('Reading')}} {{article.views | readingCountFormat}}</span>
             <span class="font14 color-gray" @click="clickDig"><span :class="`digicon ${isdig ? 'diged' : ''}`"></span> {{article.dig}}</span>
@@ -34,11 +46,11 @@
         v-show="showShareSuccess"
         v-if="article.uploader == reward.uid || query.wid == reward.uid || article.identity != 'user'"
         :data="article"
-        :loginUser="reward"
+        :loginUser="loginUser"
         :module="module"
         :on-close="closeShareSuccess">
       </share-success>
-      <editor v-if="reward.uid == article.uploader" elem="#editor-content" module="academic" :query="query" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
+      <editor v-if="reward.uid == article.uploader && article.c_format != 'json'" elem="#editor-content" module="academic" :loginUser="loginUser" :query="query" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
       <div v-transfer-dom class="x-popup">
         <popup v-model="showSubscribe" height="100%">
           <div class="popup1">
@@ -121,7 +133,7 @@ export default {
       this.$util.wxAccess()
     },
     clickInsertProduct (url) {
-      this.$router.push(url)
+      this.$router.push({path: url})
     },
     popupSubscribe () {
       this.showSubscribe = true
@@ -136,7 +148,7 @@ export default {
         if (node.nodeType === 1 && node.getAttribute('class').indexOf('insertproduct') > -1) {
           const linkurl = node.getAttribute('linkurl')
           if (linkurl) {
-            self.$router.push(linkurl)
+            self.$router.push({path: linkurl})
           }
           break
         }

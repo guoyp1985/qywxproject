@@ -239,13 +239,13 @@ export default {
       })
     },
     articleItemClick (item) {
-      this.$router.push(item.url)
+      this.$router.push({path: item.url})
     },
     commodityItemClick (item) {
-      this.$router.push(item.url)
+      this.$router.push({path: item.url})
     },
     storeItemClick (item) {
-      this.$router.push(item.url)
+      this.$router.push({path: item.url})
     },
     cancelArticel (item) {
       const self = this

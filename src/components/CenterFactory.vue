@@ -48,6 +48,15 @@
               </div>
           </grid-item>
         </div>
+        <div class="gridlist" v-if="query.from">
+          <grid-item :label="$t('Activity')" :link="{path:'/factoryActivitylist'}">
+              <div slot="icon" style="position:relative;">
+                <i class="al al-huodong"></i>
+                <div class="numicon" v-if="factoryInfo.newactivity > 0 && factoryInfo.newactivity < 100">{{ factoryInfo.newactivity }}</div>
+                <div class="numicon" v-if="factoryInfo.newactivity >= 100">···</div>
+              </div>
+          </grid-item>
+        </div>
         <div class="gridlist">
           <grid-item :label="$t('News')" :link="{path:'/factoryNewsList', query: {fid: factoryInfo.id}}">
             <div slot="icon" style="position:relative;">
@@ -64,13 +73,13 @@
             </div>
           </grid-item>
         </div>
-        <!-- <div class="gridlist">
-          <grid-item :label="$t('Level')" :link="{path:`/factoryLevel?id=${factoryInfo.id}`}" style="position:relative;">
+        <div class="gridlist">
+          <grid-item label="经销商等级" :link="{path:`/agentLevel?id=${factoryInfo.id}`}" style="position:relative;">
             <div slot="icon">
               <i class="al al-dengji"></i>
             </div>
           </grid-item>
-        </div> -->
+        </div>
         <!--
         <div class="gridlist">
           <grid-item :label="$t('Stat')" :link="{path:`/stat?module=factory&id=${factoryInfo.id}`}" style="position:relative;">
@@ -115,6 +124,13 @@
             </div>
           </grid-item>
         </div>
+        <div class="gridlist">
+          <grid-item label="厂家管理" :link="{path:'/factoryManagerList', query: {fid: loginUser.fid}}" style="position:relative;">
+            <div slot="icon">
+              <i class="al al-peoplefill"></i>
+            </div>
+          </grid-item>
+        </div>
       </grid>
     </div>
     <group class="list-shadow02 order_list_show posi_r">
@@ -128,10 +144,22 @@
           <div class="numicon" v-if="factoryInfo.neworders >= 100">···</div>
         </div>
       </cell>
+      <cell :link="{path:'/pickUpManage'}" style="position:relative">
+        <div slot="icon" class="pr10"><i class="al al-dingdan color-blue11 db-in font18"></i></div>
+        <div slot="inline-desc">
+          <span class="font15">提货订单管理</span>
+        </div>
+      </cell>
       <cell :link="{path:'/factoryDetail'}" style="position:relative">
         <div slot="icon" class="pr10"><i class="al al-shouye1 color-red db-in font18"></i></div>
         <div slot="inline-desc">
           <span class="font15">{{$t('Factory introduction')}}</span>
+        </div>
+      </cell>
+      <cell :link="{path:'/agentDetail'}" style="position:relative">
+        <div slot="icon" class="pr10"><i class="al al-kehu1 color-blue db-in font18"></i></div>
+        <div slot="inline-desc">
+          <span class="font15">经销商介绍</span>
         </div>
       </cell>
       <cell :link="{path:'/factoryReport', query:{fid: factoryInfo.id}}" style="position:relative">
@@ -205,6 +233,10 @@ import ENV from 'env'
 export default {
   name: 'CenterFactory',
   props: {
+    query: {
+      type: Object,
+      default: {}
+    },
     loginUser: {
       type: Object,
       default: {}
@@ -351,7 +383,9 @@ export default {
 .centersales .weui-grids .gridlist:nth-child(4) .weui-grid{background: linear-gradient(#3eb4f1, #099ded);}
 .centersales .weui-grids .gridlist:nth-child(5) .weui-grid{background: linear-gradient(#f25c7d, #ed2d5a);}
 .centersales .weui-grids .gridlist:nth-child(6) .weui-grid{background: linear-gradient(#7974f6, #615aec);}
-.centersales .weui-grids .gridlist:nth-child(7) .weui-grid{background: linear-gradient(#2498e0, #226ab2);}
+.centersales .weui-grids .gridlist:nth-child(7) .weui-grid{background: linear-gradient(#9364f2, #694ba6);}
+.centersales .weui-grids .gridlist:nth-child(8) .weui-grid{background: linear-gradient(#fac45b, #efac2c);}
+.centersales .weui-grids .gridlist:nth-child(9) .weui-grid{background: linear-gradient(#3f9ccc, #3480a8);}
 .centersales .weui-grids .gridlist.disabled .weui-grid{background: linear-gradient(#b9b9b9, #afafaf);}
 .listitem.disabled {position:relative;background-color:#d8d8d8;}
 

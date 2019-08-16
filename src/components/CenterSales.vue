@@ -141,6 +141,12 @@
       </grid>
     </div>
     <group class="list-shadow02 order_list_show posi_r">
+      <cell :link="{path:'/subCommission'}" style="position:relative">
+        <div slot="icon" class="pr10" style="width:18px;overflow:hidden;"><i class="al al-maijiaxiu21 color-orange db-in bold font20" style="margin-left:-4px;"></i></div>
+        <div slot="inline-desc">
+          <span class="font15">每月分佣</span>
+        </div>
+      </cell>
       <cell :link="{path:'/centerSeller',query: {uid:retailerInfo.uid,wid:retailerInfo.uid}}" style="position:relative">
         <div slot="icon" class="pr10" style="width:18px;overflow:hidden;"><i class="al al-maijiaxiu21 color-orange db-in bold font20" style="margin-left:-4px;"></i></div>
         <div slot="inline-desc">
@@ -369,7 +375,7 @@ export default {
         content: '请先添加商品再使用该功能哦！',
         confirmText: '添加商品',
         onConfirm () {
-          self.$router.push('/addProduct')
+          self.$router.push({path: '/addProduct'})
         }
       })
     },

@@ -1,6 +1,6 @@
 <template>
-  <div class="containerarea font14 bg-white addmaterial">
-    <div class="">
+  <div class="containerarea s-havebottom font14 bg-white addmaterial">
+    <div class="s-container" style="top:0;">
       <form ref="fileForm1" enctype="multipart/form-data">
         <input ref="fileInput1" class="hide" type="file" multiple="multiple" name="files" @change="fileMulChange('fileForm1', 'contentphoto')" />
       </form>
@@ -66,8 +66,8 @@
         </div>
       </div>
     </div>
-    <div class="sc-bottom">
-      <button  @click="saveupevent" class="btnadd" :disabled="flags">立即发布</button>
+    <div class="s-bottom flex_center color-white list-shadow02">
+      <div class="flex_center color-white btn-bottom-red" style="width:90%;" @click="saveupevent">立即发布</div>
     </div>
   </div>
 </template>
@@ -98,8 +98,7 @@ export default {
     refresh () {
       this.photoarr1 = []
       this.videoarr = []
-      this.submitdata.title = ''
-      this.submitdata.contentphoto = ''
+      this.submitdata = {title: '', contentphoto: '', video: ''}
     },
     // textareaChange (refname) {
     //   let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
@@ -183,12 +182,17 @@ export default {
           self.photoarr1.push(data.data)
           self.submitdata.contentphoto = self.photoarr1.join(',')
         } else if (type === 'video') {
-          self.videoarr.push(data.data)
-          self.submitdata.video = self.videoarr.join(',')
+          if (data.data.lastIndexOf('.mp4') < 0 && data.data.lastIndexOf('.MOV') < 0) {
+            self.$vux.toast.text('请上传正确的视频文件', 'middle')
+          } else {
+            self.videoarr.push(data.data)
+            self.submitdata.video = self.videoarr.join(',')
+          }
         }
       } else if (data.error) {
         self.$vux.toast.show({
           text: data.error,
+          type: 'warn',
           time: self.$util.delay(data.error)
         })
       }

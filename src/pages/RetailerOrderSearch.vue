@@ -24,8 +24,6 @@
             <div>积极分享商品或活动，客户才会购买哦~</div>
           </div>
           <Orderitemplate v-else v-for="(item,index1) in tabdata1" :key="item.id" :data="item">
-            <span slot="orderno">{{ item.orderno }}</span>
-            <span slot="flagstr">{{ item.flagstr }}</span>
             <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item" :product="product"></Orderproductplate>
             <div slot="receivearea">
               <div class="t-table">
@@ -153,7 +151,7 @@ export default {
       self.$util.scrollEvent({
         element: scrollarea,
         callback: function () {
-          if (self.tabdata1.length === self.pagestart1 * self.limit) {
+          if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
             self.getData1()
           }

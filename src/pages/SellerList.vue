@@ -15,7 +15,7 @@
             @on-cancel="onCancel1"
             ref="search">
           </search>
-          <template v-if="disSearchData">
+          <template v-if="disSearchList">
             <div class="flex_center" style="width:100%;height:44px;">搜索结果</div>
           </template>
           <template v-else>
@@ -26,10 +26,10 @@
         </div>
       </div>
       <div class="s-container scroll-container" style="top:99px;" ref="scrollContainer">
-        <template v-if="disSearchData">
-          <div class="swiper-inner" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',2)">
-            <template v-if="disTabData3">
-              <template v-if="!tabData3.length">
+        <template v-if="disSearchList">
+          <div class="swiper-inner" ref="searchScrollContainer" @scroll="handleSearchScroll('searchScrollContainer')">
+            <template v-if="disSearchData">
+              <template v-if="!searchData.length">
                 <div class="scroll_list">
                   <div class="emptyitem">
                     <div class="t-table" style="padding-top:20%;">
@@ -42,13 +42,14 @@
               </template>
               <template v-else>
                 <div class="scroll_list ">
-                  <div class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData3" :key="item.id" style="color:inherit;">
+                  <div class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in searchData" :key="item.id" style="color:inherit;">
                     <div class="t-table bg-white pl10 pr10 pt10 pb10 border-box">
                       <div class="t-cell v_middle w70">
                         <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                       </div>
                       <div class="t-cell v_middle pr10" style="box-sizing:border-box;">
                         <div class="clamp1 font16">{{item.linkman}}</div>
+                        <div class="clamp1 font12 color-gray" v-if="item.identity && item.identity != 'W'">卖家等级: {{item.identity}}</div>
                         <div class="clamp1 font12 color-gray">店铺: {{item.title}}</div>
                         <div class="clamp1 font12 color-gray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
                         <div class="clamp1 font12 color-orange">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
@@ -66,6 +67,7 @@
           </div>
         </template>
         <template v-else>
+          <!-- 全职卖家 -->
           <div v-show="(selectedIndex == 0)" class="swiper-inner" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',0)">
             <template v-if="disTabData1">
               <template v-if="!tabData1.length">
@@ -99,6 +101,7 @@
                       </div>
                       <div class="t-cell v_middle pr10" style="box-sizing:border-box;">
                         <div class="clamp1 font16">{{item.linkman}}</div>
+                        <div class="clamp1 font12 color-gray" v-if="item.identity && item.identity != 'W'">卖家等级: {{item.identity}}</div>
                         <div class="clamp1 font12 color-gray">店铺: {{item.title}}</div>
                         <div class="clamp1 font12 color-gray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
                         <div class="clamp1 font12 color-orange">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
@@ -114,6 +117,7 @@
               </template>
             </template>
           </div>
+          <!-- 兼职卖家 -->
           <div v-show="(selectedIndex == 1)" class="swiper-inner" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',1)">
             <template v-if="disTabData2">
               <template v-if="!tabData2.length">
@@ -147,6 +151,7 @@
                       </div>
                       <div class="t-cell v_middle pr10" style="box-sizing:border-box;">
                         <div class="clamp1 font16">{{item.linkman}}</div>
+                        <div class="clamp1 font12 color-gray" v-if="item.identity && item.identity != 'W'">卖家等级: {{item.identity}}</div>
                         <div class="clamp1 font12 color-gray">店铺: {{item.title}}</div>
                         <div class="clamp1 font12 color-gray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
                         <div class="clamp1 font12 color-orange">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
@@ -162,12 +167,137 @@
               </template>
             </template>
           </div>
+          <!-- 待审核卖家 -->
+          <div v-show="(selectedIndex == 2)" class="swiper-inner" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',2)">
+            <template v-if="disTabData3">
+              <template v-if="!tabData3.length">
+                <div class="scroll_list">
+                  <div class="emptyitem">
+                    <div class="t-table" style="padding-top:20%;">
+                      <div class="t-cell padding10">
+                        <div>分享【厂家介绍】给好友，好友申请加盟即可成为兼职卖家帮你销售商品</div>
+                        <div class="color-blue"><router-link :to="{path: '/factoryDetail',query:{fid:fid}}">分享厂家介绍</router-link></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+              <template v-else>
+                <div class="scroll_list " >
+                  <div class="flex_around">
+                    <div class="doBtn" @click="allchoose()">全选</div>
+                    <div class="doBtn" @click="agree()">同意</div>
+                    <div class="doBtn" @click="refuse()">拒绝</div>
+                  </div>
+                  <div class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData3" :key="item.id" style="color:inherit;">
+                    <div class="t-table bg-white pl10 pr10 pt10 pb10 border-box">
+                      <div class="t-cell v_middle w70">
+                        <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                      </div>
+                      <div class="t-cell v_middle pr10" style="box-sizing:border-box;">
+                        <div class="clamp1 font16">{{item.linkman}}</div>
+                        <div class="clamp1 font12 color-gray" v-if="item.identity && item.identity != 'W'">卖家等级: {{item.identity}}</div>
+                        <div class="clamp1 font12 color-gray">店铺: {{item.title}}</div>
+                        <div class="clamp1 font12 color-gray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
+                        <div class="clamp1 font12 color-orange">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
+                      </div>
+                      <div class="align_right t-cell v_middle w80" >
+                        <input ref="inputCheckbox" type="checkbox" :value="item.uid" :data-uid="item.uid"/>
+                      </div>
+                		</div>
+                  </div>
+                </div>
+              </template>
+            </template>
+          </div>
+          <!-- 经销商 -->
+          <div v-show="(selectedIndex == 3)" class="swiper-inner" ref="scrollContainer4" @scroll="handleScroll('scrollContainer4',3)">
+            <template v-if="disTabData4">
+              <template v-if="!tabData4.length">
+                <div class="scroll_list">
+                  <div class="emptyitem">
+                    <div class="t-table" style="padding-top:20%;">
+                      <div class="t-cell padding10">
+                        <div>分享【经销商介绍】给好友，好友申请加盟即可成为经销商</div>
+                        <div class="color-blue"><router-link :to="{path: '/factoryDetail',query:{fid:fid}}">经销商介绍</router-link></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+              <template v-else>
+                <div class="scroll_list ">
+                  <div class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData4" :key="item.id" style="color:inherit;">
+                    <div class="t-table bg-white pl10 pr10 pt10 pb10 border-box">
+                      <div class="t-cell v_middle w70">
+                        <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                      </div>
+                      <div class="t-cell v_middle pr10" style="box-sizing:border-box;">
+                        <div class="clamp1 font16">{{item.linkman}}</div>
+                        <div class="clamp1 font12 color-gray">级别: {{item.levelname}}</div>
+                      </div>
+                      <div class="align_right t-cell v_middle w80">
+                        <div class="btnicon bg-red color-white font12" @click="controlPopup1(item,index)">
+                          <i class="al al-asmkticon0165 v_middle"></i>
+                        </div>
+                      </div>
+                		</div>
+                  </div>
+                </div>
+              </template>
+            </template>
+          </div>
+          <!-- 待审核卖家 -->
+          <div v-show="(selectedIndex == 4)" class="swiper-inner" ref="scrollContainer5" @scroll="handleScroll('scrollContainer5',4)">
+            <template v-if="disTabData5">
+              <template v-if="!tabData5.length">
+                <div class="scroll_list">
+                  <div class="emptyitem">
+                    <div class="t-table" style="padding-top:20%;">
+                      <div class="t-cell padding10">
+                        <div>分享【经销商介绍】给好友，好友申请加盟即可成为经销商</div>
+                        <div class="color-blue"><router-link :to="{path: '/agentDetail',query:{fid:fid}}">经销商介绍</router-link></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+              <template v-else>
+                <div class="scroll_list " >
+                  <div class="flex_around">
+                    <div class="doBtn" @click="allchoose()">全选</div>
+                    <div class="doBtn" @click="agree()">同意</div>
+                    <div class="doBtn" @click="refuse()">拒绝</div>
+                  </div>
+                  <div class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData5" :key="item.id" style="color:inherit;">
+                    <div class="t-table bg-white pl10 pr10 pt10 pb10 border-box">
+                      <div class="t-cell v_middle w70">
+                        <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                      </div>
+                      <div class="t-cell v_middle pr10" style="box-sizing:border-box;">
+                        <div class="clamp1 font16">{{item.linkman}}</div>
+                      </div>
+                      <div class="align_right t-cell v_middle w80" >
+                        <input ref="inputCheckbox" type="checkbox" :value="item.uid" :data-uid="item.uid"/>
+                      </div>
+                		</div>
+                  </div>
+                </div>
+              </template>
+            </template>
+          </div>
         </template>
       </div>
       <div v-transfer-dom>
         <popup class="menuwrap" v-model="showPopup1">
           <div class="popup0">
             <div class="list" v-if="clickData">
+              <div class="item" v-if="clickData.identity == 'D'">
+                <div class="inner" @click="clickPopup('up')">升级到C</div>
+              </div>
+              <div class="item" v-if="selectedIndex == 3">
+                <div class="inner" @click="clickPopup('level')">更改级别</div>
+              </div>
               <div class="item" >
                 <div class="inner" @click="clickPopup('uploader')">更改推荐人</div>
               </div>
@@ -209,7 +339,7 @@
       <div v-transfer-dom class="x-popup">
         <popup v-model="showLevelPopup" height="100%">
           <div class="popup1">
-            <div class="popup-top flex_center">设置代理级别</div>
+            <div class="popup-top flex_center">更改经销商级别</div>
             <div class="popup-middle font14">
               <div class="pt10 pb10 scroll_list">
                 <div v-for="(item,index) in levelData" :key="index" class="scroll_item">
@@ -217,7 +347,6 @@
                     <div class="t-table">
                       <div class="t-cell v_middle" style="color:inherit;">
                         <div class="clamp1 font14 color-999">等级名称: {{item.levelname}}</div>
-                        <div class="clamp1 font14 color-999">销售额: {{ $t('RMB') }}{{item.money}}</div>
                       </div>
                     </div>
                   </check-icon>
@@ -246,7 +375,7 @@
                 ref="search">
               </search>
             </div>
-            <div class="popup-middle font14 padding10" style="top:101px;box-sizing:border-box;">
+            <div class="popup-middle font14 padding10" style="top:101px;box-sizing:border-box;" ref="userScrollContainer" @scroll="handleScroll1('userScrollContainer')">
               <template v-if="disUserData">
                 <template v-if="!userData.length">
                   <div class="padding10 align_center color-gray" v-if="searchword2 != ''">暂无搜索结果</div>
@@ -277,6 +406,29 @@
         </popup>
       </div>
     </template>
+    <div v-if="showRefuseModal" class="auto-modal refund-modal flex_center">
+      <div class="modal-inner border-box" style="width:80%;">
+        <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">拒绝审核</div>
+        <div class="align_left txt padding10">
+          <group class="textarea-outer" style="padding:0;">
+            <x-textarea
+              ref="titleTextarea"
+              v-model="refuseContent"
+              name="title" class="x-textarea noborder"
+              placeholder="请输入原因"
+              :show-counter="false"
+              :rows="6"
+              :max="200"
+              autosize>
+            </x-textarea>
+          </group>
+        </div>
+        <div class="flex_center b_top_after" style="height:50px;">
+          <div class="flex_cell flex_center h_100 b_right_after" @click="closeRefuse">取消</div>
+          <div class="flex_cell flex_center h_100 color-orange" @click="submitRefuse">提交</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -286,7 +438,7 @@ Add factory:
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Popup, Confirm, CheckIcon, XImg, Search } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Popup, Confirm, CheckIcon, XImg, Search, Group, XTextarea } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
@@ -296,7 +448,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Popup, Confirm, CheckIcon, XImg, Sos, Search
+    Tab, TabItem, Swiper, SwiperItem, Popup, Confirm, CheckIcon, XImg, Sos, Search, Group, XTextarea
   },
   data () {
     return {
@@ -306,22 +458,31 @@ export default {
       query: {},
       fid: 0,
       loginUser: {},
-      tabtxts: [ '全职卖家', '兼职卖家' ],
+      tabtxts: ['全职卖家', '兼职卖家', '待审核卖家', '经销商', '待审核经销商'],
       selectedIndex: 0,
       searchword1: '',
       searchword2: '',
       autofixed: false,
+      searchData: [],
       tabData1: [],
       tabData2: [],
       tabData3: [],
+      tabData4: [],
+      tabData5: [],
+      disSearchData: false,
       disTabData1: false,
       disTabData2: false,
       disTabData3: false,
+      disTabData4: false,
+      disTabData5: false,
+      userPpageStart: 0,
+      searchPageStart: 0,
       pageStart1: 0,
       pageStart2: 0,
       pageStart3: 0,
       pageStart4: 0,
-      limit: 10,
+      pageStart5: 0,
+      limit: 20,
       showPopup1: false,
       clickData: {},
       clickIndex: 0,
@@ -330,11 +491,15 @@ export default {
       levelData: [],
       levelName: {},
       selectLevel: null,
-      disSearchData: false,
+      disSearchList: false,
       showUploaderPopup: false,
       selectUploader: null,
       userData: [],
-      disUserData: false
+      disUserData: false,
+      idArr: [],
+      refuseContent: '',
+      showRefuseModal: false,
+      levelPolicy: {}
     }
   },
   methods: {
@@ -343,20 +508,20 @@ export default {
     },
     onCancel1 () {
       this.searchword1 = ''
-      this.disSearchData = false
+      this.disSearchList = false
     },
     onSubmit1 () {
       const kw = this.searchword1
-      // this.searchword1 = ''
-      // this.$router.push({path: '/SellerSearch', query: {fid: this.query.id, keyword: kw}})
+      console.log('------进入搜索方法------')
+      console.log(kw)
       if (kw === '') {
-        this.disSearchData = false
+        this.disSearchList = false
       } else {
-        this.disSearchData = true
-        this.disTabData3 = false
-        this.tabData3 = []
-        this.pageStart3 = 0
-        this.getData3()
+        this.disSearchList = true
+        this.disSearchData = false
+        this.searchData = []
+        this.searchPageStart = 0
+        this.getSearchData()
       }
     },
     onChange2 (val) {
@@ -364,11 +529,15 @@ export default {
     },
     onCancel2 () {
       this.searchword2 = ''
+      this.disUserData = false
+      this.userData = []
+      this.userPpageStart = 0
+      this.searchUser()
     },
     onSubmit2 () {
       this.disUserData = false
       this.userData = []
-      this.pageStart4 = 0
+      this.userPpageStart = 0
       this.searchUser()
     },
     getPhoto (src) {
@@ -397,9 +566,24 @@ export default {
     closeQrcode () {
       this.showQrcode = false
     },
-    handleScroll: function (refname, index) {
+    handleSearchScroll (refname) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      self.$util.scrollEvent({
+        element: scrollarea,
+        callback: () => {
+          if (self.searchData.length === (self.searchPageStart + 1) * self.limit) {
+            self.searchPageStart++
+            self.$vux.loading.show()
+            self.getSearchData()
+          }
+        }
+      })
+    },
+    handleScroll: function (refname) {
+      const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      const index = this.selectedIndex
       self.$util.scrollEvent({
         element: scrollarea,
         callback: () => {
@@ -421,6 +605,32 @@ export default {
               self.$vux.loading.show()
               self.getData3()
             }
+          } else if (index === 3) {
+            if (self.tabData4.length === (self.pageStart4 + 1) * self.limit) {
+              self.pageStart4++
+              self.$vux.loading.show()
+              self.getData4()
+            }
+          } else if (index === 4) {
+            if (self.tabData5.length === (self.pageStart5 + 1) * self.limit) {
+              self.pageStart5++
+              self.$vux.loading.show()
+              self.getData5()
+            }
+          }
+        }
+      })
+    },
+    handleScroll1: function (refname, index) {
+      const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      self.$util.scrollEvent({
+        element: scrollarea,
+        callback: () => {
+          if (self.userData.length === (self.userPpageStart + 1) * self.limit) {
+            self.userPpageStart++
+            self.$vux.loading.show()
+            self.searchUser()
           }
         }
       })
@@ -448,6 +658,30 @@ export default {
             self.disTabData2 = false
             this.tabData2 = []
             self.getData2()
+          }
+          break
+        case 2:
+          if (this.tabData3.length < this.limit) {
+            self.pageStart3 = 0
+            self.disTabData3 = false
+            this.tabData3 = []
+            self.getData3()
+          }
+          break
+        case 3:
+          if (this.tabData4.length < this.limit) {
+            self.pageStart4 = 0
+            self.disTabData4 = false
+            this.tabData4 = []
+            self.getData4()
+          }
+          break
+        case 4:
+          if (this.tabData5.length < this.limit) {
+            self.pageStart5 = 0
+            self.disTabData5 = false
+            this.tabData5 = []
+            self.getData5()
           }
           break
       }
@@ -500,6 +734,29 @@ export default {
             })
           }
         })
+      } else if (key === 'up') {
+        self.$vux.confirm.show({
+          content: '确定将该用户升级到C级吗？',
+          onConfirm: () => {
+            self.$vux.loading.show()
+            self.$http.post(`${ENV.BokaApi}/api/haitun/upgrade`, {uid: self.clickData.uid, fid: self.query.id}).then((res) => {
+              self.$vux.loading.hide()
+              const data = res.data
+              if (data.flag) {
+                self.clickData.identity = 'C'
+                if (self.selectedIndex === 0) {
+                  self.tabData1[self.clickIndex].identity = 'C'
+                } else {
+                  self.tabData2[self.clickIndex].identity = 'C'
+                }
+              }
+              self.$vux.toast.show({
+                text: data.error,
+                time: self.$util.delay(data.error)
+              })
+            })
+          }
+        })
       }
     },
     closeLevelPopup () {
@@ -522,6 +779,140 @@ export default {
         }
       }
     },
+    // 获取待审核卖家的信息
+    getDshsSellerInfo () {
+      let uids = []
+      let checkdoms = this.$refs.inputCheckbox
+      for (var i = 0; i < checkdoms.length; i++) {
+        if (checkdoms[i].checked) {
+          uids.push(checkdoms[i].dataset.uid)
+        }
+      }
+      // console.log('-------uid.length------')
+      // console.log(uids.length)
+      // if (!uids.length) {
+      //   this.$vux.alert.show({
+      //     title: '温馨提示',
+      //     content: '请先选中待审核的用户'
+      //   })
+      //   return false
+      // }
+      this.idArr = uids
+      // if (callback) {
+      //   callback()
+      // }
+    },
+    allchoose () {  // 全选
+      let checkdoms = this.$refs.inputCheckbox
+      for (var i = 0; i < checkdoms.length; i++) {
+        checkdoms[i].checked = !checkdoms[i].checked
+      }
+      this.getDshsSellerInfo()
+    },
+    agree () {  // 同意
+      // this.getDshsSellerInfo(() => {
+      let uids = []
+      let checkdoms = this.$refs.inputCheckbox  // 通过ref获取所有check-box节点
+      for (var i = 0; i < checkdoms.length; i++) {
+        if (checkdoms[i].checked) {
+          uids.push(checkdoms[i].dataset.uid)
+        }
+      }
+      console.log('-------uid.length------')
+      console.log(uids.length)
+      if (!uids.length) {
+        this.$vux.alert.show({
+          title: '温馨提示',
+          content: '请先选中待审核的用户'
+        })
+        return false
+      }
+      this.idArr = uids
+      this.$vux.confirm.show({
+        content: '确定将选中的用户通过审核？',
+        onConfirm: () => {
+          this.$vux.loading.show()
+          let postParams = {fid: this.fid, uids: this.idArr, ok: 1}
+          if (this.selectedIndex === 4) {
+            postParams.agent = 1
+          }
+          this.$http.get(`${ENV.BokaApi}/api/factory/censorRetailer`, {
+            params: postParams
+          }).then((res) => {
+            console.log('-------------')
+            console.log(res)
+            this.$vux.loading.hide()
+            if (this.selectedIndex === 4) {
+              this.disTabData5 = false
+              this.tabData5 = []
+              this.pageStart5 = 0
+              this.getData5()
+            } else {
+              this.disTabData3 = false
+              this.tabData3 = []
+              this.pageStart3 = 0
+              this.getData3()
+            }
+          })
+        }
+      })
+      // })
+    },
+    refuse () {
+      // this.getDshsSellerInfo(() => {
+      let uids = []
+      let checkdoms = this.$refs.inputCheckbox
+      for (var i = 0; i < checkdoms.length; i++) {
+        if (checkdoms[i].checked) {
+          uids.push(checkdoms[i].dataset.uid)
+        }
+      }
+      console.log('-------uid.length------')
+      console.log(uids.length)
+      if (!uids.length) {
+        this.$vux.alert.show({
+          title: '温馨提示',
+          content: '请先选中待审核的用户'
+        })
+        return false
+      }
+      this.idArr = uids
+      this.showRefuseModal = true
+      // })
+    },
+    closeRefuse () {
+      this.showRefuseModal = false
+      this.refuseContent = ''
+    },
+    submitRefuse () { // 拒绝审核
+      this.showRefuseModal = false
+      console.log('-----拒绝原因------')
+      console.log(this.refuseContent)
+      this.$vux.loading.show()
+      let postParams = {fid: this.fid, uids: this.idArr, ok: 0, reason: this.refuseContent}
+      if (this.selectedIndex === 4) {
+        postParams.agent = 1
+      }
+      this.$http.get(`${ENV.BokaApi}/api/factory/censorRetailer`, {
+        params: postParams
+      }).then((res) => {
+        console.log('-------------')
+        console.log(res)
+        this.$vux.loading.hide()
+        this.refuseContent = ''
+        if (this.selectedIndex === 4) {
+          this.disTabData5 = false
+          this.tabData5 = []
+          this.pageStart5 = 0
+          this.getData5()
+        } else {
+          this.disTabData3 = false
+          this.tabData3 = []
+          this.pageStart3 = 0
+          this.getData3()
+        }
+      })
+    },
     submitLevel () {
       const self = this
       if (!self.selectLevel) {
@@ -539,14 +930,12 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              if (self.disSearchData) {
-                self.tabData3[self.clickIndex].level = self.selectLevel.id
+              if (self.disSearchList) {
+                self.searchData[self.clickIndex].level = self.selectLevel.id
+                self.searchData[self.clickIndex].levelname = self.levelPolicy[self.selectLevel.id]
               } else {
-                if (self.selectedIndex === 0) {
-                  self.tabData1[self.clickIndex].level = self.selectLevel.id
-                } else {
-                  self.tabData2[self.clickIndex].level = self.selectLevel.id
-                }
+                self.tabData4[self.clickIndex].level = self.selectLevel.id
+                self.tabData4[self.clickIndex].levelname = self.levelPolicy[self.selectLevel.id]
               }
               self.showLevelPopup = false
             }
@@ -586,7 +975,7 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              if (self.disSearchData) {
+              if (self.disSearchList) {
                 self.tabData3[self.clickIndex].uploader = self.selectUploader.wid
                 self.tabData3[self.clickIndex].uploadname = self.selectUploader.linkman
               } else {
@@ -602,6 +991,45 @@ export default {
             }
           }
         })
+      })
+    },
+    getSearchData () {
+      const self = this
+      let keyword = self.searchword1
+      let params = {fid: self.query.id, pagestart: self.searchPageStart, limit: self.limit}
+      if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
+        params.keyword = keyword
+      }
+      let url = ''
+      switch (self.selectedIndex) {
+        case 0:
+          url = 'api/factory/retailerList'
+          params.fulltime = 1
+          break
+        case 1:
+          url = 'api/factory/retailerList'
+          params.fulltime = 2
+          break
+        case 2:
+          url = 'api/factory/getCensorRetailers'
+          params.agent = 0
+          break
+        case 3:
+          url = 'api/factory/retailerList'
+          break
+        case 4:
+          url = 'api/factory/getCensorRetailers'
+          params.agent = 1
+          break
+      }
+      self.$http.get(`${ENV.BokaApi}/${url}`, {
+        params: params
+      }).then(function (res) {
+        const data = res.data
+        self.$vux.loading.hide()
+        const retdata = data.data ? data.data : data
+        self.searchData = self.searchData.concat(retdata)
+        self.disSearchData = true
       })
     },
     getData1 (isone) {
@@ -640,26 +1068,63 @@ export default {
         self.disTabData2 = true
       })
     },
-    getData3 () {
+    getData3 (isone) {
       const self = this
-      const params = {fid: self.query.id, pagestart: self.pageStart3, limit: self.limit}
-      let keyword = self.searchword1
-      if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
-        params.keyword = keyword
+      let params = {fid: self.query.id, pagestart: self.pageStart3, limit: self.limit, agent: 0}
+      if (isone) {
+        params.pagestart = self.tabData3.length
+        params.limit = 1
       }
-      self.$http.get(`${ENV.BokaApi}/api/factory/retailerList`, {
+      this.$http.get(`${ENV.BokaApi}/api/factory/getCensorRetailers`, {
         params: params
-      }).then(function (res) {
-        const data = res.data
+      })
+      .then(res => {
         self.$vux.loading.hide()
+        const data = res.data
         const retdata = data.data ? data.data : data
         self.tabData3 = self.tabData3.concat(retdata)
         self.disTabData3 = true
       })
     },
+    getData4 (isone) {
+      const self = this
+      let params = {fid: self.query.id, agent: 1, pagestart: self.pageStart4, limit: self.limit}
+      if (isone) {
+        params.pagestart = self.tabData4.length
+        params.limit = 1
+      }
+      this.$http.get(`${ENV.BokaApi}/api/factory/retailerList`, {
+        params: params
+      })
+      .then(res => {
+        self.$vux.loading.hide()
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        self.tabData4 = self.tabData4.concat(retdata)
+        self.disTabData4 = true
+      })
+    },
+    getData5 (isone) {
+      const self = this
+      let params = {fid: self.query.id, pagestart: self.pageStart5, limit: self.limit, agent: 1}
+      if (isone) {
+        params.pagestart = self.tabData5.length
+        params.limit = 1
+      }
+      this.$http.get(`${ENV.BokaApi}/api/factory/getCensorRetailers`, {
+        params: params
+      })
+      .then(res => {
+        self.$vux.loading.hide()
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        self.tabData5 = self.tabData5.concat(retdata)
+        self.disTabData5 = true
+      })
+    },
     searchUser () {
       const self = this
-      const params = {fid: self.query.id, pagestart: self.pageStart4, limit: self.limit}
+      const params = {fid: self.query.id, pagestart: self.userPpageStart, limit: self.limit}
       let keyword = self.searchword2
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         params.keyword = keyword
@@ -681,6 +1146,7 @@ export default {
       })
     },
     refresh () {
+      console.log('进入了刷新方法')
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
@@ -712,18 +1178,25 @@ export default {
             self.$vux.loading.hide()
             let data = res.data
             let retdata = data.data ? data.data : data
-            let levelpolicy = retdata.levelpolicy
             self.levelName = retdata.levelname
             self.levelData = []
-            for (let key in levelpolicy) {
-              self.levelData.push({id: key, money: levelpolicy[key], levelname: self.levelName[key]})
-            }
+            // for (let key in levelpolicy) {
+            //   self.levelData.push({id: key, money: levelpolicy[key], levelname: self.levelName[key]})
+            // }
             if (self.tabData1.length < self.limit) {
               self.disTabData1 = false
               self.tabData1 = []
               self.$vux.loading.show()
               self.pageStart1 = 0
               self.getData1()
+            }
+            return self.$http.post(`${ENV.BokaApi}/api/factory/getPolicy`)
+          }).then(res => {
+            const data = res.data
+            const retdata = data.data ? data.data : data
+            this.levelPolicy = retdata
+            for (let key in retdata) {
+              self.levelData.push({id: key, key: key, levelname: retdata[key]})
             }
           })
         }
@@ -760,5 +1233,7 @@ export default {
     background-position: center;
     background-size: 100%;
   }
+  .doBtn{height: 44px;line-height: 44px;width: 33.3%;text-align: center;}
+  .flex_around{display: flex;justify-content: space-around; align-items: center;}
 }
 </style>

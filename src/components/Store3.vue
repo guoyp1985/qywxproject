@@ -177,19 +177,14 @@
         <div v-if="query.wid && query.wid != loginUser.uid && !loginUser.isretailer" class="pb10 pl10 pr10">
           <router-link to="/centerSales" class="btn-open db" style="background-color: #e10c00">我也要开店</router-link>
         </div>
-        <div style="text-align: center;color:#999;height: 30px;line-height:30px;font-size: 14px;" v-if="scrollEnd">没有更多商品了！</div>
+        <div class="load-end-area loading" v-if="isLoading"></div>
+        <div class="load-end-area done" v-else-if="isDone"></div>
       </div>
       <div class="template3-fixed-icon">
         <div class="radius-item flex_center">
           <div class="align_center" @click="favoriteevent">
             <span :class="`al font16 ${isfavorite ? 'al-shoucang3' : 'al-zan8' }`"></span>
             <div class="font12">收藏</div>
-          </div>
-        </div>
-        <div class="radius-item flex_center">
-          <div class="align_center">
-            <span class="al al-fenxiang1 font14"></span>
-            <div class="font12">分享</div>
           </div>
         </div>
       </div>
@@ -330,9 +325,13 @@ export default {
       type: Boolean,
       default: ''
     },
-    scrollEnd: {
+    isLoading: {
       type: Boolean,
-      default: ''
+      default: false
+    },
+    isDone: {
+      type: Boolean,
+      default: false
     },
     showSuggest: {
       type: Boolean,

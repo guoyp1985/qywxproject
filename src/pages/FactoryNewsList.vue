@@ -54,7 +54,12 @@
         </div>
       </div>
       <div class="s-bottom list-shadow flex_center bg-white pl12 pr12">
-        <router-link class="flex_cell flex_center btn-bottom-red" :to="{path: '/addFactoryNews', query: {fid: query.fid}}" >{{ $t('Create news') }}</router-link>
+        <div class="flex_cell flex_center">
+          <router-link class="flex_center btn-bottom-orange" style="width:80%;" :to="{path: '/factoryNewsClass', query: {fid: query.fid}}" >文章分类</router-link>
+        </div>
+        <div class="flex_cell flex_center">
+          <router-link class="flex_center btn-bottom-red" style="width:80%;" :to="{path: '/addFactoryNews', query: {fid: query.fid}}" >{{ $t('Create news') }}</router-link>
+        </div>
       </div>
       <div v-transfer-dom>
         <popup class="menuwrap" v-model="showpopup">
@@ -162,6 +167,9 @@ export default {
     getData1 () {
       const self = this
       const params = { fid: self.query.fid, pagestart: self.pagestart1, limit: self.limit, wid: this.loginUser.uid }
+      if (this.query.classid) {
+        params.classid = this.query.classid
+      }
       let keyword = self.searchword1
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         self.searchresult1 = true

@@ -49,7 +49,7 @@
                   <template v-if="item.flag == 1 && item.fid == 0 && item.crowdid == 0">
                     <div class="t-cell v_middle align_left color-orange">
                       <div class="clamp1">
-                        <span class="v_middle">待支付: {{ $t('RMB') }}</span><span class="v_middle">{{ item.paymoney }}</span>
+                        <span class="v_middle">待支付: {{ $t('RMB') }}</span><span class="v_middle">{{ item.needpaymoney }}</span>
                         <template v-if="item.postage && item.postage != ''">
                           <span class="v_middle font12 color-gray" v-if="item.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
                           <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ item.postage }} )</span>
@@ -98,7 +98,7 @@
                 <div v-if="item.flag == 1 && item.fid == 0 && item.crowdid == 0" class="t-table pt5 color-lightgray font13 deliverarea" >
                   <div class="t-cell v_middle align_left color-orange">
                     <div class="clamp1">
-                      <span class="v_middle">待支付: {{ $t('RMB') }}</span><span class="v_middle">{{ item.paymoney }}</span>
+                      <span class="v_middle">待支付: {{ $t('RMB') }}</span><span class="v_middle">{{ item.needpaymoney }}</span>
                       <template v-if="item.postage && item.postage != ''">
                         <span class="v_middle font12 color-gray" v-if="item.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
                         <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ item.postage }} )</span>
@@ -523,7 +523,7 @@ export default {
       event.preventDefault()
       const self = this
       let showtitle = '修改价格'
-      let inputval = item.paymoney.replace(/,/g, '')
+      let inputval = item.needpaymoney.replace(/,/g, '')
       self.$vux.confirm.prompt(inputval, {
         title: showtitle,
         onShow: () => {
@@ -547,9 +547,9 @@ export default {
               onHide: () => {
                 if (data.flag === 1) {
                   if (this.selectedIndex === 0) {
-                    this.tabdata1[index].paymoney = parseFloat(val).toFixed(2)
+                    this.tabdata1[index].needpaymoney = parseFloat(val).toFixed(2)
                   } else if (this.selectedIndex === 1) {
-                    this.tabdata2[index].paymoney = parseFloat(val).toFixed(2)
+                    this.tabdata2[index].needpaymoney = parseFloat(val).toFixed(2)
                   }
                 }
               }

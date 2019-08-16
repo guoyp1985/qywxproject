@@ -9,21 +9,24 @@
       @on-cancel="onCancel"
       ref="search">
     </search>
-    <tab class="w_100 v-tab">
+    <div v-show="menuFlag" class="menu-swiper-outer" ref="swiperOuter">
+      <swiper class="menu-swiper">
+        <swiper-item class="swiper-item"  v-for="(items,index) in classDataArry" :key="index">
+          <div :class="`inner flex_center ${selectedIndex == index*colCount+index1 ? 'active' : ''}`" v-for="(tab,index1) in items" :key="index1" @click="onItemClick(index*colCount+index1)">
+            <div class="w_100">
+              <div class="pic-outer">
+                <div class="pic"><img :src="tab.photo"></img></div>
+              </div>
+              <div class="txt">{{tab.title}}</div>
+            </div>
+          </div>
+        </swiper-item>
+      </swiper>
+    </div>
+    <!-- <tab class="w_100 v-tab">
       <tab-item v-for="(item,index) in classData" :selected="selectedIndex == index" :key="index"  @on-item-click="onItemClick">{{item.title}}</tab-item>
-    </tab>
+    </tab> -->
     <div class="column-content" style="padding-bottom:10px;box-sizing:border-box;position:relative;">
-        <!-- <div>
-          <search
-            class="v-search bg-white"
-            v-model='searchword'
-            :auto-fixed="autofixed"
-            @on-submit="onSubmit"
-            @on-change="onChange"
-            @on-cancel="onCancel"
-            ref="search">
-          </search>
-        </div> -->
       <div class="b_top_after pt10 pb10">
         <div class="flex_center">
           <div :class="`flex_cell flex_center b_right_after sort-icon ${sort == 'dateline' ? 'active' : ''}`" @click="sortEvent('dateline')">
@@ -47,7 +50,7 @@
           			<div class="picarea">
           				<div class="pic">
                     <img class="imgcover" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-                    <div class="t-icon color-theme flex_center"><i class="al al-zhuanqian font18"></i><span>赚 {{$t('RMB')}}{{item.levelagent}}</span></div>
+                    <div class="t-icon color-theme flex_center"><i class="al al-zhuanqian font18"></i><span>赚 {{$t('RMB')}}{{item.salesrebate ? item.salesrebate : item.levelagent}}</span></div>
                   </div>
           			</div>
           			<div class="desbox" style="overflow:hidden;">
@@ -67,8 +70,8 @@
           		</div>
             </div>
           </div>
-          <div style="span-align:center;color:#999;height:30px;line-height:30px;font-size:14px;text-align:center;" v-if="isLoading">数据加载中</div>
-          <div style="span-align:center;color:#999;height:30px;line-height:30px;font-size:14px;text-align:center;" v-else-if="scrollEnd && productData.length">没有更多商品啦</div>
+          <div class="load-end-area loading" v-if="isLoading"></div>
+          <div class="load-end-area done" v-else-if="isDone"></div>
         </div>
       </div>
     </div>
@@ -87,6 +90,9 @@
           <div class="al al-close"></div>
         </div>
       </div>
+    </div>
+    <div class="flex_center color-white font12 flbtn">
+      <div @click="hideMenu">{{flagTxt}}分类</div>
     </div>
     <template v-if="showTip">
       <template v-if="VipFree">
@@ -115,7 +121,7 @@ Apply join:
 </i18n>
 
 <script>
-import { Tab, TabItem, Search } from 'vux'
+import { Tab, TabItem, Search, Swiper, SwiperItem } from 'vux'
 import { User, SystemParams } from '#/storage'
 import ENV from 'env'
 import Time from '#/time'
@@ -124,12 +130,12 @@ import FirstTip from '@/components/FirstTip'
 import FirstHb from '@/components/FirstHb'
 
 let self = this
-const limit = 30
+const limit = 10
 let pageStart = 0
 
 export default {
   components: {
-    Tab, TabItem, Search, TipLayer, FirstTip, FirstHb
+    Tab, TabItem, Search, TipLayer, FirstTip, FirstHb, Swiper, SwiperItem
   },
   filters: {
     dateformat: function (value) {
@@ -146,7 +152,7 @@ export default {
       productData: [],
       classData: [],
       selectedIndex: 0,
-      defaultTab: [{title: '为你推荐'}, {title: '全部'}],
+      defaultTab: [{title: '为你推荐', photo: 'https://tossharingsales.boka.cn/minigxk/allclass.png'}, {title: '全部', photo: 'https://tossharingsales.boka.cn/minigxk/allclass.png'}],
       autofixed: false,
       searchword: '',
       datecss: 'desc',
@@ -154,7 +160,6 @@ export default {
       sort: 'dateline',
       pageTop: 0,
       tabLeft: 0,
-      scrollEnd: false,
       showTip: false,
       showFirst: false,
       isFirst: false,
@@ -167,7 +172,15 @@ export default {
       isLoading: false,
       WeixinQrcode: ENV.WeixinQrcode,
       showSubscribe: false,
-      VipFree: false
+      VipFree: false,
+      colCount: 10,
+      classDataArry: [],
+      activeColor: '',
+      clicked: false,
+      isDone: false,
+      menuFlag: true,
+      flagTxt: '收起',
+      times: 0
     }
   },
   watch: {
@@ -176,6 +189,15 @@ export default {
     }
   },
   methods: {
+    hideMenu () {
+      this.menuFlag = !this.menuFlag
+      this.menuFlag ? this.flagTxt = '收起' : this.flagTxt = '展开'
+      // if (this.menuFlag) {
+      //   this.flagTxt = '收起'
+      // } else {
+      //   this.flagTxt = '展开'
+      // }
+    },
     closeSubscribe () {
       this.showSubscribe = false
     },
@@ -234,7 +256,7 @@ export default {
           this.productData[this.clickIndex].haveimport = 1
         }
         self.$vux.toast.show({
-          span: error,
+          text: error,
           type: data.flag === 1 ? 'success' : 'warn',
           time: self.$util.delay(error),
           onHide: () => {
@@ -331,6 +353,31 @@ export default {
       this.$router.push({path: '/factoryProduct', query: params})
     },
     handleScroll (refname) {
+      let swiperOuter = self.$refs['swiperOuter']
+      swiperOuter.style.height = 100 + 'px'
+      this.colCount = 5
+      let len = this.classData.length
+      let col = Math.ceil(len / this.colCount) // 获取swiper-items的数量，向上取整
+      if (col > 1) {
+        this.showDot = true
+      } else {
+        this.showDot = false
+      }
+      if (this.times < 1) {
+        this.times += 1
+        this.classDataArry = []
+      // 拼接成5个一组的对象数组
+        for (let i = 0; i < col; i++) { // 循环页数 i:0,1,2
+          let arr = []
+          for (let j = 0; j < 5; j++) { // 循环每页保存的类目数 j:1-30  每页10个类目
+            if (this.classData[j + i * this.colCount] == null) {
+              break
+            }
+            arr.push(this.classData[j + i * this.colCount]) // 第一页存前十个，即 j+0*10，j的取值范围，j<10（0-9） retdata[0-9]
+          }
+          this.classDataArry.push(arr)
+        }
+      }
       let scrollArea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
         element: scrollArea,
@@ -340,15 +387,15 @@ export default {
             self.$vux.loading.show()
             self.isLoading = true
             self.getData1()
-          } else {
-            self.scrollEnd = true
           }
         }
       })
     },
     getData1 (type) {
+      console.log(this.loginUser)
+      console.log(this.userInfo)
       let params = {pagestart: pageStart, limit: limit, wid: this.loginUser.uid}
-      if (this.loginUser.retailerinfo.fid) {
+      if (this.loginUser.retailerinfo && this.loginUser.retailerinfo.fid) {
         params.fid = this.loginUser.retailerinfo.fid
       }
       if (this.sort === 'dateline') {
@@ -376,7 +423,11 @@ export default {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
+        console.log('------------查询前-----------')
+        console.log(self.productData)
         self.productData = self.productData.concat(retdata)
+        console.log('------------查询后-----------')
+        console.log(self.productData)
         self.disProductData = true
         self.isLoading = false
         if (this.searchword !== '') {
@@ -384,20 +435,29 @@ export default {
         } else {
           self.afterSearch = false
         }
+        if (retdata.length < limit && this.productData.length && pageStart > 0) {
+          this.isDone = true
+        } else {
+          this.isDone = false
+        }
       })
     },
-    onItemClick (index) {
+    onItemClick (index, classId) {
       console.log('in onitemclick')
       console.log(index)
-      if (index !== self.selectedIndex) {
-        this.searchword = ''
-        self.selectedIndex = index
-        pageStart = 0
-        self.$vux.loading.show()
-        self.disProductData = false
-        self.productData = []
-        self.getData1()
-      }
+      console.log(this)
+      this.selectedIndex = index
+      this.clickClassId = classId
+      // if (index !== self.selectedIndex) {
+      this.clicked = true
+      this.searchword = ''
+      self.selectedIndex = index
+      pageStart = 0
+      self.$vux.loading.show()
+      self.disProductData = false
+      self.productData = []
+      self.getData1()
+      // }
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
@@ -410,7 +470,7 @@ export default {
         console.log('SHUSDNAKSD SDA:')
         console.log(this.loginUser)
         User.set(data)
-        if (`${this.loginUser.retailerinfo.firstinfo.importproduct}` === '0' && this.query.from && this.query.allowfirst !== 'false') {
+        if (this.loginUser.retailerinfo && `${this.loginUser.retailerinfo.firstinfo.importproduct}` === '0' && this.query.from && this.query.allowfirst !== 'false') {
           this.isFirst = true
         }
         return this.$http.post(`${ENV.BokaApi}/api/common/getSysParas`)
@@ -430,6 +490,30 @@ export default {
           let retdata = data.data ? data.data : data
           retdata = this.defaultTab.concat(retdata)
           self.classData = retdata
+          console.log(self.classData)
+          let colcount = this.colCount
+          let len = retdata.length
+          let col = Math.ceil(len / colcount) // 获取swiper-items的数量，向上取整
+          if (col > 1) {
+            this.showDot = true
+          } else {
+            this.showDot = false
+          }
+          // 拼接成十个一组的对象数组
+          for (let i = 0; i < col; i++) { // 循环页数 i:0,1,2
+            let arr = []
+            for (let j = 0; j < 10; j++) { // 循环每页保存的类目数 j:1-30  每页10个类目
+              if (retdata[j + i * colcount] == null) {
+                break
+              }
+              arr.push(retdata[j + i * colcount]) // 第一页存前十个，即 j+0*10，j的取值范围，j<10（0-9） retdata[0-9]
+            }
+            this.classDataArry.push(arr)
+          }
+          console.log(this.classDataArry)
+          // for (var i = 0; i < self.classData.length; i++) {
+          //   this.classItem.push = self.classData[i]
+          // }
           pageStart = 0
           self.$vux.loading.show()
           self.disProductData = false
@@ -444,7 +528,9 @@ export default {
   },
   activated () {
     this.$refs.scrollContainer.scrollTop = this.pageTop
-    document.querySelector('.vux-tab').scrollLeft = this.tabLeft
+    if (document.querySelector('.vux-tab')) {
+      document.querySelector('.vux-tab').scrollLeft = this.tabLeft
+    }
     this.showHb = false
     this.isFirst = false
     this.$util.getSystemParams(() => {
@@ -454,7 +540,9 @@ export default {
   },
   beforeRouteLeave (to, from, next) {
     this.pageTop = this.$refs.scrollContainer.scrollTop
-    this.tabLeft = document.querySelector('.vux-tab').scrollLeft
+    if (document.querySelector('.vux-tab')) {
+      this.tabLeft = document.querySelector('.vux-tab').scrollLeft
+    }
     next()
   }
 }
@@ -462,6 +550,14 @@ export default {
 
 <style lang="less">
 .rproducts{
+  .vux-slider > .vux-indicator, .vux-slider .vux-indicator-right {
+    position: absolute;
+    right: 47%;
+    bottom: -3px;
+  }
+  .al_center{
+
+  }
   .squarepic .desbox{height:85px;}
   .t-icon{
     position:absolute;left:0;top:10px;border-top-right-radius:20px;border-bottom-right-radius:20px;background-color:#fff;padding:5px 10px 5px 5px;font-size:15px;
@@ -498,5 +594,9 @@ export default {
   .txt1{position:absolute;top:26%;left:67%;}
   .txt2{position:absolute;bottom:6.6%;left:6%;}
   }
+  // .flex_center.active{
+  //   color: #ff6a61;
+  // }
+  .flbtn{height:50px;width:50px;border-radius:50px;background-color:#ff6a61;position:fixed;top:308px;right:12px;opacity:0.8}
 }
 </style>

@@ -101,7 +101,8 @@
                 </div>
                 <div class="flex_center bg-white h40">
                   <div class="t-table align_center color-gray2 font14 color-gray2">
-                    <div class="t-cell v_middle b_right_after" @click="toTimeline(item)" :to="{path: '/timeline', query:{ uid: item.uid }}">客户行为</div>
+                    <div class="t-cell v_middle b_right_after" v-if="query.from" @click="toCard(item)">专属优惠券</div>
+                    <div class="t-cell v_middle b_right_after" v-else @click="toTimeline(item)" :to="{path: '/timeline', query:{ uid: item.uid }}">客户行为</div>
                     <div class="t-cell v_middle b_right_after" v-if="item.priority" @click="priorityEvent(item,index)">取消置顶</div>
                     <div class="t-cell v_middle b_right_after" v-else @click="priorityEvent(item,index)">置顶</div>
                     <div class="t-cell v_middle b_right_after" @click="toChat(item)">
@@ -468,6 +469,11 @@ export default {
       let params = this.$util.handleAppParams(this.query, {uid: item.uid})
       this.$router.push({path: '/timeline', query: params})
     },
+    toCard (item) {
+      if (this.query.from) {
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.addCard}?uid=${item.uid}`})
+      }
+    },
     btnDetail (index) {
       for (var i = 0; i < this.tabdata1.length; i++) {
         if (i !== index && this.tabdata1[i].checked) {
@@ -499,14 +505,14 @@ export default {
       if (this.query.from === 'miniprogram') {
         this.$wechat.miniProgram.navigateTo({url: ENV.MiniRouter.store})
       } else {
-        this.$router.push('/store')
+        this.$router.push({path: '/store'})
       }
     },
     toNews () {
       if (this.query.from === 'miniprogram') {
         this.$wechat.miniProgram.navigateTo({url: ENV.MiniRouter.contentsNews})
       } else {
-        this.$router.push('/store')
+        this.$router.push({path: '/store'})
       }
     },
     handleScroll (refname, index) {
@@ -766,7 +772,11 @@ export default {
             self.distabdata1 = false
             this.tabdata1 = []
             if (!self.orderbyParams || !self.orderbyParams.orderby) {
-              self.orderbyParams = {orderby: 'dateline'}
+              if (this.query.type === 'customer') {
+                self.orderbyParams = {}
+              } else {
+                self.orderbyParams = {orderby: 'dateline'}
+              }
             }
             // self.orderbyParams = {}
             // if (self.dateClass.indexOf('active') > -1) {
@@ -844,6 +854,7 @@ export default {
           this.showApply = true
         } else {
           self.initContainer()
+          document.title = this.loginUser.retailerinfo.title
           this.showContainer = true
           this.swiperChange()
         }

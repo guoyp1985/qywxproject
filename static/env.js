@@ -1,5 +1,5 @@
 var ENV = {
-  Version: '2.0.0.2',
+  Version: '2.0.0.7',
   AppId: 'wxd50f3623bec2f5b5', // vux:'wx1e72f0c45242a94e' // vue: 'wxd50f3623bec2f5b5'
   // AppSecret: 'f22214afc8a01ec9a769bd0ba8551c48',
   FeedChars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
@@ -12,6 +12,7 @@ var ENV = {
   SocketBokaRoom: 'laravel.boka.cn',
   SocketServer: 'wss://chat.boka.cn/wss', //'wss://chat.boka.cn/wss', // vux: 'ws://123.206.77.217:7272', // vue: 'ws://124.207.246.109:7272'
   AdminUrl: 'http://laravelcms.boka.cn/admin/login/unionIdLogin',
+  FactoryApi: 'https://factorydev.boka.cn',
   OrderStatus: [
     {id: 0, status: '订单取消'},
     {id: 1, status: '已确认订单'},
@@ -27,7 +28,8 @@ var ENV = {
     news: '/packageB/pages/news',
     pay: '/packageB/pages/pay',
     product: '/packageB/pages/product',
-    store: '/packageB/pages/store'
+    store: '/packageB/pages/store',
+    addCard: '/packageA/pages/addCard'
   },
   Emots: [
     '微笑', '撇嘴', '色', '发呆', '得意', '流泪', '害羞', '闭嘴',
@@ -59,12 +61,18 @@ var ENV = {
   UidArr: [1, 2, 9, 139, 1406],
   FactoryManagerUid: 9,
   SuggestFid: 2,
-  AppHomePage: '/pages/wymh',
+  AppHomePage: {
+    'default': '/pages/wymh',
+    'factory': '/pages/index',
+    'qxb': '/pages/wymh',
+    'wl': '/pages/index'
+  },
   FactoryLoginUrl: 'http://laravelcms.boka.cn/admin/login/login?role=factory',
   RetailerLoginUrl: 'http://laravelcms.boka.cn/admin/login/login?role=retailer',
   AdminLoginUrl: 'http://laravelcms.boka.cn/admin/login/login?role=admin',
   AdminFactoryImg1: 'https://tossharingsales.boka.cn/images/vue_admin_factory1.png',
-  AdminFactoryImg2: 'https://tossharingsales.boka.cn/images/vue_admin_factory2.png'
+  AdminFactoryImg2: 'https://tossharingsales.boka.cn/images/vue_admin_factory2.png',
+  CommissionFid: 97
 }
 
 ENV.NoAccessUrls = [

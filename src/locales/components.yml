@@ -452,6 +452,7 @@ zh-CN:
   Cancel: 取消
   Save: 保存
   Necessary: (必填)
+  Selectable: (选填)
   No Address: 还未添加地址
   Sharing Details: 分享明细
   Share To Friend: 分享给好友
@@ -819,7 +820,7 @@ zh-CN:
   tFactoryOrders: 订单列表
   tFactoryRevenue: 收入
   tAddFactoryNews: 添加文章
-  tFactoryGoodeazy: 易采集
+  tFactoryGoodeazy: 采集商品
   tBusinessSchool: 商学院
   Create training academics: 创建培训素材
   tAddAcademic: 创建素材
@@ -827,6 +828,7 @@ zh-CN:
   Contact factory: 联系厂家
   Source of goods: 货源
   tRecommendProducts: 货源
+  RtEcommendProducts: 货源
   tFactoryOrderDetail: 订单详情
   tRetailerAcademic: 共销客商学院
   Academic title: 素材标题
@@ -937,3 +939,22 @@ zh-CN:
   tAddgroup: 添加微信群
   tAddGroup: 添加微信群
   AtDdGroup: 添加微信群
+  tSubCommission: 每月分佣
+  tFactoryActivitylist: 活动
+  tFactoryNewsClass: 文章分类
+  tFactoryManagerList: 厂家管理员
+  tPostageArea: 运费设置
+  tAgentSetting: 经销商设置
+  tAgentDetail: 经销商介绍
+  tAgentLevel: 经销商级别
+  tAgentProduct: 经销商价格
+  tPickupmanage: 提货申请管理
+  PtIckUpManage: 提货申请管理
+  tPickUpManage: 提货申请管理
+  tAgentTake: 提货
+  AtDdFactoryCard: 创建厂家优惠券
+  tAddFactoryCard: 修改厂家优惠券
+  FtActoryCardList: 厂家优惠券管理
+  tFactoryCardDetailInfo: 厂家优惠券统计
+  FtActoryCardDetailInfo: 厂家优惠券统计
+  Identify: 识别

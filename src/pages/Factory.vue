@@ -1,5 +1,5 @@
 <template>
-  <div :class="`containerarea bg-white font14 notop ${(!tabData2.length || (loginUser.retailerinfo.fid && loginUser.retailerinfo.fid != query.id)) ? 'nobottom' : ''}`">
+  <div :class="`containerarea bg-white font14 notop ${((selectedIndex == 1 && !tabData2.length) || (loginUser.retailerinfo.fid && loginUser.retailerinfo.fid != query.id)) ? 'nobottom' : ''}`">
     <div class="s-topbanner">
       <div class="flex_left border-box padding10 color-white" style="height:88px;">
         <div v-if="viewData.photo && viewData.photo != ''" class="w70">

@@ -1,5 +1,14 @@
 <template>
   <div class="containerarea bg-page font14 s-havebottom rproductlist">
+    <search
+      class="v-search bg-white"
+      v-model='searchword'
+      :auto-fixed="autofixed"
+      @on-submit="onSubmit"
+      @on-change="onChange"
+      @on-cancel="onCancel"
+      ref="search">
+    </search>
     <tab v-model="selectedIndex" class="w_100 v-tab">
       <tab-item v-for="(item,index) in tabtxts" :selected="selectedIndex == index" :key="index" @on-item-click="clickTab(index)">{{item}}</tab-item>
     </tab>
@@ -128,6 +137,9 @@
             <div class="item">
               <div v-if="clickdata.fpid > 0" class="inner" @click="clickpopup('fee')">设置返点佣金</div>
               <div v-else class="inner"  @click="clickpopup('edit')">编辑</div>
+            </div>
+            <div class="item" v-if="!clickdata.fpid">
+              <router-link class="inner" :to="{path: '/postageArea', query: {type: 'product',id: clickdata.id}}">偏远地区运费</router-link>
             </div>
             <div class="item" v-if="clickdata.moderate == 0">
               <div class="inner" @click="clickpopup('up')">上架</div>
@@ -258,7 +270,7 @@ Back go shop:
 </i18n>
 
 <script>
-import { TransferDom, Popup, Confirm, CheckIcon, XImg, Tab, TabItem, Swiper, SwiperItem } from 'vux'
+import { TransferDom, Popup, Confirm, CheckIcon, XImg, Tab, TabItem, Swiper, SwiperItem, Search } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 
@@ -268,7 +280,7 @@ export default {
     TransferDom
   },
   components: {
-    Popup, Confirm, CheckIcon, XImg, Tab, TabItem, Swiper, SwiperItem
+    Popup, Confirm, CheckIcon, XImg, Tab, TabItem, Swiper, SwiperItem, Search
   },
   data () {
     return {
@@ -303,7 +315,9 @@ export default {
       discustomerdata: false,
       showFeePopup: false,
       feeData: {},
-      postFee: '0.00'
+      postFee: '0.00',
+      searchword: '',
+      autofixed: false
     }
   },
   computed: {
@@ -375,21 +389,21 @@ export default {
       if (this.loginUser.isretailer === 2 && this.tabData1.length >= 5) {
         this.openVip()
       } else {
-        this.$router.push('/recommendProducts')
+        this.$router.push({path: '/recommendProducts'})
       }
     },
     toAdd () {
       if (this.loginUser.isretailer === 2 && this.tabData1.length >= 5) {
         this.openVip()
       } else {
-        this.$router.push('/addProduct')
+        this.$router.push({path: '/addProduct'})
       }
     },
     toCollect () {
       if (this.loginUser.isretailer === 2 && this.tabData1.length >= 5) {
         this.openVip()
       } else {
-        this.$router.push('/CollectProduct')
+        this.$router.push({path: '/CollectProduct'})
       }
     },
     getPhoto (src) {
@@ -742,10 +756,14 @@ export default {
     },
     getData1 (isone) {
       const self = this
-      const params = {moderate: 1, pagestart: this.pageStart1, limit: limit, wid: this.loginUser.uid}
+      let params = {moderate: 1, pagestart: this.pageStart1, limit: limit, wid: this.loginUser.uid}
       if (isone) {
         params.pagestart = this.tabData1.length
         params.limit = 1
+      }
+      if (this.searchword !== '') {
+        params = {pagestart: this.pageStart1, limit: limit, wid: this.loginUser.uid}
+        params.keyword = this.searchword
       }
       this.$http.get(`${ENV.BokaApi}/api/retailer/getRetailerProducts`, {
         params: params
@@ -754,7 +772,12 @@ export default {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
+        // console.log(retdata)
+        // console.log('------------查询前-----------')
+        // console.log(this.tabData1)
         this.tabData1 = this.tabData1.concat(retdata)
+        // console.log('------------查询后-----------')
+        // console.log(this.tabData1)
         this.disList1 = true
       })
     },
@@ -787,7 +810,28 @@ export default {
       this.loginUser = User.get()
       this.query = this.$route.query
       this.retailerInfo = this.loginUser.retailerinfo
+      document.title = this.retailerInfo.title
       this.swiperChange()
+    },
+    onSubmit () {
+      const self = this
+      self.$vux.loading.show()
+      self.disProductData = false
+      self.tabData1 = []
+      self.pageStart1 = 0
+      self.getData1()
+    },
+    onChange (val) {
+      this.searchword = val
+    },
+    onCancel () {
+      const self = this
+      self.searchword = ''
+      self.$vux.loading.show()
+      self.disProductData = false
+      self.tabData1 = []
+      self.pageStart1 = 0
+      self.getData1()
     }
   },
   created () {

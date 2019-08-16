@@ -71,14 +71,18 @@ export default {
   methods: {
     syncWxProfile () {
       const self = this
+      this.$vux.loading.show()
       this.$http.get(`${ENV.BokaApi}/api/user/refresh/0`)
       .then(res => {
+        this.$vux.loading.hide()
         if (res.data.flag) {
           const user = User.get()
           const retdata = res.data.data
           for (let key in retdata) {
             self.getProfile[key] = retdata[key]
           }
+          let dstr = new Date().getTime()
+          self.getProfile.avatar = `${self.getProfile.avatar}?_dt=${dstr}`
           User.set({
             ...user,
             ...self.getProfile

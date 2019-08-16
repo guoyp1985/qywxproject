@@ -222,7 +222,7 @@
           </div>
         </popup>
       </div>
-      <div class="auto-modal flex_center qrcode-modal" v-if="showQrcodeModal">
+      <div class="auto-modal flex_center qrcode-modal" v-show="showQrcodeModal">
         <div class="modal-inner border-box" style="width:80%;">
           <div class="flex_center b_bottom_after padding10 bold font16">识别二维码加卖家微信</div>
           <div class="flex_center padding10">
@@ -1090,8 +1090,10 @@ export default {
       return this.$http.get(`${ENV.BokaApi}/api/getUser/${this.query.uid}`)
     },
     refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       const self = this
       self.retailerInfo = {}
+      this.showQrcodeModal = false
       room = ''
       minIdFlag = 0
       this.message = ''
@@ -1104,9 +1106,8 @@ export default {
       this.isUserTouch = false
       this.hasNewMessage = false
       this.loginUser = User.get()
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
-      if (this.query.miniconfig === 'wechat.mini_program.qxb' || this.query.fromapp === 'factory') {
+      if (this.query.miniconfig === 'wechat.mini_program.qxb' || this.query.fromapp === 'factory' || this.query.fromapp === 'qxb') {
         this.showTip = false
       } else {
         this.showTip = true
@@ -1156,6 +1157,7 @@ export default {
   },
   activated () {
     this.$util.miniPost()
+    this.showQrcodeModal = false
     this.refresh()
   }
 }

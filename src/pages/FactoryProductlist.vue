@@ -51,18 +51,32 @@
         </template>
       </div>
       <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
-        <div class="addproduct flex_cell flex_center btn-bottom-red" @click="toAdd">{{ $t('Add product') }}</div>
+        <!-- <div class="align_center flex_center flex_cell">
+          <router-link class="flex_center bg-orange color-white" style="width:85%;border-radius:50px;height:35px;" to="/factoryGoodeazy">采集商品</router-link>
+        </div> -->
+        <div class="flex_cell flex_center">
+          <div class="bg-red flex_center color-white" style="width:85%;border-radius:50px;height:35px;" @click="toAdd">{{ $t('Add product') }}</div>
+        </div>
       </div>
       <div v-transfer-dom>
         <popup class="menuwrap" v-model="showpopup1">
           <div class="popup0">
             <div class="list" v-if="clickdata">
               <div class="item">
+                <div class="inner" @click="clickpopup('copy')">复制商品信息</div>
+              </div>
+              <div class="item">
+                <router-link class="inner" :to="{path: '/agentProduct', query: {pid: clickdata.id}}">经销商价格</router-link>
+              </div>
+              <div class="item">
                 <router-link class="inner" :to="{path: '/materialbank', query: {pid: clickdata.id}}">素材库</router-link>
               </div>
               <div class="item" v-if="clickdata.moderate == 1">
                 <div class="inner" @click="clickpopup('recommend')" v-if="clickdata.recommend == 0">商品推荐</div>
                 <div class="inner" @click="clickpopup('recommend')" v-else>取消推荐</div>
+              </div>
+              <div class="item">
+                <router-link class="inner" :to="{path: '/postageArea', query: {type: 'factoryproduct',id: clickdata.id}}">偏远地区运费</router-link>
               </div>
               <div class="item" v-if="!clickdata.activityid || clickdata.activityid == 0">
                 <router-link class="inner" :to="{path: '/addFactoryProduct', query: {id: clickdata.id, fid: query.fid}}">编辑</router-link>
@@ -230,6 +244,36 @@ export default {
         } else {
           self.showTip = true
         }
+      } else if (key === 'copy') {
+        self.showpopup1 = false
+        self.$vux.confirm.show({
+          title: '复制成功将会重新生成与当前商品信息完全一致的新商品',
+          confirmText: '复制',
+          onConfirm: () => {
+            self.$vux.loading.show()
+            self.$http.post(`${ENV.BokaApi}/api/copy/factoryproduct`, {
+              id: this.clickdata.id
+            }).then(res => {
+              let data = res.data
+              self.$vux.loading.hide()
+              let error = data.flag ? '成功' : data.error
+              self.$vux.toast.show({
+                text: error,
+                type: data.flag !== 1 ? 'warn' : 'success',
+                time: self.$util.delay(error),
+                onHide: () => {
+                  if (data.flag === 1) {
+                    this.$router.push({path: '/addFactoryProduct', query: {id: data.data.id}})
+                    // if (self.productdata.length === (pageStart1 + 1) * limit) {
+                    //   self.productdata.splice(self.productdata.length - 1, 1)
+                    // }
+                    // self.productdata = [data.data].concat(self.productdata)
+                  }
+                }
+              })
+            })
+          }
+        })
       } else {
         self.showpopup1 = false
       }

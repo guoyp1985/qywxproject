@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea font14">
-    <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
+    <subscribe v-if="loginUser.subscribe != 0 && !loginUser.isretailer"></subscribe>
     <template v-if="showSetting">
       <retailer-setting
         ref="retailerSetting"
@@ -188,14 +188,14 @@ export default {
     refresh () {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.$vux.loading.show()
       this.loginUser = User.get()
       this.query = this.$route.query
-      if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
+      if (this.loginUser && (this.loginUser.subscribe !== 0 || this.loginUser.isretailer)) {
+        this.$vux.loading.show()
         self.initContainer()
         self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
           { params: { limit: 100 } }
-        ).then(function (res) {
+        ).then(res => {
           self.$vux.loading.hide()
           if (res.status === 200) {
             let data = res.data
@@ -211,6 +211,7 @@ export default {
           } else {
             self.$vux.loading.hide()
             self.initContainer()
+            document.title = this.loginUser.retailerinfo.title
             self.showSetting = true
             self.getData()
           }

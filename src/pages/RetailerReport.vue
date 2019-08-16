@@ -150,12 +150,12 @@ export default {
     },
     toCustomer () {
       if (this.retailerInfo.moderate && this.retailerInfo.vipvalidate) {
-        this.$router.push('/retailerCustomerlist')
+        this.$router.push({path: '/retailerCustomerlist'})
       }
     },
     toSales () {
       if (this.retailerInfo.moderate && this.retailerInfo.vipvalidate) {
-        this.$router.push('/retailerSalechance')
+        this.$router.push({path: '/retailerSalechance'})
       }
     },
     getData () {
@@ -175,6 +175,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.retailerInfo = this.loginUser.retailerinfo
+      document.title = this.retailerInfo.title
       this.query = this.$route.query
       this.wid = this.query.wid ? this.query.wid : this.loginUser.uid
       this.getData()

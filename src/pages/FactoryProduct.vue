@@ -58,6 +58,9 @@
             </span>
           </div>
         </div>
+        <div class="flex_left padding10 color-gray b_bottom_after" v-if="(productdata.tb_price != '' && productdata.tb_price > 0) || (productdata.jd_price != '' && productdata.jd_price > 0)">
+          <span v-if="productdata.tb_price != '' && productdata.tb_price > 0">猫价: ￥{{productdata.tb_price}}</span><span :class="{'ml10': (productdata.tb_price != '' && productdata.jd_price > 0)}" v-if="productdata.jd_price != '' && productdata.jd_price > 0">狗价: ￥{{productdata.jd_price}}</span>
+        </div>
         <div class="bg-page" style="height:10px;"></div>
         <div class="b_top_after"></div>
         <template v-if="productdata.options && productdata.options.length">
@@ -401,7 +404,7 @@ export default {
       }
     },
     tofactoryDetail () {
-      this.$router.push('/factoryDetail?fid=' + this.productdata.fid)
+      this.$router.push({path: '/factoryDetail', query: {fid: this.productdata.fid}})
     },
     filterEmot (text) {
       return this.$util.emotPrase(text)
@@ -456,7 +459,7 @@ export default {
       if (this.loginUser.subscribe === 0) {
         this.$util.wxAccess()
       } else {
-        this.$router.push('/center')
+        this.$router.push({path: '/center'})
       }
     },
     showBigimg (index) {

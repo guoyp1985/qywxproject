@@ -58,7 +58,8 @@
         :hideloading="hideloading"
         :isNextNews="isNextNews"
         :haveMoreNews="haveMoreNews"
-        :scrollEnd="scrollEnd"
+        :isLoading="isLoading"
+        :isDone="isDone"
         :showSuggest="showSuggest"
         :suggestData="suggestData"
         :showHelpModal="showHelpModal"
@@ -99,7 +100,8 @@
         :hideloading="hideloading"
         :isNextNews="isNextNews"
         :haveMoreNews="haveMoreNews"
-        :scrollEnd="scrollEnd"
+        :isLoading="isLoading"
+        :isDone="isDone"
         :showSuggest="showSuggest"
         :suggestData="suggestData"
         :showHelpModal="showHelpModal"
@@ -140,7 +142,8 @@
         :hideloading="hideloading"
         :isNextNews="isNextNews"
         :haveMoreNews="haveMoreNews"
-        :scrollEnd="scrollEnd"
+        :isLoading="isLoading"
+        :isDone="isDone"
         :showSuggest="showSuggest"
         :suggestData="suggestData"
         :showHelpModal="showHelpModal"
@@ -181,7 +184,8 @@
         :hideloading="hideloading"
         :isNextNews="isNextNews"
         :haveMoreNews="haveMoreNews"
-        :scrollEnd="scrollEnd"
+        :isLoading="isLoading"
+        :isDone="isDone"
         :showSuggest="showSuggest"
         :suggestData="suggestData"
         :showHelpModal="showHelpModal"
@@ -280,7 +284,6 @@ export default {
       hideloading: false,
       isNextNews: true,
       haveMoreNews: false,
-      scrollEnd: false,
       showSuggest: false,
       suggestData: [],
       showHelpModal: false,
@@ -289,7 +292,10 @@ export default {
       showTemplate1: false,
       showTemplate2: false,
       showTemplate3: false,
-      showTemplate4: false
+      showTemplate4: false,
+      isLoading: false,
+      isDone: false,
+      ajaxIng: false
     }
   },
   watch: {
@@ -335,6 +341,7 @@ export default {
       this.showTemplate2 = false
       this.showTemplate3 = false
       this.showTemplate4 = false
+      this.ajaxIng = false
     },
     toDecoration () {
       let params = this.$util.handleAppParams(this.query, {})
@@ -402,20 +409,19 @@ export default {
           console.log('in 滚动事件到底部了')
           console.log(self.productdata.length)
           console.log((self.pageStart + 1) * limit)
-          if (self.productdata.length === (self.pageStart + 1) * limit) {
+          if (self.productdata.length === (self.pageStart + 1) * limit && !this.ajaxIng) {
             console.log(1)
-            self.scrollEnd = false
             self.pageStart++
             self.$vux.loading.show()
+            self.isLoading = true
             self.getData1()
-          } else {
-            console.log(2)
-            self.scrollEnd = true
           }
         }
       })
     },
     getData1 () {
+      if (this.ajaxIng) return false
+      this.ajaxIng = true
       const self = this
       let params = {pagestart: this.pageStart, limit: limit, wid: this.loginUser.uid}
       if (self.query.wid) {
@@ -423,13 +429,20 @@ export default {
       }
       self.$http.get(`${ENV.BokaApi}/api/retailer/getRetailerProducts`, {
         params: params
-      }).then(function (res) {
+      }).then(res => {
+        this.ajaxIng = false
         const data = res.data
         if (self.hideloading) {
           self.$vux.loading.hide()
         }
         const retdata = data.data ? data.data : data
         self.productdata = self.productdata.concat(retdata)
+        this.isLoading = false
+        if (retdata.length < limit && this.productdata.length && this.pageStart > 0) {
+          this.isDone = true
+        } else {
+          this.isDone = false
+        }
         self.disproductdata = true
       })
     },
@@ -543,10 +556,10 @@ export default {
           }
         })
       } else {
-        let cururl = `/store?wid=${self.query.wid}`
+        let cururl = `/store?wid=${self.retailerInfo.uid}`
         self.$vux.loading.show()
         self.$http.get(`${ENV.BokaApi}/api/user/favorite/add`,
-          { params: { module: self.module, id: self.query.wid, wid: self.retailerInfo.uid, currenturl: encodeURIComponent(cururl) } }
+          { params: { module: self.module, id: self.retailerInfo.uid, wid: self.retailerInfo.uid, currenturl: encodeURIComponent(cururl) } }
         ).then(function (res) {
           let data = res.data
           self.$vux.loading.hide()

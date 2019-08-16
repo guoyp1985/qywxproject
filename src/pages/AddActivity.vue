@@ -107,7 +107,12 @@
                         <div class="clamp1">{{item.title}}</div>
                         <div class="font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
                         <div class="font12 clamp1 color-orange" v-if="item.allowcard">允许使用优惠券</div>
-                        <div class="font12 clamp1 color-orange" v-if="item.fid">厂家佣金: ¥{{ item.rebatein }}</div>
+                        <template v-if="productmodule == 'product'">
+                          <div class="font12 clamp1 color-orange" v-if="item.fid">厂家佣金: ¥{{ item.rebatein }}</div>
+                        </template>
+                        <template v-else-if="item.salesrebate">
+                          <div class="font12 clamp1 color-orange">销售佣金: ¥{{ item.salesrebate }}</div>
+                        </template>
                       </div>
                     </div>
                   </check-icon>
@@ -213,7 +218,8 @@ export default {
       newData: {},
       action: '',
       sysParams: {},
-      disProductData: false
+      disProductData: false,
+      productmodule: 'product'
     }
   },
   watch: {
@@ -373,12 +379,19 @@ export default {
     },
     getProductData () {
       const self = this
-      let params = {from: 'activity', wid: this.loginUser.uid, pagestart: self.pagestart1, limit: self.limit}
+      let ajaxurl = `${ENV.BokaApi}/api/retailer/getRetailerProducts`
+      let params = {from: 'activity', pagestart: self.pagestart1, limit: self.limit}
+      if (this.productmodule === 'factoryproduct') {
+        ajaxurl = `${ENV.BokaApi}/api/list/factoryproduct`
+        params.fid = this.query.fid
+      } else {
+        params.wid = this.loginUser.uid
+      }
       let keyword = self.searchword
       if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
         params.keyword = keyword
       }
-      self.$http.get(`${ENV.BokaApi}/api/retailer/getRetailerProducts`, {
+      self.$http.get(ajaxurl, {
         params: params
       }).then((res) => {
         let data = res.data
@@ -439,19 +452,23 @@ export default {
         self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
       } else if (self.query.from) {
         if (self.activityType === 'groupbuy') {
-          self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${self.submitdata.productid}&wid=${self.loginUser.uid}`})
+          self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${self.submitdata.productid}&wid=${self.loginUser.uid}&module=${self.productmodule}`})
         } else {
           self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.activity}?id=${data.data}`})
         }
       } else {
         if (self.query.id) {
           if (self.activityType === 'groupbuy') {
-            self.$router.push({path: '/product', query: {id: self.query.id, wid: self.loginUser.uid}})
+            self.$router.push({path: '/product', query: {id: self.query.id, wid: self.loginUser.uid, module: self.productmodule}})
           } else {
             self.$router.push({path: '/activity', query: {id: data.data}})
           }
         } else {
-          self.$router.push({path: '/retailerActivitylist', query: {add: 1}})
+          if (self.query.fid) {
+            self.$router.push({path: '/factoryActivitylist', query: {add: 1}})
+          } else {
+            self.$router.push({path: '/retailerActivitylist', query: {add: 1}})
+          }
         }
         if (self.query.type === 'bargainbuy') {
           self.$refs.formBargainbuy.minprice = ''
@@ -462,7 +479,11 @@ export default {
     },
     saveAjax () {
       const self = this
-      self.$http.post(`${ENV.BokaApi}/api/retailer/addActivity`, self.submitdata).then((res) => {
+      let postData = self.submitdata
+      if (this.query.fid) {
+        postData.fid = this.query.fid
+      }
+      self.$http.post(`${ENV.BokaApi}/api/retailer/addActivity`, postData).then((res) => {
         let data = res.data
         self.$vux.loading.hide()
         self.$vux.toast.show({
@@ -587,9 +608,9 @@ export default {
           })
           return false
         }
-        if (groupprice > priceval) {
+        if (groupprice >= priceval) {
           self.$vux.toast.show({
-            text: '团购价不能大于原价',
+            text: '团购价应低于商品现价',
             type: 'warn',
             time: 1500
           })
@@ -672,6 +693,71 @@ export default {
         }
       })
     },
+    handleinit () {
+      const self = this
+      self.showContainer = true
+      this.query = this.$route.query
+      this.activityType = this.query.type
+      this.action = this.query.type
+      if (this.query.fid) {
+        this.productmodule = 'factoryproduct'
+      }
+      const nowdate = new Date().getTime()
+      const startime = this.dateformat(parseInt(nowdate / 1000))
+      const endtime = this.dateformat(parseInt((nowdate + 7 * 24 * 60 * 60 * 1000) / 1000))
+      this.selectdatetxt1 = ''
+      this.selectdatetxt2 = ''
+      this.showselectproduct = true
+      this.showproductitem = false
+      this.selectproduct = {}
+      this.productdata = []
+      this.radiodata = []
+      const submitdata = {
+        productid: '',
+        starttime: startime,
+        endtime: endtime
+      }
+      if (this.activityType === 'groupbuy') {
+        this.submitdata = {
+          ...submitdata,
+          param_groupprice: '',
+          param_numbers: '',
+          param_finishtime: '',
+          param_everybuy: ''
+        }
+      } else if (this.activityType === 'bargainbuy') {
+        this.submitdata = {
+          ...submitdata,
+          param_minprice: '',
+          param_finishtime: '',
+          param_everymin: '',
+          param_everymax: ''
+        }
+      } else if (this.activityType === 'discount') {
+        this.submitdata = {
+          ...submitdata,
+          param_price: '',
+          param_limitcount: '',
+          param_storage: ''
+        }
+      }
+      this.submitdata.type = this.query.type
+      this.requireddata = this.submitdata
+      if (this.query.id) {
+        this.submitdata.productid = this.query.id
+        this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
+          params: {id: this.query.id, module: this.productmodule}
+        }).then(res => {
+          let data = res.data
+          let retdata = data.data ? data.data : data
+          if (retdata.photo && retdata.photo !== '') {
+            retdata.photo = retdata.photo.split(',')[0]
+          }
+          this.selectproduct = retdata
+        })
+      }
+      this.showProductArea = true
+    },
     refresh () {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
@@ -681,91 +767,37 @@ export default {
         this.showSubscribe = true
         return false
       }
-      if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
-        if (((`${this.loginUser.retailerinfo.firstinfo.groupbuy}` === '0' && this.$route.query.type === 'groupbuy') || (`${this.loginUser.retailerinfo.firstinfo.bargainbuy}` === '0' && this.$route.query.type === 'bargainbuy')) && this.$route.query.from) {
-          this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
-            const data = res.data
-            this.loginUser = data
-            User.set(this.loginUser)
-            if (((`${this.loginUser.retailerinfo.firstinfo.groupbuy}` === '0' && this.$route.query.type === 'groupbuy') || (`${this.loginUser.retailerinfo.firstinfo.bargainbuy}` === '0' && this.$route.query.type === 'bargainbuy')) && this.$route.query.from) {
-              this.isFirst = true
-              // if (!(`${this.loginUser.retailerinfo.firstinfo.groupbuy}` === '0' && `${this.loginUser.retailerinfo.firstinfo.bargainbuy}` === '0')) {
-              //   this.showFirst = true
-              // }
-            }
-          })
-        }
-        let isAdmin = false
-        for (let i = 0; i < self.loginUser.usergroup.length; i++) {
-          if (self.loginUser.usergroup[i] === 1) {
-            isAdmin = true
-            break
-          }
-        }
-        if (!self.loginUser.isretailer && !isAdmin) {
-          this.$vux.loading.hide()
-          self.initData()
-          self.showApply = true
-        } else {
-          self.showContainer = true
-          this.query = this.$route.query
-          this.activityType = this.query.type
-          this.action = this.query.type
-          const nowdate = new Date().getTime()
-          const startime = this.dateformat(parseInt(nowdate / 1000))
-          const endtime = this.dateformat(parseInt((nowdate + 7 * 24 * 60 * 60 * 1000) / 1000))
-          this.selectdatetxt1 = ''
-          this.selectdatetxt2 = ''
-          this.showselectproduct = true
-          this.showproductitem = false
-          this.selectproduct = {}
-          this.productdata = []
-          this.radiodata = []
-          const submitdata = {
-            productid: '',
-            starttime: startime,
-            endtime: endtime
-          }
-          if (this.activityType === 'groupbuy') {
-            this.submitdata = {
-              ...submitdata,
-              param_groupprice: '',
-              param_numbers: '',
-              param_finishtime: '',
-              param_everybuy: ''
-            }
-          } else if (this.activityType === 'bargainbuy') {
-            this.submitdata = {
-              ...submitdata,
-              param_minprice: '',
-              param_finishtime: '',
-              param_everymin: '',
-              param_everymax: ''
-            }
-          } else if (this.activityType === 'discount') {
-            this.submitdata = {
-              ...submitdata,
-              param_price: '',
-              param_limitcount: '',
-              param_storage: ''
-            }
-          }
-          this.submitdata.type = this.query.type
-          this.requireddata = this.submitdata
-          if (this.query.id) {
-            this.submitdata.productid = this.query.id
-            this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
-              params: {id: this.query.id, module: 'product'}
-            }).then(res => {
-              let data = res.data
-              let retdata = data.data ? data.data : data
-              if (retdata.photo && retdata.photo !== '') {
-                retdata.photo = retdata.photo.split(',')[0]
+      if (this.$route.query.fid) {
+        this.handleinit()
+      } else {
+        if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
+          if (((`${this.loginUser.retailerinfo.firstinfo.groupbuy}` === '0' && this.$route.query.type === 'groupbuy') || (`${this.loginUser.retailerinfo.firstinfo.bargainbuy}` === '0' && this.$route.query.type === 'bargainbuy')) && this.$route.query.from) {
+            this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
+              const data = res.data
+              this.loginUser = data
+              User.set(this.loginUser)
+              if (((`${this.loginUser.retailerinfo.firstinfo.groupbuy}` === '0' && this.$route.query.type === 'groupbuy') || (`${this.loginUser.retailerinfo.firstinfo.bargainbuy}` === '0' && this.$route.query.type === 'bargainbuy')) && this.$route.query.from) {
+                this.isFirst = true
+                // if (!(`${this.loginUser.retailerinfo.firstinfo.groupbuy}` === '0' && `${this.loginUser.retailerinfo.firstinfo.bargainbuy}` === '0')) {
+                //   this.showFirst = true
+                // }
               }
-              this.selectproduct = retdata
             })
           }
-          this.showProductArea = true
+          let isAdmin = false
+          for (let i = 0; i < self.loginUser.usergroup.length; i++) {
+            if (self.loginUser.usergroup[i] === 1) {
+              isAdmin = true
+              break
+            }
+          }
+          if (!self.loginUser.isretailer && !isAdmin) {
+            this.$vux.loading.hide()
+            self.initData()
+            self.showApply = true
+          } else {
+            this.handleinit()
+          }
         }
       }
     }

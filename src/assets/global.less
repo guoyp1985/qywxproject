@@ -51,6 +51,7 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 
 .bg-theme {background-color:#ff6a61 !important;}
 .color-theme{color:#ff6a61 !important;}
+.bg-arrival{background-color:#FF6B63 !important;}
 .bg-black{background-color:#000 !important;}
 .bg-blue{background-color:#007aff !important;}
 .bg-blue1{background-color:#3ac7e5 !important;}
@@ -91,6 +92,7 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 .bg-page{background-color:@page-bg-color !important;}
 .bg-page-product{background:rgba(245,249,250,0.5) !important;}
 
+.active-check{background-color:#FF6B63!important}
 .color-black{color:#000 !important;}
 .color-blue{color:#007aff !important;}
 .color-blue1{color:#3ac7e5 !important;}
@@ -337,6 +339,7 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 .w90{width:90px !important;}
 .w100{width:100px !important;}
 .w_100{width:100%;}
+.w_50{width:50%;}
 
 .h30{height:30px !important;}
 .h35{height:35px !important;}
@@ -344,6 +347,7 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 .h45{height:45px !important;}
 .h50{height:50px !important;}
 .h100{height:100px !important;}
+.h_50{height:50%;}
 .h_100{height:100%;}
 
 .qselect {width: 100%;height: 27px;}
@@ -511,6 +515,10 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 	position:absolute;left:0;right:0;bottom:0;height:45px;
 	background: #f5f5f5;border-top:#d8d8d8 1px solid;
 }
+.popup-bottom2{
+	position:absolute;left:0;right:0;bottom:45px;height:45px;
+	background: #fff;
+}
 
 .pagetop{position:absolute;left:0;top:0;right:0;height:48px;overflow-x:hidden;}
 .pagemiddle{position:absolute;left:0;top:48px;right:0;bottom:45px;overflow-y:auto;overflow-x:hidden;}
@@ -539,6 +547,9 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 	border-style: solid;
 	border-width: 1px;
 }
+
+
+
 .bottomnaviarea .bottomnavi .item.active{background-color:#ebebeb;}
 .bottomnaviarea .bottomnavi .ico{height:20px;vertical-align:middle;}
 
@@ -727,11 +738,18 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 .q_photolist .photoitem .inner .innerlist{position: absolute;left: 0;right: 0;top: 0;bottom: 0;margin: auto auto;}
 /* .q_photolist .photoitem .inner .t-cell{width:100%;height:100%;vertical-align:middle;position:relative;text-align:center;} */
 .q_photolist .photoitem .photo{background-size:cover;background-repeat:no-repeat;background-position:center;}
+.q_photolist .photoitem .pic{position:absolute;left:0;top:0;right:0;bottom:0;width:100%;height:100%;object-fit:cover;}
 .q_photolist .photoitem .close{
 	position:absolute;top:-8px;right:-8px;
 	width:20px;height:20px;border-radius:50%;background-color:rgba(0,0,0,0.8);color:#fff;
 	display:flex;justify-content: center;align-items: center;
 }
+.q_photolist .photoitem .move-ico{
+	position:absolute;bottom:0;background-color:rgba(0,0,0,0.5);color:#fff;
+	.al{font-weight:bold;font-size:16px;}
+}
+.q_photolist .photoitem .move-ico.prev{left:0;}
+.q_photolist .photoitem .move-ico.next{right:0;}
 .q_photolist .setting-btn{display:none;}
 .q_photolist .photoitem .clip{
 	position:absolute;top:-8px;left:-8px;
@@ -1156,3 +1174,30 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
     }
   }
 }
+.menu-swiper-outer:after{content:'';display:block;padding-top:55%;}
+.menu-swiper-outer.one:after{content:'';display:block;padding-top:27.5%;}
+.menu-swiper-outer{
+	width:100%;max-height:200px;position:relative;
+	.menu-swiper{
+		position:absolute;left:0;top:0;right:0;bottom:0;height:100%;
+		.swiper-item{display:flex;flex-wrap: wrap;position:relative;}
+		.inner{
+			width:20%;height:50%;
+			.pic-outer{
+				width:70%;position:relative;margin:0 auto;display: flex;justify-content: center;
+				.pic:after{content:'';display:block;padding-bottom:100%;}
+				.pic{
+					width:40px;height:40px;position:relative;
+					img{position:absolute;left:0;top:0;right:0;bottom:0;width:100%;height:100%;}
+				}
+			}
+			.txt{color:black;font-size: 12px;text-align:center;margin-top:5rpx;font-size:12rpx;overflow: hidden;display: block;white-space: nowrap;text-overflow: ellipsis;}
+		}
+		.inner.active .txt{color:#ff6a61;}
+	}
+	.wx-swiper-dots.wx-swiper-dots-horizontal{position:absolute;bottom:0;}
+}
+
+.load-end-area{width:100%;height:50px;color:#ccc;display:flex;align-items:center;justify-content: center;}
+.load-end-area.loading:after{content:'正在加载中';}
+.load-end-area.done:after{content:'没有更多数据啦';}

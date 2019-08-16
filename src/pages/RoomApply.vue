@@ -126,7 +126,7 @@ export default {
       this.afterAdd()
     },
     toStart () {
-      this.$router.push('/RoomStart')
+      this.$router.push({path: '/RoomStart'})
     },
     wxContact () {
       if (this.query.from) {
