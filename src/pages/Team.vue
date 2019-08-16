@@ -171,6 +171,7 @@ export default {
   },
   activated () {
     this.fixedTop = false
+    console.log('团队用户信息请求前')
     this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
       const data = res.data
       this.loginUser = data
