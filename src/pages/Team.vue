@@ -196,6 +196,7 @@ export default {
   methods: {
     toHome () {
       let type = 'default'
+      alert(1)
       if (this.query.fromapp) {
         type = this.query.fromapp
       }
