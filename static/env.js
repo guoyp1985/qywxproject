@@ -67,7 +67,6 @@ var ENV = {
     'qxb': '/pages/wymh',
     'wl': '/pages/index'
   },
-  GxkAppHomePage: '/pages/wymh',
   FactoryLoginUrl: 'http://laravelcms.boka.cn/admin/login/login?role=factory',
   RetailerLoginUrl: 'http://laravelcms.boka.cn/admin/login/login?role=retailer',
   AdminLoginUrl: 'http://laravelcms.boka.cn/admin/login/login?role=admin',
