@@ -199,7 +199,7 @@ export default {
       if (this.query.fromapp) {
         type = this.query.fromapp
       }
-      alert(type)
+      console.log(ENV.AppHomePage[type])
       this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage[type]})
     },
     closeTipModal () {
