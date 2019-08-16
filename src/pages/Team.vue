@@ -180,7 +180,7 @@ export default {
       if (this.query.fromapp) {
         type = this.query.fromapp
       }
-      let url = ENV.AppHomePage[type]
+      let url = type
       this.navUrl = url
       if (!this.currentTab) {
         this.$refs.listTags.tags = []
