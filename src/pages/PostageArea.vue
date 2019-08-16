@@ -147,7 +147,10 @@ export default {
         {name: '甘肃省', value: '620000'},
         {name: '青海省', value: '630000'},
         {name: '宁夏回族自治区', value: '640000'},
-        {name: '新疆维吾尔自治区', value: '650000'}
+        {name: '新疆维吾尔自治区', value: '650000'},
+        {name: '臺灣省', value: '710000'},
+        {name: '香港特別行政區', value: '810000'},
+        {name: '澳門特別行政區', value: '820000'}
       ],
       submitIng: false,
       sendData: [],
@@ -264,6 +267,11 @@ export default {
         }
         if (isNaN(curPostage) || parseFloat(curPostage) <= 0) {
           this.$vux.toast.text('运费金额必须大于0', 'middle')
+          iscontinue = false
+          break
+        }
+        if (parseFloat(curPostage) > 100000) {
+          this.$vux.toast.text('运费金额过大', 'middle')
           iscontinue = false
           break
         }

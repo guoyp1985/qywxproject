@@ -179,7 +179,7 @@
             <div class="popup-bottom flex_center">
               <div class="h_100 flex_center bg-gray color-white w80" @click="closepopup">{{ $t('Close') }}</div>
               <div @click="toNewAddress" class="flex_cell h_100 flex_center bg-red color-white">新建地址</div>
-              <div v-if="!query.from" class="flex_cell h_100 flex_center bg-green color-white" @click="clickWxAddress">使用微信地址</div>
+              <div v-if="!query.from && !query.fromapp" class="flex_cell h_100 flex_center bg-green color-white" @click="clickWxAddress">使用微信地址</div>
             </div>
           </div>
         </popup>
@@ -689,7 +689,14 @@ export default {
       if (postageSetting && postageSetting.length) {
         for (let i = 0; i < postageSetting.length; i++) {
           const curProvince = postageSetting[i].province
-          if (selectedProvince === curProvince || selectedProvince.indexOf(curProvince) > -1 || curProvince.indexOf(selectedProvince) > -1) {
+          let isTw = false
+          let isAm = false
+          if ((curProvince.indexOf('臺灣') > -1 || curProvince.indexOf('台湾') > -1) && (selectedProvince.indexOf('臺灣') > -1 || selectedProvince.indexOf('台湾') > -1)) {
+            isTw = true
+          } else if ((curProvince.indexOf('澳門') > -1 || curProvince.indexOf('澳门') > -1) && (selectedProvince.indexOf('澳門') > -1 || selectedProvince.indexOf('澳门') > -1)) {
+            isAm = true
+          }
+          if (selectedProvince === curProvince || selectedProvince.indexOf(curProvince) > -1 || curProvince.indexOf(selectedProvince) > -1 || isTw || isAm) {
             if (postageSetting[i].postage !== -1 && postageSetting[i].postage !== '-1' && postageSetting[i].postage !== '-1.00') {
               this.postPostage = postageSetting[i].postage.replace(/,/g, '')
               this.allowSend = true
@@ -802,7 +809,7 @@ export default {
               self.addressdata = retdata
               self.handleAddress()
             } else {
-              if (!this.query.from) {
+              if (!this.query.from && !this.query.fromapp) {
                 this.$wechat.ready(() => {
                   this.$vux.confirm.show({
                     content: '是否使用微信地址？',

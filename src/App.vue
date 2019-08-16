@@ -134,9 +134,20 @@ export default {
     },
     getData () {
       const user = User.get()
-      if (!user || user.subscribe !== 1) {
-        this.$http.get(`${ENV.BokaApi}/api/user/show`)
-        .then(res => {
+      let query = this.$util.query()
+      console.log('进入到了app页面')
+      console.log(query)
+      if (!user || user.subscribe !== 1 || query.factoryuid || query.miniuid) {
+        let params = {}
+        if (query.factoryuid) {
+          params.factoryuid = query.factoryuid
+        }
+        if (query.miniuid) {
+          params.miniuid = query.miniuid
+        }
+        this.$http.get(`${ENV.BokaApi}/api/user/show`, {
+          params: params
+        }).then(res => {
           if (res && res.status === 200) {
             User.set(res.data)
           }

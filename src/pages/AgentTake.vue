@@ -344,7 +344,7 @@ export default {
     },
     getRecordData () {
       this.$http.post(`${ENV.BokaApi}/api/agent/dealList`, {
-        wid: this.loginUser.uid, fpid: this.productInfo.fpid, poid: this.productInfo.poid
+        wid: this.loginUser.uid, fpid: this.productInfo.fpid, poid: this.productInfo.poid, pagestart: this.recordPageStart, limit: this.limit
       }).then(res => {
         this.$vux.loading.hide()
         const data = res.data
@@ -366,7 +366,7 @@ export default {
         this.$vux.toast.text('请输入提货数量', 'middle')
         return false
       }
-      if (isNaN(this.takeQuantity) || parseFloat(this.takeQuantity) < 0) {
+      if (isNaN(this.takeQuantity) || parseFloat(this.takeQuantity) <= 0 || this.takeQuantity.indexOf('.') > -1 || this.takeQuantity.indexOf(',') > -1) {
         this.$vux.toast.text('请输入正确的提货数量', 'middle')
         return false
       }

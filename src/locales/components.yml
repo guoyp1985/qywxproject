@@ -452,6 +452,7 @@ zh-CN:
   Cancel: 取消
   Save: 保存
   Necessary: (必填)
+  Selectable: (选填)
   No Address: 还未添加地址
   Sharing Details: 分享明细
   Share To Friend: 分享给好友
@@ -956,3 +957,4 @@ zh-CN:
   FtActoryCardList: 厂家优惠券管理
   tFactoryCardDetailInfo: 厂家优惠券统计
   FtActoryCardDetailInfo: 厂家优惠券统计
+  Identify: 识别
