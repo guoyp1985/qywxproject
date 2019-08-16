@@ -1,5 +1,5 @@
 var ENV = {
-  Version: '2.0.0.6',
+  Version: '2.0.0.7',
   AppId: 'wxd50f3623bec2f5b5', // vux:'wx1e72f0c45242a94e' // vue: 'wxd50f3623bec2f5b5'
   // AppSecret: 'f22214afc8a01ec9a769bd0ba8551c48',
   FeedChars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
@@ -62,10 +62,10 @@ var ENV = {
   FactoryManagerUid: 9,
   SuggestFid: 2,
   AppHomePage: {
-    default: '/pages/wymh',
-    factory: '/pages/index',
-    qxb: '/pages/wymh',
-    wl: '/pages/index'
+    'default': '/pages/wymh',
+    'factory': '/pages/index',
+    'qxb': '/pages/wymh',
+    'wl': '/pages/index'
   },
   FactoryLoginUrl: 'http://laravelcms.boka.cn/admin/login/login?role=factory',
   RetailerLoginUrl: 'http://laravelcms.boka.cn/admin/login/login?role=retailer',

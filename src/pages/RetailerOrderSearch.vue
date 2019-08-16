@@ -151,7 +151,7 @@ export default {
       self.$util.scrollEvent({
         element: scrollarea,
         callback: function () {
-          if (self.tabdata1.length === self.pagestart1 * self.limit) {
+          if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
             self.getData1()
           }

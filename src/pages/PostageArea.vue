@@ -270,6 +270,11 @@ export default {
           iscontinue = false
           break
         }
+        if (parseFloat(curPostage) > 100000) {
+          this.$vux.toast.text('运费金额过大', 'middle')
+          iscontinue = false
+          break
+        }
       }
       if (!iscontinue) return false
       this.submitIng = true

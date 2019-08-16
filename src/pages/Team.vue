@@ -121,7 +121,8 @@ export default {
       fixedTop: false,
       showModal: false,
       backurl: '',
-      showTip: false
+      showTip: false,
+      navUrl: ''
     }
   },
   computed: {
@@ -147,6 +148,7 @@ export default {
     }
   },
   created () {
+    console.log('进入到了团队页面')
     this.userInfo = User.get()
     this.id = this.$route.query.id
     this.getTeamInfo(this.id).then(res => {
@@ -170,11 +172,19 @@ export default {
   },
   activated () {
     this.fixedTop = false
+    console.log('团队用户信息请求前')
     this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
       const data = res.data
       this.loginUser = data
       User.set(this.loginUser)
       this.query = this.$route.query
+      console.log('进入到了团队的用户信息之后')
+      let type = 'default'
+      if (this.query.fromapp) {
+        type = this.query.fromapp
+      }
+      let url = type
+      this.navUrl = url
       if (!this.currentTab) {
         this.$refs.listTags.tags = []
         this.$refs.listTags.pagestart = 0
@@ -195,7 +205,11 @@ export default {
   },
   methods: {
     toHome () {
-      this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage})
+      let type = 'default'
+      if (this.query.fromapp) {
+        type = this.query.fromapp
+      }
+      this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage[type]})
     },
     closeTipModal () {
       this.showTip = false
