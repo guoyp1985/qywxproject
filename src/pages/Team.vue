@@ -17,7 +17,7 @@
             </div>
             <div class="inner-item inner-item-right">
               <div class="leader">
-                {{teamInfo.title}}{{navUrl}}
+                {{teamInfo.title}}
                 <div class="al al-fenxiang1 font20" style="position:absolute;right:20px;top:16px;color:#ff6a61;" @click="tabModal"></div>
               </div>
               <div class="counts">
@@ -91,7 +91,7 @@
         buttonTxt="立即加入团队">
       </tip-layer>
     </template>
-    <div class="bg-theme flex_center color-white fix-home-icon" @click="goAppHome" v-if="query.from">
+    <div class="bg-theme flex_center color-white fix-home-icon" @click="toHome" v-if="query.from">
       <i class="al al-home1"></i>
     </div>
   </div>
@@ -204,23 +204,12 @@ export default {
     })
   },
   methods: {
-    goAppHome () {
-      let type = 'default'
-      if (this.query.fromapp) {
-        type = this.query.fromapp
-      }
-      let url = ENV.AppHomePage[type]
-      this.navUrl = url
-      this.$wechat.miniProgram.reLaunch({url: '/pages/wymh'})
-    },
     toHome () {
       let type = 'default'
       if (this.query.fromapp) {
         type = this.query.fromapp
       }
-      let url = ENV.AppHomePage[type]
-      // this.$wechat.miniProgram.reLaunch({url: `${url}`})
-      this.$wechat.miniProgram.reLaunch({url: ENV.GxkAppHomePage})
+      this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage[type]})
     },
     closeTipModal () {
       this.showTip = false
