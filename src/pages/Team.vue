@@ -17,7 +17,7 @@
             </div>
             <div class="inner-item inner-item-right">
               <div class="leader">
-                {{teamInfo.title}}
+                {{teamInfo.title}}{{navUrl}}
                 <div class="al al-fenxiang1 font20" style="position:absolute;right:20px;top:16px;color:#ff6a61;" @click="tabModal"></div>
               </div>
               <div class="counts">
@@ -121,7 +121,8 @@ export default {
       fixedTop: false,
       showModal: false,
       backurl: '',
-      showTip: false
+      showTip: false,
+      navUrl: ''
     }
   },
   computed: {
@@ -200,6 +201,7 @@ export default {
         type = this.query.fromapp
       }
       let url = ENV.AppHomePage[type]
+      this.navUrl = url
       this.$wechat.miniProgram.reLaunch({url: '/pages/wymh'})
     },
     toHome () {
