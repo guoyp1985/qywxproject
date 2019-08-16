@@ -203,7 +203,7 @@ export default {
       }
       let url = ENV.AppHomePage[type]
       // this.$wechat.miniProgram.reLaunch({url: `${url}`})
-      this.$wechat.miniProgram.reLaunch({url: '/pages/wymh'})
+      this.$wechat.miniProgram.reLaunch({url: ENV.GxkAppHomePage})
     },
     closeTipModal () {
       this.showTip = false
