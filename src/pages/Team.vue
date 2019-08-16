@@ -176,6 +176,7 @@ export default {
       this.loginUser = data
       User.set(this.loginUser)
       this.query = this.$route.query
+      console.log('进入到了团队的用户信息之后')
       let type = 'default'
       if (this.query.fromapp) {
         type = this.query.fromapp
