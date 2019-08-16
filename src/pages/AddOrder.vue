@@ -13,9 +13,9 @@
           <template v-if="onlineVal">
     				<div class="padding10 b_bottom_after bg-white" @click="showaddress">
     					<div class="t-table">
-    						<div v-if="selectaddress" class="t-cell v_middle">
-    							<div>收货人：{{ selectaddress.linkman }} {{ selectaddress.telephone}}</div>
-    							<div>收货地址：{{ selectaddress.fulladdress }}</div>
+    						<div v-if="selectAddress" class="t-cell v_middle">
+    							<div>收货人：{{ selectAddress.linkman }} {{ selectAddress.telephone}}</div>
+    							<div>收货地址：{{ selectAddress.fulladdress }}</div>
     						</div>
     						<div v-else class="t-cell v_middle color-red">请选择地址</div>
     						<div class="t-cell v_middle" style="width:30px;">
@@ -131,7 +131,7 @@
           </div>
         </form>
       </div>
-      <div class="s-bottom toolbar_bg" v-if="disPostageArea">
+      <div class="s-bottom toolbar_bg" v-if="disPostageArea || offlineVal">
         <div class="t-table h_100 align_center">
   				<div class="t-cell h_100 v_middle">需付：<span class="color-orange1">{{ $t('RMB') }}{{ payPrice }}</span></div>
   				<div class="t-cell h_100 v_middle w100 bg-orange1 color-white" v-if="allowSend || offlineVal" @click="submitOrder">确认订单</div>
@@ -314,7 +314,7 @@ export default {
       cardPrice: '0.00',
       postage: 0,
       postPostage: 0,
-      selectaddress: null,
+      selectAddress: null,
       orderdata: [],
       showpopup: false,
       addressdata: [],
@@ -356,8 +356,8 @@ export default {
     payPrice: function () {
       return this.payPrice
     },
-    selectaddress: function () {
-      return this.selectaddress
+    selectAddress: function () {
+      return this.selectAddress
     }
   },
   computed: {
@@ -373,7 +373,7 @@ export default {
       this.query = {}
       this.payPrice = '0.00'
       this.cardPrice = '0.00'
-      this.selectaddress = null
+      this.selectAddress = null
       this.orderdata = []
       this.showpopup = false
       this.addressdata = []
@@ -460,8 +460,8 @@ export default {
             })
             if (data.flag) {
               this.addressdata.splice(index, 1)
-              if (this.selectaddress.id === item.id) {
-                this.selectaddress = {}
+              if (this.selectAddress.id === item.id) {
+                this.selectAddress = {}
                 this.submitdata.addressid = 0
               }
             }
@@ -549,16 +549,16 @@ export default {
       })
     },
     clickAddress (data, index) {
-      this.selectaddress = data
+      this.selectAddress = data
       this.showpopup = false
       this.changeAddress()
     },
     radioclick (data, index) {
       const self = this
       if (data.checked) {
-        self.selectaddress = data
+        self.selectAddress = data
       } else {
-        self.selectaddress = null
+        self.selectAddress = null
       }
       for (let d of self.addressdata) {
         if (d.id !== data.id && d.checked) {
@@ -662,7 +662,7 @@ export default {
             })
             return
           }
-          self.submitdata.addressid = self.selectaddress.id
+          self.submitdata.addressid = self.selectAddress.id
           this.payData = this.submitdata
           if (this.curOrder.accounttype === 1 && !this.curOrder.info[0].fid) {
             this.showModal = true
@@ -681,7 +681,8 @@ export default {
       this.payData = {}
     },
     changeAddress () {
-      const selectedProvince = this.selectaddress.province
+      if (!this.selectAddress || !this.selectAddress.id) return false
+      const selectedProvince = this.selectAddress.province
       const postageSetting = this.curOrder.postageSetting
       this.allowSend = true
       let isset = false
@@ -721,24 +722,24 @@ export default {
         let a = self.addressdata[i]
         if (paramsid) {
           if (a.id === parseInt(paramsid)) {
-            self.selectaddress = a
+            self.selectAddress = a
             self.addressdata[i].checked = true
             break
           }
         } else {
           if (a.isdefault) {
-            self.selectaddress = a
+            self.selectAddress = a
             self.addressdata[i].checked = true
             break
           }
         }
       }
-      if (!self.selectaddress && self.addressdata.length > 0) {
-        self.selectaddress = self.addressdata[0]
+      if (!self.selectAddress && self.addressdata.length > 0) {
+        self.selectAddress = self.addressdata[0]
         self.addressdata[0].checked = true
       }
-      if (self.selectaddress) {
-        self.submitdata.addressid = self.selectaddress.id
+      if (self.selectAddress) {
+        self.submitdata.addressid = self.selectAddress.id
         this.changeAddress()
       }
     },
