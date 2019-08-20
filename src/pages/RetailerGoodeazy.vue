@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea font14 rgoodeazy bg-white">
-    <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
+    <subscribe v-if="loginUser.subscribe == 0 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
       <!-- <div class="s-topbanner s-topbanner1 bg-white">
@@ -509,7 +509,7 @@ export default {
         let curArea = self.$refs.urlTextarea[0] ? self.$refs.urlTextarea[0] : self.$refs.urlTextarea
         curArea.updateAutosize()
       }
-      if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
+      if (this.loginUser && (this.loginUser.subscribe !== 0 || this.loginUser.isretailer)) {
         self.initContainer()
         let isAdmin = false
         for (let i = 0; i < self.loginUser.usergroup.length; i++) {

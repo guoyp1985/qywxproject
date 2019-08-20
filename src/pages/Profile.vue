@@ -102,7 +102,7 @@ export default {
           }
           minibackurl = `${minibackurl}gxkfid=${this.loginUser.fid}`
         }
-        this.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+        this.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
       } else {
         this.$router.go(-1)
       }

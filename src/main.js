@@ -151,7 +151,7 @@ Vue.http.interceptors.request.use(config => {
       // console.log(config.url)
       cancelAllPendings(config)
       access((path) => {
-        router.push({path: path})
+        router.replace({path: path})
       })
     } else {
       console.log(`interceptors: Bearer ${token.token}`)
@@ -271,10 +271,13 @@ const access = success => {
       )
     }
   } else if (state === 'defaultAccess' && code) {
+    console.log('进入到了defaultAccess code 的判断内')
     // 401授权，取得token
     Vue.http.get(`${ENV.BokaApi}/api/authUser/${code}`)
     .then(
       res => {
+        console.log('weinxin/authUser success')
+        console.log(res)
         if (!res || !res.data || res.data.errcode) return
         Token.set(res.data.data)
         // 取用户信息
@@ -284,6 +287,8 @@ const access = success => {
     )
     .then(
       res => {
+        console.log('weinxin/authUser error')
+        console.log(res)
         if (!res) return
         User.set(res.data)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
@@ -293,6 +298,7 @@ const access = success => {
       }
     )
   } else {
+    console.log('已经授权过了')
     Vue.access(isPC => {
       if (isPC) {
         success && success()
@@ -344,7 +350,7 @@ clearCache()
 if (!Token.get() || Token.isExpired()) {
   access(path => {
     console.log(`Entry: ${path}`)
-    router.push({path: path})
+    router.replace({path: path})
     render()
   })
 } else {
