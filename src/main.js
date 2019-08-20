@@ -293,6 +293,7 @@ const access = success => {
       }
     )
   } else {
+    console.log('已经授权过了')
     Vue.access(isPC => {
       if (isPC) {
         success && success()
