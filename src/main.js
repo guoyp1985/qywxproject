@@ -151,7 +151,8 @@ Vue.http.interceptors.request.use(config => {
       // console.log(config.url)
       cancelAllPendings(config)
       access((path) => {
-        router.replace({path: path})
+        // router.replace({path: path})
+        location.replace(`${ENV.Host}/#/${path}`)
       })
     } else {
       console.log(`interceptors: Bearer ${token.token}`)
@@ -350,7 +351,8 @@ clearCache()
 if (!Token.get() || Token.isExpired()) {
   access(path => {
     console.log(`Entry: ${path}`)
-    router.replace({path: path})
+    // router.replace({path: path})
+    location.replace(`${ENV.Host}/#/${path}`)
     render()
   })
 } else {
