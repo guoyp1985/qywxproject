@@ -38,7 +38,7 @@
           </template>
           <div class="reading-info">
             <span class="font14 color-gray">{{$t('Reading')}} {{article.views | readingCountFormat}}</span>
-            <span class="font14 color-gray" @click="clickDig"><span :class="`digicon ${isdig ? 'diged' : ''}`"></span> {{article.dig}}</span>
+            <!-- <span class="font14 color-gray" @click="clickDig"><span :class="`digicon ${isdig ? 'diged' : ''}`"></span> {{article.dig}}</span> -->
           </div>
         </div>
       </div>
