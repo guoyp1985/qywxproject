@@ -61,7 +61,7 @@
                     <span class="middle-cell mr10 v_middle">收货信息:</span><span class="v_middle">{{item.address}}</span>
                     <span @click="copyTxt(item)" class="ml5" style="position:relative;">
                       <i class="al al-fuzhi font14 color-red4"></i><span class="font12 color-red4">复制</span>
-                      <div :class="`deliver_txt-0-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{item.address}}</div>
+                      <div :class="`deliver_txt-1-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{item.address}}</div>
                     </span>
                   </div>
                   <div class="t-table pt5 color-lightgray font13 deliverarea">

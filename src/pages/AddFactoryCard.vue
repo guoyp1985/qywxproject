@@ -349,7 +349,7 @@ export default {
     afterSelectProduct () {
       const self = this
       self.selectproduct = self.selectpopupdata
-      // if (self.selectProductData) {
+      // if (self.selectProductData) {  // 此处循环判断选中的商品是否已经存在 一张优惠券对应多个商品
       //   for (var i = 0; i < self.selectProductData.length; i++) {
       //     if (self.selectproduct === self.selectProductData[i]) {
       //       self.selectProductData.splice(i, 1)
@@ -374,6 +374,10 @@ export default {
         self.$vux.toast.text('该商品库存为0，请补充库存', 'middle')
         return false
       } else if (this.selectpopupdata.price <= this.submitdata.discountordermoney) {
+        console.log('当前选中商品金额')
+        console.log(this.selectpopupdata.price)
+        console.log('所设置的满减金额')
+        console.log(this.submitdata.discountordermoney)
         self.$vux.toast.text('该商品价格低于满减金额，请重新选择', 'middle')
         return false
       }
@@ -392,6 +396,10 @@ export default {
         self.$vux.toast.text('请填写正确的满减金额', 'middle')
         return false
       } else if (this.selectpopupdata.price <= this.submitdata.discountordermoney) {
+        console.log('当前选中商品金额')
+        console.log(this.selectpopupdata.price)
+        console.log('所设置的满减金额')
+        console.log(this.submitdata.discountordermoney)
         self.$vux.toast.text('该商品价格低于满减金额，请重新选择', 'middle')
         return false
       } else if (!self.submitdata.starttime) {
