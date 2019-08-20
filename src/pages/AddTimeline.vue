@@ -1,6 +1,6 @@
 <template>
   <div class="font14 containerarea notop addtimeline">
-    <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer && query.type != 'customer'"></subscribe>
+    <subscribe v-if="loginUser.subscribe == 0 && !loginUser.isretailer && query.type != 'customer'"></subscribe>
     <template v-if="showContainer">
       <div class="pagemiddle">
         <group>
@@ -233,7 +233,7 @@ export default {
       if (self.query.tagid) {
         self.tagids = [self.query.tagid]
       }
-      if (self.loginUser && (self.loginUser.subscribe === 1 || self.loginUser.isretailer || self.query.type === 'customer')) {
+      if (self.loginUser && (self.loginUser.subscribe !== 0 || self.loginUser.isretailer || self.query.type === 'customer')) {
         self.showContainer = true
         if (self.query.uid && self.query.uid.toString() !== self.loginUser.uid.toString()) {
           self.addType = 'customer'

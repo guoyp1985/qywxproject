@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea bg-page membersview font14">
-    <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
+    <subscribe v-if="loginUser.subscribe == 0 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <Sos v-if="showSos" :title="sosTitle"></Sos>
     <template v-if="showContainer">
@@ -512,7 +512,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.initData()
       this.loginUser = User.get()
-      if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
+      if (this.loginUser && (this.loginUser.subscribe !== 0 || this.loginUser.isretailer)) {
         if (!this.loginUser.isretailer) {
           self.initContainer()
           this.showApply = true

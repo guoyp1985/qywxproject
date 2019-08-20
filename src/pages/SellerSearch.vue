@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea bg-page font14 sellersearch-page">
-    <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
+    <subscribe v-if="loginUser.subscribe == 0 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
       <div class="s-topbanner s-topbanner1">
@@ -319,7 +319,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$vux.loading.show()
       this.loginUser = User.get()
-      if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
+      if (this.loginUser && (this.loginUser.subscribe !== 0 || this.loginUser.isretailer)) {
         if (!this.loginUser.isretailer) {
           this.$vux.loading.hide()
           self.initContainer()

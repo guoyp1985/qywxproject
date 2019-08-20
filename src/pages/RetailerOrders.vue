@@ -1,6 +1,6 @@
 <template>
   <div id="retailer-orders-page" :class="`containerarea bg-page font14 retailerordes ${showTip ? 'show-tip-page' : ''}`">
-    <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
+    <subscribe v-if="loginUser.subscribe == 0 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
       <div v-if="showTip" class="pagetop border-box db-flex top-subscribe-tip">
@@ -998,7 +998,7 @@ export default {
       if (this.$route.query.from && this.loginUser.subscribe !== 1) {
         this.showTip = true
       }
-      if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
+      if (this.loginUser && (this.loginUser.subscribe !== 0 || this.loginUser.isretailer)) {
         if (!this.loginUser.isretailer) {
           this.$vux.loading.hide()
           self.initContainer()

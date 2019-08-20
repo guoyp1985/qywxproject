@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea font14 havetoptab bg-page factivitylist">
-    <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
+    <subscribe v-if="loginUser.subscribe == 0 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
       <div class="pagetop">

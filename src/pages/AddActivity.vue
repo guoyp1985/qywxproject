@@ -763,14 +763,14 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.initData()
       this.loginUser = User.get()
-      if (this.loginUser.subscribe !== 1 && !this.loginUser.isretailer) {
+      if (this.loginUser.subscribe === 0 && !this.loginUser.isretailer) {
         this.showSubscribe = true
         return false
       }
       if (this.$route.query.fid) {
         this.handleinit()
       } else {
-        if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
+        if (this.loginUser && (this.loginUser.subscribe !== 0 || this.loginUser.isretailer)) {
           if (((`${this.loginUser.retailerinfo.firstinfo.groupbuy}` === '0' && this.$route.query.type === 'groupbuy') || (`${this.loginUser.retailerinfo.firstinfo.bargainbuy}` === '0' && this.$route.query.type === 'bargainbuy')) && this.$route.query.from) {
             this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
               const data = res.data

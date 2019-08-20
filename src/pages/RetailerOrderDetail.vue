@@ -1,6 +1,6 @@
 <template>
   <div id="order-detail" :class="`containerarea notop rorderdetail bg-page color-gray5 font14 ${bottomcss}`">
-    <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
+    <subscribe v-if="loginUser.subscribe == 0 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <Sos v-if="showSos" :title="sosTitle"></Sos>
     <template v-if="showContainer">
@@ -991,7 +991,7 @@ export default {
       this.$vux.loading.show()
       this.loginUser = User.get()
       this.initData()
-      if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
+      if (this.loginUser && (this.loginUser.subscribe !== 0 || this.loginUser.isretailer)) {
         if (!this.loginUser.isretailer) {
           this.$vux.loading.hide()
           self.initContainer()

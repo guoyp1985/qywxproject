@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea bg-page font14 factory-customer-page">
-    <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
+    <subscribe v-if="loginUser.subscribe == 0 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
       <div class="s-container s-container1" style="top:0;" @scroll="handleScroll('scrollContainer1', 0)">
@@ -466,7 +466,7 @@ export default {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
-      if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
+      if (this.loginUser && (this.loginUser.subscribe !== 0 || this.loginUser.isretailer)) {
         this.query = this.$route.query
         if (this.query.type === 'customer') {
           self.dateClass = ''
