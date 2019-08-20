@@ -272,7 +272,7 @@ const access = success => {
     }
   } else if (state === 'defaultAccess' && code) {
     // 401授权，取得token
-    Vue.http.get(`${ENV.BokaApi}/api/authUser/${code}`)
+    Vue.http.get(`${ENV.BokaApi}/weixin/authUser/${code}`)
     .then(
       res => {
         if (!res || !res.data || res.data.errcode) return
