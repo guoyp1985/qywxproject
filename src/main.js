@@ -275,6 +275,8 @@ const access = success => {
     Vue.http.get(`${ENV.BokaApi}/weixin/authUser/${code}`)
     .then(
       res => {
+        console.log('weinxin/authUser success')
+        console.log(res)
         if (!res || !res.data || res.data.errcode) return
         Token.set(res.data.data)
         // 取用户信息
@@ -284,6 +286,8 @@ const access = success => {
     )
     .then(
       res => {
+        console.log('weinxin/authUser error')
+        console.log(res)
         if (!res) return
         User.set(res.data)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
