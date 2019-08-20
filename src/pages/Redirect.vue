@@ -20,7 +20,7 @@ export default {
       const code = lUrl.query.code
       const state = lUrl.query.state
       if (code) {
-        self.$http.get(`${ENV.BokaApi}/weixin/authUser/${code}`)
+        self.$http.get(`${ENV.BokaApi}/api/authUser/${code}`)
         .then(
           res => {
             if (res.data.flag) {
