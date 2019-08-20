@@ -271,6 +271,7 @@ const access = success => {
       )
     }
   } else if (state === 'defaultAccess' && code) {
+    console.log('进入到了defaultAccess code 的判断内')
     // 401授权，取得token
     Vue.http.get(`${ENV.BokaApi}/weixin/authUser/${code}`)
     .then(
