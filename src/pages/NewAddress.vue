@@ -19,11 +19,7 @@
       <x-input :title="$t('Detailed Address')" required :placeholder="`${$t('Necessary')}${$t('Detailed Address')}`" v-model="item.address"></x-input>
       <x-switch :title="$t('Default Address')" v-model="getSwitcher"></x-switch>
     </group>
-    <box gap="20px 10px">
-      <x-button type="primary" @click.native="save">{{$t('Save')}}</x-button>
-      <x-button type="default" link="BACK">{{$t('Cancel')}}</x-button>
-    </box>
-    <div class="db-flex w_100">
+    <div class="db-flex w_100 mt10">
       <group style="width:85%;">
           <x-textarea placeholder="粘贴整段地址,自动识别电话、姓名和地址" v-model="details"></x-textarea>
       </group>
@@ -31,6 +27,10 @@
         <x-button style="height:92px;" type="primary" @click.native="identify">{{$t('Identify')}}</x-button>
       </box>
     </div>
+    <box gap="20px 10px">
+      <x-button type="primary" @click.native="save">{{$t('Save')}}</x-button>
+      <x-button type="default" link="BACK">{{$t('Cancel')}}</x-button>
+    </box>
   </div>
 </template>
 <script>
