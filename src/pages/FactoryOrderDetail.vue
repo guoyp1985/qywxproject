@@ -443,7 +443,7 @@ export default {
       // } else {
       //   this.$router.push({path: '/product', query: {id: item.pid, wid: item.wid}})
       // }
-      if (!this.query.from && this.query.fromapp) {
+      if (!this.query.from && !this.query.fromapp) {
         this.$router.push({path: '/product', query: {id: item.pid, wid: item.wid}})
       }
     },
