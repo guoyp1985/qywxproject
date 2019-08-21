@@ -523,12 +523,12 @@ export default {
       this.$util.wxAccessListening()
     },
     refresh (query) {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       const self = this
       this.loginUser = User.get()
       this.showArticle = false
       this.showEditor = false
       this.editIng = false
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       if (this.query.id !== query.id) {
         self.showSos = false
         self.showContainer = false

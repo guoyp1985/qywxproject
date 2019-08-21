@@ -34,7 +34,15 @@
             </template>
           </template>
           <template v-else>
-            <div id="editor-content" class="article-content" v-html="article.content"></div>
+            <template v-if="article.uploader == reward.uid || article.fid == reward.fid">
+              <div v-if="article.content == '' && !afterEdit" id="editor-content" class="article-content color-gray font16">
+                <p>内容为空，点击【编辑】按钮可修改内容哦！</p>
+              </div>
+              <div v-else id="editor-content" class="article-content" v-html="article.content"></div>
+            </template>
+            <template v-else>
+              <div class="article-content" v-html="article.content"></div>
+            </template>
           </template>
           <div class="reading-info">
             <span class="font14 color-gray">{{$t('Reading')}} {{article.views | readingCountFormat}}</span>
@@ -50,7 +58,7 @@
         :module="module"
         :on-close="closeShareSuccess">
       </share-success>
-      <editor v-if="reward.uid == article.uploader && article.c_format != 'json'" elem="#editor-content" module="academic" :loginUser="loginUser" :query="query" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
+      <editor v-if="(reward.uid == article.uploader || reward.fid == article.fid) && showEditor && article.c_format != 'json'" elem="#editor-content" module="academic" :loginUser="loginUser" :query="query" @on-edit="clickEdit" @on-auto-save="autoSave" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
       <div v-transfer-dom class="x-popup">
         <popup v-model="showSubscribe" height="100%">
           <div class="popup1">
@@ -112,7 +120,10 @@ export default {
       pagestart: 0,
       limit: 20,
       replyData: null,
-      messages: 0
+      showEditor: false,
+      showArticle: false,
+      editIng: false,
+      afterEdit: false
     }
   },
   filters: {
@@ -131,6 +142,9 @@ export default {
   methods: {
     access () {
       this.$util.wxAccess()
+    },
+    clickEdit () {
+      this.editIng = true
     },
     clickInsertProduct (url) {
       this.$router.push({path: url})
@@ -178,7 +192,9 @@ export default {
           }
           if (res.data.flag) {
             self.article = res.data.data
-            self.createSocket()
+            self.article = res.data.data
+            self.showArticle = true
+            self.showEditor = true
             document.title = self.article.title
             self.reward = User.get()
             self.factoryinfo = self.article.factoryinfo
@@ -220,28 +236,42 @@ export default {
         }
       })
     },
-    editSave () {
+    save (callback) {
       const self = this
       let editorContent = document.querySelector('#editor-content')
       self.$vux.loading.show()
+      let con = editorContent.innerHTML.replace(/Eleditor-active/g, '')
+        .replace('<p class="">文章内容为空，点击【编辑】按钮可修改内容哦！</p>', '')
+        .replace('<p>文章内容为空，点击【编辑】按钮可修改内容哦！</p>', '')
+        .replace('<p class="Eleditor-active">文章内容为空，点击【编辑】按钮可修改内容哦！</p>', '')
       self.$http.post(`${ENV.BokaApi}/api/editContent/academic`, {
         id: self.query.id,
-        content: editorContent.innerHTML
-      }).then(function (res) {
+        content: con
+      }).then(res => {
         let data = res.data
         self.$vux.loading.hide()
+        if (data.flag === 1) {
+          if (con !== '') {
+            self.article.content = con
+            self.afterEdit = true
+          }
+          self.handleImg()
+          callback && callback()
+        }
         let toasttype = data.flag !== 1 ? 'warn' : 'success'
         self.$vux.toast.show({
           text: data.error,
           type: toasttype,
-          time: self.$util.delay(data.error),
-          onHide: function () {
-            if (data.flag === 1) {
-              self.handleImg()
-            }
-          }
+          time: self.$util.delay(data.error)
         })
       })
+    },
+    autoSave () {
+      this.save()
+    },
+    editSave () {
+      this.editIng = false
+      this.save()
     },
     editSetting () {
       this.$router.push({name: 'tAddAcademic', params: {id: this.article.id, fid: this.article.fid}})
@@ -343,21 +373,18 @@ export default {
       this.$util.wxAccessListening()
     },
     refresh (query) {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       const self = this
       this.loginUser = User.get()
+      this.showArticle = false
+      this.showEditor = false
+      this.editIng = false
       if (this.query.id !== query.id) {
-        room = ''
-        this.comments = []
-        this.pagestart = 0
+        self.showSos = false
+        self.showContainer = false
         this.query = query
-        this.getData()
       }
-      this.loginUser = User.get()
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
-        let data = res.data
-        self.messages = data.data
-      })
+      this.getData()
     }
   },
   created () {
