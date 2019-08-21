@@ -53,7 +53,7 @@
               </template>
             </template>
             <template v-else>
-              <template v-if="article.uploader == reward.uid">
+              <template v-if="article.uploader == reward.uid || article.fid == reward.fid">
                 <div v-if="article.content == '' && !afterEdit" id="editor-content" class="article-content color-gray font16">
                   <p>文章内容为空，点击【编辑】按钮可修改内容哦！</p>
                 </div>
@@ -84,7 +84,7 @@
         :module="module"
         :on-close="closeShareSuccess">
       </share-success>
-      <editor v-if="reward.uid == article.uploader && showEditor && article.c_format != 'json'" elem="#editor-content" module="factorynews" :loginUser="loginUser" :query="query" @on-edit="clickEdit" @on-auto-save="autoSave" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
+      <editor v-if="(reward.uid == article.uploader || reward.fid == article.fid) && showEditor && article.c_format != 'json'" elem="#editor-content" module="factorynews" :loginUser="loginUser" :query="query" @on-edit="clickEdit" @on-auto-save="autoSave" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
       <div v-transfer-dom class="x-popup">
         <popup v-model="showSubscribe" height="100%">
           <div class="popup1">
