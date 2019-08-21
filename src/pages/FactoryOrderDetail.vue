@@ -58,7 +58,7 @@
         </div>
         <div class="bg-white">
           <div class="scroll_list productlist color_gray appendarea" ajaxurl="" template=".template">
-            <div v-for="(item,index) in orderData.orderlist" :key="item.id" @click="toProduct(item)" class="scroll_item db padding10 bg-gray4">
+            <div v-for="(item,index) in orderData.orderlist" :key="item.id" class="scroll_item db padding10 bg-gray4">
               <div class="t-table">
                 <div class="t-cell v_middle w60 algin_left">
                   <template v-if="item.options && item.options.id">

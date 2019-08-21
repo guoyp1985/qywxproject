@@ -61,7 +61,7 @@
         </div>
         <div class="bg-white b_bottom_after">
           <div class="scroll_list productlist color_gray appendarea">
-            <div v-on:click="toProduct(item)" v-for="(item,index) in orderData.orderlist" :key="item.id" :data-product-url="{path: '/product', query: {id: item.pid, wid: orderData.wid}}" class="scroll_item db padding10 bg-gray4">
+            <div v-for="(item,index) in orderData.orderlist" :key="item.id" :data-product-url="{path: '/product', query: {id: item.pid, wid: orderData.wid}}" class="scroll_item db padding10 bg-gray4">
               <div class="t-table">
                 <div class="t-cell v_middle w60 algin_left">
                   <template v-if="item.options && item.options.id">
