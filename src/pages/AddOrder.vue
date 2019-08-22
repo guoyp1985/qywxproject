@@ -107,7 +107,7 @@
               </div>
               <div class="b_bottom_after padding10 color-theme" v-if="!allowSend && !offlineVal">该地区不在派送范围内</div>
             </template>
-            <div class="b_bottom_after padding10">
+            <div class="b_bottom_after padding10" v-if="!(query.fromapp == 'factory' && query.appid == 'wx93366404c4cbc761')">
               <div class="t-table">
                 <div class="t-cell v_middle" style="width:40px;">留言</div>
                 <div class="t-cell v_middle">
