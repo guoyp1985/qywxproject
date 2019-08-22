@@ -475,10 +475,12 @@ export default {
               time: timeout
             })
             if (data.flag === 1) {
+              if (self.query.fromapp === 'factory') {
+                self.$wechat.miniProgram.navigateTo({url: '/pages/own'})
+              }
+              console.log('= self.query.minibackurl =')
+              console.log(self.query.minibackurl)
               setTimeout(() => {
-                // if (self.query.fromapp === 'factory') {
-                //   self.$wechat.miniProgram.navigateTo({url: '/pages/own'})
-                // }
                 if (self.query.minibackurl) {
                   let minibackurl = decodeURIComponent(self.query.minibackurl)
                   if (self.query.backtype === 'relaunch') {
