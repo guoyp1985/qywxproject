@@ -100,7 +100,7 @@ export default {
           // let postData = { fid: self.query.id, salesmoney: salesmoney, levelname: levelname }
           let postData = { fid: self.query.id, levelname: levelname }
           self.$vux.loading.show()
-          self.$http.post(`${ENV.BokaApi}/api/factory/addPolicy`, postData).then(function (res) {
+          self.$http.post(`${ENV.BokaApi}/api/factory/addPolicy`, postData).then(res => {
             self.$vux.loading.hide()
             let data = res.data
             self.$vux.toast.show({
@@ -108,6 +108,15 @@ export default {
               type: data.flag === 1 ? 'success' : 'warn',
               time: self.$util.delay(data.error)
             })
+            if (data.flag) {
+              for (let i = 0; i < self.levelData.length; i++) {
+                let cur = self.levelData[i]
+                if (cur.isAdd) {
+                  delete cur.isAdd
+                  self.levelData.splice(i, 1, cur)
+                }
+              }
+            }
           })
         }
       })

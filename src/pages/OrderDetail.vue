@@ -62,7 +62,7 @@
         -->
         </div>
         <div class="mt10 b_top_after bg-white font12">
-          <div class="flex_left b_bottom_after padding10" v-for="(order, index) in orders" :key="index" @click="toProduct(order)">
+          <div class="flex_left b_bottom_after padding10" v-for="(order, index) in orders" :key="index">
             <div class="flex_left w70">
               <img v-if="order.options && order.options.id" style="width:60px;height:60px;border: 1px solid #f7f7f7;" class="imgcover" :src="order.options.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
               <img v-else style="width:60px;height:60px;border: 1px solid #f7f7f7;" class="imgcover" :src="order.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
@@ -74,9 +74,9 @@
                 <div><span>¥{{order.special}}</span><span class="color-gray ml5 font12">× {{order.quantity}}</span></div>
               </div>
             </div>
-            <div class="w30 flex_right">
+            <!-- <div class="w30 flex_right">
               <span class="al al-mjiantou-copy color-gray font14 bold"></span>
-            </div>
+            </div> -->
           </div>
         </div>
         <group>
@@ -426,7 +426,7 @@ export default {
       // } else {
       //   this.$router.push({path: '/product', query: {id: item.pid, wid: item.wid}})
       // }
-      if (!this.query.from && this.query.fromapp) {
+      if (!this.query.from && !this.query.fromapp) {
         this.$router.push({path: '/product', query: {id: item.pid, wid: item.wid}})
       }
     },
