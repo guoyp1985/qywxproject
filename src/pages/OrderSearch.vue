@@ -170,10 +170,10 @@ export default {
       tabdata3: [],
       tabdata4: [],
       limit: 10,
-      pagestart1: 1,
-      pagestart2: 1,
-      pagestart3: 1,
-      pagestart4: 1,
+      pagestart1: 0,
+      pagestart2: 0,
+      pagestart3: 0,
+      pagestart4: 0,
       showRefundModal: false,
       refundContent: '',
       clickOrder: {},
@@ -520,6 +520,8 @@ export default {
       })
     },
     toggleTab () {
+      console.log('in toggleTab')
+      console.log(this.selectedIndex)
       switch (this.selectedIndex) {
         case 0:
           !this.tabdata1.length && this.getData()
@@ -542,23 +544,27 @@ export default {
         callback: () => {
           switch (self.selectedIndex) {
             case 0:
-              if (self.tabdata1.length === self.pagestart1 * self.limit) {
-                self.getPageData(0, self.pagestart1)
+              if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+                self.pagestart1++
+                self.getData(0)
               }
               break
             case 1:
-              if (self.tabdata2.length === self.pagestart2 * self.limit) {
-                self.getPageData(2, self.pagestart2)
+              if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
+                self.pagestart2++
+                self.getData(2)
               }
               break
             case 2:
-              if (self.tabdata3.length === self.pagestart3 * self.limit) {
-                self.getPageData(3, self.pagestart3)
+              if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
+                self.pagestart3++
+                self.getData(3)
               }
               break
             case 3:
-              if (self.tabdata4.length === self.pagestart4 * self.limit) {
-                self.getPageData(4, self.pagestart4)
+              if (self.tabdata4.length === (self.pagestart4 + 1) * self.limit) {
+                self.pagestart4++
+                self.getData(4)
               }
               break
           }
@@ -569,59 +575,39 @@ export default {
       flag = flag || 0
       this.$vux.loading.show()
       const self = this
-      let params = { params: { flag: flag, pagestart: 0, limit: self.limit } }
-      this.$http.get(`${ENV.BokaApi}/api/order/orderList/user`, params).then((res) => {
+      let params = {flag: flag, limit: self.limit}
+      if (flag === 2) {
+        params.pagestart = this.pagestart2
+      } else if (flag === 3) {
+        params.pagestart = this.pagestart3
+      } else if (flag === 4) {
+        params.pagestart = this.pagestart4
+      } else {
+        params.pagestart = this.pagestart1
+      }
+      this.$http.get(`${ENV.BokaApi}/api/order/orderList/user`, {
+        params: params
+      }).then((res) => {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         retdata = this.setListButton(retdata)
         switch (flag) {
           case 0:
-            self.tabdata1 = retdata
+            self.tabdata1 = self.tabdata1.concat(retdata)
             self.distabdata1 = true
             break
           case 2:
-            self.tabdata2 = retdata
+            self.tabdata2 = self.tabdata2.concat(retdata)
             self.distabdata2 = true
             break
           case 3:
-            self.tabdata3 = retdata
+            self.tabdata3 = self.tabdata3.concat(retdata)
             self.distabdata3 = true
             break
           case 4:
-            self.tabdata4 = retdata
-            self.distabdata4 = true
-            break
-        }
-      })
-    },
-    getPageData (flag, page) {
-      flag = flag || 0
-      page = page || 0
-      this.$vux.loading.show()
-      const self = this
-      let params = { params: { flag: flag, pagestart: page, limit: self.limit } }
-      this.$http.get(`${ENV.BokaApi}/api/order/orderList/user`, params).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
-        retdata = self.setListButton(retdata)
-        switch (flag) {
-          case 0:
-            retdata.length && self.pagestart1++
-            self.tabdata1 = self.tabdata1.concat(retdata)
-            break
-          case 2:
-            retdata.length && self.pagestart2++
-            self.tabdata2 = self.tabdata2.concat(retdata)
-            break
-          case 3:
-            retdata.length && self.pagestart3++
-            self.tabdata3 = self.tabdata3.concat(retdata)
-            break
-          case 4:
-            retdata.length && self.pagestart4++
             self.tabdata4 = self.tabdata4.concat(retdata)
+            self.distabdata4 = true
             break
         }
       })
@@ -637,46 +623,34 @@ export default {
       let flag = parseInt(this.query.flag)
       switch (flag) {
         case 2:
-          if (this.query.refresh) {
+          if (this.query.refresh || !this.tabdata2.length) {
             this.selectedIndex = 1
             this.pagestart2 = 0
             this.tabdata2 = []
             this.toggleTab()
-          } else if (!this.tabdata2.length) {
-            this.selectedIndex = 1
-            this.toggleTab()
           }
           break
         case 3:
-          if (this.query.refresh) {
+          if (this.query.refresh || !this.tabdata3.length) {
             this.selectedIndex = 2
             this.pagestart3 = 0
             this.tabdata3 = []
             this.toggleTab()
-          } else if (!this.tabdata3.length) {
-            this.selectedIndex = 2
-            this.toggleTab()
           }
           break
         case 4:
-          if (this.query.refresh) {
+          if (this.query.refresh || !this.tabdata4.length) {
             this.selectedIndex = 3
             this.pagestart4 = 0
             this.tabdata4 = []
             this.toggleTab()
-          } else if (!this.tabdata4.length) {
-            this.selectedIndex = 3
-            this.toggleTab()
           }
           break
         default :
-          if (this.query.refresh) {
+          if (this.query.refresh || !this.tabdata1.length) {
             this.selectedIndex = 0
             this.pagestart1 = 0
             this.tabdata1 = []
-            this.toggleTab()
-          } else if (!this.tabdata1.length) {
-            this.selectedIndex = 0
             this.toggleTab()
           }
           break

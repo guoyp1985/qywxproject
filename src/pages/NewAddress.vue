@@ -6,7 +6,7 @@
 <template>
   <div id="new-address">
     <group label-width="6em">
-      <x-input :title="$t('Addressee')" required :placeholder="`${$t('Necessary')}${$t('Addressee')}`" v-model="item.linkman"></x-input>
+      <x-input :title="$t('Addressee')" required :placeholder="`${$t('Necessary')}${$t('Addressee')}`" v-model="item.linkman" :max="6"></x-input>
       <x-input :title="$t('Cell Phone Number')" required :placeholder="`${$t('Necessary')}${$t('Cell Phone Number')}`" mask="999 9999 9999" :max="13" is-type="china-mobile" v-model="item.telephone"></x-input>
       <x-address :title="$t('Select Address')" raw-value v-model="item.area" :list="addressData" :placeholder="`${$t('Necessary')}${$t('Please Select Address')}`">
         <template slot="title" slot-scope="props">
