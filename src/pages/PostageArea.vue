@@ -8,7 +8,7 @@
     <div class="s-topbanner s-topbanner1">
       <div style="height:45px;" class="db-flex top-subscribe-tip">
         <div class="flex_cell h_100 flex_left">
-          <i class="al al-gantanhaozhong font20"></i><span>偏远地区和不派送地区，不可重复设置</span>
+          <i class="al al-gantanhaozhong font20"></i><span>加运费地区和不派送地区，不可重复设置</span>
         </div>
       </div>
       <div class="row">
@@ -111,7 +111,7 @@ export default {
       showContainer: false,
       query: {},
       loginUser: {},
-      tabtxts: ['偏远地区', '不派送地区'],
+      tabtxts: ['加运费地区', '不派送地区'],
       productType: 'product',
       moduleid: 0,
       selectedIndex: 0,

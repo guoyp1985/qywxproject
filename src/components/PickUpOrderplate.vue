@@ -3,17 +3,10 @@
     <a class="db pt10 pb10 pl12 pr12" style="color:inherit;">
       <div class="t-table">
         <div class="t-cell pic ">
-          <!-- <template v-if="product.options && product.options.id">
-            <img class="imgcover" :src="product.options.photo" @error="`javascript:'this.src=${ENV.ImageHostUri}/nopic.jpg';`" style="width:80px;height:80px;" />
-          </template> -->
-          <!-- <template> -->
             <img class="imgcover" :src="product.p_photo" @error="`javascript:'this.src=${ENV.ImageHostUri}/nopic.jpg';`" style="width:80px;height:80px;" />
-          <!-- </template> -->
-          <!-- <img v-if="orderData.carddeduct > 0" class="yhq" src="https://tossharingsales.boka.cn/minigxk/yhq.png"/> -->
         </div>
         <div class="t-cell v_top">
           <div class="clamp1 font14 color-lightgray">{{ product.p_title }}</div>
-          <!-- <div class="color-red4 font14">{{ $t('RMB') }} {{ product.special }}</div> -->
           <div class="font12 color-999">{{ product.dateline | dateformat }}</div>
         </div>
         <div class="t-cell v_top align_right color-gray5 w50 pr10">
