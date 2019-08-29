@@ -198,8 +198,6 @@ export default {
         const retdata = data.data ? data.data : data
         self.tabData1 = self.tabData1.concat(retdata)
         self.disList1 = true
-        console.log('----response-----')
-        console.log(self.tabData1)
       })
     },
     getData2 (isone) {  // 获取已发货订单数据
@@ -217,8 +215,6 @@ export default {
         const retdata = data.data ? data.data : data
         self.tabData2 = self.tabData2.concat(retdata)
         self.disList2 = true
-        console.log('----response-----')
-        console.log(self.tabData2)
       })
     },
     onItemClick () {  // 选择对应tab获取对应订单状态列表数据
@@ -247,8 +243,6 @@ export default {
       let str = `#pickup-manage-page .deliver_txt-${this.selectedIndex}-${item.id}`
       let eleobj = jQuery(str)[0]
       let range = null
-      console.log('查看复制内容')
-      console.log(eleobj.innerHTML)
       let save = function (e) {
         console.log(e)
         e.clipboardData.setData('text/plain', eleobj.innerHTML)
@@ -284,7 +278,7 @@ export default {
       // this.showServiceModal = false
       console.log(this.clickData)
       if (this.$util.trim(this.serviceContent) === '' && this.$util.trim(this.servicePhoto) === '') {
-        this.$vux.toast.text('请完善售后信息', 'middle')
+        this.$vux.toast.text('请完善发货信息', 'middle')
         return false
       }
       this.$vux.loading.show()
