@@ -1124,7 +1124,7 @@ export default {
     },
     searchUser () {
       const self = this
-      const params = {fid: self.query.id, pagestart: self.userPpageStart, limit: self.limit}
+      const params = {fid: self.query.id, pagestart: self.userPpageStart, limit: self.limit, agent: 0}
       let keyword = self.searchword2
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         params.keyword = keyword
