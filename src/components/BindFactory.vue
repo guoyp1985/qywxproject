@@ -124,8 +124,6 @@ export default {
           minibackurl = `${minibackurl}&`
         }
         minibackurl = `${minibackurl}regwid=${this.loginUser.uid}`
-        console.log('===this.query.backtype===')
-        console.log(this.query.backtype)
         if (this.query.backtype === 'relaunch') {
           this.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
         } else if (this.query.backtype === 'redirect') {
