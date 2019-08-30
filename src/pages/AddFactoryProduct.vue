@@ -864,7 +864,7 @@ export default {
         if (self.$util.trim(price).length > 7 || self.$util.trim(oriprice).length > 7 || self.$util.trim(tbprice).length > 7 || self.$util.trim(jdprice).length > 7) {
           self.$vux.alert.show({
             title: '',
-            content: '请重新衡量商品价格'
+            content: '商品价格不能超过7位数'
           })
           return false
         }

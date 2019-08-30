@@ -796,7 +796,7 @@ export default {
         let postage = postdata.postage.toString().replace(/,/g, '')
         let rebate = postdata.rebate
         if (self.$util.trim(price).length > 7 || self.$util.trim(oriprice).length > 7 || self.$util.trim(tbprice).length > 7 || self.$util.trim(jdprice).length > 7) {
-          self.$vux.toast.text('请重新衡量商品价格', 'middle')
+          self.$vux.toast.text('商品价格不能超过7位数', 'middle')
           return false
         }
         if (self.$util.trim(rebate) !== '') {
