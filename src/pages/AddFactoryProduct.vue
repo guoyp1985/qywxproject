@@ -861,6 +861,13 @@ export default {
         let profit = postdata.profit.toString().replace(/,/g, '')
         let salesrebate = postdata.salesrebate.toString().replace(/,/g, '')
         let superrebate = postdata.superrebate.toString().replace(/,/g, '')
+        if (self.$util.trim(price).length > 7 || self.$util.trim(oriprice).length > 7 || self.$util.trim(tbprice).length > 7 || self.$util.trim(jdprice).length > 7) {
+          self.$vux.alert.show({
+            title: '',
+            content: '请重新衡量商品价格'
+          })
+          return false
+        }
         if ((self.$util.trim(oriprice) !== '' && (isNaN(oriprice) || parseFloat(oriprice) < 0)) || isNaN(price) || parseFloat(price) <= 0) {
           self.$vux.alert.show({
             title: '',

@@ -795,6 +795,10 @@ export default {
         let jdprice = postdata.jd_price.toString().replace(/,/g, '')
         let postage = postdata.postage.toString().replace(/,/g, '')
         let rebate = postdata.rebate
+        if (self.$util.trim(price).length > 7 || self.$util.trim(oriprice).length > 7 || self.$util.trim(tbprice).length > 7 || self.$util.trim(jdprice).length > 7) {
+          self.$vux.toast.text('请重新衡量商品价格', 'middle')
+          return false
+        }
         if (self.$util.trim(rebate) !== '') {
           rebate = rebate.toString().replace(/,/g, '')
         }
