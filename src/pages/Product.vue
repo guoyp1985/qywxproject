@@ -71,8 +71,8 @@
               <span class="v_middle">{{ productdata.oriprice }}</span>
             </span>
           </div>
-          <div class="flex_left mt5 color-gray" v-if="(productdata.tb_price != '' && productdata.tb_price) || (productdata.jd_price != '' && productdata.jd_price)">
-            <span v-if="productdata.tb_price != '' && productdata.tb_price">猫价: ￥{{productdata.tb_price}}</span><span :class="{'ml10': (productdata.tb_price != '' && productdata.jd_price)}" v-if="productdata.jd_price != '' && productdata.jd_price">狗价: ￥{{productdata.jd_price}}</span>
+          <div class="flex_left mt5 color-gray" v-if="(productdata.tb_price && productdata.tb_price != '') || (productdata.jd_price && productdata.jd_price != '')">
+            <span v-if="productdata.tb_price && productdata.tb_price != ''">猫价: ￥{{productdata.tb_price}}</span><span :class="{'ml10': (productdata.tb_price && productdata.jd_price != '')}" v-if="productdata.jd_price && productdata.jd_price != ''">狗价: ￥{{productdata.jd_price}}</span>
           </div>
           <div class="flex_left font12 mt5 color-gray2">
   					<div v-if="productdata.postage == 0" class="flex_left">{{ $t('Postage') }}: 包邮</div>

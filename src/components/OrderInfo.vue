@@ -150,6 +150,8 @@ export default {
           } else {
             this.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.store}?wid=${this.item.wid}`})
           }
+        } else if (this.$route.query.fromapp === 'factory') {
+          this.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.store}?wid=${this.item.wid}`})
         } else {
           this.$router.push({path: '/store', query: params})
         }

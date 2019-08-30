@@ -58,8 +58,8 @@
             </span>
           </div>
         </div>
-        <div class="flex_left padding10 color-gray b_bottom_after" v-if="(productdata.tb_price != '' && productdata.tb_price) || (productdata.jd_price != '' && productdata.jd_price)">
-          <span v-if="productdata.tb_price != '' && productdata.tb_price">猫价: ￥{{productdata.tb_price}}</span><span :class="{'ml10': (productdata.tb_price != '' && productdata.jd_price)}" v-if="productdata.jd_price != '' && productdata.jd_price">狗价: ￥{{productdata.jd_price}}</span>
+        <div class="flex_left padding10 color-gray b_bottom_after" v-if="(productdata.tb_price && productdata.tb_price != '') || (productdata.jd_price && productdata.jd_price != '')">
+          <span v-if="productdata.tb_price && productdata.tb_price != ''">猫价: ￥{{productdata.tb_price}}</span><span :class="{'ml10': (productdata.tb_price && productdata.jd_price != '')}" v-if="productdata.jd_price && productdata.jd_price != ''">狗价: ￥{{productdata.jd_price}}</span>
         </div>
         <div class="bg-page" style="height:10px;"></div>
         <div class="b_top_after"></div>
