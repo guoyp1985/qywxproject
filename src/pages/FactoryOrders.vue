@@ -646,9 +646,9 @@ export default {
     },
     closepopup () {
       this.showpopup = false
-      self.deliveritem = null
-      self.deliverindex = 0
-      self.deliverdata = { delivercompany: '-1', delivercode: '' }
+      this.deliveritem = null
+      this.deliverindex = 0
+      this.deliverdata = { delivercompany: '-1', delivercode: '' }
     },
     scanClick () {
       const self = this
