@@ -58,8 +58,8 @@
             </span>
           </div>
         </div>
-        <div class="flex_left padding10 color-gray b_bottom_after" v-if="(productdata.tb_price && productdata.tb_price != '') || (productdata.jd_price && productdata.jd_price != '')">
-          <span v-if="productdata.tb_price && productdata.tb_price != ''">猫价: ￥{{productdata.tb_price}}</span><span :class="{'ml10': (productdata.tb_price && productdata.jd_price != '')}" v-if="productdata.jd_price && productdata.jd_price != ''">狗价: ￥{{productdata.jd_price}}</span>
+        <div class="flex_left padding10 color-gray b_bottom_after" v-if="showTb && showJd">
+          <span>猫价: ￥{{productdata.tb_price}}</span><span class="ml10">狗价: ￥{{productdata.jd_price}}</span>
         </div>
         <div class="bg-page" style="height:10px;"></div>
         <div class="b_top_after"></div>
@@ -297,7 +297,9 @@ export default {
       selectedOption: {},
       selectedOptionIndex: 0,
       previewerOptionsPhoto: [],
-      VipFree: false
+      VipFree: false,
+      showJd: false,
+      showTb: false
     }
   },
   watch: {
@@ -598,6 +600,16 @@ export default {
           } else {
             self.showContainer = true
             self.productdata = data.data
+            if (this.productdata.jd_price && this.productdata.jd_price !== '' && parseFloat(this.productdata.jd_price) > 0) {
+              this.showJd = true
+            } else {
+              this.showJd = false
+            }
+            if (this.productdata.tb_price && this.productdata.tb_price !== '' && parseFloat(this.productdata.tb_price) > 0) {
+              this.showTb = true
+            } else {
+              this.showTb = false
+            }
             self.factoryinfo = self.productdata.factoryinfo
             document.title = self.productdata.title
             const photo = self.productdata.photo
