@@ -68,8 +68,8 @@
               <div class="t-cell title-cell font14 v_middle w100">
                 <span>选择商品</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span>
               </div>
-              <check-icon class="red-check" :value.sync="singlePro" @click.stop="setType(1)">单件商品</check-icon>
-              <check-icon class="red-check" :value.sync="allPro" @click.stop="setType(0)">所有商品</check-icon>
+              <!-- <check-icon class="red-check" :value.sync="singlePro" @click.stop="setType(1)">单件商品</check-icon>
+              <check-icon class="red-check" :value.sync="allPro" @click.stop="setType(0)">所有商品</check-icon> -->
             </div>
           </div>
           <div class="padding10 required">
@@ -101,7 +101,7 @@
       </form>
     </div>
     <div class="s-bottom border-box flex_center color-white list-shadow02" style="background-color:#ea3a3a;">
-      <div class="flex_cell flex_center color-white" @click="saveevent">保存</div>
+      <div class="flex_cell flex_center color-white" @click="saveevent">立即创建</div>
     </div>
     <!-- 点击单个商品弹出全部厂家商品列表区域 -->
     <div v-transfer-dom class="x-popup">
@@ -373,14 +373,15 @@ export default {
       } else if (this.selectpopupdata.storage <= 0) {
         self.$vux.toast.text('该商品库存为0，请补充库存', 'middle')
         return false
-      } else if (this.selectpopupdata.price <= this.submitdata.discountordermoney) {
-        console.log('当前选中商品金额')
-        console.log(this.selectpopupdata.price)
-        console.log('所设置的满减金额')
-        console.log(this.submitdata.discountordermoney)
-        self.$vux.toast.text('该商品价格低于满减金额，请重新选择', 'middle')
-        return false
       }
+      // else if (this.selectpopupdata.price <= this.submitdata.discountordermoney) {
+      //   console.log('当前选中商品金额')
+      //   console.log(this.selectpopupdata.price)
+      //   console.log('所设置的满减金额')
+      //   console.log(this.submitdata.discountordermoney)
+      //   self.$vux.toast.text('该商品价格低于满减金额，请重新选择', 'middle')
+      //   return false
+      // }
       self.afterSelectProduct()
     },
     saveevent () {
@@ -394,13 +395,6 @@ export default {
         return false
       } else if (isNaN(self.submitdata.discountcutmoney) || isNaN(self.submitdata.discountordermoney) || !self.submitdata.discountcutmoney || self.submitdata.discountcutmoney <= 0 || !self.submitdata.discountordermoney || self.submitdata.discountordermoney <= 0) {
         self.$vux.toast.text('请填写正确的满减金额', 'middle')
-        return false
-      } else if (this.selectpopupdata.price <= this.submitdata.discountordermoney) {
-        console.log('当前选中商品金额')
-        console.log(this.selectpopupdata.price)
-        console.log('所设置的满减金额')
-        console.log(this.submitdata.discountordermoney)
-        self.$vux.toast.text('该商品价格低于满减金额，请重新选择', 'middle')
         return false
       } else if (!self.submitdata.starttime) {
         self.$vux.toast.text('请选择开始时间', 'middle')

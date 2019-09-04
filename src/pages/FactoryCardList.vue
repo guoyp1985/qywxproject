@@ -248,7 +248,7 @@ export default {
           if (this.tabData2.length < this.limit) {
             self.pageStart2 = 0
             self.disList2 = false
-            this.tabData2 = []
+            // this.tabData2 = []
             self.getData2()
           }
           break
