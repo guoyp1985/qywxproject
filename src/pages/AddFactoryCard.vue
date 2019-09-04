@@ -210,7 +210,8 @@ export default {
       selectProductIndex: -1,
       dataGetting: false,
       loginUser: {},
-      Fid: 0
+      Fid: 0,
+      submitIng: false
     }
   },
   watch: {
@@ -251,6 +252,7 @@ export default {
       this.showproductitem = false
       this.selectpopupdata = null
       this.selectProductData = []
+      this.submitIng = false
     },
     showxdate1 () {
       this.visibility1 = true
@@ -449,6 +451,7 @@ export default {
     },
     saveevent () {
       const self = this
+      if (this.submitIng) return false
       console.log('输出当前对象')
       console.log(self.selectpopupdata)
       let facemoney = self.submitdata.facemoney
@@ -487,6 +490,8 @@ export default {
       if (this.query.id) {
         self.submitdata.id = this.query.id
       }
+      this.submitIng = true
+      this.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/miniactivity/add`, {
         ...self.submitdata, type: 'factorycard', fid: this.Fid
       }).then(res => {
