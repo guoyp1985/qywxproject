@@ -483,8 +483,23 @@ export default {
         this.$vux.toast.text('该商品库存为0，请补充库存', 'middle')
         return false
       }
-      this.selectedProduct = curProduct
-      this.closepopup()
+      if (curProduct.activityid) {
+        this.$vux.confirm.show({
+          content: '该商品正在参与活动，继续选择该商品将会导致两种优惠叠加使用',
+          confirmText: '继续创建',
+          cancelText: '取消',
+          onCancel: () => {
+            this.closepopup()
+          },
+          onConfirm: () => {
+            this.selectedProduct = curProduct
+            this.closepopup()
+          }
+        })
+      } else {
+        this.selectedProduct = curProduct
+        this.closepopup()
+      }
     },
     saveevent () {
       const self = this
