@@ -107,8 +107,8 @@
       </div>
       <div class="hiddenbox"></div>
     </div>
-    <div class="s-bottom border-box flex_center color-white list-shadow02" style="background-color:#eb6b5e;">
-      <div class="flex_cell flex_center color-white" @click="saveevent">创建优惠券</div>
+    <div class="s-bottom border-box flex_center color-white list-shadow02" style="background-color:#eb6b5e;" @click="saveevent">
+      <div class="flex_cell flex_center color-white">创建优惠券</div>
     </div>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showpopup1">

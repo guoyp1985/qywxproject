@@ -585,4 +585,5 @@ export default {
 }
 .bg-page{background-color:  #f2f2f2 !important}
 .border-input{border:#ccc 1px solid;}
+.x-datetime *{touch-action: pan-y;}
 </style>
