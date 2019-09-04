@@ -80,23 +80,21 @@
             </div>
           </div>
           <div class="padding10 required">
-            <template v-if="showproductitem">
-              <template v-for="(item, index) in selectProductData" index="index">
-                <div class="border db">
-                  <div class="t-table">
-                    <div class="t-cell v_middle" style="width:50px;">
-                      <img class="v_middle imgcover" style="width:40px;height:40px;" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-                    </div>
-                    <div class="t-cell v_middle">
-                      <div class="clamp1">{{item.title}}</div>
-                      <div class="mt5 font12 clamp1"><span class="color-orange">{{ $t('RMB') }}{{item.price}}</span><span class="ml10 color-gray">{{ $t('Storage') }}{{item.storage}}</span></div>
-                    </div>
-                    <div class="t-cell align_center v_middle" style="width:60px;" v-if="!query.id">
-                      <div class="qbtn color-red btnchange" style="border:#ff3b30 1px solid;line-height:1;" @click="selectevent(item)">修改</div>
-                    </div>
+            <template v-if="selectedProduct">
+              <div class="border db">
+                <div class="t-table">
+                  <div class="t-cell v_middle" style="width:50px;">
+                    <img class="v_middle imgcover" style="width:40px;height:40px;" :src="selectedProduct.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+                  </div>
+                  <div class="t-cell v_middle">
+                    <div class="clamp1">{{selectedProduct.title}}</div>
+                    <div class="mt5 font12 clamp1"><span class="color-orange">{{ $t('RMB') }}{{selectedProduct.price}}</span><span class="ml10 color-gray">{{ $t('Storage') }}{{selectedProduct.storage}}</span></div>
+                  </div>
+                  <div class="t-cell align_center v_middle" style="width:60px;" v-if="!query.id">
+                    <div class="qbtn color-red btnchange" style="border:#ff3b30 1px solid;line-height:1;" @click="selectevent(item)">修改</div>
                   </div>
                 </div>
-              </template>
+              </div>
             </template>
             <div v-else class="flex_center w_100">
               <div class="qbtn flex_center color-orange mt10" style="border:orange 1px solid;width:90%;line-height:1;padding:4px 0;" @click="selectevent">
@@ -211,7 +209,9 @@ export default {
       dataGetting: false,
       loginUser: {},
       Fid: 0,
-      submitIng: false
+      submitIng: false,
+      checkedProduct: null,
+      selectedProduct: null
     }
   },
   watch: {
@@ -253,6 +253,8 @@ export default {
       this.selectpopupdata = null
       this.selectProductData = []
       this.submitIng = false
+      this.checkedProduct = null
+      this.selectedProduct = null
     },
     showxdate1 () {
       this.visibility1 = true
@@ -385,14 +387,12 @@ export default {
           if (data.flag) {
             const retdata = data.data
             retdata.photo = retdata.photo.split(',')[0]
-            this.selectProductData.push(retdata)
-            this.selectpopupdata = retdata
-            this.showproductitem = true
+            this.selectedProduct = retdata
           }
         }
       })
     },
-    radioclick (data, index) {
+    _radioclick (data, index) {
       const self = this
       if (data.checked) {
         self.selectpopupdata = data
@@ -408,9 +408,32 @@ export default {
         }
       }
     },
-    closepopup () {
+    radioclick (data, index) {
+      if (data.checked) {
+        this.checkedProduct = data
+      } else {
+        this.checkedProduct = null
+      }
+      for (let d of this.productList) {
+        if (d.id !== data.id && d.checked) {
+          delete d.checked
+          break
+        }
+      }
+    },
+    _closepopup () {
       this.selectpopupdata = null
       this.showProductList = false
+    },
+    closepopup () {
+      this.showProductList = false
+      this.checkedProduct = null
+      for (let d of this.productList) {
+        if (d.checked) {
+          delete d.checked
+          break
+        }
+      }
     },
     afterSelectProduct () {
       const self = this
@@ -431,7 +454,7 @@ export default {
       self.showProductList = false
       self.showproductitem = true
     },
-    confirmpopup () {
+    _confirmpopup () {
       const self = this
       if (!this.selectpopupdata || !this.selectpopupdata.id) {
         self.$vux.toast.text('请选择商品', 'middle')
@@ -449,14 +472,24 @@ export default {
       }
       self.afterSelectProduct()
     },
+    confirmpopup () {
+      let curProduct = this.checkedProduct
+      if (!curProduct || !curProduct.id) {
+        this.$vux.toast.text('请选择商品', 'middle')
+        return false
+      } else if (curProduct.storage <= 0) {
+        this.$vux.toast.text('该商品库存为0，请补充库存', 'middle')
+        return false
+      }
+      this.selectedProduct = curProduct
+      this.closepopup()
+    },
     saveevent () {
       const self = this
       if (this.submitIng) return false
-      console.log('输出当前对象')
-      console.log(self.selectpopupdata)
       let facemoney = self.submitdata.facemoney
       let ordermoney = self.submitdata.ordermoney
-      if (!self.selectpopupdata) {
+      if (!self.selectedProduct) {
         self.$vux.toast.text('请选择至少一个商品', 'middle')
         return false
       }
@@ -501,6 +534,7 @@ export default {
       if (this.query.id) {
         self.submitdata.id = this.query.id
       }
+      this.submitdata.fpid = this.selectedProduct.id
       this.submitIng = true
       this.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/miniactivity/add`, {
