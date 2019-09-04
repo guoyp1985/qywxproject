@@ -23,7 +23,7 @@
                     <div class="flex_between" style="padding:10px 20px 0px 20px;">
                       <div class="font18"><span style="font-weight:bold;color:#eb6b5e;">¥ {{item.facemoney}}</span><span class="color-gray3 font16"> (满{{item.ordermoney}}元可用)</span></div>
                       <div class="flex_column">
-                        <div class="rbtn color-theme" @click="controlpopup1(item, item.id)">· · ·</div>
+                        <div class="rbtn color-theme" @click="controlpopup1(item, index)">· · ·</div>
                       </div>
                     </div>
                     <div>
@@ -73,7 +73,7 @@
                       <div class="flex_between" style="padding:10px 20px 0px 20px;">
                         <div class="font18"><span style="font-weight:bold;color:#eb6b5e;">¥ 10</span><span class="color-gray3 font16"> (满99元可用)</span></div>
                         <div class="flex_column">
-                          <div class="rbtn color-theme" @click="controlpopup1(item2, item2.id)">· · ·</div>
+                          <div class="rbtn color-theme" @click="controlpopup1(item2, index)">· · ·</div>
                         </div>
                       </div>
                       <div>
@@ -123,7 +123,7 @@
             </div>
             <div class="item">
               <!-- <router-link class="inner" :to="{path: '/factoryCardDetailInfo', query: {id: clickdata.id, module: 'product'}}">统计</router-link> -->
-              <router-link class="inner" :to="{path: '/factoryCardDetailInfo', query: {id: clickdata.id}}">统计</router-link>
+              <router-link class="inner" :to="{path: '/stat', query: {id: clickdata.id, module: 'miniactivity'}}">统计</router-link>
             </div>
             <div class="item" v-if="selectedIndex == 0">
               <div class="inner" @click="clickpopup('stop')">停止</div>
@@ -226,11 +226,15 @@ export default {
     onItemClick () {  // 选择对应tab获取对应订单状态列表数据
       this.swiperChange()
     },
-    getData1 () {
+    getData1 (isone) {
       // 获取正在发放优惠券数据
       this.$vux.loading.show()
       const self = this
       let params = {showtype: 'factorycard', do: 'all', pagestart: self.pageStart1, limit: self.limit, fid: self.loginUser.fid}
+      if (isone) {
+        params.pagestart = this.tabData1.length
+        params.limit = 1
+      }
       self.$http.post(`${ENV.BokaApi}/api/miniactivity/getList`,
         params
       ).then(function (res) {
@@ -243,12 +247,16 @@ export default {
         console.log(self.tabData1)
       })
     },
-    getData2 () {
+    getData2 (isone) {
       // 获取停止发放优惠券数据
       this.$vux.loading.show()
       const self = this
-      let params = {showtype: 'factorycard', do: 'all', pagestart: self.pageStart2, limit: self.limit, fid: self.loginUser.fid}
-      self.$http.post(`${ENV.BokaApi}/api/agent/applyList`,
+      let params = {showtype: 'factorycard', do: 'all', pagestart: self.pageStart1, limit: self.limit, fid: self.loginUser.fid}
+      if (isone) {
+        params.pagestart = this.tabData1.length
+        params.limit = 1
+      }
+      self.$http.post(`${ENV.BokaApi}/api/miniactivity/getList`,
         params
       ).then(function (res) {
         const data = res.data
@@ -270,14 +278,27 @@ export default {
         self.$vux.confirm.show({
           title: '确定要停止发放该优惠券吗？',
           onConfirm: () => {
-            // self.$vux.loading.show()
+            self.$vux.loading.show()
             // 停止优惠券发放操作 向后台发送请求
-            // let params = { id: self.clickdata.id, module: 'product', param: 'priority', paramvalue: 1 }
-            // self.$http.post(`${ENV.BokaApi}/api/setModulePara/product`, params).then(function (res) {
-            //   let data = res.data
-            //   self.$vux.loading.hide()
-            //   self.$vux.toast.show({})
-            // })
+            self.$http.post(`${ENV.BokaApi}/api/miniactivity/stop`, {
+              id: this.clickdata.id
+            }).then(res => {
+              let data = res.data
+              self.$vux.loading.hide()
+              self.$vux.toast.show({
+                text: data.error,
+                type: data.flag !== 1 ? 'warn' : 'success',
+                time: self.$util.delay(data.error),
+                onHide: () => {
+                  if (data.flag === 1) {
+                    if (this.tabData1.length === (this.pageStart1 + 1) * this.limit) {
+                      this.getData1(true)
+                    }
+                    this.tabData1.splice(this.clickindex, 1)
+                  }
+                }
+              })
+            })
           }
         })
       }
@@ -297,9 +318,9 @@ export default {
       this.$router.push({path: '/addFactoryCard', query: rparams})
     }
   },
-  activated () {
-  },
   created () {
+  },
+  activated () {
     this.loginUser = User.get()
     this.Fid = this.loginUser.fid
     this.query = this.$route.query
