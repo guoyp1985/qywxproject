@@ -952,8 +952,8 @@ zh-CN:
   PtIckUpManage: 提货申请管理
   tPickUpManage: 提货申请管理
   tAgentTake: 提货
-  AtDdFactoryCard: 创建厂家优惠券
-  tAddFactoryCard: 修改厂家优惠券
+  AtDdFactoryCard: 厂家优惠券
+  tAddFactoryCard: 厂家优惠券
   tFactoryCardList: 厂家优惠券管理
   FtActoryCardList: 厂家优惠券管理
   tFactoryCardDetailInfo: 厂家优惠券统计
