@@ -26,16 +26,14 @@
                         <div class="rbtn color-theme" @click="controlpopup1(item, index)">· · ·</div>
                       </div>
                     </div>
-                    <div>
                     <div style="padding:5px 20px;">{{item.starttime | dateformat}} 至 {{item.endtime | dateformat}}</div>
-                    </div>
                     <div class="flex_left">
                       <div class="ball ball-left"></div>
                       <div class="ball ball-right"></div>
                     </div>
                   </div>
                 </div>
-                <div class="w_100 proInfo bg-white">
+                <div class="w_100 proInfo">
                   <div class="db-flex">
                     <div class="pic v_middle w80">
                       <img class="v_middle imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" style="width:70px;height:70px;" />
@@ -65,47 +63,43 @@
             <div class="mt5">暂无已停止发放优惠券！</div>
           </div>
           <div v-else class="scroll_list">
-            <template v-for="(item2,index) in tabData2" :index="index">
-              <div class="lists">
-                <div>
-                  <div class="yhq_item">
-                    <div class="flex_cell b-bottom" style="overflow:visible">
-                      <div class="flex_between" style="padding:10px 20px 0px 20px;">
-                        <div class="font18"><span style="font-weight:bold;color:#eb6b5e;">¥ 10</span><span class="color-gray3 font16"> (满99元可用)</span></div>
-                        <div class="flex_column">
-                          <div class="rbtn color-theme" @click="controlpopup1(item2, index)">· · ·</div>
-                        </div>
-                      </div>
-                      <div>
-                        <div style="padding:5px 20px;">2019-08-08 12:20 至 2019-08-10 12:20</div>
-                      </div>
-                      <div class="flex_left">
-                        <div class="ball ball-left"></div>
-                        <div class="ball ball-right"></div>
+            <div class="lists finished" v-for="(item,index) in tabData2" :key="index">
+              <div>
+                <div class="yhq_item">
+                  <div class="flex_cell b-bottom" style="overflow:visible">
+                    <div class="flex_between" style="padding:10px 20px 0px 20px;">
+                      <div class="font18"><span style="font-weight:bold;color:#eb6b5e;">¥ {{item.facemoney}}</span><span class="color-gray3 font16"> (满{{item.ordermoney}}元可用)</span></div>
+                      <div class="flex_column">
+                        <div class="rbtn color-theme" @click="controlpopup1(item, index)">· · ·</div>
                       </div>
                     </div>
-                  </div>
-                  <div class="w_100 proInfo bg-white">
-                    <div class="db-flex">
-                      <div class="pic v_middle w80">
-                        <img class="v_middle imgcover" src="https://tossqzx.boka.cn/month_201907/15629216149869.jpg" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" style="width:70px;height:70px;" />
-                      </div>
-                      <div class="ml10" style="width:70%;">
-                        <div class="clamp1 font16">商品名</div>
-                        <div class="hxj">¥商品现价</div>
-                        <div class="font16" style="color:#eb6b5e;">领券后 <span style="font-weight:bold">¥88.00</span></div>
-                      </div>
-                    </div>
-                    <div class="w_100 flex_center">
-                      <div class="percentarea db-in v_middle mr10">
-                        <div class="inner" style="width:20%"></div>
-                      </div>
-                      <div>仅剩20张</div>
+                    <div style="padding:5px 20px;">{{item.starttime | dateformat}} 至 {{item.endtime | dateformat}}</div>
+                    <div class="flex_left">
+                      <div class="ball ball-left"></div>
+                      <div class="ball ball-right"></div>
                     </div>
                   </div>
                 </div>
+                <div class="w_100 proInfo">
+                  <div class="db-flex">
+                    <div class="pic v_middle w80">
+                      <img class="v_middle imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" style="width:70px;height:70px;" />
+                    </div>
+                    <div class="ml10" style="width:70%;">
+                      <div class="clamp1 font16">{{item.title}}</div>
+                      <div class="hxj">¥ {{item.productprice}}</div>
+                      <div class="font16" style="color:#eb6b5e;">领券后 <span style="font-weight:bold">¥ {{item.discountprice}}</span></div>
+                    </div>
+                  </div>
+                  <div class="w_100 flex_center">
+                    <div class="percentarea db-in v_middle mr10">
+                      <div class="inner" :style="`width:${(item.totalcount - item.leftstorage) / item.totalcount * 100}%`"></div> <!-- 这里的width需要计算百分比 -->
+                    </div>
+                    <div>仅剩{{item.leftstorage}}张</div>
+                  </div>
+                </div>
               </div>
-            </template>
+            </div>
           </div>
         </template>
       </div>
@@ -230,7 +224,7 @@ export default {
       // 获取正在发放优惠券数据
       this.$vux.loading.show()
       const self = this
-      let params = {showtype: 'factorycard', do: 'all', pagestart: self.pageStart1, limit: self.limit, fid: self.loginUser.fid}
+      let params = {finished: 0, showtype: 'factorycard', do: 'all', pagestart: self.pageStart1, limit: self.limit, fid: self.loginUser.fid}
       if (isone) {
         params.pagestart = this.tabData1.length
         params.limit = 1
@@ -251,7 +245,7 @@ export default {
       // 获取停止发放优惠券数据
       this.$vux.loading.show()
       const self = this
-      let params = {showtype: 'factorycard', do: 'all', pagestart: self.pageStart1, limit: self.limit, fid: self.loginUser.fid}
+      let params = {finished: 1, showtype: 'factorycard', do: 'all', pagestart: self.pageStart1, limit: self.limit, fid: self.loginUser.fid}
       if (isone) {
         params.pagestart = this.tabData1.length
         params.limit = 1
@@ -295,6 +289,13 @@ export default {
                       this.getData1(true)
                     }
                     this.tabData1.splice(this.clickindex, 1)
+                    this.clickdata.finished = 1
+                    if (this.tabData2.length) {
+                      if (this.tabData2.length === (this.pageStart2 + 1) * this.limit) {
+                        this.tabData2.splice(this.tabData2.length - 1, 1)
+                      }
+                      this.tabData2 = this.clickdata.concat(this.tabData2)
+                    }
                   }
                 }
               })
@@ -352,10 +353,12 @@ export default {
   display: flex;justify-content: center;align-items: center;
   margin-top:10px;
 }
+.factoryCardList .finished .yhq_item{background-color:#ccc;}
 .factoryCardList .b-bottom{border-bottom: 2px dashed #f2f3f2}
 .factoryCardList .percentarea{width: 75% !important;height: 5px !important;background: #f6f6f6 !important;}
 .factoryCardList .inner{height:5px !important;background-color:#eb6b5e !important; }
-.factoryCardList .proInfo{box-sizing: border-box;padding: 10px 20px}
+.factoryCardList .proInfo{box-sizing: border-box;padding: 10px 20px;background-color:#fff;}
+.factoryCardList .finished .proInfo{background-color:#ccc;}
 .factoryCardList .hxj{text-decoration: line-through;}
 .factoryCardList .flex_between{display: flex;justify-content: space-between;}
 .factoryCardList .stop{background-color: #aeafae !important;}

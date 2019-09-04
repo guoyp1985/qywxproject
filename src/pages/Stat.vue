@@ -76,7 +76,7 @@
                 </div>
               </template>
             </div>
-            <div v-if="tabitem.type == 'buylist'" class="scroll_list border-box">
+            <div v-else-if="tabitem.type == 'buylist'" class="scroll_list border-box">
               <template>
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
@@ -119,7 +119,7 @@
                 </div>
               </template>
             </div>
-            <div v-if="tabitem.type == 'sharelist'" class="scroll_list border-box">
+            <div v-else-if="tabitem.type == 'sharelist'" class="scroll_list border-box">
               <template>
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
@@ -162,7 +162,7 @@
                 </div>
               </template>
             </div>
-            <div v-if="tabitem.type == 'asklist'" class="scroll_list border-box">
+            <div v-else-if="tabitem.type == 'asklist'" class="scroll_list border-box">
               <template>
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
@@ -205,7 +205,7 @@
                 </div>
               </template>
             </div>
-            <div v-if="tabitem.type == 'viewlist'" class="scroll_list border-box">
+            <div v-else-if="tabitem.type == 'viewlist'" class="scroll_list border-box">
               <template>
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
@@ -250,7 +250,7 @@
                 </div>
               </template>
             </div>
-            <div v-if="tabitem.type == 'second'" class="scroll_list border-box">
+            <div v-else-if="tabitem.type == 'second'" class="scroll_list border-box">
               <template>
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
@@ -293,7 +293,7 @@
                 </div>
               </template>
             </div>
-            <div v-if="tabitem.type == 'crowdlist'" class="scroll_list border-box">
+            <div v-else-if="tabitem.type == 'crowdlist'" class="scroll_list border-box">
               <template>
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
@@ -336,7 +336,7 @@
                 </div>
               </template>
             </div>
-            <div v-if="tabitem.type == 'crowdlist_isdeliver_1'" class="scroll_list border-box">
+            <div v-else-if="tabitem.type == 'crowdlist_isdeliver_1'" class="scroll_list border-box">
               <template>
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
@@ -378,7 +378,7 @@
                 </div>
               </template>
             </div>
-            <div v-if="tabitem.type == 'crowdlist_isdeliver_0'" class="scroll_list border-box">
+            <div v-else-if="tabitem.type == 'crowdlist_isdeliver_0'" class="scroll_list border-box">
               <template>
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
@@ -424,7 +424,7 @@
                 </div>
               </template>
             </div>
-            <div v-if="tabitem.type == 'agentlist'" class="scroll_list border-box">
+            <div v-else-if="tabitem.type == 'agentlist'" class="scroll_list border-box">
               <template>
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
@@ -466,7 +466,7 @@
                 </div>
               </template>
             </div>
-            <div v-if="tabitem.type == 'retailerShare'" class="scroll_list border-box">
+            <div v-else-if="tabitem.type == 'retailerShare'" class="scroll_list border-box">
               <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
               <template v-else v-for="(item,index1) in arrData">
                 <router-link v-if="item.module === 'retailer'" to="/centerSales" class="scroll_item db padding10">
@@ -495,7 +495,7 @@
                 </router-link>
               </template>
             </div>
-            <div v-if="tabitem.type == 'productlist'" class="scroll_list border-box">
+            <div v-else-if="tabitem.type == 'productlist'" class="scroll_list border-box">
               <template>
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
@@ -511,7 +511,7 @@
                 </div>
               </template>
             </div>
-            <div v-if="tabitem.type == 'newslist'" class="scroll_list border-box">
+            <div v-else-if="tabitem.type == 'newslist'" class="scroll_list border-box">
               <template>
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
@@ -527,7 +527,7 @@
                 </div>
               </template>
             </div>
-            <div v-if="tabitem.type == 'academiclist'" class="scroll_list border-box">
+            <div v-else-if="tabitem.type == 'academiclist'" class="scroll_list border-box">
               <template>
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
@@ -539,6 +539,22 @@
                       <div class="clamp1 color-gray2">{{ item.title }}</div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
                     </router-link>
+                  </div>
+                </div>
+              </template>
+            </div>
+            <div v-else class="scroll_list border-box">
+              <template>
+                <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
+                <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
+                  <div class="flex_left">
+                    <div class="pic">
+                      <img class="imgcover" :src="item.photo" style="width:50px;height:50px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+                    </div>
+                    <div class="flex_cell pl10 pr20">
+                      <div class="clamp1 color-gray2">{{ item.title }}</div>
+                      <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
+                    </div>
                   </div>
                 </div>
               </template>
