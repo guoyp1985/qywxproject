@@ -37,8 +37,8 @@
                 <span>优惠券数量</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span>
               </div>
               <div class="t-cell input-cell v_middle db-flex" style="position:relative;">
-                <div><input style="width:160px" v-model='submitdata.totalcount' type="number" placeholder="请输入发放的优惠券数量" /></div>
-                <div style="position:absolute;right:0">张</div>
+                <x-input class="flex_cell" v-model='submitdata.totalcount' type="number" placeholder="请输入发放的优惠券数量" ></x-input>
+                <div class="flex_right w30">张</div>
               </div>
             </div>
           </div>
@@ -52,13 +52,15 @@
             </div>
           </div>
           <div class="padding10 required db-flex">
-            <div class="w_50">
-              <span>满</span>
-              <input class="border-input" v-model='submitdata.ordermoney' name="ordermoney" type="text" size="10" maxlength="6"/><span>元</span>
+            <div class="flex_cell flex_left">
+              <span class="pr10">满</span>
+              <x-input class="border-input flex_cell" v-model='submitdata.ordermoney' name="ordermoney" type="text" size="10" maxlength="6"></x-input>
+              <span class="pl10 pr10">元</span>
             </div>
-            <div class="w_50">
-              <span>减</span>
-              <input class="border-input" v-model='submitdata.facemoney' name="facemoney" type="text" size="10" maxlength="6"/><span>元</span>
+            <div class="flex_cell flex_left">
+              <span class="pl19 pl10 pr10">减</span>
+              <x-input class="border-input flex_cell" v-model='submitdata.facemoney' name="facemoney" type="text" size="10" maxlength="6"></x-input>
+              <span class="pl10">元</span>
             </div>
           </div>
         </div>
@@ -91,7 +93,7 @@
                     <div class="mt5 font12 clamp1"><span class="color-orange">{{ $t('RMB') }}{{selectedProduct.price}}</span><span class="ml10 color-gray">{{ $t('Storage') }}{{selectedProduct.storage}}</span></div>
                   </div>
                   <div class="t-cell align_center v_middle" style="width:60px;" v-if="!query.id">
-                    <div class="qbtn color-red btnchange" style="border:#ff3b30 1px solid;line-height:1;" @click="selectevent(item)">修改</div>
+                    <div class="qbtn color-red btnchange" style="border:#ff3b30 1px solid;line-height:1;" @click="selectevent">修改</div>
                   </div>
                 </div>
               </div>
@@ -167,7 +169,7 @@
     zh-CN: 提交
 </i18n>
 <script>
-import { Group, Datetime, CheckIcon, TransferDom, Search, Popup } from 'vux'
+import { Group, Datetime, CheckIcon, TransferDom, Search, Popup, XInput } from 'vux'
 import { User } from '#/storage'
 import ENV from 'env'
 import Time from '#/time'
@@ -175,7 +177,7 @@ export default {
   directives: {
     TransferDom
   },
-  components: { Group, Datetime, CheckIcon, Search, Popup },
+  components: { Group, Datetime, CheckIcon, Search, Popup, XInput },
   data () {
     return {
       submitdata: {
@@ -576,9 +578,11 @@ export default {
   }
 }
 </script>
-<style lang="less" scoped>
-.addFactoryCard .s-container{top:0;}
+<style lang="less">
+.addFactoryCard{
+  .s-container{top:0;}
+  .weui-cell{padding:5px !important;}
+}
 .bg-page{background-color:  #f2f2f2 !important}
-.border-input{border:#ccc 1px solid;margin-left:10rpx;margin-right:10rpx;flex:1;}
-.flex_right{}
+.border-input{border:#ccc 1px solid;}
 </style>
