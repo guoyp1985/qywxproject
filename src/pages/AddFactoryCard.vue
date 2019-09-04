@@ -460,12 +460,23 @@ export default {
         self.$vux.toast.text('请选择至少一个商品', 'middle')
         return false
       }
-      if (!self.submitdata.starttime) {
+      if (!self.submitdata.starttime || self.submitdata.starttime === '') {
         self.$vux.toast.text('请选择开始时间', 'middle')
         return false
       }
-      if (!self.submitdata.endtime) {
+      if (!self.submitdata.endtime || self.submitdata.endtime === '') {
         self.$vux.toast.text('请选择结束时间', 'middle')
+        return false
+      }
+      let starttime = new Date(self.submitdata.starttime).getTime()
+      let endtime = new Date(self.submitdata.endtime).getTime()
+      let nowtime = new Date().getTime()
+      if (endtime <= starttime) {
+        self.$vux.toast.text('结束时间应大于开始时间', 'middle')
+        return false
+      }
+      if (endtime <= nowtime) {
+        self.$vux.toast.text('结束时间应大于当前时间', 'middle')
         return false
       }
       if (self.submitdata.totalcount <= 0 || !self.submitdata.totalcount) {
