@@ -37,7 +37,7 @@
                 <span>优惠券数量</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span>
               </div>
               <div class="t-cell input-cell v_middle db-flex" style="position:relative;">
-                <div><input style="width:160px" v-model='submitdata.number' type="number" placeholder="请输入发放的优惠券数量" /></div>
+                <div><input style="width:160px" v-model='submitdata.totalcount' type="number" placeholder="请输入发放的优惠券数量" /></div>
                 <div style="position:absolute;right:0">张</div>
               </div>
             </div>
@@ -54,11 +54,11 @@
           <div class="padding10 required db-flex">
             <div class="w_50">
               <span>满</span>
-              <input class="border-input" v-model='submitdata.discountordermoney' name="discountordermoney" type="text" size="10" maxlength="6"/><span>元</span>
+              <input class="border-input" v-model='submitdata.orderMoney' name="orderMoney" type="text" size="10" maxlength="6"/><span>元</span>
             </div>
             <div class="w_50">
               <span>减</span>
-              <input class="border-input" v-model='submitdata.discountcutmoney' name="discountcutmoney" type="text" size="10" maxlength="6"/><span>元</span>
+              <input class="border-input" v-model='submitdata.faceMoney' name="faceMoney" type="text" size="10" maxlength="6"/><span>元</span>
             </div>
           </div>
         </div>
@@ -361,7 +361,7 @@ export default {
       // }
       console.log('------已选择的商品------')
       console.log(self.selectProductData)
-      self.submitdata.id = self.selectproduct.id
+      self.submitdata.fpid = self.selectproduct.id
       self.showProductList = false
       self.showproductitem = true
     },
@@ -373,11 +373,11 @@ export default {
       } else if (this.selectpopupdata.storage <= 0) {
         self.$vux.toast.text('该商品库存为0，请补充库存', 'middle')
         return false
-      } else if (this.selectpopupdata.price <= this.submitdata.discountordermoney) {
+      } else if (this.selectpopupdata.price <= this.submitdata.orderMoney) {
         console.log('当前选中商品金额')
         console.log(this.selectpopupdata.price)
         console.log('所设置的满减金额')
-        console.log(this.submitdata.discountordermoney)
+        console.log(this.submitdata.orderMoney)
         self.$vux.toast.text('该商品价格低于满减金额，请重新选择', 'middle')
         return false
       }
@@ -387,31 +387,60 @@ export default {
       const self = this
       console.log('输出当前对象')
       console.log(self.selectpopupdata)
+      let faceMoney = self.submitdata.faceMoney
+      let orderMoney = self.submitdata.orderMoney
       if (!self.selectpopupdata) {
         self.$vux.toast.text('请选择至少一个商品', 'middle')
-      } else if (self.submitdata.number <= 0 || !self.submitdata.number) {
-        self.$vux.toast.text('请输入正确的优惠券数量', 'middle')
         return false
-      } else if (isNaN(self.submitdata.discountcutmoney) || isNaN(self.submitdata.discountordermoney) || !self.submitdata.discountcutmoney || self.submitdata.discountcutmoney <= 0 || !self.submitdata.discountordermoney || self.submitdata.discountordermoney <= 0) {
-        self.$vux.toast.text('请填写正确的满减金额', 'middle')
-        return false
-      } else if (this.selectpopupdata.price <= this.submitdata.discountordermoney) {
-        console.log('当前选中商品金额')
-        console.log(this.selectpopupdata.price)
-        console.log('所设置的满减金额')
-        console.log(this.submitdata.discountordermoney)
-        self.$vux.toast.text('该商品价格低于满减金额，请重新选择', 'middle')
-        return false
-      } else if (!self.submitdata.starttime) {
+      }
+      if (!self.submitdata.starttime) {
         self.$vux.toast.text('请选择开始时间', 'middle')
         return false
-      } else if (!self.submitdata.endtime) {
+      }
+      if (!self.submitdata.endtime) {
         self.$vux.toast.text('请选择结束时间', 'middle')
         return false
       }
+      if (self.submitdata.totalcount <= 0 || !self.submitdata.totalcount) {
+        self.$vux.toast.text('请输入正确的优惠券数量', 'middle')
+        return false
+      }
+      if (isNaN(faceMoney) || isNaN(orderMoney) || !faceMoney || parseFloat(faceMoney.replace(/,/g, '')) <= 0 || !orderMoney || parseFloat(orderMoney.replace(/,/g, '')) <= 0) {
+        self.$vux.toast.text('请填写正确的满减金额', 'middle')
+        return false
+      }
+      // if (this.selectpopupdata.price <= this.submitdata.orderMoney) {
+      //   console.log('当前选中商品金额')
+      //   console.log(this.selectpopupdata.price)
+      //   console.log('所设置的满减金额')
+      //   console.log(this.submitdata.orderMoney)
+      //   self.$vux.toast.text('该商品价格低于满减金额，请重新选择', 'middle')
+      //   return false
+      // }
       // 无论是创建优惠券 还是修改优惠券 统一传对象
       console.log('------submitdata------')
       console.log(self.submitdata)
+      if (this.query.id) {
+        self.submitdata.id = this.query.id
+      }
+      self.$http.post(`${ENV.BokaApi}/api/miniactivity/add`, {
+        ...self.submitdata, type: 'factorycard', fid: this.query.fid
+      }).then(res => {
+        let data = res.data
+        self.$vux.loading.hide()
+        self.$vux.toast.show({
+          text: data.error,
+          type: data.flag !== 1 ? 'warn' : 'success',
+          time: self.$util.delay(data.error),
+          onHide: () => {
+            self.submitIng = false
+            // if (data.flag === 1) {
+            //   let rparams = self.$util.handleAppParams(self.query, {id: data.data, fid: self.query.fid})
+            //   self.$router.push({path: '/factoryProduct', query: rparams})
+            // }
+          }
+        })
+      })
     }
   },
   activated () {
