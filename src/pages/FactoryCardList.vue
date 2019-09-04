@@ -10,40 +10,18 @@
     <div class="s-container s-container1" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
       <!-- 正在发放的优惠券 -->
       <div v-show="(selectedIndex == 0)">
-        <div v-if="!tabData1 || tabData1.length === 0" class="scroll_item padding10 align_center color-gray">
-          <div><i class="al al-wushuju font60 pt20"></i></div>
-          <div class="mt5">暂无发放优惠券！</div>
-        </div>
-        <div v-if="!disList1" class="scroll_list">
-          <template v-for="(item,index) in tabData1" :index="index">
-            <div class="lists">
-              <!-- <div class="yhq_item">
-                <div class="flex_cell txt-cell" style="overflow:visible">
-                  <div class="db-flex">
-                    <div class="pic v_middle w70">
-                      <img class="v_middle imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" style="width:60px;height:60px;" />
-                    </div>
-                    <div>
-                      <div>{{item.title}}</div>
-                      <div class="font16 mt5 txt" style="font-weight:bolder;">满100减50</div>
-                    </div>
-                  </div>
-                  <div class="mt5">
-                    <div class="font12">{{item.starttime | dateformat}}至{{item.endtime | dateformat}}</div>
-                  </div>
-                  <div class="ball ball-up"></div>
-                  <div class="ball ball-down"></div>
-                </div>
-                <div class="btn-cell flex_column">
-                  <div class="rbtn color-theme" @click="controlpopup1(item, item.id)">· · ·</div>
-                  <div class="mt5">剩余<span style="font-weight:bolder;">100</span>张</div>
-                </div>
-              </div> -->
-              <div>
+        <template v-if="disList1">
+          <div v-if="!tabData1 || !tabData1.length" class="scroll_item padding10 align_center color-gray">
+            <div><i class="al al-wushuju font60 pt20"></i></div>
+            <div class="mt5">暂无发放优惠券！</div>
+          </div>
+          <div v-else class="scroll_list">
+            <div class="lists" v-for="(item,index) in tabData1" :key="index">
+              <div class="list-item">
                 <div class="yhq_item">
                   <div class="flex_cell b-bottom" style="overflow:visible">
                     <div class="flex_between" style="padding:10px 20px 0px 20px;">
-                      <div class="font18"><span style="font-weight:bold;color:#eb6b5e;">¥ 10</span><span class="color-gray3 font16"> (满99元可用)</span></div>
+                      <div class="font18"><span style="font-weight:bold;color:#eb6b5e;">¥ {{item.facemoney}}</span><span class="color-gray3 font16"> (满{{item.ordermoney}}元可用)</span></div>
                       <div class="flex_column">
                         <div class="rbtn color-theme" @click="controlpopup1(item, item.id)">· · ·</div>
                       </div>
@@ -64,70 +42,72 @@
                     </div>
                     <div class="ml10" style="width:70%;">
                       <div class="clamp1 font16">{{item.title}}</div>
-                      <div class="hxj">¥商品现价</div>
-                      <div class="font16" style="color:#eb6b5e;">领券后 <span style="font-weight:bold">¥88.00</span></div>
+                      <div class="hxj">¥ {{item.productprice}}</div>
+                      <div class="font16" style="color:#eb6b5e;">领券后 <span style="font-weight:bold">¥ {{item.discountprice}}</span></div>
                     </div>
                   </div>
                   <div class="w_100 flex_center">
                     <div class="percentarea db-in v_middle mr10">
-                      <div class="inner" style="width:20%"></div> <!-- 这里的width需要计算百分比 -->
+                      <div class="inner" :style="`width:${(item.totalcount - item.leftstorage) / item.totalcount * 100}%`"></div> <!-- 这里的width需要计算百分比 -->
                     </div>
-                    <div>仅剩20张</div>
+                    <div>仅剩{{item.leftstorage}}张</div>
                   </div>
                 </div>
               </div>
             </div>
-          </template>
-        </div>
+          </div>
+        </template>
       </div>
       <div v-show="(selectedIndex == 1)">
-        <div v-if="!tabData2 || tabData2.length === 0" class="scroll_item padding10 align_center color-gray">
-          <div><i class="al al-wushuju font60 pt20"></i></div>
-          <div class="mt5">暂无已停止发放优惠券！</div>
-        </div>
-        <div v-if="!disList2" class="scroll_list">
-          <template v-for="(item2,index) in tabData2" :index="index">
-            <div class="lists">
-              <div>
-                <div class="yhq_item">
-                  <div class="flex_cell b-bottom" style="overflow:visible">
-                    <div class="flex_between" style="padding:10px 20px 0px 20px;">
-                      <div class="font18"><span style="font-weight:bold;color:#eb6b5e;">¥ 10</span><span class="color-gray3 font16"> (满99元可用)</span></div>
-                      <div class="flex_column">
-                        <div class="rbtn color-theme" @click="controlpopup1(item2, item2.id)">· · ·</div>
+        <template v-if="disList2">
+          <div v-if="!tabData2 || !tabData2.length" class="scroll_item padding10 align_center color-gray">
+            <div><i class="al al-wushuju font60 pt20"></i></div>
+            <div class="mt5">暂无已停止发放优惠券！</div>
+          </div>
+          <div v-else class="scroll_list">
+            <template v-for="(item2,index) in tabData2" :index="index">
+              <div class="lists">
+                <div>
+                  <div class="yhq_item">
+                    <div class="flex_cell b-bottom" style="overflow:visible">
+                      <div class="flex_between" style="padding:10px 20px 0px 20px;">
+                        <div class="font18"><span style="font-weight:bold;color:#eb6b5e;">¥ 10</span><span class="color-gray3 font16"> (满99元可用)</span></div>
+                        <div class="flex_column">
+                          <div class="rbtn color-theme" @click="controlpopup1(item2, item2.id)">· · ·</div>
+                        </div>
+                      </div>
+                      <div>
+                        <div style="padding:5px 20px;">2019-08-08 12:20 至 2019-08-10 12:20</div>
+                      </div>
+                      <div class="flex_left">
+                        <div class="ball ball-left"></div>
+                        <div class="ball ball-right"></div>
                       </div>
                     </div>
-                    <div>
-                      <div style="padding:5px 20px;">2019-08-08 12:20 至 2019-08-10 12:20</div>
-                    </div>
-                    <div class="flex_left">
-                      <div class="ball ball-left"></div>
-                      <div class="ball ball-right"></div>
-                    </div>
                   </div>
-                </div>
-                <div class="w_100 proInfo bg-white">
-                  <div class="db-flex">
-                    <div class="pic v_middle w80">
-                      <img class="v_middle imgcover" src="https://tossqzx.boka.cn/month_201907/15629216149869.jpg" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" style="width:70px;height:70px;" />
+                  <div class="w_100 proInfo bg-white">
+                    <div class="db-flex">
+                      <div class="pic v_middle w80">
+                        <img class="v_middle imgcover" src="https://tossqzx.boka.cn/month_201907/15629216149869.jpg" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" style="width:70px;height:70px;" />
+                      </div>
+                      <div class="ml10" style="width:70%;">
+                        <div class="clamp1 font16">商品名</div>
+                        <div class="hxj">¥商品现价</div>
+                        <div class="font16" style="color:#eb6b5e;">领券后 <span style="font-weight:bold">¥88.00</span></div>
+                      </div>
                     </div>
-                    <div class="ml10" style="width:70%;">
-                      <div class="clamp1 font16">商品名</div>
-                      <div class="hxj">¥商品现价</div>
-                      <div class="font16" style="color:#eb6b5e;">领券后 <span style="font-weight:bold">¥88.00</span></div>
+                    <div class="w_100 flex_center">
+                      <div class="percentarea db-in v_middle mr10">
+                        <div class="inner" style="width:20%"></div>
+                      </div>
+                      <div>仅剩20张</div>
                     </div>
-                  </div>
-                  <div class="w_100 flex_center">
-                    <div class="percentarea db-in v_middle mr10">
-                      <div class="inner" style="width:20%"></div>
-                    </div>
-                    <div>仅剩20张</div>
                   </div>
                 </div>
               </div>
-            </div>
-          </template>
-        </div>
+            </template>
+          </div>
+        </template>
       </div>
       <div class="hiddenbox"></div>
     </div>
@@ -159,7 +139,7 @@
 </template>
 <script>
 // import jQuery from 'jquery'
-// import ENV from 'env'
+import ENV from 'env'
 import Time from '#/time'
 import {Tab, TabItem, Popup, TransferDom, Confirm} from 'vux'
 import {User} from '#/storage'
@@ -180,20 +160,8 @@ export default {
     return {
       tabtxts: ['正在发放', '已停止发放'],
       selectedIndex: 0,
-      tabData1: [
-        {id: 1, title: '胶卷', photo: 'https://tossqzx.boka.cn/month_201907/15629216149869.jpg', starttime: '1564990620', endtime: '1565595604'},
-        {id: 1, title: '胶卷', photo: 'https://tossqzx.boka.cn/month_201907/15629216149869.jpg', starttime: '1564990620', endtime: '1565595604'},
-        {id: 1, title: '胶卷', photo: 'https://tossqzx.boka.cn/month_201907/15629216149869.jpg', starttime: '1564990620', endtime: '1565595604'},
-        {id: 1, title: '胶卷', photo: 'https://tossqzx.boka.cn/month_201907/15629216149869.jpg', starttime: '1564990620', endtime: '1565595604'},
-        {id: 1, title: '胶卷', photo: 'https://tossqzx.boka.cn/month_201907/15629216149869.jpg', starttime: '1564990620', endtime: '1565595604'},
-        {id: 1, title: '胶卷', photo: 'https://tossqzx.boka.cn/month_201907/15629216149869.jpg', starttime: '1564990620', endtime: '1565595604'},
-        {id: 1, title: '胶卷', photo: 'https://tossqzx.boka.cn/month_201907/15629216149869.jpg', starttime: '1564990620', endtime: '1565595604'},
-        {id: 1, title: '胶卷', photo: 'https://tossqzx.boka.cn/month_201907/15629216149869.jpg', starttime: '1564990620', endtime: '1565595604'},
-        {id: 1, title: '胶卷', photo: 'https://tossqzx.boka.cn/month_201907/15629216149869.jpg', starttime: '1564990620', endtime: '1565595604'},
-        {id: 1, title: '胶卷', photo: 'https://tossqzx.boka.cn/month_201907/15629216149869.jpg', starttime: '1564990620', endtime: '1565595604'},
-        {id: 1, title: '胶卷', photo: 'https://tossqzx.boka.cn/month_201907/15629216149869.jpg', starttime: '1564990620', endtime: '1565595604'},
-        {id: 1, title: '胶卷', photo: 'https://tossqzx.boka.cn/month_201907/15629216149869.jpg', starttime: '1564990620', endtime: '1565595604'}],
-      tabData2: [{id: 1, title: '胶卷', photo: 'https://tossqzx.boka.cn/month_201907/15629216149869.jpg', starttime: '1564990620', endtime: '1565595604'}],
+      tabData1: [],
+      tabData2: [],
       pageStart1: 0,
       pageStart2: 0,
       disList1: false,
@@ -202,13 +170,11 @@ export default {
       loginUser: {},
       clickdata: {},
       clickindex: 0,
-      showpopup1: false
+      showpopup1: false,
+      Fid: 0
     }
   },
   methods: {
-    init () {
-      this.getData1()
-    },
     handleScroll: function (refname) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
@@ -233,8 +199,11 @@ export default {
         }
       })
     },
-    onItemClick () {  // 选择对应tab获取对应订单状态列表数据
+    swiperChange (index) {
       const self = this
+      if (index !== undefined) {
+        this.selectedIndex = index
+      }
       switch (this.selectedIndex) {
         case 0:
           if (this.tabData1.length < this.limit) {
@@ -254,39 +223,42 @@ export default {
           break
       }
     },
+    onItemClick () {  // 选择对应tab获取对应订单状态列表数据
+      this.swiperChange()
+    },
     getData1 () {
       // 获取正在发放优惠券数据
-      // this.$vux.loading.show()
-      // const self = this
-      // let params = {dealed: 0, pagestart: self.pageStart1, limit: self.limit, fid: self.loginUser.fid}
-      // self.$http.post(`${ENV.BokaApi}/api/agent/applyList`,
-      //   params
-      // ).then(function (res) {
-      //   const data = res.data
-      //   self.$vux.loading.hide()
-      //   const retdata = data.data ? data.data : data
-      //   self.tabData1 = self.tabData1.concat(retdata)
-      //   self.disList1 = true
-      //   console.log('----response-----')
-      //   console.log(self.tabData1)
-      // })
+      this.$vux.loading.show()
+      const self = this
+      let params = {showtype: 'factorycard', do: 'all', pagestart: self.pageStart1, limit: self.limit, fid: self.loginUser.fid}
+      self.$http.post(`${ENV.BokaApi}/api/miniactivity/getList`,
+        params
+      ).then(function (res) {
+        const data = res.data
+        self.$vux.loading.hide()
+        const retdata = data.data ? data.data : data
+        self.tabData1 = self.tabData1.concat(retdata)
+        self.disList1 = true
+        console.log('----response-----')
+        console.log(self.tabData1)
+      })
     },
     getData2 () {
       // 获取停止发放优惠券数据
-      // this.$vux.loading.show()
-      // const self = this
-      // let params = {dealed: 1, pagestart: self.pageStart2, limit: self.limit, fid: self.loginUser.fid}
-      // self.$http.post(`${ENV.BokaApi}/api/agent/applyList`,
-      //   params
-      // ).then(function (res) {
-      //   const data = res.data
-      //   self.$vux.loading.hide()
-      //   const retdata = data.data ? data.data : data
-      //   self.tabData2 = self.tabData2.concat(retdata)
-      //   self.disList2 = true
-      //   console.log('----response-----')
-      //   console.log(self.tabData2)
-      // })
+      this.$vux.loading.show()
+      const self = this
+      let params = {showtype: 'factorycard', do: 'all', pagestart: self.pageStart2, limit: self.limit, fid: self.loginUser.fid}
+      self.$http.post(`${ENV.BokaApi}/api/agent/applyList`,
+        params
+      ).then(function (res) {
+        const data = res.data
+        self.$vux.loading.hide()
+        const retdata = data.data ? data.data : data
+        self.tabData2 = self.tabData2.concat(retdata)
+        self.disList2 = true
+        console.log('----response-----')
+        console.log(self.tabData2)
+      })
     },
     clickpopup (key) {
       const self = this
@@ -321,16 +293,31 @@ export default {
       this.clickindex = index
     },
     saveevent () {
-      this.$router.push({path: '/addFactoryCard'})
+      let rparams = this.$util.handleAppParams(this.query, {fid: this.Fid})
+      this.$router.push({path: '/addFactoryCard', query: rparams})
     }
   },
   activated () {
   },
   created () {
     this.loginUser = User.get()
-    console.log('-----loginUser-----')
-    console.log(this.loginUser.fid)
-    this.init()
+    this.Fid = this.loginUser.fid
+    this.query = this.$route.query
+    if (this.query.fid) {
+      this.Fid = this.query.fid
+    }
+    if (this.query.refresh) {
+      this.disList1 = false
+      this.disList2 = false
+      this.selectedIndex = 0
+      this.tabData1 = []
+      this.tabData2 = []
+      this.pageStart1 = 0
+      this.pageStart2 = 0
+      this.swiperChange()
+    } else {
+      this.swiperChange()
+    }
   }
 }
 </script>

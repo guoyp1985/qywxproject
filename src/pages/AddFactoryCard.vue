@@ -54,16 +54,16 @@
           <div class="padding10 required db-flex">
             <div class="w_50">
               <span>满</span>
-              <input class="border-input" v-model='submitdata.orderMoney' name="orderMoney" type="text" size="10" maxlength="6"/><span>元</span>
+              <input class="border-input" v-model='submitdata.ordermoney' name="ordermoney" type="text" size="10" maxlength="6"/><span>元</span>
             </div>
             <div class="w_50">
               <span>减</span>
-              <input class="border-input" v-model='submitdata.faceMoney' name="faceMoney" type="text" size="10" maxlength="6"/><span>元</span>
+              <input class="border-input" v-model='submitdata.facemoney' name="facemoney" type="text" size="10" maxlength="6"/><span>元</span>
             </div>
           </div>
         </div>
         <div style="margin: 10px 10px 10px 10px;background-color: white;border-radius:5px">
-          <div class="form-item required">
+          <!-- <div class="form-item required">
             <div class="t-table">
               <div class="t-cell title-cell font14 v_middle w100">
                 <span>选择商品</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span>
@@ -71,10 +71,17 @@
               <check-icon class="red-check" :value.sync="singlePro" @click.stop="setType(1)">单件商品</check-icon>
               <check-icon class="red-check" :value.sync="allPro" @click.stop="setType(0)">所有商品</check-icon>
             </div>
+          </div> -->
+          <div class="form-item required">
+            <div class="t-table">
+              <div class="t-cell title-cell font14 v_middle w100">
+                <span>指定商品</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span>
+              </div>
+            </div>
           </div>
           <div class="padding10 required">
             <template v-if="showproductitem">
-                <template v-for="(item, index) in selectProductData" index="index">
+              <template v-for="(item, index) in selectProductData" index="index">
                 <div class="border db">
                   <div class="t-table">
                     <div class="t-cell v_middle" style="width:50px;">
@@ -84,14 +91,14 @@
                       <div class="clamp1">{{item.title}}</div>
                       <div class="mt5 font12 clamp1"><span class="color-orange">{{ $t('RMB') }}{{item.price}}</span><span class="ml10 color-gray">{{ $t('Storage') }}{{item.storage}}</span></div>
                     </div>
-                    <div class="t-cell align_center v_middle" style="width:60px;">
+                    <div class="t-cell align_center v_middle" style="width:60px;" v-if="!query.id">
                       <div class="qbtn color-red btnchange" style="border:#ff3b30 1px solid;line-height:1;" @click="selectevent(item)">修改</div>
                     </div>
                   </div>
                 </div>
               </template>
             </template>
-            <div class="flex_center w_100">
+            <div v-else class="flex_center w_100">
               <div class="qbtn flex_center color-orange mt10" style="border:orange 1px solid;width:90%;line-height:1;padding:4px 0;" @click="selectevent">
                 <span class="mr5 v_middle db-in" style="margin-top:-3px;">+</span><span class="v_middle db-in">{{ $t('Select product') }}</span>
               </div>
@@ -165,7 +172,7 @@
 import { Group, Datetime, CheckIcon, TransferDom, Search, Popup } from 'vux'
 import { User } from '#/storage'
 import ENV from 'env'
-// import Time from '#/time'
+import Time from '#/time'
 export default {
   directives: {
     TransferDom
@@ -173,7 +180,14 @@ export default {
   components: { Group, Datetime, CheckIcon, Search, Popup },
   data () {
     return {
-      submitdata: {},
+      submitdata: {
+        endtime: '',
+        starttime: '',
+        facemoney: '',
+        totalcount: '',
+        ordermoney: '',
+        fpid: ''
+      },
       query: {},
       visibility1: false,
       visibility2: false,
@@ -195,7 +209,8 @@ export default {
       selectProductData: [],
       selectProductIndex: -1,
       dataGetting: false,
-      loginUser: {}
+      loginUser: {},
+      Fid: 0
     }
   },
   watch: {
@@ -219,6 +234,24 @@ export default {
     }
   },
   methods: {
+    initData () {
+      this.submitdata = {
+        endtime: '',
+        starttime: '',
+        facemoney: '',
+        totalcount: '',
+        ordermoney: '',
+        fpid: ''
+      }
+      this.visibility1 = false
+      this.visibility2 = false
+      this.selectdatetxt1 = '选择开始时间'
+      this.selectdatetxt2 = '选择结束时间'
+      this.showProductList = false
+      this.showproductitem = false
+      this.selectpopupdata = null
+      this.selectProductData = []
+    },
     showxdate1 () {
       this.visibility1 = true
     },
@@ -324,7 +357,38 @@ export default {
       })
     },
     getCardInfoById () {
-
+      this.selectdatetxt1 = ''
+      this.selectdatetxt2 = ''
+      this.$http.post(`${ENV.BokaApi}/api/miniactivity/info`, {
+        id: this.query.id
+      }).then(res => {
+        const data = res.data
+        if (data.flag) {
+          this.viewData = data.data
+          for (let key in this.submitdata) {
+            if (key === 'starttime' || key === 'endtime') {
+              this.submitdata[key] = new Time(this.viewData[key] * 1000).dateFormat('yyyy-MM-dd hh:mm')
+            } else {
+              this.submitdata[key] = this.viewData[key]
+            }
+          }
+          console.log(this.submitdata)
+          return this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
+            params: {id: this.viewData.fpid, module: 'factoryproduct'}
+          })
+        }
+      }).then(res => {
+        if (res) {
+          const data = res.data
+          if (data.flag) {
+            const retdata = data.data
+            retdata.photo = retdata.photo.split(',')[0]
+            this.selectProductData.push(retdata)
+            this.selectpopupdata = retdata
+            this.showproductitem = true
+          }
+        }
+      })
     },
     radioclick (data, index) {
       const self = this
@@ -373,11 +437,11 @@ export default {
       } else if (this.selectpopupdata.storage <= 0) {
         self.$vux.toast.text('该商品库存为0，请补充库存', 'middle')
         return false
-      } else if (this.selectpopupdata.price <= this.submitdata.orderMoney) {
+      } else if (this.selectpopupdata.price <= this.submitdata.ordermoney) {
         console.log('当前选中商品金额')
         console.log(this.selectpopupdata.price)
         console.log('所设置的满减金额')
-        console.log(this.submitdata.orderMoney)
+        console.log(this.submitdata.ordermoney)
         self.$vux.toast.text('该商品价格低于满减金额，请重新选择', 'middle')
         return false
       }
@@ -387,8 +451,8 @@ export default {
       const self = this
       console.log('输出当前对象')
       console.log(self.selectpopupdata)
-      let faceMoney = self.submitdata.faceMoney
-      let orderMoney = self.submitdata.orderMoney
+      let facemoney = self.submitdata.facemoney
+      let ordermoney = self.submitdata.ordermoney
       if (!self.selectpopupdata) {
         self.$vux.toast.text('请选择至少一个商品', 'middle')
         return false
@@ -405,15 +469,15 @@ export default {
         self.$vux.toast.text('请输入正确的优惠券数量', 'middle')
         return false
       }
-      if (isNaN(faceMoney) || isNaN(orderMoney) || !faceMoney || parseFloat(faceMoney.replace(/,/g, '')) <= 0 || !orderMoney || parseFloat(orderMoney.replace(/,/g, '')) <= 0) {
+      if (isNaN(facemoney) || isNaN(ordermoney) || !facemoney || parseFloat(facemoney.replace(/,/g, '')) <= 0 || !ordermoney || parseFloat(ordermoney.replace(/,/g, '')) <= 0) {
         self.$vux.toast.text('请填写正确的满减金额', 'middle')
         return false
       }
-      // if (this.selectpopupdata.price <= this.submitdata.orderMoney) {
+      // if (this.selectpopupdata.price <= this.submitdata.ordermoney) {
       //   console.log('当前选中商品金额')
       //   console.log(this.selectpopupdata.price)
       //   console.log('所设置的满减金额')
-      //   console.log(this.submitdata.orderMoney)
+      //   console.log(this.submitdata.ordermoney)
       //   self.$vux.toast.text('该商品价格低于满减金额，请重新选择', 'middle')
       //   return false
       // }
@@ -424,7 +488,7 @@ export default {
         self.submitdata.id = this.query.id
       }
       self.$http.post(`${ENV.BokaApi}/api/miniactivity/add`, {
-        ...self.submitdata, type: 'factorycard', fid: this.query.fid
+        ...self.submitdata, type: 'factorycard', fid: this.Fid
       }).then(res => {
         let data = res.data
         self.$vux.loading.hide()
@@ -434,24 +498,28 @@ export default {
           time: self.$util.delay(data.error),
           onHide: () => {
             self.submitIng = false
-            // if (data.flag === 1) {
-            //   let rparams = self.$util.handleAppParams(self.query, {id: data.data, fid: self.query.fid})
-            //   self.$router.push({path: '/factoryProduct', query: rparams})
-            // }
+            if (data.flag === 1) {
+              let rparams = self.$util.handleAppParams(self.query, {fid: this.Fid, refresh: 1})
+              self.$router.push({path: '/factoryCardList', query: rparams})
+            }
           }
         })
       })
     }
   },
+  created () {
+  },
   activated () {
+    this.initData()
+    this.loginUser = User.get()
+    this.Fid = this.loginUser.fid
     this.query = this.$route.query
+    if (this.query.fid) {
+      this.Fid = this.query.fid
+    }
     if (this.query.id) {
-      console.log(this.query.id)
       this.getCardInfoById()
     }
-  },
-  created () {
-    this.loginUser = User.get()
   }
 }
 </script>
