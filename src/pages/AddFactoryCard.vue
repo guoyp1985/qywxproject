@@ -504,6 +504,9 @@ export default {
       let starttime = new Date(self.submitdata.starttime).getTime()
       let endtime = new Date(self.submitdata.endtime).getTime()
       let nowtime = new Date().getTime()
+      console.log('starttime', starttime)
+      console.log('endtime', endtime)
+      console.log('nowtime', nowtime)
       if (endtime <= starttime) {
         self.$vux.toast.text('结束时间应大于开始时间', 'middle')
         return false
