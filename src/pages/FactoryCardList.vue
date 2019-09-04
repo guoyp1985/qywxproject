@@ -247,7 +247,7 @@ export default {
       // 获取停止发放优惠券数据
       this.$vux.loading.show()
       const self = this
-      let params = {finished: 1, showtype: 'factorycard', do: 'all', pagestart: self.pageStart1, limit: self.limit, fid: self.loginUser.fid}
+      let params = {finished: 1, showtype: 'factorycard', do: 'all', pagestart: self.pageStart2, limit: self.limit, fid: self.loginUser.fid}
       if (isone) {
         params.pagestart = this.tabData1.length
         params.limit = 1
