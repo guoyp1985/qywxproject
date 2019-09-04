@@ -44,12 +44,13 @@
                       <div class="font16" style="color:#eb6b5e;">领券后 <span style="font-weight:bold">¥ {{item.discountprice}}</span></div>
                     </div>
                   </div>
-                  <div class="w_100 flex_center">
-                    <div class="percentarea db-in v_middle mr10">
+                  <div class="w_100 pt10 flex_center">
+                    <div class="percentarea v_middle">
                       <div class="inner" :style="`width:${(item.totalcount - item.leftstorage) / item.totalcount * 100}%`"></div> <!-- 这里的width需要计算百分比 -->
                     </div>
-                    <div>仅剩{{item.leftstorage}}张</div>
+                    <!-- <div>仅剩{{item.leftstorage}}张</div> -->
                   </div>
+                  <div class="w_100 pt5 flex_center">仅剩{{item.leftstorage}}张</div>
                 </div>
               </div>
             </div>
@@ -91,12 +92,13 @@
                       <div class="font16" style="color:#eb6b5e;">领券后 <span style="font-weight:bold">¥ {{item.discountprice}}</span></div>
                     </div>
                   </div>
-                  <div class="w_100 flex_center">
-                    <div class="percentarea db-in v_middle mr10">
+                  <div class="w_100 pt10 flex_center">
+                    <div class="percentarea v_middle">
                       <div class="inner" :style="`width:${(item.totalcount - item.leftstorage) / item.totalcount * 100}%`"></div> <!-- 这里的width需要计算百分比 -->
                     </div>
-                    <div>仅剩{{item.leftstorage}}张</div>
+                    <!-- <div>仅剩{{item.leftstorage}}张</div> -->
                   </div>
+                  <div class="w_100 pt5 flex_center">仅剩{{item.leftstorage}}张</div>
                 </div>
               </div>
             </div>
@@ -355,7 +357,7 @@ export default {
 }
 .factoryCardList .finished .yhq_item{background-color:#ccc;}
 .factoryCardList .b-bottom{border-bottom: 2px dashed #f2f3f2}
-.factoryCardList .percentarea{width: 75% !important;height: 5px !important;background: #f6f6f6 !important;}
+.factoryCardList .percentarea{width:100% !important;height: 5px !important;background: #f6f6f6 !important;}
 .factoryCardList .inner{height:5px !important;background-color:#eb6b5e !important; }
 .factoryCardList .proInfo{box-sizing: border-box;padding: 10px 20px;background-color:#fff;}
 .factoryCardList .finished .proInfo{background-color:#ccc;}
