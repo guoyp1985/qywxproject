@@ -38,7 +38,7 @@
                     <div class="pic v_middle w80">
                       <img class="v_middle imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" style="width:70px;height:70px;" />
                     </div>
-                    <div class="ml10" style="width:70%;">
+                    <div class="flex_cell">
                       <div class="clamp1 font16">{{item.title}}</div>
                       <div class="hxj">¥ {{item.productprice}}</div>
                       <div class="font16" style="color:#eb6b5e;">领券后 <span style="font-weight:bold">¥ {{item.discountprice}}</span></div>
