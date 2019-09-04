@@ -21,7 +21,7 @@
                 <div class="yhq_item">
                   <div class="flex_cell b-bottom" style="overflow:visible">
                     <div class="flex_between" style="padding:10px 20px 0px 20px;">
-                      <div class="font18"><span style="font-weight:bold;color:#eb6b5e;">¥ {{item.facemoney}}</span><span class="color-gray3 font16"> (满{{item.ordermoney}}元可用)</span></div>
+                      <div class="font18"><span style="font-weight:bold;color:#eb6b5e;">¥ {{item.facemoney}}</span><span class="color-gray3 font16 ml5"> (满{{item.ordermoney}}元可用)</span></div>
                       <div class="flex_column">
                         <div class="rbtn color-theme" @click="controlpopup1(item, index)">· · ·</div>
                       </div>
@@ -346,7 +346,9 @@ export default {
 }
 </script>
 <style lang="less">
-.factoryCardList{}
+.factoryCardList{
+  .list-item{box-shadow: 0 2px 6px rgba(0,0,0,0.1);}
+}
 .factoryCardList .disimg{filter: grayscale(0.8);}
 .factoryCardList .lists{padding:0px 20px 10px;}
 .factoryCardList .hiddenbox{height: 45px;}
