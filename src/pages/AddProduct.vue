@@ -791,6 +791,7 @@ export default {
         }
         let price = postdata.price.toString().replace(/,/g, '')
         let oriprice = postdata.oriprice.toString().replace(/,/g, '')
+        console.log(oriprice)
         let tbprice = postdata.tb_price.toString().replace(/,/g, '')
         let jdprice = postdata.jd_price.toString().replace(/,/g, '')
         let postage = postdata.postage.toString().replace(/,/g, '')
