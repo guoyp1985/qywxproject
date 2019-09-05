@@ -503,8 +503,6 @@ export default {
     },
     saveevent () {
       const self = this
-      alert(self.submitdata.starttime)
-      alert(self.submitdata.endtime)
       if (this.submitIng) return false
       let facemoney = self.submitdata.facemoney
       let ordermoney = self.submitdata.ordermoney
@@ -523,8 +521,6 @@ export default {
       let starttime = new Date(self.submitdata.starttime.replace(/-/g, '/')).getTime()
       let endtime = new Date(self.submitdata.endtime.replace(/-/g, '/')).getTime()
       let nowtime = new Date().getTime()
-      alert(starttime)
-      alert(endtime)
       console.log('starttime', starttime)
       console.log('endtime', endtime)
       console.log('nowtime', nowtime)
