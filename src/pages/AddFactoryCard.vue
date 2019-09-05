@@ -520,8 +520,8 @@ export default {
         self.$vux.toast.text('请选择结束时间', 'middle')
         return false
       }
-      let starttime = new Date(self.submitdata.starttime).getTime()
-      let endtime = new Date(self.submitdata.endtime).getTime()
+      let starttime = new Date(self.submitdata.starttime.replace(/-/g, '/')).getTime()
+      let endtime = new Date(self.submitdata.endtime.replace(/-/g, '/')).getTime()
       let nowtime = new Date().getTime()
       console.log('starttime', starttime)
       console.log('endtime', endtime)
