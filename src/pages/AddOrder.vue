@@ -827,9 +827,13 @@ export default {
               }
             }
           }
-          return self.$http.post(`${ENV.BokaApi}/api/card/canUse`, {
-            wid: self.orderdata[0].wid, ordermoney: self.payPrice, productid: self.orderdata[0].info[0].pid
-          })
+          let cardParams = {wid: self.orderdata[0].wid, ordermoney: self.payPrice, productid: self.orderdata[0].info[0].pid}
+          if (self.query.shop_id) {
+            cardParams.shopid = self.query.shop_id
+          } else {
+            cardParams.shopid = self.query.id
+          }
+          return self.$http.post(`${ENV.BokaApi}/api/card/canUse`, cardParams)
         }
       }).then(res => {
         if (res) {

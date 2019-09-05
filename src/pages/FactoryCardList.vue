@@ -21,7 +21,7 @@
                 <div class="yhq_item">
                   <div class="flex_cell b-bottom" style="overflow:visible">
                     <div class="flex_between" style="padding:10px 20px 0px 20px;">
-                      <div class="font18"><span style="font-weight:bold;color:#eb6b5e;">¥ {{item.facemoney}}</span><span class="color-gray3 font16"> (满{{item.ordermoney}}元可用)</span></div>
+                      <div class="font18"><span style="font-weight:bold;color:#eb6b5e;">¥ {{item.facemoney}}</span><span class="color-gray3 font16 ml5"> (满{{item.ordermoney}}元可用)</span></div>
                       <div class="flex_column">
                         <div class="rbtn color-theme" @click="controlpopup1(item, index)">· · ·</div>
                       </div>
@@ -38,17 +38,21 @@
                     <div class="pic v_middle w80">
                       <img class="v_middle imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" style="width:70px;height:70px;" />
                     </div>
-                    <div class="ml10" style="width:70%;">
+                    <div class="flex_cell">
                       <div class="clamp1 font16">{{item.title}}</div>
                       <div class="hxj">¥ {{item.productprice}}</div>
                       <div class="font16" style="color:#eb6b5e;">领券后 <span style="font-weight:bold">¥ {{item.discountprice}}</span></div>
                     </div>
                   </div>
-                  <div class="w_100 flex_center">
-                    <div class="percentarea db-in v_middle mr10">
-                      <div class="inner" :style="`width:${(item.totalcount - item.leftstorage) / item.totalcount * 100}%`"></div> <!-- 这里的width需要计算百分比 -->
+                  <div class="w_100 pt10 flex_center">
+                    <div class="flex_cell flex_left">
+                      <div class="percentarea v_middle">
+                        <div class="inner" :style="`width:${(item.totalcount - item.leftstorage) / item.totalcount * 100}%`"></div> <!-- 这里的width需要计算百分比 -->
+                      </div>
                     </div>
-                    <div>仅剩{{item.leftstorage}}张</div>
+                    <div class="w100 flex_center">
+                      <div class="w_100 align_center clamp1 font12">仅剩{{item.leftstorage}}张</div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -91,11 +95,15 @@
                       <div class="font16" style="color:#eb6b5e;">领券后 <span style="font-weight:bold">¥ {{item.discountprice}}</span></div>
                     </div>
                   </div>
-                  <div class="w_100 flex_center">
-                    <div class="percentarea db-in v_middle mr10">
-                      <div class="inner" :style="`width:${(item.totalcount - item.leftstorage) / item.totalcount * 100}%`"></div> <!-- 这里的width需要计算百分比 -->
+                  <div class="w_100 pt10 flex_center">
+                    <div class="flex_cell flex_left">
+                      <div class="percentarea v_middle">
+                        <div class="inner" :style="`width:${(item.totalcount - item.leftstorage) / item.totalcount * 100}%`"></div> <!-- 这里的width需要计算百分比 -->
+                      </div>
                     </div>
-                    <div>仅剩{{item.leftstorage}}张</div>
+                    <div class="w100 flex_center">
+                      <div class="w_100 align_center clamp1 font12">仅剩{{item.leftstorage}}张</div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -105,8 +113,8 @@
       </div>
       <div class="hiddenbox"></div>
     </div>
-    <div class="s-bottom border-box flex_center color-white list-shadow02" style="background-color:#eb6b5e;">
-      <div class="flex_cell flex_center color-white" @click="saveevent">创建优惠券</div>
+    <div class="s-bottom border-box flex_center color-white list-shadow02" style="background-color:#eb6b5e;" @click="saveevent">
+      <div class="flex_cell flex_center color-white">创建优惠券</div>
     </div>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showpopup1">
@@ -245,7 +253,7 @@ export default {
       // 获取停止发放优惠券数据
       this.$vux.loading.show()
       const self = this
-      let params = {finished: 1, showtype: 'factorycard', do: 'all', pagestart: self.pageStart1, limit: self.limit, fid: self.loginUser.fid}
+      let params = {finished: 1, showtype: 'factorycard', do: 'all', pagestart: self.pageStart2, limit: self.limit, fid: self.loginUser.fid}
       if (isone) {
         params.pagestart = this.tabData1.length
         params.limit = 1
@@ -344,7 +352,9 @@ export default {
 }
 </script>
 <style lang="less">
-.factoryCardList{}
+.factoryCardList{
+  .list-item{box-shadow: 0 2px 6px rgba(0,0,0,0.1);}
+}
 .factoryCardList .disimg{filter: grayscale(0.8);}
 .factoryCardList .lists{padding:0px 20px 10px;}
 .factoryCardList .hiddenbox{height: 45px;}
@@ -355,7 +365,7 @@ export default {
 }
 .factoryCardList .finished .yhq_item{background-color:#ccc;}
 .factoryCardList .b-bottom{border-bottom: 2px dashed #f2f3f2}
-.factoryCardList .percentarea{width: 75% !important;height: 5px !important;background: #f6f6f6 !important;}
+.factoryCardList .percentarea{width:100% !important;height: 5px !important;background: #f6f6f6 !important;}
 .factoryCardList .inner{height:5px !important;background-color:#eb6b5e !important; }
 .factoryCardList .proInfo{box-sizing: border-box;padding: 10px 20px;background-color:#fff;}
 .factoryCardList .finished .proInfo{background-color:#ccc;}
