@@ -312,8 +312,8 @@ export default {
           return false
         }
         self.$vux.loading.show()
-        self.$http.post(`${ENV.BokaApi}/api/factorynews/goodeazy`,
-          { do: 'download', url: self.collecturl }
+        self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`,
+          { do: 'download', url: self.collecturl, fid: this.loginUser.fid }
         ).then((res) => {
           const data = res.data
           self.$vux.loading.hide()
@@ -341,7 +341,7 @@ export default {
       }
     },
     afterCollect1 () {
-      this.$router.push({path: '/news', query: this.routerParams})
+      this.$router.push({path: '/factoryNews', query: this.routerParams})
     },
     init () {
       const self = this

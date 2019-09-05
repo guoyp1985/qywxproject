@@ -361,6 +361,10 @@ export default {
       if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
         params.keyword = keyword
       }
+      // if (self.module === 'factorynews') {
+      // } else {
+      //   params.wid = this.loginUser.uid
+      // }
       self.$http.get(`${ENV.BokaApi}/api/retailer/getRetailerProducts`, {
         params: params
       }).then(function (res) {
