@@ -422,7 +422,7 @@ export default {
         'cancel'
       ]
       if (self.module === 'factorynews') {
-        toolbars.splice(0, 1)
+        // toolbars.splice(0, 1)
       }
       if (editor) {
         editor.destory()

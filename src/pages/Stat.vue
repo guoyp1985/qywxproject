@@ -16,7 +16,7 @@
         <div v-if="query.from == 'miniprogram'" class="v-top font16 color-white clamp1">{{ data.title }}</div>
         <template v-else>
           <router-link v-if="module == 'activity' && data.type === 'groupbuy'" :to="{path: '/product', query: {id: query.id}}" class="v-top font16 color-white clamp1">{{ data.title }}</router-link>
-          <router-link v-else :to="{path: `/${module}`, query: {id: query.id}}" class="v-top font16 color-white clamp1">{{ data.title }}</router-link>
+          <div v-else class="v-top font16 color-white clamp1">{{ data.title }}</div>
         </template>
         <div v-if="statData && statData.length > 0" class="radiusarea mb10 pb15 bg-white list-shadow01">
           <div class="item" v-for="(item,index) in statData" :key="index">
