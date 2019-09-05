@@ -98,11 +98,11 @@
                   <div class="w_100 pt10 flex_center">
                     <div class="flex_cell flex_left">
                       <div class="percentarea v_middle">
-                        <div class="inner" :style="`width:${(item.totalcount - item.leftstorage) / item.totalcount * 100}%`"></div> <!-- 这里的width需要计算百分比 -->
+                        <div class="inner" :style="`width:${(item.leftstorage - item.leftcount) / item.leftstorage * 100}%`"></div> <!-- 这里的width需要计算百分比 -->
                       </div>
                     </div>
                     <div class="w100 flex_center">
-                      <div class="w_100 align_center clamp1 font12">仅剩{{item.leftstorage}}张</div>
+                      <div class="w_100 align_center clamp1 font12">仅剩{{item.leftcount}}张</div>
                     </div>
                   </div>
                 </div>

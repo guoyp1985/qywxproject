@@ -356,16 +356,19 @@ export default {
       })
     },
     getProductData () {
-      let params = {pagestart: self.pagestart1, limit: self.limit, wid: this.loginUser.uid}
+      let ajaxUrl = `${ENV.BokaApi}/api/retailer/getRetailerProducts`
+      let params = {pagestart: self.pagestart1, limit: self.limit}
       let keyword = self.searchword
       if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
         params.keyword = keyword
       }
-      // if (self.module === 'factorynews') {
-      // } else {
-      //   params.wid = this.loginUser.uid
-      // }
-      self.$http.get(`${ENV.BokaApi}/api/retailer/getRetailerProducts`, {
+      if (self.module === 'factorynews') {
+        ajaxUrl = `${ENV.BokaApi}/api/list/factoryproduct`
+        params.fid = this.loginUser.fid
+      } else {
+        params.wid = this.loginUser.uid
+      }
+      self.$http.get(ajaxUrl, {
         params: params
       }).then(function (res) {
         let data = res.data
