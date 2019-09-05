@@ -174,6 +174,14 @@
               </div>
             </div>
           </div>
+          <!-- <div class="form-item required bg-white">
+            <div class="t-table">
+              <div class="t-cell title-cell w80 font14 v_middle">限购个数</div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <x-input v-model="submitdata.limitbuy" type="text" class="input priceInput" name="limitbuy" placeholder="限购个数" ></x-input>
+              </div>
+            </div>
+          </div> -->
           <div class="form-item required bg-white">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Postage') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
