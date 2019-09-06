@@ -218,7 +218,7 @@ export default {
       radiodata: [],
       searchword: '',
       searchresult: false,
-      limit: 10,
+      limit: 20,
       pagestart1: 0,
       insertProductCallback: Function,
       isDown: false,
@@ -696,11 +696,15 @@ export default {
       }
       if (linkurl) {
         let pquery = self.$route.query
-        if (pquery.from === 'miniprogram') {
-          const params = self.$util.query(linkurl)
+        const params = self.$util.query(linkurl)
+        if (pquery.fromapp === 'factory' && self.module === 'factorynews') {
+          self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.factoryAppProduct}?id=${params.id}`})
+        } else if (pquery.from === 'miniprogram') {
           self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}&module=product`})
         } else {
-          self.$router.push({path: linkurl})
+          if (self.module !== 'factorynews') {
+            self.$router.push({path: linkurl})
+          }
         }
       }
     }
