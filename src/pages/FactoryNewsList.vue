@@ -55,10 +55,13 @@
       </div>
       <div class="s-bottom list-shadow flex_center bg-white pl12 pr12">
         <div class="flex_cell flex_center">
-          <router-link class="flex_center btn-bottom-orange" style="width:80%;" :to="{path: '/factoryNewsClass', query: {fid: query.fid}}" >文章分类</router-link>
+          <router-link class="flex_center btn-bottom-red font14" style="width:80%;" :to="{path: '/factoryGoodeazy', query: {fid: query.fid}}" >易采集</router-link>
         </div>
         <div class="flex_cell flex_center">
-          <router-link class="flex_center btn-bottom-red" style="width:80%;" :to="{path: '/addFactoryNews', query: {fid: query.fid}}" >{{ $t('Create news') }}</router-link>
+          <router-link class="flex_center btn-bottom-orange font14" style="width:80%;" :to="{path: '/factoryNewsClass', query: {fid: query.fid}}" >文章分类</router-link>
+        </div>
+        <div class="flex_cell flex_center">
+          <router-link class="flex_center btn-bottom-red font14" style="width:80%;" :to="{path: '/addFactoryNews', query: {fid: query.fid}}" >{{ $t('Create news') }}</router-link>
         </div>
       </div>
       <div v-transfer-dom>
