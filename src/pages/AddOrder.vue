@@ -577,7 +577,7 @@ export default {
         self.payPrice = (cha + parseFloat(self.postage)).toFixed(2)
       } else {
         self.selectedCard = null
-        self.payPrice = self.orderPrice
+        self.payPrice = self.orderPrice.toFixed(2)
       }
       for (let d of self.cardList) {
         if (d.id !== data.id && d.checked) {
