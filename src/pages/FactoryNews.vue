@@ -190,8 +190,10 @@ export default {
       this.showSubscribe = false
     },
     clickProduct (event) {
+      const self = this
       console.log('进入点出商品事件')
-      if (parseInt(self.reward.uid) !== parseInt(self.article.uploader)) {
+      console.log(self.loginUser)
+      if (parseInt(self.loginUser.uid) !== parseInt(self.article.uploader)) {
         console.log('in news clickproduct')
         let node = event.target
         let linkurl = null
@@ -207,14 +209,16 @@ export default {
         }
         if (linkurl) {
           console.log(linkurl)
-          if (self.query.from === 'miniprogram') {
-            const params = self.$util.query(linkurl)
+          let pquery = self.$route.query
+          const params = self.$util.query(linkurl)
+          if (pquery.fromapp === 'factory' && self.module === 'factorynews') {
+            self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.factoryAppProduct}?id=${params.id}`})
+          } else if (pquery.from === 'miniprogram') {
             self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}&module=product`})
-          } else if (self.query.fromapp === 'factory') {
-            const params = self.$util.query(linkurl)
-            self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&fid=${params.fid}&module=product`})
           } else {
-            self.$router.push({path: linkurl})
+            if (self.module !== 'factorynews') {
+              self.$router.push({path: linkurl})
+            }
           }
         }
       }
