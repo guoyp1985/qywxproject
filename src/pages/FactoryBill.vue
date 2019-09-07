@@ -1,7 +1,7 @@
 <template>
   <div class="containerarea font14 notop nobottom factory-bill-page">
     <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
-      <div class="v-top font16 color-white clamp1">
+      <div class="v-top font16 color-white flex_left">
         <div class="flex_cell flex_left">
           <div class="w_100 clamp1">厂家: {{viewData.title}}</div>
         </div>
