@@ -344,7 +344,6 @@ export default {
       this.$router.push({path: '/factoryNews', query: this.routerParams})
     },
     init () {
-      const self = this
       this.loginUser = User.get()
     },
     initContainer () {

@@ -597,6 +597,8 @@ export default {
         if (self.selectedCard) {
           postData.cardid = self.selectedCard.id
         }
+        console.log('优惠券id')
+        console.log(postData.cardid)
         if (this.query.ordertype) {
           postData.ordertype = this.query.ordertype
         }
