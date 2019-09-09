@@ -255,7 +255,7 @@ export default {
       const self = this
       let params = {finished: 1, showtype: 'factorycard', do: 'all', pagestart: self.pageStart2, limit: self.limit, fid: self.loginUser.fid}
       if (isone) {
-        params.pagestart = this.tabData1.length
+        params.pagestart = this.tabData2.length
         params.limit = 1
       }
       self.$http.post(`${ENV.BokaApi}/api/miniactivity/getList`,
