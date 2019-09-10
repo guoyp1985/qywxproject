@@ -381,7 +381,7 @@ export default {
     getData1 () {
       const self = this
       this.$vux.loading.show()
-      let params = { tolevel: -1, pagestart: self.pagestart1, limit: self.limit, fid: this.loginUser.fid }
+      let params = {tolevel: -1, pagestart: self.pagestart1, limit: self.limit, fid: this.loginUser.fid, appid: this.query.appid}
       let keyword = self.searchword1
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         self.searchresult1 = true
