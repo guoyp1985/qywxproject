@@ -82,6 +82,7 @@
           <div class="align_right pt10 pl10 pr10 flex_right">
             <span class="v_middle">商品: {{ $t('RMB') }}</span><span class="font16 v_middle">{{ orderData.special }}</span>
             <span class="v_middle font12 color-gray ml5">( 运费:<span v-if="orderData.postage == 0 || orderData.postage== '0.00'">包邮</span><span v-else>{{ $t('RMB') }}{{orderData.postage}}</span> )</span>
+            <span class="v_middle font12 color-gray ml5" v-if="orderData.carddeduct > 0">( 优惠券抵扣: {{ $t('RMB') }} {{ orderData.carddeduct }} )</span>
           </div>
           <div class="align_right padding10 flex_right">合计:{{ $t('RMB') }} <span class="font16">{{ totalPrice }}</span></div>
           <div class="pl10 pr10 pb10 flex_right color-gray font12" v-if="orderData.delivertype == 2">到店自提</div>
