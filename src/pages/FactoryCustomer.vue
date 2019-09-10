@@ -395,7 +395,7 @@ export default {
       for (let key in self.orderbyParams) {
         params[key] = self.orderbyParams[key]
       }
-      self.$http.post(`${ENV.BokaApi}/api/factory/customerList`, params).then(function (res) {
+      self.$http.post(`${ENV.BokaApi}/api/factory/mincustomerList`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
         self.tabcount1 = data.count
