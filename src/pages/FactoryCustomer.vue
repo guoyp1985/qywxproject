@@ -381,7 +381,7 @@ export default {
     getData1 () {
       const self = this
       this.$vux.loading.show()
-      let params = { tolevel: -1, pagestart: self.pagestart1, limit: self.limit, fid: this.loginUser.fid }
+      let params = {tolevel: -1, pagestart: self.pagestart1, limit: self.limit, fid: this.loginUser.fid, appid: this.query.appid}
       let keyword = self.searchword1
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         self.searchresult1 = true
@@ -395,7 +395,7 @@ export default {
       for (let key in self.orderbyParams) {
         params[key] = self.orderbyParams[key]
       }
-      self.$http.post(`${ENV.BokaApi}/api/factory/customerList`, params).then(function (res) {
+      self.$http.post(`${ENV.BokaApi}/api/factory/mincustomerList`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
         self.tabcount1 = data.count

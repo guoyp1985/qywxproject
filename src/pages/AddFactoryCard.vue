@@ -98,7 +98,7 @@
                 </div>
               </div>
             </template>
-            <div v-else class="flex_center w_100">
+            <div v-else-if="!query.id" class="flex_center w_100">
               <div class="qbtn flex_center color-orange mt10" style="border:orange 1px solid;width:90%;line-height:1;padding:4px 0;" @click="selectevent">
                 <span class="mr5 v_middle db-in" style="margin-top:-3px;">+</span><span class="v_middle db-in">{{ $t('Select product') }}</span>
               </div>
