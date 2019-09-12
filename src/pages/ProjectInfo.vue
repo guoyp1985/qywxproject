@@ -2,7 +2,7 @@
   <div id="project-info" class="containerarea font14">
     <div class="t-table">
       <div class="t-cell v_middle" style="width:70px;">
-        <img class="avatarimg3 imgcover v_middle" :src="avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+        <img class="avatarimg3 imgcover v_middle" src="" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
       </div>
       <div class="t-cell v_middle">
         <div class="clamp1 font14">完美生活旗舰店</div>
@@ -60,10 +60,6 @@ export default {
       // this.pagestart2 = 1
       // this.pagestart3 = 1
       // this.pagestart4 = 1
-      this.showRefundModal = false
-      this.refundContent = ''
-      this.clickOrder = {}
-      this.clickIndex = 0
     },
     toggleTab () {
       console.log('in toggleTab')
@@ -128,7 +124,7 @@ export default {
       })
     },
     init () {
-      this.$vux.loading.show()
+      // this.$vux.loading.show()
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
@@ -142,22 +138,6 @@ export default {
             this.selectedIndex = 1
             this.pagestart2 = 0
             this.tabdata2 = []
-            this.toggleTab()
-          }
-          break
-        case 3:
-          if (this.query.refresh || !this.tabdata3.length) {
-            this.selectedIndex = 2
-            this.pagestart3 = 0
-            this.tabdata3 = []
-            this.toggleTab()
-          }
-          break
-        case 4:
-          if (this.query.refresh || !this.tabdata4.length) {
-            this.selectedIndex = 3
-            this.pagestart4 = 0
-            this.tabdata4 = []
             this.toggleTab()
           }
           break
