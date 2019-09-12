@@ -104,6 +104,7 @@
         <group>
           <div class="padding10 font12 color-gray flex_left">
             <div class="flex_cell flex_left">创建时间: {{ orderData.dateline | dateformat }}</div>
+            <div class=" flex_cell flex_right w60 color-orange5">{{orderData.flagstr}}</div>
             <div class="flex_right w60" v-if="orderData.delivertype == 2">到店自提</div>
           </div>
           <div class="pl10 pr10 pb10 font12 color-gray" v-if="orderData.flag == 3">发货时间: {{ orderData.delivertime | dateformat }}</div>
