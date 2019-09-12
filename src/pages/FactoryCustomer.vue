@@ -39,7 +39,7 @@
                 <div class="flex_center bg-white h40">
                   <div class="t-table align_center color-gray2 font14 color-gray2">
                     <div class="t-cell v_middle b_right_after" @click="toSaleRecord(item)">消费记录</div>
-                    <div class="t-cell v_middle b_right_after" @click="toChat(item)">
+                    <div class="t-cell v_middle" @click="toChat(item)">
                       <div>联系TA</div>
                     </div>
                   </div>
