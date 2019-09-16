@@ -71,6 +71,7 @@
   "FriendRecommend",
   "FactoryUser",
   "FactoryLink",
+  "InviteFactory",
   "KnowledgeClass",
   "Knowledge",
   "Academic",
