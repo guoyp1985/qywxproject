@@ -123,7 +123,7 @@
 
 <script>
 import { Sticky, Tab, TabItem } from 'vux'
-import {User} from '#/storage'
+// import {User} from '#/storage'
 import ENV from 'env'
 
 export default {
@@ -148,14 +148,10 @@ export default {
       pagestart2: 0,
       pagestart3: 0,
       pagestart4: 0,
-      showRefundModal: false,
       refundContent: '',
       clickOrder: {},
       clickIndex: 0,
-      pageTop: 0,
-      showServiceModal: false,
-      serviceContent: '',
-      servicePhoto: ''
+      pageTop: 0
     }
   },
   methods: {
@@ -173,7 +169,6 @@ export default {
       // this.pagestart2 = 1
       // this.pagestart3 = 1
       // this.pagestart4 = 1
-      this.showRefundModal = false
       this.refundContent = ''
       this.clickOrder = {}
       this.clickIndex = 0
@@ -274,14 +269,14 @@ export default {
       this.$vux.loading.show()
     },
     refresh () {
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.loginUser = User.get()
+      // this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      // this.loginUser = User.get()
       this.initData()
       this.query = this.$route.query
       let flag = parseInt(this.query.flag)
       switch (flag) {
         case 2:
-          if (this.query.refresh || !this.tabdata2.length) {
+          if (!this.tabdata2.length) {
             this.selectedIndex = 1
             this.pagestart2 = 0
             this.tabdata2 = []
@@ -289,7 +284,7 @@ export default {
           }
           break
         case 3:
-          if (this.query.refresh || !this.tabdata3.length) {
+          if (!this.tabdata3.length) {
             this.selectedIndex = 2
             this.pagestart3 = 0
             this.tabdata3 = []
@@ -297,7 +292,7 @@ export default {
           }
           break
         case 4:
-          if (this.query.refresh || !this.tabdata4.length) {
+          if (!this.tabdata4.length) {
             this.selectedIndex = 3
             this.pagestart4 = 0
             this.tabdata4 = []
@@ -305,7 +300,7 @@ export default {
           }
           break
         default :
-          if (this.query.refresh || !this.tabdata1.length) {
+          if (!this.tabdata1.length) {
             this.selectedIndex = 0
             this.pagestart1 = 0
             this.tabdata1 = []
@@ -322,21 +317,9 @@ export default {
     if (this.$refs.scrollContainer) {
       this.$refs.scrollContainer.scrollTop = this.pageTop
     }
-    if (document.querySelector('.vux-tab')) {
-      document.querySelector('.vux-tab').scrollLeft = this.tabLeft
-    }
     this.refresh()
     this.$util.miniPost()
   }
-  // beforeRouteLeave (to, from, next) {
-  //   if (this.$refs.scrollContainer) {
-  //     this.pageTop = this.$refs.scrollContainer.scrollTop
-  //   }
-  //   if (document.querySelector('.vux-tab')) {
-  //     this.tabLeft = document.querySelector('.vux-tab').scrollLeft
-  //   }
-  //   next()
-  // }
 }
 </script>
 

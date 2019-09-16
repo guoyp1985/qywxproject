@@ -746,7 +746,7 @@ zh-CN:
   Groupprice: 团购价
   Group numbers: 成团人数
   Person: 人
-  Online consulting: 在线咨询
+  Online consulting: 在线联系
   I am the seller: 我是卖家
   Sales Assistant: 销售助手
   Newcomer Guide: 新手指南
@@ -963,4 +963,6 @@ zh-CN:
   tSourceList: 厂家货源
   tFactoryBill: 详细账单
   tFactoryHelp: 帮助
+  tProjectManage: 项目管理
+  tProjectInfo: 项目详情
   tInviteFactory: 邀请厂家

@@ -52,7 +52,7 @@
                     </div>
                     <div class="w100 flex_center">
                       <div class="w_100 align_center clamp1 font12" v-if="!item.leftcount">已抢光</div>
-                      <div class="w_100 align_center clamp1 font12" v-else>仅剩{{item.leftcount}}张</div>
+                      <div class="w_100 align_center clamp1 font12" v-else>仅剩<span style="color:#eb6b5e;">{{item.leftcount}}</span>张</div>
                     </div>
                   </div>
                 </div>
@@ -103,7 +103,8 @@
                       </div>
                     </div>
                     <div class="w100 flex_center">
-                      <div class="w_100 align_center clamp1 font12">仅剩{{item.leftcount}}张</div>
+                      <div class="w_100 align_center clamp1 font12" v-if="!item.leftcount">已抢光</div>
+                      <div class="w_100 align_center clamp1 font12" v-else>仅剩<span style="color:#eb6b5e;">{{item.leftcount}}</span>张</div>
                     </div>
                   </div>
                 </div>
@@ -114,7 +115,7 @@
       </div>
       <div class="hiddenbox"></div>
     </div>
-    <div class="s-bottom border-box flex_center color-white list-shadow02" style="background-color:#eb6b5e;" @click="saveevent">
+    <div class="s-bottom border-box flex_center color-white list-shadow02" style="background-color:#eb6b5e;z-index:99" @click="saveevent">
       <div class="flex_cell flex_center color-white">创建优惠券</div>
     </div>
     <div v-transfer-dom>
