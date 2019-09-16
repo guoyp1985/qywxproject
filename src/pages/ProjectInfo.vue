@@ -21,47 +21,47 @@
     </div>
     <div v-if="selectedIndex === 0" class="bg-white padding15 db-flex">
       <div class="left-progress">
-        <div class="progress w50 flex_center"><div class="ball flex_center" :style="{'background-color' : true ? 'lightblue' : 'white'}"><span class="font12 color-white" :class="{'al al-gou' : true}"></span></div></div>
-        <div class="progress w50 flex_center"><div class="ball flex_center" :style="{'background-color' : false ? 'lightblue' : 'white'}"><span class="font12 color-white al" :class="{'al-gou' : false}"></span></div></div>
-        <div class="progress w50 flex_center"><div class="ball flex_center" :style="{'background-color' : false ? 'lightblue' : 'white'}"><span class="font12 color-white al" :class="{'al-gou' : false}"></span></div></div>
-        <div class="progress w50 flex_center"><div class="ball flex_center" :style="{'background-color' : false ? 'lightblue' : 'white'}"><span class="font12 color-white al" :class="{'al-gou' : false}"></span></div></div>
-        <div class="progress w50 flex_center"><div class="ball flex_center" :style="{'background-color' : false ? 'lightblue' : 'white'}"><span class="font12 color-white al" :class="{'al-gou' : false}"></span></div></div>
-        <div class="progress w50 flex_center"><div class="ball flex_center" :style="{'background-color' : false ? 'lightblue' : 'white'}"><span class="font12 color-white al" :class="{'al-gou' : false}"></span></div></div>
-        <div class="progress w50 flex_center"><div class="ball flex_center" :style="{'background-color' : false ? 'lightblue' : 'white'}"><span class="font12 color-white al" :class="{'al-gou' : false}"></span></div></div>
-        <div class="progress w50 flex_center"><div class="ball flex_center" :style="{'background-color' : false ? 'lightblue' : 'white'}"><span class="font12 color-white al" :class="{'al-gou' : false}"></span></div></div>
+        <div class="progress w50 flex_center"><div class="ball flex_center" :style="{'background-color' : true ? '#7ca6fa' : 'white'}"><span class="font12 color-white" :class="{'al al-gou' : true}"></span></div></div>
+        <div class="progress w50 flex_center"><div class="ball flex_center" :style="{'background-color' : false ? '#7ca6fa' : 'white'}"><span class="font12 color-white" :class="{'al al-gou' : false}"></span></div></div>
+        <div class="progress w50 flex_center"><div class="ball flex_center" :style="{'background-color' : false ? '#7ca6fa' : 'white'}"><span class="font12 color-white" :class="{'al al-gou' : false}"></span></div></div>
+        <div class="progress w50 flex_center"><div class="ball flex_center" :style="{'background-color' : false ? '#7ca6fa' : 'white'}"><span class="font12 color-white" :class="{'al al-gou' : false}"></span></div></div>
+        <div class="progress w50 flex_center"><div class="ball flex_center" :style="{'background-color' : false ? '#7ca6fa' : 'white'}"><span class="font12 color-white" :class="{'al al-gou' : false}"></span></div></div>
+        <div class="progress w50 flex_center"><div class="ball flex_center" :style="{'background-color' : false ? '#7ca6fa' : 'white'}"><span class="font12 color-white" :class="{'al al-gou' : false}"></span></div></div>
+        <div class="progress w50 flex_center"><div class="ball flex_center" :style="{'background-color' : false ? '#7ca6fa' : 'white'}"><span class="font12 color-white" :class="{'al al-gou' : false}"></span></div></div>
+        <div class="progress w50 flex_center"><div class="ball flex_center" :style="{'background-color' : false ? '#7ca6fa' : 'white'}"><span class="font12 color-white" :class="{'al al-gou' : false}"></span></div></div>
       </div>
       <div style="flex:1;">
         <div class="apply" :class="{'active' : true}">
           <div class="font14">申请成为厂家: 未完成</div>
-          <div class="mt5 font12 time-color" v-if="true">2019-08-28 12:00</div>
+          <div class="mt5 font12 time-color">2019-08-28 12:00</div>
         </div>
         <div class="apply">
           <div class="font14" :class="{'active' : false}">申请小程序: 未完成</div>
-          <div class="mt5 font12 time-color" v-if="false">2019-08-28 12:00</div>
+          <div class="mt5 font12 time-color">2019-08-28 12:00</div>
         </div>
         <div class="apply">
           <div class="font14" :class="{'active' : false}">授权厂家小程序: 未完成</div>
-          <div class="mt5 font12 time-color" v-if="false">2019-08-28 12:00</div>
+          <div class="mt5 font12 time-color">2019-08-28 12:00</div>
         </div>
         <div class="apply">
           <div class="font14" :class="{'active' : false}">绑定厂家身份: 未完成</div>
-          <div class="mt5 font12 time-color" v-if="false">2019-08-28 12:00</div>
+          <div class="mt5 font12 time-color">2019-08-28 12:00</div>
         </div>
         <div class="apply">
           <div class="font14" :class="{'active' : false}">配置自有微信支付: 未完成</div>
-          <div class="mt5 font12 time-color" v-if="false">2019-08-28 12:00</div>
+          <div class="mt5 font12 time-color">2019-08-28 12:00</div>
         </div>
         <div class="apply">
           <div class="font14" :class="{'active' : false}">上传代码提交审核: 未完成</div>
-          <div class="mt5 font12 time-color" v-if="false">2019-08-28 12:00</div>
+          <div class="mt5 font12 time-color">2019-08-28 12:00</div>
         </div>
         <div class="apply">
           <div class="font14" :class="{'active' : false}">上传商品: 未完成</div>
-          <div class="mt5 font12 time-color" v-if="false">2019-08-28 12:00</div>
+          <div class="mt5 font12 time-color">2019-08-28 12:00</div>
         </div>
         <div class="apply">
           <div class="font14" :class="{'active' : false}">开始运营: 未完成</div>
-          <div class="mt5 font12 time-color" v-if="false">2019-08-28 12:00</div>
+          <div class="mt5 font12 time-color">2019-08-28 12:00</div>
         </div>
       </div>
     </div>
@@ -129,16 +129,10 @@ export default {
       // this.selectedIndex = 0
       // this.distabdata1 = false
       // this.distabdata2 = false
-      // this.distabdata3 = false
-      // this.distabdata4 = false
       // this.tabdata1 = []
       // this.tabdata2 = []
-      // this.tabdata3 = []
-      // this.tabdata4 = []
-      // this.pagestart1 = 1
-      // this.pagestart2 = 1
-      // this.pagestart3 = 1
-      // this.pagestart4 = 1
+      // this.pagestart1 = 0
+      // this.pagestart2 = 0
     },
     toggleTab () {
       console.log('in toggleTab')
@@ -152,30 +146,9 @@ export default {
           break
       }
     },
-    scrollHandle () {
-      const self = this
-      this.$util.scrollEvent({
-        element: this.$refs.scrollContainer,
-        callback: () => {
-          switch (self.selectedIndex) {
-            case 0:
-              if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
-                self.pagestart1++
-                self.getData()
-              }
-              break
-            case 1:
-              if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
-                self.pagestart2++
-                self.getData2()
-              }
-              break
-          }
-        }
-      })
-    },
     /* 获取对应步骤是否完成 */
     getData () {
+      // console.log('走1方法')
       // this.$vux.loading.show()
       // const self = this
       // let params = {limit: self.limit, pagestart: self.pageStart1}
@@ -199,6 +172,7 @@ export default {
     },
     /* 获取统计数据 */
     getData2 () {
+      // console.log('走2方法')
       // const self = this
       // let params = {limit: self.limit, pagestart: self.pageStart2}
     },
@@ -208,6 +182,21 @@ export default {
   },
   created () {
     this.init()
+  },
+  activated () {
+    this.initData()
+    switch (this.selectedIndex) {
+      case 0:
+        if (!this.tabdata1.length) {
+          this.getData()
+        }
+        break;
+      case 1:
+        if (!this.tadData2.length) {
+          this.getData2()
+        }
+        break;
+    }
   }
 }
 </script>
@@ -237,8 +226,9 @@ export default {
 .radiusarea .item:nth-child(1) .radius{background-color:#3ecbc0;}
 .radiusarea .item:nth-child(2) .radius{background-color:#f0cb51;}
 .radiusarea .item:nth-child(3) .radius{background-color:#aed370;}
-.radiusarea .item:nth-child(4) .radius{background-color:#ffb22d;}
-.radiusarea .item:nth-child(5) .radius{background-color:#ea8482;}
+.radiusarea .item:nth-child(4) .radius{background-color:#3ecbc0;}
+.radiusarea .item:nth-child(5) .radius{background-color:#f0cb51;}
+.radiusarea .item:nth-child(6) .radius{background-color:#aed370;}
 .left-progress{position: relative;}
 .left-progress:after{
   content: "";display:block;
