@@ -104,7 +104,7 @@
                     </div>
                     <div class="w100 flex_center">
                       <div class="w_100 align_center clamp1 font12" v-if="!item.leftcount">已抢光</div>
-                      <div class="w_100 align_center clamp1 font12">仅剩<span style="color:#eb6b5e;">{{item.leftcount}}</span>张</div>
+                      <div class="w_100 align_center clamp1 font12" v-else>仅剩<span style="color:#eb6b5e;">{{item.leftcount}}</span>张</div>
                     </div>
                   </div>
                 </div>
