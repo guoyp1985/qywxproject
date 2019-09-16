@@ -79,7 +79,7 @@
                 <router-link class="inner" :to="{path: '/postageArea', query: {type: 'factoryproduct',id: clickdata.id}}">偏远地区运费</router-link>
               </div>
               <div class="item" v-if="!clickdata.activityid || clickdata.activityid == 0">
-                <router-link class="inner" :to="{path: '/addFactoryProduct', query: {id: clickdata.id, fid: query.fid}}">编辑</router-link>
+                <router-link class="inner" :to="{path: '/addFactoryProduct', query: {id: clickdata.id, fid: Fid}}">编辑</router-link>
               </div>
               <div class="item" v-if="clickdata.moderate == 0">
                 <div class="inner" @click="clickpopup('up')">上架</div>
@@ -91,7 +91,7 @@
                 <router-link class="inner" :to="{path: '/stat', query: {id: clickdata.id, module: 'factoryproduct'}}">统计</router-link>
               </div>
               <!-- <div class="item">
-                <router-link class="inner" :to="{ path: '/factoryAgentFee', query: { id: clickdata.id, fid: query.fid } }">设置佣金</router-link>
+                <router-link class="inner" :to="{ path: '/factoryAgentFee', query: { id: clickdata.id, fid: Fid } }">设置佣金</router-link>
               </div> -->
               <div class="item close mt10" @click="clickpopup">
                 <div class="inner">{{ $t('Cancel txt') }}</div>
@@ -145,7 +145,8 @@ export default {
       clickdata: {},
       clickindex: 0,
       disproductdata: false,
-      showTip: false
+      showTip: false,
+      Fid: 0
     }
   },
   watch: {
@@ -155,11 +156,11 @@ export default {
   },
   methods: {
     toFactoryProduct (item) {
-      let params = this.$util.handleAppParams(this.query, {id: item.id, fid: this.query.fid})
+      let params = this.$util.handleAppParams(this.query, {id: item.id, fid: this.Fid})
       this.$router.push({path: '/factoryProduct', query: params})
     },
     toAdd () {
-      let params = this.$util.handleAppParams(this.query, {fid: this.query.fid})
+      let params = this.$util.handleAppParams(this.query, {fid: this.Fid})
       this.$router.push({path: '/addFactoryProduct', query: params})
     },
     getPhoto (src) {
@@ -318,7 +319,7 @@ export default {
     },
     getData1 () {
       const self = this
-      const params = { fid: self.query.fid, from: 'factory', pagestart: pageStart1, limit: limit }
+      const params = { fid: self.Fid, from: 'factory', pagestart: pageStart1, limit: limit }
       this.$http.get(`${ENV.BokaApi}/api/list/factoryproduct`, {
         params: params
       })
@@ -352,6 +353,11 @@ export default {
           self.showContainer = true
           this.$vux.loading.hide()
           this.query = this.$route.query
+          if (this.query.fid) {
+            this.Fid = this.query.fid
+          } else {
+            this.Fid = this.loginUser.fid
+          }
           this.disproductdata = false
           this.productdata = []
           this.$vux.loading.show()

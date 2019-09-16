@@ -26,31 +26,28 @@
         <template v-if="distabdata1">
           <div v-if="!tabdata1 || tabdata1.length === 0" class="w_100 h_100 flex_center color-gray">暂无数据</div>
           <div v-else class="scroll_list">
-            <div v-for="(item,index1) in tabdata1" :key="index1" class="scroll_item">
+            <div v-for="(item,index1) in tabdata1" :key="index1" class="scroll_item" @click="toUpProduct(item)">
               <div class="scroll_inner">
                 <div class="info-row flex_left">
                   <div class="pic flex_left">
-                    <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+                    <img :src="item.factoryinfo.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                   </div>
                   <div class="flex_cell flex_left">
                     <div class="w_100">
-                      <div>{{item.title}}</div>
+                      <div>{{item.factoryinfo.title}}</div>
                     </div>
                   </div>
                 </div>
                 <div class="pic-row flex_left">
                   <div class="pic-list flex_cell flex_left" style="overflow:hidden;">
-                    <img class="pic-img" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
-                    <img class="pic-img" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
-                    <img class="pic-img" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
-                    <img class="pic-img" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
-                    <img class="pic-img" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
-                    <img class="pic-img" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+                    <template v-for="(product,pindex) in item.factoryproduct">
+                      <img class="pic-img" :src="product.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+                    </template>
                   </div>
                   <div class="more-txt flex_center w100">
                     <div class="w_100">
                       <div class="align_center font12">查看更多商品></div>
-                      <div class="align_center font12">共{{item.totalCount}}款</div>
+                      <div class="align_center font12">共{{item.factoryproduct.length}}款</div>
                     </div>
                   </div>
                 </div>
@@ -131,7 +128,8 @@ export default {
       delivercompany: [],
       deliverdata: { delivercompany: '-1', delivercode: '' },
       autofixed: false,
-      searchword1: ''
+      searchword1: '',
+      Fid: 0
     }
   },
   methods: {
@@ -147,7 +145,7 @@ export default {
     toUpProduct (item) {
       console.log('in')
       console.log(item)
-      this.$router.push({path: '/factorySource', query: {fid: item.id}})
+      this.$router.push({path: '/factorySource', query: {fid: item.factoryinfo.id}})
     },
     handleScroll (refname, index) {
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
@@ -181,7 +179,7 @@ export default {
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         params.keyword = keyword
       }
-      self.$http.get(`${ENV.BokaApi}/api/factory/list?pagestart=0&limit=10`, {
+      self.$http.get(`${ENV.BokaApi}/api/factory/fpimportList`, {
         params: params
       }).then(function (res) {
         const data = res.data
@@ -238,6 +236,11 @@ export default {
       this.$vux.loading.show()
       this.loginUser = User.get()
       this.query = this.$route.query
+      if (this.query.fid) {
+        this.Fid = this.query.fid
+      } else {
+        this.Fid = this.loginUser.fid
+      }
       this.swiperChange()
     }
   },

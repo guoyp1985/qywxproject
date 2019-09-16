@@ -31,13 +31,9 @@
       						<span class="color-red font14 flex_cell" style="overflow: hidden;margin-right: 10px;white-space: nowrap;text-overflow: ellipsis;">{{ $t('RMB') }} <span style="margin-left:1px;">{{ item.price }}</span></span>
       						<span class="color-gray">{{ $t('Saled txt') }}:<span style="margin-left:1px;">{{ item.saled }}</span></span>
       					</div>
-                <div class="flex_left mt5">
-                  <div class="flex_cell flex_left">
-                    <div class="w_100 clamp1"><span class="color-red">{{ $t('RMB') }} {{ item.price }}</span><span class="color-gray">销量: {{ item.saled }}</span></div>
-                  </div>
-                  <div class="flex_right" style="width:45px;">
-                    <span class="bg-theme color-white flex_center padding5" style="border-radius:5px;" @click.stop="upEvent(item, index)">上架</span>
-                  </div>
+                <div class="flex_right mt5">
+                  <span v-if="item.haveshelf == 1" class="bg-gray color-white flex_center padding5" style="border-radius:5px;">已导入</span>
+                  <span v-else class="bg-theme color-white flex_center padding5" style="border-radius:5px;" @click.stop="upEvent(item, index)">导入</span>
                 </div>
       				</div>
       			</div>
@@ -48,7 +44,7 @@
     <template v-if="showBottom && tabData1 && tabData1.length">
       <div class="s-bottom list-shadow flex_center bg-white pl12 pr12">
         <div class="align_center flex_center flex_cell">
-          <div class="flex_center btn-bottom-red" style="width:85%;" @click="upAll('product')">一键上架商品</div>
+          <div class="flex_center btn-bottom-red" style="width:85%;" @click="upAll('product')">一键导入商品</div>
         </div>
       </div>
     </template>
@@ -157,7 +153,7 @@ export default {
       let con = ''
       let ajaxUrl = ''
       if (type === 'product') {
-        con = `确定要上架该厂家的${this.productCount}件商品？`
+        con = `确定要导入该厂家的${this.productCount}件商品？`
         ajaxUrl = `${ENV.BokaApi}/api/factory/fastImportFactoryProduct`
       } else if (type === 'factorynews') {
         con = `确定要导入该厂家的${this.newsCount}篇文章？`
@@ -214,6 +210,24 @@ export default {
         self.upAllData(type)
       }
     },
+    upEvent (item, index) {
+      const self = this
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/factory/productshelf`, {
+        fid: self.Fid, module: 'factoryproduct', moduleid: item.id
+      }).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        self.$vux.toast.show({
+          text: data.error,
+          type: data.flag === 1 ? 'success' : 'warn',
+          time: self.$util.delay(data.error)
+        })
+        if (data.flag) {
+          this.tabData1[index].haveshelf = 1
+        }
+      })
+    },
     openVip (type) {
       const self = this
       let con = ENV.vipProduct
@@ -261,8 +275,8 @@ export default {
     },
     getData1 () {
       const self = this
-      self.$http.get(`${ENV.BokaApi}/api/list/factoryproduct`, {
-        params: { fid: self.Fid, pagestart: pageStart1, limit: limit, wid: this.loginUser.uid }
+      self.$http.get(`${ENV.BokaApi}/api/list/fpimport`, {
+        params: {fid: self.Fid, myfid: this.loginUser.fid, pagestart: pageStart1, limit: limit, shelf: 1}
       }).then(res => {
         const data = res.data
         self.$vux.loading.hide()
@@ -270,7 +284,7 @@ export default {
         this.productCount = data.allcount
         self.tabData1 = self.tabData1.concat(retdata)
         self.disTabData1 = true
-        if (self.loginUser.isretailer && (self.tabData1.length > 0 || self.tabData2.length > 0)) {
+        if (self.tabData1.length > 0 || self.tabData2.length > 0) {
           self.showBottom = true
         }
       })
