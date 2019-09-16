@@ -21,7 +21,7 @@
           </template>
           <template v-else>
             <div class="scroll_list ">
-              <div @click="toFactoryProduct(item)" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
+              <div @click="toFactoryProduct(item)" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in productdata" :key="index" style="color:inherit;">
                 <div v-if="item.moderate == 0" class="ico down"></div>
             		<div class="t-table bg-white pt10 pb10">
             			<div class="t-cell pl12 v_middle" style="width:110px;">
@@ -86,6 +86,12 @@
               </div>
               <div class="item" v-else-if="clickdata.moderate == 1">
                 <div class="inner" @click="clickpopup('down')">下架</div>
+              </div>
+              <div class="item" v-if="clickdata.shelf == 0">
+                <div class="inner" @click="clickpopup('upShelf')">推荐到货源</div>
+              </div>
+              <div class="item" v-else-if="clickdata.shelf == 1">
+                <div class="inner" @click="clickpopup('downShelf')">从货源移出</div>
               </div>
               <div class="item">
                 <router-link class="inner" :to="{path: '/stat', query: {id: clickdata.id, module: 'factoryproduct'}}">统计</router-link>
@@ -269,6 +275,54 @@ export default {
                     //   self.productdata.splice(self.productdata.length - 1, 1)
                     // }
                     // self.productdata = [data.data].concat(self.productdata)
+                  }
+                }
+              })
+            })
+          }
+        })
+      } else if (key === 'upShelf') {
+        self.$vux.confirm.show({
+          title: '确定要将该商品移至货源吗？',
+          onConfirm () {
+            self.$vux.loading.show()
+            let params = { id: self.clickdata.id, shelf: 1 }
+            self.$http.post(`${ENV.BokaApi}/api/factory/productset`, params).then(function (res) {
+              let data = res.data
+              self.$vux.loading.hide()
+              self.$vux.toast.show({
+                text: data.error,
+                type: (data.flag !== 1 ? 'warn' : 'success'),
+                time: self.$util.delay(data.error),
+                onHide: function () {
+                  if (data.flag === 1) {
+                    self.clickdata.shelf = 1
+                    self.productdata[self.clickindex].shelf = 1
+                    self.showpopup1 = false
+                  }
+                }
+              })
+            })
+          }
+        })
+      } else if (key === 'downShelf') {
+        self.$vux.confirm.show({
+          title: '确定要将该商品从货源移出吗？',
+          onConfirm () {
+            self.$vux.loading.show()
+            let params = { id: self.clickdata.id, shelf: 0 }
+            self.$http.post(`${ENV.BokaApi}/api/factory/productset`, params).then(function (res) {
+              let data = res.data
+              self.$vux.loading.hide()
+              self.$vux.toast.show({
+                text: data.error,
+                type: (data.flag !== 1 ? 'warn' : 'success'),
+                time: self.$util.delay(data.error),
+                onHide: function () {
+                  if (data.flag === 1) {
+                    self.clickdata.shelf = 0
+                    self.productdata[self.clickindex].shelf = 0
+                    self.showpopup1 = false
                   }
                 }
               })
