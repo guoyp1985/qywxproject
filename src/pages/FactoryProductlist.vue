@@ -319,8 +319,8 @@ export default {
     },
     getData1 () {
       const self = this
-      const params = { fid: self.Fid, from: 'factory', pagestart: pageStart1, limit: limit }
-      this.$http.get(`${ENV.BokaApi}/api/list/factoryproduct`, {
+      const params = { fid: self.Fid, pagestart: pageStart1, limit: limit }
+      this.$http.get(`${ENV.BokaApi}/api/list/fpimport`, {
         params: params
       })
       .then(res => {
