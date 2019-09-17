@@ -51,7 +51,7 @@
                       </div>
                     </div>
                     <div class="w100 flex_center">
-                      <div class="w_100 align_center clamp1 font12" v-if="!item.leftcount">已抢光</div>
+                      <div class="w_100 align_center clamp1 font12" v-if="!item.leftcount || item.leftcount <= 0">已抢光</div>
                       <div class="w_100 align_center clamp1 font12" v-else>仅剩<span style="color:#eb6b5e;">{{item.leftcount}}</span>张</div>
                     </div>
                   </div>
@@ -103,7 +103,7 @@
                       </div>
                     </div>
                     <div class="w100 flex_center">
-                      <div class="w_100 align_center clamp1 font12" v-if="!item.leftcount">已抢光</div>
+                      <div class="w_100 align_center clamp1 font12" v-if="!item.leftcount || item.leftcount <= 0">已抢光</div>
                       <div class="w_100 align_center clamp1 font12" v-else>仅剩<span style="color:#eb6b5e;">{{item.leftcount}}</span>张</div>
                     </div>
                   </div>
@@ -115,8 +115,11 @@
       </div>
       <div class="hiddenbox"></div>
     </div>
-    <div class="s-bottom border-box flex_center color-white list-shadow02" style="background-color:#eb6b5e;z-index:99" @click="saveevent">
-      <div class="flex_cell flex_center color-white">创建优惠券</div>
+    <div class="s-bottom border-box flex_center color-white list-shadow02 w_50" style="background-color:#f6a843;z-index:99" @click="saveevent('personal')">
+      <div class="flex_cell flex_center color-white">专属优惠券</div>
+    </div>
+    <div class="s-bottom border-box flex_center color-white list-shadow02 w_50" style="background-color:#eb6b5e;z-index:99;left:auto;" @click="saveevent()">
+      <div class="flex_cell flex_center color-white">活动优惠券</div>
     </div>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showpopup1">
@@ -245,6 +248,9 @@ export default {
         const data = res.data
         self.$vux.loading.hide()
         const retdata = data.data ? data.data : data
+        for (var i = 0; i < retdata.length; i++) {
+          retdata[i].leftcount = parseInt(retdata[i].leftcount)
+        }
         self.tabData1 = self.tabData1.concat(retdata)
         self.disList1 = true
         console.log('----response-----')
@@ -324,9 +330,13 @@ export default {
       this.clickdata = item
       this.clickindex = index
     },
-    saveevent () {
-      let rparams = this.$util.handleAppParams(this.query, {fid: this.Fid})
-      this.$router.push({path: '/addFactoryCard', query: rparams})
+    saveevent (type) {
+      if (type) {
+        let rparams = this.$util.handleAppParams(this.query, {fid: this.Fid})
+        this.$router.push({path: '/addFactoryCard', query: rparams})
+      } else {
+        // 跳转专属优惠券创建页面
+      }
     }
   },
   created () {

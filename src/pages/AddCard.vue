@@ -1,44 +1,31 @@
 <template>
-  <div id="addfactory-card-page" class="containerarea bg-page font14 addFactoryCard">
+  <div id="add-card-page" class="containerarea bg-page font14 addCard">
     <div class="s-container">
       <form class="addForm">
         <div style="margin: 10px 10px 0px 10px;background-color: white;border-radius:5px">
           <div class="form-item required">
             <div class="t-table">
               <div class="t-cell title-cell font14 v_middle w100">
-                <span>{{ $t('Starttime') }}</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span>
+                <span>奖励语</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span>
               </div>
-              <div class="t-cell input-cell v_middle" style="position:relative;">
-                <group class="x-datetime">
-                  <datetime format="YYYY-MM-DD HH:mm" v-model='submitdata.starttime' :show.sync="visibility1" @on-change="datechange1" @on-cancel="datecancel1" @on-confirm="dateconfirm1"></datetime>
-                </group>
-                <div @click="showxdate1" class='font14 color-gray align_left' style="position:absolute;left:0;right:0;top:0;height:22px;background-color:transparent;z-index:10;">{{ selectdatetxt1 }}</div>
-              </div>
-            </div>
-          </div>
-          <div class="form-item required">
-            <div class="t-table">
-              <div class="t-cell title-cell font14 v_middle w100">
-                <span>{{ $t('Endtime') }}</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span>
-              </div>
-              <div class="t-cell input-cell v_middle" style="position:relative;">
-                <group class="x-datetime">
-                  <datetime format="YYYY-MM-DD HH:mm" v-model='submitdata.endtime' :show.sync="visibility2" @on-change="datechange2" @on-cancel="datecancel2" @on-confirm="dateconfirm2"></datetime>
-                </group>
-                <div @click="showxdate2" class='font14 color-gray align_left' style="position:absolute;left:0;right:0;top:0;height:22px;background-color:transparent;z-index:10;">{{ selectdatetxt2 }}</div>
+              <div class="t-cell input-cell v_middle db-flex" style="position:relative;">
+                <x-input class="flex_cell" v-model='submitdata.totalcount' type="number" placeholder="请输入奖励语" ></x-input>
+                <div class="flex_right w30">张</div>
               </div>
             </div>
           </div>
         </div>
-        <div style="margin: 10px 10px 10px 10px;background-color: white;border-radius:5px">
-          <div class="padding10 required">
+        <!-- 选择客户 -->
+        <div style="margin: 0px 10px 0px 10px;background-color: white;border-radius:5px">
+          <div class="form-item required">
             <div class="t-table">
               <div class="t-cell title-cell font14 v_middle w100">
-                <span>优惠券数量</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span>
+                <span>选择客户</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span>
               </div>
               <div class="t-cell input-cell v_middle db-flex" style="position:relative;">
-                <x-input class="flex_cell" v-model='submitdata.totalcount' type="number" placeholder="请输入发放的优惠券数量" ></x-input>
-                <div class="flex_right w30">张</div>
+                <div class="qbtn flex_center color-orange mt10" style="border:orange 1px solid;width:90%;line-height:1;padding:4px 0;" @click="selectevent">
+                  <span class="mr5 v_middle db-in" style="margin-top:-3px;">+</span><span class="v_middle db-in">选择领券用户</span>
+                </div>
               </div>
             </div>
           </div>
@@ -65,15 +52,6 @@
           </div>
         </div>
         <div style="margin: 10px 10px 10px 10px;background-color: white;border-radius:5px">
-          <!-- <div class="form-item required">
-            <div class="t-table">
-              <div class="t-cell title-cell font14 v_middle w100">
-                <span>选择商品</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span>
-              </div>
-              <check-icon class="red-check" :value.sync="singlePro" @click.stop="setType(1)">单件商品</check-icon>
-              <check-icon class="red-check" :value.sync="allPro" @click.stop="setType(0)">所有商品</check-icon>
-            </div>
-          </div> -->
           <div class="form-item required">
             <div class="t-table">
               <div class="t-cell title-cell font14 v_middle w100">
@@ -457,6 +435,24 @@ export default {
       self.showProductList = false
       self.showproductitem = true
     },
+    _confirmpopup () {
+      const self = this
+      if (!this.selectpopupdata || !this.selectpopupdata.id) {
+        self.$vux.toast.text('请选择商品', 'middle')
+        return false
+      } else if (this.selectpopupdata.storage <= 0) {
+        self.$vux.toast.text('该商品库存为0，请补充库存', 'middle')
+        return false
+      } else if (this.selectpopupdata.price <= this.submitdata.ordermoney) {
+        console.log('当前选中商品金额')
+        console.log(this.selectpopupdata.price)
+        console.log('所设置的满减金额')
+        console.log(this.submitdata.ordermoney)
+        self.$vux.toast.text('该商品价格低于满减金额，请重新选择', 'middle')
+        return false
+      }
+      self.afterSelectProduct()
+    },
     confirmpopup () {
       let curProduct = this.checkedProduct
       if (!curProduct || !curProduct.id) {
@@ -519,7 +515,7 @@ export default {
         self.$vux.toast.text('请输入正确的优惠券数量', 'middle')
         return false
       }
-      if (isNaN(facemoney) || isNaN(ordermoney) || !facemoney || parseFloat(facemoney.replace(/,/g, '')) < 0 || !ordermoney || parseFloat(ordermoney.replace(/,/g, '')) < 0) {
+      if (isNaN(facemoney) || isNaN(ordermoney) || !facemoney || parseFloat(facemoney.replace(/,/g, '')) <= 0 || !ordermoney || parseFloat(ordermoney.replace(/,/g, '')) <= 0) {
         self.$vux.toast.text('请填写正确的满减金额', 'middle')
         return false
       }
@@ -577,7 +573,7 @@ export default {
 }
 </script>
 <style lang="less">
-.addFactoryCard{
+.addCard{
   .s-container{top:0;}
   .weui-cell{padding:5px !important;}
 }
