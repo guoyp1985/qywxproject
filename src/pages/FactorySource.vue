@@ -223,7 +223,7 @@ export default {
         onConfirm: () => {
           self.$vux.loading.show()
           self.$http.post(`${ENV.BokaApi}/api/factory/productshelf`, {
-            fid: self.Fid, module: 'factoryproduct', moduleid: item.moduleid
+            fid: self.loginUser.fid, module: 'factoryproduct', moduleid: item.moduleid
           }).then(function (res) {
             let data = res.data
             self.$vux.loading.hide()
@@ -329,37 +329,30 @@ export default {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       console.log(this.query)
-      if (!this.query.fid || this.query.fid !== parseInt(this.$route.query.fid)) {
-        this.initData()
-        this.loginUser = User.get()
-        if (!self.loginUser.isretailer) {
-          self.showBottom = true
-        } else {
-          self.showBottom = false
-        }
-        this.query = this.$route.query
-        if (this.query.fid) {
-          this.Fid = this.query.fid
-        } else {
-          this.Fid = this.loginUser.fid
-        }
-        self.$vux.loading.show()
-        self.$http.get(`${ENV.BokaApi}/api/factory/info`, {
-          params: { fid: self.Fid }
-        }).then(res => {
-          self.$vux.loading.hide()
-          let data = res.data
-          let retdata = data.data ? data.data : data
-          self.viewData = retdata
-          if (this.tabData1.length < limit) {
-            self.$vux.loading.show()
-            pageStart1 = 0
-            this.disTabData1 = false
-            this.tabData1 = []
-            this.getData1()
-          }
-        })
+      this.initData()
+      this.loginUser = User.get()
+      this.query = this.$route.query
+      if (this.query.fid) {
+        this.Fid = this.query.fid
+      } else {
+        this.Fid = this.loginUser.fid
       }
+      self.$vux.loading.show()
+      self.$http.get(`${ENV.BokaApi}/api/factory/info`, {
+        params: { fid: self.Fid }
+      }).then(res => {
+        self.$vux.loading.hide()
+        let data = res.data
+        let retdata = data.data ? data.data : data
+        self.viewData = retdata
+        if (this.tabData1.length < limit) {
+          self.$vux.loading.show()
+          pageStart1 = 0
+          this.disTabData1 = false
+          this.tabData1 = []
+          this.getData1()
+        }
+      })
     }
   },
   created () {
