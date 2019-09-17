@@ -153,10 +153,10 @@ export default {
       let con = ''
       let ajaxUrl = ''
       if (type === 'product') {
-        con = `确定要导入该厂家的${this.productCount}件商品？`
+        con = `确定要导入该厂家的商品？`
         ajaxUrl = `${ENV.BokaApi}/api/factory/fastImportFactoryProduct`
       } else if (type === 'factorynews') {
-        con = `确定要导入该厂家的${this.newsCount}篇文章？`
+        con = `确定要导入该厂家的文章？`
         ajaxUrl = `${ENV.BokaApi}/api/factory/fastImportFactoryNews`
       }
       self.$vux.confirm.show({
@@ -212,19 +212,24 @@ export default {
     },
     upEvent (item, index) {
       const self = this
-      self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/factory/productshelf`, {
-        fid: self.Fid, module: 'factoryproduct', moduleid: item.moduleid
-      }).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        self.$vux.toast.show({
-          text: data.error,
-          type: data.flag === 1 ? 'success' : 'warn',
-          time: self.$util.delay(data.error)
-        })
-        if (data.flag) {
-          this.tabData1[index].haveshelf = 1
+      self.$vux.confirm.show({
+        content: '确定导入商品并加盟该厂家吗？',
+        onConfirm: () => {
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/factory/productshelf`, {
+            fid: self.Fid, module: 'factoryproduct', moduleid: item.moduleid
+          }).then(function (res) {
+            let data = res.data
+            self.$vux.loading.hide()
+            self.$vux.toast.show({
+              text: data.error,
+              type: data.flag === 1 ? 'success' : 'warn',
+              time: self.$util.delay(data.error)
+            })
+            if (data.flag) {
+              this.tabData1[index].haveshelf = 1
+            }
+          })
         }
       })
     },
