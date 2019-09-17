@@ -36,6 +36,10 @@
                             <span class="v_middle db-in">库存: {{ item.storage }}{{item.unit}}</span>
                             <span class="v_middle db-in ml5">已售: {{ item.truesaled }}{{item.unit}}</span>
                         </div>
+                        <div class="clamp1 mt5">
+                            <span class="v_middle db-in">销售佣金: {{ item.salesrebate }}</span>
+                            <span class="v_middle db-in ml5">推荐佣金: {{ item.superrebate }}</span>
+                        </div>
                       </div>
                       <div class="align_right t-cell v_bottom w80">
                         <div class="btnicon bg-red color-white font12" @click.stop="controlpopup1(item,index)">
@@ -94,6 +98,9 @@
                 <div class="inner" @click="clickpopup('downShelf')">从货源移出</div>
               </div>
               <div class="item">
+                <div class="inner" @click="clickpopup('fee')">设置佣金</div>
+              </div>
+              <div class="item">
                 <router-link class="inner" :to="{path: '/stat', query: {id: clickdata.id, module: 'factoryproduct'}}">统计</router-link>
               </div>
               <!-- <div class="item">
@@ -102,6 +109,54 @@
               <div class="item close mt10" @click="clickpopup">
                 <div class="inner">{{ $t('Cancel txt') }}</div>
               </div>
+            </div>
+          </div>
+        </popup>
+      </div>
+      <div v-transfer-dom class="x-popup">
+        <popup v-model="showFeePopup" height="100%">
+          <div class="popup1">
+            <div class="popup-top flex_center">设置佣金</div>
+            <div class="popup-middle font14">
+              <div class="pt10 pb10 pl12 pr12">
+                <div class="t-table bg-white pt10 pb10">
+            			<div class="t-cell pl12 v_middle" style="width:110px;">
+                    <img class="imgcover v_middle" :src="getPhoto(feeData.photo)" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+                  </div>
+            			<div class="t-cell v_middle">
+                    <div class="clamp1 font16 pr10 color-lightgray">{{feeData.title}}</div>
+                    <div class="t-table pr12 border-box mt15">
+                      <div class="t-cell color-999 font14">
+                        <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ feeData.price }}</span></div>
+                        <div class="clamp1 mt5" v-if="feeData.fpid > 0">厂家佣金:<span class="color-red"> {{ $t('RMB') }}{{ feeData.rebatein }}</span></div>
+                        <div class="clamp1 mt5">
+                            <span class="v_middle db-in">已售: {{ feeData.saled }}{{feeData.unit}}</span>
+                        </div>
+                      </div>
+                    </div>
+            			</div>
+            		</div>
+                <div class="form-item">
+                  <div class="t-table">
+                    <div class="t-cell title-cell w80 font14 v_middle">销售佣金<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
+                    <div class="t-cell input-cell v_middle" style="position:relative;">
+                      <x-input v-model="postSalesRebate" type="text" class="input" placeholder="销售佣金"></x-input>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-item">
+                  <div class="t-table">
+                    <div class="t-cell title-cell w80 font14 v_middle">推荐佣金<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
+                    <div class="t-cell input-cell v_middle" style="position:relative;">
+                      <x-input v-model="postSuperRebate" type="text" class="input" placeholder="推荐佣金"></x-input>
+                    </div>
+                  </div>
+                </div>
+    					</div>
+            </div>
+            <div class="popup-bottom flex_center">
+              <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeFeePopup">{{ $t('Close') }}</div>
+              <div class="flex_cell h_100 flex_center bg-green color-white" @click="submitFee">提交</div>
             </div>
           </div>
         </popup>
@@ -123,7 +178,7 @@
 </i18n>
 
 <script>
-import { TransferDom, Popup, Confirm, CheckIcon, XImg } from 'vux'
+import { TransferDom, Popup, Confirm, CheckIcon, XImg, XInput } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
@@ -137,7 +192,7 @@ export default {
     TransferDom
   },
   components: {
-    Popup, Confirm, CheckIcon, XImg, Sos, TipLayer
+    Popup, Confirm, CheckIcon, XImg, Sos, TipLayer, XInput
   },
   data () {
     return {
@@ -152,7 +207,11 @@ export default {
       clickindex: 0,
       disproductdata: false,
       showTip: false,
-      Fid: 0
+      Fid: 0,
+      showFeePopup: false,
+      feeData: {},
+      postSalesRebate: '',
+      postSuperRebate: ''
     }
   },
   watch: {
@@ -282,6 +341,7 @@ export default {
           }
         })
       } else if (key === 'upShelf') {
+        self.showpopup1 = false
         self.$vux.confirm.show({
           title: '确定要将该商品移至货源吗？',
           onConfirm () {
@@ -306,6 +366,7 @@ export default {
           }
         })
       } else if (key === 'downShelf') {
+        self.showpopup1 = false
         self.$vux.confirm.show({
           title: '确定要将该商品从货源移出吗？',
           onConfirm () {
@@ -329,9 +390,60 @@ export default {
             })
           }
         })
+      } else if (key === 'fee') {
+        self.showpopup1 = false
+        self.showFeePopup = true
+        self.feeData = self.clickdata
       } else {
         self.showpopup1 = false
       }
+    },
+    closeFeePopup () {
+      this.showFeePopup = false
+      this.postSalesRebate = ''
+      this.postSuperRebate = ''
+    },
+    submitFee () {
+      const self = this
+      let salesRebate = self.postSalesRebate
+      let superRebate = self.postSuperRebate
+      if (self.$util.trim(salesRebate) === '' || self.$util.trim(superRebate) === '') {
+        self.$vux.toast.show({
+          text: '请输入销售佣金和推荐佣金'
+        })
+        return false
+      }
+      if (isNaN(salesRebate) || parseFloat(salesRebate) < 0 || isNaN(superRebate) || parseFloat(superRebate) < 0) {
+        self.$vux.toast.show({
+          text: '请输入正确的佣金'
+        })
+        return false
+      }
+      self.$http.post(`${ENV.BokaApi}/api/factory/productset `, {
+        id: self.clickdata.id, salesrebate: salesRebate, superrebate: superRebate
+      }).then(function (res) {
+        let data = res.data
+        const retdata = data.data
+        self.$vux.loading.hide()
+        self.$vux.toast.show({
+          text: data.error,
+          type: data.flag !== 1 ? 'warn' : 'success',
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+              self.showFeePopup = false
+              switch (self.selectedIndex) {
+                case 0:
+                  self.tabData1[self.clickindex] = retdata
+                  break
+                case 1:
+                  self.tabData2[self.clickindex] = retdata
+                  break
+              }
+            }
+          }
+        })
+      })
     },
     closeTipModal () {
       this.showTip = false
