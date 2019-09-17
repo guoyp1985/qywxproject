@@ -1178,7 +1178,7 @@ export default {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
-        self.tabData6 = self.tabData5.concat(retdata)
+        self.tabData6 = self.tabData6.concat(retdata)
         self.disTabData6 = true
       })
     },
