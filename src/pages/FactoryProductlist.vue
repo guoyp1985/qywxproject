@@ -66,25 +66,27 @@
         <popup class="menuwrap" v-model="showpopup1">
           <div class="popup0">
             <div class="list" v-if="clickdata">
-              <div class="item">
-                <div class="inner" @click="clickpopup('copy')">复制商品信息</div>
-              </div>
-              <div class="item">
-                <router-link class="inner" :to="{path: '/agentProduct', query: {pid: clickdata.id}}">经销商价格</router-link>
-              </div>
-              <div class="item">
-                <router-link class="inner" :to="{path: '/materialbank', query: {pid: clickdata.id}}">素材库</router-link>
-              </div>
-              <div class="item" v-if="clickdata.moderate == 1">
-                <div class="inner" @click="clickpopup('recommend')" v-if="clickdata.recommend == 0">商品推荐</div>
-                <div class="inner" @click="clickpopup('recommend')" v-else>取消推荐</div>
-              </div>
-              <div class="item">
-                <router-link class="inner" :to="{path: '/postageArea', query: {type: 'factoryproduct',id: clickdata.id}}">偏远地区运费</router-link>
-              </div>
-              <div class="item" v-if="!clickdata.activityid || clickdata.activityid == 0">
-                <router-link class="inner" :to="{path: '/addFpimportProduct', query: {id: clickdata.id, fid: Fid}}">编辑</router-link>
-              </div>
+              <template v-if="!clickdata.fromfid">
+                <div class="item">
+                  <div class="inner" @click="clickpopup('copy')">复制商品信息</div>
+                </div>
+                <div class="item">
+                  <router-link class="inner" :to="{path: '/agentProduct', query: {pid: clickdata.id}}">经销商价格</router-link>
+                </div>
+                <div class="item">
+                  <router-link class="inner" :to="{path: '/materialbank', query: {pid: clickdata.id}}">素材库</router-link>
+                </div>
+                <div class="item" v-if="clickdata.moderate == 1">
+                  <div class="inner" @click="clickpopup('recommend')" v-if="clickdata.recommend == 0">商品推荐</div>
+                  <div class="inner" @click="clickpopup('recommend')" v-else>取消推荐</div>
+                </div>
+                <div class="item">
+                  <router-link class="inner" :to="{path: '/postageArea', query: {type: 'factoryproduct',id: clickdata.id}}">偏远地区运费</router-link>
+                </div>
+                <div class="item" v-if="!clickdata.activityid || clickdata.activityid == 0">
+                  <router-link class="inner" :to="{path: '/addFactoryProduct', query: {id: clickdata.id, fid: Fid}}">编辑</router-link>
+                </div>
+              </template>
               <div class="item" v-if="clickdata.moderate == 0">
                 <div class="inner" @click="clickpopup('up')">上架</div>
               </div>
