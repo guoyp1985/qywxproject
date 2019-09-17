@@ -10,7 +10,11 @@
           <div class="font12 clamp2">应打款金额: {{ $t('RMB') }}1000.00</div>
         </div>
         <div class="w100 flex_right">
-          <div class="flex_center bg-white color-theme" style="width:80px;padding:5px 0;border-radius:20px;" @click="toBill">详细账单</div>
+          <div>
+            <div class="flex_center bg-white color-theme" style="width:80px;padding:5px 0;border-radius:20px;" @click="toBill">详细账单</div>
+            <div class="flex_center bg-white color-theme mt5" style="width:80px;padding:5px 0;border-radius:20px;" v-if="!joinStatus" @click="toJoin">加盟厂家</div>
+            <div class="flex_center color-white mt5" style="width:80px;padding:5px 0;border-radius:20px;" v-else @click="toJoin">已加盟</div>
+          </div>
         </div>
       </div>
     </div>
@@ -91,7 +95,9 @@ export default {
       showBottom: false,
       productCount: 0,
       newsCount: 0,
-      Fid: 0
+      Fid: 0,
+      joinStatus: 0,
+      disJoin: false
     }
   },
   watch: {
@@ -233,6 +239,29 @@ export default {
         }
       })
     },
+    toJoin () {
+      const self = this
+      self.$vux.confirm.show({
+        content: '确定加盟该厂家吗？',
+        onConfirm: () => {
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/factory/fpimportApply`, {
+            fromfid: self.Fid, fid: self.loginUser.fid
+          }).then(function (res) {
+            let data = res.data
+            self.$vux.loading.hide()
+            self.$vux.toast.show({
+              text: data.error,
+              type: data.flag === 1 ? 'success' : 'warn',
+              time: self.$util.delay(data.error)
+            })
+            if (data.flag) {
+              self.joinStatus = 1
+            }
+          })
+        }
+      })
+    },
     openVip (type) {
       const self = this
       let con = ENV.vipProduct
@@ -292,6 +321,8 @@ export default {
         if (self.tabData1.length > 0 || self.tabData2.length > 0) {
           self.showBottom = true
         }
+        self.joinStatus = data.join
+        self.disJoin = true
       })
     },
     refresh () {
@@ -307,7 +338,11 @@ export default {
           self.showBottom = false
         }
         this.query = this.$route.query
-        this.Fid = this.query.fid
+        if (this.query.fid) {
+          this.Fid = this.query.fid
+        } else {
+          this.Fid = this.loginUser.fid
+        }
         self.$vux.loading.show()
         self.$http.get(`${ENV.BokaApi}/api/factory/info`, {
           params: { fid: self.Fid }
