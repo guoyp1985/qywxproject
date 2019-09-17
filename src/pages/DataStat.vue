@@ -4,12 +4,31 @@
   .box-area{
     box-shadow:0px 0px 3px 1px #e6ebed;
     padding:10px;background-color:#fff;
+    .col-item:not(:last-child){border-bottom:#ccc 1px solid;}
+    .col-item{
+      width:100%;display:flex;flex-wrap: wrap;
+      .row-item:not(:last-child){border-right:#ccc 1px solid;}
+      .row-item{
+        width:50%;box-sizing:border-box;
+      }
+    }
   }
 }
 </style>
 <template>
   <div class="containerarea font14 bg-page data-stat-page">
-    <div class="box-area"></div>
+    <div class="box-area">
+      <div class="col-item">
+        <div class="row-item">
+          <div class="txt1">今日订单</div>
+          <div class="txt2">100</div>
+        </div>
+        <div class="row-item">
+          <div class="txt1">今日订单</div>
+          <div class="txt2">100</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>

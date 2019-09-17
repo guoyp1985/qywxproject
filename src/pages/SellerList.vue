@@ -286,6 +286,33 @@
               </template>
             </template>
           </div>
+          <div v-show="(selectedIndex == 5)" class="swiper-inner" ref="scrollContainer6" @scroll="handleScroll('scrollContainer6',5)">
+            <template v-if="disTabData6">
+              <template v-if="!tabData6.length">
+                <div class="scroll_list">
+                  <div class="emptyitem">
+                    <div class="t-table" style="padding-top:20%;">
+                      <div class="t-cell padding10">暂无数据</div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+              <template v-else>
+                <div class="scroll_list " >
+                  <div class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData6" :key="item.id" style="color:inherit;">
+                    <div class="t-table bg-white pl10 pr10 pt10 pb10 border-box">
+                      <div class="t-cell v_middle w70">
+                        <img class="avatarimg3 imgcover" :src="item.factoryinfo.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+                      </div>
+                      <div class="t-cell v_middle pr10" style="box-sizing:border-box;">
+                        <div class="clamp1 font16">{{item.factoryinfo.title}}</div>
+                      </div>
+                		</div>
+                  </div>
+                </div>
+              </template>
+            </template>
+          </div>
         </template>
       </div>
       <div v-transfer-dom>
@@ -458,7 +485,7 @@ export default {
       query: {},
       fid: 0,
       loginUser: {},
-      tabtxts: ['全职卖家', '兼职卖家', '待审核卖家', '经销商', '待审核经销商'],
+      tabtxts: ['全职卖家', '兼职卖家', '待审核卖家', '经销商', '待审核经销商', '代理厂家'],
       selectedIndex: 0,
       searchword1: '',
       searchword2: '',
@@ -469,12 +496,14 @@ export default {
       tabData3: [],
       tabData4: [],
       tabData5: [],
+      tabData6: [],
       disSearchData: false,
       disTabData1: false,
       disTabData2: false,
       disTabData3: false,
       disTabData4: false,
       disTabData5: false,
+      disTabData6: false,
       userPpageStart: 0,
       searchPageStart: 0,
       pageStart1: 0,
@@ -482,6 +511,7 @@ export default {
       pageStart3: 0,
       pageStart4: 0,
       pageStart5: 0,
+      pageStart6: 0,
       limit: 20,
       showPopup1: false,
       clickData: {},
@@ -617,6 +647,12 @@ export default {
               self.$vux.loading.show()
               self.getData5()
             }
+          } else if (index === 5) {
+            if (self.tabData6.length === (self.pageStart6 + 1) * self.limit) {
+              self.pageStart6++
+              self.$vux.loading.show()
+              self.getData6()
+            }
           }
         }
       })
@@ -682,6 +718,14 @@ export default {
             self.disTabData5 = false
             this.tabData5 = []
             self.getData5()
+          }
+          break
+        case 5:
+          if (this.tabData6.length < this.limit) {
+            self.pageStart6 = 0
+            self.disTabData6 = false
+            this.tabData6 = []
+            self.getData6()
           }
           break
       }
@@ -1120,6 +1164,22 @@ export default {
         const retdata = data.data ? data.data : data
         self.tabData5 = self.tabData5.concat(retdata)
         self.disTabData5 = true
+      })
+    },
+    getData6 (isone) {
+      const self = this
+      let params = {fid: this.loginUser.fid, type: 'my', pagestart: self.pageStart6, limit: self.limit}
+      if (isone) {
+        params.pagestart = self.tabData6.length
+        params.limit = 1
+      }
+      this.$http.post(`${ENV.BokaApi}/api/factory/fpimportapplyList`, params)
+      .then(res => {
+        self.$vux.loading.hide()
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        self.tabData6 = self.tabData5.concat(retdata)
+        self.disTabData6 = true
       })
     },
     searchUser () {
