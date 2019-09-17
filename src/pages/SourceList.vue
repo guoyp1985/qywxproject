@@ -64,11 +64,11 @@
               <div class="scroll_inner">
                 <div class="info-row flex_left">
                   <div class="pic flex_left">
-                    <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+                    <img :src="item.factoryinfo.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                   </div>
                   <div class="flex_cell flex_left">
                     <div class="w_100">
-                      <div>{{item.title}}</div>
+                      <div>{{item.factoryinfo.title}}</div>
                     </div>
                   </div>
                   <div class="flex_right" style="width:90px;">
