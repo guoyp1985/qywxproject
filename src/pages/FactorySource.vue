@@ -214,7 +214,7 @@ export default {
       const self = this
       self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/factory/productshelf`, {
-        fid: self.Fid, module: 'factoryproduct', moduleid: item.id
+        fid: self.Fid, module: 'factoryproduct', moduleid: item.moduleid
       }).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
