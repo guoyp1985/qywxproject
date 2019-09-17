@@ -221,7 +221,7 @@ export default {
   },
   methods: {
     toFactoryProduct (item) {
-      let params = this.$util.handleAppParams(this.query, {id: item.id, fid: this.Fid})
+      let params = this.$util.handleAppParams(this.query, {id: item.moduleid, fid: this.Fid})
       this.$router.push({path: '/factoryProduct', query: params})
     },
     toAdd () {
