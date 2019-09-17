@@ -118,7 +118,7 @@ export default {
       this.$router.push({path: '/factoryBill', query: {fid: this.Fid}})
     },
     toProduct (item) {
-      let params = this.$util.handleAppParams(this.query, {id: item.id, fid: this.Fid})
+      let params = this.$util.handleAppParams(this.query, {id: item.id, fid: this.Fid, module: 'fpimport'})
       this.$router.push({path: '/factoryProduct', query: params})
     },
     toStore () {

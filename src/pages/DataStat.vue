@@ -1,5 +1,15 @@
+<style lang="less">
+.data-stat-page{
+  .box-area:not(:last-child){margin-bottom:20px;}
+  .box-area{
+    box-shadow:0px 0px 3px 1px #e6ebed;
+    padding:10px;background-color:#fff;
+  }
+}
+</style>
 <template>
-  <div class="containerarea font14 bg-page">
+  <div class="containerarea font14 bg-page data-stat-page">
+    <div class="box-area"></div>
   </div>
 </template>
 <script>
@@ -10,7 +20,6 @@ import { User } from '#/storage'
 
 export default {
   components: {
-    Group, GroupTitle, Cell, XImg
   },
   data () {
     return {
@@ -36,15 +45,3 @@ export default {
   }
 }
 </script>
-
-<style lang="less">
-#personal-credit .credit-item img {
-  width: 60px;
-  float: left;
-}
-
-/* weui css hack */
-#personal-credit .vux-cell-primary {
-  margin-left: 10px;
-}
-</style>
