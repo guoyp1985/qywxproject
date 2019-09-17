@@ -6,10 +6,25 @@
     padding:10px;background-color:#fff;
     .col-item:not(:last-child){border-bottom:#ccc 1px solid;}
     .col-item{
-      width:100%;display:flex;flex-wrap: wrap;
+      width:100%;display:flex;flex-wrap: wrap;padding-top:10px;padding-bottom:10px;
       .row-item:not(:last-child){border-right:#ccc 1px solid;}
       .row-item{
         width:50%;box-sizing:border-box;
+        .txt1{
+          text-align:center;color:#999;font-size:16px;
+        }
+        .txt2{
+          text-align:center;color:#ff6a61;font-weight:bold;
+        }
+      }
+      .big{
+        .txt2{font-size:20px;}
+      }
+      .middle{
+        .txt2{font-size:16px;}
+      }
+      .small{
+        .txt2{font-size:14px;}
       }
     }
   }
@@ -19,13 +34,23 @@
   <div class="containerarea font14 bg-page data-stat-page">
     <div class="box-area">
       <div class="col-item">
-        <div class="row-item">
+        <div class="row-item big">
           <div class="txt1">今日订单</div>
           <div class="txt2">100</div>
         </div>
-        <div class="row-item">
-          <div class="txt1">今日订单</div>
-          <div class="txt2">100</div>
+        <div class="row-item big">
+          <div class="txt1">今日收入</div>
+          <div class="txt2">100.00</div>
+        </div>
+      </div>
+      <div class="col-item">
+        <div class="row-item big">
+          <div class="txt1">今日入驻</div>
+          <div class="txt2">200</div>
+        </div>
+        <div class="row-item big">
+          <div class="txt1">今日销售额</div>
+          <div class="txt2">300.00</div>
         </div>
       </div>
     </div>
