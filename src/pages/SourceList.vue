@@ -192,12 +192,12 @@ export default {
     getData2 () {
       this.$vux.loading.show()
       const self = this
-      const params = {pagestart: pageStart2, limit: limit}
+      const params = {pagestart: pageStart2, limit: limit, type: 'join', fid: this.Fid}
       let keyword = self.searchword1
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         params.keyword = keyword
       }
-      self.$http.get(`${ENV.BokaApi}/api/factory/list?pagestart=0&limit=10`, {
+      self.$http.get(`${ENV.BokaApi}/api/factory/fpimportList`, {
         params: params
       }).then(function (res) {
         const data = res.data

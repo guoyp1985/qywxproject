@@ -83,6 +83,9 @@ export default {
     getData () {
       const self = this
       const params = { pagestart: pageStart, limit: limit, module: 'academic' }
+      if (this.query.fid) {
+        params.fid = this.query.fid
+      }
       this.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/retailer/recommendNews`, params).then(function (res) {
         const data = res.data
