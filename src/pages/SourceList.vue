@@ -69,6 +69,7 @@
                   <div class="flex_cell flex_left">
                     <div class="w_100">
                       <div>{{item.factoryinfo.title}}</div>
+                      <div class="font12 color-gray mt5" v-if="item.factoryinfo.bankcardno && item.factoryinfo.bankcardno != ''">银行账号: {{item.factoryinfo.bankcardno}}</div>
                     </div>
                   </div>
                   <div class="flex_right" style="width:90px;">
