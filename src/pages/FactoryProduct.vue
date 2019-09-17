@@ -652,6 +652,9 @@ export default {
         User.set(data)
         this.retailerInfo = this.loginUser.retailerinfo
         this.query = this.$route.query
+        if (this.query.module) {
+          this.module = this.query.module
+        }
         if (this.query.allowfirst !== 'false') {
           if (this.retailerInfo && `${this.retailerInfo.firstinfo.importproduct}` === '0' && this.query.from) {
             this.isFirst = true
