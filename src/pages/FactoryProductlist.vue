@@ -21,7 +21,7 @@
           </template>
           <template v-else>
             <div class="scroll_list ">
-              <div @click="toFactoryProduct(item)" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
+              <div @click="toFactoryProduct(item)" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in productdata" :key="index" style="color:inherit;">
                 <div v-if="item.moderate == 0" class="ico down"></div>
             		<div class="t-table bg-white pt10 pb10">
             			<div class="t-cell pl12 v_middle" style="width:110px;">
@@ -79,7 +79,7 @@
                 <router-link class="inner" :to="{path: '/postageArea', query: {type: 'factoryproduct',id: clickdata.id}}">偏远地区运费</router-link>
               </div>
               <div class="item" v-if="!clickdata.activityid || clickdata.activityid == 0">
-                <router-link class="inner" :to="{path: '/addFactoryProduct', query: {id: clickdata.id, fid: query.fid}}">编辑</router-link>
+                <router-link class="inner" :to="{path: '/addFactoryProduct', query: {id: clickdata.id, fid: Fid}}">编辑</router-link>
               </div>
               <div class="item" v-if="clickdata.moderate == 0">
                 <div class="inner" @click="clickpopup('up')">上架</div>
@@ -87,11 +87,17 @@
               <div class="item" v-else-if="clickdata.moderate == 1">
                 <div class="inner" @click="clickpopup('down')">下架</div>
               </div>
+              <div class="item" v-if="clickdata.shelf == 0">
+                <div class="inner" @click="clickpopup('upShelf')">推荐到货源</div>
+              </div>
+              <div class="item" v-else-if="clickdata.shelf == 1">
+                <div class="inner" @click="clickpopup('downShelf')">从货源移出</div>
+              </div>
               <div class="item">
                 <router-link class="inner" :to="{path: '/stat', query: {id: clickdata.id, module: 'factoryproduct'}}">统计</router-link>
               </div>
               <!-- <div class="item">
-                <router-link class="inner" :to="{ path: '/factoryAgentFee', query: { id: clickdata.id, fid: query.fid } }">设置佣金</router-link>
+                <router-link class="inner" :to="{ path: '/factoryAgentFee', query: { id: clickdata.id, fid: Fid } }">设置佣金</router-link>
               </div> -->
               <div class="item close mt10" @click="clickpopup">
                 <div class="inner">{{ $t('Cancel txt') }}</div>
@@ -145,7 +151,8 @@ export default {
       clickdata: {},
       clickindex: 0,
       disproductdata: false,
-      showTip: false
+      showTip: false,
+      Fid: 0
     }
   },
   watch: {
@@ -155,11 +162,11 @@ export default {
   },
   methods: {
     toFactoryProduct (item) {
-      let params = this.$util.handleAppParams(this.query, {id: item.id, fid: this.query.fid})
+      let params = this.$util.handleAppParams(this.query, {id: item.id, fid: this.Fid})
       this.$router.push({path: '/factoryProduct', query: params})
     },
     toAdd () {
-      let params = this.$util.handleAppParams(this.query, {fid: this.query.fid})
+      let params = this.$util.handleAppParams(this.query, {fid: this.Fid})
       this.$router.push({path: '/addFactoryProduct', query: params})
     },
     getPhoto (src) {
@@ -274,6 +281,54 @@ export default {
             })
           }
         })
+      } else if (key === 'upShelf') {
+        self.$vux.confirm.show({
+          title: '确定要将该商品移至货源吗？',
+          onConfirm () {
+            self.$vux.loading.show()
+            let params = { id: self.clickdata.id, shelf: 1 }
+            self.$http.post(`${ENV.BokaApi}/api/factory/productset`, params).then(function (res) {
+              let data = res.data
+              self.$vux.loading.hide()
+              self.$vux.toast.show({
+                text: data.error,
+                type: (data.flag !== 1 ? 'warn' : 'success'),
+                time: self.$util.delay(data.error),
+                onHide: function () {
+                  if (data.flag === 1) {
+                    self.clickdata.shelf = 1
+                    self.productdata[self.clickindex].shelf = 1
+                    self.showpopup1 = false
+                  }
+                }
+              })
+            })
+          }
+        })
+      } else if (key === 'downShelf') {
+        self.$vux.confirm.show({
+          title: '确定要将该商品从货源移出吗？',
+          onConfirm () {
+            self.$vux.loading.show()
+            let params = { id: self.clickdata.id, shelf: 0 }
+            self.$http.post(`${ENV.BokaApi}/api/factory/productset`, params).then(function (res) {
+              let data = res.data
+              self.$vux.loading.hide()
+              self.$vux.toast.show({
+                text: data.error,
+                type: (data.flag !== 1 ? 'warn' : 'success'),
+                time: self.$util.delay(data.error),
+                onHide: function () {
+                  if (data.flag === 1) {
+                    self.clickdata.shelf = 0
+                    self.productdata[self.clickindex].shelf = 0
+                    self.showpopup1 = false
+                  }
+                }
+              })
+            })
+          }
+        })
       } else {
         self.showpopup1 = false
       }
@@ -318,8 +373,8 @@ export default {
     },
     getData1 () {
       const self = this
-      const params = { fid: self.query.fid, from: 'factory', pagestart: pageStart1, limit: limit }
-      this.$http.get(`${ENV.BokaApi}/api/list/factoryproduct`, {
+      const params = { fid: self.Fid, pagestart: pageStart1, limit: limit }
+      this.$http.get(`${ENV.BokaApi}/api/list/fpimport`, {
         params: params
       })
       .then(res => {
@@ -352,6 +407,11 @@ export default {
           self.showContainer = true
           this.$vux.loading.hide()
           this.query = this.$route.query
+          if (this.query.fid) {
+            this.Fid = this.query.fid
+          } else {
+            this.Fid = this.loginUser.fid
+          }
           this.disproductdata = false
           this.productdata = []
           this.$vux.loading.show()
