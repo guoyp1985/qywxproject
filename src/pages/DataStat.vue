@@ -4,12 +4,28 @@
   .box-area{
     box-shadow:0px 0px 3px 1px #e6ebed;
     padding:10px;background-color:#fff;
-    .col-item:not(:last-child){border-bottom:#ccc 1px solid;}
+    .col-item:not(:last-child):after{
+      content:"";display:block;
+    	background-color:@list-border-color;height:1px;overflow:hidden;
+    	position: absolute;left: 0;right: 0;bottom:0px;
+    	-webkit-transform: scaleY(0.5) translateY(0.5px);
+    	transform: scaleY(0.5) translateY(0.5px);
+    	-webkit-transform-origin: 0% 0%;
+    	transform-origin: 0% 0%;
+    }
     .col-item{
-      width:100%;display:flex;flex-wrap: wrap;padding-top:10px;padding-bottom:10px;
-      .row-item:not(:last-child){border-right:#ccc 1px solid;}
+      width:100%;display:flex;flex-wrap: wrap;padding-top:10px;padding-bottom:10px;position:relative;
+      .row-item:not(:last-child):after{
+        content:"";display:block;
+      	background-color:@list-border-color;width:1px;overflow:hidden;
+      	position: absolute;right: 0;top: 0;bottom:0px;
+      	-webkit-transform: scaleX(0.5) translateX(0.5px);
+      	transform: scaleX(0.5) translateX(0.5px);
+      	-webkit-transform-origin: 0% 0%;
+      	transform-origin: 0% 0%;
+      }
       .row-item{
-        width:50%;box-sizing:border-box;
+        width:50%;box-sizing:border-box;position:relative;
         .txt1{
           text-align:center;color:#999;font-size:16px;
         }
@@ -50,6 +66,50 @@
         </div>
         <div class="row-item big">
           <div class="txt1">今日销售额</div>
+          <div class="txt2">300.00</div>
+        </div>
+      </div>
+    </div>
+    <div class="box-area">
+      <div class="col-item">
+        <div class="row-item big">
+          <div class="txt1">本月订单</div>
+          <div class="txt2">100</div>
+        </div>
+        <div class="row-item big">
+          <div class="txt1">本月收入</div>
+          <div class="txt2">100.00</div>
+        </div>
+      </div>
+      <div class="col-item">
+        <div class="row-item big">
+          <div class="txt1">本月入驻</div>
+          <div class="txt2">200</div>
+        </div>
+        <div class="row-item big">
+          <div class="txt1">本月销售额</div>
+          <div class="txt2">300.00</div>
+        </div>
+      </div>
+    </div>
+    <div class="box-area">
+      <div class="col-item">
+        <div class="row-item big">
+          <div class="txt1">累计订单</div>
+          <div class="txt2">100</div>
+        </div>
+        <div class="row-item big">
+          <div class="txt1">累计收入</div>
+          <div class="txt2">100.00</div>
+        </div>
+      </div>
+      <div class="col-item">
+        <div class="row-item big">
+          <div class="txt1">累计入驻</div>
+          <div class="txt2">200</div>
+        </div>
+        <div class="row-item big">
+          <div class="txt1">累计销售额</div>
           <div class="txt2">300.00</div>
         </div>
       </div>
