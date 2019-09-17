@@ -344,9 +344,25 @@ export default {
         })
       } else if (key === 'upShelf') {
         self.showpopup1 = false
+        if (!this.loginUser.bankcardno || this.loginUser.bankcardno == '' || !this.loginUser.bankname || this.loginUser.bankname == '') {
+          self.$vux.confirm.show({
+            title: '您还没有绑定银行卡，请先绑定银行卡信息，其他厂家出售商品后，将会把订单金额直接打款到您的银行卡账户上。',
+            confirmText: '去绑定',
+            onConfirm: () => {
+              let fromPage = ''
+              if (this.query.appid) {
+                fromPage = encodeURIComponent(`/factoryProductlist?fid=${this.Fid}&appid=${this.query.appid}`)
+              } else {
+                fromPage = encodeURIComponent(`/factoryProductlist?fid=${this.Fid}`)
+              }
+              this.$router.push({path: '/factoryBank', query: {fid: this.Fid, fromPage: fromPage}})
+            }
+          })
+          return false
+        }
         self.$vux.confirm.show({
           title: '确定要将该商品移至货源吗？',
-          onConfirm () {
+          onConfirm: () => {
             self.$vux.loading.show()
             let params = { id: self.clickdata.id, shelf: 1 }
             self.$http.post(`${ENV.BokaApi}/api/factory/productset`, params).then(function (res) {
