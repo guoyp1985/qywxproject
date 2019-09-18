@@ -519,6 +519,10 @@ export default {
           error = '导入成功'
           self.productdata.havefpimport = 1
         }
+        self.$vux.toast.show({
+          text: error,
+          time: self.$util.delay(error)
+        })
       })
     },
     importProduct () {
