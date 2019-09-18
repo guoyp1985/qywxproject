@@ -12,7 +12,7 @@
   <div class="containerarea font14 project-info-page">
     <div class="t-table padding10 bg-white mb10" style="box-sizing:border-box;">
       <div class="t-cell v_middle" style="width:70px;">
-        <img class="avatarimg3 imgcover v_middle" src="" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+        <img class="avatarimg3 imgcover v_middle" :src="infoData.factoryinfo.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
       </div>
       <div class="t-cell v_middle">
         <div class="clamp1 font14">{{infoData.factoryinfo.title}}</div>
