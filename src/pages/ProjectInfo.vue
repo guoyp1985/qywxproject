@@ -9,7 +9,7 @@
 * success   运营
 */
 <template>
-  <div id="project-info" class="containerarea font14" style="background-color:#f2f2f2;">
+  <div class="containerarea font14 project-info-page">
     <div class="t-table padding10 bg-white mb10" style="box-sizing:border-box;">
       <div class="t-cell v_middle" style="width:70px;">
         <img class="avatarimg3 imgcover v_middle" src="" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
@@ -75,35 +75,35 @@
       <div style="flex:1;">
         <div class="apply" :class="{'active' : infoData.havefactory}">
           <div class="font14">申请成为厂家: {{infoData.havefactory ? '已完成' : '未完成'}}</div>
-          <div class="mt5 font12 time-color">2019-08-28 12:00</div>
+          <!-- <div class="mt5 font12 time-color">2019-08-28 12:00</div> -->
         </div>
-        <div class="apply" :class="{'active' : infoData.havefactory}">
-          <div class="font14">申请小程序: {{infoData.havefactory ? '已完成' : '未完成'}}</div>
-          <div class="mt5 font12 time-color">2019-08-28 12:00</div>
+        <div class="apply" :class="{'active' : infoData.haveminiprograms}">
+          <div class="font14">申请小程序: {{infoData.haveminiprograms ? '已完成' : '未完成'}}</div>
+          <!-- <div class="mt5 font12 time-color">2019-08-28 12:00</div> -->
         </div>
         <div class="apply" :class="{'active' : infoData.havefactoryminiprograms}">
           <div class="font14">授权厂家小程序: {{infoData.havefactoryminiprograms ? '已完成' : '未完成'}}</div>
-          <div class="mt5 font12 time-color">2019-08-28 12:00</div>
+          <!-- <div class="mt5 font12 time-color">2019-08-28 12:00</div> -->
         </div>
         <div class="apply" :class="{'active' : infoData.bandfactroy}">
           <div class="font14">绑定厂家身份: {{infoData.bandfactroy ? '已完成' : '未完成'}}</div>
-          <div class="mt5 font12 time-color">2019-08-28 12:00</div>
+          <!-- <div class="mt5 font12 time-color">2019-08-28 12:00</div> -->
         </div>
         <div class="apply" :class="{'active' : infoData.haveminpay}">
           <div class="font14">配置自有微信支付: {{infoData.haveminpay ? '已完成' : '未完成'}}</div>
-          <div class="mt5 font12 time-color">2019-08-28 12:00</div>
+          <!-- <div class="mt5 font12 time-color">2019-08-28 12:00</div> -->
         </div>
         <div class="apply" :class="{'active' : infoData.havesubmit}">
           <div class="font14">上传代码提交审核: {{infoData.havesubmit ? '已完成' : '未完成'}}</div>
-          <div class="mt5 font12 time-color">2019-08-28 12:00</div>
+          <!-- <div class="mt5 font12 time-color">2019-08-28 12:00</div> -->
         </div>
         <div class="apply" :class="{'active' : infoData.haveproduct}">
           <div class="font14">上传商品: {{infoData.haveproduct ? '已完成' : '未完成'}}</div>
-          <div class="mt5 font12 time-color">2019-08-28 12:00</div>
+          <!-- <div class="mt5 font12 time-color">2019-08-28 12:00</div> -->
         </div>
         <div class="apply" :class="{'active' : infoData.success}">
           <div class="font14">开始运营: {{infoData.success ? '已完成' : '未完成'}}</div>
-          <div class="mt5 font12 time-color">2019-08-28 12:00</div>
+          <!-- <div class="mt5 font12 time-color">2019-08-28 12:00</div> -->
         </div>
       </div>
     </div>
@@ -164,7 +164,8 @@ export default {
       limit: 10,
       pagestart1: 0,
       pagestart2: 0,
-      infoData: {}
+      infoData: {},
+      statData: {}
     }
   },
   methods: {
@@ -191,102 +192,81 @@ export default {
     },
     /* 获取对应步骤是否完成 */
     getData () {
-      // console.log('走1方法')
-      // this.$vux.loading.show()
-      // const self = this
-      // let params = {limit: self.limit, pagestart: self.pageStart1}
-      // this.$http.get(`${ENV.BokaApi}/api/order/orderList/user`, {
-      //   params: params
-      // }).then((res) => {
-      //   let data = res.data
-      //   self.$vux.loading.hide()
-      //   let retdata = data.data ? data.data : data
-      //   switch (flag) {
-      //     case 0:
-      //       self.tabdata1 = self.tabdata1.concat(retdata)
-      //       self.distabdata1 = true
-      //       break
-      //     case 2:
-      //       self.tabdata2 = self.tabdata2.concat(retdata)
-      //       self.distabdata2 = true
-      //       break
-      //   }
-      // })
+      this.$http.post(`${ENV.BokaApi}/api/factory/factoryProgress`, {
+        fid: this.query.fid
+      }).then((res) => {
+        const data = res.data
+        if (data.flag) {
+          this.infoData = data.data
+        }
+      })
     },
     /* 获取统计数据 */
     getData2 () {
-      // console.log('走2方法')
-      // const self = this
-      // let params = {limit: self.limit, pagestart: self.pageStart2}
-    },
-    init () {
-      // this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/factory/inviterFactoryStat`, {
+        fid: this.query.fid
+      }).then((res) => {
+        const data = res.data
+        if (data.flag) {
+          this.statData = data.data
+        }
+      })
     }
   },
   created () {
-    this.init()
   },
   activated () {
     this.initData()
+    this.query = this.$route.query
     switch (this.selectedIndex) {
       case 0:
-        if (!this.tabdata1.length) {
-          this.getData()
-        }
+        this.getData()
         break;
       case 1:
-        if (!this.tadData2.length) {
-          this.getData2()
-        }
+        this.getData2()
         break;
     }
-    this.query = this.$route.query
-    this.$http.post(`${ENV.BokaApi}/api/factory/factoryProgress`, {
-      fid: this.query.fid
-    }).then((res) => {
-      const data = res.data
-      if (data.flag) {
-        this.infoData = data.data
-      }
-    })
   }
 }
 </script>
 
 <style lang="less">
-.b-tab .vux-tab .vux-tab-item.vux-tab-selected{color:#ea3a3a;}
-.b-tab .vux-tab-ink-bar{background-color:#ea3a3a;}
-.qbtn{
-  display: inline-block;
-  vertical-align: middle;
-  border-radius: 50px;
-  text-align: center;
-  padding: 5px 10px;
-  font-size: 14px;
-  line-height: 1;
-  color: #ea3a3a;
-  border: #ea3a3a 1px solid;
+.project-info-page{
+  background-color:#f2f2f2;
+  .b-tab .vux-tab .vux-tab-item.vux-tab-selected{color:#ea3a3a;}
+  .b-tab .vux-tab-ink-bar{background-color:#ea3a3a;}
+  .qbtn{
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 50px;
+    text-align: center;
+    padding: 5px 10px;
+    font-size: 14px;
+    line-height: 1;
+    color: #ea3a3a;
+    border: #ea3a3a 1px solid;
+  }
+  .active{background-color: #f8f9e4 !important;}
+  .time-color{color:#d7d7d7;}
+  .apply{padding:20px;box-sizing: border-box;background-color: #d7d7d7;margin-bottom: 15px;}
+  .radiusarea:after{content:"";clear:both;display:block;}
+  .radiusarea .item{float:left;width:33.333333%;text-align:center;}
+  .radiusarea .inner{padding:20px 10px 0 10px;}
+  .radiusarea .radius{margin:0 auto;width:60px;height:60px;border-radius:50%;background-color:#69d6e3;color:#fff;line-height:60px;}
+  .radiusarea .title{margin-top:5px;line-height:25px;}
+  .radiusarea .item:nth-child(1) .radius{background-color:#3ecbc0;}
+  .radiusarea .item:nth-child(2) .radius{background-color:#f0cb51;}
+  .radiusarea .item:nth-child(3) .radius{background-color:#aed370;}
+  .radiusarea .item:nth-child(4) .radius{background-color:#3ecbc0;}
+  .radiusarea .item:nth-child(5) .radius{background-color:#f0cb51;}
+  .radiusarea .item:nth-child(6) .radius{background-color:#aed370;}
+  .left-progress{position: relative;}
+  .left-progress:after{
+    content: "";display:block;
+    border-right:#d7d7d7 1px solid;
+  	position: absolute;top: 45px;left: 50%;bottom: 45px;
+  }
+  .progress{height: 76px;margin-bottom: 15px;}
+  .ball{border-radius: 50%;height: 20px;width: 20px;z-index: 99;border: 1px solid #d7d7d7;}
 }
-.active{background-color: #f8f9e4 !important;}
-.time-color{color:#d7d7d7;}
-.apply{height: 76px;box-sizing: border-box;padding: 15px;background-color: #d7d7d7;margin-bottom: 15px;}
-.radiusarea:after{content:"";clear:both;display:block;}
-.radiusarea .item{float:left;width:33.333333%;text-align:center;}
-.radiusarea .inner{padding:20px 10px 0 10px;}
-.radiusarea .radius{margin:0 auto;width:60px;height:60px;border-radius:50%;background-color:#69d6e3;color:#fff;line-height:60px;}
-.radiusarea .title{margin-top:5px;line-height:25px;}
-.radiusarea .item:nth-child(1) .radius{background-color:#3ecbc0;}
-.radiusarea .item:nth-child(2) .radius{background-color:#f0cb51;}
-.radiusarea .item:nth-child(3) .radius{background-color:#aed370;}
-.radiusarea .item:nth-child(4) .radius{background-color:#3ecbc0;}
-.radiusarea .item:nth-child(5) .radius{background-color:#f0cb51;}
-.radiusarea .item:nth-child(6) .radius{background-color:#aed370;}
-.left-progress{position: relative;}
-.left-progress:after{
-  content: "";display:block;
-  border-right:#d7d7d7 1px solid;
-	position: absolute;top: 45px;left: 50%;bottom: 45px;
-}
-.progress{height: 76px;margin-bottom: 15px;}
-.ball{border-radius: 50%;height: 20px;width: 20px;z-index: 99;border: 1px solid #d7d7d7;}
 </style>
