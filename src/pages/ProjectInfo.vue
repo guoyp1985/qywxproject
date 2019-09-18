@@ -229,6 +229,12 @@ export default {
         }
         break;
     }
+    this.query = this.$route.query
+    this.$http.get(`${ENV.BokaApi}/api/factory/factoryProgress`, {
+      params: {fid: this.query.fid}
+    }).then((res) => {
+      let data = res.data
+    })
   }
 }
 </script>

@@ -12,12 +12,6 @@
           <input ref="fileInput2" class="hide" type="file" name="files" @change="fileChange('qrcode')" />
         </form>
         <form class="addForm">
-          <div v-if="shareUser && shareUser.uid" class="form-item fg bg-white b-top">
-            <div class="t-table">
-              <div class="t-cell title-cell font14 v_middle">推荐人</div>
-              <div class="t-cell input-cell align_right" style="position:relative;">{{ shareUser.linkman }}</div>
-            </div>
-          </div>
           <div class="form-item fg bg-white b-top b-bottom">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Fatory name') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
@@ -270,8 +264,7 @@ export default {
       pageStart: 0,
       limit: 20,
       clickUser: null,
-      showMonthlyCommission: false,
-      shareUser: {}
+      showMonthlyCommission: false
     }
   },
   watch: {
@@ -497,9 +490,6 @@ export default {
         content: con,
         onConfirm: () => {
           self.$vux.loading.show()
-          if (self.shareUser && self.shareUser.uid) {
-            postData.inviter = self.shareUser.uid
-          }
           self.$http.post(`${ENV.BokaApi}/api/factory/add`, postData).then(function (res) {
             let data = res.data
             self.$vux.loading.hide()
@@ -660,11 +650,6 @@ export default {
         self.showSos = false
         self.showContainer = true
         this.$vux.loading.hide()
-        if (self.query.share_uid) {
-          self.$http.get(`${ENV.BokaApi}/api/getUser/${self.query.share_uid}`).then(res => {
-            self.shareUser = res.data
-          })
-        }
         self.getData()
       } else {
         this.$vux.loading.hide()
