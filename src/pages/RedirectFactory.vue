@@ -6,7 +6,6 @@
 <script>
 import ENV from 'env'
 import { User } from '#/storage'
-import urlParse from 'url-parse'
 export default {
   data () {
     return {
