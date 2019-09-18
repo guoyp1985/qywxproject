@@ -374,6 +374,8 @@ export default {
       self.getProductData()
     },
     onSubmit2 () {
+      console.log('走这搜索用户')
+      console.log(this.searchword2)
       const self = this
       self.$vux.loading.show()
       self.customerList = []
