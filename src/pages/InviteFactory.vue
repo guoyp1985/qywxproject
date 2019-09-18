@@ -38,7 +38,7 @@ export default {
   methods: {
     createQrcode () {
       this.$vux.loading.show()
-      this.$http.post(`${ENV.BokaApi}/api/factory/joinQRCode`, {
+      this.$http.post(`${ENV.BokaApi}/api/factory/joinfactory`, {
         fid: this.fid
       }).then(res => {
         let data = res.data

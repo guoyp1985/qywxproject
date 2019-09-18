@@ -41,7 +41,7 @@
                 <div class="pic-row flex_left">
                   <div class="pic-list flex_cell flex_left" style="overflow:hidden;">
                     <template v-for="(product,pindex) in item.factoryproduct">
-                      <img class="pic-img" :src="product.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+                      <img v-if="pindex < 4" class="pic-img" :src="product.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                     </template>
                   </div>
                   <div class="more-txt flex_center w100">
