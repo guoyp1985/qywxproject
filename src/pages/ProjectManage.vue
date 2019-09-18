@@ -20,11 +20,11 @@
             <div class="scroll_item pt10 pb10  pl12 pr12 bg-white mt10 list-shadow" @click="toInfo(item)" v-for="(item,index) in tabdata1" :item="item" :key="index">
               <div class="t-table">
                 <div class="t-cell v_middle" style="width:70px;">
-                  <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                  <img class="avatarimg3 imgcover v_middle" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
                 </div>
                 <div class="t-cell v_middle">
-                  <div class="clamp1 font14">完美生活旗舰店</div>
-                  <div class="clamp1 mt5 font14 color-gray">2019-09-12 15:36</div>
+                  <div class="clamp1 font14">{{item.title}}</div>
+                  <div class="clamp1 mt5 font14 color-gray">{{item.dateline | dateformat}}</div>
                 </div>
                 <div class="t-cell w60 align_right v_middle">
                   <div style="color:#f6a843;">待审核</div>
@@ -123,12 +123,18 @@
 
 <script>
 import { Sticky, Tab, TabItem } from 'vux'
-// import {User} from '#/storage'
+import {User} from '#/storage'
+import Time from '#/time'
 import ENV from 'env'
 
 export default {
   components: {
     Sticky, Tab, TabItem
+  },
+  filters: {
+    dateformat: function (value) {
+      return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
+    }
   },
   data () {
     return {
@@ -151,7 +157,8 @@ export default {
       refundContent: '',
       clickOrder: {},
       clickIndex: 0,
-      pageTop: 0
+      pageTop: 0,
+      Fid: 0
     }
   },
   methods: {
@@ -270,10 +277,15 @@ export default {
       this.$vux.loading.show()
     },
     refresh () {
-      // this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      // this.loginUser = User.get()
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.initData()
+      this.loginUser = User.get()
       this.query = this.$route.query
+      if (this.query.fid) {
+        this.Fid = this.query.fid
+      } else {
+        this.Fid = this.loginUser.fid
+      }
       let flag = parseInt(this.query.flag)
       switch (flag) {
         case 1:

@@ -1,3 +1,13 @@
+/*
+* havefactory  申请成为厂家
+* haveminiprograms   申请小程勋
+* havefactoryminiprograms   授权厂家小程序
+* bandfactroy   绑定厂家身份
+* haveminpay    自有微信支付
+* havesubmit    上传代码提交审核
+* haveproduct    商品
+* success   运营
+*/
 <template>
   <div id="project-info" class="containerarea font14" style="background-color:#f2f2f2;">
     <div class="t-table padding10 bg-white mb10" style="box-sizing:border-box;">
@@ -22,77 +32,77 @@
     <div v-if="selectedIndex === 0" class="bg-white padding15 db-flex">
       <div class="left-progress">
         <div class="progress w50 flex_center">
-          <div class="ball flex_center" :style="{'background-color' : true ? '#7ca6fa' : 'white'}">
-            <span class="font12 color-white" :class="{'al al-gou' : true}"></span>
+          <div class="ball flex_center" :style="{'background-color' : infoData.havefactory ? '#7ca6fa' : 'white'}">
+            <span class="font12 color-white" :class="{'al al-gou' : infoData.havefactory}"></span>
           </div>
         </div>
         <div class="progress w50 flex_center">
-          <div class="ball flex_center" :style="{'background-color' : false ? '#7ca6fa' : 'white'}">
-            <span class="font12 color-white" :class="{'al al-gou' : false}"></span>
+          <div class="ball flex_center" :style="{'background-color' : infoData.haveminiprograms ? '#7ca6fa' : 'white'}">
+            <span class="font12 color-white" :class="{'al al-gou' : infoData.haveminiprograms}"></span>
           </div>
         </div>
         <div class="progress w50 flex_center">
-          <div class="ball flex_center" :style="{'background-color' : false ? '#7ca6fa' : 'white'}">
-            <span class="font12 color-white" :class="{'al al-gou' : false}"></span>
+          <div class="ball flex_center" :style="{'background-color' : infoData.havefactoryminiprograms ? '#7ca6fa' : 'white'}">
+            <span class="font12 color-white" :class="{'al al-gou' : infoData.havefactoryminiprograms}"></span>
           </div>
         </div>
         <div class="progress w50 flex_center">
-          <div class="ball flex_center" :style="{'background-color' : false ? '#7ca6fa' : 'white'}">
-            <span class="font12 color-white" :class="{'al al-gou' : false}"></span>
+          <div class="ball flex_center" :style="{'background-color' : infoData.bandfactroy ? '#7ca6fa' : 'white'}">
+            <span class="font12 color-white" :class="{'al al-gou' : infoData.bandfactroy}"></span>
           </div>
         </div>
         <div class="progress w50 flex_center">
-          <div class="ball flex_center" :style="{'background-color' : false ? '#7ca6fa' : 'white'}">
-            <span class="font12 color-white" :class="{'al al-gou' : false}"></span>
+          <div class="ball flex_center" :style="{'background-color' : infoData.haveminpay ? '#7ca6fa' : 'white'}">
+            <span class="font12 color-white" :class="{'al al-gou' : infoData.haveminpay}"></span>
           </div>
         </div>
         <div class="progress w50 flex_center">
-          <div class="ball flex_center" :style="{'background-color' : false ? '#7ca6fa' : 'white'}">
-            <span class="font12 color-white" :class="{'al al-gou' : false}"></span>
+          <div class="ball flex_center" :style="{'background-color' : infoData.havesubmit ? '#7ca6fa' : 'white'}">
+            <span class="font12 color-white" :class="{'al al-gou' : infoData.havesubmit}"></span>
           </div>
         </div>
         <div class="progress w50 flex_center">
-          <div class="ball flex_center" :style="{'background-color' : false ? '#7ca6fa' : 'white'}">
-            <span class="font12 color-white" :class="{'al al-gou' : false}"></span>
+          <div class="ball flex_center" :style="{'background-color' : infoData.haveproduct ? '#7ca6fa' : 'white'}">
+            <span class="font12 color-white" :class="{'al al-gou' : infoData.haveproduct}"></span>
           </div>
         </div>
         <div class="progress w50 flex_center">
-          <div class="ball flex_center" :style="{'background-color' : false ? '#7ca6fa' : 'white'}">
-            <span class="font12 color-white" :class="{'al al-gou' : false}"></span>
+          <div class="ball flex_center" :style="{'background-color' : infoData.success ? '#7ca6fa' : 'white'}">
+            <span class="font12 color-white" :class="{'al al-gou' : infoData.success}"></span>
           </div>
         </div>
       </div>
       <div style="flex:1;">
-        <div class="apply" :class="{'active' : true}">
-          <div class="font14">申请成为厂家: 未完成</div>
+        <div class="apply" :class="{'active' : infoData.havefactory}">
+          <div class="font14">申请成为厂家: {{infoData.havefactory ? '已完成' : '未完成'}}</div>
           <div class="mt5 font12 time-color">2019-08-28 12:00</div>
         </div>
-        <div class="apply">
-          <div class="font14" :class="{'active' : false}">申请小程序: 未完成</div>
+        <div class="apply" :class="{'active' : infoData.havefactory}">
+          <div class="font14">申请小程序: {{infoData.havefactory ? '已完成' : '未完成'}}</div>
           <div class="mt5 font12 time-color">2019-08-28 12:00</div>
         </div>
-        <div class="apply">
-          <div class="font14" :class="{'active' : false}">授权厂家小程序: 未完成</div>
+        <div class="apply" :class="{'active' : infoData.havefactoryminiprograms}">
+          <div class="font14">授权厂家小程序: {{infoData.havefactoryminiprograms ? '已完成' : '未完成'}}</div>
           <div class="mt5 font12 time-color">2019-08-28 12:00</div>
         </div>
-        <div class="apply">
-          <div class="font14" :class="{'active' : false}">绑定厂家身份: 未完成</div>
+        <div class="apply" :class="{'active' : infoData.bandfactroy}">
+          <div class="font14">绑定厂家身份: {{infoData.bandfactroy ? '已完成' : '未完成'}}</div>
           <div class="mt5 font12 time-color">2019-08-28 12:00</div>
         </div>
-        <div class="apply">
-          <div class="font14" :class="{'active' : false}">配置自有微信支付: 未完成</div>
+        <div class="apply" :class="{'active' : infoData.haveminpay}">
+          <div class="font14">配置自有微信支付: {{infoData.haveminpay ? '已完成' : '未完成'}}</div>
           <div class="mt5 font12 time-color">2019-08-28 12:00</div>
         </div>
-        <div class="apply">
-          <div class="font14" :class="{'active' : false}">上传代码提交审核: 未完成</div>
+        <div class="apply" :class="{'active' : infoData.havesubmit}">
+          <div class="font14">上传代码提交审核: {{infoData.havesubmit ? '已完成' : '未完成'}}</div>
           <div class="mt5 font12 time-color">2019-08-28 12:00</div>
         </div>
-        <div class="apply">
-          <div class="font14" :class="{'active' : false}">上传商品: 未完成</div>
+        <div class="apply" :class="{'active' : infoData.haveproduct}">
+          <div class="font14">上传商品: {{infoData.haveproduct ? '已完成' : '未完成'}}</div>
           <div class="mt5 font12 time-color">2019-08-28 12:00</div>
         </div>
-        <div class="apply">
-          <div class="font14" :class="{'active' : false}">开始运营: 未完成</div>
+        <div class="apply" :class="{'active' : infoData.success}">
+          <div class="font14">开始运营: {{infoData.success ? '已完成' : '未完成'}}</div>
           <div class="mt5 font12 time-color">2019-08-28 12:00</div>
         </div>
       </div>
@@ -137,7 +147,7 @@
 <script>
 import { Tab, TabItem } from 'vux'
 // import {User} from '#/storage'
-// import ENV from 'env'
+import ENV from 'env'
 
 export default {
   components: {
@@ -153,7 +163,8 @@ export default {
       tabdata2: [],
       limit: 10,
       pagestart1: 0,
-      pagestart2: 0
+      pagestart2: 0,
+      infoData: {}
     }
   },
   methods: {
@@ -230,10 +241,13 @@ export default {
         break;
     }
     this.query = this.$route.query
-    this.$http.get(`${ENV.BokaApi}/api/factory/factoryProgress`, {
-      params: {fid: this.query.fid}
+    this.$http.post(`${ENV.BokaApi}/api/factory/factoryProgress`, {
+      fid: this.query.fid
     }).then((res) => {
-      let data = res.data
+      const data = res.data
+      if (data.flag) {
+        this.infoData = data.data
+      }
     })
   }
 }
