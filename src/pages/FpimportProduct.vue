@@ -136,12 +136,8 @@
       <div v-if="loginUser.isretailer" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
         <!-- <div class="align_center flex_center flex_cell" v-if="!loginUser.retailerinfo.fid || loginUser.retailerinfo.fid == query.fid"> -->
         <div class="align_center flex_center flex_cell">
-          <div class="btn-bottom-red flex_center" style="width:90%;" v-if="productdata.haveimport == 1">已上架</div>
-          <div class="btn-bottom-red flex_center" style="width:90%;" v-else-if="productdata.haveimport == -1" @click="importEvent">上架到店铺</div>
-          <div class="btn-bottom-red flex_center" style="width:90%;" v-else-if="productdata.haveimport == 0" @click="importEvent">重新上架到店铺</div>
-        </div>
-        <div class="align_center flex_center flex_cell">
-          <div @click="toStore" class="btn-bottom-orange flex_center" style="width:90%;">我的店铺</div>
+          <div class="btn-bottom-red flex_center" style="width:90%;" v-if="productdata.haveshelf == 1">已导入</div>
+          <div class="btn-bottom-red flex_center" style="width:90%;" v-else @click="importEvent">导入</div>
         </div>
       </div>
       <div v-transfer-dom>
@@ -257,7 +253,7 @@ export default {
     return {
       loginUser: {},
       retailerInfo: {},
-      module: 'factoryproduct',
+      module: 'fpimport',
       query: {},
       disTimeout: true,
       showHelpModal: false,
@@ -299,7 +295,8 @@ export default {
       previewerOptionsPhoto: [],
       VipFree: false,
       showJd: false,
-      showTb: false
+      showTb: false,
+      Fid: 0
     }
   },
   watch: {
@@ -511,17 +508,15 @@ export default {
     },
     ajaxImport () {
       const self = this
-      let params = {id: self.query.id}
-      if (self.query.wid) {
-        params.wid = self.query.wid
-      }
       self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/factory/importFactoryProduct`, params).then((res) => {
+      self.$http.post(`${ENV.BokaApi}/api/factory/productshelf`, {
+        fid: self.Fid, module: 'factoryproduct', moduleid: self.query.id
+      }).then((res) => {
         let data = res.data
         self.$vux.loading.hide()
         let error = data.error
         if (data.flag === 1) {
-          error = '上架成功！该商品已显示在你的店铺中！'
+          error = '导入成功'
           self.productdata.haveimport = 1
         }
         self.$vux.toast.show({
@@ -538,11 +533,11 @@ export default {
     },
     importProduct () {
       const self = this
-      if (self.productdata.haveimport === 0) {
+      if (self.productdata.join) {
         self.ajaxImport()
       } else {
         self.$vux.confirm.show({
-          content: '确定将该商品上架到店铺并进行出售吗？',
+          content: '确定导入商品并加盟该厂家吗？',
           onConfirm: () => {
             self.ajaxImport()
           }
@@ -578,7 +573,7 @@ export default {
     getData () {
       const self = this
       this.productid = this.query.id
-      let infoparams = { id: this.productid, module: this.module, fid: self.query.fid }
+      let infoparams = {id: this.productid, module: this.module, fid: self.query.fid, myfid: this.loginUser.fid}
       if (this.query.share_uid) {
         infoparams.share_uid = this.query.share_uid
       }
@@ -652,6 +647,11 @@ export default {
         User.set(data)
         this.retailerInfo = this.loginUser.retailerinfo
         this.query = this.$route.query
+        if (this.query.fid) {
+          this.Fid = this.query.fid
+        } else {
+          this.Fid = this.loginUser.fid
+        }
         if (this.query.module) {
           this.module = this.query.module
         }

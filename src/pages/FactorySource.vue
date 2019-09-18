@@ -10,7 +10,11 @@
           <div class="font12 clamp2">应打款金额: {{ $t('RMB') }}1000.00</div>
         </div>
         <div class="w100 flex_right">
-          <div class="flex_center bg-white color-theme" style="width:80px;padding:5px 0;border-radius:20px;" @click="toBill">详细账单</div>
+          <div>
+            <div class="flex_center bg-white color-theme" style="width:80px;padding:5px 0;border-radius:20px;" @click="toBill">详细账单</div>
+            <div class="flex_center bg-white color-theme mt5" style="width:80px;padding:5px 0;border-radius:20px;" v-if="!joinStatus" @click="toJoin">加盟厂家</div>
+            <div class="flex_center color-white mt5" style="width:80px;padding:5px 0;border-radius:20px;" v-else @click="toJoin">已加盟</div>
+          </div>
         </div>
       </div>
     </div>
@@ -91,7 +95,9 @@ export default {
       showBottom: false,
       productCount: 0,
       newsCount: 0,
-      Fid: 0
+      Fid: 0,
+      joinStatus: 0,
+      disJoin: false
     }
   },
   watch: {
@@ -118,8 +124,8 @@ export default {
       this.$router.push({path: '/factoryBill', query: {fid: this.Fid}})
     },
     toProduct (item) {
-      let params = this.$util.handleAppParams(this.query, {id: item.id, fid: this.Fid})
-      this.$router.push({path: '/factoryProduct', query: params})
+      let params = this.$util.handleAppParams(this.query, {id: item.id, fid: this.Fid, module: 'fpimport'})
+      this.$router.push({path: '/fpimportProduct', query: params})
     },
     toStore () {
       if (this.query.from) {
@@ -153,10 +159,10 @@ export default {
       let con = ''
       let ajaxUrl = ''
       if (type === 'product') {
-        con = `确定要导入该厂家的${this.productCount}件商品？`
+        con = `确定要导入该厂家的商品？`
         ajaxUrl = `${ENV.BokaApi}/api/factory/fastImportFactoryProduct`
       } else if (type === 'factorynews') {
-        con = `确定要导入该厂家的${this.newsCount}篇文章？`
+        con = `确定要导入该厂家的文章？`
         ajaxUrl = `${ENV.BokaApi}/api/factory/fastImportFactoryNews`
       }
       self.$vux.confirm.show({
@@ -212,19 +218,52 @@ export default {
     },
     upEvent (item, index) {
       const self = this
-      self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/factory/productshelf`, {
-        fid: self.Fid, module: 'factoryproduct', moduleid: item.id
-      }).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        self.$vux.toast.show({
-          text: data.error,
-          type: data.flag === 1 ? 'success' : 'warn',
-          time: self.$util.delay(data.error)
-        })
-        if (data.flag) {
-          this.tabData1[index].haveshelf = 1
+      let con = '确定导入商品吗？'
+      if (!this.joinStatus) {
+        con = '确定导入商品并加盟该厂家吗？'
+      }
+      self.$vux.confirm.show({
+        content: con,
+        onConfirm: () => {
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/factory/productshelf`, {
+            fid: self.loginUser.fid, module: 'factoryproduct', moduleid: item.moduleid
+          }).then(function (res) {
+            let data = res.data
+            self.$vux.loading.hide()
+            self.$vux.toast.show({
+              text: data.error,
+              type: data.flag === 1 ? 'success' : 'warn',
+              time: self.$util.delay(data.error)
+            })
+            if (data.flag) {
+              this.tabData1[index].haveshelf = 1
+              this.joinStatus = true
+            }
+          })
+        }
+      })
+    },
+    toJoin () {
+      const self = this
+      self.$vux.confirm.show({
+        content: '确定加盟该厂家吗？',
+        onConfirm: () => {
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/factory/fpimportApply`, {
+            fromfid: self.Fid, fid: self.loginUser.fid
+          }).then(function (res) {
+            let data = res.data
+            self.$vux.loading.hide()
+            self.$vux.toast.show({
+              text: data.error,
+              type: data.flag === 1 ? 'success' : 'warn',
+              time: self.$util.delay(data.error)
+            })
+            if (data.flag) {
+              self.joinStatus = 1
+            }
+          })
         }
       })
     },
@@ -287,39 +326,38 @@ export default {
         if (self.tabData1.length > 0 || self.tabData2.length > 0) {
           self.showBottom = true
         }
+        self.joinStatus = data.join
+        self.disJoin = true
       })
     },
     refresh () {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       console.log(this.query)
-      if (!this.query.fid || this.query.fid !== parseInt(this.$route.query.fid)) {
-        this.initData()
-        this.loginUser = User.get()
-        if (!self.loginUser.isretailer) {
-          self.showBottom = true
-        } else {
-          self.showBottom = false
-        }
-        this.query = this.$route.query
+      this.initData()
+      this.loginUser = User.get()
+      this.query = this.$route.query
+      if (this.query.fid) {
         this.Fid = this.query.fid
-        self.$vux.loading.show()
-        self.$http.get(`${ENV.BokaApi}/api/factory/info`, {
-          params: { fid: self.Fid }
-        }).then(res => {
-          self.$vux.loading.hide()
-          let data = res.data
-          let retdata = data.data ? data.data : data
-          self.viewData = retdata
-          if (this.tabData1.length < limit) {
-            self.$vux.loading.show()
-            pageStart1 = 0
-            this.disTabData1 = false
-            this.tabData1 = []
-            this.getData1()
-          }
-        })
+      } else {
+        this.Fid = this.loginUser.fid
       }
+      self.$vux.loading.show()
+      self.$http.get(`${ENV.BokaApi}/api/factory/info`, {
+        params: { fid: self.Fid }
+      }).then(res => {
+        self.$vux.loading.hide()
+        let data = res.data
+        let retdata = data.data ? data.data : data
+        self.viewData = retdata
+        if (this.tabData1.length < limit) {
+          self.$vux.loading.show()
+          pageStart1 = 0
+          this.disTabData1 = false
+          this.tabData1 = []
+          this.getData1()
+        }
+      })
     }
   },
   created () {

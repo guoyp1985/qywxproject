@@ -603,6 +603,9 @@ export default {
           postData.ordertype = this.query.ordertype
         }
         postData.postage = this.postPostage
+        if (this.query.fromfid) {
+          postData.fromfid = this.query.fromfid
+        }
         self.$http.post(`${ENV.BokaApi}/api/order/addOrder`, postData).then(function (res) {
           let data = res.data
           self.isShowLoading = false
