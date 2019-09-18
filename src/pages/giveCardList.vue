@@ -103,7 +103,6 @@ export default {
       })
     },
     saveevent () {
-        // 跳转专属优惠券创建页面
       let rparams = this.$util.handleAppParams(this.query, {fid: this.Fid})
       this.$router.push({path: '/addCard', query: rparams})
     }
