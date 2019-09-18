@@ -9,14 +9,13 @@
                 <span>奖励语</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span>
               </div>
               <div class="t-cell input-cell v_middle db-flex" style="position:relative;">
-                <x-input class="flex_cell" v-model='submitdata.totalcount' type="number" placeholder="请输入奖励语" ></x-input>
-                <div class="flex_right w30">张</div>
+                <x-input class="flex_cell" v-model='submitdata.totalcount' type="text" placeholder="请输入奖励语" ></x-input>
               </div>
             </div>
           </div>
         </div>
         <!-- 选择客户 -->
-        <div style="margin: 0px 10px 0px 10px;background-color: white;border-radius:5px">
+        <!-- <div style="margin: 10px 10px 10px 10px;background-color: white;border-radius:5px">
           <div class="form-item required">
             <div class="t-table">
               <div class="t-cell title-cell font14 v_middle w100">
@@ -29,8 +28,35 @@
               </div>
             </div>
           </div>
+        </div> -->
+        <div style="margin: 0px 10px 10px 10px;background-color: white;border-radius:5px">
+          <div class="form-item required">
+            <div class="t-table">
+              <div class="t-cell title-cell font14 v_middle w100">
+                <span>选择客户</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span>
+              </div>
+              <div v-if="selectedCustomer" class="t-cell title-cell font14 v_middle">
+                <div class="t-table">
+                  <div class="t-cell v_middle" style="width:50px;">
+                    <img class="v_middle imgcover" style="width:40px;height:40px;" :src="selectedCustomer.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+                  </div>
+                  <div class="t-cell v_middle">
+                    <div class="clamp1">{{selectedCustomer.linkman}}</div>
+                  </div>
+                  <div class="t-cell align_center v_middle" style="width:60px;" v-if="!query.id">
+                    <div class="qbtn color-red btnchange" style="border:#ff3b30 1px solid;line-height:1;" @click="selectevent2">修改</div>
+                  </div>
+                </div>
+              </div>
+              <div v-else class="t-cell title-cell font14 v_middle">
+                <div class="qbtn flex_center color-orange mt10" style="border:orange 1px solid;width:90%;line-height:1;padding:4px 0;" @click="selectevent2">
+                  <span class="mr5 v_middle db-in" style="margin-top:-3px;">+</span><span class="v_middle db-in">选择领券用户</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div style="margin: 0px 10px 0px 10px;background-color: white;border-radius:5px">
+        <div style="margin: 0px 10px 10px 10px;background-color: white;border-radius:5px">
           <div class="form-item required">
             <div class="t-table">
               <div class="t-cell title-cell font14 v_middle w100">
@@ -51,7 +77,7 @@
             </div>
           </div>
         </div>
-        <div style="margin: 10px 10px 10px 10px;background-color: white;border-radius:5px">
+        <div style="margin: 0px 10px 10px 10px;background-color: white;border-radius:5px">
           <div class="form-item required">
             <div class="t-table">
               <div class="t-cell title-cell font14 v_middle w100">
@@ -85,8 +111,9 @@
         </div>
       </form>
     </div>
-    <div class="s-bottom border-box flex_center color-white list-shadow02" style="background-color:#ea3a3a;">
-      <div class="flex_cell flex_center color-white" @click="saveevent">保存</div>
+    <div class="s-bottom border-box flex_center color-white list-shadow02">
+      <div class="flex_cell flex_center color-white h_100" style="background-color:#f6a843;" @toCardList>发放记录</div>
+      <div class="flex_cell flex_center color-white h_100" style="background-color:#ea3a3a;" @click="saveevent">立即创建</div>
     </div>
     <!-- 点击单个商品弹出全部厂家商品列表区域 -->
     <div v-transfer-dom class="x-popup">
@@ -136,6 +163,49 @@
         </div>
       </popup>
     </div>
+    <!-- 点击选择用户时弹出 -->
+    <div v-transfer-dom class="x-popup">
+      <popup v-model="showCustomerList" height="100%">
+        <div class="popup1">
+          <div class="popup-top flex_center">选择用户</div>
+          <div ref="scrollCustomer" @scroll="handleScroll2('scrollCustomer')" class="popup-middle">
+            <search
+              class="x-search"
+              v-model="searchword2"
+              :auto-fixed="autofixed"
+              @on-submit="onSubmit2"
+              @on-change="onChange2"
+              @on-cancel="onCancel2"
+              ref="search">
+            </search>
+            <div class="scroll_list" v-if="disCustomerData">
+              <div v-if="!customerList || !customerList.length" class="scroll_item padding10 color-gray align_center">
+                <template v-if="searchresult2">
+                  <div class="flex_center" style="height:80px;">暂无搜索结果</div>
+                </template>
+                <template v-else>
+                  <div class="flex_center" style="height:80px;">暂无客户</div>
+                </template>
+              </div>
+              <check-icon class="x-check-icon scroll_item" v-for="(item,index) in customerList" :key="item.uid" :value.sync="item.checked" @click.native.stop="radioclick2(item,index)">
+                <div class="t-table">
+                  <div class="t-cell pic v_middle w50">
+                    <img class="v_middle imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" style="width:40px;height:40px;" />
+                  </div>
+                  <div class="t-cell v_middle" style="color:inherit;">
+                    <div class="clamp1">{{item.linkman}}</div>
+                  </div>
+                </div>
+              </check-icon>
+            </div>
+          </div>
+          <div class="popup-bottom flex_center">
+            <div class="flex_cell bg-gray color-white h_100 flex_center" @click="closepopup2">{{ $t('Close') }}</div>
+            <div class="flex_cell bg-green color-white h_100 flex_center" @click="confirmpopup2">{{ $t('Confirm txt') }}</div>
+          </div>
+        </div>
+      </popup>
+    </div>
   </div>
 </template>
 <i18n>
@@ -172,26 +242,34 @@ export default {
       selectdatetxt1: '选择开始时间',
       selectdatetxt2: '选择结束时间',
       pagestart1: 0,
+      pagestart2: 0,
       limit: 20,
       singlePro: false,
       allPro: false,
       autofixed: false,
       showProductList: false,
+      showCustomerList: false,
       showproductitem: false,
       productList: [],
+      customerList: [],
       searchword: '',
+      searchword2: '',
       searchresult: false,
+      searchresult2: false,
       disProductData: false,
+      disCustomerData: false,
       selectpopupdata: null,
       selectproduct: [],
       selectProductData: [],
-      selectProductIndex: -1,
       dataGetting: false,
+      dataGetting2: false,
       loginUser: {},
       Fid: 0,
       submitIng: false,
       checkedProduct: null,
-      selectedProduct: null
+      checkedCustomer: null,
+      selectedProduct: null,
+      selectedCustomer: null
     }
   },
   watch: {
@@ -229,12 +307,15 @@ export default {
       this.selectdatetxt1 = '选择开始时间'
       this.selectdatetxt2 = '选择结束时间'
       this.showProductList = false
+      this.showCustomerList = false
       this.showproductitem = false
       this.selectpopupdata = null
       this.selectProductData = []
       this.submitIng = false
       this.checkedProduct = null
+      this.checkedCustomer = null
       this.selectedProduct = null
+      this.selectedCustomer = null
     },
     showxdate1 () {
       this.visibility1 = true
@@ -277,9 +358,13 @@ export default {
         this.singlePro = true
         self.getProductData()
       }
-      // 当点击修改的时候
-      // console.log('----当前点击的对象----')
-      // console.log(self.selectpopupdata)
+    },
+    selectevent2 () {
+      const self = this
+      self.showCustomerList = true
+      if (self.customerList.length === 0) {
+        self.getCustomerData()
+      }
     },
     onSubmit () {
       const self = this
@@ -288,8 +373,18 @@ export default {
       self.pagestart1 = 0
       self.getProductData()
     },
+    onSubmit2 () {
+      const self = this
+      self.$vux.loading.show()
+      self.customerList = []
+      self.pagestart2 = 0
+      self.getCustomerData()
+    },
     onChange (val) {
       this.searchword = val
+    },
+    onChange2 (val) {
+      this.searchword2 = val
     },
     onCancel () {
       const self = this
@@ -299,9 +394,18 @@ export default {
       self.pagestart1 = 0
       self.getProductData()
     },
+    onCancel2 () {
+      const self = this
+      self.searchword2 = ''
+      self.$vux.loading.show()
+      self.customerList = []
+      self.pagestart2 = 0
+      self.getCustomerData()
+    },
     handleScroll (refname) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      console.log(scrollarea)
       this.$util.scrollEvent({
         element: scrollarea,
         callback: () => {
@@ -309,6 +413,20 @@ export default {
             self.pagestart1++
             self.$vux.loading.show()
             self.getProductData()
+          }
+        }
+      })
+    },
+    handleScroll2 (refname) {
+      const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      this.$util.scrollEvent({
+        element: scrollarea,
+        callback: () => {
+          if (self.customerList.length === (self.pagestart2 + 1) * self.limit) {
+            self.pagestart2++
+            self.$vux.loading.show()
+            self.getCustomerData()
           }
         }
       })
@@ -338,6 +456,31 @@ export default {
         self.productList = self.productList.concat(retdata)
         this.disProductData = true
         this.dataGetting = false
+      })
+    },
+    getCustomerData () {
+      // 获取客户列表数据 admin/members/getMinData?
+      const self = this
+      let params = {tolevel: -1, fid: this.loginUser.fid, pagestart: self.pagestart2, limit: self.limit, appid: this.query.appid}
+      let ajaxurl = `${ENV.BokaApi}/api/factory/mincustomerList`
+      let keyword = self.searchword2
+      if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
+        params.keyword = keyword
+      }
+      if (self.dataGetting2) return false
+      self.dataGetting2 = true
+      self.$http.post(ajaxurl, params).then((res) => {
+        let data = res.data
+        self.$vux.loading.hide()
+        if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
+          self.searchresult2 = true
+        } else {
+          self.searchresult2 = false
+        }
+        let retdata = data.data ? data.data : data
+        self.customerList = self.customerList.concat(retdata)
+        this.disCustomerData = true
+        this.dataGetting2 = false
       })
     },
     getCardInfoById () {
@@ -373,22 +516,6 @@ export default {
         }
       })
     },
-    _radioclick (data, index) {
-      const self = this
-      if (data.checked) {
-        self.selectpopupdata = data
-        self.selectProductIndex = index
-      } else {
-        self.selectpopupdata = null
-        self.selectProductIndex = -1
-      }
-      for (let d of self.productList) {
-        if (d.id !== data.id && d.checked) {
-          delete d.checked
-          break
-        }
-      }
-    },
     radioclick (data, index) {
       if (data.checked) {
         this.checkedProduct = data
@@ -402,9 +529,18 @@ export default {
         }
       }
     },
-    _closepopup () {
-      this.selectpopupdata = null
-      this.showProductList = false
+    radioclick2 (data, index) {
+      if (data.checked) {
+        this.checkedCustomer = data
+      } else {
+        this.checkedCustomer = null
+      }
+      for (let d of this.customerList) {
+        if (d.uid !== data.uid && d.checked) {
+          delete d.checked
+          break
+        }
+      }
     },
     closepopup () {
       this.showProductList = false
@@ -416,43 +552,35 @@ export default {
         }
       }
     },
-    afterSelectProduct () {
-      const self = this
-      self.selectproduct = self.selectpopupdata
-      // if (self.selectProductData) {  // 此处循环判断选中的商品是否已经存在 一张优惠券对应多个商品
-      //   for (var i = 0; i < self.selectProductData.length; i++) {
-      //     if (self.selectproduct === self.selectProductData[i]) {
-      //       self.selectProductData.splice(i, 1)
-      //     }
-      //   }
-      //   self.selectProductData.push(self.selectproduct)
-      // } else {
-      self.selectProductData[0] = self.selectproduct
-      // }
-      console.log('------已选择的商品------')
-      console.log(self.selectProductData)
-      self.submitdata.fpid = self.selectproduct.id
-      self.showProductList = false
-      self.showproductitem = true
-    },
-    _confirmpopup () {
-      const self = this
-      if (!this.selectpopupdata || !this.selectpopupdata.id) {
-        self.$vux.toast.text('请选择商品', 'middle')
-        return false
-      } else if (this.selectpopupdata.storage <= 0) {
-        self.$vux.toast.text('该商品库存为0，请补充库存', 'middle')
-        return false
-      } else if (this.selectpopupdata.price <= this.submitdata.ordermoney) {
-        console.log('当前选中商品金额')
-        console.log(this.selectpopupdata.price)
-        console.log('所设置的满减金额')
-        console.log(this.submitdata.ordermoney)
-        self.$vux.toast.text('该商品价格低于满减金额，请重新选择', 'middle')
-        return false
+    closepopup2 () {
+      this.showCustomerList = false
+      this.checkedCustomer = null
+      for (let d of this.customerList) {
+        if (d.checked) {
+          delete d.checked
+          break
+        }
       }
-      self.afterSelectProduct()
     },
+    // afterSelectProduct () {
+    //   const self = this
+    //   self.selectproduct = self.selectpopupdata
+    //   // if (self.selectProductData) {  // 此处循环判断选中的商品是否已经存在 一张优惠券对应多个商品
+    //   //   for (var i = 0; i < self.selectProductData.length; i++) {
+    //   //     if (self.selectproduct === self.selectProductData[i]) {
+    //   //       self.selectProductData.splice(i, 1)
+    //   //     }
+    //   //   }
+    //   //   self.selectProductData.push(self.selectproduct)
+    //   // } else {
+    //   self.selectProductData[0] = self.selectproduct
+    //   // }
+    //   console.log('------已选择的商品------')
+    //   console.log(self.selectProductData)
+    //   self.submitdata.fpid = self.selectproduct.id
+    //   self.showProductList = false
+    //   self.showproductitem = true
+    // },
     confirmpopup () {
       let curProduct = this.checkedProduct
       if (!curProduct || !curProduct.id) {
@@ -480,65 +608,43 @@ export default {
         this.closepopup()
       }
     },
+    confirmpopup2 () {
+      let curCustomer = this.checkedCustomer
+      if (!curCustomer || !curCustomer.uid) {
+        this.$vux.toast.text('请选择用户', 'middle')
+        return false
+      } else {
+        this.selectedCustomer = curCustomer
+        this.closepopup2()
+      }
+    },
     saveevent () {
       const self = this
       if (this.submitIng) return false
       let facemoney = self.submitdata.facemoney
       let ordermoney = self.submitdata.ordermoney
+      if (!self.selectedCustomer) {
+        self.$vux.toast.text('请选择发放的用户', 'middle')
+        return false
+      }
       if (!self.selectedProduct) {
         self.$vux.toast.text('请选择至少一个商品', 'middle')
-        return false
-      }
-      if (!self.submitdata.starttime || self.submitdata.starttime === '') {
-        self.$vux.toast.text('请选择开始时间', 'middle')
-        return false
-      }
-      if (!self.submitdata.endtime || self.submitdata.endtime === '') {
-        self.$vux.toast.text('请选择结束时间', 'middle')
-        return false
-      }
-      let starttime = new Date(self.submitdata.starttime.replace(/-/g, '/')).getTime()
-      let endtime = new Date(self.submitdata.endtime.replace(/-/g, '/')).getTime()
-      let nowtime = new Date().getTime()
-      console.log('starttime', starttime)
-      console.log('endtime', endtime)
-      console.log('nowtime', nowtime)
-      if (endtime <= starttime) {
-        self.$vux.toast.text('结束时间应大于开始时间', 'middle')
-        return false
-      }
-      if (endtime <= nowtime) {
-        self.$vux.toast.text('结束时间应大于当前时间', 'middle')
-        return false
-      }
-      if (self.submitdata.totalcount <= 0 || !self.submitdata.totalcount) {
-        self.$vux.toast.text('请输入正确的优惠券数量', 'middle')
         return false
       }
       if (isNaN(facemoney) || isNaN(ordermoney) || !facemoney || parseFloat(facemoney.replace(/,/g, '')) <= 0 || !ordermoney || parseFloat(ordermoney.replace(/,/g, '')) <= 0) {
         self.$vux.toast.text('请填写正确的满减金额', 'middle')
         return false
       }
-      // if (this.selectpopupdata.price <= this.submitdata.ordermoney) {
-      //   console.log('当前选中商品金额')
-      //   console.log(this.selectpopupdata.price)
-      //   console.log('所设置的满减金额')
-      //   console.log(this.submitdata.ordermoney)
-      //   self.$vux.toast.text('该商品价格低于满减金额，请重新选择', 'middle')
-      //   return false
-      // }
       // 无论是创建优惠券 还是修改优惠券 统一传对象
       console.log('------submitdata------')
       console.log(self.submitdata)
-      if (this.query.id) {
-        self.submitdata.id = this.query.id
+      let params = {fid: this.Fid, touid: this.selectedCustomer.uid, fpid: this.selectedProduct.id, facemoney: facemoney, ordermoney: ordermoney}
+      if (this.query.appid) {
+        params.appid = this.query.appid
       }
-      this.submitdata.fpid = this.selectedProduct.id
       this.submitIng = true
       this.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/miniactivity/add`, {
-        ...self.submitdata, type: 'factorycard', fid: this.Fid
-      }).then(res => {
+      self.$http.post(`${ENV.BokaApi}/api/card/giveFactoryCard`, params).then(res => {
         let data = res.data
         self.$vux.loading.hide()
         self.$vux.toast.show({
@@ -554,6 +660,10 @@ export default {
           }
         })
       })
+    },
+    toCardList () {
+      let rparams = self.$util.handleAppParams(self.query, {fid: this.Fid, refresh: 1})
+      self.$router.push({path: '/giveCardList', query: rparams})
     }
   },
   created () {
@@ -565,9 +675,6 @@ export default {
     this.query = this.$route.query
     if (this.query.fid) {
       this.Fid = this.query.fid
-    }
-    if (this.query.id) {
-      this.getCardInfoById()
     }
   }
 }
