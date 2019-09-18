@@ -181,7 +181,7 @@ export default {
       this.clickIndex = 0
     },
     toInfo (item) {
-      this.$router.push({path: '/projectInfo', query: {id: item.id, fid: item.fid}})
+      this.$router.push({path: '/projectInfo', query: {fid: item.id}})
     },
     toggleTab () {
       console.log('in toggleTab')
