@@ -497,6 +497,9 @@ export default {
         content: con,
         onConfirm: () => {
           self.$vux.loading.show()
+          if (self.shareUser && self.shareUser.uid) {
+            postData.inviter = self.shareUser.uid
+          }
           self.$http.post(`${ENV.BokaApi}/api/factory/add`, postData).then(function (res) {
             let data = res.data
             self.$vux.loading.hide()

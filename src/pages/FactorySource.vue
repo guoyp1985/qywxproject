@@ -45,13 +45,13 @@
         </div>
       </div>
     </div>
-    <template v-if="showBottom && tabData1 && tabData1.length">
+    <!-- <template v-if="showBottom && tabData1 && tabData1.length">
       <div class="s-bottom list-shadow flex_center bg-white pl12 pr12">
         <div class="align_center flex_center flex_cell">
           <div class="flex_center btn-bottom-red" style="width:85%;" @click="upAll('product')">一键导入商品</div>
         </div>
       </div>
-    </template>
+    </template> -->
   </div>
 </template>
 
