@@ -137,20 +137,40 @@
       <div class="radiusarea mb10 pb15 bg-white list-shadow01">
         <div class="item">
           <div class="inner">
-            <div class="radius font12 clamp1">￥10000</div>
+            <div class="radius font12 clamp1">￥{{statData.mymonthmoney}}</div>
             <div class="title color-gray">本月我的收入</div>
           </div>
         </div>
         <div class="item">
           <div class="inner">
-            <div class="radius font12 clamp1">￥100000</div>
+            <div class="radius font12 clamp1">￥{{statData.monthmoney}}</div>
             <div class="title color-gray">本月销售额</div>
           </div>
         </div>
         <div class="item">
           <div class="inner">
-            <div class="radius font12 clamp1">￥3000</div>
+            <div class="radius font12 clamp1">￥{{statData.todaymoney}}</div>
             <div class="title color-gray">今日销售额</div>
+          </div>
+        </div>
+      </div>
+      <div class="radiusarea mb10 pb15 bg-white list-shadow01">
+        <div class="item">
+          <div class="inner">
+            <div class="radius font12 clamp1">{{statData.productcount}}</div>
+            <div class="title color-gray">上架商品</div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="inner">
+            <div class="radius font12 clamp1">{{statData.orderscount}}</div>
+            <div class="title color-gray">本月订单</div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="inner">
+            <div class="radius font12 clamp1">{{statData.retailercount}}</div>
+            <div class="title color-gray">兼职卖家</div>
           </div>
         </div>
       </div>
