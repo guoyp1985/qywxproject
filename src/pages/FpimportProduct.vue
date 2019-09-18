@@ -533,7 +533,7 @@ export default {
     },
     importProduct () {
       const self = this
-      if (self.productdata.haveimport === 0) {
+      if (self.productdata.join) {
         self.ajaxImport()
       } else {
         self.$vux.confirm.show({
@@ -573,7 +573,7 @@ export default {
     getData () {
       const self = this
       this.productid = this.query.id
-      let infoparams = { id: this.productid, module: this.module, fid: self.query.fid }
+      let infoparams = {id: this.productid, module: this.module, fid: self.query.fid, myfid: this.loginUser.fid}
       if (this.query.share_uid) {
         infoparams.share_uid = this.query.share_uid
       }

@@ -218,8 +218,12 @@ export default {
     },
     upEvent (item, index) {
       const self = this
+      let con = '确定导入商品吗？'
+      if (!this.joinStatus) {
+        con = '确定导入商品并加盟该厂家吗？'
+      }
       self.$vux.confirm.show({
-        content: '确定导入商品并加盟该厂家吗？',
+        content: con,
         onConfirm: () => {
           self.$vux.loading.show()
           self.$http.post(`${ENV.BokaApi}/api/factory/productshelf`, {
@@ -234,6 +238,7 @@ export default {
             })
             if (data.flag) {
               this.tabData1[index].haveshelf = 1
+              this.joinStatus = true
             }
           })
         }
