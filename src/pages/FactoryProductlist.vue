@@ -93,12 +93,12 @@
               <div class="item" v-else-if="clickdata.moderate == 1">
                 <div class="inner" @click="clickpopup('down')">下架</div>
               </div>
-              <!-- <div class="item" v-if="clickdata.shelf == 0">
+              <div class="item" v-if="clickdata.shelf == 0">
                 <div class="inner" @click="clickpopup('upShelf')">推荐到货源</div>
               </div>
               <div class="item" v-else-if="clickdata.shelf == 1">
                 <div class="inner" @click="clickpopup('downShelf')">从货源移出</div>
-              </div> -->
+              </div>
               <div class="item">
                 <div class="inner" @click="clickpopup('fee')">设置佣金</div>
               </div>
@@ -263,7 +263,7 @@ export default {
           onConfirm () {
             self.$vux.loading.show()
             let params = { id: self.clickdata.id, moderate: 1 }
-            self.$http.post(`${ENV.BokaApi}/api/moderate/fpimport`, params).then(function (res) {
+            self.$http.post(`${ENV.BokaApi}/api/moderate/factoryproduct`, params).then(function (res) {
               let data = res.data
               self.$vux.loading.hide()
               self.$vux.toast.show({
@@ -287,7 +287,7 @@ export default {
           onConfirm () {
             self.$vux.loading.show()
             let params = { id: self.clickdata.id, moderate: 0 }
-            self.$http.post(`${ENV.BokaApi}/api/moderate/fpimport`, params).then(function (res) {
+            self.$http.post(`${ENV.BokaApi}/api/moderate/factoryproduct`, params).then(function (res) {
               let data = res.data
               self.$vux.loading.hide()
               self.$vux.toast.show({
@@ -344,7 +344,7 @@ export default {
         })
       } else if (key === 'upShelf') {
         self.showpopup1 = false
-        if (!this.loginUser.factoryinfo.bankcardno || this.loginUser.factoryinfo.bankcardno === '') {
+        if (!this.loginUser.bankcardno || this.loginUser.bankcardno === '' || !this.loginUser.bankname || this.loginUser.bankname === '') {
           self.$vux.confirm.show({
             title: '您还没有绑定银行卡，请先绑定银行卡信息，其他厂家出售商品后，将会把订单金额直接打款到您的银行卡账户上。',
             confirmText: '去绑定',
@@ -437,7 +437,7 @@ export default {
         })
         return false
       }
-      self.$http.post(`${ENV.BokaApi}/api/factory/productset`, {
+      self.$http.post(`${ENV.BokaApi}/api/factory/productset `, {
         id: self.clickdata.id, salesrebate: salesRebate, superrebate: superRebate
       }).then(function (res) {
         let data = res.data
@@ -503,8 +503,8 @@ export default {
     },
     getData1 () {
       const self = this
-      const params = { fid: self.query.fid, from: 'factory', pagestart: pageStart1, limit: limit }
-      this.$http.get(`${ENV.BokaApi}/api/list/factoryproduct`, {
+      const params = { fid: self.Fid, pagestart: pageStart1, limit: limit }
+      this.$http.get(`${ENV.BokaApi}/api/list/fpimport`, {
         params: params
       })
       .then(res => {

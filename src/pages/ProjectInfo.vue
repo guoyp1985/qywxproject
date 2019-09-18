@@ -21,14 +21,46 @@
     </div>
     <div v-if="selectedIndex === 0" class="bg-white padding15 db-flex">
       <div class="left-progress">
-        <div class="progress w50 flex_center"><div class="ball flex_center" :style="{'background-color' : true ? '#7ca6fa' : 'white'}"><span class="font12 color-white" :class="{'al al-gou' : true}"></span></div></div>
-        <div class="progress w50 flex_center"><div class="ball flex_center" :style="{'background-color' : false ? '#7ca6fa' : 'white'}"><span class="font12 color-white" :class="{'al al-gou' : false}"></span></div></div>
-        <div class="progress w50 flex_center"><div class="ball flex_center" :style="{'background-color' : false ? '#7ca6fa' : 'white'}"><span class="font12 color-white" :class="{'al al-gou' : false}"></span></div></div>
-        <div class="progress w50 flex_center"><div class="ball flex_center" :style="{'background-color' : false ? '#7ca6fa' : 'white'}"><span class="font12 color-white" :class="{'al al-gou' : false}"></span></div></div>
-        <div class="progress w50 flex_center"><div class="ball flex_center" :style="{'background-color' : false ? '#7ca6fa' : 'white'}"><span class="font12 color-white" :class="{'al al-gou' : false}"></span></div></div>
-        <div class="progress w50 flex_center"><div class="ball flex_center" :style="{'background-color' : false ? '#7ca6fa' : 'white'}"><span class="font12 color-white" :class="{'al al-gou' : false}"></span></div></div>
-        <div class="progress w50 flex_center"><div class="ball flex_center" :style="{'background-color' : false ? '#7ca6fa' : 'white'}"><span class="font12 color-white" :class="{'al al-gou' : false}"></span></div></div>
-        <div class="progress w50 flex_center"><div class="ball flex_center" :style="{'background-color' : false ? '#7ca6fa' : 'white'}"><span class="font12 color-white" :class="{'al al-gou' : false}"></span></div></div>
+        <div class="progress w50 flex_center">
+          <div class="ball flex_center" :style="{'background-color' : true ? '#7ca6fa' : 'white'}">
+            <span class="font12 color-white" :class="{'al al-gou' : true}"></span>
+          </div>
+        </div>
+        <div class="progress w50 flex_center">
+          <div class="ball flex_center" :style="{'background-color' : false ? '#7ca6fa' : 'white'}">
+            <span class="font12 color-white" :class="{'al al-gou' : false}"></span>
+          </div>
+        </div>
+        <div class="progress w50 flex_center">
+          <div class="ball flex_center" :style="{'background-color' : false ? '#7ca6fa' : 'white'}">
+            <span class="font12 color-white" :class="{'al al-gou' : false}"></span>
+          </div>
+        </div>
+        <div class="progress w50 flex_center">
+          <div class="ball flex_center" :style="{'background-color' : false ? '#7ca6fa' : 'white'}">
+            <span class="font12 color-white" :class="{'al al-gou' : false}"></span>
+          </div>
+        </div>
+        <div class="progress w50 flex_center">
+          <div class="ball flex_center" :style="{'background-color' : false ? '#7ca6fa' : 'white'}">
+            <span class="font12 color-white" :class="{'al al-gou' : false}"></span>
+          </div>
+        </div>
+        <div class="progress w50 flex_center">
+          <div class="ball flex_center" :style="{'background-color' : false ? '#7ca6fa' : 'white'}">
+            <span class="font12 color-white" :class="{'al al-gou' : false}"></span>
+          </div>
+        </div>
+        <div class="progress w50 flex_center">
+          <div class="ball flex_center" :style="{'background-color' : false ? '#7ca6fa' : 'white'}">
+            <span class="font12 color-white" :class="{'al al-gou' : false}"></span>
+          </div>
+        </div>
+        <div class="progress w50 flex_center">
+          <div class="ball flex_center" :style="{'background-color' : false ? '#7ca6fa' : 'white'}">
+            <span class="font12 color-white" :class="{'al al-gou' : false}"></span>
+          </div>
+        </div>
       </div>
       <div style="flex:1;">
         <div class="apply" :class="{'active' : true}">
