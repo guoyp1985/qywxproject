@@ -200,7 +200,7 @@ export default {
       limit: 10,
       pagestart1: 0,
       pagestart2: 0,
-      infoData: {},
+      infoData: {factoryinfo: {}},
       statData: {}
     }
   },
