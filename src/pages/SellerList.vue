@@ -306,6 +306,7 @@
                       </div>
                       <div class="t-cell v_middle pr10" style="box-sizing:border-box;">
                         <div class="clamp1 font16">{{item.factoryinfo.title}}</div>
+                        <div class="mt5 font12 color-gray">应打款金额: {{item.money}}</div>
                       </div>
                 		</div>
                   </div>
