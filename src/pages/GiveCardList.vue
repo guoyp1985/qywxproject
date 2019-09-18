@@ -67,6 +67,17 @@ export default {
     }
   },
   methods: {
+    initData () {
+      this.tabData1 = []
+      this.pageStart1 = 0
+      this.disList1 = false
+      this.limit = 10
+      this.loginUser = {}
+      this.clickdata = {}
+      this.clickindex = 0
+      this.showpopup1 = false
+      this.Fid = 0
+    },
     handleScroll: function (refname) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
@@ -110,6 +121,7 @@ export default {
   created () {
   },
   activated () {
+    this.initData()
     this.loginUser = User.get()
     this.Fid = this.loginUser.fid
     this.query = this.$route.query
@@ -127,7 +139,7 @@ export default {
 </script>
 <style lang="less">
 .giveCardList{
-  .s-container1{top: 0 !important;}
+  .s-container1{top: 0 !important;bottom:45px !important;}
   .lists{padding:0px 10px;}
   .list-item{width: 100%;background-color: #fff;position:relative;
   padding: 10px;box-sizing: border-box;box-sizing: border-box;
