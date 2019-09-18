@@ -175,7 +175,7 @@ export default {
     },
     getData1 () {
       this.$vux.loading.show()
-      const params = {pagestart: pageStart1, limit: limit}
+      const params = {pagestart: pageStart1, limit: limit, fid: this.Fid}
       let keyword = self.searchword1
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         params.keyword = keyword
