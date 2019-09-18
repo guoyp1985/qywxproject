@@ -112,7 +112,7 @@
       </form>
     </div>
     <div class="s-bottom border-box flex_center color-white list-shadow02">
-      <div class="flex_cell flex_center color-white h_100" style="background-color:#f6a843;" @toCardList>发放记录</div>
+      <div class="flex_cell flex_center color-white h_100" style="background-color:#f6a843;" @click="toCardList">发放记录</div>
       <div class="flex_cell flex_center color-white h_100" style="background-color:#ea3a3a;" @click="saveevent">立即创建</div>
     </div>
     <!-- 点击单个商品弹出全部厂家商品列表区域 -->
@@ -562,25 +562,6 @@ export default {
         }
       }
     },
-    // afterSelectProduct () {
-    //   const self = this
-    //   self.selectproduct = self.selectpopupdata
-    //   // if (self.selectProductData) {  // 此处循环判断选中的商品是否已经存在 一张优惠券对应多个商品
-    //   //   for (var i = 0; i < self.selectProductData.length; i++) {
-    //   //     if (self.selectproduct === self.selectProductData[i]) {
-    //   //       self.selectProductData.splice(i, 1)
-    //   //     }
-    //   //   }
-    //   //   self.selectProductData.push(self.selectproduct)
-    //   // } else {
-    //   self.selectProductData[0] = self.selectproduct
-    //   // }
-    //   console.log('------已选择的商品------')
-    //   console.log(self.selectProductData)
-    //   self.submitdata.fpid = self.selectproduct.id
-    //   self.showProductList = false
-    //   self.showproductitem = true
-    // },
     confirmpopup () {
       let curProduct = this.checkedProduct
       if (!curProduct || !curProduct.id) {
@@ -662,8 +643,8 @@ export default {
       })
     },
     toCardList () {
-      let rparams = self.$util.handleAppParams(self.query, {fid: this.Fid, refresh: 1})
-      self.$router.push({path: '/giveCardList', query: rparams})
+      let rparams = this.$util.handleAppParams(this.query, {fid: this.Fid, refresh: 1})
+      this.$router.push({path: '/giveCardList', query: rparams})
     }
   },
   created () {

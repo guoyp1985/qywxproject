@@ -746,7 +746,7 @@ zh-CN:
   Groupprice: 团购价
   Group numbers: 成团人数
   Person: 人
-  Online consulting: 在线联系
+  Online consulting: 在线咨询
   I am the seller: 我是卖家
   Sales Assistant: 销售助手
   Newcomer Guide: 新手指南
@@ -969,3 +969,5 @@ zh-CN:
   tDataStat: 数据统计
   tFpimportProduct: 商品详情
   tAddFpimportProduct: 添加商品
+  tAddCard: 创建专属优惠券
+  tGiveCardList: 专属优惠券
