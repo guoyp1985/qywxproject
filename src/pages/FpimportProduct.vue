@@ -136,7 +136,7 @@
       <div v-if="loginUser.isretailer" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
         <!-- <div class="align_center flex_center flex_cell" v-if="!loginUser.retailerinfo.fid || loginUser.retailerinfo.fid == query.fid"> -->
         <div class="align_center flex_center flex_cell">
-          <div class="btn-bottom-red flex_center" style="width:90%;" v-if="productdata.haveshelf == 1">已导入</div>
+          <div class="btn-bottom-red flex_center" style="width:90%;" v-if="productdata.havefpimport == 1">已导入</div>
           <div class="btn-bottom-red flex_center" style="width:90%;" v-else @click="importEvent">导入</div>
         </div>
       </div>
@@ -517,18 +517,8 @@ export default {
         let error = data.error
         if (data.flag === 1) {
           error = '导入成功'
-          self.productdata.haveimport = 1
+          self.productdata.havefpimport = 1
         }
-        self.$vux.toast.show({
-          text: error,
-          type: data.flag === 1 ? 'success' : 'warn',
-          time: self.$util.delay(error),
-          onHide: () => {
-            if (this.isFirst && data.flag) {
-              this.showHb = true
-            }
-          }
-        })
       })
     },
     importProduct () {
