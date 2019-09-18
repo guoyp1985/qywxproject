@@ -116,7 +116,7 @@
       <div class="hiddenbox"></div>
     </div>
     <div class="s-bottom border-box flex_center color-white list-shadow02">
-      <!-- <div class="flex_center flex_cell h_100" style="background-color:#f6a843;"  @click="saveevent('personal')">专属优惠券</div> -->
+      <div class="flex_center flex_cell h_100" style="background-color:#f6a843;"  @click="saveevent('personal')">专属优惠券</div>
       <div class="flex_cell flex_center h_100" style="background-color:#eb6b5e;"  @click="saveevent()">活动优惠券</div>
     </div>
     <div v-transfer-dom>
