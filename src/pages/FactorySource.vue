@@ -45,13 +45,13 @@
         </div>
       </div>
     </div>
-    <!-- <template v-if="showBottom && tabData1 && tabData1.length">
+    <template v-if="showBottom && tabData1 && tabData1.length">
       <div class="s-bottom list-shadow flex_center bg-white pl12 pr12">
         <div class="align_center flex_center flex_cell">
           <div class="flex_center btn-bottom-red" style="width:85%;" @click="upAll('product')">一键导入商品</div>
         </div>
       </div>
-    </template> -->
+    </template>
   </div>
 </template>
 
@@ -187,36 +187,28 @@ export default {
     },
     upAll (type) {
       const self = this
-      if (self.loginUser.isretailer === 2) {
-        self.$vux.loading.show()
-        let ajaxurl = `${ENV.BokaApi}/api/list/product?from=retailer`
-        if (type === 'factorynews') {
-          ajaxurl = `${ENV.BokaApi}/api/list/news?from=retailer`
+      self.$vux.confirm.show({
+        content: '确定要导入该厂家的商品？',
+        onConfirm: () => {
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/factory/productshelf`, {
+            module: 'factoryproduct', type: 'all', fid: self.loginUser.Fid, fromfid: self.Fid
+          }).then(function (res) {
+            let data = res.data
+            self.$vux.loading.hide()
+            self.$vux.toast.show({
+              text: data.error,
+              type: data.flag === 1 ? 'success' : 'warn',
+              time: self.$util.delay(data.error)
+            })
+            if (data.flag) {
+              for (let i = 0; i < self.tabData1.length; i++) {
+                self.tabData1[i].haveshelf = 1
+              }
+            }
+          })
         }
-        this.$http.get(ajaxurl, {
-          params: { pagestart: 0, limit: 5 }
-        }).then(res => {
-          self.$vux.loading.hide()
-          const data = res.data
-          const retdata = data.data ? data.data : data
-          const retlen = retdata.length
-          if (type === 'product') {
-            if (retlen + self.tabData1.length <= 5) {
-              self.upAllData(type)
-            } else {
-              self.openVip(type)
-            }
-          } else if (type === 'factorynews') {
-            if (retlen + self.tabData2.length <= 5) {
-              self.upAllData(type)
-            } else {
-              self.openVip(type)
-            }
-          }
-        })
-      } else if (self.loginUser.isretailer === 1) {
-        self.upAllData(type)
-      }
+      })
     },
     upEvent (item, index) {
       const self = this
