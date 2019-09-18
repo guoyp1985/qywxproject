@@ -17,7 +17,7 @@
       <div v-show="selectedIndex===0">
         <template v-if="distabdata1">
           <template v-if="tabdata1.length">
-            <div class="scroll_item pt10 pb10  pl12 pr12 bg-white mt10 list-shadow" v-for="(item,index) in tabdata1" :item="item" :key="index">
+            <div class="scroll_item pt10 pb10  pl12 pr12 bg-white mt10 list-shadow" @click="toInfo(item)" v-for="(item,index) in tabdata1" :item="item" :key="index">
               <div class="t-table">
                 <div class="t-cell v_middle" style="width:70px;">
                   <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
@@ -42,7 +42,7 @@
       <div v-show="selectedIndex===1">
         <template v-if="distabdata2">
           <template v-if="tabdata2.length">
-            <div class="scroll_item pt10 pb10  pl12 pr12 bg-white mt10 list-shadow" :class="{'pb10' : index === (tabdata2.length - 1)}" v-for="(item,index) in tabdata2" :item="item" :key="index">
+            <div class="scroll_item pt10 pb10  pl12 pr12 bg-white mt10 list-shadow" @click="toInfo(item)" :class="{'pb10' : index === (tabdata2.length - 1)}" v-for="(item,index) in tabdata2" :item="item" :key="index">
               <div class="t-table">
                 <div class="t-cell v_middle" style="width:70px;">
                   <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
@@ -67,7 +67,7 @@
       <div v-show="selectedIndex===2">
         <template v-if="distabdata3">
           <template v-if="tabdata3.length">
-            <div class="scroll_item pt10 pb10  pl12 pr12 bg-white mt10 list-shadow" v-for="(item,index) in tabdata3" :item="item" :key="index">
+            <div class="scroll_item pt10 pb10  pl12 pr12 bg-white mt10 list-shadow" @click="toInfo(item)" v-for="(item,index) in tabdata3" :item="item" :key="index">
               <div class="t-table">
                 <div class="t-cell v_middle" style="width:70px;">
                   <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
@@ -92,7 +92,7 @@
       <div v-show="selectedIndex===3">
         <template v-if="distabdata4">
           <template v-if="tabdata4.length">
-            <div class="scroll_item pt10 pb10  pl12 pr12 bg-white mt10 list-shadow" v-for="(item,index) in tabdata4" :item="item" :key="index">
+            <div class="scroll_item pt10 pb10  pl12 pr12 bg-white mt10 list-shadow" @click="toInfo(item)" v-for="(item,index) in tabdata4" :item="item" :key="index">
               <div class="t-table">
                 <div class="t-cell v_middle" style="width:70px;">
                   <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
@@ -172,6 +172,9 @@ export default {
       this.refundContent = ''
       this.clickOrder = {}
       this.clickIndex = 0
+    },
+    toInfo (item) {
+      this.$router.push({path: '/projectInfo', query: {id: item.id}})
     },
     toggleTab () {
       console.log('in toggleTab')

@@ -4,7 +4,6 @@
 </template>
 
 <script>
-import ENV from 'env'
 import { User } from '#/storage'
 export default {
   data () {
