@@ -139,6 +139,7 @@ export default {
     },
     onCancel1 () {
       this.searchword1 = ''
+      this.swiperChange()
     },
     onSubmit1 () {
       this.swiperChange()
