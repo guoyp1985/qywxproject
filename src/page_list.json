@@ -108,6 +108,7 @@
   "Login",
   "LinkReplication",
   "Redirect",
+  "RedirectFactory",
   "RedirectUrl",
   "RetailerSales",
   "RetailerSalechance",
