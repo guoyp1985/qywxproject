@@ -181,13 +181,13 @@ export default {
           !this.tabdata1.length && this.getData()
           break
         case 1:
-          !this.tabdata2.length && this.getData(2)
+          !this.tabdata2.length && this.getData(1)
           break
         case 2:
-          !this.tabdata3.length && this.getData(3)
+          !this.tabdata3.length && this.getData(2)
           break
         case 3:
-          !this.tabdata4.length && this.getData(4)
+          !this.tabdata4.length && this.getData(3)
           break
       }
     },
@@ -229,19 +229,17 @@ export default {
       flag = flag || 0
       this.$vux.loading.show()
       const self = this
-      let params = {flag: flag, limit: self.limit}
-      if (flag === 2) {
+      let params = {progress: flag, limit: self.limit}
+      if (flag === 1) {
         params.pagestart = this.pagestart2
-      } else if (flag === 3) {
+      } else if (flag === 2) {
         params.pagestart = this.pagestart3
-      } else if (flag === 4) {
+      } else if (flag === 3) {
         params.pagestart = this.pagestart4
       } else {
         params.pagestart = this.pagestart1
       }
-      this.$http.get(`${ENV.BokaApi}/api/order/orderList/user`, {
-        params: params
-      }).then((res) => {
+      this.$http.post(`${ENV.BokaApi}/api/factory/inviterFactory`, params).then((res) => {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
@@ -250,15 +248,15 @@ export default {
             self.tabdata1 = self.tabdata1.concat(retdata)
             self.distabdata1 = true
             break
-          case 2:
+          case 1:
             self.tabdata2 = self.tabdata2.concat(retdata)
             self.distabdata2 = true
             break
-          case 3:
+          case 2:
             self.tabdata3 = self.tabdata3.concat(retdata)
             self.distabdata3 = true
             break
-          case 4:
+          case 3:
             self.tabdata4 = self.tabdata4.concat(retdata)
             self.distabdata4 = true
             break
@@ -275,7 +273,7 @@ export default {
       this.query = this.$route.query
       let flag = parseInt(this.query.flag)
       switch (flag) {
-        case 2:
+        case 1:
           if (!this.tabdata2.length) {
             this.selectedIndex = 1
             this.pagestart2 = 0
@@ -283,7 +281,7 @@ export default {
             this.toggleTab()
           }
           break
-        case 3:
+        case 2:
           if (!this.tabdata3.length) {
             this.selectedIndex = 2
             this.pagestart3 = 0
@@ -291,7 +289,7 @@ export default {
             this.toggleTab()
           }
           break
-        case 4:
+        case 3:
           if (!this.tabdata4.length) {
             this.selectedIndex = 3
             this.pagestart4 = 0
