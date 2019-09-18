@@ -136,7 +136,7 @@
       <div v-if="loginUser.isretailer" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
         <!-- <div class="align_center flex_center flex_cell" v-if="!loginUser.retailerinfo.fid || loginUser.retailerinfo.fid == query.fid"> -->
         <div class="align_center flex_center flex_cell">
-          <div class="btn-bottom-red flex_center" style="width:90%;" v-if="productdata.havefpimport == 1">已导入</div>
+          <div class="btn-bottom-red flex_center" style="width:90%;background-color:#ccc;" v-if="productdata.havefpimport == 1">已导入</div>
           <div class="btn-bottom-red flex_center" style="width:90%;" v-else @click="importEvent">导入</div>
         </div>
       </div>
