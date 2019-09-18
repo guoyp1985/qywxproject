@@ -1045,7 +1045,7 @@ export default {
               self.submitIng = false
               if (data.flag === 1) {
                 let rparams = self.$util.handleAppParams(self.query, {id: data.data, fid: self.query.fid})
-                self.$router.push({path: '/factoryProduct', query: rparams})
+                self.$router.push({path: '/fpimportProduct', query: rparams})
               }
             }
           })
