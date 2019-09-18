@@ -34,7 +34,7 @@
           </template>
           <template v-else>
             <div class="no-related-x color-gray">
-              <span>暂无任何数据</span>
+              <span>暂无相关数据</span>
             </div>
           </template>
         </template>
@@ -59,7 +59,7 @@
           </template>
           <template v-else>
             <div class="no-related-x color-gray">
-              <span>暂无任何数据</span>
+              <span>暂无相关数据</span>
             </div>
           </template>
         </template>
@@ -84,7 +84,7 @@
           </template>
           <template v-else>
             <div class="no-related-x color-gray">
-              <span>{{$t('No Related Orders')}}</span>
+              <span>暂无相关数据</span>
             </div>
           </template>
         </template>
@@ -109,7 +109,7 @@
           </template>
           <template v-else>
             <div class="no-related-x color-gray">
-              <span>暂无任何数据</span>
+              <span>暂无相关数据</span>
             </div>
           </template>
         </template>
