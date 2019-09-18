@@ -55,9 +55,9 @@
         </template>
       </div>
       <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
-        <div class="flex_center flex_cell">
+        <!-- <div class="flex_center flex_cell">
           <router-link class="flex_center bg-orange color-white" style="width:85%;border-radius:50px;height:35px;" to="/sourceList">货源</router-link>
-        </div>
+        </div> -->
         <div class="flex_cell flex_center">
           <div class="bg-red flex_center color-white" style="width:85%;border-radius:50px;height:35px;" @click="toAdd">{{ $t('Add product') }}</div>
         </div>
@@ -93,12 +93,12 @@
               <div class="item" v-else-if="clickdata.moderate == 1">
                 <div class="inner" @click="clickpopup('down')">下架</div>
               </div>
-              <div class="item" v-if="clickdata.shelf == 0">
+              <!-- <div class="item" v-if="clickdata.shelf == 0">
                 <div class="inner" @click="clickpopup('upShelf')">推荐到货源</div>
               </div>
               <div class="item" v-else-if="clickdata.shelf == 1">
                 <div class="inner" @click="clickpopup('downShelf')">从货源移出</div>
-              </div>
+              </div> -->
               <div class="item">
                 <div class="inner" @click="clickpopup('fee')">设置佣金</div>
               </div>
@@ -503,8 +503,8 @@ export default {
     },
     getData1 () {
       const self = this
-      const params = { fid: self.Fid, pagestart: pageStart1, limit: limit }
-      this.$http.get(`${ENV.BokaApi}/api/list/fpimport`, {
+      const params = { fid: self.query.fid, from: 'factory', pagestart: pageStart1, limit: limit }
+      this.$http.get(`${ENV.BokaApi}/api/list/factoryproduct`, {
         params: params
       })
       .then(res => {

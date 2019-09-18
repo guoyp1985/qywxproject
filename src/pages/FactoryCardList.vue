@@ -115,11 +115,9 @@
       </div>
       <div class="hiddenbox"></div>
     </div>
-    <div class="s-bottom border-box flex_center color-white list-shadow02 w_50" style="background-color:#f6a843;z-index:99" @click="saveevent('personal')">
-      <div class="flex_cell flex_center color-white">专属优惠券</div>
-    </div>
-    <div class="s-bottom border-box flex_center color-white list-shadow02 w_50" style="background-color:#eb6b5e;z-index:99;left:auto;" @click="saveevent()">
-      <div class="flex_cell flex_center color-white">活动优惠券</div>
+    <div class="s-bottom border-box flex_center color-white list-shadow02">
+      <!-- <div class="flex_center flex_cell h_100" style="background-color:#f6a843;"  @click="saveevent('personal')">专属优惠券</div> -->
+      <div class="flex_cell flex_center h_100" style="background-color:#eb6b5e;"  @click="saveevent()">活动优惠券</div>
     </div>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showpopup1">
@@ -331,10 +329,10 @@ export default {
       this.clickindex = index
     },
     saveevent (type) {
-      if (type) {
+      if (type === 'personal') {
         // 跳转专属优惠券创建页面
-        // let rparams = this.$util.handleAppParams(this.query, {fid: this.Fid})
-        // this.$router.push({path: '/addFactoryCard', query: rparams})
+        let rparams = this.$util.handleAppParams(this.query, {fid: this.Fid})
+        this.$router.push({path: '/addCard', query: rparams})
       } else {
         let rparams = this.$util.handleAppParams(this.query, {fid: this.Fid})
         this.$router.push({path: '/addFactoryCard', query: rparams})
