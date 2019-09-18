@@ -9,7 +9,7 @@
                 <span>奖励语</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span>
               </div>
               <div class="t-cell input-cell v_middle db-flex" style="position:relative;">
-                <x-input class="flex_cell" v-model='submitdata.totalcount' type="text" placeholder="请输入奖励语" ></x-input>
+                <x-input class="flex_cell" v-model='submitdata.jly' type="text" placeholder="请输入奖励语" ></x-input>
               </div>
             </div>
           </div>
@@ -102,7 +102,7 @@
                 </div>
               </div>
             </template>
-            <div v-else-if="!query.id" class="flex_center w_100">
+            <div v-else class="flex_center w_100">
               <div class="qbtn flex_center color-orange mt10" style="border:orange 1px solid;width:90%;line-height:1;padding:4px 0;" @click="selectevent">
                 <span class="mr5 v_middle db-in" style="margin-top:-3px;">+</span><span class="v_middle db-in">{{ $t('Select product') }}</span>
               </div>
@@ -604,6 +604,10 @@ export default {
       if (this.submitIng) return false
       let facemoney = self.submitdata.facemoney
       let ordermoney = self.submitdata.ordermoney
+      if (!self.submitdata.jly) {
+        self.$vux.toast.text('请填写奖励语', 'middle')
+        return false
+      }
       if (!self.selectedCustomer) {
         self.$vux.toast.text('请选择发放的用户', 'middle')
         return false
@@ -612,7 +616,7 @@ export default {
         self.$vux.toast.text('请选择至少一个商品', 'middle')
         return false
       }
-      if (isNaN(facemoney) || isNaN(ordermoney) || !facemoney || parseFloat(facemoney.replace(/,/g, '')) <= 0 || !ordermoney || parseFloat(ordermoney.replace(/,/g, '')) <= 0) {
+      if (isNaN(facemoney) || isNaN(ordermoney) || !facemoney || parseFloat(facemoney.replace(/,/g, '')) < 0 || !ordermoney || parseFloat(ordermoney.replace(/,/g, '')) < 0) {
         self.$vux.toast.text('请填写正确的满减金额', 'middle')
         return false
       }
