@@ -7,7 +7,7 @@
         </div>
         <div class="flex_cell">
           <div class="clamp1">{{ viewData.title }}</div>
-          <div class="font12 clamp2">应打款金额: {{ $t('RMB') }}1000.00</div>
+          <div class="font12 clamp2">应打款金额: {{ $t('RMB') }}{{needpaymoney}}</div>
         </div>
         <div class="w100 flex_right">
           <div>
@@ -97,7 +97,8 @@ export default {
       newsCount: 0,
       Fid: 0,
       joinStatus: 0,
-      disJoin: false
+      disJoin: false,
+      needpaymoney: '0.00'
     }
   },
   watch: {
@@ -119,6 +120,7 @@ export default {
       this.showBottom = false
       this.productCount = 0
       this.newsCount = 0
+      this.needpaymoney = '0.00'
     },
     toBill () {
       this.$router.push({path: '/factoryBill', query: {fid: this.Fid}})
@@ -328,6 +330,7 @@ export default {
         }
         self.joinStatus = data.join
         self.disJoin = true
+        self.needpaymoney = data.needpaymoney
       })
     },
     refresh () {
