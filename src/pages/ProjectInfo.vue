@@ -74,36 +74,52 @@
       </div>
       <div style="flex:1;">
         <div class="apply" :class="{'active' : infoData.havefactory}">
-          <div class="font14">申请成为厂家: {{infoData.havefactory ? '已完成' : '未完成'}}</div>
-          <!-- <div class="mt5 font12 time-color">2019-08-28 12:00</div> -->
+          <div class="w_100">
+            <div class="font14">申请成为厂家: {{infoData.havefactory ? '已完成' : '未完成'}}</div>
+            <!-- <div class="mt5 font12 time-color">2019-08-28 12:00</div> -->
+          </div>
         </div>
         <div class="apply" :class="{'active' : infoData.haveminiprograms}">
-          <div class="font14">申请小程序: {{infoData.haveminiprograms ? '已完成' : '未完成'}}</div>
-          <!-- <div class="mt5 font12 time-color">2019-08-28 12:00</div> -->
+          <div class="w_100">
+            <div class="font14">申请小程序: {{infoData.haveminiprograms ? '已完成' : '未完成'}}</div>
+            <!-- <div class="mt5 font12 time-color">2019-08-28 12:00</div> -->
+          </div>
         </div>
         <div class="apply" :class="{'active' : infoData.havefactoryminiprograms}">
-          <div class="font14">授权厂家小程序: {{infoData.havefactoryminiprograms ? '已完成' : '未完成'}}</div>
-          <!-- <div class="mt5 font12 time-color">2019-08-28 12:00</div> -->
+          <div class="w_100">
+            <div class="font14">授权厂家小程序: {{infoData.havefactoryminiprograms ? '已完成' : '未完成'}}</div>
+            <!-- <div class="mt5 font12 time-color">2019-08-28 12:00</div> -->
+          </div>
         </div>
         <div class="apply" :class="{'active' : infoData.bandfactroy}">
-          <div class="font14">绑定厂家身份: {{infoData.bandfactroy ? '已完成' : '未完成'}}</div>
-          <!-- <div class="mt5 font12 time-color">2019-08-28 12:00</div> -->
+          <div class="w_100">
+            <div class="font14">绑定厂家身份: {{infoData.bandfactroy ? '已完成' : '未完成'}}</div>
+            <!-- <div class="mt5 font12 time-color">2019-08-28 12:00</div> -->
+          </div>
         </div>
         <div class="apply" :class="{'active' : infoData.haveminpay}">
-          <div class="font14">配置自有微信支付: {{infoData.haveminpay ? '已完成' : '未完成'}}</div>
-          <!-- <div class="mt5 font12 time-color">2019-08-28 12:00</div> -->
+          <div class="w_100">
+            <div class="font14">配置自有微信支付: {{infoData.haveminpay ? '已完成' : '未完成'}}</div>
+            <!-- <div class="mt5 font12 time-color">2019-08-28 12:00</div> -->
+          </div>
         </div>
         <div class="apply" :class="{'active' : infoData.havesubmit}">
-          <div class="font14">上传代码提交审核: {{infoData.havesubmit ? '已完成' : '未完成'}}</div>
-          <!-- <div class="mt5 font12 time-color">2019-08-28 12:00</div> -->
+          <div class="w_100">
+            <div class="font14">上传代码提交审核: {{infoData.havesubmit ? '已完成' : '未完成'}}</div>
+            <!-- <div class="mt5 font12 time-color">2019-08-28 12:00</div> -->
+          </div>
         </div>
         <div class="apply" :class="{'active' : infoData.haveproduct}">
-          <div class="font14">上传商品: {{infoData.haveproduct ? '已完成' : '未完成'}}</div>
-          <!-- <div class="mt5 font12 time-color">2019-08-28 12:00</div> -->
+          <div class="w_100">
+            <div class="font14">上传商品: {{infoData.haveproduct ? '已完成' : '未完成'}}</div>
+            <!-- <div class="mt5 font12 time-color">2019-08-28 12:00</div> -->
+          </div>
         </div>
         <div class="apply" :class="{'active' : infoData.success}">
-          <div class="font14">开始运营: {{infoData.success ? '已完成' : '未完成'}}</div>
-          <!-- <div class="mt5 font12 time-color">2019-08-28 12:00</div> -->
+          <div class="w_100">
+            <div class="font14">开始运营: {{infoData.success ? '已完成' : '未完成'}}</div>
+            <!-- <div class="mt5 font12 time-color">2019-08-28 12:00</div> -->
+          </div>
         </div>
       </div>
     </div>
@@ -248,7 +264,10 @@ export default {
   }
   .active{background-color: #f8f9e4 !important;}
   .time-color{color:#d7d7d7;}
-  .apply{padding:20px;box-sizing: border-box;background-color: #d7d7d7;margin-bottom: 15px;}
+  .apply{
+    height:76px;padding:15px;box-sizing: border-box;background-color: #d7d7d7;margin-bottom: 15px;
+    display:flex;justify-content: flex-start;align-items: center;
+  }
   .radiusarea:after{content:"";clear:both;display:block;}
   .radiusarea .item{float:left;width:33.333333%;text-align:center;}
   .radiusarea .inner{padding:20px 10px 0 10px;}
