@@ -344,7 +344,7 @@ export default {
         })
       } else if (key === 'upShelf') {
         self.showpopup1 = false
-        if (!this.loginUser.bankcardno || this.loginUser.bankcardno === '' || !this.loginUser.bankname || this.loginUser.bankname === '') {
+        if (!this.loginUser.factoryinfo.bankcardno || this.loginUser.factoryinfo.bankcardno === '') {
           self.$vux.confirm.show({
             title: '您还没有绑定银行卡，请先绑定银行卡信息，其他厂家出售商品后，将会把订单金额直接打款到您的银行卡账户上。',
             confirmText: '去绑定',
