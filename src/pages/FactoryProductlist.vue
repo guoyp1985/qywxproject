@@ -100,7 +100,7 @@
               <div class="item" v-else-if="clickdata.shelf == 1">
                 <div class="inner" @click="clickpopup('downShelf')">从货源移出</div>
               </div>
-              <div class="item">
+              <div class="item" v-if="clickdata.fromfid">
                 <div class="inner" @click="clickpopup('fee')">设置佣金</div>
               </div>
               <div class="item">
@@ -439,7 +439,7 @@ export default {
         return false
       }
       self.$http.post(`${ENV.BokaApi}/api/factory/productset`, {
-        id: self.clickdata.id, salesrebate: salesRebate, superrebate: superRebate
+        id: self.clickdata.id, newsalesrebate: salesRebate, newsuperrebate: superRebate
       }).then(res => {
         let data = res.data
         const retdata = data.data
