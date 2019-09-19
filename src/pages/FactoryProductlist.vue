@@ -411,6 +411,8 @@ export default {
         })
       } else if (key === 'fee') {
         self.showpopup1 = false
+        self.postSalesRebate = self.clickdata.newsalesrebate
+        self.postSuperRebate = self.clickdata.newsuperrebate
         self.showFeePopup = true
         self.feeData = self.clickdata
       } else {
