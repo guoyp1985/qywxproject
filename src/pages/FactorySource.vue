@@ -144,7 +144,7 @@ export default {
           self.$vux.loading.show()
           self.$http.post(`${ENV.BokaApi}/api/factory/join`, {
             fid: self.Fid
-          }).then(function (res) {
+          }).then(res => {
             let data = res.data
             self.$vux.loading.hide()
             self.$vux.toast.show({
@@ -173,7 +173,7 @@ export default {
           self.$vux.loading.show()
           self.$http.post(ajaxUrl, {
             fid: self.Fid
-          }).then(function (res) {
+          }).then(res => {
             let data = res.data
             self.$vux.loading.hide()
             self.$vux.toast.show({
@@ -193,7 +193,7 @@ export default {
           self.$vux.loading.show()
           self.$http.post(`${ENV.BokaApi}/api/factory/productshelf`, {
             module: 'factoryproduct', type: 'all', fid: self.loginUser.fid, fromfid: self.Fid
-          }).then(function (res) {
+          }).then(res => {
             let data = res.data
             self.$vux.loading.hide()
             self.$vux.toast.show({
@@ -222,7 +222,7 @@ export default {
           self.$vux.loading.show()
           self.$http.post(`${ENV.BokaApi}/api/factory/productshelf`, {
             fid: self.loginUser.fid, module: 'factoryproduct', moduleid: item.moduleid
-          }).then(function (res) {
+          }).then(res => {
             let data = res.data
             self.$vux.loading.hide()
             self.$vux.toast.show({
@@ -246,7 +246,7 @@ export default {
           self.$vux.loading.show()
           self.$http.post(`${ENV.BokaApi}/api/factory/fpimportApply`, {
             fromfid: self.Fid, fid: self.loginUser.fid
-          }).then(function (res) {
+          }).then(res => {
             let data = res.data
             self.$vux.loading.hide()
             self.$vux.toast.show({
