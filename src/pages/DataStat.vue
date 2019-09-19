@@ -52,21 +52,21 @@
       <div class="col-item">
         <div class="row-item big">
           <div class="txt1">今日订单</div>
-          <div class="txt2">100</div>
+          <div class="txt2">{{statData.todayorders}}</div>
         </div>
         <div class="row-item big">
           <div class="txt1">今日收入</div>
-          <div class="txt2">100.00</div>
+          <div class="txt2">{{statData.todayrevenue}}</div>
         </div>
       </div>
       <div class="col-item">
         <div class="row-item big">
           <div class="txt1">今日入驻</div>
-          <div class="txt2">200</div>
+          <div class="txt2">{{statData.newRetailers_0_factory}}</div>
         </div>
         <div class="row-item big">
           <div class="txt1">今日销售额</div>
-          <div class="txt2">300.00</div>
+          <div class="txt2">{{statData.todayordersmoney}}</div>
         </div>
       </div>
     </div>
@@ -74,21 +74,21 @@
       <div class="col-item">
         <div class="row-item big">
           <div class="txt1">本月订单</div>
-          <div class="txt2">100</div>
+          <div class="txt2">{{statData.monthorders}}</div>
         </div>
         <div class="row-item big">
           <div class="txt1">本月收入</div>
-          <div class="txt2">100.00</div>
+          <div class="txt2">{{statData.monthrevenue}}</div>
         </div>
       </div>
       <div class="col-item">
         <div class="row-item big">
           <div class="txt1">本月入驻</div>
-          <div class="txt2">200</div>
+          <div class="txt2">{{statData.newRetailers_0_factory}}</div>
         </div>
         <div class="row-item big">
           <div class="txt1">本月销售额</div>
-          <div class="txt2">300.00</div>
+          <div class="txt2">{{statData.monthordersmoney}}</div>
         </div>
       </div>
     </div>
@@ -96,21 +96,21 @@
       <div class="col-item">
         <div class="row-item big">
           <div class="txt1">累计订单</div>
-          <div class="txt2">100</div>
+          <div class="txt2">{{statData.allorders}}</div>
         </div>
         <div class="row-item big">
           <div class="txt1">累计收入</div>
-          <div class="txt2">100.00</div>
+          <div class="txt2">{{statData.allrevenue}}</div>
         </div>
       </div>
       <div class="col-item">
         <div class="row-item big">
           <div class="txt1">累计入驻</div>
-          <div class="txt2">200</div>
+          <div class="txt2">{{statData.allRetailers_0_factory}}</div>
         </div>
         <div class="row-item big">
           <div class="txt1">累计销售额</div>
-          <div class="txt2">300.00</div>
+          <div class="txt2">{{statData.allordersmoney}}</div>
         </div>
       </div>
     </div>
@@ -119,7 +119,7 @@
 <script>
 import {} from 'vux'
 import Time from '#/time'
-// import ENV from 'env'
+import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
@@ -128,7 +128,9 @@ export default {
   data () {
     return {
       query: {},
-      loginUser: {}
+      loginUser: {},
+      Fid: 0,
+      statData: {}
     }
   },
   filters: {
@@ -140,6 +142,28 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
+      this.query = this.$route.query
+      // factory/factoryAllStat  参数fid
+      // 今日订单  todayorders
+      // 今日收入  todayrevenue
+      // 今日入驻  newRetailers_0_factory
+      // 今日销售额  todayordersmoney
+      //
+      // 今月订单  monthorders
+      // 今月收入  monthrevenue
+      // 今月入驻  newRetailers_10_factory
+      // 今月销售额  monthordersmoney
+      if (this.query.fid) {
+        this.Fid = this.query.fid
+      } else {
+        this.Fid = this.loginUser.fid
+      }
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/factory/factoryAllStat`, {fid: this.Fid}).then(res => {
+        const data = res.data
+        this.$vux.loading.hide()
+        this.statData = data.data
+      })
     }
   },
   created () {
