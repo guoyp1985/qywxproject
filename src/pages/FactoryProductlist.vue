@@ -264,7 +264,7 @@ export default {
           onConfirm () {
             self.$vux.loading.show()
             let params = { id: self.clickdata.id, moderate: 1 }
-            self.$http.post(`${ENV.BokaApi}/api/moderate/fpimport`, params).then(function (res) {
+            self.$http.post(`${ENV.BokaApi}/api/moderate/fpimport`, params).then(res => {
               let data = res.data
               self.$vux.loading.hide()
               self.$vux.toast.show({
@@ -288,7 +288,7 @@ export default {
           onConfirm () {
             self.$vux.loading.show()
             let params = { id: self.clickdata.id, moderate: 0 }
-            self.$http.post(`${ENV.BokaApi}/api/moderate/fpimport`, params).then(function (res) {
+            self.$http.post(`${ENV.BokaApi}/api/moderate/fpimport`, params).then(res => {
               let data = res.data
               self.$vux.loading.hide()
               self.$vux.toast.show({
@@ -366,7 +366,7 @@ export default {
           onConfirm: () => {
             self.$vux.loading.show()
             let params = { id: self.clickdata.id, shelf: 1 }
-            self.$http.post(`${ENV.BokaApi}/api/factory/productset`, params).then(function (res) {
+            self.$http.post(`${ENV.BokaApi}/api/factory/productset`, params).then(res => {
               let data = res.data
               self.$vux.loading.hide()
               self.$vux.toast.show({
@@ -391,7 +391,7 @@ export default {
           onConfirm () {
             self.$vux.loading.show()
             let params = { id: self.clickdata.id, shelf: 0 }
-            self.$http.post(`${ENV.BokaApi}/api/factory/productset`, params).then(function (res) {
+            self.$http.post(`${ENV.BokaApi}/api/factory/productset`, params).then(res => {
               let data = res.data
               self.$vux.loading.hide()
               self.$vux.toast.show({
@@ -438,9 +438,9 @@ export default {
         })
         return false
       }
-      self.$http.post(`${ENV.BokaApi}/api/factory/productset `, {
+      self.$http.post(`${ENV.BokaApi}/api/factory/productset`, {
         id: self.clickdata.id, salesrebate: salesRebate, superrebate: superRebate
-      }).then(function (res) {
+      }).then(res => {
         let data = res.data
         const retdata = data.data
         self.$vux.loading.hide()
