@@ -36,10 +36,10 @@
                             <span class="v_middle db-in">库存: {{ item.storage }}{{item.unit}}</span>
                             <span class="v_middle db-in ml5">已售: {{ item.truesaled }}{{item.unit}}</span>
                         </div>
-                        <div class="clamp1 mt5">
+                        <!-- <div class="clamp1 mt5">
                             <span class="v_middle db-in">销售佣金: {{ item.salesrebate }}</span>
                             <span class="v_middle db-in ml5">推荐佣金: {{ item.superrebate }}</span>
-                        </div>
+                        </div> -->
                       </div>
                       <div class="align_right t-cell v_bottom w80">
                         <div class="btnicon bg-red color-white font12" @click.stop="controlpopup1(item,index)">
