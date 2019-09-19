@@ -1034,7 +1034,7 @@ export default {
           postdata.id = self.query.id
         }
         postdata.fid = self.query.fid
-        self.$http.post(`${ENV.BokaApi}/api/add/fpimport`, postdata).then(res => {
+        self.$http.post(`${ENV.BokaApi}/api/add/factoryproduct`, postdata).then(res => {
           let data = res.data
           self.$vux.loading.hide()
           self.$vux.toast.show({
