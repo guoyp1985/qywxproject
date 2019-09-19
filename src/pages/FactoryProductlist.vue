@@ -263,7 +263,7 @@ export default {
           onConfirm () {
             self.$vux.loading.show()
             let params = { id: self.clickdata.id, moderate: 1 }
-            self.$http.post(`${ENV.BokaApi}/api/moderate/factoryproduct`, params).then(function (res) {
+            self.$http.post(`${ENV.BokaApi}/api/moderate/fpimport`, params).then(function (res) {
               let data = res.data
               self.$vux.loading.hide()
               self.$vux.toast.show({
@@ -287,7 +287,7 @@ export default {
           onConfirm () {
             self.$vux.loading.show()
             let params = { id: self.clickdata.id, moderate: 0 }
-            self.$http.post(`${ENV.BokaApi}/api/moderate/factoryproduct`, params).then(function (res) {
+            self.$http.post(`${ENV.BokaApi}/api/moderate/fpimport`, params).then(function (res) {
               let data = res.data
               self.$vux.loading.hide()
               self.$vux.toast.show({
