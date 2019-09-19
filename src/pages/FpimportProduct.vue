@@ -82,7 +82,7 @@
         </template>
         <div class="padding10 b_bottom_after levelarea">
           <div class="levelitem">
-            <div><span class="bold">推荐人佣金:</span><span class="bold">{{ $t('RMB') }}{{ productdata.newsuperiorrebate }}</span><i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp"></i></div>
+            <div><span class="bold">推荐人佣金:</span><span class="bold">{{ $t('RMB') }}{{ productdata.newsuperrebate }}</span><i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp"></i></div>
           </div>
         </div>
         <div class="padding10 b_bottom_after levelarea">
