@@ -270,7 +270,7 @@ export default {
                 text: data.error,
                 type: (data.flag !== 1 ? 'warn' : 'success'),
                 time: self.$util.delay(data.error),
-                onHide: function () {
+                onHide: () => {
                   if (data.flag === 1) {
                     self.clickdata.moderate = 1
                     self.productdata[self.clickindex].moderate = 1
@@ -294,7 +294,7 @@ export default {
                 text: data.error,
                 type: (data.flag !== 1 ? 'warn' : 'success'),
                 time: self.$util.delay(data.error),
-                onHide: function () {
+                onHide: () => {
                   if (data.flag === 1) {
                     self.clickdata.moderate = 0
                     self.productdata[self.clickindex].moderate = 0
