@@ -9,15 +9,6 @@
           <div class="w_100 clamp1 align_right">应打款金额: {{salesData.needpaymoney}}</div>
         </div>
       </div>
-      <!-- <div v-if="statData && statData.length > 0" class="radiusarea mb10 pb15 bg-white list-shadow01">
-        <div class="item" v-for="(item,index) in statData" :key="index">
-          <div class="inner">
-            <div class="radius font15 clamp1" v-if="item.key == 'salesmoney'">{{ item.value }}</div>
-            <div class="radius font22 clamp1" v-else>{{ item.value }}</div>
-            <div class="title color-gray">{{ item.title }}</div>
-          </div>
-        </div>
-      </div> -->
       <div class="radiusarea mb10 pb15 bg-white list-shadow01">
         <div class="item">
           <div class="inner">
@@ -70,6 +61,7 @@
                   <div class="color-lightgray" style="width:190px;">订单号: {{item.orderno}}</div>
                   <div class="flex_cell align_right color-red4">{{item.flagstr}}</div>
               </div>
+              <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item" :product="product"></Orderproductplate>
               <div class="bg-white padding10 b_top_after b_bottom_after color-gray5">
                 <div class="t-table">
                   <div class="font12 color-lightgray">
@@ -88,6 +80,7 @@
                   <div class="color-lightgray" style="width:190px;">订单号: {{item.orderno}}</div>
                   <div class="flex_cell align_right color-red4">{{item.flagstr}}</div>
               </div>
+              <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item" :product="product"></Orderproductplate>
               <div class="bg-white padding10 b_top_after b_bottom_after color-gray5">
                 <div class="t-table">
                   <div class="font12 color-lightgray">
@@ -106,6 +99,7 @@
                   <div class="color-lightgray" style="width:190px;">订单号: {{item.orderno}}</div>
                   <div class="flex_cell align_right color-red4">{{item.flagstr}}</div>
               </div>
+              <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item" :product="product"></Orderproductplate>
               <div class="bg-white padding10 b_top_after b_bottom_after color-gray5">
                 <div class="t-table">
                   <div class="font12 color-lightgray">
@@ -124,6 +118,7 @@
                   <div class="color-lightgray" style="width:190px;">订单号: {{item.orderno}}</div>
                   <div class="flex_cell align_right color-red4">{{item.flagstr}}</div>
               </div>
+              <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item" :product="product"></Orderproductplate>
               <div class="bg-white padding10 b_top_after b_bottom_after color-gray5">
                 <div class="t-table">
                   <div class="font12 color-lightgray">
@@ -149,6 +144,7 @@ import { Tab, TabItem, Swiper, SwiperItem, XImg } from 'vux'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
+import Orderproductplate from '@/components/Orderproductplate'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
@@ -156,7 +152,7 @@ import { User } from '#/storage'
 const limit = 10
 export default {
   components: {
-    Tab, TabItem, Swiper, SwiperItem, XImg, Sos, Subscribe, ApplyTip
+    Tab, TabItem, Swiper, SwiperItem, XImg, Sos, Subscribe, ApplyTip, Orderproductplate
   },
   filters: {
     dateformat: function (value) {
