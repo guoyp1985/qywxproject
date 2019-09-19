@@ -21,37 +21,37 @@
       <div class="radiusarea mb10 pb15 bg-white list-shadow01">
         <div class="item">
           <div class="inner">
-            <div class="radius font22 clamp1">{{statData.allorders}}</div>
+            <div class="radius font22 clamp1">{{salesData.allorders}}</div>
             <div class="title color-gray">总订单</div>
           </div>
         </div>
         <div class="item">
           <div class="inner">
-            <div class="radius font22 clamp1">{{statData.monthorders}}</div>
+            <div class="radius font22 clamp1">{{salesData.monthorders}}</div>
             <div class="title color-gray">本月订单</div>
           </div>
         </div>
         <div class="item">
           <div class="inner">
-            <div class="radius font22 clamp1">{{statData.todayorders}}</div>
+            <div class="radius font22 clamp1">{{salesData.todayorders}}</div>
             <div class="title color-gray">今日订单</div>
           </div>
         </div>
         <div class="item">
           <div class="inner">
-            <div class="radius font22 clamp1">{{statData.allordersmoney}}</div>
+            <div class="radius font22 clamp1">{{salesData.allordersmoney}}</div>
             <div class="title color-gray">总销售额</div>
           </div>
         </div>
         <div class="item">
           <div class="inner">
-            <div class="radius font22 clamp1">{{statData.monthordersmoney}}</div>
+            <div class="radius font22 clamp1">{{salesData.monthordersmoney}}</div>
             <div class="title color-gray">本月销售额</div>
           </div>
         </div>
         <div class="item">
           <div class="inner">
-            <div class="radius font22 clamp1">{{statData.todayordersmoney}}</div>
+            <div class="radius font22 clamp1">{{salesData.todayordersmoney}}</div>
             <div class="title color-gray">今日销售额</div>
           </div>
         </div>
@@ -676,7 +676,7 @@ export default {
       showTip: false,
       viewData: {},
       Fid: 0,
-      statData: {}
+      salesData: {}
     }
   },
   watch: {
@@ -866,7 +866,7 @@ export default {
       }).then(res => {
         const data = res.data
         if (data.flag) {
-          this.statData = data.data
+          this.salesData = data.data
         }
       })
     }
