@@ -1045,7 +1045,7 @@ export default {
             onHide: () => {
               self.submitIng = false
               if (data.flag === 1) {
-                let rparams = self.$util.handleAppParams(self.query, {id: data.data, fid: self.query.fid})
+                let rparams = self.$util.handleAppParams(self.query, {id: this.query.id, fid: self.query.fid})
                 self.$router.push({path: '/fpimportProduct', query: rparams})
               }
             }
