@@ -16,8 +16,7 @@
       </div>
       <div class="t-cell v_middle">
         <div class="clamp1 font14">{{infoData.factoryinfo.title}}</div>
-        <div v-if="selectedIndex === 0" class="clamp1 mt5 font14" style="color:#ea3a3a">项目收入: ￥{{infoData.mymonthmoney}}</div>
-        <div v-else class="clamp1 mt5 font14" style="color:#ea3a3a">合作模式: 每月分佣</div>
+        <div class="clamp1 mt5 font14" style="color:#ea3a3a">本月我的分佣: ￥{{infoData.mymonthmoney}}</div>
       </div>
       <!-- <div class="t-cell align_right v_middle">
         <div class="qbtn w60">联系</div>
