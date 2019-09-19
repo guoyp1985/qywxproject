@@ -192,7 +192,7 @@ export default {
         onConfirm: () => {
           self.$vux.loading.show()
           self.$http.post(`${ENV.BokaApi}/api/factory/productshelf`, {
-            module: 'factoryproduct', type: 'all', fid: self.loginUser.Fid, fromfid: self.Fid
+            module: 'factoryproduct', type: 'all', fid: self.loginUser.fid, fromfid: self.Fid
           }).then(function (res) {
             let data = res.data
             self.$vux.loading.hide()
