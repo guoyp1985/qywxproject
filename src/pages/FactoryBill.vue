@@ -6,7 +6,7 @@
           <div class="w_100 clamp1">厂家: {{viewData.title}}</div>
         </div>
         <div class="flex_cell flex_right">
-          <div class="w_100 clamp1">应打款金额: 1000</div>
+          <div class="w_100 clamp1">应打款金额: {{statData.needpaymoney}}</div>
         </div>
       </div>
       <!-- <div v-if="statData && statData.length > 0" class="radiusarea mb10 pb15 bg-white list-shadow01">
@@ -21,37 +21,37 @@
       <div class="radiusarea mb10 pb15 bg-white list-shadow01">
         <div class="item">
           <div class="inner">
-            <div class="radius font22 clamp1">1000</div>
+            <div class="radius font22 clamp1">{{statData.allorders}}</div>
             <div class="title color-gray">总订单</div>
           </div>
         </div>
         <div class="item">
           <div class="inner">
-            <div class="radius font22 clamp1">100</div>
+            <div class="radius font22 clamp1">{{statData.monthorders}}</div>
             <div class="title color-gray">本月订单</div>
           </div>
         </div>
         <div class="item">
           <div class="inner">
-            <div class="radius font22 clamp1">10</div>
+            <div class="radius font22 clamp1">{{statData.todayorders}}</div>
             <div class="title color-gray">今日订单</div>
           </div>
         </div>
         <div class="item">
           <div class="inner">
-            <div class="radius font22 clamp1">1000</div>
+            <div class="radius font22 clamp1">{{statData.allordersmoney}}</div>
             <div class="title color-gray">总销售额</div>
           </div>
         </div>
         <div class="item">
           <div class="inner">
-            <div class="radius font22 clamp1">100</div>
+            <div class="radius font22 clamp1">{{statData.monthordersmoney}}</div>
             <div class="title color-gray">本月销售额</div>
           </div>
         </div>
         <div class="item">
           <div class="inner">
-            <div class="radius font22 clamp1">10</div>
+            <div class="radius font22 clamp1">{{statData.todayordersmoney}}</div>
             <div class="title color-gray">今日销售额</div>
           </div>
         </div>
@@ -675,7 +675,8 @@ export default {
       userData: {},
       showTip: false,
       viewData: {},
-      Fid: 0
+      Fid: 0,
+      statData: {}
     }
   },
   watch: {
@@ -859,6 +860,14 @@ export default {
           {title: '本月订单'},
           {title: '全部订单'}
         ]
+        return this.$http.post(`${ENV.BokaApi}/api/factory/inviterSaleStat`, {
+          fromfid: this.Fid, fid: this.loginUser.fid
+        })
+      }).then(res => {
+        const data = res.data
+        if (data.flag) {
+          this.statData = data.data
+        }
       })
     }
   },
