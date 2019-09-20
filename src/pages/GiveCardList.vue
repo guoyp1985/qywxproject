@@ -15,6 +15,11 @@
                 </div>
                 <div class="flex_cell">
                   <div class="font16 mb5 clamp1 color-orange">满{{item.ordermoney}}减{{item.money}}</div>
+                  <div class="font12 w_100 flex_left">
+                    <span class="w40">仅限【</span>
+                    <span class="clamp1">潮流男款卫衣时尚街头</span>
+                    <span class="w40">】使用</span>
+                  </div>
                   <div class="font14 mb5 clamp1">领取人: {{item.linkman}}</div>
                   <div class="font12 color-gray">领取时间: {{item.dateline_str}}</div>
                 </div>
@@ -165,5 +170,6 @@ export default {
   }
   .btn-cell{width:180rpx;padding-top:30rpx;padding-bottom:30rpx;box-sizing: border-box;}
   .rbtn{display:inline-block;padding:10rpx;border-radius:10rpx;background-color: #fff;}
+  .w120{width:120px;}
 }
 </style>
