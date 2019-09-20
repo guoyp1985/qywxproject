@@ -562,6 +562,22 @@
                 </div>
               </template>
             </div>
+            <div v-else-if="tabitem.type == 'factoryagentlist'" class="scroll_list border-box">
+              <template>
+                <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
+                <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
+                  <div class="flex_left">
+                    <div class="pic">
+                      <img class="avatarimg2 imgcover" :src="item.factoryinfo.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+                    </div>
+                    <div class="flex_cell pl10 pr20">
+                      <div class="clamp1 color-gray2">{{ item.factoryinfo.title }}</div>
+                      <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+            </div>
             <div v-else class="scroll_list border-box">
               <template>
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
