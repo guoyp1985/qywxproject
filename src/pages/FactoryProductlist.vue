@@ -22,7 +22,7 @@
           <template v-else>
             <div class="scroll_list ">
               <div @click="toFactoryProduct(item)" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in productdata" :key="index" style="color:inherit;">
-                <div v-if="item.moderate == 0" class="ico down"></div>
+                <div v-if="item.moderate == 0 || item.originmoderate == 0" class="ico down"></div>
             		<div class="t-table bg-white pt10 pb10">
             			<div class="t-cell pl12 v_middle" style="width:110px;">
                     <img class="imgcover v_middle" :src="getPhoto(item.photo)" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
