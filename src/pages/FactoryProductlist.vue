@@ -88,7 +88,7 @@
                   <router-link class="inner" :to="{path: '/addFpimportProduct', query: {id: clickdata.id, fid: Fid}}">编辑</router-link>
                 </div>
               </template>
-              <div class="item" v-if="clickdata.moderate == 0">
+              <div class="item" v-if="clickdata.moderate == 0 && (!clickdata.fromfid || (clickdata.fromfid && clickdata.originmoderate))">
                 <div class="inner" @click="clickpopup('up')">上架</div>
               </div>
               <div class="item" v-else-if="clickdata.moderate == 1">
