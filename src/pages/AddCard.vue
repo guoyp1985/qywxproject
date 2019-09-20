@@ -43,7 +43,7 @@
                   <div class="t-cell v_middle">
                     <div class="clamp1">{{selectedCustomer.linkman}}</div>
                   </div>
-                  <div class="t-cell align_center v_middle" style="width:60px;">
+                  <div class="t-cell align_center v_middle" style="width:60px;" v-if="!query.id">
                     <div class="qbtn color-red btnchange" style="border:#ff3b30 1px solid;line-height:1;" @click="selectevent2">修改</div>
                   </div>
                 </div>
@@ -96,7 +96,7 @@
                     <div class="clamp1">{{selectedProduct.title}}</div>
                     <div class="mt5 font12 clamp1"><span class="color-orange">{{ $t('RMB') }}{{selectedProduct.price}}</span><span class="ml10 color-gray">{{ $t('Storage') }}{{selectedProduct.storage}}</span></div>
                   </div>
-                  <div class="t-cell align_center v_middle" style="width:60px;">
+                  <div class="t-cell align_center v_middle" style="width:60px;" v-if="!query.id">
                     <div class="qbtn color-red btnchange" style="border:#ff3b30 1px solid;line-height:1;" @click="selectevent">修改</div>
                   </div>
                 </div>
