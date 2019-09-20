@@ -88,7 +88,7 @@
                   <router-link class="inner" :to="{path: '/addFpimportProduct', query: {id: clickdata.id, fid: Fid}}">编辑</router-link>
                 </div>
               </template>
-              <div class="item" v-if="clickdata.moderate == 0 && (!clickdata.fromfid || (clickdata.fromfid && clickdata.originmoderate))">
+              <div class="item" v-if="clickdata.moderate == 0">
                 <div class="inner" @click="clickpopup('up')">上架</div>
               </div>
               <div class="item" v-else-if="clickdata.moderate == 1">
@@ -446,7 +446,6 @@ export default {
         id: self.clickdata.id, newsalesrebate: salesRebate, newsuperrebate: superRebate
       }).then(res => {
         let data = res.data
-        const retdata = data.data
         self.$vux.loading.hide()
         self.$vux.toast.show({
           text: data.error,
@@ -455,14 +454,7 @@ export default {
           onHide: function () {
             if (data.flag === 1) {
               self.showFeePopup = false
-              switch (self.selectedIndex) {
-                case 0:
-                  self.tabData1[self.clickindex] = retdata
-                  break
-                case 1:
-                  self.tabData2[self.clickindex] = retdata
-                  break
-              }
+              self.refresh()
             }
           }
         })
