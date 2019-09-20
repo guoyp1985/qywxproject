@@ -28,18 +28,19 @@
                     <img class="imgcover v_middle" :src="getPhoto(item.photo)" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                   </div>
             			<div class="t-cell v_middle">
-                    <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
+                    <div class="clamp1 font16 pr10 color-lightgray"><span class="color-theme" v-if="item.fromfid">【货源】</span><span>{{item.title}}</span></div>
                     <div class="t-table pr12 border-box mt15">
                       <div class="t-cell color-999 font14">
                         <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ item.price }}</span></div>
-                        <div class="clamp1 mt5">
+                        <div class="clamp1">
                             <span class="v_middle db-in">库存: {{ item.storage }}{{item.unit}}</span>
                             <span class="v_middle db-in ml5">已售: {{ item.truesaled }}{{item.unit}}</span>
                         </div>
-                        <div class="clamp1 mt5">
+                        <div class="font12">利润空间:<span class="color-red"> {{ $t('RMB') }}{{ item.lirun }}</span></div>
+                        <!-- <div class="clamp1 mt5">
                             <span class="v_middle db-in">销售佣金: {{ item.salesrebate }}</span>
                             <span class="v_middle db-in ml5">推荐佣金: {{ item.superrebate }}</span>
-                        </div>
+                        </div> -->
                       </div>
                       <div class="align_right t-cell v_bottom w80">
                         <div class="btnicon bg-red color-white font12" @click.stop="controlpopup1(item,index)">
@@ -99,11 +100,11 @@
               <div class="item" v-else-if="clickdata.shelf == 1">
                 <div class="inner" @click="clickpopup('downShelf')">从货源移出</div>
               </div>
-              <div class="item">
+              <div class="item" v-if="clickdata.fromfid">
                 <div class="inner" @click="clickpopup('fee')">设置佣金</div>
               </div>
               <div class="item">
-                <router-link class="inner" :to="{path: '/stat', query: {id: clickdata.id, module: 'factoryproduct'}}">统计</router-link>
+                <router-link class="inner" :to="{path: '/stat', query: {id: clickdata.id, module: 'fpimport'}}">统计</router-link>
               </div>
               <!-- <div class="item">
                 <router-link class="inner" :to="{ path: '/factoryAgentFee', query: { id: clickdata.id, fid: Fid } }">设置佣金</router-link>
@@ -263,14 +264,14 @@ export default {
           onConfirm () {
             self.$vux.loading.show()
             let params = { id: self.clickdata.id, moderate: 1 }
-            self.$http.post(`${ENV.BokaApi}/api/moderate/factoryproduct`, params).then(function (res) {
+            self.$http.post(`${ENV.BokaApi}/api/moderate/fpimport`, params).then(res => {
               let data = res.data
               self.$vux.loading.hide()
               self.$vux.toast.show({
                 text: data.error,
                 type: (data.flag !== 1 ? 'warn' : 'success'),
                 time: self.$util.delay(data.error),
-                onHide: function () {
+                onHide: () => {
                   if (data.flag === 1) {
                     self.clickdata.moderate = 1
                     self.productdata[self.clickindex].moderate = 1
@@ -287,14 +288,14 @@ export default {
           onConfirm () {
             self.$vux.loading.show()
             let params = { id: self.clickdata.id, moderate: 0 }
-            self.$http.post(`${ENV.BokaApi}/api/moderate/factoryproduct`, params).then(function (res) {
+            self.$http.post(`${ENV.BokaApi}/api/moderate/fpimport`, params).then(res => {
               let data = res.data
               self.$vux.loading.hide()
               self.$vux.toast.show({
                 text: data.error,
                 type: (data.flag !== 1 ? 'warn' : 'success'),
                 time: self.$util.delay(data.error),
-                onHide: function () {
+                onHide: () => {
                   if (data.flag === 1) {
                     self.clickdata.moderate = 0
                     self.productdata[self.clickindex].moderate = 0
@@ -344,7 +345,7 @@ export default {
         })
       } else if (key === 'upShelf') {
         self.showpopup1 = false
-        if (!this.loginUser.bankcardno || this.loginUser.bankcardno === '' || !this.loginUser.bankname || this.loginUser.bankname === '') {
+        if (!this.loginUser.factoryinfo.bankcardno || this.loginUser.factoryinfo.bankcardno === '') {
           self.$vux.confirm.show({
             title: '您还没有绑定银行卡，请先绑定银行卡信息，其他厂家出售商品后，将会把订单金额直接打款到您的银行卡账户上。',
             confirmText: '去绑定',
@@ -365,7 +366,7 @@ export default {
           onConfirm: () => {
             self.$vux.loading.show()
             let params = { id: self.clickdata.id, shelf: 1 }
-            self.$http.post(`${ENV.BokaApi}/api/factory/productset`, params).then(function (res) {
+            self.$http.post(`${ENV.BokaApi}/api/factory/productset`, params).then(res => {
               let data = res.data
               self.$vux.loading.hide()
               self.$vux.toast.show({
@@ -390,7 +391,7 @@ export default {
           onConfirm () {
             self.$vux.loading.show()
             let params = { id: self.clickdata.id, shelf: 0 }
-            self.$http.post(`${ENV.BokaApi}/api/factory/productset`, params).then(function (res) {
+            self.$http.post(`${ENV.BokaApi}/api/factory/productset`, params).then(res => {
               let data = res.data
               self.$vux.loading.hide()
               self.$vux.toast.show({
@@ -410,6 +411,8 @@ export default {
         })
       } else if (key === 'fee') {
         self.showpopup1 = false
+        self.postSalesRebate = self.clickdata.newsalesrebate
+        self.postSuperRebate = self.clickdata.newsuperrebate
         self.showFeePopup = true
         self.feeData = self.clickdata
       } else {
@@ -437,9 +440,9 @@ export default {
         })
         return false
       }
-      self.$http.post(`${ENV.BokaApi}/api/factory/productset `, {
-        id: self.clickdata.id, salesrebate: salesRebate, superrebate: superRebate
-      }).then(function (res) {
+      self.$http.post(`${ENV.BokaApi}/api/factory/productset`, {
+        id: self.clickdata.id, newsalesrebate: salesRebate, newsuperrebate: superRebate
+      }).then(res => {
         let data = res.data
         const retdata = data.data
         self.$vux.loading.hide()

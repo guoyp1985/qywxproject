@@ -438,7 +438,8 @@ export default {
       optionsData: [],
       selectedOptionIndex: 0,
       optionsPhoto: [],
-      clickPhotoIndex: -1
+      clickPhotoIndex: -1,
+      productData: {}
     }
   },
   watch: {
@@ -1031,7 +1032,7 @@ export default {
         postdata.options = postOptions
         self.$vux.loading.show()
         if (self.query.id) {
-          postdata.id = self.query.id
+          postdata.id = self.productData.moduleid
         }
         postdata.fid = self.query.fid
         self.$http.post(`${ENV.BokaApi}/api/add/factoryproduct`, postdata).then(res => {
@@ -1044,7 +1045,7 @@ export default {
             onHide: () => {
               self.submitIng = false
               if (data.flag === 1) {
-                let rparams = self.$util.handleAppParams(self.query, {id: data.data, fid: self.query.fid})
+                let rparams = self.$util.handleAppParams(self.query, {id: this.query.id, fid: self.query.fid})
                 self.$router.push({path: '/fpimportProduct', query: rparams})
               }
             }
@@ -1103,6 +1104,7 @@ export default {
             self.submitdata.storage = retdata.storage
           }
           self.data = retdata
+          self.productData = retdata
           self.activityInfo = self.data.activitinfo
           for (let key in self.submitdata) {
             self.submitdata[key] = self.data[key]

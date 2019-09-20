@@ -13,6 +13,12 @@
         <input ref="fileInput1" class="hide" type="file" name="files" @change="fileChange('photo')" />
       </form>
       <form class="addForm">
+        <div class="form-item fg bg-white b-top b-bottom" v-if="shareUser && shareUser.uid">
+          <div class="t-table">
+            <div class="t-cell title-cell w80 font14 v_middle">推荐人</div>
+            <div class="t-cell input-cell v_middle flex_right" style="position:relative;">{{ shareUser.linkman }}</div>
+          </div>
+        </div>
         <div class="form-item fg bg-white b-top b-bottom">
           <div class="t-table">
             <div class="t-cell title-cell w80 font14 v_middle">公司名称<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
@@ -229,6 +235,7 @@ export default {
   },
   data () {
     return {
+      query: {},
       flags: null,
       btnSubmit: '提交申请',
       message: '获取验证码',
@@ -246,7 +253,8 @@ export default {
       requireddata: { title: '', company: '', licensephoto: '', licensecode: '' },
       isLoadPhoto: false,
       showTop: false,
-      showMonthlyCommission: false
+      showMonthlyCommission: false,
+      shareUser: {}
     }
   },
   watch: {
@@ -415,6 +423,9 @@ export default {
         postData.id = this.factoryInfo.id
       }
       self.$vux.loading.show()
+      if (self.shareUser && self.shareUser.uid) {
+        postData.inviter = self.shareUser.uid
+      }
       self.$http.post(`${ENV.BokaApi}/api/factory/applyFactory`, postData).then(res => {
         let data = res.data
         let error = data.flag === 1 ? '申请成功' : data.error
@@ -542,6 +553,14 @@ export default {
     this.initData()
     this.watchPhoto()
     this.watchTop()
+  },
+  created () {
+    this.query = this.$route.query
+    if (this.query.share_uid) {
+      this.$http.get(`${ENV.BokaApi}/api/getUser/${this.query.share_uid}`).then(res => {
+        this.shareUser = res.data
+      })
+    }
   }
 };
 </script>
