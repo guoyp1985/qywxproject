@@ -137,7 +137,7 @@
         <div class="item">
           <div class="inner">
             <div class="radius font12 clamp1">￥{{statData.mymonthmoney}}</div>
-            <div class="title color-gray">本月我的收入</div>
+            <div class="title color-gray">本月我的分佣</div>
           </div>
         </div>
         <div class="item">
@@ -169,7 +169,7 @@
         <div class="item">
           <div class="inner">
             <div class="radius font12 clamp1">{{statData.retailercount}}</div>
-            <div class="title color-gray">兼职卖家</div>
+            <div class="title color-gray">合伙人</div>
           </div>
         </div>
       </div>
