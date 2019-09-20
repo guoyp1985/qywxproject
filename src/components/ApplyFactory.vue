@@ -426,6 +426,9 @@ export default {
       if (self.shareUser && self.shareUser.uid) {
         postData.inviter = self.shareUser.uid
       }
+      if (self.query.share_fid) {
+        postData.fid = self.query.share_fid
+      }
       self.$http.post(`${ENV.BokaApi}/api/factory/applyFactory`, postData).then(res => {
         let data = res.data
         let error = data.flag === 1 ? '申请成功' : data.error
