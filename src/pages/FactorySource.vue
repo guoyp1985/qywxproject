@@ -1,5 +1,5 @@
 <template>
-  <div :class="`containerarea bg-white font14 notop ${((selectedIndex == 1 && !tabData2.length)) ? 'nobottom' : ''}`">
+  <div :class="`containerarea bg-white font14 notop ${((selectedIndex == 1 && !tabData2.length || !showBottom)) ? 'nobottom' : ''}`">
     <div class="s-topbanner">
       <div class="flex_left border-box padding10 color-white" style="height:88px;">
         <div v-if="viewData.photo && viewData.photo != ''" class="w70">
@@ -12,8 +12,10 @@
         <div class="w100 flex_right">
           <div>
             <div class="flex_center bg-white color-theme" style="width:80px;padding:5px 0;border-radius:20px;" @click="toBill">详细账单</div>
-            <div class="flex_center bg-white color-theme mt5" style="width:80px;padding:5px 0;border-radius:20px;" v-if="!joinStatus" @click="toJoin">加盟厂家</div>
-            <div class="flex_center color-white mt5" style="width:80px;padding:5px 0;border-radius:20px;" v-else @click="toJoin">已加盟</div>
+            <template v-if="loginUser.fid != Fid">
+              <div class="flex_center bg-white color-theme mt5" style="width:80px;padding:5px 0;border-radius:20px;" v-if="!joinStatus" @click="toJoin">加盟厂家</div>
+              <div class="flex_center color-white mt5" style="width:80px;padding:5px 0;border-radius:20px;" v-else @click="toJoin">已加盟</div>
+            </template>
           </div>
         </div>
       </div>
@@ -35,7 +37,7 @@
       						<span class="color-red font14 flex_cell" style="overflow: hidden;margin-right: 10px;white-space: nowrap;text-overflow: ellipsis;">{{ $t('RMB') }} <span style="margin-left:1px;">{{ item.price }}</span></span>
       						<span class="color-gray">{{ $t('Saled txt') }}:<span style="margin-left:1px;">{{ item.saled }}</span></span>
       					</div>
-                <div class="flex_right mt5">
+                <div class="flex_right mt5" v-if="loginUser.fid != Fid">
                   <span v-if="item.haveshelf == 1" class="bg-gray color-white flex_center padding5" style="border-radius:5px;">已导入</span>
                   <span v-else class="bg-theme color-white flex_center padding5" style="border-radius:5px;" @click.stop="upEvent(item, index)">导入</span>
                 </div>
@@ -317,7 +319,7 @@ export default {
         this.productCount = data.allcount
         self.tabData1 = self.tabData1.concat(retdata)
         self.disTabData1 = true
-        if (self.tabData1.length > 0 || self.tabData2.length > 0) {
+        if ((self.tabData1.length > 0 || self.tabData2.length > 0) && this.loginUser.fid !== this.Fid) {
           self.showBottom = true
         }
         self.joinStatus = data.join
@@ -333,7 +335,7 @@ export default {
       this.loginUser = User.get()
       this.query = this.$route.query
       if (this.query.fid) {
-        this.Fid = this.query.fid
+        this.Fid = parseInt(this.query.fid)
       } else {
         this.Fid = this.loginUser.fid
       }
