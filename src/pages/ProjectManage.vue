@@ -24,6 +24,7 @@
                 </div>
                 <div class="t-cell v_middle">
                   <div class="clamp1 font14">{{item.title}}</div>
+                  <div class="clamp1 font12 color-gray" v-if="item.inviteruploader == loginUser.uid">推荐人: {{item.invitername}}</div>
                   <div class="clamp1 font12 color-gray">{{item.dateline | dateformat}}</div>
                 </div>
                 <div class="t-cell w60 align_right v_middle">
@@ -49,6 +50,7 @@
                 </div>
                 <div class="t-cell v_middle">
                   <div class="clamp1 font14">{{item.title}}</div>
+                  <div class="clamp1 font12 color-gray" v-if="item.inviteruploader == loginUser.uid">推荐人: {{item.invitername}}</div>
                   <div class="clamp1 font12 color-gray">{{item.dateline | dateformat}}</div>
                 </div>
                 <div class="t-cell w60 align_right v_middle">
@@ -74,6 +76,7 @@
                 </div>
                 <div class="t-cell v_middle">
                   <div class="clamp1 font14">{{item.title}}</div>
+                  <div class="clamp1 font12 color-gray" v-if="item.inviteruploader == loginUser.uid">推荐人: {{item.invitername}}</div>
                   <div class="clamp1 font12 color-gray">{{item.dateline | dateformat}}</div>
                 </div>
                 <div class="t-cell w60 align_right v_middle">
@@ -99,6 +102,7 @@
                 </div>
                 <div class="t-cell v_middle">
                   <div class="clamp1 font14">{{item.title}}</div>
+                  <div class="clamp1 font12 color-gray" v-if="item.inviteruploader == loginUser.uid">推荐人: {{item.invitername}}</div>
                   <div class="clamp1 font12 color-gray">{{item.dateline | dateformat}}</div>
                 </div>
                 <div class="t-cell w60 align_right v_middle">
