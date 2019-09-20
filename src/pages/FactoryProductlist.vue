@@ -88,12 +88,14 @@
                   <router-link class="inner" :to="{path: '/addFpimportProduct', query: {id: clickdata.id, fid: Fid}}">编辑</router-link>
                 </div>
               </template>
-              <div class="item" v-if="clickdata.moderate == 0">
-                <div class="inner" @click="clickpopup('up')">上架</div>
-              </div>
-              <div class="item" v-else-if="clickdata.moderate == 1">
-                <div class="inner" @click="clickpopup('down')">下架</div>
-              </div>
+              <template v-if="clickdata.originmoderate != 0">
+                <div class="item" v-if="clickdata.moderate == 0">
+                  <div class="inner" @click="clickpopup('up')">上架</div>
+                </div>
+                <div class="item" v-else-if="clickdata.moderate == 1">
+                  <div class="inner" @click="clickpopup('down')">下架</div>
+                </div>
+              </template>
               <template v-if="!clickdata.fromfid">
                 <div class="item" v-if="clickdata.shelf == 0">
                   <div class="inner" @click="clickpopup('upShelf')">推荐到货源</div>
