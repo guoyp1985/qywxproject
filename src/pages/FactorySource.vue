@@ -7,11 +7,11 @@
         </div>
         <div class="flex_cell">
           <div class="clamp1">{{ viewData.title }}</div>
-          <div class="font12 clamp2">应打款金额: {{ $t('RMB') }}{{needpaymoney}}</div>
+          <div class="font12 clamp2" v-if="joinStatus">应打款金额: {{ $t('RMB') }}{{needpaymoney}}</div>
         </div>
         <div class="w100 flex_right">
           <div>
-            <div class="flex_center bg-white color-theme" style="width:80px;padding:5px 0;border-radius:20px;" @click="toBill">详细账单</div>
+            <div v-if="joinStatus" class="flex_center bg-white color-theme" style="width:80px;padding:5px 0;border-radius:20px;" @click="toBill">详细账单</div>
             <template v-if="loginUser.fid != Fid">
               <div class="flex_center bg-white color-theme mt5" style="width:80px;padding:5px 0;border-radius:20px;" v-if="!joinStatus" @click="toJoin">加盟厂家</div>
               <div class="flex_center color-white mt5" style="width:80px;padding:5px 0;border-radius:20px;" v-else @click="toJoin">已加盟</div>
