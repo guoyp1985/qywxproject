@@ -94,12 +94,14 @@
               <div class="item" v-else-if="clickdata.moderate == 1">
                 <div class="inner" @click="clickpopup('down')">下架</div>
               </div>
-              <div class="item" v-if="clickdata.shelf == 0">
-                <div class="inner" @click="clickpopup('upShelf')">推荐到货源</div>
-              </div>
-              <div class="item" v-else-if="clickdata.shelf == 1">
-                <div class="inner" @click="clickpopup('downShelf')">从货源移出</div>
-              </div>
+              <template v-if="!clickdata.fromfid">
+                <div class="item" v-if="clickdata.shelf == 0">
+                  <div class="inner" @click="clickpopup('upShelf')">推荐到货源</div>
+                </div>
+                <div class="item" v-else-if="clickdata.shelf == 1">
+                  <div class="inner" @click="clickpopup('downShelf')">从货源移出</div>
+                </div>
+              </template>
               <div class="item" v-if="clickdata.fromfid">
                 <div class="inner" @click="clickpopup('fee')">设置佣金</div>
               </div>
