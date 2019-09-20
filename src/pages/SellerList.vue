@@ -1169,7 +1169,7 @@ export default {
     },
     getData6 (isone) {
       const self = this
-      let params = {fid: this.loginUser.fid, type: 'my', pagestart: self.pageStart6, limit: self.limit}
+      let params = {fid: this.loginUser.fid, type: 'join', pagestart: self.pageStart6, limit: self.limit}
       if (isone) {
         params.pagestart = self.tabData6.length
         params.limit = 1
