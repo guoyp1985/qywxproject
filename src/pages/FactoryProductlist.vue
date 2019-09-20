@@ -36,7 +36,7 @@
                             <span class="v_middle db-in">库存: {{ item.storage }}{{item.unit}}</span>
                             <span class="v_middle db-in ml5">已售: {{ item.truesaled }}{{item.unit}}</span>
                         </div>
-                        <div class="font12">利润空间:<span class="color-red"> {{ $t('RMB') }}{{ item.lirun }}</span></div>
+                        <div class="font12" v-if="item.fromfid">利润空间:<span class="color-red"> {{ $t('RMB') }}{{ item.lirun }}</span></div>
                         <!-- <div class="clamp1 mt5">
                             <span class="v_middle db-in">销售佣金: {{ item.salesrebate }}</span>
                             <span class="v_middle db-in ml5">推荐佣金: {{ item.superrebate }}</span>
@@ -94,12 +94,14 @@
               <div class="item" v-else-if="clickdata.moderate == 1">
                 <div class="inner" @click="clickpopup('down')">下架</div>
               </div>
-              <div class="item" v-if="clickdata.shelf == 0">
-                <div class="inner" @click="clickpopup('upShelf')">推荐到货源</div>
-              </div>
-              <div class="item" v-else-if="clickdata.shelf == 1">
-                <div class="inner" @click="clickpopup('downShelf')">从货源移出</div>
-              </div>
+              <template v-if="!clickdata.fromfid">
+                <div class="item" v-if="clickdata.shelf == 0">
+                  <div class="inner" @click="clickpopup('upShelf')">推荐到货源</div>
+                </div>
+                <div class="item" v-else-if="clickdata.shelf == 1">
+                  <div class="inner" @click="clickpopup('downShelf')">从货源移出</div>
+                </div>
+              </template>
               <div class="item" v-if="clickdata.fromfid">
                 <div class="inner" @click="clickpopup('fee')">设置佣金</div>
               </div>
