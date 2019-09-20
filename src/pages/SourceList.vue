@@ -235,7 +235,6 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.$vux.loading.show()
       this.loginUser = User.get()
       this.query = this.$route.query
       if (this.query.fid) {
