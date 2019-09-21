@@ -134,7 +134,7 @@
           </div>
         </div>
       </div>
-      <div v-if="loginUser.isretailer" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
+      <div v-if="loginUser.fid != Fid" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
         <!-- <div class="align_center flex_center flex_cell" v-if="!loginUser.retailerinfo.fid || loginUser.retailerinfo.fid == query.fid"> -->
         <div class="align_center flex_center flex_cell">
           <div class="btn-bottom-red flex_center" style="width:90%;background-color:#ccc;" v-if="productdata.havefpimport == 1">已代理</div>
@@ -622,7 +622,7 @@ export default {
               self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
             }
             self.handelShare()
-            if (!self.loginUser.isretailer) {
+            if (self.loginUser.fid === this.Fid) {
               self.topcss = 'nobottom'
             }
             self.feeData = self.productdata.agentfee ? self.productdata.agentfee : []
@@ -643,7 +643,7 @@ export default {
         this.retailerInfo = this.loginUser.retailerinfo
         this.query = this.$route.query
         if (this.query.fid) {
-          this.Fid = this.query.fid
+          this.Fid = parseInt(this.query.fid)
         } else {
           this.Fid = this.loginUser.fid
         }
