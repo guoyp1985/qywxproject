@@ -590,6 +590,7 @@ export default {
           } else {
             self.showContainer = true
             self.productdata = data.data
+            this.Fid = self.productdata.fid
             if (this.productdata.jd_price && this.productdata.jd_price !== '' && parseFloat(this.productdata.jd_price) > 0) {
               this.showJd = true
             } else {
@@ -642,11 +643,6 @@ export default {
         User.set(data)
         this.retailerInfo = this.loginUser.retailerinfo
         this.query = this.$route.query
-        if (this.query.fid) {
-          this.Fid = parseInt(this.query.fid)
-        } else {
-          this.Fid = this.loginUser.fid
-        }
         if (this.query.module) {
           this.module = this.query.module
         }
@@ -684,6 +680,7 @@ export default {
 
 <style lang="less">
 .notop .pagetop{display:none;}
+.f-product-page.nobottom .pagemiddle{bottom:0;}
 .f-product-page{
   .options-list{
     display: flex;flex-wrap: wrap;
