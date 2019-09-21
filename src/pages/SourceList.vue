@@ -130,7 +130,8 @@ export default {
       productData: [],
       classData: [],
       selectedIndex: 0,
-      defaultTab: [{title: '为你推荐', photo: 'https://tossharingsales.boka.cn/minigxk/allclass.png'}, {title: '全部', photo: 'https://tossharingsales.boka.cn/minigxk/allclass.png'}],
+      // defaultTab: [{title: '为你推荐', photo: 'https://tossharingsales.boka.cn/minigxk/allclass.png'}, {title: '全部', photo: 'https://tossharingsales.boka.cn/minigxk/allclass.png'}],
+      defaultTab: [{title: '全部', photo: 'https://tossharingsales.boka.cn/minigxk/allclass.png'}],
       autofixed: false,
       searchword: '',
       datecss: 'desc',
@@ -361,10 +362,7 @@ export default {
     getData1 (type) {
       console.log(this.loginUser)
       console.log(this.userInfo)
-      let params = {pagestart: pageStart, limit: limit, fid: this.Fid, myfid: this.loginUser.fid, shelf: 1}
-      if (this.loginUser.retailerinfo && this.loginUser.retailerinfo.fid) {
-        params.fid = this.loginUser.retailerinfo.fid
-      }
+      let params = {pagestart: pageStart, limit: limit, fid: this.Fid}
       if (this.sort === 'dateline') {
         if (this.selectedIndex === 0) {
           params.orderby = 'recommendtime'
@@ -374,19 +372,15 @@ export default {
         params.orderby = 'salesrebate'
         params.ascdesc = this.pricecss
       }
-      if (this.selectedIndex === 0) {
-        params.recommend = 2
-      } else if (this.selectedIndex === 1) {
-        params.from = 'origin'
-      } else {
-        // params.orderby = 'saled'
-        params.from = 'origin'
+      if (this.selectedIndex > 0) {
         params.classid = self.classData[self.selectedIndex].id
       }
       if (this.searchword !== '') {
         params.keyword = this.searchword
       }
-      self.$http.post(`${ENV.BokaApi}/api/list/fpimport`, params).then((res) => {
+      self.$http.get(`${ENV.BokaApi}/api/factory/sourceFactoryProduct`, {
+        params: params
+      }).then((res) => {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
