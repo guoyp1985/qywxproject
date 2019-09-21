@@ -51,7 +51,7 @@
           			<div class="picarea">
           				<div class="pic">
                     <img class="imgcover" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-                    <div class="t-icon color-theme flex_center"><i class="al al-zhuanqian font18"></i><span>赚 {{$t('RMB')}}{{item.newsalesrebate}}</span></div>
+                    <div class="t-icon color-theme flex_center"><i class="al al-zhuanqian font18"></i><span class="font12">利润空间 {{$t('RMB')}}{{item.lirun}}</span></div>
                   </div>
           			</div>
           			<div class="desbox" style="overflow:hidden;">
@@ -62,8 +62,8 @@
                       <div class="w_100 clamp1 color-red">{{ $t('RMB') }} {{ item.price }}</div>
                     </div>
                     <div class="flex_right" style="width:60px;">
-                      <span v-if="item.haveshelf == 1" class="bg-theme color-white flex_center padding5" style="border-radius:5px;">已导入</span>
-                      <span v-else class="bg-theme color-white flex_center padding5" style="border-radius:5px;" @click.stop="upEvent(item, index)">导入</span>
+                      <span v-if="item.haveshelf == 1" class="bg-theme color-white flex_center padding5 font12" style="border-radius:5px;">已代理</span>
+                      <span v-else class="bg-theme color-white flex_center padding5 font12" style="border-radius:5px;" @click.stop="upEvent(item, index)">代理销售</span>
                     </div>
                   </div>
           			</div>

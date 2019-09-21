@@ -110,7 +110,8 @@
         </template>
         <div class="bg-page" style="height:10px;"></div>
         <div class="b_top_after"></div>
-        <div class="padding10 b_bottom_after" @click="tofactoryDetail">
+        <!-- <div class="padding10 b_bottom_after" @click="tofactoryDetail"> -->
+        <div class="padding10 b_bottom_after">
           <div class="t-table">
     				<div class="t-cell v_middle w70" v-if="factoryinfo.photo && factoryinfo.photo != ''">
               <img class="v_middle imgcover" style="width:60px;height:60px;" :src="factoryinfo.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
@@ -136,8 +137,8 @@
       <div v-if="loginUser.isretailer" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
         <!-- <div class="align_center flex_center flex_cell" v-if="!loginUser.retailerinfo.fid || loginUser.retailerinfo.fid == query.fid"> -->
         <div class="align_center flex_center flex_cell">
-          <div class="btn-bottom-red flex_center" style="width:90%;background-color:#ccc;" v-if="productdata.havefpimport == 1">已导入</div>
-          <div class="btn-bottom-red flex_center" style="width:90%;" v-else @click="importEvent">导入</div>
+          <div class="btn-bottom-red flex_center" style="width:90%;background-color:#ccc;" v-if="productdata.havefpimport == 1">已代理</div>
+          <div class="btn-bottom-red flex_center" style="width:90%;" v-else @click="importEvent">加入我的厂家商品列表</div>
         </div>
       </div>
       <div v-transfer-dom>
