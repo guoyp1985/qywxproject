@@ -62,7 +62,7 @@
                       <div class="w_100 clamp1 color-red">{{ $t('RMB') }} {{ item.price }}</div>
                     </div>
                     <div class="flex_right" style="width:60px;">
-                      <span v-if="item.haveshelf == 1" class="bg-theme color-white flex_center padding5 font12" style="border-radius:5px;">已代理</span>
+                      <span v-if="item.havefpimport == 1" class="bg-theme color-white flex_center padding5 font12" style="border-radius:5px;">已代理</span>
                       <span v-else class="bg-theme color-white flex_center padding5 font12" style="border-radius:5px;" @click.stop="upEvent(item, index)">代理销售</span>
                     </div>
                   </div>
@@ -241,8 +241,6 @@ export default {
     upEvent (item, index) {
       this.clickData = item
       this.clickIndex = index
-      this.importProduct(item)
-
       const self = this
       let con = '确定导入商品吗？导入商品会自动加盟厂家'
       self.$vux.confirm.show({
@@ -260,7 +258,7 @@ export default {
               time: self.$util.delay(data.error)
             })
             if (data.flag) {
-              this.productData[index].haveshelf = 1
+              this.productData[index].shelf = 1
             }
           })
         }
@@ -365,9 +363,6 @@ export default {
       console.log(this.userInfo)
       let params = {pagestart: pageStart, limit: limit, fid: this.Fid}
       if (this.sort === 'dateline') {
-        if (this.selectedIndex === 0) {
-          params.orderby = 'recommendtime'
-        }
         params.ascdesc = this.datecss
       } else {
         params.orderby = 'salesrebate'
