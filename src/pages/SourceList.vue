@@ -27,7 +27,7 @@
       <tab-item v-for="(item,index) in classData" :selected="selectedIndex == index" :key="index"  @on-item-click="onItemClick">{{item.title}}</tab-item>
     </tab> -->
     <div class="column-content" style="padding-bottom:10px;box-sizing:border-box;position:relative;">
-      <div class="b_top_after pt10 pb10">
+      <!-- <div class="b_top_after pt10 pb10">
         <div class="flex_center">
           <div :class="`flex_cell flex_center b_right_after sort-icon ${sort == 'dateline' ? 'active' : ''}`" @click="sortEvent('dateline')">
             <div class="txt">最新上架<span :class="`al sort ${datecss}`"></span></div>
@@ -37,8 +37,9 @@
           </div>
         </div>
       </div>
-      <div class="b_top_after"></div>
-      <div style="overflow-y:auto;position:absolute;left:0;top:0;right:0;bottom:0;top:43px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
+      <div class="b_top_after"></div> -->
+      <!-- <div style="overflow-y:auto;position:absolute;left:0;top:0;right:0;bottom:0;top:43px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')"> -->
+      <div style="overflow-y:auto;position:absolute;left:0;top:0;right:0;bottom:0;top:0px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
         <div v-if="disProductData">
           <div class="productlist squarepic">
             <template v-if="!productData.length">
