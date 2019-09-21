@@ -103,12 +103,13 @@
                 <div class="title">交易流程</div>
                 <div class="con">
                   <div>商品产生交易后</div>
-                  <div>由于订单收入将会是在代理厂家账户上进行交易</div>
-                  <div>所以产生交易后</div>
-                  <div>代理厂家需将该笔订单供货商应获得的交易额</div>
-                  <div>从线下供货商进行订单发货</div>
+                  <div>由于订单收入是在代理厂家账户上进行的交易</div>
+                  <div>所以在产生交易后</div>
+                  <div>代理厂家需将供货商应获得的订单交易额</div>
+                  <div>从线下打款到供货商的对公账户内</div>
+                  <div>再由供货商对订单进行发货</div>
                   <div>代理厂家可通过订单列表查看订单的状态</div>
-                  <div class="mt10">注意: 订单出现售后情况时，需双方线下沟通协商处理。</div>
+                  <div class="mt10">注意: 当订单出现售后情况时，需双方线下沟通协商处理</div>
                 </div>
               </div>
             </div>
@@ -119,23 +120,23 @@
                 <div class="con">
                   <div class="flex_left pt10 pb10">
                     <div class="w80 flex_left">开户银行</div>
-                    <div class="flex_cell flex_left">{{clickData && clickData.factoryInfo ? clickData.factoryInfo.newbankcode : ''}}</div>
+                    <div class="flex_cell flex_left">{{clickData && clickData.factoryinfo ? clickData.factoryinfo.newbankcode : ''}}</div>
                   </div>
                   <div class="flex_left pt10 pb10">
                     <div class="w80 flex_left">开户名</div>
-                    <div class="flex_cell flex_left">{{clickData && clickData.factoryInfo ? clickData.factoryInfo.accountname : ''}}</div>
+                    <div class="flex_cell flex_left">{{clickData && clickData.factoryinfo ? clickData.factoryinfo.accountname : ''}}</div>
                   </div>
                   <div class="flex_left pt10 pb10">
                     <div class="w80 flex_left">开户账号</div>
-                    <div class="flex_cell flex_left">{{clickData && clickData.factoryInfo ? clickData.factoryInfo.newbankcardno : ''}}</div>
+                    <div class="flex_cell flex_left">{{clickData && clickData.factoryinfo ? clickData.factoryinfo.newbankcardno : ''}}</div>
                   </div>
                   <div class="flex_left pt10 pb10">
                     <div class="w80 flex_left">联系人</div>
-                    <div class="flex_cell flex_left">{{clickData && clickData.factoryInfo ? clickData.factoryInfo.newbankuser : ''}}</div>
+                    <div class="flex_cell flex_left">{{clickData && clickData.factoryinfo ? clickData.factoryinfo.newbankuser : ''}}</div>
                   </div>
                   <div class="flex_left pt10 pb10">
                     <div class="w80 flex_left">手机号</div>
-                    <div class="flex_cell flex_left">{{clickData && clickData.factoryInfo ? clickData.factoryInfo.mobile : ''}}</div>
+                    <div class="flex_cell flex_left">{{clickData && clickData.factoryinfo ? clickData.factoryinfo.mobile : ''}}</div>
                   </div>
                 </div>
               </div>
