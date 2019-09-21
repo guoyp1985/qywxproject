@@ -94,6 +94,70 @@
     <div class="flex_center color-white font12 flbtn">
       <div @click="hideMenu">{{flagTxt}}分类</div>
     </div>
+    <div v-transfer-dom class="x-popup">
+      <popup v-model="showBankPopup" height="100%">
+        <div class="popup1">
+          <div class="popup-middle font14 bank-pop" style="top:0;">
+            <div class="box-area">
+              <div class="box-inner">
+                <div class="title">交易流程</div>
+                <div class="con">
+                  <div>商品产生交易后</div>
+                  <div>由于订单收入将会是在代理厂家账户上进行交易</div>
+                  <div>所以产生交易后</div>
+                  <div>代理厂家需将该笔订单供货商应获得的交易额</div>
+                  <div>从线下供货商进行订单发货</div>
+                  <div>代理厂家可通过订单列表查看订单的状态</div>
+                  <div class="mt10">注意: 订单出现售后情况时，需双方线下沟通协商处理。</div>
+                </div>
+              </div>
+            </div>
+            <div class="line bg-page pt10"></div>
+            <div class="box-area">
+              <div class="box-inner">
+                <div class="title">收款方信息填写</div>
+                <div class="con">
+                  <div class="form-item required bg-white">
+                    <div class="t-table">
+                      <div class="t-cell title-cell w80 font14 v_middle">开户银行</div>
+                      <div class="t-cell input-cell v_middle" style="position:relative;">{{factoryInfo.newbankcode}}</div>
+                    </div>
+                  </div>
+                  <div class="form-item required bg-white">
+                    <div class="t-table">
+                      <div class="t-cell title-cell w80 font14 v_middle">开户名</div>
+                      <div class="t-cell input-cell v_middle" style="position:relative;">{{factoryInfo.accountname}}</div>
+                    </div>
+                  </div>
+                  <div class="form-item required bg-white">
+                    <div class="t-table">
+                      <div class="t-cell title-cell w80 font14 v_middle">开户账号</div>
+                      <div class="t-cell input-cell v_middle" style="position:relative;">{{factoryInfo.newbankcardno}}</div>
+                    </div>
+                  </div>
+                  <div class="form-item required bg-white">
+                    <div class="t-table">
+                      <div class="t-cell title-cell w80 font14 v_middle">联系人</div>
+                      <div class="t-cell input-cell v_middle" style="position:relative;">{{factoryInfo.newbankuser}}</div>
+                    </div>
+                  </div>
+                  <div class="form-item required bg-white">
+                    <div class="t-table">
+                      <div class="t-cell title-cell w80 font14 v_middle">手机号</div>
+                      <div class="t-cell input-cell v_middle" style="position:relative;">{{factoryInfo.mobile}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="popup-bottom flex_center">
+            <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeBank">{{ $t('Close') }}</div>
+            <div class="flex_cell h_100 flex_center bg-theme color-white" @click="toSale">代理销售</div>
+          </div>
+        </div>
+      </popup>
+    </div>
   </div>
 </template>
 
@@ -103,7 +167,7 @@ Apply join:
 </i18n>
 
 <script>
-import { Tab, TabItem, Search, Swiper, SwiperItem } from 'vux'
+import { TransferDom, Popup, Tab, TabItem, Search, Swiper, SwiperItem } from 'vux'
 import { User } from '#/storage'
 import ENV from 'env'
 import Time from '#/time'
@@ -113,8 +177,11 @@ const limit = 10
 let pageStart = 0
 
 export default {
+  directives: {
+    TransferDom
+  },
   components: {
-    Tab, TabItem, Search, Swiper, SwiperItem
+    Popup, Tab, TabItem, Search, Swiper, SwiperItem
   },
   filters: {
     dateformat: function (value) {
@@ -158,7 +225,9 @@ export default {
       menuFlag: true,
       flagTxt: '收起',
       times: 0,
-      Fid: 0
+      Fid: 0,
+      showBankPopup: false,
+      factoryInfo: {}
     }
   },
   watch: {
@@ -200,6 +269,12 @@ export default {
         backurl = encodeURIComponent(backurl)
         this.$router.push({path: '/centerSales', query: {backurl: backurl}})
       }
+    },
+    closeBank () {
+      this.showBankPopup = false
+    },
+    toSale () {
+
     },
     ajaxImport (item) {
       const self = this
