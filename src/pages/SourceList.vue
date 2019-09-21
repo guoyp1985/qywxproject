@@ -61,7 +61,7 @@
                     <div class="flex_cell flex_left">
                       <div class="w_100 clamp1 color-red">{{ $t('RMB') }} {{ item.price }}</div>
                     </div>
-                    <div class="flex_right" style="width:60px;">
+                    <div class="flex_right" style="width:60px;" v-if="loginUser.fid !== item.fid">
                       <span v-if="item.havefpimport == 1" class="bg-theme color-white flex_center padding5 font12" style="border-radius:5px;">已代理</span>
                       <span v-else class="bg-theme color-white flex_center padding5 font12" style="border-radius:5px;" @click.stop="upEvent(item, index)">代理销售</span>
                     </div>
@@ -117,35 +117,25 @@
               <div class="box-inner">
                 <div class="title">收款方信息填写</div>
                 <div class="con">
-                  <div class="form-item required bg-white">
-                    <div class="t-table">
-                      <div class="t-cell title-cell w80 font14 v_middle">开户银行</div>
-                      <div class="t-cell input-cell v_middle" style="position:relative;">{{factoryInfo.newbankcode}}</div>
-                    </div>
+                  <div class="flex_left pt10 pb10">
+                    <div class="w80 flex_left">开户银行</div>
+                    <div class="flex_cell flex_left">{{clickData && clickData.factoryInfo ? clickData.factoryInfo.newbankcode : ''}}</div>
                   </div>
-                  <div class="form-item required bg-white">
-                    <div class="t-table">
-                      <div class="t-cell title-cell w80 font14 v_middle">开户名</div>
-                      <div class="t-cell input-cell v_middle" style="position:relative;">{{factoryInfo.accountname}}</div>
-                    </div>
+                  <div class="flex_left pt10 pb10">
+                    <div class="w80 flex_left">开户名</div>
+                    <div class="flex_cell flex_left">{{clickData && clickData.factoryInfo ? clickData.factoryInfo.accountname : ''}}</div>
                   </div>
-                  <div class="form-item required bg-white">
-                    <div class="t-table">
-                      <div class="t-cell title-cell w80 font14 v_middle">开户账号</div>
-                      <div class="t-cell input-cell v_middle" style="position:relative;">{{factoryInfo.newbankcardno}}</div>
-                    </div>
+                  <div class="flex_left pt10 pb10">
+                    <div class="w80 flex_left">开户账号</div>
+                    <div class="flex_cell flex_left">{{clickData && clickData.factoryInfo ? clickData.factoryInfo.newbankcardno : ''}}</div>
                   </div>
-                  <div class="form-item required bg-white">
-                    <div class="t-table">
-                      <div class="t-cell title-cell w80 font14 v_middle">联系人</div>
-                      <div class="t-cell input-cell v_middle" style="position:relative;">{{factoryInfo.newbankuser}}</div>
-                    </div>
+                  <div class="flex_left pt10 pb10">
+                    <div class="w80 flex_left">联系人</div>
+                    <div class="flex_cell flex_left">{{clickData && clickData.factoryInfo ? clickData.factoryInfo.newbankuser : ''}}</div>
                   </div>
-                  <div class="form-item required bg-white">
-                    <div class="t-table">
-                      <div class="t-cell title-cell w80 font14 v_middle">手机号</div>
-                      <div class="t-cell input-cell v_middle" style="position:relative;">{{factoryInfo.mobile}}</div>
-                    </div>
+                  <div class="flex_left pt10 pb10">
+                    <div class="w80 flex_left">手机号</div>
+                    <div class="flex_cell flex_left">{{clickData && clickData.factoryInfo ? clickData.factoryInfo.mobile : ''}}</div>
                   </div>
                 </div>
               </div>
@@ -274,7 +264,23 @@ export default {
       this.showBankPopup = false
     },
     toSale () {
-
+      const self = this
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/factory/productshelf`, {
+        fid: self.loginUser.fid, module: 'factoryproduct', moduleid: self.clickData.moduleid
+      }).then(res => {
+        let data = res.data
+        self.$vux.loading.hide()
+        self.$vux.toast.show({
+          text: data.error,
+          type: data.flag === 1 ? 'success' : 'warn',
+          time: self.$util.delay(data.error)
+        })
+        if (data.flag) {
+          this.productData[self.clickIndex].havefpimport = 1
+          this.showBankPopup = false
+        }
+      })
     },
     ajaxImport (item) {
       const self = this
@@ -316,28 +322,29 @@ export default {
     upEvent (item, index) {
       this.clickData = item
       this.clickIndex = index
-      const self = this
-      let con = '确定导入商品吗？导入商品会自动加盟厂家'
-      self.$vux.confirm.show({
-        content: con,
-        onConfirm: () => {
-          self.$vux.loading.show()
-          self.$http.post(`${ENV.BokaApi}/api/factory/productshelf`, {
-            fid: self.loginUser.fid, module: 'factoryproduct', moduleid: item.moduleid
-          }).then(res => {
-            let data = res.data
-            self.$vux.loading.hide()
-            self.$vux.toast.show({
-              text: data.error,
-              type: data.flag === 1 ? 'success' : 'warn',
-              time: self.$util.delay(data.error)
-            })
-            if (data.flag) {
-              this.productData[index].shelf = 1
-            }
-          })
-        }
-      })
+      this.showBankPopup = true
+      // const self = this
+      // let con = '确定导入商品吗？导入商品会自动加盟厂家'
+      // self.$vux.confirm.show({
+      //   content: con,
+      //   onConfirm: () => {
+      //     self.$vux.loading.show()
+      //     self.$http.post(`${ENV.BokaApi}/api/factory/productshelf`, {
+      //       fid: self.loginUser.fid, module: 'factoryproduct', moduleid: item.moduleid
+      //     }).then(res => {
+      //       let data = res.data
+      //       self.$vux.loading.hide()
+      //       self.$vux.toast.show({
+      //         text: data.error,
+      //         type: data.flag === 1 ? 'success' : 'warn',
+      //         time: self.$util.delay(data.error)
+      //       })
+      //       if (data.flag) {
+      //         this.productData[index].shelf = 1
+      //       }
+      //     })
+      //   }
+      // })
     },
     onChange (val) {
       this.searchword = val
@@ -614,5 +621,18 @@ export default {
   //   color: #ff6a61;
   // }
   .flbtn{height:50px;width:50px;border-radius:50px;background-color:#ff6a61;position:fixed;top:308px;right:12px;opacity:0.8}
+}
+.bank-pop{
+  .box-area{
+    padding:10px;box-sizing:border-box;
+    .box-inner{
+      padding-left:10px;padding-bottom:10px;box-sizing:border-box;position:relative;
+      .title:before{
+        content:'';width:6px;height:6px;border-radius:50%;background-color:#ff6a61;
+        position:absolute;left:-10px;top:50%;margin-top:-3px;
+      }
+      .title{color:#ff6a61;font-size:18px;font-weight:bold;position:relative;}
+    }
+  }
 }
 </style>
