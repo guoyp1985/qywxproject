@@ -134,6 +134,9 @@
                       <div class="clamp1 color-gray2">{{ item.username }}</div>
                       <div class="clamp1 color-gray">传播级别: {{ item.level }}</div>
                       <div class="clamp1 color-gray">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
+                      <div class="color-gray">
+                        <div class="clamp1 w_100">停留: {{ item.staytime | staytimeFormat }}  阅读: {{ item.number }}次</div>
+                      </div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
                     </div>
                     <div class="w60 flex_right">
@@ -439,6 +442,9 @@
                       <div class="clamp1 color-gray2">{{ item.linkman }}</div>
                       <div class="clamp1 color-gray" v-if="query.module != 'factoryproduct'">{{ item.dateline | dateformat }}</div>
                       <div class="clamp1 color-gray">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
+                      <div class="color-gray">
+                        <div class="clamp1 w_100">停留: {{ item.staytime | staytimeFormat }}  阅读: {{ item.number }}次</div>
+                      </div>
                     </div>
                     <div class="w60 flex_right">
                       <div class="qbtnInfo bg-red color-white" @click="toChat(item)">联系</div>

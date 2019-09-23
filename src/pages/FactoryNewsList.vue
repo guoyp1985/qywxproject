@@ -45,7 +45,7 @@
                 </div>
               </div>
               <div class="align_right t-cell v_bottom w80 pb8">
-                  <div class="btnicon bg-red color-white font12" @click="controlpopup(item)">
+                  <div class="btnicon bg-red color-white font12" @click.stop="controlpopup(item)">
                     <i class="al al-asmkticon0165 v_middle"></i>
                   </div>
               </div>
