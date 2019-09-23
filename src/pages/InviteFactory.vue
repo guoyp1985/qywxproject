@@ -7,7 +7,7 @@
   .bottom-area{
     position:fixed;left:0;bottom:20px;right:0;height:50px;
     .btn{
-      width:100px;height:35px;border-radius:35px;
+      width:100px;height:35px;border-radius:35px;box-shadow:0px 0px 3px 1px #fff;
     }
   }
 }
