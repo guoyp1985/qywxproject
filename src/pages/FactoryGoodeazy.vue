@@ -333,10 +333,14 @@ export default {
                   queryParmas.backtype = self.query.backtype
                 }
                 this.routerParams = queryParmas
-                if (this.isFirst) {
-                  this.showHb = true
+                if (self.query.fromapp) {
+                  this.$vux.wechat.miniProgram.reLaunch({url: `${ENV.MiniRouter.news}?id=${data.data.id}&add=1`})
                 } else {
-                  this.afterCollect1()
+                  if (this.isFirst) {
+                    this.showHb = true
+                  } else {
+                    this.afterCollect1()
+                  }
                 }
               }
             }
