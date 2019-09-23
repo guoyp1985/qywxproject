@@ -275,7 +275,7 @@ export default {
               self.$vux.toast.show({
                 text: data.error,
                 time: self.$util.delay(data.error),
-                onHide: function () {
+                onHide: () => {
                   if (data.flag === 1) {
                     self.newsCount++
                     let queryParmas = {id: data.data.id, control: 'edit'}
@@ -283,7 +283,11 @@ export default {
                       queryParmas.minibackurl = self.query.minibackurl
                       queryParmas.backtype = self.query.backtype
                     }
-                    self.$router.push({path: '/news', query: queryParmas})
+                    if (self.query.fromapp) {
+                      this.$vux.wechat.miniProgram.reLaunch({url: `${ENV.MiniRouter.news}?id=${data.data.id}&add=1`})
+                    } else {
+                      self.$router.push({path: '/news', query: queryParmas})
+                    }
                   }
                 }
               })
