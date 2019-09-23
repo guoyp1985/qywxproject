@@ -556,6 +556,8 @@ export default {
     self = this
   },
   activated () {
+    this.classData = []
+    this.classDataArry = []
     this.$refs.scrollContainer.scrollTop = this.pageTop
     if (document.querySelector('.vux-tab')) {
       document.querySelector('.vux-tab').scrollLeft = this.tabLeft
