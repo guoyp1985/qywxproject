@@ -55,13 +55,13 @@
       </div>
       <div class="s-bottom list-shadow flex_center bg-white pl12 pr12">
         <div class="flex_cell flex_center">
-          <router-link class="flex_center btn-bottom-red font14" style="width:80%;" :to="{path: '/factoryGoodeazy', query: {fid: query.fid}}" >易采集</router-link>
+          <div class="flex_center btn-bottom-red font14" style="width:80%;" @click="toGoodeazy">易采集</div>
         </div>
         <div class="flex_cell flex_center">
-          <router-link class="flex_center btn-bottom-orange font14" style="width:80%;" :to="{path: '/factoryNewsClass', query: {fid: query.fid}}" >文章分类</router-link>
+          <div class="flex_center btn-bottom-orange font14" style="width:80%;" @click="toClass">文章分类</div>
         </div>
         <div class="flex_cell flex_center">
-          <router-link class="flex_center btn-bottom-red font14" style="width:80%;" :to="{path: '/addFactoryNews', query: {fid: query.fid}}" >{{ $t('Create news') }}</router-link>
+          <div class="flex_center btn-bottom-red font14" style="width:80%;" @click="toAdd">{{ $t('Create news') }}</div>
         </div>
       </div>
       <div v-transfer-dom>
@@ -145,6 +145,18 @@ export default {
     }
   },
   methods: {
+    toGoodeazy () {
+      let params = this.$util.handleAppParams(this.query, {fid: this.query.fid})
+      this.$router.push({path: '/factoryGoodeazy', query: params})
+    },
+    toClass () {
+      let params = this.$util.handleAppParams(this.query, {fid: this.query.fid})
+      this.$router.push({path: '/factoryNewsClass', query: params})
+    },
+    toAdd () {
+      let params = this.$util.handleAppParams(this.query, {fid: this.query.fid})
+      this.$router.push({path: '/addFactoryNews', query: params})
+    },
     handleScroll (refname, type) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
