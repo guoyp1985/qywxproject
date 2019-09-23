@@ -697,6 +697,9 @@ export default {
           })
         }
       }
+    },
+    clearValue () {
+
     }
   },
   activated () {
