@@ -27,7 +27,7 @@
         <div class="btn color-white flex_center" style="background-color:#e9e078;" @click="toUse">马上使用</div>
       </div>
       <div class="flex_cell flex_center" v-if="loginUser.fid">
-        <div class="btn color-white flex_center" style="background-color:#acb2ea;" @click="toQrcode">二维码</div>
+        <div class="btn color-white flex_center" style="background-color:#6080ec;" @click="toQrcode">二维码</div>
       </div>
     </div>
     <div v-if="showQrcode" class="auto-modal flex_center" style="position:fixed;">
