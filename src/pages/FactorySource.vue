@@ -62,7 +62,7 @@
           <div class="con">
             <div class="flex_left pt10 pb10">
               <div class="w80 flex_left">开户银行</div>
-              <div class="flex_cell flex_left" style="word-break:break-word;">{{viewData.newbankcode}}</div>
+              <div class="flex_cell flex_left" style="word-break:break-word;">{{viewData.newbankname}}</div>
             </div>
             <div class="flex_left pt10 pb10">
               <div class="w80 flex_left">开户名</div>

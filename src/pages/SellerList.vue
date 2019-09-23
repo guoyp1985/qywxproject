@@ -308,6 +308,11 @@
                         <div class="clamp1 font16">{{item.factoryinfo.title}}</div>
                         <div class="mt5 font12 color-gray">应打款金额: {{item.needpaymoney}}</div>
                       </div>
+                      <div class="align_right t-cell v_middle w80">
+                        <div class="btnicon bg-red color-white font12" @click="controlPopup1(item,index)">
+                          <i class="al al-asmkticon0165 v_middle"></i>
+                        </div>
+                      </div>
                 		</div>
                   </div>
                 </div>
@@ -320,21 +325,26 @@
         <popup class="menuwrap" v-model="showPopup1">
           <div class="popup0">
             <div class="list" v-if="clickData">
-              <div class="item" v-if="clickData.identity == 'D'">
-                <div class="inner" @click="clickPopup('up')">升级到C</div>
+              <div class="item" v-if="selectedIndex == 5">
+                <div class="inner" @click="clickPopup('pay')">核销打款金额</div>
               </div>
-              <div class="item" v-if="selectedIndex == 3">
-                <div class="inner" @click="clickPopup('level')">更改级别</div>
-              </div>
-              <div class="item" >
-                <div class="inner" @click="clickPopup('uploader')">更改推荐人</div>
-              </div>
-              <div class="item" v-if="clickData.fulltime">
-                <div class="inner" @click="clickPopup('fulltime')">设置为兼职卖家</div>
-              </div>
-              <router-link class="item" :to="{path:'/store',query:{wid:clickData.wid}}">
-                <div class="inner">进入店铺</div>
-              </router-link>
+              <template v-else>
+                <div class="item" v-if="clickData.identity == 'D'">
+                  <div class="inner" @click="clickPopup('up')">升级到C</div>
+                </div>
+                <div class="item" v-if="selectedIndex == 3">
+                  <div class="inner" @click="clickPopup('level')">更改级别</div>
+                </div>
+                <div class="item" >
+                  <div class="inner" @click="clickPopup('uploader')">更改推荐人</div>
+                </div>
+                <div class="item" v-if="clickData.fulltime">
+                  <div class="inner" @click="clickPopup('fulltime')">设置为兼职卖家</div>
+                </div>
+                <router-link class="item" :to="{path:'/store',query:{wid:clickData.wid}}">
+                  <div class="inner">进入店铺</div>
+                </router-link>
+              </template>
               <router-link class="item" :to="{path:'/factoryOrders',query:{wid:clickData.wid}}">
                 <div class="inner">相关订单</div>
               </router-link>
@@ -457,6 +467,38 @@
         </div>
       </div>
     </div>
+    <div v-transfer-dom class="x-popup">
+      <popup v-model="showPayPopup" height="100%">
+        <div class="popup1">
+          <div class="popup-top flex_center">厂家已打款</div>
+          <div class="popup-middle font14">
+            <div class="pt10 pb10 pl12 pr12" v-if="clickData && clickData.factoryinfo">
+              <div class="t-table bg-white pt10 pb10">
+                <div class="t-cell pl12 v_middle" style="width:110px;">
+                  <img class="imgcover v_middle" :src="clickData.factoryinfo.photo" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+                </div>
+                <div class="t-cell v_middle">
+                  <div class="clamp1 font16">{{clickData.factoryinfo.title}}</div>
+                  <div class="font12 color-gray">应打款金额: {{clickData.needpaymoney}}</div>
+                </div>
+              </div>
+              <div class="form-item">
+                <div class="t-table">
+                  <div class="t-cell title-cell w100 font14 v_middle">已打款金额<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
+                  <div class="t-cell input-cell v_middle" style="position:relative;">
+                    <x-input v-model="payMoney" type="text" class="input" placeholder="已打款金额"></x-input>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="popup-bottom flex_center">
+            <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closePayPopup">{{ $t('Close') }}</div>
+            <div class="flex_cell h_100 flex_center bg-green color-white" @click="submitPay">提交</div>
+          </div>
+        </div>
+      </popup>
+    </div>
   </div>
 </template>
 
@@ -466,7 +508,7 @@ Add factory:
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Popup, Confirm, CheckIcon, XImg, Search, Group, XTextarea } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Popup, Confirm, CheckIcon, XImg, Search, Group, XTextarea, XInput } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
@@ -476,7 +518,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Popup, Confirm, CheckIcon, XImg, Sos, Search, Group, XTextarea
+    Tab, TabItem, Swiper, SwiperItem, Popup, Confirm, CheckIcon, XImg, Sos, Search, Group, XTextarea, XInput
   },
   data () {
     return {
@@ -530,7 +572,9 @@ export default {
       idArr: [],
       refuseContent: '',
       showRefuseModal: false,
-      levelPolicy: {}
+      levelPolicy: {},
+      showPayPopup: false,
+      payMoney: ''
     }
   },
   methods: {
@@ -802,7 +846,45 @@ export default {
             })
           }
         })
+      } else if (key === 'pay') {
+        this.showPayPopup = true
       }
+    },
+    closePayPopup () {
+      this.showPayPopup = false
+    },
+    submitPay () {
+      const self = this
+      let money = self.payMoney
+      if (self.$util.trim(money) === '') {
+        self.$vux.toast.show({
+          text: '请输入核销金额'
+        })
+        return false
+      }
+      if (isNaN(money) || parseFloat(money) < 0) {
+        self.$vux.toast.show({
+          text: '请输入正确的核销金额'
+        })
+        return false
+      }
+      // self.$http.post(`${ENV.BokaApi}/api/factory/productset`, {
+      //   id: self.clickdata.id, newsalesrebate: salesRebate, newsuperrebate: superRebate
+      // }).then(res => {
+      //   let data = res.data
+      //   self.$vux.loading.hide()
+      //   self.$vux.toast.show({
+      //     text: data.error,
+      //     type: data.flag !== 1 ? 'warn' : 'success',
+      //     time: self.$util.delay(data.error),
+      //     onHide: function () {
+      //       if (data.flag === 1) {
+      //         self.showPayPopup = false
+      //         self.refresh()
+      //       }
+      //     }
+      //   })
+      // })
     },
     closeLevelPopup () {
       this.showLevelPopup = false
