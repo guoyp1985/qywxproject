@@ -8,11 +8,14 @@
         <div class="flex_cell">
           <div class="clamp1">{{ viewData.title }}</div>
           <div class="font12 clamp2" v-if="joinStatus">应打款金额: {{ $t('RMB') }}{{needpaymoney}}</div>
+          <div v-if="disJoin && joinStatus">
+            <span class="font12 color-black" @click="viewInfo">查看收款信息</span>
+          </div>
         </div>
         <div class="w100 flex_right">
           <div>
             <div v-if="joinStatus" class="flex_center bg-white color-theme" style="width:80px;padding:5px 0;border-radius:20px;" @click="toBill">详细账单</div>
-            <template v-if="loginUser.fid != Fid">
+            <template v-if="loginUser.fid != Fid && disJoin">
               <div class="flex_center bg-white color-theme mt5" style="width:80px;padding:5px 0;border-radius:20px;" v-if="!joinStatus" @click="toJoin">加盟厂家</div>
               <div class="flex_center color-white mt5" style="width:80px;padding:5px 0;border-radius:20px;" v-else @click="toJoin">已加盟</div>
             </template>
@@ -54,6 +57,38 @@
         </div>
       </div>
     </template>
+    <div v-if="showInfo" class="auto-modal flex_center" style="position:fixed;">
+      <div class="modal-inner border-box" style="width:80%;">
+        <div class="padding20">
+          <div class="flex_center font16 bold">收款方信息</div>
+          <div class="con">
+            <div class="flex_left pt10 pb10">
+              <div class="w80 flex_left">开户银行</div>
+              <div class="flex_cell flex_left">{{viewData.newbankcode}}</div>
+            </div>
+            <div class="flex_left pt10 pb10">
+              <div class="w80 flex_left">开户名</div>
+              <div class="flex_cell flex_left">{{viewData.accountname}}</div>
+            </div>
+            <div class="flex_left pt10 pb10">
+              <div class="w80 flex_left">开户账号</div>
+              <div class="flex_cell flex_left">{{viewData.newbankcardno}}</div>
+            </div>
+            <div class="flex_left pt10 pb10">
+              <div class="w80 flex_left">联系人</div>
+              <div class="flex_cell flex_left">{{viewData.newbankuser}}</div>
+            </div>
+            <div class="flex_left pt10 pb10">
+              <div class="w80 flex_left">手机号</div>
+              <div class="flex_cell flex_left">{{viewData.mobile}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="close-area flex_center" @click="closeInfo">
+          <i class="al al-close"></i>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -100,7 +135,8 @@ export default {
       Fid: 0,
       joinStatus: 0,
       disJoin: false,
-      needpaymoney: '0.00'
+      needpaymoney: '0.00',
+      showInfo: false
     }
   },
   watch: {
@@ -123,6 +159,12 @@ export default {
       this.productCount = 0
       this.newsCount = 0
       this.needpaymoney = '0.00'
+    },
+    closeInfo () {
+      this.showInfo = false
+    },
+    viewInfo () {
+      this.showInfo = true
     },
     toBill () {
       this.$router.push({path: '/factoryBill', query: {fid: this.Fid}})
