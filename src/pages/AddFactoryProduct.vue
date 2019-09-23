@@ -1167,7 +1167,7 @@ export default {
     this.init()
   },
   activated () {
-    if (this.query.id !== this.$route.query.id) {
+    if (this.query.id !== this.$route.query.id || !this.query.id) {
       this.initSubmitData()
     }
     this.refresh()

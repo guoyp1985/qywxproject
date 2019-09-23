@@ -517,7 +517,7 @@ export default {
         self.$vux.loading.hide()
         let error = data.error
         if (data.flag === 1) {
-          error = '导入成功'
+          error = '代理成功'
           self.productdata.havefpimport = 1
         }
         self.$vux.toast.show({
