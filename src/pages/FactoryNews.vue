@@ -4,7 +4,7 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div :class="`containerarea font14 bg-white news notop ${loginUser.isretailer ? '' : 'nobottom'}`">
+  <div :class="`containerarea font14 bg-white news notop ${(loginUser.isretailer && !editIng && !query.from && !query.fromapp) ? '' : 'nobottom'}`">
     <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
     </template>

@@ -31,7 +31,7 @@
               </div>
             </template>
           </div>
-          <router-link :to="{path: '/factoryNews', query: {id: item.id, fid: query.fid}}" v-else v-for="(item,index1) in tabdata1" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
+          <div @click="toDetail(item)" v-else v-for="(item,index1) in tabdata1" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
             <div class="t-table">
               <div class="t-cell v_middle w70">
                 <img class="imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
@@ -50,7 +50,7 @@
                   </div>
               </div>
             </div>
-          </router-link>
+          </div>
         </div>
       </div>
       <div class="s-bottom list-shadow flex_center bg-white pl12 pr12">
@@ -145,6 +145,10 @@ export default {
     }
   },
   methods: {
+    toDetail (item) {
+      let params = this.$util.handleAppParams(this.query, {id: item.id, fid: this.query.fid})
+      this.$router.push({path: '/factoryNews', query: params})
+    },
     toGoodeazy () {
       let params = this.$util.handleAppParams(this.query, {fid: this.query.fid})
       this.$router.push({path: '/factoryGoodeazy', query: params})
