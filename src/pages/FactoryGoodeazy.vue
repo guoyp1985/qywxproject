@@ -327,20 +327,16 @@ export default {
             onHide: () => {
               if (data.flag === 1) {
                 self.collecturl = ''
-                let queryParmas = {id: data.data.id, control: 'edit'}
+                let queryParmas = this.$util.handleAppParams(this.query, {id: data.data.id, control: 'edit'})
                 if (self.query.minibackurl) {
                   queryParmas.minibackurl = self.query.minibackurl
                   queryParmas.backtype = self.query.backtype
                 }
                 this.routerParams = queryParmas
-                if (self.query.fromapp) {
-                  this.$wechat.miniProgram.reLaunch({url: `${ENV.MiniRouter.news}?id=${data.data.id}&add=1`})
+                if (this.isFirst) {
+                  this.showHb = true
                 } else {
-                  if (this.isFirst) {
-                    this.showHb = true
-                  } else {
-                    this.afterCollect1()
-                  }
+                  this.afterCollect1()
                 }
               }
             }
