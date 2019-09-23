@@ -32,7 +32,10 @@
                   <div class="flex_cell flex_left">
                     <div class="w_100">
                       <div>{{item.factoryinfo.title}}</div>
-                      <div class="font12 color-gray mt5" v-if="item.factoryinfo.bankcardno && item.factoryinfo.bankcardno != ''">银行账号: {{item.factoryinfo.bankcardno}}</div>
+                      <template v-if="item.factoryinfo.bankcardno && item.factoryinfo.bankcardno != ''">
+                        <div class="font12 color-gray mt5">联系人: {{item.factoryinfo.bankuser}}</div>
+                        <div class="font12 color-gray mt5">联系电话: {{item.factoryinfo.mobile}}</div>
+                      </template>
                     </div>
                   </div>
                   <div class="flex_right" style="width:90px;">
