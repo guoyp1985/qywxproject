@@ -218,7 +218,8 @@ export default {
       times: 0,
       Fid: 0,
       showBankPopup: false,
-      factoryInfo: {}
+      factoryInfo: {},
+      isIng: false
     }
   },
   watch: {
@@ -266,22 +267,26 @@ export default {
     },
     toSale () {
       const self = this
-      self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/factory/productshelf`, {
-        fid: self.loginUser.fid, module: 'factoryproduct', moduleid: self.clickData.moduleid
-      }).then(res => {
-        let data = res.data
-        self.$vux.loading.hide()
-        self.$vux.toast.show({
-          text: data.error,
-          type: data.flag === 1 ? 'success' : 'warn',
-          time: self.$util.delay(data.error)
+      if (!this.isIng) {
+        this.isIng = true
+        self.$vux.loading.show()
+        self.$http.post(`${ENV.BokaApi}/api/factory/productshelf`, {
+          fid: self.loginUser.fid, module: 'factoryproduct', moduleid: self.clickData.moduleid
+        }).then(res => {
+          this.isIng = false
+          let data = res.data
+          self.$vux.loading.hide()
+          self.$vux.toast.show({
+            text: data.error,
+            type: data.flag === 1 ? 'success' : 'warn',
+            time: self.$util.delay(data.error)
+          })
+          if (data.flag) {
+            this.productData[self.clickIndex].havefpimport = 1
+            this.showBankPopup = false
+          }
         })
-        if (data.flag) {
-          this.productData[self.clickIndex].havefpimport = 1
-          this.showBankPopup = false
-        }
-      })
+      }
     },
     ajaxImport (item) {
       const self = this
