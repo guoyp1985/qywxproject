@@ -348,7 +348,10 @@
               <router-link class="item" :to="{path:'/factoryOrders',query:{wid:clickData.wid}}">
                 <div class="inner">相关订单</div>
               </router-link>
-              <router-link class="item" :to="{path:'/stat',query:{module:'factoryretailer',id:query.id,wid:clickData.wid}}">
+              <router-link v-if="selectedIndex == 5" class="item" :to="{path:'/factoryBill',query:{fid:clickData.fid}}">
+                <div class="inner">统计</div>
+              </router-link>
+              <router-link v-else class="item" :to="{path:'/stat',query:{module:'factoryretailer',id:query.id,wid:clickData.wid}}">
                 <div class="inner">统计</div>
               </router-link>
               <div class="item close mt10" @click="clickPopup">
