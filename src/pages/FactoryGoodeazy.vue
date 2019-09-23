@@ -334,7 +334,7 @@ export default {
                 }
                 this.routerParams = queryParmas
                 if (self.query.fromapp) {
-                  this.$vux.wechat.miniProgram.reLaunch({url: `${ENV.MiniRouter.news}?id=${data.data.id}&add=1`})
+                  this.$wechat.miniProgram.reLaunch({url: `${ENV.MiniRouter.news}?id=${data.data.id}&add=1`})
                 } else {
                   if (this.isFirst) {
                     this.showHb = true
