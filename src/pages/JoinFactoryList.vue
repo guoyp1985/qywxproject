@@ -33,7 +33,7 @@
                     <div class="w_100">
                       <div>{{item.factoryinfo.title}}</div>
                       <template v-if="item.factoryinfo.bankcardno && item.factoryinfo.bankcardno != ''">
-                        <div class="font12 color-gray mt5">联系人: {{item.factoryinfo.bankuser}}</div>
+                        <div class="font12 color-gray mt5">联系人: {{item.factoryinfo.newbankuser}}</div>
                         <div class="font12 color-gray mt5">联系电话: {{item.factoryinfo.mobile}}</div>
                       </template>
                     </div>

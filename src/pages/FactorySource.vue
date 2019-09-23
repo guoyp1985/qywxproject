@@ -64,23 +64,23 @@
           <div class="con">
             <div class="flex_left pt10 pb10">
               <div class="w80 flex_left">开户银行</div>
-              <div class="flex_cell flex_left">{{viewData.newbankcode}}</div>
+              <div class="flex_cell flex_left" style="word-break:break-word;">{{viewData.newbankcode}}</div>
             </div>
             <div class="flex_left pt10 pb10">
               <div class="w80 flex_left">开户名</div>
-              <div class="flex_cell flex_left">{{viewData.accountname}}</div>
+              <div class="flex_cell flex_left" style="word-break:break-word;">{{viewData.accountname}}</div>
             </div>
             <div class="flex_left pt10 pb10">
               <div class="w80 flex_left">开户账号</div>
-              <div class="flex_cell flex_left">{{viewData.newbankcardno}}</div>
+              <div class="flex_cell flex_left" style="word-break:break-word;">{{viewData.newbankcardno}}</div>
             </div>
             <div class="flex_left pt10 pb10">
               <div class="w80 flex_left">联系人</div>
-              <div class="flex_cell flex_left">{{viewData.newbankuser}}</div>
+              <div class="flex_cell flex_left" style="word-break:break-word;">{{viewData.newbankuser}}</div>
             </div>
             <div class="flex_left pt10 pb10">
               <div class="w80 flex_left">手机号</div>
-              <div class="flex_cell flex_left">{{viewData.mobile}}</div>
+              <div class="flex_cell flex_left" style="word-break:break-word;">{{viewData.mobile}}</div>
             </div>
           </div>
         </div>
