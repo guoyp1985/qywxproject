@@ -217,7 +217,7 @@
                       <div class="t-table">
                         <div class="t-cell title-cell w80 font14 v_middle">开户名</div>
                         <div class="t-cell input-cell v_middle" style="position:relative;">
-                          <input v-model="submitData.accountname" type="text" class="input priceInput" name="username" placeholder="开户名" />
+                          <x-input v-model="submitData.accountname" type="text" class="input priceInput" name="accountname" placeholder="开户名" />
                         </div>
                       </div>
                     </div>
@@ -225,7 +225,7 @@
                       <div class="t-table">
                         <div class="t-cell title-cell w80 font14 v_middle">开户账号</div>
                         <div class="t-cell input-cell v_middle" style="position:relative;">
-                          <input v-model="submitData.newbankcardno" type="text" class="input priceInput" name="username" placeholder="开户账号" />
+                          <x-input v-model="submitData.newbankcardno" type="text" :max="23" class="input priceInput" name="newbankcardno" placeholder="开户账号" />
                         </div>
                       </div>
                     </div>
@@ -233,7 +233,7 @@
                       <div class="t-table">
                         <div class="t-cell title-cell w80 font14 v_middle">联系人</div>
                         <div class="t-cell input-cell v_middle" style="position:relative;">
-                          <input v-model="submitData.newbankuser" type="text" class="input priceInput" name="username" placeholder="联系人" />
+                          <x-input v-model="submitData.newbankuser" type="text" class="input priceInput" name="newbankuser" placeholder="联系人" />
                         </div>
                       </div>
                     </div>
@@ -241,7 +241,7 @@
                       <div class="t-table">
                         <div class="t-cell title-cell w80 font14 v_middle">手机号</div>
                         <div class="t-cell input-cell v_middle" style="position:relative;">
-                          <input v-model="submitData.mobile" type="text" class="input priceInput" name="username" placeholder="手机号" />
+                          <x-input v-model="submitData.mobile" type="tel" class="input priceInput" :max="11" name="mobile" placeholder="手机号" />
                         </div>
                       </div>
                     </div>
@@ -697,6 +697,9 @@ export default {
           })
         }
       }
+    },
+    clearValue () {
+
     }
   },
   activated () {
