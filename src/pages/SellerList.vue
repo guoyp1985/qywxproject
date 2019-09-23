@@ -306,7 +306,7 @@
                       </div>
                       <div class="t-cell v_middle pr10" style="box-sizing:border-box;">
                         <div class="clamp1 font16">{{item.factoryinfo.title}}</div>
-                        <div class="mt5 font12 color-gray">应打款金额: {{item.money}}</div>
+                        <div class="mt5 font12 color-gray">应打款金额: {{item.needpaymoney}}</div>
                       </div>
                 		</div>
                   </div>
@@ -1169,7 +1169,7 @@ export default {
     },
     getData6 (isone) {
       const self = this
-      let params = {fid: this.loginUser.fid, type: 'my', pagestart: self.pageStart6, limit: self.limit}
+      let params = {fid: this.loginUser.fid, type: 'join', pagestart: self.pageStart6, limit: self.limit}
       if (isone) {
         params.pagestart = self.tabData6.length
         params.limit = 1

@@ -7,11 +7,11 @@
         </div>
         <div class="flex_cell">
           <div class="clamp1">{{ viewData.title }}</div>
-          <div class="font12 clamp2">应打款金额: {{ $t('RMB') }}{{needpaymoney}}</div>
+          <div class="font12 clamp2" v-if="joinStatus">应打款金额: {{ $t('RMB') }}{{needpaymoney}}</div>
         </div>
         <div class="w100 flex_right">
           <div>
-            <div class="flex_center bg-white color-theme" style="width:80px;padding:5px 0;border-radius:20px;" @click="toBill">详细账单</div>
+            <div v-if="joinStatus" class="flex_center bg-white color-theme" style="width:80px;padding:5px 0;border-radius:20px;" @click="toBill">详细账单</div>
             <template v-if="loginUser.fid != Fid">
               <div class="flex_center bg-white color-theme mt5" style="width:80px;padding:5px 0;border-radius:20px;" v-if="!joinStatus" @click="toJoin">加盟厂家</div>
               <div class="flex_center color-white mt5" style="width:80px;padding:5px 0;border-radius:20px;" v-else @click="toJoin">已加盟</div>
@@ -38,8 +38,8 @@
       						<span class="color-gray">{{ $t('Saled txt') }}:<span style="margin-left:1px;">{{ item.saled }}</span></span>
       					</div>
                 <div class="flex_right mt5" v-if="loginUser.fid != Fid">
-                  <span v-if="item.haveshelf == 1" class="bg-gray color-white flex_center padding5" style="border-radius:5px;">已导入</span>
-                  <span v-else class="bg-theme color-white flex_center padding5" style="border-radius:5px;" @click.stop="upEvent(item, index)">导入</span>
+                  <span v-if="item.haveshelf == 1" class="bg-gray color-white flex_center padding5" style="border-radius:5px;">已代理</span>
+                  <span v-else class="bg-theme color-white flex_center padding5" style="border-radius:5px;" @click.stop="upEvent(item, index)">代理销售</span>
                 </div>
       				</div>
       			</div>
@@ -50,7 +50,7 @@
     <template v-if="showBottom && tabData1 && tabData1.length">
       <div class="s-bottom list-shadow flex_center bg-white pl12 pr12">
         <div class="align_center flex_center flex_cell">
-          <div class="flex_center btn-bottom-red" style="width:85%;" @click="upAll('product')">一键导入商品</div>
+          <div class="flex_center btn-bottom-red" style="width:85%;" @click="upAll('product')">一键代理销售</div>
         </div>
       </div>
     </template>
