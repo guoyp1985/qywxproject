@@ -66,6 +66,12 @@ export default {
   methods: {
     toUse () {
       let params = this.$util.handleAppParams(this.query, {})
+      if (this.query.share_uid) {
+        params.share_uid = this.query.share_uid
+      }
+      if (this.query.share_fid) {
+        params.share_fid = this.query.share_fid
+      }
       this.$router.push({path: '/centerFactory', query: params})
     },
     closeQrcode () {
