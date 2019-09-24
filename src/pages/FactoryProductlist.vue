@@ -22,7 +22,8 @@
           <template v-else>
             <div class="scroll_list ">
               <div @click="toFactoryProduct(item)" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in productdata" :key="index" style="color:inherit;">
-                <div v-if="item.moderate == 0 || (clickdata.fromfid && clickdata.originmoderate == 0)" class="ico down"></div>
+                <!-- <div v-if="item.moderate == 0 || (clickdata.fromfid && clickdata.originmoderate == 0)" class="ico down"></div> -->
+                <div v-if="item.isshow == 0" class="ico down"></div>
             		<div class="t-table bg-white pt10 pb10">
             			<div class="t-cell pl12 v_middle" style="width:110px;">
                     <img class="imgcover v_middle" :src="getPhoto(item.photo)" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
@@ -88,14 +89,20 @@
                   <router-link class="inner" :to="{path: '/addFpimportProduct', query: {id: clickdata.id, fid: Fid}}">编辑</router-link>
                 </div>
               </template>
-              <template v-if="!clickdata.fromid || (clickdata.fromfid && clickdata.originmoderate != 0)">
+              <!-- <template v-if="!clickdata.fromid || (clickdata.fromfid && clickdata.originmoderate != 0)">
                 <div class="item" v-if="clickdata.moderate == 0">
                   <div class="inner" @click="clickpopup('up')">上架</div>
                 </div>
                 <div class="item" v-else-if="clickdata.moderate == 1">
                   <div class="inner" @click="clickpopup('down')">下架</div>
                 </div>
-              </template>
+              </template> -->
+              <div class="item" v-if="clickdata.isshow == 0">
+                <div class="inner" @click="clickpopup('up')">上架</div>
+              </div>
+              <div class="item" v-else>
+                <div class="inner" @click="clickpopup('down')">下架</div>
+              </div>
               <template v-if="!clickdata.fromfid">
                 <div class="item" v-if="clickdata.shelf == 0">
                   <div class="inner" @click="clickpopup('upShelf')">推荐到货源</div>
@@ -357,6 +364,10 @@ export default {
     clickpopup (key) {
       const self = this
       if (key === 'up') {
+        if (self.clickdata.fromfid && !self.clickdata.originmoderate) {
+          self.$vux.toast.text('货源商品已下架，不能上架该商品', 'middle')
+          return false
+        }
         self.$vux.confirm.show({
           title: '确定要上架该商品吗？',
           onConfirm () {
