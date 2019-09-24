@@ -258,7 +258,7 @@ export default {
       this.$router.push({path: '/membersView', query: params})
     },
     toChat (item) {
-      let params = this.$util.handleAppParams(this.query, {uid: item.uid, fromModule: 'retailer'})
+      let params = this.$util.handleAppParams(this.query, {uid: item.gxkuid, fromModule: 'retailer'})
       this.$router.push({path: '/chat', query: params})
     },
     toSaleRecord (item) {
