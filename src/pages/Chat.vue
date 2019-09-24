@@ -298,7 +298,7 @@ export default {
       showUserInfo: false,
       showTip: false,
       recordCheck: false,
-      allowChatModule: ['news', 'product', 'store', 'messagelist', 'retailer', 'order', 'factory'],
+      allowChatModule: ['news', 'product', 'store', 'messagelist', 'retailer', 'order', 'factory', 'factoryCustomer'],
       allowChat: false,
       retailerInfo: {},
       bottomPos: 0,
@@ -1087,7 +1087,11 @@ export default {
       }
     },
     setContactUser () {
-      return this.$http.get(`${ENV.BokaApi}/api/getUser/${this.query.uid}`)
+      let url = `${ENV.BokaApi}/api/getUser/${this.query.uid}`
+      if (this.query.fromModule === 'factoryCustomer') {
+        url = `${ENV.BokaApi}/api/getFactoryUser/${this.query.uid}`
+      }
+      return this.$http.get(url)
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
