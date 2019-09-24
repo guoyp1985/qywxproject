@@ -156,6 +156,9 @@ Vue.http.interceptors.request.use(config => {
     } else {
       console.log(`interceptors: Bearer ${token.token}`)
       config.headers['Authorization'] = `Bearer ${token.token}`
+      if (config.url.indexOf(ENV.FactoryApi) > -1 && ENV.ApiVersion === 'V2') {
+        config.headers['Accept'] = ENV.ApiAccept
+      }
     }
   }
   return config
