@@ -122,7 +122,7 @@
                 </div>
               </template>
             </div>
-            <div v-else-if="tabitem.type == 'sharelist'" class="scroll_list border-box">
+            <div v-else-if="tabitem.type == 'sharelist' || tabitem.type == 'factorysharelist'" class="scroll_list border-box">
               <template>
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
@@ -133,7 +133,7 @@
                     <div class="flex_cell pl10 pr20" @click="toMembersView(item)">
                       <div class="clamp1 color-gray2">{{ item.username }}</div>
                       <div class="clamp1 color-gray">传播级别: {{ item.level }}</div>
-                      <div class="clamp1 color-gray">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
+                      <div class="clamp1 color-gray" v-if="item.yingxiangli">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
                       <div class="color-gray">
                         <div class="clamp1 w_100">停留: {{ item.staytime | staytimeFormat }}  阅读: {{ item.number }}次</div>
                       </div>
@@ -211,7 +211,7 @@
                 </div>
               </template>
             </div>
-            <div v-else-if="tabitem.type == 'viewlist'" class="scroll_list border-box">
+            <div v-else-if="tabitem.type == 'viewlist' || tabitem.type == 'factoryviewlist'" class="scroll_list border-box">
               <template>
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
@@ -222,7 +222,7 @@
                     <div class="flex_cell pl10 pr20" @click="toMembersView(item)">
                       <div class="clamp1 color-gray2">{{ item.username }}</div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
-                      <div class="clamp1 color-gray">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
+                      <div class="clamp1 color-gray" v-if="item.yingxiangli">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
                       <div class="color-gray">
                         <div class="clamp1 w_100">停留: {{ item.staytime | staytimeFormat }}  阅读: {{ item.number }}次</div>
                       </div>
