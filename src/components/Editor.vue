@@ -363,7 +363,7 @@ export default {
         params.keyword = keyword
       }
       if (self.module === 'factorynews') {
-        ajaxUrl = `${ENV.BokaApi}/api/list/factoryproduct`
+        ajaxUrl = `${ENV.BokaApi}/api/factory/getfpimportList`
         params.fid = this.loginUser.fid
       } else {
         params.wid = this.loginUser.uid
