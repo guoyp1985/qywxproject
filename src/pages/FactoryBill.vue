@@ -293,7 +293,7 @@ export default {
     },
     getData1 () {
       const self = this
-      let params = {type: 'day', pagestart: this.pageStart1, limit: limit, fromfid: this.Fid}
+      let params = {type: 'day', pagestart: this.pageStart1, limit: limit, fromfid: this.query.fromfid}
       self.$http.post(`${ENV.BokaApi}/api/factory/tofactoryOrders`, params).then(res => {
         let data = res.data
         self.$vux.loading.hide()
@@ -304,7 +304,7 @@ export default {
     },
     getData2 () {
       const self = this
-      let params = {type: 'yesterday', pagestart: this.pageStart2, limit: limit, fromfid: this.Fid}
+      let params = {type: 'yesterday', pagestart: this.pageStart2, limit: limit, fromfid: this.query.fromfid}
       self.$http.post(`${ENV.BokaApi}/api/factory/tofactoryOrders`, params).then(res => {
         let data = res.data
         self.$vux.loading.hide()
@@ -315,7 +315,7 @@ export default {
     },
     getData3 () {
       const self = this
-      let params = {type: 'month', pagestart: this.pageStart3, limit: limit, fromfid: this.Fid}
+      let params = {type: 'month', pagestart: this.pageStart3, limit: limit, fromfid: this.query.fromfid}
       self.$http.post(`${ENV.BokaApi}/api/factory/tofactoryOrders`, params).then(res => {
         let data = res.data
         self.$vux.loading.hide()
@@ -326,7 +326,7 @@ export default {
     },
     getData4 () {
       const self = this
-      let params = {type: '', pagestart: this.pageStart4, limit: limit, fromfid: this.Fid}
+      let params = {type: '', pagestart: this.pageStart4, limit: limit, fromfid: this.query.fromfid}
       self.$http.post(`${ENV.BokaApi}/api/factory/tofactoryOrders`, params).then(res => {
         let data = res.data
         self.$vux.loading.hide()
@@ -411,7 +411,7 @@ export default {
         ]
         this.swiperChange()
         return this.$http.post(`${ENV.BokaApi}/api/factory/inviterSaleStat`, {
-          fromfid: this.Fid, fid: this.loginUser.fid
+          fromfid: this.query.fromfid, fid: this.Fid
         })
       }).then(res => {
         const data = res.data
