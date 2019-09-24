@@ -795,6 +795,9 @@ export default {
       if (self.query.wid) {
         statParams.wid = self.query.wid
       }
+      if (self.query.appid) {
+        statParams.appid = self.query.appid
+      }
       self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, { module: this.module, action: 'stat', id: this.query.id })
       .then(res => self.$http.get(`${ENV.BokaApi}/api/statData/${self.module}`, { params: statParams }))
       .then(res => {

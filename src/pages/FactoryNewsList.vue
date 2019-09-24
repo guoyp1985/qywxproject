@@ -69,7 +69,7 @@
           <div class="popup0">
             <div class="list">
               <div class="item" v-for="(row,index1) in controldata" :key="index1">
-                <router-link class="inner" v-if="row.key == 'stat'" :to="{path:'/stat',query:{id:clickdata.id,module:'factorynews', fid: query.fid}}">{{ row.title }}</router-link>
+                <div class="inner" v-if="row.key == 'stat'" @click="toStat">{{ row.title }}</div>
                 <router-link class="inner" v-else-if="row.key == 'set'" :to="{path:'/addFactoryNews',query:{id:clickdata.id, fid: query.fid}}">{{ row.title }}</router-link>
               </div>
               <div class="item close mt10" @click="clickpopup('row.key,clickdata')">
@@ -160,6 +160,10 @@ export default {
     toAdd () {
       let params = this.$util.handleAppParams(this.query, {fid: this.query.fid})
       this.$router.push({path: '/addFactoryNews', query: params})
+    },
+    toStat () {
+      let params = this.$util.handleAppParams(this.query, {id: this.clickdata.id, module: 'factorynews', fid: this.query.fid})
+      this.$router.push({path: '/stat', query: params})
     },
     handleScroll (refname, type) {
       const self = this
