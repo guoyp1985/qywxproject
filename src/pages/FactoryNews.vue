@@ -423,9 +423,6 @@ export default {
           }
           self.handleImg()
           callback && callback()
-          if (self.query.fromapp) {
-            self.$wechat.miniProgram.reLaunch({url: `${ENV.MiniRouter.news}?id=${self.query.id}&add=1`})
-          }
         }
         let toasttype = data.flag !== 1 ? 'warn' : 'success'
         self.$vux.toast.show({
@@ -440,7 +437,11 @@ export default {
     },
     editSave () {
       this.editIng = false
-      this.save()
+      this.save(() => {
+        if (self.query.fromapp) {
+          self.$wechat.miniProgram.reLaunch({url: `${ENV.MiniRouter.news}?id=${self.query.id}&add=1`})
+        }
+      })
     },
     editSetting () {
       this.$router.push({name: 'tAddFacotryNews', params: {id: this.article.id, fid: this.article.fid}})
