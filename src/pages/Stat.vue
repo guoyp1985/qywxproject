@@ -796,7 +796,7 @@ export default {
         statParams.wid = self.query.wid
       }
       if (self.query.appid) {
-        statParams.appid = self.query.appid
+        statParams.from = self.query.miniprograms
       }
       self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, { module: this.module, action: 'stat', id: this.query.id })
       .then(res => self.$http.get(`${ENV.BokaApi}/api/statData/${self.module}`, { params: statParams }))
