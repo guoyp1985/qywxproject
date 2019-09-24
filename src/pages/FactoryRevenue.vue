@@ -414,7 +414,11 @@ export default {
       const retdata = data.data ? data.data : data
       this.factoryInfo = retdata
       this.factoryInfo.waitcash = `${this.factoryInfo.waitcashmoney}`
-      return this.$http.post(`${ENV.FactoryApi}/api/factory/controlsettingList`,
+      let apistr = 'api'
+      if (ENV.ApiVersion === 'V2' && this.query.appid) {
+        apistr = `api/${this.query.appid}`
+      }
+      return this.$http.post(`${ENV.FactoryApi}/${apistr}/factory/controlsettingList`,
         {fid: this.fid, type: 'my'}
       )
     }).then(res => {

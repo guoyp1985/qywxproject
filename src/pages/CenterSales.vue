@@ -111,7 +111,11 @@ export default {
         if (this.query.type === 'agent') {
           params.agent = 1
         }
-        this.$http.post(`${ENV.FactoryApi}/api/miniopen/bindRetailer`, params)
+        let apistr = 'api'
+        if (ENV.ApiVersion === 'V2' && this.query.appid) {
+          apistr = `api/${this.query.appid}`
+        }
+        this.$http.post(`${ENV.FactoryApi}/${apistr}/miniopen/bindRetailer`, params)
       }
     },
     applySuccess () {

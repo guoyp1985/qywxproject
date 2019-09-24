@@ -14,6 +14,7 @@ var ENV = {
   AdminUrl: 'http://laravelcms.boka.cn/admin/login/unionIdLogin',
   FactoryApi: 'https://factorydev.boka.cn',
   ApiVersion: 'V1',
+  ApiAccept: 'application/vnd.factorydev.v2+json',
   OrderStatus: [
     {id: 0, status: '订单取消'},
     {id: 1, status: '已确认订单'},
