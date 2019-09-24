@@ -212,7 +212,7 @@ export default {
           let pquery = self.$route.query
           const params = self.$util.query(linkurl)
           if (pquery.fromapp === 'factory' && self.module === 'factorynews') {
-            self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.factoryAppProduct}?id=${params.id}`})
+            self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.factoryAppProduct}?id=${params.id}&type=others`})
           } else if (pquery.from === 'miniprogram') {
             self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}&module=product`})
           } else {
