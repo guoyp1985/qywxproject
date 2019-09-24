@@ -108,7 +108,8 @@
                 <div class="inner" @click="clickpopup('fee')">设置佣金</div>
               </div>
               <div class="item">
-                <router-link class="inner" :to="{path: '/stat', query: {id: clickdata.id, module: 'fpimport'}}">统计</router-link>
+                <!-- <router-link class="inner" :to="{path: '/stat', query: {id: clickdata.id, module: 'fpimport'}}">统计</router-link> -->
+                <div class="inner" @click="clickpopup('stat')">统计</div>
               </div>
               <!-- <div class="item">
                 <router-link class="inner" :to="{ path: '/factoryAgentFee', query: { id: clickdata.id, fid: Fid } }">设置佣金</router-link>
@@ -514,6 +515,9 @@ export default {
         self.postSuperRebate = self.clickdata.newsuperrebate
         self.showFeePopup = true
         self.feeData = self.clickdata
+      } else if (key === 'stat') {
+        let params = this.$util.handleAppParams(this.query, {id: this.clickdata.id, module: 'fpimport'})
+        this.$router.push({path: '/stat', query: params})
       } else {
         self.showpopup1 = false
       }
