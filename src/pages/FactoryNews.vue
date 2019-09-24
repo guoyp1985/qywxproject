@@ -438,8 +438,8 @@ export default {
     editSave () {
       this.editIng = false
       this.save(() => {
-        if (self.query.fromapp) {
-          self.$wechat.miniProgram.reLaunch({url: `${ENV.MiniRouter.news}?id=${self.query.id}&add=1`})
+        if (this.query.fromapp) {
+          this.$wechat.miniProgram.reLaunch({url: `${ENV.MiniRouter.news}?id=${this.query.id}&add=1`})
         }
       })
     },
