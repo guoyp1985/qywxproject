@@ -1087,11 +1087,7 @@ export default {
       }
     },
     setContactUser () {
-      let url = `${ENV.BokaApi}/api/getUser/${this.query.uid}`
-      if (this.query.fromModule === 'factoryCustomer') {
-        url = `${ENV.BokaApi}/api/getFactoryUser/${this.query.uid}`
-      }
-      return this.$http.get(url)
+      return this.$http.get(`${ENV.BokaApi}/api/getUser/${this.query.uid}`)
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
