@@ -136,7 +136,9 @@
             <div class="b_top_after">
               <div class="color-gray padding10" v-html="item.content"></div>
               <div class="padding10" v-if="item.photo && item.photo != ''">
-                <img :src="item.photo" style="width:100px;height:100px;object-fit:cover;" @click="viewBigImg(item.photo,index)" />
+                <div style="width:110px;display:inline-block;" v-for="(photo,index1) in item.photoarr">
+                  <img :src="photo" style="width:100px;height:100px;object-fit:cover;" @click="viewBigImg(photo,index,index1)" />
+                </div>
                 <div v-transfer-dom>
                   <previewer :list="item.previewerPhoto" :ref="`previewerPhoto-${index}`"></previewer>
                 </div>
@@ -196,7 +198,7 @@
         </div>
       </div>
     </div>
-    <div v-show="showServiceModal" class="auto-modal refund-modal flex_center">
+    <div v-if="showServiceModal" class="auto-modal refund-modal flex_center">
       <div class="modal-inner border-box" style="width:80%;">
         <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">申请售后</div>
         <div class="align_left txt padding10 b_bottom_after">
@@ -205,7 +207,7 @@
               ref="serviceTextarea"
               v-model="serviceContent"
               name="title" class="x-textarea noborder"
-              placeholder="请输入售后原因"
+              placeholder="请输入售后原因，并上传1张快递面单+2张商品照片"
               :show-counter="false"
               :rows="6"
               :max="200"
@@ -219,19 +221,20 @@
           <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange" />
         </form>
         <div class="q_photolist align_left bg-white">
-          <template v-if="servicePhoto && servicePhoto != ''">
-            <div class="photoitem" style="width:100px;">
-              <div class="inner photo imgcover">
-                <img :src="servicePhoto" class="pic" @click="uploadPhoto('fileInput')" />
-                <div class="close" @click.stop="deletephoto()">×</div>
-              </div>
+          <div class="photoitem" style="width:100px;" v-for="(photo,index) in servicePhotoArr" :key="index">
+            <div class="inner photo imgcover">
+              <img :src="photo" class="pic" @click="uploadPhoto('fileInput',index)" />
+              <div class="close" @click.stop="deletephoto(index)">×</div>
             </div>
-          </template>
-          <div v-else class="photoitem add" @click="uploadPhoto('fileInput')" style="width:100px;">
+          </div>
+          <div  v-if="servicePhotoArr.length < maxnum" class="photoitem add" @click="uploadPhoto('fileInput')" style="width:100px;">
             <div class="inner">
               <div class="innerlist">
                 <div class="flex_center h_100">
-                  <i class="al al-zhaopian" style="color:#bbb;line-height:30px;"></i>
+                  <div>
+                    <i class="al al-zhaopian" style="color:#bbb;line-height:30px;"></i>
+                    <div><span>{{ servicePhotoArr.length }}</span><span class="ml5 mr5">/</span><span>{{ maxnum }}</span></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -290,6 +293,9 @@ export default {
       showServiceModal: false,
       serviceContent: '',
       servicePhoto: '',
+      servicePhotoArr: [],
+      clickPhotoIndex: undefined,
+      maxnum: 4,
       recordData: [],
       recordPageStart: 0,
       limit: 10
@@ -322,14 +328,14 @@ export default {
         this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage.default})
       }
     },
-    deletephoto () {
-      this.servicePhoto = ''
+    deletephoto (index) {
+      this.servicePhotoArr.splice(index, 1)
     },
-    viewBigImg (photo, index) {
+    viewBigImg (photo, index, index1) {
       const self = this
       if (self.$util.isPC()) {
         let refarea = self.$refs[`previewerPhoto-${index}`][0] ? self.$refs[`previewerPhoto-${index}`][0] : self.$refs[`previewerPhoto-${index}`]
-        refarea.show(0)
+        refarea.show(index1)
       } else {
         window.WeixinJSBridge.invoke('imagePreview', {
           current: photo,
@@ -339,8 +345,13 @@ export default {
     },
     photoCallback (data) {
       const self = this
+      let index = this.clickPhotoIndex
       if (data.flag === 1) {
-        self.servicePhoto = data.data
+        if (index !== undefined && index !== 'undefined') {
+          self.servicePhotoArr.splice(index, 1, data.data)
+        } else {
+          self.servicePhotoArr.push(data.data)
+        }
       } else if (data.error) {
         self.$vux.toast.show({
           text: data.error,
@@ -348,15 +359,16 @@ export default {
         })
       }
     },
-    uploadPhoto (refname) {
+    uploadPhoto (refname, index) {
       const self = this
+      this.clickPhotoIndex = index
       const fileInput = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       if (self.$util.isPC()) {
         fileInput.click()
       } else {
         self.$wechat.ready(function () {
           self.$util.wxUploadImage({
-            maxnum: 1,
+            maxnum: this.maxnum,
             handleCallback: function (data) {
               self.photoCallback(data)
             }
@@ -364,7 +376,7 @@ export default {
         })
       }
     },
-    fileChange (refname) {
+    fileChange (refname, index) {
       const self = this
       const target = event.target
       const files = target.files
@@ -392,13 +404,16 @@ export default {
       if (this.$util.trim(this.serviceContent) !== '') {
         newData.content = this.serviceContent.replace(/\n/g, '<br/>')
       }
-      if (this.$util.trim(this.servicePhoto) !== '') {
-        newData.photo = this.servicePhoto
-        newData.previewerPhoto = this.$util.previewerImgdata([this.servicePhoto])
+      let sphoto = ''
+      if (this.servicePhotoArr.length) {
+        sphoto = this.servicePhotoArr.join(',')
+        newData.previewerPhoto = this.$util.previewerImgdata(this.servicePhotoArr)
       }
+      newData.photo = sphoto
+      newData.photoarr = this.servicePhotoArr
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/order/applyService`, {
-        id: this.orderData.id, reasonreturn: this.serviceContent, proofphoto: this.servicePhoto
+        id: this.orderData.id, reasonreturn: this.serviceContent, proofphoto: sphoto
       }).then(res => {
         this.$vux.loading.hide()
         const data = res.data
@@ -570,7 +585,9 @@ export default {
         let retdata = data.data ? data.data : data
         for (let i in retdata) {
           if (retdata[i].photo && retdata[i].photo !== '') {
-            retdata[i].previewerPhoto = this.$util.previewerImgdata([retdata[i].photo])
+            let parr = retdata[i].photo.split(',')
+            retdata[i].photoarr = parr
+            retdata[i].previewerPhoto = this.$util.previewerImgdata(parr)
           }
           if (retdata[i].content && retdata[i].content !== '') {
             retdata[i].content = retdata[i].content.replace(/\n/g, '<br/>')

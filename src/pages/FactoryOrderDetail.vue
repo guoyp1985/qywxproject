@@ -144,7 +144,9 @@
             <div class="b_top_after">
               <div class="color-gray padding10" v-html="item.content"></div>
               <div class="padding10" v-if="item.photo && item.photo != ''">
-                <img :src="item.photo" style="width:100px;height:100px;object-fit:cover;" @click="viewBigImg(item.photo,index)" />
+                <div style="width:110px;display:inline-block;" v-for="(photo,index1) in item.photoarr">
+                  <img :src="photo" style="width:100px;height:100px;object-fit:cover;" @click="viewBigImg(photo,index,index1)" />
+                </div>
                 <div v-transfer-dom>
                   <previewer :list="item.previewerPhoto" :ref="`previewerPhoto-${index}`"></previewer>
                 </div>
@@ -337,11 +339,11 @@ export default {
         }
       })
     },
-    viewBigImg (photo, index) {
+    viewBigImg (photo, index, index1) {
       const self = this
       if (self.$util.isPC()) {
         let refarea = self.$refs[`previewerPhoto-${index}`][0] ? self.$refs[`previewerPhoto-${index}`][0] : self.$refs[`previewerPhoto-${index}`]
-        refarea.show(0)
+        refarea.show(index1)
       } else {
         window.WeixinJSBridge.invoke('imagePreview', {
           current: photo,
@@ -686,7 +688,9 @@ export default {
         let retdata = data.data ? data.data : data
         for (let i in retdata) {
           if (retdata[i].photo && retdata[i].photo !== '') {
-            retdata[i].previewerPhoto = this.$util.previewerImgdata([retdata[i].photo])
+            let parr = retdata[i].photo.split(',')
+            retdata[i].photoarr = parr
+            retdata[i].previewerPhoto = this.$util.previewerImgdata(parr)
           }
           if (retdata[i].content && retdata[i].content !== '') {
             retdata[i].content = retdata[i].content.replace(/\n/g, '<br/>')
