@@ -132,7 +132,7 @@
               <div class="flex_left flex_cell">
                 <span v-if="item.description == '售后反馈'" class="color-theme bold">售后客服</span>
                 <template v-else>
-                  <img :src="orderData.avatar" style="width:40px;height:40px;border-radius:50%;object-fit:cover;"/>
+                  <img :src="orderData.avatar" style="width:30px;height:30px;border-radius:50%;object-fit:cover;"/>
                   <span class="bold ml5">{{orderData.username}}</span>
                 </template>
               </div>
