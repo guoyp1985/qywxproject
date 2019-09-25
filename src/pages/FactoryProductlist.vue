@@ -571,7 +571,7 @@ export default {
       this.showTip = false
       this.$vux.loading.show()
       let oldValue = this.clickdata.recommend
-      let params = {param: 'recommend', paramvalue: 1, id: this.clickdata.id, module: 'factoryproduct'}
+      let params = {param: 'recommend', paramvalue: 1, id: this.clickdata.moduleid, module: 'factoryproduct'}
       if (this.clickdata.recommend) {
         params.paramvalue = 0
       }
