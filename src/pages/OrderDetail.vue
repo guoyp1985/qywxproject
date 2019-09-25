@@ -717,7 +717,7 @@ export default {
   font-size: 12px;
 }
 #order-detail .weui-cells {
-  margin-top: 10px !important;
+  margin-top: 0px !important;
 }
 #order-detail .vux-cell-primary {
   padding-left: 10px;
