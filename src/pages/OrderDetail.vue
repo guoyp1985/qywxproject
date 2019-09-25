@@ -123,20 +123,28 @@
           <x-button v-if="orderData.flag == 3" mini @click.native="confirm" class="font12">确认收货</x-button>
           <x-button v-if="orderData.flag == 4" mini @click.native="evaluate" class="font12">评价</x-button>
         </div>
-        <div class="bg-white mt12" v-if="recordData.length">
-          <div class="padding10 b_bottom_after">售后记录</div>
-          <div class="scroll_list mt12">
-            <div class="scroll_item padding10" v-for="(item, index) in recordData" :key="index">
-              <div class="color-theme">{{item.description}}</div>
-              <div class="mt5" v-html="item.content"></div>
-              <div class="mt5" v-if="item.photo && item.photo != ''">
-                <img :src="item.photo" style="width:100px;max-width:100%;" @click="viewBigImg(item.photo,index)" />
+        <div class="mt12" v-if="recordData.length">
+          <div class="line-area">
+            <div class="txt bg-page flex_center">售后记录</div>
+          </div>
+          <div class="bg-white mb12" v-for="(item, index) in recordData" :key="index">
+            <div class="b_top_after flex_left padding10">
+              <div class="flex_left flex_cell">
+                <span v-if="item.description == '售后反馈'" class="color-theme bold">售后客服</span>
+                <span v-else class="bold">{{orderData.linkman}}</span>
+              </div>
+              <div class="flex_right color-gray" style="width:130px;">{{item.dateline | dateformat}}</div>
+            </div>
+            <div class="b_top_after">
+              <div class="color-gray padding10" v-html="item.content"></div>
+              <div class="padding10" v-if="item.photo && item.photo != ''">
+                <img :src="item.photo" style="width:100px;height:100px;object-fit:cover;" @click="viewBigImg(item.photo,index)" />
                 <div v-transfer-dom>
                   <previewer :list="item.previewerPhoto" :ref="`previewerPhoto-${index}`"></previewer>
                 </div>
               </div>
-              <div class="color-gray font12 mt5">{{item.dateline | dateformat}}</div>
             </div>
+            <div class="b_bottom_after"></div>
           </div>
         </div>
         <div v-transfer-dom class="qrcode-dialog">
@@ -716,5 +724,16 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   width: 80%;
+}
+#order-detail{
+  .line-area:after{
+    content:"";display:block;position:absolute;left:50%;;top:50%;
+    width:160px;height:1px;margin-left:-80px;
+    background-color:#000;
+  }
+  .line-area{
+    position:relative;width:100%;height:50px;text-align:center;
+    .txt{margin:0 auto;width:90px;height:50px;position:relative;z-index:1;}
+  }
 }
 </style>
