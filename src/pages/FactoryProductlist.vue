@@ -107,12 +107,8 @@
                 <div class="inner" @click="clickpopup('fee')">设置佣金</div>
               </div>
               <div class="item">
-                <!-- <router-link class="inner" :to="{path: '/stat', query: {id: clickdata.id, module: 'fpimport'}}">统计</router-link> -->
                 <div class="inner" @click="clickpopup('stat')">统计</div>
               </div>
-              <!-- <div class="item">
-                <router-link class="inner" :to="{ path: '/factoryAgentFee', query: { id: clickdata.id, fid: Fid } }">设置佣金</router-link>
-              </div> -->
               <div class="item close mt10" @click="clickpopup">
                 <div class="inner">{{ $t('Cancel txt') }}</div>
               </div>
