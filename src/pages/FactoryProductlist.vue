@@ -73,30 +73,22 @@
                   <div class="inner" @click="clickpopup('copy')">复制商品信息</div>
                 </div>
                 <div class="item">
-                  <router-link class="inner" :to="{path: '/agentProduct', query: {pid: clickdata.id}}">经销商价格</router-link>
+                  <router-link class="inner" :to="{path: '/agentProduct', query: {pid: clickdata.moduleid}}">经销商价格</router-link>
                 </div>
                 <div class="item">
-                  <router-link class="inner" :to="{path: '/materialbank', query: {pid: clickdata.id}}">素材库</router-link>
+                  <router-link class="inner" :to="{path: '/materialbank', query: {pid: clickdata.moduleid}}">素材库</router-link>
                 </div>
                 <div class="item" v-if="clickdata.moderate == 1">
                   <div class="inner" @click="clickpopup('recommend')" v-if="clickdata.recommend == 0">商品推荐</div>
                   <div class="inner" @click="clickpopup('recommend')" v-else>取消推荐</div>
                 </div>
                 <div class="item">
-                  <router-link class="inner" :to="{path: '/postageArea', query: {type: 'factoryproduct',id: clickdata.id}}">偏远地区运费</router-link>
+                  <router-link class="inner" :to="{path: '/postageArea', query: {type: 'factoryproduct',id: clickdata.moduleid}}">偏远地区运费</router-link>
                 </div>
                 <div class="item" v-if="!clickdata.activityid || clickdata.activityid == 0">
-                  <router-link class="inner" :to="{path: '/addFpimportProduct', query: {id: clickdata.id, fid: Fid}}">编辑</router-link>
+                  <router-link class="inner" :to="{path: '/addFpimportProduct', query: {id: clickdata.moduleid, fid: Fid}}">编辑</router-link>
                 </div>
               </template>
-              <!-- <template v-if="!clickdata.fromid || (clickdata.fromfid && clickdata.originmoderate != 0)">
-                <div class="item" v-if="clickdata.moderate == 0">
-                  <div class="inner" @click="clickpopup('up')">上架</div>
-                </div>
-                <div class="item" v-else-if="clickdata.moderate == 1">
-                  <div class="inner" @click="clickpopup('down')">下架</div>
-                </div>
-              </template> -->
               <div class="item" v-if="clickdata.isshow == 0">
                 <div class="inner" @click="clickpopup('up')">上架</div>
               </div>
@@ -430,7 +422,7 @@ export default {
           onConfirm: () => {
             self.$vux.loading.show()
             self.$http.post(`${ENV.BokaApi}/api/copy/factoryproduct`, {
-              id: this.clickdata.id
+              id: this.clickdata.moduleid
             }).then(res => {
               let data = res.data
               self.$vux.loading.hide()
@@ -455,53 +447,13 @@ export default {
       } else if (key === 'upShelf') {
         self.showpopup1 = false
         this.showBankPopup = true
-        // this.$router.push({path: '/collectionInfo', query: {fid: this.loginUser.fid, id: this.clickdata.id}})
-        // if (!this.loginUser.factoryinfo.bankcardno || this.loginUser.factoryinfo.bankcardno === '') {
-        //   self.$vux.confirm.show({
-        //     title: '您还没有绑定银行卡，请先绑定银行卡信息，其他厂家出售商品后，将会把订单金额直接打款到您的银行卡账户上。',
-        //     confirmText: '去绑定',
-        //     onConfirm: () => {
-        //       let fromPage = ''
-        //       if (this.query.appid) {
-        //         fromPage = encodeURIComponent(`/factoryProductlist?fid=${this.Fid}&appid=${this.query.appid}`)
-        //       } else {
-        //         fromPage = encodeURIComponent(`/factoryProductlist?fid=${this.Fid}`)
-        //       }
-        //       this.$router.push({path: '/factoryBank', query: {fid: this.Fid, fromPage: fromPage}})
-        //     }
-        //   })
-        //   return false
-        // }
-        // self.$vux.confirm.show({
-        //   title: '确定要将该商品移至货源吗？',
-        //   onConfirm: () => {
-        //     self.$vux.loading.show()
-        //     let params = { id: self.clickdata.id, shelf: 1 }
-        //     self.$http.post(`${ENV.BokaApi}/api/factory/productset`, params).then(res => {
-        //       let data = res.data
-        //       self.$vux.loading.hide()
-        //       self.$vux.toast.show({
-        //         text: data.error,
-        //         type: (data.flag !== 1 ? 'warn' : 'success'),
-        //         time: self.$util.delay(data.error),
-        //         onHide: function () {
-        //           if (data.flag === 1) {
-        //             self.clickdata.shelf = 1
-        //             self.productdata[self.clickindex].shelf = 1
-        //             self.showpopup1 = false
-        //           }
-        //         }
-        //       })
-        //     })
-        //   }
-        // })
       } else if (key === 'downShelf') {
         self.showpopup1 = false
         self.$vux.confirm.show({
           title: '确定要将该商品从货源移出吗？',
           onConfirm () {
             self.$vux.loading.show()
-            let params = { id: self.clickdata.id, shelf: 0 }
+            let params = { id: self.clickdata.moduleid, shelf: 0 }
             self.$http.post(`${ENV.BokaApi}/api/factory/productset`, params).then(res => {
               let data = res.data
               self.$vux.loading.hide()
