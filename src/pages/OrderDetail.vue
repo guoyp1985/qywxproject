@@ -62,7 +62,7 @@
         -->
         </div>
         <div class="mt10 b_top_after bg-white font12">
-          <div class="flex_left b_bottom_after padding10" v-for="(order, index) in orders" :key="index">
+          <div class="flex_left padding10" v-for="(order, index) in orders" :key="index">
             <div class="flex_left w70">
               <img v-if="order.options && order.options.id" style="width:60px;height:60px;border: 1px solid #f7f7f7;" class="imgcover" :src="order.options.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
               <img v-else style="width:60px;height:60px;border: 1px solid #f7f7f7;" class="imgcover" :src="order.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
@@ -79,7 +79,38 @@
             </div> -->
           </div>
         </div>
-        <group>
+        <div class="b_top_after padding10 bg-white">
+          <div class="flex_left font12 color-gray">
+            <div class="flex_left w80">运费</div>
+            <div class="flex_right flex_cell">
+              <span v-if="orderData.postage == 0">包邮</span>
+              <span v-else>{{ $t('RMB') }}{{ orderData.postage }}</span>
+            </div>
+          </div>
+          <div class="flex_left font12 color-gray mt10" v-if="orderData.carddeduct > 0">
+            <div class="flex_left w100">优惠券抵扣</div>
+            <div class="flex_right flex_cell">{{ $t('RMB') }}{{orderData.carddeduct}}</div>
+          </div>
+        </div>
+        <div class="b_top_after padding10 bg-white flex_right">
+          <span class="v_middle font12">实际支付: </span><span class="v_middle font16 color-orange">{{ $t('RMB') }}{{orderData.needpaymoney}}</span>
+        </div>
+        <div class="b_top_after padding10 bg-white">
+          <div class="font12 color-gray flex_left">
+            <div class="flex_left" style="width:160px;">创建时间: {{ orderData.dateline | dateformat }}</div>
+            <div class="flex_cell flex_right color-orange5">{{orderData.flagstr}}</div>
+            <div class="flex_right w60" v-if="orderData.delivertype == 2">到店自提</div>
+          </div>
+          <div class="font12 color-gray" v-if="orderData.flag == 3">发货时间: {{ orderData.delivertime | dateformat }}</div>
+          <div v-if="orderData && orderData.content != ''"  class="pl10 pr10 pb10 color-gray">
+            <div class="flex_left font12">
+              <div class="w40">留言: </div>
+              <div class="flex_cell" v-html="orderData.content"></div>
+            </div>
+          </div>
+        </div>
+        <div class="b_bottom_after"></div>
+        <!-- <group>
           <cell-form-preview v-if="priceInfos.length" :list="priceInfos"></cell-form-preview>
           <cell>
             <div class="color-orange">
@@ -114,7 +145,7 @@
               <div class="flex_cell" v-html="orderData.content"></div>
             </div>
           </div>
-        </group>
+        </group> -->
         <div class="padding10 align_right">
           <x-button v-if="orderData.flag == 1" mini @click.native="cancel" class="font12">取消订单</x-button>
           <x-button v-if="orderData.flag == 1 && orderData.payorder == '' && query.fromapp != 'factory'" :link="{path: '/pay', query: {id: orderData.id}}" mini class="font12">去支付</x-button>
