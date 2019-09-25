@@ -86,7 +86,7 @@
                   <router-link class="inner" :to="{path: '/postageArea', query: {type: 'factoryproduct',id: clickdata.moduleid}}">偏远地区运费</router-link>
                 </div>
                 <div class="item" v-if="!clickdata.activityid || clickdata.activityid == 0">
-                  <router-link class="inner" :to="{path: '/addFpimportProduct', query: {id: clickdata.moduleid, fid: Fid}}">编辑</router-link>
+                  <router-link class="inner" :to="{path: '/addFpimportProduct', query: {id: clickdata.id, fid: Fid}}">编辑</router-link>
                 </div>
               </template>
               <div class="item" v-if="clickdata.isshow == 0">
