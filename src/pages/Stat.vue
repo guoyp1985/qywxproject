@@ -758,6 +758,9 @@ export default {
       if (self.query.wid) {
         params.wid = self.query.wid
       }
+      if (self.query.fromapp || self.query.appid) {
+        params.from = 'miniprograms'
+      }
       self.$http.get(`${ENV.BokaApi}/api/statDetail/${self.module}`, {
         params: params
       }).then(function (res) {
