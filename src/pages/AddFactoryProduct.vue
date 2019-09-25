@@ -1136,6 +1136,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       const self = this
       this.loginUser = User.get()
+      console.log(this.loginUser)
       self.submitIng = false
       if (this.loginUser) {
         this.$vux.loading.show()
@@ -1146,7 +1147,7 @@ export default {
             break
           }
         }
-        if (!(self.loginUser.fid && parseInt(self.loginUser.fid) === parseInt(self.$route.query.fid)) && !isAdmin && self.$route.query.fromapp !== 'factory') {
+        if (!(self.loginUser.fid || parseInt(self.loginUser.fid) === parseInt(self.$route.query.fid)) && !isAdmin && self.$route.query.fromapp !== 'factory') {
           this.$vux.loading.hide()
           self.showSos = true
           self.showContainer = false
