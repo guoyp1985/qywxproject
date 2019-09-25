@@ -131,7 +131,10 @@
             <div class="b_top_after flex_left padding10">
               <div class="flex_left flex_cell">
                 <span v-if="item.description == '售后反馈'" class="color-theme bold">售后客服</span>
-                <span v-else class="bold">{{orderData.username}}</span>
+                <template v-else>
+                  <img :src="orderData.avatar" style="width:40px;height:40px;border-radius:50%;object-fit:cover;"/>
+                  <span class="bold ml5">{{orderData.username}}</span>
+                </template>
               </div>
               <div class="flex_right color-gray" style="width:130px;">{{item.dateline | dateformat}}</div>
             </div>
