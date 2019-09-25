@@ -110,42 +110,6 @@
           </div>
         </div>
         <div class="b_bottom_after"></div>
-        <!-- <group>
-          <cell-form-preview v-if="priceInfos.length" :list="priceInfos"></cell-form-preview>
-          <cell>
-            <div class="color-orange">
-              <span class="v_middle font12">商品: </span><span class="v_middle font14">{{ $t('RMB') }}{{orderData.special}}</span>
-              <template v-if="!orderData.delivertype && orderData.postage && orderData.postage != ''">
-                <span class="v_middle font12 color-gray" v-if="orderData.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
-                <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ orderData.postage }} )</span>
-              </template>
-            </div>
-          </cell>
-        </group>
-        <group>
-          <cell>
-            <div>
-              <span class="v_middle font12 color-orange">实际支付: </span><span class="v_middle font14 color-orange">{{ $t('RMB') }}{{orderData.needpaymoney}}</span>
-              <template v-if="orderData.carddeduct > 0">
-                <span class="v_middle font12 ml10 color-gray">优惠券抵扣: </span><span class="v_middle font14 color-gray">{{ $t('RMB') }}{{orderData.carddeduct}}</span>
-              </template>
-            </div>
-          </cell>
-        </group>
-        <group>
-          <div class="padding10 font12 color-gray flex_left">
-            <div class="flex_cell flex_left">创建时间: {{ orderData.dateline | dateformat }}</div>
-            <div class=" flex_cell flex_right w60 color-orange5">{{orderData.flagstr}}</div>
-            <div class="flex_right w60" v-if="orderData.delivertype == 2">到店自提</div>
-          </div>
-          <div class="pl10 pr10 pb10 font12 color-gray" v-if="orderData.flag == 3">发货时间: {{ orderData.delivertime | dateformat }}</div>
-          <div v-if="orderData && orderData.content != ''"  class="pl10 pr10 pb10 color-gray">
-            <div class="flex_left font12">
-              <div class="w40">留言: </div>
-              <div class="flex_cell" v-html="orderData.content"></div>
-            </div>
-          </div>
-        </group> -->
         <div class="padding10 align_right">
           <x-button v-if="orderData.flag == 1" mini @click.native="cancel" class="font12">取消订单</x-button>
           <x-button v-if="orderData.flag == 1 && orderData.payorder == '' && query.fromapp != 'factory'" :link="{path: '/pay', query: {id: orderData.id}}" mini class="font12">去支付</x-button>
