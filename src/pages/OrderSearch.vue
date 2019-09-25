@@ -316,10 +316,12 @@ export default {
             item.buttons = arr
             break
           case 4:
-            item.buttons = [
-              // {id: 5, name: '申请售后'},
-              {id: 7, name: '评价'}
-            ]
+            let arr1 = []
+            if (item.canservice) {
+              arr1.push({id: 5, name: '申请售后'})
+            }
+            arr1.push({id: 7, name: '评价'})
+            item.buttons = arr1
             break
         }
       }
