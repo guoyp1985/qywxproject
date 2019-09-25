@@ -824,7 +824,11 @@ export default {
       this.$router.push({path: '/membersView', query: params})
     },
     toChat (item) {
-      let params = this.$util.handleAppParams(this.query, {uid: item.uid})
+      let uid = item.uid
+      if (item.gxkuid) {
+        uid = item.gxkuid
+      }
+      let params = this.$util.handleAppParams(this.query, {uid: uid})
       this.$router.push({path: '/chat', query: params})
     },
     init () {
