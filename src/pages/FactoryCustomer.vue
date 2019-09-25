@@ -262,7 +262,7 @@ export default {
       this.$router.push({path: '/chat', query: params})
     },
     toSaleRecord (item) {
-      let params = this.$util.handleAppParams(this.query, {uid: item.uid, fid: this.loginUser.fid})
+      let params = this.$util.handleAppParams(this.query, {uid: item.gxkuid, fid: this.loginUser.fid})
       this.$router.push({path: '/factoryOrders', query: params})
     },
     btnDetail (index) {
