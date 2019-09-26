@@ -96,10 +96,10 @@
                 <div class="inner" @click="clickpopup('down')">下架</div>
               </div>
               <template v-if="!clickdata.fromfid">
-                <div class="item" v-if="clickdata.shelf == 0">
+                <div class="item" v-if="clickdata.shelf == 0 && clickdata.ishow">
                   <div class="inner" @click="clickpopup('upShelf')">推荐到货源</div>
                 </div>
-                <div class="item" v-else-if="clickdata.shelf == 1">
+                <div class="item" v-if="clickdata.shelf == 1">
                   <div class="inner" @click="clickpopup('downShelf')">从货源移出</div>
                 </div>
               </template>
