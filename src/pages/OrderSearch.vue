@@ -329,6 +329,7 @@ export default {
             let arr1 = []
             if (item.canservice) {
               arr1.push({id: 5, name: '申请售后'})
+              arr1.push({id: 8, name: '完成售后'})
             }
             arr1.push({id: 7, name: '评价'})
             item.buttons = arr1
@@ -348,6 +349,24 @@ export default {
         onConfirm () {
           self.$vux.loading.show()
           self.$http.post(`${ENV.BokaApi}/api/order/receive`, {id: order.id})
+          .then(res => {
+            self.$vux.loading.hide()
+            if (res.data.flag) {
+              self.$vux.toast.text(res.data.error)
+              self.changeOrderView(order, 4, [4, 6])
+            }
+          })
+        }
+      })
+    },
+    finishService (order) {
+      const self = this
+      this.$vux.confirm.show({
+        title: '您确认售后服务已结束？',
+        content: '请确认售后结束',
+        onConfirm () {
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/order/finishService`, {id: order.id})
           .then(res => {
             self.$vux.loading.hide()
             if (res.data.flag) {
@@ -513,6 +532,9 @@ export default {
           break
         case 7:
           this.evaluate(order)
+          break
+        case 8:
+          this.finishService(order)
           break
       }
     },
