@@ -48,87 +48,169 @@
 </style>
 <template>
   <div class="containerarea font14 bg-page data-stat-page">
-    <div class="box-area">
-      <div class="col-item">
-        <div class="row-item big">
-          <div class="txt1">今日订单</div>
-          <div class="txt2">{{statData.todayorders}}</div>
-        </div>
-        <div class="row-item big">
-          <div class="txt1">今日收入</div>
-          <div class="txt2">{{statData.todayrevenue}}</div>
-        </div>
-      </div>
-      <div class="col-item">
-        <div class="row-item big">
-          <div class="txt1">今日入驻</div>
-          <div class="txt2">{{statData.newRetailers_0_factory}}</div>
-        </div>
-        <div class="row-item big">
-          <div class="txt1">今日销售额</div>
-          <div class="txt2">{{statData.todayordersmoney}}</div>
-        </div>
+    <div class="s-topbanner s-topbanner1">
+      <div class="row">
+        <tab v-model="selectedIndex" class="v-tab">
+          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
+        </tab>
       </div>
     </div>
-    <div class="box-area">
-      <div class="col-item">
-        <div class="row-item big">
-          <div class="txt1">本月订单</div>
-          <div class="txt2">{{statData.monthorders}}</div>
+    <div class="s-container s-container1">
+      <div v-show="(selectedIndex == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',0)">
+        <div class="box-area">
+          <div class="col-item">
+            <div class="row-item big">
+              <div class="txt1">今日订单</div>
+              <div class="txt2">{{statData.todayorders}}</div>
+            </div>
+            <div class="row-item big">
+              <div class="txt1">今日收入</div>
+              <div class="txt2">{{statData.todayrevenue}}</div>
+            </div>
+          </div>
+          <div class="col-item">
+            <div class="row-item big">
+              <div class="txt1">今日入驻</div>
+              <div class="txt2">{{statData.newRetailers_0_factory}}</div>
+            </div>
+            <div class="row-item big">
+              <div class="txt1">今日销售额</div>
+              <div class="txt2">{{statData.todayordersmoney}}</div>
+            </div>
+          </div>
         </div>
-        <div class="row-item big">
-          <div class="txt1">本月收入</div>
-          <div class="txt2">{{statData.monthrevenue}}</div>
+        <div class="box-area">
+          <div class="col-item">
+            <div class="row-item big">
+              <div class="txt1">本月订单</div>
+              <div class="txt2">{{statData.monthorders}}</div>
+            </div>
+            <div class="row-item big">
+              <div class="txt1">本月收入</div>
+              <div class="txt2">{{statData.monthrevenue}}</div>
+            </div>
+          </div>
+          <div class="col-item">
+            <div class="row-item big">
+              <div class="txt1">本月入驻</div>
+              <div class="txt2">{{statData.newRetailers_0_factory}}</div>
+            </div>
+            <div class="row-item big">
+              <div class="txt1">本月销售额</div>
+              <div class="txt2">{{statData.monthordersmoney}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="box-area">
+          <div class="col-item">
+            <div class="row-item big">
+              <div class="txt1">累计订单</div>
+              <div class="txt2">{{statData.allorders}}</div>
+            </div>
+            <div class="row-item big">
+              <div class="txt1">累计收入</div>
+              <div class="txt2">{{statData.allrevenue}}</div>
+            </div>
+          </div>
+          <div class="col-item">
+            <div class="row-item big">
+              <div class="txt1">累计入驻</div>
+              <div class="txt2">{{statData.allRetailers_0_factory}}</div>
+            </div>
+            <div class="row-item big">
+              <div class="txt1">累计销售额</div>
+              <div class="txt2">{{statData.allordersmoney}}</div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="col-item">
-        <div class="row-item big">
-          <div class="txt1">本月入驻</div>
-          <div class="txt2">{{statData.newRetailers_0_factory}}</div>
+      <div v-show="(selectedIndex == 1)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',0)">
+        <div class="box-area">
+          <div class="col-item">
+            <div class="row-item big">
+              <div class="txt1">今日订单</div>
+              <div class="txt2">{{statData.todayorders}}</div>
+            </div>
+            <div class="row-item big">
+              <div class="txt1">今日收入</div>
+              <div class="txt2">{{statData.todayrevenue}}</div>
+            </div>
+          </div>
+          <div class="col-item">
+            <div class="row-item big">
+              <div class="txt1">今日入驻</div>
+              <div class="txt2">{{statData.newRetailers_0_factory}}</div>
+            </div>
+            <div class="row-item big">
+              <div class="txt1">今日销售额</div>
+              <div class="txt2">{{statData.todayordersmoney}}</div>
+            </div>
+          </div>
         </div>
-        <div class="row-item big">
-          <div class="txt1">本月销售额</div>
-          <div class="txt2">{{statData.monthordersmoney}}</div>
+        <div class="box-area">
+          <div class="col-item">
+            <div class="row-item big">
+              <div class="txt1">本月订单</div>
+              <div class="txt2">{{statData.monthorders}}</div>
+            </div>
+            <div class="row-item big">
+              <div class="txt1">本月收入</div>
+              <div class="txt2">{{statData.monthrevenue}}</div>
+            </div>
+          </div>
+          <div class="col-item">
+            <div class="row-item big">
+              <div class="txt1">本月入驻</div>
+              <div class="txt2">{{statData.newRetailers_0_factory}}</div>
+            </div>
+            <div class="row-item big">
+              <div class="txt1">本月销售额</div>
+              <div class="txt2">{{statData.monthordersmoney}}</div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="box-area">
-      <div class="col-item">
-        <div class="row-item big">
-          <div class="txt1">累计订单</div>
-          <div class="txt2">{{statData.allorders}}</div>
-        </div>
-        <div class="row-item big">
-          <div class="txt1">累计收入</div>
-          <div class="txt2">{{statData.allrevenue}}</div>
-        </div>
-      </div>
-      <div class="col-item">
-        <div class="row-item big">
-          <div class="txt1">累计入驻</div>
-          <div class="txt2">{{statData.allRetailers_0_factory}}</div>
-        </div>
-        <div class="row-item big">
-          <div class="txt1">累计销售额</div>
-          <div class="txt2">{{statData.allordersmoney}}</div>
+        <div class="box-area">
+          <div class="col-item">
+            <div class="row-item big">
+              <div class="txt1">累计订单</div>
+              <div class="txt2">{{statData.allorders}}</div>
+            </div>
+            <div class="row-item big">
+              <div class="txt1">累计收入</div>
+              <div class="txt2">{{statData.allrevenue}}</div>
+            </div>
+          </div>
+          <div class="col-item">
+            <div class="row-item big">
+              <div class="txt1">累计入驻</div>
+              <div class="txt2">{{statData.allRetailers_0_factory}}</div>
+            </div>
+            <div class="row-item big">
+              <div class="txt1">累计销售额</div>
+              <div class="txt2">{{statData.allordersmoney}}</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import {} from 'vux'
+import {Tab, TabItem} from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
   components: {
+    Tab, TabItem
   },
   data () {
     return {
       query: {},
       loginUser: {},
+      tabtxts: ['今日', '昨日'],
+      selectedIndex: 0,
       Fid: 0,
       statData: {}
     }

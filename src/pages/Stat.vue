@@ -122,7 +122,7 @@
                 </div>
               </template>
             </div>
-            <div v-else-if="tabitem.type == 'sharelist'" class="scroll_list border-box">
+            <div v-else-if="tabitem.type == 'sharelist' || tabitem.type == 'factorysharelist'" class="scroll_list border-box">
               <template>
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
@@ -133,10 +133,7 @@
                     <div class="flex_cell pl10 pr20" @click="toMembersView(item)">
                       <div class="clamp1 color-gray2">{{ item.username }}</div>
                       <div class="clamp1 color-gray">传播级别: {{ item.level }}</div>
-                      <div class="clamp1 color-gray">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
-                      <div class="color-gray">
-                        <div class="clamp1 w_100">停留: {{ item.staytime | staytimeFormat }}  阅读: {{ item.number }}次</div>
-                      </div>
+                      <div class="clamp1 color-gray" v-if="item.yingxiangli">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
                     </div>
                     <div class="w60 flex_right">
@@ -211,7 +208,7 @@
                 </div>
               </template>
             </div>
-            <div v-else-if="tabitem.type == 'viewlist'" class="scroll_list border-box">
+            <div v-else-if="tabitem.type == 'viewlist' || tabitem.type == 'factoryviewlist'" class="scroll_list border-box">
               <template>
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
@@ -222,7 +219,7 @@
                     <div class="flex_cell pl10 pr20" @click="toMembersView(item)">
                       <div class="clamp1 color-gray2">{{ item.username }}</div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
-                      <div class="clamp1 color-gray">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
+                      <div class="clamp1 color-gray" v-if="item.yingxiangli">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
                       <div class="color-gray">
                         <div class="clamp1 w_100">停留: {{ item.staytime | staytimeFormat }}  阅读: {{ item.number }}次</div>
                       </div>
@@ -758,6 +755,9 @@ export default {
       if (self.query.wid) {
         params.wid = self.query.wid
       }
+      if (self.query.fromapp || self.query.appid) {
+        params.from = 'miniprograms'
+      }
       self.$http.get(`${ENV.BokaApi}/api/statDetail/${self.module}`, {
         params: params
       }).then(function (res) {
@@ -824,7 +824,11 @@ export default {
       this.$router.push({path: '/membersView', query: params})
     },
     toChat (item) {
-      let params = this.$util.handleAppParams(this.query, {uid: item.uid})
+      let uid = item.uid
+      if (item.gxkuid) {
+        uid = item.gxkuid
+      }
+      let params = this.$util.handleAppParams(this.query, {uid: uid})
       this.$router.push({path: '/chat', query: params})
     },
     init () {

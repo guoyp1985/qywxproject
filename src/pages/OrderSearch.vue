@@ -102,7 +102,7 @@
               ref="serviceTextarea"
               v-model="serviceContent"
               name="title" class="x-textarea noborder"
-              placeholder="请输入售后原因"
+              placeholder="请输入售后原因，并上传1张快递面单+2张商品照片"
               :show-counter="false"
               :rows="6"
               :max="200"
@@ -116,19 +116,20 @@
           <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange" />
         </form>
         <div class="q_photolist align_left bg-white">
-          <template v-if="servicePhoto && servicePhoto != ''">
-            <div class="photoitem" style="width:100px;">
-              <div class="inner photo imgcover">
-                <img :src="servicePhoto" class="pic" @click="uploadPhoto('fileInput')" />
-                <div class="close" @click.stop="deletephoto()">×</div>
-              </div>
+          <div class="photoitem" style="width:100px;" v-for="(photo,index) in servicePhotoArr" :key="index">
+            <div class="inner photo imgcover">
+              <img :src="photo" class="pic" @click="uploadPhoto('fileInput',index)" />
+              <div class="close" @click.stop="deletephoto(index)">×</div>
             </div>
-          </template>
-          <div v-else class="photoitem add" @click="uploadPhoto('fileInput')" style="width:100px;">
+          </div>
+          <div  v-if="servicePhotoArr.length < maxnum" class="photoitem add" @click="uploadPhoto('fileInput')" style="width:100px;">
             <div class="inner">
               <div class="innerlist">
                 <div class="flex_center h_100">
-                  <i class="al al-zhaopian" style="color:#bbb;line-height:30px;"></i>
+                  <div>
+                    <i class="al al-zhaopian" style="color:#bbb;line-height:30px;"></i>
+                    <div><span>{{ servicePhotoArr.length }}</span><span class="ml5 mr5">/</span><span>{{ maxnum }}</span></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -181,7 +182,10 @@ export default {
       pageTop: 0,
       showServiceModal: false,
       serviceContent: '',
-      servicePhoto: ''
+      servicePhoto: '',
+      servicePhotoArr: [],
+      maxnum: 4,
+      clickPhotoIndex: undefined
     }
   },
   computed: {
@@ -223,13 +227,18 @@ export default {
       this.clickOrder = {}
       this.clickIndex = 0
     },
-    deletephoto () {
-      this.servicePhoto = ''
+    deletephoto (index) {
+      this.servicePhotoArr.splice(index, 1)
     },
     photoCallback (data) {
       const self = this
+      let index = this.clickPhotoIndex
       if (data.flag === 1) {
-        self.servicePhoto = data.data
+        if (index !== undefined && index !== 'undefined') {
+          self.servicePhotoArr.splice(index, 1, data.data)
+        } else {
+          self.servicePhotoArr.push(data.data)
+        }
       } else if (data.error) {
         self.$vux.toast.show({
           text: data.error,
@@ -237,15 +246,16 @@ export default {
         })
       }
     },
-    uploadPhoto (refname) {
+    uploadPhoto (refname, index) {
       const self = this
+      this.clickPhotoIndex = index
       const fileInput = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       if (self.$util.isPC()) {
         fileInput.click()
       } else {
         self.$wechat.ready(function () {
           self.$util.wxUploadImage({
-            maxnum: 1,
+            maxnum: self.maxnum,
             handleCallback: function (data) {
               self.photoCallback(data)
             }
@@ -253,7 +263,7 @@ export default {
         })
       }
     },
-    fileChange (refname) {
+    fileChange (refname, index) {
       const self = this
       const target = event.target
       const files = target.files
@@ -309,17 +319,19 @@ export default {
             //   {id: 6, name: '确认收货'}
             // ]
             let arr = [{id: 4, name: '查看物流'}]
-            if (item.backflag !== 120) {
+            if (item.canservice) {
               arr.push({id: 5, name: '申请售后'})
             }
             arr.push({id: 6, name: '确认收货'})
             item.buttons = arr
             break
           case 4:
-            item.buttons = [
-              // {id: 5, name: '申请售后'},
-              {id: 7, name: '评价'}
-            ]
+            let arr1 = []
+            if (item.canservice) {
+              arr1.push({id: 5, name: '申请售后'})
+            }
+            arr1.push({id: 7, name: '评价'})
+            item.buttons = arr1
             break
         }
       }
@@ -423,15 +435,20 @@ export default {
       this.showServiceModal = false
       this.serviceContent = ''
       this.servicePhoto = ''
+      this.servicePhotoArr = []
     },
     submitService () {
       if (this.$util.trim(this.serviceContent) === '' && this.$util.trim(this.servicePhoto) === '') {
         this.$vux.toast.text('请完善售后信息', 'middle')
         return false
       }
+      let sphoto = ''
+      if (this.servicePhotoArr.length) {
+        sphoto = this.servicePhotoArr.join(',')
+      }
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/order/applyService`, {
-        id: this.clickOrder.id, reasonreturn: this.serviceContent, proofphoto: this.servicePhoto
+        id: this.clickOrder.id, reasonreturn: this.serviceContent, proofphoto: sphoto
       }).then(res => {
         this.$vux.loading.hide()
         const data = res.data
@@ -462,6 +479,7 @@ export default {
       // 售后
       this.serviceContent = ''
       this.servicePhoto = ''
+      this.servicePhotoArr = []
       this.showServiceModal = true
     },
     payment (order) {

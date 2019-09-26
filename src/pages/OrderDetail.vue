@@ -62,7 +62,7 @@
         -->
         </div>
         <div class="mt10 b_top_after bg-white font12">
-          <div class="flex_left b_bottom_after padding10" v-for="(order, index) in orders" :key="index">
+          <div class="flex_left padding10" v-for="(order, index) in orders" :key="index">
             <div class="flex_left w70">
               <img v-if="order.options && order.options.id" style="width:60px;height:60px;border: 1px solid #f7f7f7;" class="imgcover" :src="order.options.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
               <img v-else style="width:60px;height:60px;border: 1px solid #f7f7f7;" class="imgcover" :src="order.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
@@ -79,42 +79,37 @@
             </div> -->
           </div>
         </div>
-        <group>
-          <cell-form-preview v-if="priceInfos.length" :list="priceInfos"></cell-form-preview>
-          <cell>
-            <div class="color-orange">
-              <span class="v_middle font12">商品: </span><span class="v_middle font14">{{ $t('RMB') }}{{orderData.special}}</span>
-              <template v-if="!orderData.delivertype && orderData.postage && orderData.postage != ''">
-                <span class="v_middle font12 color-gray" v-if="orderData.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
-                <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ orderData.postage }} )</span>
-              </template>
+        <div class="b_top_after padding10 bg-white">
+          <div class="flex_left font12 color-gray">
+            <div class="flex_left w80">运费</div>
+            <div class="flex_right flex_cell">
+              <span v-if="orderData.postage == 0">包邮</span>
+              <span v-else>{{ $t('RMB') }}{{ orderData.postage }}</span>
             </div>
-          </cell>
-        </group>
-        <group>
-          <cell>
-            <div>
-              <span class="v_middle font12 color-orange">实际支付: </span><span class="v_middle font14 color-orange">{{ $t('RMB') }}{{orderData.needpaymoney}}</span>
-              <template v-if="orderData.carddeduct > 0">
-                <span class="v_middle font12 ml10 color-gray">优惠券抵扣: </span><span class="v_middle font14 color-gray">{{ $t('RMB') }}{{orderData.carddeduct}}</span>
-              </template>
-            </div>
-          </cell>
-        </group>
-        <group>
-          <div class="padding10 font12 color-gray flex_left">
-            <div class="flex_cell flex_left">创建时间: {{ orderData.dateline | dateformat }}</div>
-            <div class=" flex_cell flex_right w60 color-orange5">{{orderData.flagstr}}</div>
+          </div>
+          <div class="flex_left font12 color-gray mt10" v-if="orderData.carddeduct > 0">
+            <div class="flex_left w100">优惠券抵扣</div>
+            <div class="flex_right flex_cell">{{ $t('RMB') }}{{orderData.carddeduct}}</div>
+          </div>
+        </div>
+        <div class="b_top_after padding10 bg-white flex_right">
+          <span class="v_middle font12">实际支付: </span><span class="v_middle font16 color-orange">{{ $t('RMB') }}{{orderData.needpaymoney}}</span>
+        </div>
+        <div class="b_top_after padding10 bg-white">
+          <div class="font12 color-gray flex_left">
+            <div class="flex_left" style="width:160px;">创建时间: {{ orderData.dateline | dateformat }}</div>
+            <div class="flex_cell flex_right color-orange5">{{orderData.flagstr}}</div>
             <div class="flex_right w60" v-if="orderData.delivertype == 2">到店自提</div>
           </div>
-          <div class="pl10 pr10 pb10 font12 color-gray" v-if="orderData.flag == 3">发货时间: {{ orderData.delivertime | dateformat }}</div>
+          <div class="font12 color-gray" v-if="orderData.flag == 3">发货时间: {{ orderData.delivertime | dateformat }}</div>
           <div v-if="orderData && orderData.content != ''"  class="pl10 pr10 pb10 color-gray">
             <div class="flex_left font12">
               <div class="w40">留言: </div>
               <div class="flex_cell" v-html="orderData.content"></div>
             </div>
           </div>
-        </group>
+        </div>
+        <div class="b_bottom_after"></div>
         <div class="padding10 align_right">
           <x-button v-if="orderData.flag == 1" mini @click.native="cancel" class="font12">取消订单</x-button>
           <x-button v-if="orderData.flag == 1 && orderData.payorder == '' && query.fromapp != 'factory'" :link="{path: '/pay', query: {id: orderData.id}}" mini class="font12">去支付</x-button>
@@ -123,20 +118,33 @@
           <x-button v-if="orderData.flag == 3" mini @click.native="confirm" class="font12">确认收货</x-button>
           <x-button v-if="orderData.flag == 4" mini @click.native="evaluate" class="font12">评价</x-button>
         </div>
-        <div class="bg-white mt12" v-if="recordData.length">
-          <div class="padding10 b_bottom_after">售后记录</div>
-          <div class="scroll_list mt12">
-            <div class="scroll_item padding10" v-for="(item, index) in recordData" :key="index">
-              <div class="color-theme">{{item.description}}</div>
-              <div class="mt5" v-html="item.content"></div>
-              <div class="mt5" v-if="item.photo && item.photo != ''">
-                <img :src="item.photo" style="width:100px;max-width:100%;" @click="viewBigImg(item.photo,index)" />
+        <div class="mt12" v-if="recordData.length">
+          <div class="line-area">
+            <div class="txt bg-page flex_center">售后记录</div>
+          </div>
+          <div class="bg-white mb12" v-for="(item, index) in recordData" :key="index">
+            <div class="b_top_after flex_left padding10">
+              <div class="flex_left flex_cell">
+                <span v-if="item.description == '售后反馈'" class="color-theme bold">售后客服</span>
+                <template v-else>
+                  <img :src="orderData.avatar" style="width:30px;height:30px;border-radius:50%;object-fit:cover;"/>
+                  <span class="bold ml5">{{orderData.username}}</span>
+                </template>
+              </div>
+              <div class="flex_right color-gray" style="width:130px;">{{item.dateline | dateformat}}</div>
+            </div>
+            <div class="b_top_after">
+              <div class="color-gray padding10" v-html="item.content"></div>
+              <div class="padding10" v-if="item.photo && item.photo != ''">
+                <div style="width:110px;display:inline-block;" v-for="(photo,index1) in item.photoarr">
+                  <img :src="photo" style="width:100px;height:100px;object-fit:cover;" @click="viewBigImg(photo,index,index1)" />
+                </div>
                 <div v-transfer-dom>
                   <previewer :list="item.previewerPhoto" :ref="`previewerPhoto-${index}`"></previewer>
                 </div>
               </div>
-              <div class="color-gray font12 mt5">{{item.dateline | dateformat}}</div>
             </div>
+            <div class="b_bottom_after"></div>
           </div>
         </div>
         <div v-transfer-dom class="qrcode-dialog">
@@ -190,7 +198,7 @@
         </div>
       </div>
     </div>
-    <div v-show="showServiceModal" class="auto-modal refund-modal flex_center">
+    <div v-if="showServiceModal" class="auto-modal refund-modal flex_center">
       <div class="modal-inner border-box" style="width:80%;">
         <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">申请售后</div>
         <div class="align_left txt padding10 b_bottom_after">
@@ -199,7 +207,7 @@
               ref="serviceTextarea"
               v-model="serviceContent"
               name="title" class="x-textarea noborder"
-              placeholder="请输入售后原因"
+              placeholder="请输入售后原因，并上传1张快递面单+2张商品照片"
               :show-counter="false"
               :rows="6"
               :max="200"
@@ -213,19 +221,20 @@
           <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange" />
         </form>
         <div class="q_photolist align_left bg-white">
-          <template v-if="servicePhoto && servicePhoto != ''">
-            <div class="photoitem" style="width:100px;">
-              <div class="inner photo imgcover">
-                <img :src="servicePhoto" class="pic" @click="uploadPhoto('fileInput')" />
-                <div class="close" @click.stop="deletephoto()">×</div>
-              </div>
+          <div class="photoitem" style="width:100px;" v-for="(photo,index) in servicePhotoArr" :key="index">
+            <div class="inner photo imgcover">
+              <img :src="photo" class="pic" @click="uploadPhoto('fileInput',index)" />
+              <div class="close" @click.stop="deletephoto(index)">×</div>
             </div>
-          </template>
-          <div v-else class="photoitem add" @click="uploadPhoto('fileInput')" style="width:100px;">
+          </div>
+          <div  v-if="servicePhotoArr.length < maxnum" class="photoitem add" @click="uploadPhoto('fileInput')" style="width:100px;">
             <div class="inner">
               <div class="innerlist">
                 <div class="flex_center h_100">
-                  <i class="al al-zhaopian" style="color:#bbb;line-height:30px;"></i>
+                  <div>
+                    <i class="al al-zhaopian" style="color:#bbb;line-height:30px;"></i>
+                    <div><span>{{ servicePhotoArr.length }}</span><span class="ml5 mr5">/</span><span>{{ maxnum }}</span></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -284,6 +293,9 @@ export default {
       showServiceModal: false,
       serviceContent: '',
       servicePhoto: '',
+      servicePhotoArr: [],
+      clickPhotoIndex: undefined,
+      maxnum: 4,
       recordData: [],
       recordPageStart: 0,
       limit: 10,
@@ -324,14 +336,14 @@ export default {
         this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage.default})
       }
     },
-    deletephoto () {
-      this.servicePhoto = ''
+    deletephoto (index) {
+      this.servicePhotoArr.splice(index, 1)
     },
-    viewBigImg (photo, index) {
+    viewBigImg (photo, index, index1) {
       const self = this
       if (self.$util.isPC()) {
         let refarea = self.$refs[`previewerPhoto-${index}`][0] ? self.$refs[`previewerPhoto-${index}`][0] : self.$refs[`previewerPhoto-${index}`]
-        refarea.show(0)
+        refarea.show(index1)
       } else {
         window.WeixinJSBridge.invoke('imagePreview', {
           current: photo,
@@ -341,8 +353,13 @@ export default {
     },
     photoCallback (data) {
       const self = this
+      let index = this.clickPhotoIndex
       if (data.flag === 1) {
-        self.servicePhoto = data.data
+        if (index !== undefined && index !== 'undefined') {
+          self.servicePhotoArr.splice(index, 1, data.data)
+        } else {
+          self.servicePhotoArr.push(data.data)
+        }
       } else if (data.error) {
         self.$vux.toast.show({
           text: data.error,
@@ -350,15 +367,16 @@ export default {
         })
       }
     },
-    uploadPhoto (refname) {
+    uploadPhoto (refname, index) {
       const self = this
+      this.clickPhotoIndex = index
       const fileInput = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       if (self.$util.isPC()) {
         fileInput.click()
       } else {
         self.$wechat.ready(function () {
           self.$util.wxUploadImage({
-            maxnum: 1,
+            maxnum: self.maxnum,
             handleCallback: function (data) {
               self.photoCallback(data)
             }
@@ -366,7 +384,7 @@ export default {
         })
       }
     },
-    fileChange (refname) {
+    fileChange (refname, index) {
       const self = this
       const target = event.target
       const files = target.files
@@ -394,13 +412,16 @@ export default {
       if (this.$util.trim(this.serviceContent) !== '') {
         newData.content = this.serviceContent.replace(/\n/g, '<br/>')
       }
-      if (this.$util.trim(this.servicePhoto) !== '') {
-        newData.photo = this.servicePhoto
-        newData.previewerPhoto = this.$util.previewerImgdata([this.servicePhoto])
+      let sphoto = ''
+      if (this.servicePhotoArr.length) {
+        sphoto = this.servicePhotoArr.join(',')
+        newData.previewerPhoto = this.$util.previewerImgdata(this.servicePhotoArr)
       }
+      newData.photo = sphoto
+      newData.photoarr = this.servicePhotoArr
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/order/applyService`, {
-        id: this.orderData.id, reasonreturn: this.serviceContent, proofphoto: this.servicePhoto
+        id: this.orderData.id, reasonreturn: this.serviceContent, proofphoto: sphoto
       }).then(res => {
         this.$vux.loading.hide()
         const data = res.data
@@ -572,7 +593,9 @@ export default {
         let retdata = data.data ? data.data : data
         for (let i in retdata) {
           if (retdata[i].photo && retdata[i].photo !== '') {
-            retdata[i].previewerPhoto = this.$util.previewerImgdata([retdata[i].photo])
+            let parr = retdata[i].photo.split(',')
+            retdata[i].photoarr = parr
+            retdata[i].previewerPhoto = this.$util.previewerImgdata(parr)
           }
           if (retdata[i].content && retdata[i].content !== '') {
             retdata[i].content = retdata[i].content.replace(/\n/g, '<br/>')
@@ -723,7 +746,7 @@ export default {
   font-size: 12px;
 }
 #order-detail .weui-cells {
-  margin-top: 10px !important;
+  margin-top: 0px !important;
 }
 #order-detail .vux-cell-primary {
   padding-left: 10px;
@@ -733,5 +756,16 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   width: 80%;
+}
+#order-detail{
+  .line-area:after{
+    content:"";display:block;position:absolute;left:50%;;top:50%;
+    width:160px;height:1px;margin-left:-80px;
+    background-color:#000;
+  }
+  .line-area{
+    position:relative;width:100%;height:50px;text-align:center;
+    .txt{margin:0 auto;width:90px;height:50px;position:relative;z-index:1;}
+  }
 }
 </style>
