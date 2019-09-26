@@ -632,11 +632,11 @@ export default {
     this.refresh()
   },
   mounted () {
-    const that = this
+    const self = this
     window.onresize = () => {
       return (() => {
         window.screenHeight = document.body.clientHeight
-        that.screenHeight = window.screenHeight
+        self.screenHeight = window.screenHeight
       })()
     }
   }
