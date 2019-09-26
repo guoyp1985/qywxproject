@@ -372,6 +372,7 @@ export default {
                   if (data.flag === 1) {
                     self.clickdata.moderate = 1
                     self.productdata[self.clickindex].moderate = 1
+                    self.productdata[self.clickindex].ishow = 1
                     self.showpopup1 = false
                   }
                 }
@@ -396,6 +397,7 @@ export default {
                   if (data.flag === 1) {
                     self.clickdata.moderate = 0
                     self.productdata[self.clickindex].moderate = 0
+                    self.productdata[self.clickindex].ishow = 0
                     self.showpopup1 = false
                   }
                 }
