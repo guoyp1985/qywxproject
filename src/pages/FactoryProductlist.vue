@@ -322,7 +322,7 @@ export default {
     },
     toAdd () {
       let params = this.$util.handleAppParams(this.query, {fid: this.Fid})
-      this.$router.push({path: '/addFactoryProduct', query: params})
+      this.$router.push({path: '/addFpimportProduct', query: params})
     },
     getPhoto (src) {
       return this.$util.getPhoto(src)
