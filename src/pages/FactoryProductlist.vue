@@ -96,7 +96,7 @@
                 <div class="inner" @click="clickpopup('down')">下架</div>
               </div>
               <template v-if="!clickdata.fromfid">
-                <div class="item" v-if="clickdata.shelf == 0 && clickdata.ishow">
+                <div class="item" v-if="clickdata.shelf == 0 && clickdata.isshow">
                   <div class="inner" @click="clickpopup('upShelf')">推荐到货源</div>
                 </div>
                 <div class="item" v-if="clickdata.shelf == 1">
