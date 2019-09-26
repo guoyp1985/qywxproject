@@ -641,8 +641,8 @@ export default {
           onHide: () => {
             self.submitIng = false
             if (data.flag === 1) {
-              let rparams = self.$util.handleAppParams(self.query, {fid: this.Fid, refresh: 1})
-              self.$router.push({path: '/factoryCardList', query: rparams})
+              let rparams = self.$util.handleAppParams(self.query, {fid: self.Fid, refresh: 1})
+              this.$router.push({path: '/giveCardList', query: rparams})
             }
           }
         })

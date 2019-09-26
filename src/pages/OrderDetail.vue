@@ -298,12 +298,20 @@ export default {
       maxnum: 4,
       recordData: [],
       recordPageStart: 0,
-      limit: 10
+      limit: 10,
+      screenHeight: document.body.clientHeight
     }
   },
   computed: {
     expressInfo () {
       return `${this.expressCompany} ${this.expressNumber}`
+    }
+  },
+  watch: {
+    screenHeight (val, oldval) {
+      if (val < oldval) {
+        document.body.clientHeight = oldval
+      }
     }
   },
   methods: {
@@ -645,6 +653,15 @@ export default {
   },
   activated () {
     this.refresh()
+  },
+  mounted () {
+    const self = this
+    window.onresize = () => {
+      return (() => {
+        window.screenHeight = document.body.clientHeight
+        self.screenHeight = window.screenHeight
+      })()
+    }
   }
 }
 </script>
