@@ -451,7 +451,7 @@ export default {
           title: '确定要将该商品从货源移出吗？',
           onConfirm () {
             self.$vux.loading.show()
-            let params = { id: self.clickdata.moduleid, shelf: 0 }
+            let params = { id: self.clickdata.id, shelf: 0 }
             self.$http.post(`${ENV.BokaApi}/api/factory/productset`, params).then(res => {
               let data = res.data
               self.$vux.loading.hide()
@@ -502,7 +502,7 @@ export default {
       }
       if (!iscontinue) return false
       this.$vux.loading.show()
-      let params = {...this.submitData, id: this.clickdata.moduleid, shelf: 1}
+      let params = {...this.submitData, id: this.clickdata.id, shelf: 1}
       this.$http.post(`${ENV.BokaApi}/api/factory/productset`, params).then(res => {
         let data = res.data
         this.$vux.loading.hide()
