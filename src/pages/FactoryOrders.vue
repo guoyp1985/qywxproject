@@ -696,7 +696,7 @@ export default {
           self.showSos = false
           self.showContainer = true
           this.$vux.loading.hide()
-          if (this.query.wid !== this.$route.query) {
+          if (this.query.wid !== this.$route.query.wid) {
             self.pagestart1 = 0
             self.distabdata1 = false
             this.tabdata1 = []
