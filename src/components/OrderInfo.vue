@@ -115,7 +115,8 @@ export default {
         {id: 4, name: '查看物流'},
         {id: 5, name: '申请售后'},
         {id: 6, name: '确认收货'},
-        {id: 7, name: '评价'}
+        {id: 7, name: '评价'},
+        {id: 8, name: '完成售后'}
       ]
     }
   },
