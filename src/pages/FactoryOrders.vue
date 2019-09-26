@@ -697,9 +697,9 @@ export default {
           self.showContainer = true
           this.$vux.loading.hide()
           this.query = this.$route.query
-          // self.pagestart1 = 0
-          // self.distabdata1 = false
-          // this.tabdata1 = []
+          self.pagestart1 = 0
+          self.distabdata1 = false
+          this.tabdata1 = []
           this.swiperChange()
         }
       }
