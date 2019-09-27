@@ -850,6 +850,7 @@ export default {
           }
         })
       } else if (key === 'pay') {
+        this.payMoney = ''
         this.showPayPopup = true
       }
     },
