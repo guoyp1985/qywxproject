@@ -345,7 +345,7 @@
                   <div class="inner">进入店铺</div>
                 </router-link>
               </template>
-              <router-link class="item" :to="{path:'/factoryOrders',query:{wid:clickData.wid}}">
+              <router-link v-if="selectedIndex != 5" class="item" :to="{path:'/factoryOrders',query:{wid:clickData.wid}}">
                 <div class="inner">相关订单</div>
               </router-link>
               <router-link v-if="selectedIndex == 5" class="item" :to="{path:'/factoryBill',query:{fid:clickData.fid, fromfid: loginUser.fid}}">
