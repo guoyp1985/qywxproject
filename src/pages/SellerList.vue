@@ -873,7 +873,7 @@ export default {
         return false
       }
       self.$http.post(`${ENV.BokaApi}/api/factory/factoryPaymoeny`, {
-        fid: self.loginUser.fid, fromfid: self.clickData.fid, paymoeny: money
+        fid: self.clickData.fid, fromfid: self.loginUser.fid, paymoeny: money
       }).then(res => {
         let data = res.data
         self.$vux.loading.hide()
