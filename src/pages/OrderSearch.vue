@@ -342,7 +342,23 @@ export default {
       return list
     },
     evaluate (order) {
-      this.$router.push({name: 'tEvaluation', query: {id: order.id}})
+      let params = this.$util.handleAppParams(this.query, {id: order.id})
+      this.$router.push({path: '/evaluation', query: params})
+    },
+    afterConfirm () {
+      this.distabdata1 = false
+      this.distabdata2 = false
+      this.distabdata3 = false
+      this.distabdata4 = false
+      this.tabdata1 = []
+      this.tabdata2 = []
+      this.tabdata3 = []
+      this.tabdata4 = []
+      this.pagestart1 = 0
+      this.pagestart2 = 0
+      this.pagestart3 = 0
+      this.pagestart4 = 0
+      this.toggleTab()
     },
     confirm (order) {
       const self = this
@@ -356,12 +372,8 @@ export default {
             self.$vux.loading.hide()
             if (res.data.flag) {
               self.$vux.toast.text(res.data.error)
-              if (self.selectedIndex === 0) {
-                self.tabdata1[self.clickIndex].canservice = 1
-              } else if (self.selectedIndex === 2) {
-                self.tabdata3[self.clickIndex].canservice = 1
-              }
-              self.changeOrderView(order, 4, [4, 6])
+              // self.changeOrderView(order, 4, [4, 6])
+              self.afterConfirm()
             }
           })
         }
@@ -568,6 +580,8 @@ export default {
           break
       }
       this.$util.changeItem(list, order.id, function (m) {
+        let retdata = { ...m, flag: status, flagstr: self.$util.getItem(ENV.OrderStatus, status).status, buttons: buttons }
+        console.log(retdata)
         return { ...m, flag: status, flagstr: self.$util.getItem(ENV.OrderStatus, status).status, buttons: buttons }
       })
     },
