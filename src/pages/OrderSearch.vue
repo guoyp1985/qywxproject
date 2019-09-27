@@ -331,6 +331,9 @@ export default {
               arr1.push({id: 5, name: '申请售后'})
               arr1.push({id: 8, name: '完成售后'})
             }
+            if (item.backflag === 120) {
+              arr1.push({id: 9, name: '查看售后进度'})
+            }
             arr1.push({id: 7, name: '评价'})
             item.buttons = arr1
             break
@@ -535,6 +538,9 @@ export default {
           break
         case 8:
           this.finishService(order)
+          break
+        case 9:
+          this.$router.push({path: '/orderDetail', query: {id: order.id}})
           break
       }
     },
