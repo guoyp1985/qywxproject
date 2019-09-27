@@ -356,6 +356,11 @@ export default {
             self.$vux.loading.hide()
             if (res.data.flag) {
               self.$vux.toast.text(res.data.error)
+              if (self.selectedIndex === 0) {
+                self.tabdata1[self.clickIndex].canservice = 1
+              } else if (self.selectedIndex === 2) {
+                self.tabdata3[self.clickIndex].canservice = 1
+              }
               self.changeOrderView(order, 4, [4, 6])
             }
           })
