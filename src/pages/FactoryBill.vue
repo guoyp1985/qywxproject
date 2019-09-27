@@ -321,7 +321,7 @@ export default {
     },
     getData1 () {
       const self = this
-      let params = {type: 'day', pagestart: this.pageStart1, limit: limit, fromfid: this.query.fromfid}
+      let params = {type: 'day', pagestart: this.pageStart1, limit: limit, fid: this.query.fid, fromfid: this.query.fromfid}
       self.$http.post(`${ENV.BokaApi}/api/factory/tofactoryOrders`, params).then(res => {
         let data = res.data
         self.$vux.loading.hide()
@@ -332,7 +332,7 @@ export default {
     },
     getData2 () {
       const self = this
-      let params = {type: 'yesterday', pagestart: this.pageStart2, limit: limit, fromfid: this.query.fromfid}
+      let params = {type: 'yesterday', pagestart: this.pageStart2, limit: limit, fid: this.query.fid, fromfid: this.query.fromfid}
       self.$http.post(`${ENV.BokaApi}/api/factory/tofactoryOrders`, params).then(res => {
         let data = res.data
         self.$vux.loading.hide()
@@ -343,7 +343,7 @@ export default {
     },
     getData3 () {
       const self = this
-      let params = {type: 'month', pagestart: this.pageStart3, limit: limit, fromfid: this.query.fromfid}
+      let params = {type: 'month', pagestart: this.pageStart3, limit: limit, fid: this.query.fid, fromfid: this.query.fromfid}
       self.$http.post(`${ENV.BokaApi}/api/factory/tofactoryOrders`, params).then(res => {
         let data = res.data
         self.$vux.loading.hide()
@@ -354,7 +354,7 @@ export default {
     },
     getData4 () {
       const self = this
-      let params = {type: '', pagestart: this.pageStart4, limit: limit, fromfid: this.query.fromfid}
+      let params = {type: '', pagestart: this.pageStart4, limit: limit, fid: this.query.fid, fromfid: this.query.fromfid}
       self.$http.post(`${ENV.BokaApi}/api/factory/tofactoryOrders`, params).then(res => {
         let data = res.data
         self.$vux.loading.hide()
