@@ -317,8 +317,13 @@ export default {
   },
   methods: {
     toFactoryProduct (item) {
-      let params = this.$util.handleAppParams(this.query, {id: item.id, fid: this.Fid, module: 'fpimport'})
-      this.$router.push({path: '/factoryProduct', query: params})
+      let params = this.$util.handleAppParams(this.query, {id: item.id, fid: this.Fid})
+      if (item.fromfid) {
+        params.module = 'fpimport'
+        this.$router.push({path: '/fpimportProduct', query: params})
+      } else {
+        this.$router.push({path: '/factoryProduct', query: params})
+      }
     },
     toAdd () {
       let params = this.$util.handleAppParams(this.query, {fid: this.Fid})
