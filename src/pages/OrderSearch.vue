@@ -540,7 +540,8 @@ export default {
           this.finishService(order)
           break
         case 9:
-          this.$router.push({path: '/orderDetail', query: {id: order.id}})
+          let params = this.$util.handleAppParams(this.query, {id: order.id})
+          this.$router.push({path: '/orderDetail', query: params})
           break
       }
     },
