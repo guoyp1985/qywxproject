@@ -69,6 +69,13 @@
                   </div>
                 </div>
               </div>
+              <div class="bg-white padding10 b_top_after b_bottom_after color-gray5">
+                <div class="t-table">
+                  <div class="font12 color-lightgray">
+                    <span class="middle-cell mr10 v_middle">应打款金额:</span><span class="v_middle color-orange">{{$t('RMB')}}{{ item.needpaymoeny }}</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -85,6 +92,13 @@
                 <div class="t-table">
                   <div class="font12 color-lightgray">
                     <span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-white padding10 b_top_after b_bottom_after color-gray5">
+                <div class="t-table">
+                  <div class="font12 color-lightgray">
+                    <span class="middle-cell mr10 v_middle">应打款金额:</span><span class="v_middle color-orange">{{$t('RMB')}}{{ item.needpaymoeny }}</span>
                   </div>
                 </div>
               </div>
@@ -107,6 +121,13 @@
                   </div>
                 </div>
               </div>
+              <div class="bg-white padding10 b_top_after b_bottom_after color-gray5">
+                <div class="t-table">
+                  <div class="font12 color-lightgray">
+                    <span class="middle-cell mr10 v_middle">应打款金额:</span><span class="v_middle color-orange">{{$t('RMB')}}{{ item.needpaymoeny }}</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -123,6 +144,13 @@
                 <div class="t-table">
                   <div class="font12 color-lightgray">
                     <span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-white padding10 b_top_after b_bottom_after color-gray5">
+                <div class="t-table">
+                  <div class="font12 color-lightgray">
+                    <span class="middle-cell mr10 v_middle">应打款金额:</span><span class="v_middle color-orange">{{$t('RMB')}}{{ item.needpaymoeny }}</span>
                   </div>
                 </div>
               </div>
