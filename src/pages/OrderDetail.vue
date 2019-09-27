@@ -206,6 +206,20 @@
         <div class="align_left txt padding10 b_bottom_after">
           <group class="textarea-outer" style="padding:0;">
             <x-textarea
+              v-if="orderData.backflag == 120"
+              ref="serviceTextarea"
+              v-model="serviceContent"
+              name="title" class="x-textarea noborder"
+              placeholder="回复内容"
+              :show-counter="false"
+              :rows="6"
+              :max="200"
+              @on-change="textareaChange('serviceTextarea')"
+              @on-focus="textareaFocus('serviceTextarea')"
+              autosize>
+            </x-textarea>
+            <x-textarea
+              v-else
               ref="serviceTextarea"
               v-model="serviceContent"
               name="title" class="x-textarea noborder"
@@ -244,7 +258,8 @@
         </div>
         <div class="flex_center b_top_after" style="height:50px;">
           <div class="flex_cell flex_center h_100 b_right_after" @click="closeService">取消</div>
-          <div class="flex_cell flex_center h_100 color-orange" @click="submitService">提交</div>
+          <div class="flex_cell flex_center h_100 color-orange" @click="submitService('reply')" v-if="orderData.backflag == 120">提交</div>
+          <div class="flex_cell flex_center h_100 color-orange" @click="submitService" v-else>提交</div>
         </div>
       </div>
     </div>
@@ -405,7 +420,7 @@ export default {
       this.showServiceModal = false
       this.serviceContent = ''
     },
-    submitService () {
+    submitService (type) {
       if (this.$util.trim(this.serviceContent) === '' && this.$util.trim(this.servicePhoto) === '') {
         this.$vux.toast.text('请完善售后信息', 'middle')
         return false
@@ -422,9 +437,13 @@ export default {
       newData.photo = sphoto
       newData.photoarr = this.servicePhotoArr
       this.$vux.loading.show()
-      this.$http.post(`${ENV.BokaApi}/api/order/applyService`, {
-        id: this.orderData.id, reasonreturn: this.serviceContent, proofphoto: sphoto
-      }).then(res => {
+      let ajaxurl = `${ENV.BokaApi}/api/order/applyService`
+      let postData = {id: this.orderData.id, reasonreturn: this.serviceContent, proofphoto: sphoto}
+      if (type === 'reply') {
+        ajaxurl = `${ENV.BokaApi}/api/order/replyService`
+        postData = {orderid: this.orderData.id, content: this.serviceContent, photo: sphoto}
+      }
+      this.$http.post(ajaxurl, postData).then(res => {
         this.$vux.loading.hide()
         const data = res.data
         this.$vux.toast.text(data.error)
