@@ -871,23 +871,23 @@ export default {
         })
         return false
       }
-      // self.$http.post(`${ENV.BokaApi}/api/factory/productset`, {
-      //   id: self.clickdata.id, newsalesrebate: salesRebate, newsuperrebate: superRebate
-      // }).then(res => {
-      //   let data = res.data
-      //   self.$vux.loading.hide()
-      //   self.$vux.toast.show({
-      //     text: data.error,
-      //     type: data.flag !== 1 ? 'warn' : 'success',
-      //     time: self.$util.delay(data.error),
-      //     onHide: function () {
-      //       if (data.flag === 1) {
-      //         self.showPayPopup = false
-      //         self.refresh()
-      //       }
-      //     }
-      //   })
-      // })
+      self.$http.post(`${ENV.BokaApi}/api/factory/factoryPaymoeny`, {
+        fid: self.loginUser.fid, fromfid: self.clickData.fid, paymoeny: money
+      }).then(res => {
+        let data = res.data
+        self.$vux.loading.hide()
+        self.$vux.toast.show({
+          text: data.error,
+          type: data.flag !== 1 ? 'warn' : 'success',
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+              self.showPayPopup = false
+              self.refresh()
+            }
+          }
+        })
+      })
     },
     closeLevelPopup () {
       this.showLevelPopup = false
