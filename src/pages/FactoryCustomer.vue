@@ -86,19 +86,19 @@
                   </div>
                   <div class="txt-item" v-if="item.gxkuid != loginUser.uid">客户类型: {{item.customertype}}</div>
                 </div>
-                <div class="flex_center bg-white h40">
+                <!-- <div class="flex_center bg-white h40">
                   <div class="t-table align_center color-gray2 font14 color-gray2">
                     <div class="t-cell v_middle b_right_after" v-if="query.from" @click="toCard(item)">专属优惠券</div>
                     <div class="t-cell v_middle b_right_after" @click="toChat(item)">
                       <div>联系TA</div>
                     </div>
                   </div>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
         </div>
-        <div v-show="(selectedIndex == 1)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3', 1)">
+        <!-- <div v-show="(selectedIndex == 1)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3', 1)">
           <search
             class="v-search bg-white"
             v-model='searchword3'
@@ -148,18 +148,11 @@
                   </div>
                   <div class="txt-item" v-if="item.gxkuid != loginUser.uid">客户类型: {{item.customertype}}</div>
                 </div>
-                <div class="flex_center bg-white h40">
-                  <div class="t-table align_center color-gray2 font14 color-gray2">
-                    <div class="t-cell v_middle b_right_after" @click="toChat(item)">
-                      <div>联系TA</div>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div v-show="(selectedIndex == 2)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', 2)">
+        </div> -->
+        <div v-show="(selectedIndex == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', 2)">
           <search
             class="v-search bg-white"
             v-model='searchword2'
@@ -208,13 +201,13 @@
                   </div>
                   <div class="txt-item" v-if="item.gxkuid != loginUser.uid">客户类型: {{item.customertype}}</div>
                 </div>
-                <div class="flex_center bg-white h40">
+                <!-- <div class="flex_center bg-white h40">
                   <div class="t-table align_center color-gray2 font14 color-gray2">
                     <div class="t-cell v_middle b_right_after" @click="toChat(item)">
                       <div>联系TA</div>
                     </div>
                   </div>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
@@ -349,7 +342,8 @@ export default {
       showApply: false,
       showContainer: false,
       autofixed: false,
-      tabtxts: [ '潜在客户', '意向客户', '成交客户' ],
+      // tabtxts: [ '潜在客户', '意向客户', '成交客户' ],
+      tabtxts: [ '潜在客户', '成交客户' ],
       tabcount1: 0,
       tabcount2: 0,
       tabcount3: 0,
@@ -398,31 +392,6 @@ export default {
   methods: {
     toPhone (item) {
       location.href = `tel:${item.mobile}`
-    },
-    priorityEvent (item, index) {
-      const self = this
-      self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/retailer/sellerAction`,
-        { action: 'stickcustomer', customeruid: item.gxkuid }
-      ).then(res => {
-        const data = res.data
-        self.$vux.loading.hide()
-        self.$vux.toast.show({
-          text: data.error,
-          time: self.$util.delay(data.error),
-          onHide: () => {
-            if (data.flag === 1) {
-              if (self.selectedIndex === 0) {
-                self.tabdata1[index].priority = !self.tabdata1[index].priority
-              } else if (self.selectedIndex === 2) {
-                self.tabdata2[index].priority = !self.tabdata2[index].priority
-              } else if (self.selectedIndex === 1) {
-                self.tabdata3[index].priority = !self.tabdata3[index].priority
-              }
-            }
-          }
-        })
-      })
     },
     toMembersView (item) {
       let params = this.$util.handleAppParams(this.query, {uid: item.uid})
@@ -495,12 +464,6 @@ export default {
               self.getData1()
             }
           } else if (index === 1) {
-            if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
-              self.pagestart3++
-              self.$vux.loading.show()
-              self.getData3()
-            }
-          } else if (index === 2) {
             if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
               self.pagestart2++
               self.$vux.loading.show()
@@ -751,14 +714,6 @@ export default {
           }
           break
         case 1:
-          if (this.tabdata3.length < this.limit) {
-            self.pagestart3 = 0
-            self.distabdata3 = false
-            this.tabdata3 = []
-            self.getData3()
-          }
-          break
-        case 2:
           if (this.tabdata2.length < this.limit) {
             self.pagestart2 = 0
             self.distabdata2 = false
