@@ -345,7 +345,7 @@
                   <div class="inner">进入店铺</div>
                 </router-link>
               </template>
-              <router-link class="item" :to="{path:'/factoryOrders',query:{wid:clickData.wid}}">
+              <router-link v-if="selectedIndex != 5" class="item" :to="{path:'/factoryOrders',query:{wid:clickData.wid}}">
                 <div class="inner">相关订单</div>
               </router-link>
               <router-link v-if="selectedIndex == 5" class="item" :to="{path:'/factoryBill',query:{fid:clickData.fid, fromfid: loginUser.fid}}">
@@ -850,6 +850,7 @@ export default {
           }
         })
       } else if (key === 'pay') {
+        this.payMoney = ''
         this.showPayPopup = true
       }
     },
@@ -871,23 +872,23 @@ export default {
         })
         return false
       }
-      // self.$http.post(`${ENV.BokaApi}/api/factory/productset`, {
-      //   id: self.clickdata.id, newsalesrebate: salesRebate, newsuperrebate: superRebate
-      // }).then(res => {
-      //   let data = res.data
-      //   self.$vux.loading.hide()
-      //   self.$vux.toast.show({
-      //     text: data.error,
-      //     type: data.flag !== 1 ? 'warn' : 'success',
-      //     time: self.$util.delay(data.error),
-      //     onHide: function () {
-      //       if (data.flag === 1) {
-      //         self.showPayPopup = false
-      //         self.refresh()
-      //       }
-      //     }
-      //   })
-      // })
+      self.$http.post(`${ENV.BokaApi}/api/factory/factoryPaymoeny`, {
+        fid: self.clickData.fid, fromfid: self.loginUser.fid, paymoeny: money
+      }).then(res => {
+        let data = res.data
+        self.$vux.loading.hide()
+        self.$vux.toast.show({
+          text: data.error,
+          type: data.flag !== 1 ? 'warn' : 'success',
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+              self.showPayPopup = false
+              self.refresh()
+            }
+          }
+        })
+      })
     },
     closeLevelPopup () {
       this.showLevelPopup = false

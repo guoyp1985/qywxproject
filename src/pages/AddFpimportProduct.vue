@@ -161,6 +161,15 @@
               </div>
             </div>
           </div>
+          <div class="form-item required bg-white">
+            <div class="t-table">
+              <div class="t-cell title-cell w80 font14 v_middle">厂家收入</div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <x-input v-model="submitdata.netincome" @keyup="priceChange('netincome')" type="text" class="input priceInput" name="netincome" placeholder="厂家收入" ></x-input>
+              </div>
+              <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
+            </div>
+          </div>
           <div class="pt10 bg-page"></div>
           <div class="form-item required bg-white" v-if="!optionsData.length">
             <div class="flex_row">
@@ -426,7 +435,8 @@ export default {
         profit: '',
         salesrebate: '',
         superrebate: '',
-        sellingpoint: ''
+        sellingpoint: '',
+        netincome: ''
       },
       allowsubmit: true,
       requireddata: {title: '', 'price': '', 'postage': '', 'photo': ''},
@@ -490,7 +500,8 @@ export default {
         profit: '',
         salesrebate: '',
         superrebate: '',
-        sellingpoint: ''
+        sellingpoint: '',
+        netincome: ''
       }
       this.photoarr = []
       this.photoarr1 = []

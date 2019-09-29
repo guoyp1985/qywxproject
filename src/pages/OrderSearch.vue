@@ -329,7 +329,12 @@ export default {
             let arr1 = []
             if (item.canservice) {
               arr1.push({id: 5, name: '申请售后'})
-              arr1.push({id: 8, name: '完成售后'})
+              if (ENV.AllowQuickService) {
+                arr1.push({id: 8, name: '完成售后'})
+              }
+            }
+            if (item.backflag === 120) {
+              arr1.push({id: 9, name: '查看售后进度'})
             }
             arr1.push({id: 7, name: '评价'})
             item.buttons = arr1
@@ -339,7 +344,23 @@ export default {
       return list
     },
     evaluate (order) {
-      this.$router.push({name: 'tEvaluation', query: {id: order.id}})
+      let params = this.$util.handleAppParams(this.query, {id: order.id})
+      this.$router.push({path: '/evaluation', query: params})
+    },
+    afterConfirm () {
+      this.distabdata1 = false
+      this.distabdata2 = false
+      this.distabdata3 = false
+      this.distabdata4 = false
+      this.tabdata1 = []
+      this.tabdata2 = []
+      this.tabdata3 = []
+      this.tabdata4 = []
+      this.pagestart1 = 0
+      this.pagestart2 = 0
+      this.pagestart3 = 0
+      this.pagestart4 = 0
+      this.toggleTab()
     },
     confirm (order) {
       const self = this
@@ -353,7 +374,8 @@ export default {
             self.$vux.loading.hide()
             if (res.data.flag) {
               self.$vux.toast.text(res.data.error)
-              self.changeOrderView(order, 4, [4, 6])
+              // self.changeOrderView(order, 4, [4, 6])
+              self.afterConfirm()
             }
           })
         }
@@ -536,6 +558,10 @@ export default {
         case 8:
           this.finishService(order)
           break
+        case 9:
+          let params = this.$util.handleAppParams(this.query, {id: order.id})
+          this.$router.push({path: '/orderDetail', query: params})
+          break
       }
     },
     changeOrderView (order, status, buttons) {
@@ -556,6 +582,8 @@ export default {
           break
       }
       this.$util.changeItem(list, order.id, function (m) {
+        let retdata = { ...m, flag: status, flagstr: self.$util.getItem(ENV.OrderStatus, status).status, buttons: buttons }
+        console.log(retdata)
         return { ...m, flag: status, flagstr: self.$util.getItem(ENV.OrderStatus, status).status, buttons: buttons }
       })
     },

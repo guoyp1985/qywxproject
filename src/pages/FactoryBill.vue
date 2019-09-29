@@ -69,6 +69,13 @@
                   </div>
                 </div>
               </div>
+              <div class="bg-white padding10 b_top_after b_bottom_after color-gray5">
+                <div class="t-table">
+                  <div class="font12 color-lightgray">
+                    <span class="middle-cell mr10 v_middle">应打款金额:</span><span class="v_middle color-orange">{{$t('RMB')}}{{ item.needpaymoeny }}</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -85,6 +92,13 @@
                 <div class="t-table">
                   <div class="font12 color-lightgray">
                     <span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-white padding10 b_top_after b_bottom_after color-gray5">
+                <div class="t-table">
+                  <div class="font12 color-lightgray">
+                    <span class="middle-cell mr10 v_middle">应打款金额:</span><span class="v_middle color-orange">{{$t('RMB')}}{{ item.needpaymoeny }}</span>
                   </div>
                 </div>
               </div>
@@ -107,6 +121,13 @@
                   </div>
                 </div>
               </div>
+              <div class="bg-white padding10 b_top_after b_bottom_after color-gray5">
+                <div class="t-table">
+                  <div class="font12 color-lightgray">
+                    <span class="middle-cell mr10 v_middle">应打款金额:</span><span class="v_middle color-orange">{{$t('RMB')}}{{ item.needpaymoeny }}</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -123,6 +144,13 @@
                 <div class="t-table">
                   <div class="font12 color-lightgray">
                     <span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-white padding10 b_top_after b_bottom_after color-gray5">
+                <div class="t-table">
+                  <div class="font12 color-lightgray">
+                    <span class="middle-cell mr10 v_middle">应打款金额:</span><span class="v_middle color-orange">{{$t('RMB')}}{{ item.needpaymoeny }}</span>
                   </div>
                 </div>
               </div>
@@ -293,7 +321,7 @@ export default {
     },
     getData1 () {
       const self = this
-      let params = {type: 'day', pagestart: this.pageStart1, limit: limit, fromfid: this.query.fromfid}
+      let params = {type: 'day', pagestart: this.pageStart1, limit: limit, fid: this.query.fid, fromfid: this.query.fromfid}
       self.$http.post(`${ENV.BokaApi}/api/factory/tofactoryOrders`, params).then(res => {
         let data = res.data
         self.$vux.loading.hide()
@@ -304,7 +332,7 @@ export default {
     },
     getData2 () {
       const self = this
-      let params = {type: 'yesterday', pagestart: this.pageStart2, limit: limit, fromfid: this.query.fromfid}
+      let params = {type: 'yesterday', pagestart: this.pageStart2, limit: limit, fid: this.query.fid, fromfid: this.query.fromfid}
       self.$http.post(`${ENV.BokaApi}/api/factory/tofactoryOrders`, params).then(res => {
         let data = res.data
         self.$vux.loading.hide()
@@ -315,7 +343,7 @@ export default {
     },
     getData3 () {
       const self = this
-      let params = {type: 'month', pagestart: this.pageStart3, limit: limit, fromfid: this.query.fromfid}
+      let params = {type: 'month', pagestart: this.pageStart3, limit: limit, fid: this.query.fid, fromfid: this.query.fromfid}
       self.$http.post(`${ENV.BokaApi}/api/factory/tofactoryOrders`, params).then(res => {
         let data = res.data
         self.$vux.loading.hide()
@@ -326,7 +354,7 @@ export default {
     },
     getData4 () {
       const self = this
-      let params = {type: '', pagestart: this.pageStart4, limit: limit, fromfid: this.query.fromfid}
+      let params = {type: '', pagestart: this.pageStart4, limit: limit, fid: this.query.fid, fromfid: this.query.fromfid}
       self.$http.post(`${ENV.BokaApi}/api/factory/tofactoryOrders`, params).then(res => {
         let data = res.data
         self.$vux.loading.hide()

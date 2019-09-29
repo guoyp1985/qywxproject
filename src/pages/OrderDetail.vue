@@ -114,7 +114,8 @@
           <x-button v-if="orderData.flag == 1" mini @click.native="cancel" class="font12">取消订单</x-button>
           <x-button v-if="orderData.flag == 1 && orderData.payorder == '' && query.fromapp != 'factory'" :link="{path: '/pay', query: {id: orderData.id}}" mini class="font12">去支付</x-button>
           <x-button v-if="orderData.flag == 2 && orderData.canback && orderData.backflag != 20" mini @click.native="refund" class="font12">申请退款</x-button>
-          <x-button v-if="orderData.canservice && query.fromapp != 'wl'" mini @click.native="afterSale" class="font12">申请售后</x-button>
+          <x-button v-if="orderData.backflag == 120" mini @click.native="afterSale" class="font12">回复</x-button>
+          <x-button v-else-if="orderData.canservice && query.fromapp != 'wl'" mini @click.native="afterSale" class="font12">申请售后</x-button>
           <x-button v-if="orderData.flag == 3" mini @click.native="confirm" class="font12">确认收货</x-button>
           <x-button v-if="orderData.flag == 4" mini @click.native="evaluate" class="font12">评价</x-button>
         </div>
@@ -125,7 +126,7 @@
           <div class="bg-white mb12" v-for="(item, index) in recordData" :key="index">
             <div class="b_top_after flex_left padding10">
               <div class="flex_left flex_cell">
-                <span v-if="item.description == '售后反馈'" class="color-theme bold">售后客服</span>
+                <span v-if="item.isadmin" class="color-theme bold">售后客服</span>
                 <template v-else>
                   <img :src="orderData.avatar" style="width:30px;height:30px;border-radius:50%;object-fit:cover;"/>
                   <span class="bold ml5">{{orderData.username}}</span>
@@ -200,10 +201,25 @@
     </div>
     <div v-if="showServiceModal" class="auto-modal refund-modal flex_center">
       <div class="modal-inner border-box" style="width:80%;">
-        <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">申请售后</div>
+        <div v-if="orderData.backflag == 120" class="align_center font18 bold pb10 b_bottom_after color-theme pt20">回复</div>
+        <div v-else class="align_center font18 bold pb10 b_bottom_after color-theme pt20">申请售后</div>
         <div class="align_left txt padding10 b_bottom_after">
           <group class="textarea-outer" style="padding:0;">
             <x-textarea
+              v-if="orderData.backflag == 120"
+              ref="serviceTextarea"
+              v-model="serviceContent"
+              name="title" class="x-textarea noborder"
+              placeholder="回复内容"
+              :show-counter="false"
+              :rows="6"
+              :max="200"
+              @on-change="textareaChange('serviceTextarea')"
+              @on-focus="textareaFocus('serviceTextarea')"
+              autosize>
+            </x-textarea>
+            <x-textarea
+              v-else
               ref="serviceTextarea"
               v-model="serviceContent"
               name="title" class="x-textarea noborder"
@@ -242,7 +258,8 @@
         </div>
         <div class="flex_center b_top_after" style="height:50px;">
           <div class="flex_cell flex_center h_100 b_right_after" @click="closeService">取消</div>
-          <div class="flex_cell flex_center h_100 color-orange" @click="submitService">提交</div>
+          <div class="flex_cell flex_center h_100 color-orange" @click="submitService('reply')" v-if="orderData.backflag == 120">提交</div>
+          <div class="flex_cell flex_center h_100 color-orange" @click="submitService" v-else>提交</div>
         </div>
       </div>
     </div>
@@ -403,7 +420,7 @@ export default {
       this.showServiceModal = false
       this.serviceContent = ''
     },
-    submitService () {
+    submitService (type) {
       if (this.$util.trim(this.serviceContent) === '' && this.$util.trim(this.servicePhoto) === '') {
         this.$vux.toast.text('请完善售后信息', 'middle')
         return false
@@ -420,9 +437,13 @@ export default {
       newData.photo = sphoto
       newData.photoarr = this.servicePhotoArr
       this.$vux.loading.show()
-      this.$http.post(`${ENV.BokaApi}/api/order/applyService`, {
-        id: this.orderData.id, reasonreturn: this.serviceContent, proofphoto: sphoto
-      }).then(res => {
+      let ajaxurl = `${ENV.BokaApi}/api/order/applyService`
+      let postData = {id: this.orderData.id, reasonreturn: this.serviceContent, proofphoto: sphoto}
+      if (type === 'reply') {
+        ajaxurl = `${ENV.BokaApi}/api/order/replyService`
+        postData = {orderid: this.orderData.id, content: this.serviceContent, photo: sphoto}
+      }
+      this.$http.post(ajaxurl, postData).then(res => {
         this.$vux.loading.hide()
         const data = res.data
         this.$vux.toast.text(data.error)
@@ -438,6 +459,9 @@ export default {
     },
     afterSale (order) {
       // 售后
+      this.serviceContent = ''
+      this.servicePhoto = ''
+      this.servicePhotoArr = []
       this.showServiceModal = true
     },
     toCenter () {
@@ -585,7 +609,7 @@ export default {
       }, 200)
     },
     getRecordData () {
-      this.$http.post(`${ENV.BokaApi}/api/order/recordList`, {
+      this.$http.post(`${ENV.BokaApi}/api/order/getServiceInfo`, {
         type: 'service', id: this.query.id, pagestart: this.recordPageStart, limit: 10
       }).then(res => {
         this.$vux.loading.hide()

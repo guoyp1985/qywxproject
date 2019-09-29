@@ -96,10 +96,10 @@
                 <div class="inner" @click="clickpopup('down')">下架</div>
               </div>
               <template v-if="!clickdata.fromfid">
-                <div class="item" v-if="clickdata.shelf == 0">
+                <div class="item" v-if="clickdata.shelf == 0 && clickdata.isshow">
                   <div class="inner" @click="clickpopup('upShelf')">推荐到货源</div>
                 </div>
-                <div class="item" v-else-if="clickdata.shelf == 1">
+                <div class="item" v-if="clickdata.shelf == 1">
                   <div class="inner" @click="clickpopup('downShelf')">从货源移出</div>
                 </div>
               </template>
@@ -317,12 +317,17 @@ export default {
   },
   methods: {
     toFactoryProduct (item) {
-      let params = this.$util.handleAppParams(this.query, {id: item.id, fid: this.Fid, module: 'fpimport'})
-      this.$router.push({path: '/factoryProduct', query: params})
+      if (item.fromfid) {
+        let params = this.$util.handleAppParams(this.query, {id: item.id, fid: this.Fid, module: 'fpimport'})
+        this.$router.push({path: '/fpimportProduct', query: params})
+      } else {
+        let params = this.$util.handleAppParams(this.query, {id: item.moduleid, fid: this.Fid})
+        this.$router.push({path: '/factoryProduct', query: params})
+      }
     },
     toAdd () {
       let params = this.$util.handleAppParams(this.query, {fid: this.Fid})
-      this.$router.push({path: '/addFactoryProduct', query: params})
+      this.$router.push({path: '/addFpimportProduct', query: params})
     },
     getPhoto (src) {
       return this.$util.getPhoto(src)
@@ -451,7 +456,7 @@ export default {
           title: '确定要将该商品从货源移出吗？',
           onConfirm () {
             self.$vux.loading.show()
-            let params = { id: self.clickdata.moduleid, shelf: 0 }
+            let params = { id: self.clickdata.id, shelf: 0 }
             self.$http.post(`${ENV.BokaApi}/api/factory/productset`, params).then(res => {
               let data = res.data
               self.$vux.loading.hide()
@@ -502,7 +507,7 @@ export default {
       }
       if (!iscontinue) return false
       this.$vux.loading.show()
-      let params = {...this.submitData, id: this.clickdata.moduleid, shelf: 1}
+      let params = {...this.submitData, id: this.clickdata.id, shelf: 1}
       this.$http.post(`${ENV.BokaApi}/api/factory/productset`, params).then(res => {
         let data = res.data
         this.$vux.loading.hide()

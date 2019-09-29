@@ -78,6 +78,7 @@ var ENV = {
   CommissionFid: 97,
   KefuQrcode: 'https://tossharingsales.boka.cn/images/kefu_qrcode.jpg',
   KefuWxNo: 'sharingsales',
+  AllowQuickService: true // 控制显示【完成售后按钮】，正式平台不需要
 }
 
 ENV.NoAccessUrls = [

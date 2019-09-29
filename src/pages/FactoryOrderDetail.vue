@@ -133,7 +133,7 @@
           <div class="bg-white mb12" v-for="(item, index) in recordData" :key="index">
             <div class="b_top_after flex_left padding10">
               <div class="flex_left flex_cell">
-                <span v-if="item.description == '售后反馈'" class="color-theme bold">售后客服</span>
+                <span v-if="item.isadmin" class="color-theme bold">售后客服</span>
                 <template v-else>
                   <img :src="orderData.avatar" style="width:30px;height:30px;border-radius:50%;object-fit:cover;"/>
                   <span class="bold ml5">{{orderData.username}}</span>
@@ -680,7 +680,7 @@ export default {
       })
     },
     getRecordData () {
-      this.$http.post(`${ENV.BokaApi}/api/order/recordList`, {
+      this.$http.post(`${ENV.BokaApi}/api/order/getServiceInfo`, {
         type: 'service', id: this.query.id, pagestart: this.recordPageStart, limit: 10
       }).then(res => {
         this.$vux.loading.hide()
