@@ -459,6 +459,9 @@ export default {
     },
     afterSale (order) {
       // 售后
+      this.serviceContent = ''
+      this.servicePhoto = ''
+      this.servicePhotoArr = []
       this.showServiceModal = true
     },
     toCenter () {
