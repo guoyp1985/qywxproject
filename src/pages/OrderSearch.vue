@@ -362,7 +362,7 @@ export default {
     finishService (order) {
       const self = this
       this.$vux.confirm.show({
-        title: '您确认售后服务已结束？',
+        title: '您确认结束售后服务？',
         content: '请确认售后结束',
         onConfirm () {
           self.$vux.loading.show()
