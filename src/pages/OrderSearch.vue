@@ -329,7 +329,9 @@ export default {
             let arr1 = []
             if (item.canservice) {
               arr1.push({id: 5, name: '申请售后'})
-              arr1.push({id: 8, name: '完成售后'})
+              if (ENV.AllowQuickService) {
+                arr1.push({id: 8, name: '完成售后'})
+              }
             }
             if (item.backflag === 120) {
               arr1.push({id: 9, name: '查看售后进度'})
