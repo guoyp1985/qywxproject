@@ -86,72 +86,10 @@
                   </div>
                   <div class="txt-item" v-if="item.gxkuid != loginUser.uid">客户类型: {{item.customertype}}</div>
                 </div>
-                <!-- <div class="flex_center bg-white h40">
-                  <div class="t-table align_center color-gray2 font14 color-gray2">
-                    <div class="t-cell v_middle b_right_after" v-if="query.from" @click="toCard(item)">专属优惠券</div>
-                    <div class="t-cell v_middle b_right_after" @click="toChat(item)">
-                      <div>联系TA</div>
-                    </div>
-                  </div>
-                </div> -->
               </div>
             </div>
           </div>
         </div>
-        <!-- <div v-show="(selectedIndex == 1)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3', 1)">
-          <search
-            class="v-search bg-white"
-            v-model='searchword3'
-            :auto-fixed="autofixed"
-            @on-submit="onSubmit3"
-            @on-change="onChange3"
-            @on-cancel="onCancel3"
-            ref="search">
-          </search>
-          <div class="font12 padding10 b_bottom color-lightgray">
-            <div class="t-table w_100">
-              <div class="t-cell align_left pl10">{{ $t('Customer text') }}(共{{ tabcount3 }}人)</div>
-              <div class="t-cell align_center w80">{{ $t('Degree of intention') }}</div>
-              <div class="t-cell align_center w60">{{ $t('Contact customer') }}</div>
-            </div>
-          </div>
-          <div v-if="distabdata3" class="scroll_list ">
-            <div v-if="!tabdata3 || tabdata3.length === 0" class="scroll_item padding10 color-gray align_center">
-              <template v-if="searchresult3">
-                <div class="flex_center" style="height:80px;">暂无搜索结果</div>
-              </template>
-              <template v-else>
-                <div><i class="al al-qiangkehu font60 pt20"></i></div>
-                <div class="mt5">暂无意向客户，可到用户资料里设置客户意向程度</div>
-              </template>
-            </div>
-            <div v-else v-for="(item,index) in tabdata3" :key="item.id" class="scroll_item pt10 pl12 pr12 bg-white mb10 list-shadow">
-              <div class="t-table pb10" @click="btnDetail1(index)">
-                <div class="t-cell v_middle w70">
-                  <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-                </div>
-                <div class="t-cell v_middle">
-                  <div class="clamp1 font14 color-lightgray"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
-                </div>
-                <div class="t-cell v_middle w80 align_center color-orange">{{item.intentiondesc}}</div>
-                <div class="t-cell v_middle w60 align_right">
-                  <div class="qbtnInfo bg-red color-white al al-asmkticon0165 font20"></div>
-                </div>
-              </div>
-              <div v-if="item.checked">
-                <div class="detailInfo w_100 font14 color-gray b_bottom_after">
-                  <div class="txt-item" @click="btnDetail(index)">性别: {{item.sexname}}</div>
-                  <div class="txt-item" @click="btnDetail(index)">地区: {{ item.country }} {{ item.province }} {{ item.city }}</div>
-                  <div class="txt-item flex_left" @click="influence">影响力:
-                    <span class="color-red4">{{item.yingxiangli}}</span>
-                    <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
-                  </div>
-                  <div class="txt-item" v-if="item.gxkuid != loginUser.uid">客户类型: {{item.customertype}}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div> -->
         <div v-show="(selectedIndex == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', 2)">
           <search
             class="v-search bg-white"
@@ -175,7 +113,6 @@
               </template>
               <template v-else>
                 <div><i class="al al-qiangkehu font60 pt20"></i></div>
-                <!-- <div class="mt5">好可怜，一个客户都没有~<br />赶快分享<span @click="toStore" class="color-blue">商品</span>或<span @click="toNews" class="color-blue">文章</span>给微信好友获得客户吧！</div> -->
                 <div class="mt5">好可怜，一个客户都没有~<br />赶快分享商品或文章给微信好友获得客户吧！</div>
               </template>
             </div>
@@ -201,13 +138,6 @@
                   </div>
                   <div class="txt-item" v-if="item.gxkuid != loginUser.uid">客户类型: {{item.customertype}}</div>
                 </div>
-                <!-- <div class="flex_center bg-white h40">
-                  <div class="t-table align_center color-gray2 font14 color-gray2">
-                    <div class="t-cell v_middle b_right_after" @click="toChat(item)">
-                      <div>联系TA</div>
-                    </div>
-                  </div>
-                </div> -->
               </div>
             </div>
           </div>
@@ -342,7 +272,6 @@ export default {
       showApply: false,
       showContainer: false,
       autofixed: false,
-      // tabtxts: [ '潜在客户', '意向客户', '成交客户' ],
       tabtxts: [ '潜在客户', '成交客户' ],
       tabcount1: 0,
       tabcount2: 0,
