@@ -49,7 +49,7 @@
           <div class="font12 pl12 pr12 b_bottom h35 list-shadow color-lightgray">
             <div class="t-table w_100">
               <div class="t-cell align_left ">{{ $t('Customer text') }}(共{{ tabcount1 }}人)</div>
-              <div class="t-cell align_right w80">{{ $t('Percent') }}</div>
+              <!-- <div class="t-cell align_right w80">{{ $t('Percent') }}</div> -->
               <div class="t-cell align_right w60">{{ $t('Contact customer') }}</div>
             </div>
           </div>
@@ -70,18 +70,8 @@
                   <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                 </div>
                 <div class="t-cell v_middle" @click="btnDetail(index)">
-                  <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
-                  <div class="clamp1 mt5 font14 color-gray">推荐人：{{item.recommendname}}</div>
+                  <div class="clamp1 font14 color-lightgray"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
                 </div>
-                <div class="t-cell v_middle w60 h_100 align_right">
-                  <div class="percentarea db-in v_middle" @click="percentclick">
-                    <div class="inner" :style="`width:${item.percent}%`"></div>
-                    <div class="txt font12">{{ item.percent }}%</div>
-                  </div>
-                </div>
-                <!-- <router-link :to="{path: '/chat', query: {uid: item.uid, fromModule: 'retailer', from: query.from}}" class="t-cell v_middle w60 align_right">
-                  <div class="qbtnInfo bg-red color-white al al-asmkticon0165 font20"></div>
-                </router-link> -->
                 <div class="t-cell v_middle w60 align_right">
                   <div class="qbtnInfo bg-red color-white al al-asmkticon0165 font20" @click="btnDetail(index)"></div>
                 </div>
@@ -89,26 +79,19 @@
               <div v-if="item.checked">
                 <div class="detailInfo w_100 font14 color-gray b_bottom_after">
                   <div class="txt-item" @click="btnDetail(index)">性别: {{item.sexname}}</div>
-                  <div class="txt-item db-flex" v-if="item.mobile && item.mobile != ''" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font16"></span></div></div>
                   <div class="txt-item" @click="btnDetail(index)">地区: {{ item.country }} {{ item.province }} {{ item.city }}</div>
                   <div class="txt-item flex_left" @click="influence">影响力:
                     <span class="color-red4">{{item.yingxiangli}}</span>
                     <span class="al al-wenhao font20 ml5"></span>
                   </div>
-                  <div class="txt-item">推荐人: {{item.recommendname}}</div>
-                  <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.customertype}}</div>
-                  <div class="txt-item">获客时间: {{item.dateline_str}}</div>
+                  <div class="txt-item" v-if="item.gxkuid != loginUser.uid">客户类型: {{item.customertype}}</div>
                 </div>
                 <div class="flex_center bg-white h40">
                   <div class="t-table align_center color-gray2 font14 color-gray2">
                     <div class="t-cell v_middle b_right_after" v-if="query.from" @click="toCard(item)">专属优惠券</div>
-                    <div class="t-cell v_middle b_right_after" v-else @click="toTimeline(item)" :to="{path: '/timeline', query:{ uid: item.uid }}">客户行为</div>
-                    <div class="t-cell v_middle b_right_after" v-if="item.priority" @click="priorityEvent(item,index)">取消置顶</div>
-                    <div class="t-cell v_middle b_right_after" v-else @click="priorityEvent(item,index)">置顶</div>
                     <div class="t-cell v_middle b_right_after" @click="toChat(item)">
                       <div>联系TA</div>
                     </div>
-                    <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
                   </div>
                 </div>
               </div>
@@ -148,8 +131,7 @@
                   <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                 </div>
                 <div class="t-cell v_middle">
-                  <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
-                  <div class="clamp1 mt5 font14 color-gray">推荐人：{{item.recommendname}}</div>
+                  <div class="clamp1 font14 color-lightgray"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
                 </div>
                 <div class="t-cell v_middle w80 align_center color-orange">{{item.intentiondesc}}</div>
                 <div class="t-cell v_middle w60 align_right">
@@ -159,25 +141,18 @@
               <div v-if="item.checked">
                 <div class="detailInfo w_100 font14 color-gray b_bottom_after">
                   <div class="txt-item" @click="btnDetail(index)">性别: {{item.sexname}}</div>
-                  <div class="txt-item db-flex" v-if="item.mobile && item.mobile != ''" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font16"></span></div></div>
                   <div class="txt-item" @click="btnDetail(index)">地区: {{ item.country }} {{ item.province }} {{ item.city }}</div>
                   <div class="txt-item flex_left" @click="influence">影响力:
                     <span class="color-red4">{{item.yingxiangli}}</span>
                     <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
                   </div>
-                  <div class="txt-item">推荐人: {{item.recommendname}}</div>
-                  <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.customertype}}</div>
-                  <div class="txt-item">获客时间: {{item.dateline_str}}</div>
+                  <div class="txt-item" v-if="item.gxkuid != loginUser.uid">客户类型: {{item.customertype}}</div>
                 </div>
                 <div class="flex_center bg-white h40">
                   <div class="t-table align_center color-gray2 font14 color-gray2">
-                    <div class="t-cell v_middle b_right_after" @click="toTimeline(item)" :to="{path: '/timeline', query:{ uid: item.uid }}">客户行为</div>
-                    <div class="t-cell v_middle b_right_after" v-if="item.priority" @click="priorityEvent(item,index)">取消置顶</div>
-                    <div class="t-cell v_middle b_right_after" v-else @click="priorityEvent(item,index)">置顶</div>
                     <div class="t-cell v_middle b_right_after" @click="toChat(item)">
                       <div>联系TA</div>
                     </div>
-                    <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
                   </div>
                 </div>
               </div>
@@ -217,8 +192,7 @@
                   <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                 </div>
                 <div class="t-cell v_middle">
-                  <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
-                  <div class="clamp1 mt5 font14 color-gray">推荐人：{{item.recommendname}}</div>
+                  <div class="clamp1 font14 color-lightgray"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
                 </div>
                 <div class="t-cell v_middle w60 align_right">
                   <div class="qbtnInfo bg-red color-white al al-asmkticon0165 font20"></div>
@@ -227,25 +201,18 @@
               <div v-if="item.checked">
                 <div class="detailInfo w_100 font14 color-gray b_bottom_after">
                   <div class="txt-item" @click="btnDetail(index)">性别: {{item.sexname}}</div>
-                  <div class="txt-item db-flex" v-if="item.mobile && item.mobile != ''" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font16"></span></div></div>
                   <div class="txt-item" @click="btnDetail(index)">地区: {{ item.country }} {{ item.province }} {{ item.city }}</div>
                   <div class="txt-item flex_left" @click="influence">影响力:
                     <span class="color-red4">{{item.yingxiangli}}</span>
                     <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
                   </div>
-                  <div class="txt-item">推荐人: {{item.recommendname}}</div>
-                  <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.customertype}}</div>
-                  <div class="txt-item">获客时间: {{item.dateline_str}}</div>
+                  <div class="txt-item" v-if="item.gxkuid != loginUser.uid">客户类型: {{item.customertype}}</div>
                 </div>
                 <div class="flex_center bg-white h40">
                   <div class="t-table align_center color-gray2 font14 color-gray2">
-                    <div class="t-cell v_middle b_right_after" @click="toTimeline(item)" :to="{path: '/timeline', query:{ uid: item.uid }}">客户行为</div>
-                    <div class="t-cell v_middle b_right_after" v-if="item.priority" @click="priorityEvent(item,index)">取消置顶</div>
-                    <div class="t-cell v_middle b_right_after" v-else @click="priorityEvent(item,index)">置顶</div>
                     <div class="t-cell v_middle b_right_after" @click="toChat(item)">
                       <div>联系TA</div>
                     </div>
-                    <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
                   </div>
                 </div>
               </div>
@@ -436,7 +403,7 @@ export default {
       const self = this
       self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/retailer/sellerAction`,
-        { action: 'stickcustomer', customeruid: item.uid }
+        { action: 'stickcustomer', customeruid: item.gxkuid }
       ).then(res => {
         const data = res.data
         self.$vux.loading.hide()
@@ -459,19 +426,19 @@ export default {
     },
     toMembersView (item) {
       let params = this.$util.handleAppParams(this.query, {uid: item.uid})
-      this.$router.push({path: '/membersView', query: params})
+      this.$router.push({path: '/factoryMembersView', query: params})
     },
     toChat (item) {
-      let params = this.$util.handleAppParams(this.query, {uid: item.uid, fromModule: 'retailer'})
+      let params = this.$util.handleAppParams(this.query, {uid: item.gxkuid, fromModule: 'retailer'})
       this.$router.push({path: '/chat', query: params})
     },
     toTimeline (item) {
-      let params = this.$util.handleAppParams(this.query, {uid: item.uid})
+      let params = this.$util.handleAppParams(this.query, {uid: item.gxkuid})
       this.$router.push({path: '/timeline', query: params})
     },
     toCard (item) {
       if (this.query.from) {
-        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.addCard}?uid=${item.uid}`})
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.addCard}?uid=${item.gxkuid}`})
       }
     },
     btnDetail (index) {
