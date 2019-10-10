@@ -133,7 +133,7 @@
           </div>
         </div>
       </div>
-      <div v-if="loginUser.isretailer && loginUser.fid != Fid" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
+      <div v-if="loginUser.isretailer && query.frompage != 'manager'" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
         <!-- <div class="align_center flex_center flex_cell" v-if="!loginUser.retailerinfo.fid || loginUser.retailerinfo.fid == query.fid"> -->
         <div class="align_center flex_center flex_cell">
           <div class="btn-bottom-red flex_center" style="width:90%;" v-if="productdata.haveimport == 1">已上架</div>
@@ -633,7 +633,7 @@ export default {
               self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
             }
             self.handelShare()
-            if (!self.loginUser.isretailer || this.Fid === this.loginUser.fid) {
+            if (!self.loginUser.isretailer || this.query.frompage === 'manager') {
               self.topcss = 'nobottom'
             }
             self.feeData = self.productdata.agentfee ? self.productdata.agentfee : []
