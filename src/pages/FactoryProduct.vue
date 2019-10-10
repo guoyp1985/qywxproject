@@ -133,7 +133,7 @@
           </div>
         </div>
       </div>
-      <div v-if="loginUser.isretailer && loginUser.fid != Fid" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
+      <div v-if="loginUser.isretailer" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
         <!-- <div class="align_center flex_center flex_cell" v-if="!loginUser.retailerinfo.fid || loginUser.retailerinfo.fid == query.fid"> -->
         <div class="align_center flex_center flex_cell">
           <div class="btn-bottom-red flex_center" style="width:90%;" v-if="productdata.haveimport == 1">已上架</div>
@@ -299,8 +299,7 @@ export default {
       previewerOptionsPhoto: [],
       VipFree: false,
       showJd: false,
-      showTb: false,
-      Fid: 0
+      showTb: false
     }
   },
   watch: {
@@ -633,7 +632,7 @@ export default {
               self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
             }
             self.handelShare()
-            if (!self.loginUser.isretailer || this.Fid === this.loginUser.fid) {
+            if (!self.loginUser.isretailer) {
               self.topcss = 'nobottom'
             }
             self.feeData = self.productdata.agentfee ? self.productdata.agentfee : []
@@ -650,15 +649,11 @@ export default {
       this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
         const data = res.data
         this.loginUser = data
-        this.Fid = this.loginUser.fid
         User.set(data)
         this.retailerInfo = this.loginUser.retailerinfo
         this.query = this.$route.query
         if (this.query.module) {
           this.module = this.query.module
-        }
-        if (this.query.fid) {
-          this.Fid = parseInt(this.query.fid)
         }
         if (this.query.allowfirst !== 'false') {
           if (this.retailerInfo && `${this.retailerInfo.firstinfo.importproduct}` === '0' && this.query.from) {
@@ -694,8 +689,6 @@ export default {
 
 <style lang="less">
 .notop .pagetop{display:none;}
-.f-product-page.notop .pagemiddle{top:0px;}
-.f-product-page.nobottom .pagemiddle{bottom:0px;}
 .f-product-page{
   .options-list{
     display: flex;flex-wrap: wrap;
@@ -769,6 +762,8 @@ export default {
   .pagetop{
     box-shadow: 0px 0px 10px 3px #d0d0d0;
   }
+  .product.notop .pagemiddle{top:0px;}
+  .product.nobottom .pagemiddle{bottom:0px;}
   .numicon {
       position: absolute;
       top: 0;
