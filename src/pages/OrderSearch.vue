@@ -348,7 +348,6 @@ export default {
       this.$router.push({path: '/evaluation', query: params})
     },
     afterConfirm () {
-      console.log('------进了 afterconfirm------')
       this.distabdata1 = false
       this.distabdata2 = false
       this.distabdata3 = false
@@ -394,7 +393,8 @@ export default {
             self.$vux.loading.hide()
             if (res.data.flag) {
               self.$vux.toast.text(res.data.error)
-              self.changeOrderView(order, 4, [4, 6])
+              // self.changeOrderView(order, 4, [4, 6])
+              self.afterConfirm()
             }
           })
         }
@@ -567,6 +567,12 @@ export default {
       }
     },
     changeOrderView (order, status, buttons) {
+      console.log('====  order  ====')
+      console.log(order)
+      console.log('====  status  ====')
+      console.log(status)
+      console.log('====  buttons  ====')
+      console.log(buttons)
       const self = this
       let list = []
       switch (this.selectedIndex) {
