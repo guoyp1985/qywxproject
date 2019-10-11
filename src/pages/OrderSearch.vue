@@ -348,6 +348,7 @@ export default {
       this.$router.push({path: '/evaluation', query: params})
     },
     afterConfirm () {
+      console.log('------进了 afterconfirm------')
       this.distabdata1 = false
       this.distabdata2 = false
       this.distabdata3 = false
@@ -495,6 +496,7 @@ export default {
         const data = res.data
         this.$vux.toast.text(data.error)
         if (data.flag) {
+          this.afterConfirm()
           this.showServiceModal = false
           if (this.selectedIndex === 0) {
             this.tabdata1[this.clickIndex].backflag = 120
