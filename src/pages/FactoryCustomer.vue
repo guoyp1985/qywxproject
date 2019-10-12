@@ -90,7 +90,7 @@
             </div>
           </div>
         </div>
-        <div v-show="(selectedIndex == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', 2)">
+        <div v-show="(selectedIndex == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', 1)">
           <search
             class="v-search bg-white"
             v-model='searchword2'
