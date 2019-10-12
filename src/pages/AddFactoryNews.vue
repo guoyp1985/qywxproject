@@ -44,7 +44,7 @@
           <div class="q_photolist align_left">
             <template v-if="photoarr.length > 0">
               <div v-for="(item, index) in photoarr" :key="index" class="img-box">
-                <img class="img" :src="item"/>
+                <img class="img imgcover" :src="item"/>
                 <a class="setting-btn" @click="clipPhoto(item)">
                   <i class="al al-set font16"></i>
                 </a>
