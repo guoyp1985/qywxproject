@@ -18,19 +18,15 @@
         </div>
         <group label-width="5em">
           <group class="textarea-outer">
-            <x-textarea
+            <x-input
               ref="titleTextarea"
               v-model="submitdata.title"
               :title="$t('News title')"
               class="x-textarea noborder"
               :placeholder="`${$t('Necessary')}${$t('Title')}`"
-              :show-counter="false"
-              :rows="1"
               :max="30"
-              @on-change="textareaChange('titleTextarea')"
-              @on-focus="textareaFocus('titleTextarea')"
-              autosize>
-            </x-textarea>
+              :size="30">
+            </x-input>
           </group>
           <cell :title="$t('Cover photo')" class="font14">
             {{$t('Necessary')}}<!--上传图像后可点击<i class="al al-set font14"></i>进行剪裁-->
