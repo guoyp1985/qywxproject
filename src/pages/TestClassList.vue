@@ -15,7 +15,7 @@
             <div v-for="(item, index) in testclassdata" :key="item.id" class="flex_center bg-white w_100 " @click="getmissioninfo(item)">
               <div class="item bold">{{index + 1}}.{{item.title}}</div>
               <div class="w80" v-if="!item.start">进度：{{item.finish}}</div>
-              <div v-else><div class="font14 choosebtn flex_center" @click="starttest(item.id)">开始测试</div></div>
+              <div v-else><div class="font14 choosebtn w80 flex_center" @click="starttest(item.id)">开始测试</div></div>
             </div>
           </template>
           <!--  -->
