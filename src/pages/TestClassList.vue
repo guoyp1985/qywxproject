@@ -15,7 +15,7 @@
             <div v-for="(item, index) in testclassdata" :key="item.id" class="flex_center bg-white w_100 " @click="getmissioninfo(item)">
               <div class="item bold">{{index + 1}}.{{item.title}}</div>
               <div class="w80" v-if="!item.start">进度：{{item.finish}}</div>
-              <div v-else><div class="font14 choosebtn w80 flex_center" @click="starttest(item.id)">开始测试</div></div>
+              <div v-else><div class="font14 choosebtn1 flex_center" @click="starttest(item.id)">开始测试</div></div>
             </div>
           </template>
           <!--  -->
@@ -33,7 +33,7 @@
             <div class="bg-white missionarea">
               <div class="align_center font14 padding10" style="line-height:14px;">【{{curtestclass.title}}】已完成测试</div>
               <div class="flex_around" style="padding: 10px 20px;">
-                <div class="font14 choosebtn flex_center" @click="choosetestclass">请选择测试范围</div>
+                <div class="font14 choosebtn1 flex_center" @click="choosetestclass">请选择测试范围</div>
               </div>
             </div>
           </template>
@@ -101,12 +101,11 @@ export default {
       this.testclassdata = []
       this.showtestclass = false
       this.showmissioninfo = false
+      this.showdonetest = false
       this.missiondata = null
       this.next = null
       this.curtestclass = {}
-      if (this.testclassdata.length <= 0) {
-        this.getdata()
-      }
+      this.getdata()
     },
     getdata () {
       const self = this
@@ -244,5 +243,5 @@ export default {
 .btn-bottom-red{
   border-radius: 10px;
 }
-.choosebtn{border-radius: 10px;line-height: 28px;height: 28px;border: 1px solid #ea3a3a;color:#ea3a3a;padding: 10px;box-sizing: border-box;}
+.choosebtn1{border-radius: 10px;line-height: 28px;height: 28px;border: 1px solid #ea3a3a;color:#ea3a3a;padding: 10px;box-sizing: border-box;}
 </style>
