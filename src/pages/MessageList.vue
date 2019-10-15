@@ -97,7 +97,9 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       this.$vux.loading.show()
-      this.getData()
+      if (!this.listData.length) {
+        this.getData()
+      }
     }
   },
   activated () {
