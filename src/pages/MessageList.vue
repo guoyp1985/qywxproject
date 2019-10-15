@@ -96,8 +96,8 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
-      this.$vux.loading.show()
       if (!this.listData.length) {
+        this.$vux.loading.show()
         this.getData()
       }
     }
