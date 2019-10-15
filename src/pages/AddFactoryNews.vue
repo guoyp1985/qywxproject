@@ -59,7 +59,7 @@
             </div>
           </div>
         </div>
-        <div class="form-item bg-white">
+        <!-- <div class="form-item bg-white">
           <div class="t-table">
             <div class="t-cell title-cell w80 font14 v_middle">视频</div>
             <div class="t-cell input-cell v_middle" style="position:relative;">
@@ -81,7 +81,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
         <!-- <group label-width="5em">
           <group class="textarea-outer">
             <x-textarea
@@ -156,7 +156,7 @@ export default {
       maxnum: 1,
       havenum: 0,
       // submitdata: {classid: 0, title: '', photo: '', video: '', seodescription: '', summary: ''},
-      submitdata: {classid: 0, title: '', photo: '', video: ''},
+      submitdata: {classid: 0, title: '', photo: ''},
       requireddata: {title: '', 'photo': ''},
       submitIng: false,
       classData: [],
