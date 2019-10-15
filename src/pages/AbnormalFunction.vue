@@ -11,7 +11,7 @@
         <template v-if="item.data.length > 0">
           <div v-for="(iteminfo, index2) in item.data" :key="iteminfo.id" class="flex_center iteminfo">
             <div class="flex_cell mr20">{{index2 + 1}}.{{iteminfo.title}}</div>
-            <div ><div class="font14 choosebtn flex_center" @click="">通过</div></div>
+            <div ><div class="font14 choosebtn flex_center" @click="passTest(iteminfo.moduleid, 1, '')">通过</div></div>
           </div>
         </template>
         <template v-else>
@@ -43,6 +43,21 @@ export default {
         let data = res.data
         self.abnormaldata = data.data ? data.data : []
         console.log(self.abnormaldata)
+      })
+    },
+    passTest (id, state, content) {
+      const self = this
+      let params = {id: id, state: state, content: content}
+      console.log(params)
+      self.$http.get(`${ENV.BokaApi}/api/testwork/recordTest`, {
+        params: params
+      }).then(function (res) {
+        let data = res.data
+        self.$vux.toast.show({
+          text: data.error,
+          type: 'warning'
+        })
+        self.refresh()
       })
     }
   },
