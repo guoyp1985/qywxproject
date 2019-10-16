@@ -10,7 +10,7 @@
       <div class="font14">
         <template v-if="item.data.length > 0">
           <div v-for="(iteminfo, index2) in item.data" :key="iteminfo.id" class="flex_center iteminfo">
-            <div @click="showMissionInfo(iteminfo.moduleid)" class="flex_cell mr20">{{index2 + 1}}.{{iteminfo.title}}</div>
+            <div @click="showMissionInfo(iteminfo.moduleid)" class="flex_cell mr20 clamp2">{{index2 + 1}}.{{iteminfo.testworkcontent}}</div>
             <div ><div class="font14 choosebtn flex_center" @click="passTest(iteminfo.moduleid, 1, '')">通过</div></div>
           </div>
         </template>
