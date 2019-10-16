@@ -15,7 +15,7 @@ var ENV = {
   FactoryApi: 'https://factorydev.boka.cn',
   ApiVersion: 'V2',
   ApiAccept: 'application/vnd.factorydev.v2+json',
-  showTestManager: true,
+  showTestManager: true, //正式平台不需要添加 ,控制测试管理功能按钮
   OrderStatus: [
     {id: 0, status: '订单取消'},
     {id: 1, status: '已确认订单'},

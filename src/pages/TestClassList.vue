@@ -213,8 +213,8 @@ export default {
     }
   },
   created () {
-      this.loginUser = User.get()
-      this.init()
+    this.loginUser = User.get()
+    this.init()
   },
   activated () {
   }
