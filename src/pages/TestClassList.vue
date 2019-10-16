@@ -213,10 +213,10 @@ export default {
     }
   },
   created () {
+      this.loginUser = User.get()
+      this.init()
   },
   activated () {
-    this.loginUser = User.get()
-    this.init()
   }
 }
 </script>
