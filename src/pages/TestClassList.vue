@@ -8,6 +8,9 @@
           <div class="t-cell v_middle">
             <div class="clamp1 font14 color-lightgray">{{loginUser.nickname}}</div>
           </div>
+          <div v-if="showmissioninfo || showdonetest" class="t-cell v_middle">
+            <div class="clamp1 font14 align_right color-lightgray">进度：{{missionFinish}}</div>
+          </div>
         </div>
         <div class="testarea font14" style="padding: 10px 20px;box-sizing:border-box;">
           <template v-if="showtestclass && testclassdata.length > 0">
@@ -89,7 +92,8 @@ export default {
       showdonetest: false,
       missionindex: 0,
       showNotPassReason: false,
-      notPassContent: ''
+      notPassContent: '',
+      missionFinish: ''
     }
   },
   methods: {
@@ -105,6 +109,7 @@ export default {
       this.missiondata = null
       this.next = null
       this.curtestclass = {}
+      this.missionFinish = ''
       this.getdata()
     },
     getdata () {
@@ -135,6 +140,7 @@ export default {
           self.missionindex++
           // self.$vux.loading.hide()
           let data = res.data
+          self.missionFinish = data.finish
           console.log('====  输出测试任务信息  ====')
           console.log(data.data)
           self.missiondata = data.data ? data.data : data
@@ -210,8 +216,6 @@ export default {
   },
   activated () {
     this.loginUser = User.get()
-    console.log('====  this.loginUser  ====')
-    console.log(this.loginUser)
     this.init()
   }
 }
