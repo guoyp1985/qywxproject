@@ -27,7 +27,7 @@
               <div class="align_center font14 padding10" style="line-height:14px;">{{missiondata.title}}</div>
               <div class="font14 padding10">{{missionindex}}.{{missiondata.content}}</div>
               <div class="flex_around" style="padding: 10px 20px;">
-                <div class="font14 btn-item flex_center btn-bottom-red" @click="showTxtarea">测试未通过</div>
+                <div class="font14 btn-item flex_center btn-bottom-red" style="background-color:#f6a434 !important;" @click="showTxtarea">测试未通过</div>
                 <div class="font14 btn-item flex_center btn-bottom-red" @click="testpass(missiondata, 1, '')">测试通过</div>
               </div>
             </div>
