@@ -23,12 +23,19 @@
           </template>
           <!--  -->
           <template v-if="showmissioninfo && missiondata">
-            <div class="bg-white missionarea">
-              <div class="align_center font14 padding10" style="line-height:14px;">{{missiondata.title}}</div>
-              <div class="font14 padding10">{{missionindex}}.{{missiondata.content}}</div>
-              <div class="flex_around" style="padding: 10px 20px;">
-                <div class="font14 btn-item flex_center btn-bottom-red" style="background-color:#f6a434 !important;" @click="showTxtarea">测试未通过</div>
-                <div class="font14 btn-item flex_center btn-bottom-red" @click="testpass(missiondata, 1, '')">测试通过</div>
+            <div class="missionarea">
+              <div class="flex_left padding10" style="color:red;">
+                <div class="v_middle font16" v-for="(item, index) in classtitle" :key="item.id">
+                  {{item}}<span v-if="index != classtitle.length-1">></span>
+                </div>
+              </div>
+              <div class="bg-white">
+                <div class="align_center font14 padding10" style="line-height:14px;">{{missiondata.title}}</div>
+                <div class="font14 padding10">{{missionindex}}.{{missiondata.content}}</div>
+                <div class="flex_around" style="padding: 10px 20px;">
+                  <div class="font14 btn-item flex_center btn-bottom-red" style="background-color:#f6a434 !important;" @click="showTxtarea">测试未通过</div>
+                  <div class="font14 btn-item flex_center btn-bottom-red" @click="testpass(missiondata, 1, '')">测试通过</div>
+                </div>
               </div>
             </div>
           </template>
@@ -93,7 +100,8 @@ export default {
       missionindex: 0,
       showNotPassReason: false,
       notPassContent: '',
-      missionFinish: ''
+      missionFinish: '',
+      classtitle: []
     }
   },
   methods: {
@@ -110,6 +118,7 @@ export default {
       this.next = null
       this.curtestclass = {}
       this.missionFinish = ''
+      this.classtitle = []
       this.getdata()
     },
     getdata () {
@@ -145,6 +154,9 @@ export default {
           console.log('====  输出测试任务信息  ====')
           console.log(data.data)
           self.missiondata = data.data ? data.data : data
+          self.classtitle = self.missiondata.classtitle.reverse()
+          console.log('==== 输出层级title ====')
+          console.log(self.classtitle)
           self.showmissioninfo = true
           self.next = data.next
           console.log('==== 输出下一条测试任务的id ====')
