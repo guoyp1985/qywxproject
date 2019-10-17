@@ -18,7 +18,7 @@
             <div v-for="(item, index) in testclassdata" :key="item.id" class="flex_center bg-white w_100 " @click="getmissioninfo(item)">
               <div class="item bold">{{index + 1}}.{{item.title}}</div>
               <div class="w80" v-if="!item.start">进度：{{item.finish}}</div>
-              <div v-else><div class="font14 choosebtn1 flex_center" @click="starttest(item.id)">开始测试</div></div>
+              <div v-else><div class="font14 choosebtn1 flex_center" @click.stop="getmissioninfo(item)">开始测试</div></div>
             </div>
           </template>
           <!--  -->
@@ -129,6 +129,7 @@ export default {
       if (item.id) {
         self.curtestclass = item
         self.missionindex = 0
+        self.starttest(item.id)
       }
       console.log('====  输出当前选择的测试分类  =====')
       console.log(self.curtestclass)
@@ -151,6 +152,7 @@ export default {
         })
         self.showtestclass = false
       } else {
+        self.missionFinish = '100%'
         self.$vux.toast.show({
           text: '暂无测试任务',
           type: 'warning'

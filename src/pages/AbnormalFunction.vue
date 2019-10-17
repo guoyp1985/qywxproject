@@ -4,7 +4,7 @@
 * @created_date: 2019-10-15
 */
 <template>
-  <div class="containerarea abnormalfunction">
+  <div class="containerarea abnormalfunction" style="position:inherit">
     <div class="bg-white mb10" v-for="(item, index) in abnormaldata" :key="item.id">
       <div class="title font16 bold">{{item.title}}</div>
       <div class="font14">
