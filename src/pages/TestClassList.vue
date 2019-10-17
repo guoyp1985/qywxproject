@@ -17,7 +17,7 @@
             <div class="bg-white w_100 pl10 bold" style="height:40px;line-height:40px;box-sizing:border-box;">选择测试范围</div>
             <div v-for="(item, index) in testclassdata" :key="item.id" class="flex_center bg-white w_100 " @click="getmissioninfo(item)">
               <div class="item bold">{{index + 1}}.{{item.title}}</div>
-              <div class="w80" v-if="!item.start">进度：{{item.finish}}</div>
+              <div class="w90" v-if="!item.start">进度：{{item.finish}}</div>
               <div v-else><div class="font14 choosebtn1 flex_center" @click.stop="getmissioninfo(item)">开始测试</div></div>
             </div>
           </template>
@@ -101,6 +101,7 @@ export default {
       showNotPassReason: false,
       notPassContent: '',
       missionFinish: '',
+      reqFlag: true,
       classtitle: []
     }
   },
@@ -147,6 +148,7 @@ export default {
         self.$http.get(`${ENV.BokaApi}/api/testwork/info`, {
           params: params
         }).then(function (res) {
+          self.reqFlag = true
           self.missionindex++
           // self.$vux.loading.hide()
           let data = res.data
@@ -158,9 +160,6 @@ export default {
           console.log('==== 输出层级title ====')
           console.log(self.classtitle)
           self.showmissioninfo = true
-          self.next = data.next
-          console.log('==== 输出下一条测试任务的id ====')
-          console.log(self.next)
         })
         self.showtestclass = false
       } else {
@@ -178,6 +177,8 @@ export default {
     },
     testpass (missiondata, state, content) {
       const self = this
+      if (!self.reqFlag) return
+      self.reqFlag = false
       self.curmissiondata = missiondata
       let params = {id: missiondata.id, state: state, content: content}
       console.log(params)
@@ -185,6 +186,9 @@ export default {
         params: params
       }).then(function (res) {
         let data = res.data
+        self.next = data.next
+        console.log('==== 输出下一条测试任务的id ====')
+        console.log(self.next)
         self.$vux.toast.show({
           text: data.error,
           type: 'warning'
