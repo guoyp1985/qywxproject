@@ -246,7 +246,7 @@ export default {
   line-height: 40px;
 }
 .missionarea{
-  position:absolute;left: 10px;right: 10px;top: 80px;
+  position:absolute;left: 10px;right: 10px;top: 50px;
 }
 .flex_around{
   display: flex;
