@@ -384,7 +384,7 @@ export default {
     finishService (order) {
       const self = this
       this.$vux.confirm.show({
-        title: '您确认售后服务已结束？',
+        title: '您确认结束售后服务？',
         content: '请确认售后结束',
         onConfirm () {
           self.$vux.loading.show()
@@ -393,7 +393,8 @@ export default {
             self.$vux.loading.hide()
             if (res.data.flag) {
               self.$vux.toast.text(res.data.error)
-              self.changeOrderView(order, 4, [4, 6])
+              // self.changeOrderView(order, 4, [4, 6])
+              self.afterConfirm()
             }
           })
         }
@@ -495,6 +496,7 @@ export default {
         const data = res.data
         this.$vux.toast.text(data.error)
         if (data.flag) {
+          this.afterConfirm()
           this.showServiceModal = false
           if (this.selectedIndex === 0) {
             this.tabdata1[this.clickIndex].backflag = 120
@@ -565,6 +567,12 @@ export default {
       }
     },
     changeOrderView (order, status, buttons) {
+      console.log('====  order  ====')
+      console.log(order)
+      console.log('====  status  ====')
+      console.log(status)
+      console.log('====  buttons  ====')
+      console.log(buttons)
       const self = this
       let list = []
       switch (this.selectedIndex) {

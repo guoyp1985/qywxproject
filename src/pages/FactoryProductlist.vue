@@ -321,7 +321,7 @@ export default {
         let params = this.$util.handleAppParams(this.query, {id: item.id, fid: this.Fid, module: 'fpimport'})
         this.$router.push({path: '/fpimportProduct', query: params})
       } else {
-        let params = this.$util.handleAppParams(this.query, {id: item.moduleid, fid: this.Fid})
+        let params = this.$util.handleAppParams(this.query, {id: item.moduleid, fid: this.Fid, frompage: 'manager'})
         this.$router.push({path: '/factoryProduct', query: params})
       }
     },

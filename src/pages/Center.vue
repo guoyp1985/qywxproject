@@ -95,6 +95,11 @@
               <span class="al al-shouhouwuyou font20"></span>
             </div>
           </grid-item>
+          <grid-item v-if="showTestManager && showManager" label="测试管理" @click.native="toLink('/testClassList')">
+            <div slot="icon" class="circle-icon-bg rgba07 color-white flex_center mb10">
+              <span class="al al-shouhouwuyou font20"></span>
+            </div>
+          </grid-item>
           <grid-item v-if="showApply && (!loginUser.fid || (loginUser.factoryinfo && loginUser.factoryinfo.moderate != 1))" label="申请厂家" @click.native="toLink('/centerFactory')">
             <div slot="icon" class="circle-icon-bg rgba07 color-white flex_center mb10">
               <span class="al al-shouhouwuyou font20"></span>
@@ -187,7 +192,8 @@ export default {
       showManager: false,
       showQuit: false,
       showTip: false,
-      showApply: false
+      showApply: false,
+      showTestManager: ENV.showTestManager
     }
   },
   methods: {
