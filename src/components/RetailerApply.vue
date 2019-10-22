@@ -23,12 +23,14 @@
       </div>
       <form class="applyform pr12 pl12 pt15">
         <div v-if="(query.appid == 'wx72131ab2cb77663d' && (!query.wid || query.wid == 139)) || (query.appid == 'wx93366404c4cbc761' && (!query.wid || query.wid == 16949))" class="form-item required border1px" style="color:red;">未获取到推荐人信息，请重新扫码申请!</div>
-        <div v-if="shareUser.uid" class="form-item required border1px">
-          <div class="t-table">
-            <div class="t-cell title-cell font14 v_middle">推荐人</div>
-            <div class="t-cell input-cell v_middle" style="position:relative;">{{ shareUser.linkman }}</div>
+        <template v-else>
+          <div v-if="shareUser.uid" class="form-item required border1px">
+            <div class="t-table">
+              <div class="t-cell title-cell font14 v_middle">推荐人</div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">{{ shareUser.linkman }}</div>
+            </div>
           </div>
-        </div>
+        </template>
         <div v-if="!fromFactory" class="form-item required border1px">
           <div class="t-table">
             <div class="t-cell title-cell font14 v_middle">真实姓名<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
