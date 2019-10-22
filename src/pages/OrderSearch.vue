@@ -696,7 +696,24 @@ export default {
       this.loginUser = User.get()
       this.initData()
       this.query = this.$route.query
-      let flag = parseInt(this.query.flag)
+      let flag = 0
+      switch (this.selectedIndex) {
+        case 1:
+          flag = 2
+          break
+        case 2:
+          flag = 3
+          break
+        case 3:
+          flag = 4
+          break
+        default :
+          flag = 0
+          break
+      }
+      if (this.query.flag) {
+        flag = parseInt(this.query.flag)
+      }
       switch (flag) {
         case 2:
           if (this.query.refresh || !this.tabdata2.length) {
@@ -715,12 +732,11 @@ export default {
           }
           break
         case 4:
-          if (this.query.refresh || !this.tabdata4.length) {
-            this.selectedIndex = 3
-            this.pagestart4 = 0
-            this.tabdata4 = []
-            this.toggleTab()
-          }
+          this.distabdata4 = false
+          this.selectedIndex = 3
+          this.pagestart4 = 0
+          this.tabdata4 = []
+          this.toggleTab()
           break
         default :
           if (this.query.refresh || !this.tabdata1.length) {
