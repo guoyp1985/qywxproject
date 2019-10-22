@@ -815,6 +815,8 @@ export default {
               self.addressdata = retdata
               self.handleAddress()
             } else {
+              console.log('进入到了没有地址')
+              this.disPostageArea = true
               if (!this.query.from && !this.query.fromapp) {
                 this.$wechat.ready(() => {
                   this.$vux.confirm.show({

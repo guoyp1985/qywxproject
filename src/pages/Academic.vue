@@ -20,7 +20,7 @@
           <div class="article-info" style="position:relative;">
             <span class="article-date color-gray">{{article.dateline | dateFormat}}</span>
             <span v-if="reward.subscribe != 1" @click="popupSubscribe" class="article-ex color-blue">{{ WeixinName }}</span>
-            <router-link v-else to="/subscribeInfo" class="article-ex color-blue">{{ WeixinName }}</router-link>
+            <!-- <router-link v-else to="/subscribeInfo" class="article-ex color-blue">{{ WeixinName }}</router-link> -->
             <router-link class="article-author" :to="{ name: '', params: {} }">{{article.author}}</router-link>
           </div>
           <template v-if="article.c_format == 'json'">

@@ -582,8 +582,10 @@ export default {
       }
     },
     toMemberView () {
-      let params = this.$util.handleAppParams(this.query, {uid: this.orderData.uid})
-      this.$router.push({path: '/membersView', query: params})
+      if (this.query.fromapp !== 'factory') {
+        let params = this.$util.handleAppParams(this.query, {uid: this.orderData.uid})
+        this.$router.push({path: '/membersView', query: params})
+      }
     },
     toCard (item) {
       if (this.query.from) {
