@@ -512,7 +512,7 @@ export default {
         let data = res.data
         this.$vux.loading.hide()
         this.$vux.toast.show({
-          text: data.error,
+          text: (data.flag !== 1 ? '商品正在活动中,不能推荐货源' : '推荐成功'),
           type: (data.flag !== 1 ? 'warn' : 'success'),
           time: this.$util.delay(data.error),
           onHide: () => {
