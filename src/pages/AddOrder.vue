@@ -829,6 +829,8 @@ export default {
                     }
                   })
                 })
+              } else {
+                this.disPostageArea = true
               }
             }
           }
