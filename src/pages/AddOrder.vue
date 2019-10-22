@@ -524,9 +524,10 @@ export default {
       }
       this.orderPrice = total
       if (this.selectedCard) {
-        let cha = parseFloat(this.orderPrice) - parseFloat(this.postPostage.replace(/,/g, '')) - parseFloat(this.selectedCard.money)
+        let postageStr = `${this.postPostage}`
+        let cha = parseFloat(this.orderPrice) - parseFloat(postageStr.replace(/,/g, '')) - parseFloat(this.selectedCard.money)
         cha = cha < 0 ? 0 : cha
-        this.payPrice = (cha + parseFloat(this.postPostage.replace(/,/g, ''))).toFixed(2)
+        this.payPrice = (cha + parseFloat(postageStr.replace(/,/g, ''))).toFixed(2)
       } else {
         this.payPrice = total.toFixed(2)
       }
@@ -798,7 +799,7 @@ export default {
               total1 += parseFloat(order.postage.replace(/,/g, ''))
             }
             self.postage = parseFloat(order.postage.replace(/,/g, ''))
-            self.postPostage = parseFloat(order.postage.replace(/,/g, ''))
+            self.postPostage = parseFloat(order.postage.replace(/,/g, '')).toFixed(2)
           }
           self.cardPrice = total1
           // self.payPrice = total.toFixed(2)
@@ -850,9 +851,10 @@ export default {
             if (self.cardPrice >= item.ordermoney && ((self.cardPrice - item.money - self.curOrder.rebate) >= 0 || (item.money > self.cardPrice && self.curOrder.rebate <= 0))) {
               self.selectedCard = item
               self.cardList[i].checked = true
-              let cha = parseFloat(this.orderPrice) - parseFloat(this.postPostage.replace(/,/g, '')) - parseFloat(this.selectedCard.money)
+              let postageStr = `${this.postPostage}`
+              let cha = parseFloat(this.orderPrice) - parseFloat(postageStr.replace(/,/g, '')) - parseFloat(this.selectedCard.money)
               cha = cha < 0 ? 0 : cha
-              this.payPrice = (cha + parseFloat(this.postPostage.replace(/,/g, ''))).toFixed(2)
+              this.payPrice = (cha + parseFloat(postageStr.replace(/,/g, ''))).toFixed(2)
               break
             }
           }
