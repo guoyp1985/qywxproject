@@ -799,10 +799,7 @@ export default {
               total1 += parseFloat(order.postage.replace(/,/g, ''))
             }
             self.postage = parseFloat(order.postage.replace(/,/g, ''))
-            console.log('订单的邮费')
-            console.log(order.postage)
             self.postPostage = parseFloat(order.postage.replace(/,/g, '')).toFixed(2)
-            console.log(self.postPostage)
           }
           self.cardPrice = total1
           // self.payPrice = total.toFixed(2)
