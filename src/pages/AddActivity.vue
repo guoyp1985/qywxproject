@@ -219,7 +219,8 @@ export default {
       action: '',
       sysParams: {},
       disProductData: false,
-      productmodule: 'product'
+      productmodule: 'product',
+      submitIng: false
     }
   },
   watch: {
@@ -479,6 +480,7 @@ export default {
     },
     saveAjax () {
       const self = this
+      this.submitIng = true
       let postData = self.submitdata
       if (this.query.fid) {
         postData.fid = this.query.fid
@@ -498,6 +500,8 @@ export default {
               } else {
                 this.afterSave(data)
               }
+            } else {
+              this.submitIng = false
             }
           }
         })
@@ -665,6 +669,7 @@ export default {
     },
     saveevent () {
       const self = this
+      if (this.submitIng) return false
       if (self.loginUser.isretailer === 1) {
         self.saveData()
       } else if (self.loginUser.isretailer === 2) {
