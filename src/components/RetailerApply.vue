@@ -113,7 +113,7 @@
           </div>
         </div>
       </form>
-      <div :class="`pagebottom-area flex_center pl12 pr12 bg-white ${bottomcss}`" @click="submitevent">
+      <div :class="`pagebottom-area flex_center pl12 pr12 bg-white ${bottomcss}`" @click="submitevent" v-if="!((query.appid == 'wx72131ab2cb77663d' && (!query.wid || query.wid == 139)) || (query.appid == 'wx93366404c4cbc761' && (!query.wid || query.wid == 16949)))">
         <div class="flex_cell flex_center btn-bottom-red">马上加入</div>
       </div>
     </div>
