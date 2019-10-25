@@ -89,7 +89,7 @@
                   <router-link class="inner" :to="{path: '/addFpimportProduct', query: {id: clickdata.id, fid: Fid}}">编辑</router-link>
                 </div>
                 <div class="item">
-                  <div class="inner" @click="clickpopup('storage')">补充库存</div>
+                  <div class="inner" @click="clickpopup('storage')">修改库存</div>
                 </div>
               </template>
               <div class="item" v-if="clickdata.isshow == 0">
@@ -122,7 +122,7 @@
       <div v-transfer-dom class="x-popup">
         <popup v-model="showStoragePopup" height="100%">
           <div class="popup1">
-            <div class="popup-top flex_center">补充库存</div>
+            <div class="popup-top flex_center">修改库存</div>
             <div class="popup-middle font14">
               <div class="pt10 pb10 pl12 pr12">
                 <div class="t-table bg-white pt10 pb10">
@@ -149,9 +149,9 @@
                     </div>
                     <div class="form-item">
                       <div class="t-table">
-                        <div class="t-cell title-cell w80 font14 v_middle">补充库存</div>
+                        <div class="t-cell title-cell w80 font14 v_middle">库存数量</div>
                         <div class="t-cell input-cell v_middle" style="position:relative;">
-                          <x-input v-model="oitem.newstorage" type="text" class="input" placeholder="补充库存"></x-input>
+                          <x-input v-model="oitem.newstorage" type="text" class="input" placeholder="库存数量"></x-input>
                         </div>
                       </div>
                     </div>
@@ -160,9 +160,9 @@
                 <template v-else>
                   <div class="form-item">
                     <div class="t-table">
-                      <div class="t-cell title-cell w80 font14 v_middle">补充库存</div>
+                      <div class="t-cell title-cell w80 font14 v_middle">库存数量</div>
                       <div class="t-cell input-cell v_middle" style="position:relative;">
-                        <x-input v-model="clickdata.newstorage" type="text" class="input" placeholder="补充库存"></x-input>
+                        <x-input v-model="clickdata.newstorage" type="text" class="input" placeholder="库存数量"></x-input>
                       </div>
                     </div>
                   </div>
@@ -171,7 +171,8 @@
             </div>
             <div class="popup-bottom flex_center">
               <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeStoragePopup">{{ $t('Close') }}</div>
-              <div class="flex_cell h_100 flex_center bg-green color-white" @click="submitStorage">提交</div>
+              <div class="flex_cell h_100 flex_center bg-orange color-white" @click="submitStorage">减少库存</div>
+              <div class="flex_cell h_100 flex_center bg-green color-white" @click="submitStorage('add')">增加库存</div>
             </div>
           </div>
         </popup>
@@ -556,11 +557,11 @@ export default {
     closeStoragePopup () {
       this.showStoragePopup = false
     },
-    submitStorage () {
+    submitStorage (type) {
       console.log(this.clickdata)
-      this.$vux.loading.show()
       let params = {id: this.clickdata.moduleid}
       let curOptions = this.clickdata.options
+      let isContinue = true
       if (curOptions && curOptions.length) {
         params.haveoptions = 1
         let addvalue = []
@@ -569,6 +570,19 @@ export default {
           let newval = curOptions[i].newstorage
           if (!newval || isNaN(newval)) {
             newval = 0
+          }
+          if (type === 'add') {
+            if (!/^[0-9]*[1-9][0-9]*$/.test(newval)) {
+              this.$vux.toast.text('请输入大于0的库存')
+              isContinue = false
+              return false
+            }
+          } else {
+            if (!/^-[0-9]*[1-9][0-9]*$/.test(newval)) {
+              this.$vux.toast.text('请输入负数库存')
+              isContinue = false
+              return false
+            }
           }
           this.clickdata.options[i].newstorage = newval
           addvalue.push(newval)
@@ -582,9 +596,24 @@ export default {
         if (!newval || isNaN(newval)) {
           newval = 0
         }
+        if (type === 'add') {
+          if (!/^[0-9]*[1-9][0-9]*$/.test(newval)) {
+            this.$vux.toast.text('请输入大于0的库存')
+            isContinue = false
+            return false
+          }
+        } else {
+          if (!/^-[0-9]*[1-9][0-9]*$/.test(newval)) {
+            this.$vux.toast.text('请输入负数库存')
+            isContinue = false
+            return false
+          }
+        }
         this.clickdata.newstorage = newval
         params.addvalue = newval
       }
+      if (!isContinue) return false
+      this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/FP/addStorage`, params).then(res => {
         let data = res.data
         this.$vux.loading.hide()
