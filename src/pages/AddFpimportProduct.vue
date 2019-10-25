@@ -1000,12 +1000,17 @@ export default {
             let curTitle = curOption.title
             // let curPhoto = curOption.photo
             let curStorage = curOption.storage
-            if (self.$util.trim(curTitle) === '' || self.$util.trim(curStorage) === '') {
+            if (self.$util.trim(curTitle) === '') {
               self.$vux.toast.text('请完规格信息', 'middle')
               iscontinue = false
               break
             }
             if (!self.query.id) {
+              if (self.$util.trim(curStorage) === '') {
+                self.$vux.toast.text('请完规格信息', 'middle')
+                iscontinue = false
+                break
+              }
               if (isNaN(curStorage) || parseFloat(curStorage) <= 0) {
                 self.$vux.toast.text('库存必须大于0', 'middle')
                 iscontinue = false
