@@ -171,7 +171,7 @@
             </div>
           </div>
           <div class="pt10 bg-page"></div>
-          <div class="form-item required bg-white" v-if="!optionsData.length">
+          <div class="form-item required bg-white" v-if="!optionsData.length && !query.id">
             <div class="flex_row">
               <div class="flex_cell">
                 <div class="t-table">
@@ -230,7 +230,7 @@
                       </div>
                     </template>
                   </div>
-                  <div class="flex_left mt10 con-item">
+                  <div class="flex_left mt10 con-item" v-if="!query.id">
                     <div class="title-cell1 flex_left">库存</div>
                     <div class="border-cell flex_left flex_cell">
                       <x-input v-model="item.storage" @keyup="optionStorageChange(index)" type="tel" class="input" :placeholder="$t('Storage')" maxlength="5" size="5" ></x-input>
@@ -975,7 +975,7 @@ export default {
           })
           return false
         }
-        if (!self.optionsData.length) {
+        if (!self.optionsData.length && !self.query.id) {
           if (self.$util.trim(postdata.storage) === '') {
             self.$vux.toast.text('请输入商品库存', 'middle')
             return false
@@ -1005,10 +1005,12 @@ export default {
               iscontinue = false
               break
             }
-            if (isNaN(curStorage) || parseFloat(curStorage) <= 0) {
-              self.$vux.toast.text('库存必须大于0', 'middle')
-              iscontinue = false
-              break
+            if (!self.query.id) {
+              if (isNaN(curStorage) || parseFloat(curStorage) <= 0) {
+                self.$vux.toast.text('库存必须大于0', 'middle')
+                iscontinue = false
+                break
+              }
             }
           }
         }
