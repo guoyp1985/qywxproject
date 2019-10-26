@@ -18,12 +18,12 @@
         </div> -->
         <div class="bg-white b_bottom_after padding10">
           <div class="flex_left">
-            <router-link class="flex_cell" :to="{path:'/store',query:{wid:orderData.retailer.uid}}">
+            <div @click="toStore" class="flex_cell">
               <i class="al al-dianpufill v_middle color-red font20"></i>
               <span class="v_middle">{{orderData.retailer.title}}</span>
-            </router-link>
+            </div>
             <div class="w80 align_right" v-if="query.fromapp != 'factory'">
-              <router-link class="qbtn bg-red color-white font12" :to="{path:'/chat',query:{uid:orderData.retailer.uid, from: query.from}}">联系卖家</router-link>
+              <div @click="toChat" class="qbtn bg-red color-white font12">联系卖家</div>
             </div>
           </div>
         </div>
@@ -324,6 +324,15 @@ export default {
       this.recordData = []
       this.recordPageStart = 0
       this.deliverdata = { delivercompany: '-1', delivercode: '' }
+    },
+    toStore () {
+      if (this.query.fromapp !== 'factory') {
+        this.$router.push({path: '/store', query: {wid: this.orderData.retailer.uid}})
+      }
+    },
+    toChat () {
+      let params = this.$util.handleAppParams(this.query, {uid: this.orderData.retailer.uid})
+      this.$router.push({path: '/chat', query: params})
     },
     handleScroll (refname, type) {
       const self = this
