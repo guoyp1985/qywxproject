@@ -22,7 +22,7 @@
               <i class="al al-dianpufill v_middle color-red font20"></i>
               <span class="v_middle">{{orderData.retailer.title}}</span>
             </router-link>
-            <div class="w80 align_right">
+            <div class="w80 align_right" v-if="query.fromapp != 'factory'">
               <router-link class="qbtn bg-red color-white font12" :to="{path:'/chat',query:{uid:orderData.retailer.uid, from: query.from}}">联系卖家</router-link>
             </div>
           </div>
