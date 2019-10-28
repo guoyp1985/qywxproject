@@ -13,7 +13,7 @@ var ENV = {
   SocketServer: 'wss://chat.boka.cn/wss', //'wss://chat.boka.cn/wss', // vux: 'ws://123.206.77.217:7272', // vue: 'ws://124.207.246.109:7272'
   AdminUrl: 'http://laravelcms.boka.cn/admin/login/unionIdLogin',
   FactoryApi: 'https://factorydev.boka.cn',
-  ApiVersion: 'V1',
+  ApiVersion: 'V2',
   ApiAccept: 'application/vnd.factorydev.v2+json',
   showTestManager: true, //正式平台不需要添加 ,控制测试管理功能按钮
   OrderStatus: [
