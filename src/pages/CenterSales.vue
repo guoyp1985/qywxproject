@@ -107,7 +107,7 @@ export default {
     },
     bindFactory () {
       if (this.query.fromapp === 'factory') {
-        let params = {uid: this.query.uid, wid: this.loginUser.uid}
+        let params = {uid: this.query.uid, wid: this.loginUser.uid, uploader: this.query.wid}
         if (this.query.type === 'agent') {
           params.agent = 1
         }
