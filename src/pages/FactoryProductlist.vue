@@ -86,7 +86,7 @@
                   <router-link class="inner" :to="{path: '/postageArea', query: {type: 'factoryproduct',id: clickdata.moduleid}}">偏远地区运费</router-link>
                 </div>
                 <div class="item" v-if="!clickdata.activityid || clickdata.activityid == 0">
-                  <router-link class="inner" :to="{path: '/addFpimportProduct', query: {id: clickdata.id, fid: Fid}}">编辑</router-link>
+                  <div class="inner" @click="clickpopup('edit')">编辑</div>
                 </div>
                 <div class="item">
                   <div class="inner" @click="clickpopup('storage')">修改库存</div>
@@ -550,6 +550,9 @@ export default {
       } else if (key === 'storage') {
         self.showpopup1 = false
         this.showStoragePopup = true
+      } else if (key === 'edit') {
+        let params = this.$util.handleAppParams(this.query, {id: this.clickdata.id, fid: this.Fid})
+        this.$router.push({path: '/addFpimportProduct', query: params})
       } else {
         self.showpopup1 = false
       }
