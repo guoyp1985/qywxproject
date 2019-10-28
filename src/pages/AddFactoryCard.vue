@@ -378,7 +378,7 @@ export default {
               this.submitdata[key] = this.viewData[key]
             }
           }
-          this.submitdata['totalcount'] = parseInt(this.viewData['totalcount']) - parseInt(this.viewData['budget']) // 编辑时计算剩余数量
+          // this.submitdata['totalcount'] = parseInt(this.viewData['totalcount']) - parseInt(this.viewData['budget']) // 编辑时计算剩余数量
           console.log(this.submitdata)
           return this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
             params: {id: this.viewData.fpid, module: 'factoryproduct'}
