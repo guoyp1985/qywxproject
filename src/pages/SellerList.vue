@@ -577,7 +577,8 @@ export default {
       showRefuseModal: false,
       levelPolicy: {},
       showPayPopup: false,
-      payMoney: ''
+      payMoney: '',
+      allchoosed: false
     }
   },
   methods: {
@@ -935,8 +936,13 @@ export default {
     },
     allchoose () {  // 全选
       let checkdoms = this.$refs.inputCheckbox
+      this.allchoosed = !this.allchoosed
       for (var i = 0; i < checkdoms.length; i++) {
-        checkdoms[i].checked = !checkdoms[i].checked
+        if (this.allchoosed) {
+          checkdoms[i].checked = true
+        } else {
+          checkdoms[i].checked = false
+        }
       }
       this.getDshsSellerInfo()
     },

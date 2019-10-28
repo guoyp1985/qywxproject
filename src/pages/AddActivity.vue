@@ -220,7 +220,7 @@ export default {
       sysParams: {},
       disProductData: false,
       productmodule: 'product',
-      submitIng: false
+      submiting: false
     }
   },
   watch: {
@@ -480,7 +480,7 @@ export default {
     },
     saveAjax () {
       const self = this
-      this.submitIng = true
+      self.submiting = true
       let postData = self.submitdata
       if (this.query.fid) {
         postData.fid = this.query.fid
@@ -501,7 +501,7 @@ export default {
                 this.afterSave(data)
               }
             } else {
-              this.submitIng = false
+              self.submiting = false
             }
           }
         })
@@ -669,7 +669,7 @@ export default {
     },
     saveevent () {
       const self = this
-      if (this.submitIng) return false
+      if (self.submiting) return false
       if (self.loginUser.isretailer === 1) {
         self.saveData()
       } else if (self.loginUser.isretailer === 2) {
