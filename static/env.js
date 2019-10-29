@@ -1,5 +1,5 @@
 var ENV = {
-  Version: '2.0.0.20',
+  Version: '2.0.0.21',
   AppId: 'wxd50f3623bec2f5b5', // vux:'wx1e72f0c45242a94e' // vue: 'wxd50f3623bec2f5b5'
   // AppSecret: 'f22214afc8a01ec9a769bd0ba8551c48',
   FeedChars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
@@ -13,7 +13,7 @@ var ENV = {
   SocketServer: 'wss://chat.boka.cn/wss', //'wss://chat.boka.cn/wss', // vux: 'ws://123.206.77.217:7272', // vue: 'ws://124.207.246.109:7272'
   AdminUrl: 'http://laravelcms.boka.cn/admin/login/unionIdLogin',
   FactoryApi: 'https://factorydev.boka.cn',
-  ApiVersion: 'V1',
+  ApiVersion: 'V2',
   ApiAccept: 'application/vnd.factorydev.v2+json',
   showTestManager: true, //正式平台不需要添加 ,控制测试管理功能按钮
   OrderStatus: [
