@@ -15,6 +15,10 @@
             <div class="seller-cell flex_left">
               <div class="font14 clamp1">卖家: {{retailerInfo.title}}</div>
             </div>
+            <div class="flex_right" @click="toChat" style="width:80px;padding-right:10px;box-sizing:border-box;">
+              <span class="al al-pinglun3 color-order-detail font14"></span>
+              <span class="font13 ml5">客服</span>
+            </div>
             <!-- <div class="contact-cell">
               <div class="ol-contact flex_center">
                 <div @click="toChat" :to="{path: '/chat', query: {uid: retailerInfo.uploader,fromModule: 'order', from: query.from}}">
@@ -485,8 +489,12 @@ export default {
       }
     },
     toChat () {
-      let params = this.$util.handleAppParams(this.query, {uid: this.retailerInfo.uid, fromModule: 'order'})
-      this.$router.push({path: '/chat', query: params})
+      if (this.query.fromapp === 'factory') {
+        this.$wechat.miniProgram.reLaunch({url: ENV.MiniRouter.chat})
+      } else {
+        let params = this.$util.handleAppParams(this.query, {uid: this.retailerInfo.uid, fromModule: 'order'})
+        this.$router.push({path: '/chat', query: params})
+      }
     },
     textareaChange (refname) {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
