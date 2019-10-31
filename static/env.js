@@ -33,7 +33,8 @@ var ENV = {
     product: '/packageB/pages/product',
     store: '/packageB/pages/store',
     addCard: '/packageA/pages/addCard',
-    factoryAppProduct: '/pages/product'
+    factoryAppProduct: '/pages/product',
+    chat: '/pages/chat'
   },
   Emots: [
     '微笑', '撇嘴', '色', '发呆', '得意', '流泪', '害羞', '闭嘴',
