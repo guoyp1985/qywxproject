@@ -121,7 +121,7 @@
           <x-button v-if="orderData.backflag == 120" mini @click.native="afterSale" class="font12">回复</x-button>
           <x-button v-else-if="orderData.canservice && query.fromapp != 'wl'" mini @click.native="afterSale" class="font12">申请售后</x-button>
           <x-button v-if="orderData.flag == 3" mini @click.native="confirm" class="font12">确认收货</x-button>
-          <x-button v-if="orderData.flag == 4" mini @click.native="evaluate" class="font12">评价</x-button>
+          <x-button v-if="orderData.flag == 4 && orderData.comment == 0" mini @click.native="evaluate" class="font12">评价</x-button>
         </div>
         <div class="mt12" v-if="recordData.length">
           <div class="line-area">

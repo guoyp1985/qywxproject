@@ -336,7 +336,9 @@ export default {
             if (item.backflag === 120) {
               arr1.push({id: 9, name: '查看售后进度'})
             }
-            arr1.push({id: 7, name: '评价'})
+            if (item.comment === 0) {
+              arr1.push({id: 7, name: '评价'})
+            }
             item.buttons = arr1
             break
         }
