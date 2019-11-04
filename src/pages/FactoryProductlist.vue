@@ -563,7 +563,6 @@ export default {
     },
     submitStorage (type) {
       console.log(this.clickdata)
-      console.log(this.submiting)
       if (this.submiting) return false
       this.submiting = true
       let params = {id: this.clickdata.moduleid}
