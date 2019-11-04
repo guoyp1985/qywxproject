@@ -370,7 +370,7 @@ export default {
       cardList: [],
       factoryInfo: {},
       showStoragePopup: false,
-      submiting1: false
+      submiting: false
     }
   },
   watch: {
@@ -563,8 +563,9 @@ export default {
     },
     submitStorage (type) {
       console.log(this.clickdata)
-      if (this.submiting1) return false
-      this.submiting1 = true
+      console.log(this.submiting)
+      if (this.submiting) return false
+      this.submiting = true
       let params = {id: this.clickdata.moduleid}
       let curOptions = this.clickdata.options
       let isContinue = true
@@ -622,7 +623,7 @@ export default {
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/FP/addStorage`, params).then(res => {
         let data = res.data
-        this.submiting1 = false
+        this.submiting = false
         this.$vux.loading.hide()
         if (data.flag) {
           let newData = this.productdata[this.clickindex]
