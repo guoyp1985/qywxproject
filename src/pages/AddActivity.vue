@@ -504,7 +504,6 @@ export default {
               }
             }
             self.submiting = false
-
           }
         })
       })
