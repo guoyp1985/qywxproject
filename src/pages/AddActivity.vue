@@ -493,8 +493,6 @@ export default {
           type: (data.flag !== 1 ? 'warn' : 'success'),
           time: self.$util.delay(data.error),
           onHide: () => {
-            console.log('=== data.flag ===')
-            console.log(data.flag)
             if (data.flag === 1) {
               if (this.isFirst) {
                 this.showHb = true
@@ -670,9 +668,6 @@ export default {
     },
     saveevent () {
       const self = this
-      console.log('=== 进来了 ===')
-      console.log(self.submiting)
-      console.log(self.loginUser.isretailer)
       if (self.submiting) return false
       if (self.loginUser.isretailer === 1) {
         self.saveData()
