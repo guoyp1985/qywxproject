@@ -15,9 +15,10 @@
             <div class="seller-cell flex_left">
               <div class="font14 clamp1">卖家: {{retailerInfo.title}}</div>
             </div>
-            <div class="flex_right" @click="toChat" style="width:80px;padding-right:10px;box-sizing:border-box;">
+            <div class="flex_right" @click="toChat(orderData)" style="width:80px;padding-right:10px;box-sizing:border-box;">
               <span class="al al-pinglun3 color-order-detail font14"></span>
               <span class="font13 ml5">客服</span>
+              <div class="orderinfo_txt" style="display:none">订单编号:{{orderData.orderno}};商品:{{orders[0].name}};数量:{{orders[0].quantity}};卖家:{{retailerInfo.title}};状态:{{orderData.flagstr}}</div>
             </div>
             <!-- <div class="contact-cell">
               <div class="ol-contact flex_center">
@@ -489,6 +490,26 @@ export default {
       }
     },
     toChat () {
+      const self = this
+      let eleobj = jQuery('#order-detail .orderinfo_txt')[0]
+      let range = null
+      let save = function (e) {
+        e.clipboardData.setData('text/plain', eleobj.innerHTML)
+        e.preventDefault()
+      }
+      if (self.$util.isIOS()) { // ios设备
+        window.getSelection().removeAllRanges()
+        range = document.createRange()
+        range.selectNode(eleobj)
+        window.getSelection().addRange(range)
+        document.execCommand('copy')
+        window.getSelection().removeAllRanges()
+      } else { // 安卓设备
+        console.log('in android')
+        document.addEventListener('copy', save)
+        document.execCommand('copy')
+        document.removeEventListener('copy', save)
+      }
       if (this.query.fromapp === 'factory') {
         this.$wechat.miniProgram.reLaunch({url: ENV.MiniRouter.chat})
       } else {
