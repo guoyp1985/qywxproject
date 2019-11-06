@@ -18,7 +18,7 @@
             <div class="flex_right" @click="toChat(orderData)" style="width:80px;padding-right:10px;box-sizing:border-box;">
               <span class="al al-pinglun3 color-order-detail font14"></span>
               <span class="font13 ml5">客服</span>
-              <div class="orderinfo_txt" style="opacity:0;height:0px;width:0px;">订单编号:{{orderData.orderno}};商品:{{orders[0].name}};数量:{{orders[0].quantity}};卖家:{{retailerInfo.title}};状态:{{orderData.flagstr}}</div>
+              <div class="orderinfo_txt" style="opacity:0;height:0px;width:0px;">订单编号：{{orderData.orderno}}；</br>商品：{{orders[0].name}}；</br>数量：{{orders[0].quantity}}；</br>卖家：{{retailerInfo.title}}；状态：{{orderData.flagstr}}</div>
             </div>
             <!-- <div class="contact-cell">
               <div class="ol-contact flex_center">
