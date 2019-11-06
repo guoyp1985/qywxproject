@@ -321,8 +321,7 @@ export default {
       recordData: [],
       recordPageStart: 0,
       limit: 10,
-      screenHeight: document.body.clientHeight,
-      orderinfoTxt: ''
+      screenHeight: document.body.clientHeight
     }
   },
   computed: {
@@ -519,7 +518,6 @@ export default {
         })
       }, 200)
       if (this.query.fromapp === 'factory') {
-        // let orderinfoTxt = this.orderinfoTxt
         this.$wechat.miniProgram.reLaunch({url: ENV.MiniRouter.chat})
       } else {
         let params = this.$util.handleAppParams(this.query, {uid: this.retailerInfo.uid, fromModule: 'order'})
@@ -698,7 +696,6 @@ export default {
             self.expressNumber = retdata.delivercode
             this.recordData = []
             this.recordPageStart = 0
-            // this.orderinfo_txt = '订单编号:' + self.orderData.orderno + ';商品:'+self.orders[0].name + ';数量:' + self.orders[0].quantity + ';卖家:' + self.retailerInfo.title + ';状态:' + self.orderData.flagstr
             self.getRecordData()
           }
         }
