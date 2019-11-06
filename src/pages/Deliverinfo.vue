@@ -9,8 +9,8 @@
           <div>物流公司：{{ deliverinfo.delivercompanyname }}</div>
           <div>物流单号：{{ deliverinfo.delivercode }}</div>
         </div>
-        <div class="flex_right" @click="toChat(deliverinfo)" style="width:80px;padding-right:10px;box-sizing:border-box;">
-          <span class="al al-pinglun3 color-order-detail font14"></span>
+        <div @click="toChat(deliverinfo)" style="width:80px;padding-right:10px;box-sizing:border-box;position: absolute;right: 10px;">
+          <span class="al al-pinglun3 color-white font14"></span>
           <span class="font13 ml5">客服</span>
           <div class="orderinfo_txt" style="opacity:0;height:0px;width:0px;">订单编号：{{deliverinfo.orderno}}</br>商品：{{deliverinfo.orderlist[0].name}}</br>数量：{{deliverinfo.orderlist[0].quantity}}</br>卖家：{{deliverinfo.retailer.title}}</br>状态：{{deliverinfo.flagstr}}</div>
         </div>
@@ -164,7 +164,7 @@ export default {
       if (this.query.fromapp === 'factory') {
         this.$wechat.miniProgram.reLaunch({url: ENV.MiniRouter.chat})
       } else {
-        let params = this.$util.handleAppParams(this.query, {uid: this.retailerInfo.uid, fromModule: 'order'})
+        let params = this.$util.handleAppParams(this.query, {uid: this.deliverinfo.retailer.uid, fromModule: 'order'})
         this.$router.push({path: '/chat', query: params})
       }
     }
