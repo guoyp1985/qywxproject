@@ -617,34 +617,34 @@ export default {
         })
       })
     },
-    copyTxt () {
-      const self = this
-      let eleobj = jQuery('#order-detail .deliver_txt')[0]
-      let range = null
-      let save = function (e) {
-        e.clipboardData.setData('text/plain', eleobj.innerHTML)
-        e.preventDefault()
-      }
-      if (self.$util.isIOS()) { // ios设备
-        window.getSelection().removeAllRanges()
-        range = document.createRange()
-        range.selectNode(eleobj)
-        window.getSelection().addRange(range)
-        document.execCommand('copy')
-        window.getSelection().removeAllRanges()
-      } else { // 安卓设备
-        console.log('in android')
-        document.addEventListener('copy', save)
-        document.execCommand('copy')
-        document.removeEventListener('copy', save)
-      }
-      setTimeout(function () {
-        self.$vux.toast.show({
-          text: '复制成功',
-          time: 1500
-        })
-      }, 200)
-    },
+    // copyTxt () {
+    //   const self = this
+    //   let eleobj = jQuery('#order-detail .deliver_txt')[0]
+    //   let range = null
+    //   let save = function (e) {
+    //     e.clipboardData.setData('text/plain', eleobj.innerHTML)
+    //     e.preventDefault()
+    //   }
+    //   if (self.$util.isIOS()) { // ios设备
+    //     window.getSelection().removeAllRanges()
+    //     range = document.createRange()
+    //     range.selectNode(eleobj)
+    //     window.getSelection().addRange(range)
+    //     document.execCommand('copy')
+    //     window.getSelection().removeAllRanges()
+    //   } else { // 安卓设备
+    //     console.log('in android')
+    //     document.addEventListener('copy', save)
+    //     document.execCommand('copy')
+    //     document.removeEventListener('copy', save)
+    //   }
+    //   setTimeout(function () {
+    //     self.$vux.toast.show({
+    //       text: '复制成功',
+    //       time: 1500
+    //     })
+    //   }, 200)
+    // },
     getRecordData () {
       this.$http.post(`${ENV.BokaApi}/api/order/getServiceInfo`, {
         type: 'service', id: this.query.id, pagestart: this.recordPageStart, limit: 10
