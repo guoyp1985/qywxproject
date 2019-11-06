@@ -162,6 +162,7 @@ export default {
         document.removeEventListener('copy', save)
       }
       if (this.query.fromapp === 'factory') {
+        console.log('=== 进来了 ===')
         this.$wechat.miniProgram.reLaunch({url: ENV.MiniRouter.chat})
       } else {
         let params = this.$util.handleAppParams(this.query, {uid: this.deliverinfo.retailer.uid, fromModule: 'order'})
