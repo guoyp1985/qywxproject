@@ -473,7 +473,11 @@ export default {
       })
     },
     viewShipping (order) {
-      this.$router.push({path: `/deliverinfo`, query: {id: order.id}})
+      if (this.query.fromapp !== 'factory') {
+        this.$router.push({path: `/deliverinfo`, query: {id: order.id}})
+      } else if (this.query.fromapp === 'factory') {
+        this.$router.push({path: `/deliverinfo`, query: {id: order.id, fromapp: 'factory'}})
+      }
     },
     closeService () {
       this.showServiceModal = false
