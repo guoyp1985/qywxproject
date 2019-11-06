@@ -511,12 +511,6 @@ export default {
         document.execCommand('copy')
         document.removeEventListener('copy', save)
       }
-      setTimeout(function () {
-        self.$vux.toast.show({
-          text: '复制成功',
-          time: 1500
-        })
-      }, 200)
       if (this.query.fromapp === 'factory') {
         this.$wechat.miniProgram.reLaunch({url: ENV.MiniRouter.chat})
       } else {
