@@ -18,7 +18,7 @@
             <div class="flex_right" @click="toChat(orderData)" style="width:80px;padding-right:10px;box-sizing:border-box;">
               <span class="al al-pinglun3 color-order-detail font14"></span>
               <span class="font13 ml5">客服</span>
-              <div class="orderinfo_txt" style="display:none">订单编号:{{orderData.orderno}};商品:{{orders[0].name}};数量:{{orders[0].quantity}};卖家:{{retailerInfo.title}};状态:{{orderData.flagstr}}</div>
+              <div class="orderinfo_txt" style="opacity:0;height:0px;width:0px;">订单编号:{{orderData.orderno}};商品:{{orders[0].name}};数量:{{orders[0].quantity}};卖家:{{retailerInfo.title}};状态:{{orderData.flagstr}}</div>
             </div>
             <!-- <div class="contact-cell">
               <div class="ol-contact flex_center">
@@ -499,6 +499,7 @@ export default {
         e.preventDefault()
       }
       if (self.$util.isIOS()) { // ios设备
+        console.log('in iOS')
         window.getSelection().removeAllRanges()
         range = document.createRange()
         range.selectNode(eleobj)
