@@ -5,6 +5,9 @@
     </template>
     <template v-if="showContainer">
       <div class="s-container" style="top:0;">
+        <form ref="listFileForm" enctype="multipart/form-data">
+          <input ref="listFileInput" class="hide" type="file" name="files" @change="fileChange('listFileForm', 'listphoto')" />
+        </form>
         <form ref="fileForm" enctype="multipart/form-data">
           <input ref="fileInput" class="hide" type="file" multiple="multiple" name="files" @change="fileMulChange('fileForm', 'photo')" />
         </form>
@@ -50,6 +53,32 @@
             </div>
             <div class="pt10 pb5 align_center">
               <p class="font14 color-gray5">封面图像(最多9张) <span class="al al-xing color-red font12" style="vertical-align: 2px;"></span></p>
+            </div>
+          </div>
+          <div class="pl12 pr12 pt10 b_top_after bg-white">商城封面图<span class="color-gray">（图像比例9:5）</span></div>
+          <div class="b_bottom_after bg-white pl12 pr12 pb5">
+            <input v-model="submitdata.listphoto" type="hidden" name="contentphoto" />
+            <div class="q_photolist align_left bg-white">
+              <template v-if="listphotoarr.length > 0">
+                <div v-for="(item,index) in listphotoarr" :key="index" class="photoitem">
+                  <div class="inner photo imgcover" :photo="item">
+                    <img :src="item" class="pic" @click="uploadPhoto('listFileInput','listphoto',index)" />
+                    <div class="close" @click="deletephoto(item,index,'listphoto')">×</div>
+                  </div>
+                </div>
+              </template>
+              <div v-if="listphotoarr.length < listmaxnum" class="photoitem add" @click="uploadPhoto('listFileInput','listphoto')">
+                <div class="inner">
+                  <div class="innerlist">
+                    <div class="flex_center h_100">
+                      <div class="txt">
+                        <i class="al al-zhaopian" style="color:#bbb;line-height:30px;"></i>
+                        <div><span class="havenum">{{ getlisthavenum }}</span><span class="ml5 mr5">/</span><span class="maxnum">{{ listmaxnum }}</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div v-if="classData.length" class="form-item required bg-white">
@@ -408,6 +437,9 @@ export default {
       query: {},
       loginUser: {},
       data: {},
+      listphotoarr: [],
+      listmaxnum: 1,
+      listhavenum: 0,
       photoarr: [],
       maxnum: 9,
       havenum: 0,
@@ -456,6 +488,10 @@ export default {
     submitdata: function () {
       return this.submitdata
     },
+    listhavenum: function (val) {
+      this.listhavenum = this.listphotoarr.length
+      return this.listhavenum
+    },
     havenum: function (val) {
       this.havenum = this.photoarr.length
       return this.havenum
@@ -473,6 +509,9 @@ export default {
     }
   },
   computed: {
+    getlisthavenum () {
+      return this.listphotoarr.length
+    },
     gethavenum: function () {
       return this.photoarr.length
     },
@@ -492,6 +531,7 @@ export default {
         postage: '0.00',
         limitbuy: '',
         photo: '',
+        listphoto: '',
         content: '',
         contentphoto: '',
         seotitle: '',
@@ -503,6 +543,7 @@ export default {
         sellingpoint: '',
         netincome: ''
       }
+      this.listphotoarr = []
       this.photoarr = []
       this.photoarr1 = []
       // this.optionsData = [{title: '', photo: '', storage: ''}]
@@ -665,7 +706,12 @@ export default {
       const self = this
       if (data.flag === 1) {
         if (this.clickPhotoIndex > -1) {
-          if (type === 'photo') {
+          if (type === 'listphoto') {
+            self.listphotoarr[this.clickPhotoIndex] = data.data
+            let lastphoto = this.listphotoarr.splice(this.listphotoarr.length - 1, 1)
+            this.listphotoarr.push(lastphoto)
+            self.submitdata.listphoto = self.listphotoarr.join(',')
+          } else if (type === 'photo') {
             self.photoarr[this.clickPhotoIndex] = data.data
             let lastphoto = this.photoarr.splice(this.photoarr.length - 1, 1)
             this.photoarr.push(lastphoto)
@@ -690,7 +736,10 @@ export default {
             }
           }
         } else {
-          if (type === 'photo' && self.photoarr.length < self.maxnum) {
+          if (type === 'listphoto' && self.listphotoarr.length < self.listmaxnum) {
+            self.listphotoarr.push(data.data)
+            self.submitdata.listphoto = self.listphotoarr.join(',')
+          } else if (type === 'photo' && self.photoarr.length < self.maxnum) {
             self.photoarr.push(data.data)
             self.submitdata.photo = self.photoarr.join(',')
           } else if (type === 'contentphoto' && self.photoarr1.length < self.maxnum1) {
@@ -732,7 +781,9 @@ export default {
           if (type === 'video') {
             curMaxnum = 1
           }
-          if (type === 'photo') {
+          if (type === 'listphoto') {
+            curMaxnum = self.listmaxnum - self.listphotoarr.length
+          } else if (type === 'photo') {
             curMaxnum = self.maxnum - self.photoarr.length
           } else if (type === 'contentphoto') {
             curMaxnum = self.maxnum1 - self.photoarr1.length
@@ -842,6 +893,9 @@ export default {
       if (type === 'video') {
         self.videoarr.splice(index, 1)
         self.submitdata.video = self.videoarr.join(',')
+      } else if (type === 'listphoto') {
+        self.listphotoarr.splice(index, 1)
+        self.submitdata.listphoto = self.listphotoarr.join(',')
       } else if (type === 'photo') {
         self.photoarr.splice(index, 1)
         self.submitdata.photo = self.photoarr.join(',')
@@ -1123,6 +1177,9 @@ export default {
           self.activityInfo = self.data.activitinfo
           for (let key in self.submitdata) {
             self.submitdata[key] = self.data[key]
+          }
+          if (self.submitdata.listphoto && self.$util.trim(self.submitdata.listphoto) !== '') {
+            self.listphotoarr = self.submitdata.listphoto.split(',')
           }
           if (self.submitdata.photo && self.$util.trim(self.submitdata.photo) !== '') {
             self.photoarr = self.submitdata.photo.split(',')
