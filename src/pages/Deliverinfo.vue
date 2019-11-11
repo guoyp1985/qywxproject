@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea deliverinfo nobottom font14">
+  <div id="deliverinfo-page" class="containerarea deliverinfo nobottom font14">
     <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
     </template>
@@ -8,6 +8,11 @@
         <div>
           <div>物流公司：{{ deliverinfo.delivercompanyname }}</div>
           <div>物流单号：{{ deliverinfo.delivercode }}</div>
+        </div>
+        <div @click="toChat(deliverinfo)" style="width:80px;padding-right:10px;box-sizing:border-box;position: absolute;right: 10px;">
+          <span class="al al-pinglun3 color-white font14"></span>
+          <span class="font13 ml5">客服</span>
+          <div class="orderinfo_txt" style="opacity:0;height:0px;width:0px;">订单编号：{{deliverinfo.orderno}}</br>商品：{{deliverinfo.orderlist[0].name}}</br>数量：{{deliverinfo.orderlist[0].quantity}}</br>卖家：{{deliverinfo.retailer.title}}</br>状态：{{deliverinfo.flagstr}}</div>
         </div>
       </div>
       <div class="pagemiddle">
@@ -36,6 +41,7 @@
 import { Timeline, TimelineItem } from 'vux'
 import Sos from '@/components/Sos'
 import Time from '#/time'
+import jQuery from 'jquery'
 import ENV from 'env'
 
 export default {
@@ -132,6 +138,36 @@ export default {
       this.$vux.loading.show()
       this.initData()
       this.getData()
+    },
+    toChat () {
+      const self = this
+      let eleobj = jQuery('#deliverinfo-page .orderinfo_txt')[0]
+      let range = null
+      let save = function (e) {
+        e.clipboardData.setData('text/plain', eleobj.innerHTML)
+        e.preventDefault()
+      }
+      if (self.$util.isIOS()) { // ios设备
+        console.log('in iOS')
+        window.getSelection().removeAllRanges()
+        range = document.createRange()
+        range.selectNode(eleobj)
+        window.getSelection().addRange(range)
+        document.execCommand('copy')
+        window.getSelection().removeAllRanges()
+      } else { // 安卓设备
+        console.log('in android')
+        document.addEventListener('copy', save)
+        document.execCommand('copy')
+        document.removeEventListener('copy', save)
+      }
+      if (this.query.fromapp === 'factory') {
+        console.log('=== 进来了 ===')
+        this.$wechat.miniProgram.reLaunch({url: ENV.MiniRouter.chat})
+      } else {
+        let params = this.$util.handleAppParams(this.query, {uid: this.deliverinfo.retailer.uid, fromModule: 'order'})
+        this.$router.push({path: '/chat', query: params})
+      }
     }
   },
   activated () {

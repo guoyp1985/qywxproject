@@ -500,9 +500,8 @@ export default {
               } else {
                 this.afterSave(data)
               }
-            } else {
-              self.submiting = false
             }
+            self.submiting = false
           }
         })
       })

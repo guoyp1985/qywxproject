@@ -336,7 +336,9 @@ export default {
             if (item.backflag === 120) {
               arr1.push({id: 9, name: '查看售后进度'})
             }
-            arr1.push({id: 7, name: '评价'})
+            if (item.comment === 0) {
+              arr1.push({id: 7, name: '评价'})
+            }
             item.buttons = arr1
             break
         }
@@ -471,7 +473,11 @@ export default {
       })
     },
     viewShipping (order) {
-      this.$router.push({path: `/deliverinfo`, query: {id: order.id}})
+      if (this.query.fromapp !== 'factory') {
+        this.$router.push({path: `/deliverinfo`, query: {id: order.id}})
+      } else if (this.query.fromapp === 'factory') {
+        this.$router.push({path: `/deliverinfo`, query: {id: order.id, fromapp: 'factory'}})
+      }
     },
     closeService () {
       this.showServiceModal = false

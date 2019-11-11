@@ -15,9 +15,10 @@
             <div class="seller-cell flex_left">
               <div class="font14 clamp1">卖家: {{retailerInfo.title}}</div>
             </div>
-            <div class="flex_right" @click="toChat" style="width:80px;padding-right:10px;box-sizing:border-box;">
+            <div class="flex_right" @click="toChat(orderData)" style="width:80px;padding-right:10px;box-sizing:border-box;">
               <span class="al al-pinglun3 color-order-detail font14"></span>
               <span class="font13 ml5">客服</span>
+              <div class="orderinfo_txt" style="opacity:0;height:0px;width:0px;">订单编号：{{orderData.orderno}}</br>商品：{{orders[0].name}}</br>数量：{{orders[0].quantity}}</br>卖家：{{retailerInfo.title}}</br>状态：{{orderData.flagstr}}</div>
             </div>
             <!-- <div class="contact-cell">
               <div class="ol-contact flex_center">
@@ -47,7 +48,8 @@
           <div v-if="orderData.flag != 1 && orderData.flag != 2" class="t-table mb10">
             <div class="t-cell v_middle">{{ orderData.delivercompanyname }} {{ orderData.delivercode }}</div>
             <div class="t-cell v_middle align_right w60">
-              <router-link :to="{path: '/deliverinfo', query: {id: orderData.id}}" class="font12 color-orange5">查看物流</router-link>
+              <router-link v-if="query.fromapp != 'factory'" :to="{path: '/deliverinfo', query: {id: orderData.id}}" class="font12 color-orange5">查看物流</router-link>
+              <router-link v-if="query.fromapp == 'factory'" :to="{path: '/deliverinfo', query: {id: orderData.id, fromapp: 'factory'}}" class="font12 color-orange5">查看物流</router-link>
             </div>
           </div>
           <div class="t-table">
@@ -121,7 +123,7 @@
           <x-button v-if="orderData.backflag == 120" mini @click.native="afterSale" class="font12">回复</x-button>
           <x-button v-else-if="orderData.canservice && query.fromapp != 'wl'" mini @click.native="afterSale" class="font12">申请售后</x-button>
           <x-button v-if="orderData.flag == 3" mini @click.native="confirm" class="font12">确认收货</x-button>
-          <x-button v-if="orderData.flag == 4" mini @click.native="evaluate" class="font12">评价</x-button>
+          <x-button v-if="orderData.flag == 4 && orderData.comment == 0" mini @click.native="evaluate" class="font12">评价</x-button>
         </div>
         <div class="mt12" v-if="recordData.length">
           <div class="line-area">
@@ -489,6 +491,27 @@ export default {
       }
     },
     toChat () {
+      const self = this
+      let eleobj = jQuery('#order-detail .orderinfo_txt')[0]
+      let range = null
+      let save = function (e) {
+        e.clipboardData.setData('text/plain', eleobj.innerHTML)
+        e.preventDefault()
+      }
+      if (self.$util.isIOS()) { // ios设备
+        console.log('in iOS')
+        window.getSelection().removeAllRanges()
+        range = document.createRange()
+        range.selectNode(eleobj)
+        window.getSelection().addRange(range)
+        document.execCommand('copy')
+        window.getSelection().removeAllRanges()
+      } else { // 安卓设备
+        console.log('in android')
+        document.addEventListener('copy', save)
+        document.execCommand('copy')
+        document.removeEventListener('copy', save)
+      }
       if (this.query.fromapp === 'factory') {
         this.$wechat.miniProgram.reLaunch({url: ENV.MiniRouter.chat})
       } else {
@@ -588,34 +611,34 @@ export default {
         })
       })
     },
-    copyTxt () {
-      const self = this
-      let eleobj = jQuery('#order-detail .deliver_txt')[0]
-      let range = null
-      let save = function (e) {
-        e.clipboardData.setData('text/plain', eleobj.innerHTML)
-        e.preventDefault()
-      }
-      if (self.$util.isIOS()) { // ios设备
-        window.getSelection().removeAllRanges()
-        range = document.createRange()
-        range.selectNode(eleobj)
-        window.getSelection().addRange(range)
-        document.execCommand('copy')
-        window.getSelection().removeAllRanges()
-      } else { // 安卓设备
-        console.log('in android')
-        document.addEventListener('copy', save)
-        document.execCommand('copy')
-        document.removeEventListener('copy', save)
-      }
-      setTimeout(function () {
-        self.$vux.toast.show({
-          text: '复制成功',
-          time: 1500
-        })
-      }, 200)
-    },
+    // copyTxt () {
+    //   const self = this
+    //   let eleobj = jQuery('#order-detail .deliver_txt')[0]
+    //   let range = null
+    //   let save = function (e) {
+    //     e.clipboardData.setData('text/plain', eleobj.innerHTML)
+    //     e.preventDefault()
+    //   }
+    //   if (self.$util.isIOS()) { // ios设备
+    //     window.getSelection().removeAllRanges()
+    //     range = document.createRange()
+    //     range.selectNode(eleobj)
+    //     window.getSelection().addRange(range)
+    //     document.execCommand('copy')
+    //     window.getSelection().removeAllRanges()
+    //   } else { // 安卓设备
+    //     console.log('in android')
+    //     document.addEventListener('copy', save)
+    //     document.execCommand('copy')
+    //     document.removeEventListener('copy', save)
+    //   }
+    //   setTimeout(function () {
+    //     self.$vux.toast.show({
+    //       text: '复制成功',
+    //       time: 1500
+    //     })
+    //   }, 200)
+    // },
     getRecordData () {
       this.$http.post(`${ENV.BokaApi}/api/order/getServiceInfo`, {
         type: 'service', id: this.query.id, pagestart: this.recordPageStart, limit: 10
