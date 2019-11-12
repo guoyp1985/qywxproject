@@ -572,12 +572,26 @@ export default {
         moveindex = index + 1
       }
       if (type === 'photo') {
-        curphoto = this.photoarr[index]
-        movephoto = this.photoarr[moveindex]
-        this.photoarr[index] = movephoto
-        this.photoarr[moveindex] = curphoto
+        curphoto = this.photoarr[index]         // 当前点击移动的图片
+        movephoto = this.photoarr[moveindex]    // 当前点击对象的左边或者右边的图片
+        this.photoarr[index] = movephoto        // 把当前点击的图片用来存放它左边或者右边的图片
+        this.photoarr[moveindex] = curphoto     // 把左边或者右边的图片用来存放当前图片
         let lastphoto = this.photoarr.splice(this.photoarr.length - 1, 1)
+        console.log('=== lastphoto ===')
+        console.log(lastphoto)
         this.photoarr.push(lastphoto)
+        console.log('=== photoarr ===')
+        console.log(this.photoarr)
+        let photo = ''
+        for (var i = 0; i < this.photoarr.length; i++) {
+          if (i !== this.photoarr.length - 1) {
+            photo += this.photoarr[i] + ','
+          } else {
+            photo += this.photoarr[i]
+          }
+        }
+        console.log(photo)
+        this.submitdata.photo = photo
       } else {
         curphoto = this.photoarr1[index]
         movephoto = this.photoarr1[moveindex]
