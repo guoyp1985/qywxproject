@@ -618,7 +618,6 @@ export default {
         params.addvalue = newval
       }
       if (!isContinue) return false
-      this.submiting = true
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/FP/addStorage`, params).then(res => {
         let data = res.data
@@ -893,5 +892,5 @@ export default {
     }
   }
 }
-.vux-popup-dialog{position: absolute;}
+
 </style>
