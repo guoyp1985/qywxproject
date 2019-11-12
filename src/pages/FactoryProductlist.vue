@@ -622,7 +622,6 @@ export default {
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/FP/addStorage`, params).then(res => {
         let data = res.data
-        this.submiting = false
         this.$vux.loading.hide()
         if (data.flag) {
           let newData = this.productdata[this.clickindex]
@@ -650,6 +649,7 @@ export default {
             }
           }
         })
+        this.submiting = false
       })
     },
     closeBank () {
