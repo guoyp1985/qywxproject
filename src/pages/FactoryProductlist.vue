@@ -893,5 +893,5 @@ export default {
     }
   }
 }
-
+.vux-popup-dialog{position: absolute;}
 </style>
