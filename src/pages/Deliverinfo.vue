@@ -1,7 +1,29 @@
 <template>
   <div id="deliverinfo-page" class="containerarea deliverinfo nobottom font14">
     <template v-if="showSos">
-      <Sos :title="sosTitle"></Sos>
+      <div class="h_100 error404">
+        <div class="content-block">
+          <div class="meeting_title1">
+            <div class="content_tile mg">
+              <span class="">{{ sosTitle }}</span>
+              <span>暂无物流信息</span>
+              <div @click="toChat(deliverinfo)" class="bg-theme color-white" style="width:100px;border-radius:30px;box-sizing:border-box;position:relative;margin: 20px auto;">
+                <span class="font13 ml5">联系客服</span>
+                <div class="orderinfo_txt" style="opacity:0;height:0px;width:0px;">
+                  <template v-if="isIOS">订单编号：{{deliverinfo.orderno}}<br/>商品：{{deliverinfo.orderlist[0].name}}<br/>数量：{{deliverinfo.orderlist[0].quantity}}<br/>卖家：{{deliverinfo.retailer.title}}<br/>状态：{{deliverinfo.flagstr}}</template>
+                  <template v-else>
+  订单编号：{{deliverinfo.orderno}}
+  商品：{{deliverinfo.orderlist[0].name}}
+  数量：{{deliverinfo.orderlist[0].quantity}}
+  卖家：{{deliverinfo.retailer.title}}
+  状态：{{deliverinfo.flagstr}}
+                  </template>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </template>
     <template v-if="showContainer">
       <div class="pagetop b_bottom_after pl15 pr15 flex_left color-white">
@@ -12,7 +34,16 @@
         <div @click="toChat(deliverinfo)" style="width:80px;padding-right:10px;box-sizing:border-box;position: absolute;right: 10px;">
           <span class="al al-pinglun3 color-white font14"></span>
           <span class="font13 ml5">客服</span>
-          <div class="orderinfo_txt" style="opacity:0;height:0px;width:0px;">订单编号：{{deliverinfo.orderno}}</br>商品：{{deliverinfo.orderlist[0].name}}</br>数量：{{deliverinfo.orderlist[0].quantity}}</br>卖家：{{deliverinfo.retailer.title}}</br>状态：{{deliverinfo.flagstr}}</div>
+          <div class="orderinfo_txt" style="opacity:0;height:0px;width:0px;">
+            <template v-if="isIOS">订单编号：{{deliverinfo.orderno}}<br/>商品：{{deliverinfo.orderlist[0].name}}<br/>数量：{{deliverinfo.orderlist[0].quantity}}<br/>卖家：{{deliverinfo.retailer.title}}<br/>状态：{{deliverinfo.flagstr}}</template>
+            <template v-else>
+订单编号：{{deliverinfo.orderno}}
+商品：{{deliverinfo.orderlist[0].name}}
+数量：{{deliverinfo.orderlist[0].quantity}}
+卖家：{{deliverinfo.retailer.title}}
+状态：{{deliverinfo.flagstr}}
+            </template>
+          </div>
         </div>
       </div>
       <div class="pagemiddle">
@@ -86,7 +117,8 @@ export default {
       query: {},
       deliverinfo: {},
       data: [],
-      showData: false
+      showData: false,
+      isIOS: false
     }
   },
   methods: {
@@ -135,6 +167,11 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
+      if (this.$util.isIOS()) {
+        this.isIOS = true
+      } else {
+        this.isIOS = false
+      }
       this.$vux.loading.show()
       this.initData()
       this.getData()
@@ -148,6 +185,7 @@ export default {
         e.preventDefault()
       }
       if (self.$util.isIOS()) { // ios设备
+        self.isIOS = true
         console.log('in iOS')
         window.getSelection().removeAllRanges()
         range = document.createRange()
@@ -156,6 +194,7 @@ export default {
         document.execCommand('copy')
         window.getSelection().removeAllRanges()
       } else { // 安卓设备
+        self.isIOS = false
         console.log('in android')
         document.addEventListener('copy', save)
         document.execCommand('copy')
@@ -189,4 +228,71 @@ export default {
 .deliverinfo .x-timeline .ddate {left: -39px;width: 60px;}
 .deliverinfo .x-timeline .dtime {left: -39px;width: 60px;margin-top:5px;}
 .deliverinfo .x-timeline .vux-timeline-item:nth-child(1) .vux-timeline-item-color {background-color: orange;}
+.deliverinfo{
+  .error404 .content-block {
+    margin:0px;
+    padding:0;
+    max-width:1920px;
+    height:100%;
+    margin:0 auto;
+  }
+  .error404 .list-block{
+    margin:12px 0 0;
+  }
+  .error404 .meeting_title1{
+    background:none;
+    height:100%;
+    color:#333;
+    font-size:18px;
+    line-height:40px;
+    text-align:center;
+  }
+  .error404 .content_tile{
+    width:98%;
+    height:80%;
+    margin:0 auto;
+    padding-top:15%;
+    box-sizing:border-box;
+    background:url(../assets/images/404_icon.png) no-repeat center 90%;
+    background-size:40%;
+    box-shadow:0px 10px 20px rgba(0,0,0,0.05);
+    border-radius:7%;
+  }
+  .error404 .back_year{
+    height:20%;
+    position:relative;
+  }
+  .error404 .back_year .back_btn{
+    border:1px solid #04be02;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
+    margin:auto auto;
+    width:30%;
+    border-radius:10px;
+    color:#888;
+    letter-spacing:2px;
+    padding:0 10px;
+    font-size:14px;
+    text-align:center;
+    position:absolute;
+  }
+  .btncopyurl{
+    padding:0 10px;
+    border:#ccc 1px solid;
+    border-radius:5px;
+    display:inline-block;
+  }
+  @media only screen and (min-width:751px){
+    .error404 .content_tile{
+      background-size:20%;
+    }
+  }
+  @media only screen and (min-width:1200px){
+    .error404 .content_tile{
+      background-size:15%;
+    }
+  }
+}
 </style>
