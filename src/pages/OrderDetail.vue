@@ -19,7 +19,16 @@
               <span class="bg-theme color-white font12" style="padding:5px 10px;border-radius:30px;">联系客服</span>
               <!-- <span class="al al-pinglun3 color-order-detail font14"></span>
               <span class="font13 ml5">客服</span> -->
-              <div class="orderinfo_txt" style="opacity:0;height:0px;width:0px;">订单编号：{{orderData.orderno}}</br>商品：{{orders[0].name}}</br>数量：{{orders[0].quantity}}</br>卖家：{{retailerInfo.title}}</br>状态：{{orderData.flagstr}}</div>
+              <div class="orderinfo_txt" style="opacity:0;height:0px;width:0px;">
+                <template v-if="isIOS">订单编号：{{orderData.orderno}}<br/>商品：{{orders[0].name}}<br/>数量：{{orders[0].quantity}}<br/>卖家：{{retailerInfo.title}}<br/>状态：{{orderData.flagstr}}</template>
+                <template v-else>
+订单编号：{{orderData.orderno}}
+商品：{{orders[0].name}}
+数量：{{orders[0].quantity}}
+卖家：{{retailerInfo.title}}
+状态：{{orderData.flagstr}}
+                </template>
+              </div>
             </div>
             <!-- <div class="contact-cell">
               <div class="ol-contact flex_center">
@@ -323,7 +332,8 @@ export default {
       recordData: [],
       recordPageStart: 0,
       limit: 10,
-      screenHeight: document.body.clientHeight
+      screenHeight: document.body.clientHeight,
+      isIOS: false
     }
   },
   computed: {
@@ -500,6 +510,7 @@ export default {
         e.preventDefault()
       }
       if (self.$util.isIOS()) { // ios设备
+        this.isIOS = true
         console.log('in iOS')
         window.getSelection().removeAllRanges()
         range = document.createRange()
@@ -509,6 +520,7 @@ export default {
         window.getSelection().removeAllRanges()
       } else { // 安卓设备
         console.log('in android')
+        this.isIOS = false
         document.addEventListener('copy', save)
         document.execCommand('copy')
         document.removeEventListener('copy', save)
@@ -700,6 +712,11 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
+      if (this.$util.isIOS()) {
+        this.isIOS = true
+      } else {
+        this.isIOS = false
+      }
       if (this.id !== this.$route.query.id) {
         this.recordData = []
         this.recordPageStart = 0
