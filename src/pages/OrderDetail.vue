@@ -20,13 +20,16 @@
               <!-- <span class="al al-pinglun3 color-order-detail font14"></span>
               <span class="font13 ml5">客服</span> -->
               <div class="orderinfo_txt" style="opacity:0;height:0px;width:0px;">
-                <template v-if="isIOS">订单编号：{{orderData.orderno}}<br/>商品：{{orders[0].name}}<br/>数量：{{orders[0].quantity}}<br/>卖家：{{retailerInfo.title}}<br/>状态：{{orderData.flagstr}}</template>
+                <template v-if="isIOS">订单编号：{{orderData.orderno}}<br/>商品：{{orders[0].name}}<br/>数量：{{orders[0].quantity}}<br/>卖家：{{retailerInfo.title}}<br/>合伙人：{{retailerInfo.title}}<br/>经理：{{orderData.super}}<br/>状态：{{orderData.flagstr}}<br/>下单时间：{{ orderData.dateline | dateformat }}</template>
                 <template v-else>
 订单编号：{{orderData.orderno}}
 商品：{{orders[0].name}}
 数量：{{orders[0].quantity}}
 卖家：{{retailerInfo.title}}
+所属代理：{{retailerInfo.title}}
+经理：{{orderData.super}}
 状态：{{orderData.flagstr}}
+下单时间：{{ orderData.dateline | dateformat}}
                 </template>
               </div>
             </div>

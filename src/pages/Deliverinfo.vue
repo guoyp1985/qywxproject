@@ -10,13 +10,16 @@
               <div @click="toChat(deliverinfo)" class="bg-theme color-white" style="width:100px;border-radius:30px;box-sizing:border-box;position:relative;margin: 20px auto;">
                 <span class="font13 ml5">联系客服</span>
                 <div class="orderinfo_txt" style="opacity:0;height:0px;width:0px;">
-                  <template v-if="isIOS">订单编号：{{deliverinfo.orderno}}<br/>商品：{{deliverinfo.orderlist[0].name}}<br/>数量：{{deliverinfo.orderlist[0].quantity}}<br/>卖家：{{deliverinfo.retailer.title}}<br/>状态：{{deliverinfo.flagstr}}</template>
+                  <template v-if="isIOS">订单编号：{{deliverinfo.orderno}}<br/>商品：{{deliverinfo.orderlist[0].name}}<br/>数量：{{deliverinfo.orderlist[0].quantity}}<br/>卖家：{{deliverinfo.retailer.title}}<br/>合伙人：{{deliverinfo.retailer.title}}<br/>经理：{{deliverinfo.super}}<br/>状态：{{deliverinfo.flagstr}}<br/>下单时间：{{deliverinfo.dateline | dateformat2}}</template>
                   <template v-else>
   订单编号：{{deliverinfo.orderno}}
   商品：{{deliverinfo.orderlist[0].name}}
   数量：{{deliverinfo.orderlist[0].quantity}}
   卖家：{{deliverinfo.retailer.title}}
+  合伙人：{{deliverinfo.retailer.title}}
+  经理：{{deliverinfo.super}}
   状态：{{deliverinfo.flagstr}}
+  下单时间：{{deliverinfo.dateline | dateformat2}}
                   </template>
                 </div>
               </div>
@@ -35,13 +38,16 @@
           <span class="al al-pinglun3 color-white font14"></span>
           <span class="font13 ml5">客服</span>
           <div class="orderinfo_txt" style="opacity:0;height:0px;width:0px;">
-            <template v-if="isIOS">订单编号：{{deliverinfo.orderno}}<br/>商品：{{deliverinfo.orderlist[0].name}}<br/>数量：{{deliverinfo.orderlist[0].quantity}}<br/>卖家：{{deliverinfo.retailer.title}}<br/>状态：{{deliverinfo.flagstr}}</template>
+            <template v-if="isIOS">订单编号：{{deliverinfo.orderno}}<br/>商品：{{deliverinfo.orderlist[0].name}}<br/>数量：{{deliverinfo.orderlist[0].quantity}}<br/>卖家：{{deliverinfo.retailer.title}}<br/>合伙人：{{deliverinfo.retailer.title}}<br/>经理：{{deliverinfo.super}}<br/>状态：{{deliverinfo.flagstr}}<br/>下单时间：{{deliverinfo.dateline | dateformat2}}</template>
             <template v-else>
 订单编号：{{deliverinfo.orderno}}
 商品：{{deliverinfo.orderlist[0].name}}
 数量：{{deliverinfo.orderlist[0].quantity}}
 卖家：{{deliverinfo.retailer.title}}
+合伙人：{{deliverinfo.retailer.title}}
+经理：{{deliverinfo.super}}
 状态：{{deliverinfo.flagstr}}
+下单时间：{{deliverinfo.dateline | dateformat2}}
             </template>
           </div>
         </div>
@@ -107,6 +113,9 @@ export default {
     },
     dateformat1 (value) {
       return new Time(value * 1000).dateFormat('hh:mm')
+    },
+    dateformat2 (value) {
+      return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
     }
   },
   data () {
