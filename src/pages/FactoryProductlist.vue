@@ -646,7 +646,7 @@ export default {
               this.clickdata = {}
               this.clickindex = 0
               this.showStoragePopup = false
-              setTimeout (() => {
+              setTimeout(() => {
                 this.submiting = false
               }, 1000)
             }
