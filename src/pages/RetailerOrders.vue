@@ -866,7 +866,16 @@ export default {
         self.$http.post(`${ENV.BokaApi}/api/order/delivercompany`).then(function (res) {
           let data = res.data
           self.delivercompany = data.data ? data.data : data
+          if (!self.deliverdata.delivercompany || self.deliverdata.delivercompany === '-1') {
+            self.deliverdata.delivercompanyname = self.delivercompany[0].name
+            self.deliverdata.delivercompany = self.delivercompany[0].id
+          }
         })
+      } else {
+        if (!self.deliverdata.delivercompany || self.deliverdata.delivercompany === '-1') {
+          self.deliverdata.delivercompanyname = self.delivercompany[0].name
+          self.deliverdata.delivercompany = self.delivercompany[0].id
+        }
       }
       this.deliverdata = { delivercompany: '-1', delivercode: '' }
       this.showpopup = true
