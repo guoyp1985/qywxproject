@@ -40,7 +40,7 @@
           <span class="al al-pinglun3 color-white font14"></span>
           <span class="font13 ml5">客服</span>
           <div class="orderinfo_txt" style="opacity:0;height:0px;width:0px;">
-            <template v-if="isIOS">订单编号：{{deliverinfo.orderno}}<br/>商品：{{deliverinfo.orderlist[0].name}}<br/>数量：{{deliverinfo.orderlist[0].quantity}}收货人： {{deliverinfo.linkman}}<br/>电话: {{deliverinfo.telephone}}<br/>地址: {{deliverinfo.address}}<br/>合伙人：{{deliverinfo.retailer.title}}<br/>经理：{{deliverinfo.super | stringempty}}<br/>状态：{{deliverinfo.flagstr}}<br/>下单时间：{{deliverinfo.dateline | dateformat2}}</template>
+            <template v-if="isIOS">订单编号：{{deliverinfo.orderno}}<br/>商品：{{deliverinfo.orderlist[0].name}}<br/>数量：{{deliverinfo.orderlist[0].quantity}}<br/>收货人： {{deliverinfo.linkman}}<br/>电话: {{deliverinfo.telephone}}<br/>地址: {{deliverinfo.address}}<br/>合伙人：{{deliverinfo.retailer.title}}<br/>经理：{{deliverinfo.super | stringempty}}<br/>状态：{{deliverinfo.flagstr}}<br/>下单时间：{{deliverinfo.dateline | dateformat2}}</template>
             <template v-else>
 订单编号：{{deliverinfo.orderno}}
 商品：{{deliverinfo.orderlist[0].name}}
