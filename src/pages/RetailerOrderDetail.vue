@@ -818,6 +818,7 @@ export default {
         self.$vux.toast.text('请输入物流单号', 'middle')
         return false
       }
+      self.deliverdata.delivercode = self.$util.trim(self.deliverdata.delivercode)
       self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/order/deliver`, {...self.deliverdata, id: this.query.id}).then((res) => {
         let data = res.data

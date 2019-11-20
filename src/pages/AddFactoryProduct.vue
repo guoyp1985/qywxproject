@@ -479,7 +479,8 @@ export default {
       optionsData: [],
       selectedOptionIndex: 0,
       optionsPhoto: [],
-      clickPhotoIndex: -1
+      clickPhotoIndex: -1,
+      disOptionsArea: false
     }
   },
   watch: {
@@ -549,6 +550,7 @@ export default {
       this.selectedOptionIndex = 0
       this.optionsPhoto = []
       this.videoarr = []
+      this.disOptionsArea = false
     },
     movePhoto (type, index, move) {
       let moveindex
@@ -1165,6 +1167,11 @@ export default {
             console.log(this.optionsData)
           } else {
             self.submitdata.storage = retdata.storage
+            if (retdata.truesaled !== 0 && retdata.truesaled !== '0') {
+              self.disOptionsArea = false
+            } else {
+              self.disOptionsArea = true
+            }
           }
           self.data = retdata
           self.activityInfo = self.data.activitinfo
