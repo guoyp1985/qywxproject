@@ -117,7 +117,7 @@
     </div>
     <div class="s-bottom border-box flex_center color-white list-shadow02">
       <!-- <div class="flex_center flex_cell h_100" style="background-color:#f6a843;"  @click="saveevent('personal')">专属优惠券</div> -->
-      <div class="flex_cell flex_center h_100" style="background-color:#eb6b5e;"  @click="saveevent()">活动优惠券</div>
+      <div class="flex_cell flex_center h_100" style="background-color:#eb6b5e;"  @click="saveevent()">创建优惠券</div>
     </div>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showpopup1">
@@ -329,14 +329,8 @@ export default {
       this.clickindex = index
     },
     saveevent (type) {
-      if (type === 'personal') {
-        // 跳转专属优惠券创建页面
-        let rparams = this.$util.handleAppParams(this.query, {fid: this.Fid})
-        this.$router.push({path: '/addCard', query: rparams})
-      } else {
-        let rparams = this.$util.handleAppParams(this.query, {fid: this.Fid})
-        this.$router.push({path: '/addFactoryCard', query: rparams})
-      }
+      let rparams = this.$util.handleAppParams(this.query, {fid: this.Fid})
+      this.$router.push({path: '/addFactoryCard', query: rparams})
     }
   },
   created () {
