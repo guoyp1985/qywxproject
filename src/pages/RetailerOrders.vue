@@ -889,6 +889,7 @@ export default {
       }
       self.$vux.loading.show()
       self.deliverdata.id = self.deliveritem.id
+      self.deliverdata.delivercode = self.$util.trim(self.deliverdata.delivercode)
       self.$http.post(`${ENV.BokaApi}/api/order/deliver`, self.deliverdata).then(res => {
         let data = res.data
         self.$vux.loading.hide()
