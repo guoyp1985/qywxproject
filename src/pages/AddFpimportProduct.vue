@@ -276,9 +276,17 @@
                 </div>
               </div>
             </div>
-            <div class="flex_center pt10 pb10">
-              <div class="color-theme btn-add flex_center" @click="addOption">添加一项</div>
-            </div>
+            <template v-if="query.id">
+              <div class="flex_center pt10 pb10" v-if="disOptionsArea">
+                <div class="color-theme btn-add flex_center" @click="addOption">添加一项</div>
+              </div>
+              <div class="flex_center pt10 pb10 color-theme" v-else>当前商品已经产生交易，无法添加规格</div>
+            </template>
+            <template v-else>
+              <div class="flex_center pt10 pb10">
+                <div class="color-theme btn-add flex_center" @click="addOption">添加一项</div>
+              </div>
+            </template>
           </div>
 
           <div class="form-item required bg-white">
@@ -490,7 +498,8 @@ export default {
       selectedOptionIndex: 0,
       optionsPhoto: [],
       clickPhotoIndex: -1,
-      productData: {}
+      productData: {},
+      disOptionsArea: false
     }
   },
   watch: {
@@ -561,6 +570,7 @@ export default {
       this.selectedOptionIndex = 0
       this.optionsPhoto = []
       this.videoarr = []
+      this.disOptionsArea = false
     },
     movePhoto (type, index, move) {
       let moveindex
@@ -1183,6 +1193,11 @@ export default {
             console.log(this.optionsData)
           } else {
             self.submitdata.storage = retdata.storage
+            if (retdata.truesaled !== 0 && retdata.truesaled !== '0') {
+              self.disOptionsArea = false
+            } else {
+              self.disOptionsArea = true
+            }
           }
           self.data = retdata
           self.productData = retdata
