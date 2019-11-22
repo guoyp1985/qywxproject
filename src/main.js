@@ -403,4 +403,4 @@ if (!Token.get() || Token.isExpired()) {
 } else {
   render()
 }
-console.log(AlertPlugin.show)
+console.log(Vue.plugin)
