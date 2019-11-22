@@ -308,6 +308,7 @@ const access = success => {
         if (!res) return
         const rData = res.data
         for (let i = 0; i < bugList.length; i++) {
+          console.log(bugList[i])
           if (bugList[i].uid === rData.uid) {
             alert('已获取用户信息')
           }
