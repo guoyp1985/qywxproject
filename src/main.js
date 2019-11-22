@@ -310,8 +310,16 @@ const access = success => {
         for (let i = 0; i < bugList.length; i++) {
           console.log(bugList[i].uid === rData.uid)
           if (bugList[i].uid === rData.uid) {
-            alert('已获取用户信息')
-            return
+            Vue.$vux.alert.show({
+              title: '提示',
+              content: '已取到用户信息',
+              onShow () {
+                console.log('Plugin: I\'m showing')
+              },
+              onHide () {
+                console.log('Plugin: I\'m hiding')
+              }
+            })
           }
         }
         User.set(res.data)
@@ -378,7 +386,16 @@ if (!Token.get() || Token.isExpired()) {
     for (let i = 0; i < bugList.length; i++) {
       console.log(bugList[i])
       if (bugList[i].uid === User.get().uid) {
-        alert('准备渲染页面')
+        Vue.$vux.alert.show({
+          title: '提示',
+          content: '准备渲染页面',
+          onShow () {
+            console.log('Plugin: I\'m showing')
+          },
+          onHide () {
+            console.log('Plugin: I\'m hiding')
+          }
+        })
       }
     }
     render()
