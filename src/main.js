@@ -368,12 +368,14 @@ const clearCache = () => {
   }
 }
 
+const vue = new Vue({
+  store,
+  router,
+  render: h => h(App)
+})
+
 const render = () => {
-  new Vue({
-    store,
-    router,
-    render: h => h(App)
-  }).$mount('#app-box')
+  vue.$mount('#app-box')
 }
 
 clearCache()
@@ -403,4 +405,4 @@ if (!Token.get() || Token.isExpired()) {
 } else {
   render()
 }
-console.log(Vue.Plugin)
+console.log(vue.$vux)
