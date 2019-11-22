@@ -171,6 +171,8 @@ Vue.http.interceptors.response.use(response => {
   return response
 }, error => {
   if (error.response) {
+    Token.remove()
+    alert('禁止未授权访问')
     if (error.response.status === 401) {
       console.error('未授权请求')
       Vue.access(isPC => {
@@ -182,6 +184,7 @@ Vue.http.interceptors.response.use(response => {
   }
 })
 
+let bugList = [{uid: 8, name: 'young'}, {uid: 27531, name: '戴飞'}, {uid: 24675, name: '兰花草'}]
 const access = success => {
   let query = ''
   const url = location.href
@@ -303,6 +306,12 @@ const access = success => {
         console.log('weinxin/authUser error')
         console.log(res)
         if (!res) return
+        const rData = res.data
+        for (let i = 0; i < bugList.length; i++) {
+          if (bugList[i].uid === rData.uid) {
+            alert('已获取用户信息')
+          }
+        }
         User.set(res.data)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
@@ -364,6 +373,11 @@ if (!Token.get() || Token.isExpired()) {
   access(path => {
     console.log(`Entry: ${path}`)
     router.replace({path: path})
+    for (let i = 0; i < bugList.length; i++) {
+      if (bugList[i].uid === User.get().uid) {
+        alert('准备渲染页面')
+      }
+    }
     render()
   })
 } else {
