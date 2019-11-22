@@ -184,7 +184,7 @@ Vue.http.interceptors.response.use(response => {
   }
 })
 
-let bugList = [{uid: 25465, name: '黄一萌'}, {uid: 8, name: 'young'}, {uid: 27531, name: '戴飞'}, {uid: 24675, name: '兰花草'}]
+let bugList = [{uid: 25465, name: '黄一萌'}, {uid: 8, name: 'young'}, {uid: 27531, name: '戴飞'}, {uid: 24675, name: '兰花草'}, {uid: 1694}, {uid: 65231}]
 const access = success => {
   let query = ''
   const url = location.href
