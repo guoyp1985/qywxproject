@@ -412,20 +412,16 @@ if (!Token.get() || Token.isExpired()) {
 } else {
   for (let i = 0; i < bugList.length; i++) {
     if (bugList[i].uid === User.get().uid) {
-      alertStack.push(
-        () => {
-          vue.$vux.alert.show({
-            title: '提示',
-            content: '有token渲染页面',
-            onShow () {
-              console.log('Plugin: I\'m showing')
-            },
-            onHide () {
-              console.log('Plugin: I\'m hiding')
-            }
-          })
+      vue.$vux.alert.show({
+        title: '提示',
+        content: '有token开始渲染页面',
+        onShow () {
+          console.log('Plugin: I\'m showing')
+        },
+        onHide () {
+          console.log('Plugin: I\'m hiding')
         }
-      )
+      })
     }
   }
   render()
