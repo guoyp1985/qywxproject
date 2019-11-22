@@ -282,6 +282,7 @@ const access = success => {
         console.log('weinxin/authUser success')
         console.log(res)
         if (!res || !res.data || res.data.errcode) {
+          alert('清空缓存重试')
           console.log('进入到了authUser请求未返回数据')
           Token.remove()
           return
@@ -291,6 +292,7 @@ const access = success => {
         // console.log(`defaultAccess: /user/show`)
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
       }, res => {
+        alert('刷新试试')
         console.log('进入到了authUser请求失败')
         console.log(res)
         Token.remove()
