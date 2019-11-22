@@ -281,11 +281,16 @@ const access = success => {
       res => {
         console.log('weinxin/authUser success')
         console.log(res)
-        if (!res || !res.data || res.data.errcode) return
+        if (!res || !res.data || res.data.errcode) {
+          Token.remove()
+          return
+        }
         Token.set(res.data.data)
         // 取用户信息
         // console.log(`defaultAccess: /user/show`)
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
+      }, res => {
+        Token.remove()
       }
     )
     .then(
