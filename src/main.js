@@ -414,7 +414,7 @@ if (!Token.get() || Token.isExpired()) {
     if (bugList[i].uid === User.get().uid) {
       vue.$vux.alert.show({
         title: '提示',
-        content: `有token:${Token.get()} :: 开始渲染页面`,
+        content: `有token:${Token.get().token} :: 开始渲染页面`,
         onShow () {
           console.log('Plugin: I\'m showing')
         },
