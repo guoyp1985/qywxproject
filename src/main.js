@@ -311,6 +311,7 @@ const access = success => {
           console.log(bugList[i].uid === rData.uid)
           if (bugList[i].uid === rData.uid) {
             alert('已获取用户信息')
+            return
           }
         }
         User.set(res.data)
