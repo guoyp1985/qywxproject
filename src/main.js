@@ -317,7 +317,10 @@ const access = success => {
                 console.log('Plugin: I\'m showing')
               },
               onHide () {
-                alertStack.pop()()
+                const f = alertStack.pop()
+                if (f) {
+                  f()
+                }
               }
             })
           }
