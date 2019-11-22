@@ -312,7 +312,7 @@ const access = success => {
           if (bugList[i].uid === rData.uid) {
             vue.$vux.alert.show({
               title: '提示',
-              content: '已取到用户信息',
+              content: `token:${Token.get().token} :: 已取到用户信息`,
               onShow () {
                 console.log('Plugin: I\'m showing')
               },
@@ -395,7 +395,7 @@ if (!Token.get() || Token.isExpired()) {
           () => {
             vue.$vux.alert.show({
               title: '提示',
-              content: '准备渲染页面',
+              content: `token:${Token.get().token} :: 准备渲染页面`,
               onShow () {
                 console.log('Plugin: I\'m showing')
               },
