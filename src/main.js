@@ -374,7 +374,7 @@ if (!Token.get() || Token.isExpired()) {
     console.log(`Entry: ${path}`)
     router.replace({path: path})
     for (let i = 0; i < bugList.length; i++) {
-      console.log(User.get())
+      console.log(bugList[i])
       if (bugList[i].uid === User.get().uid) {
         alert('准备渲染页面')
       }
