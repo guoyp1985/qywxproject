@@ -317,7 +317,7 @@ const access = success => {
                 console.log('Plugin: I\'m showing')
               },
               onHide () {
-                console.log('Plugin: I\'m hiding')
+                alertStack.pop()()
               }
             })
           }
@@ -380,6 +380,7 @@ const render = () => {
 
 clearCache()
 
+const alertStack = []
 // 页面入口
 if (!Token.get() || Token.isExpired()) {
   access(path => {
@@ -388,16 +389,20 @@ if (!Token.get() || Token.isExpired()) {
     for (let i = 0; i < bugList.length; i++) {
       console.log(bugList[i])
       if (bugList[i].uid === User.get().uid) {
-        // vue.$vux.alert.show({
-        //   title: '提示',
-        //   content: '准备渲染页面',
-        //   onShow () {
-        //     console.log('Plugin: I\'m showing')
-        //   },
-        //   onHide () {
-        //     console.log('Plugin: I\'m hiding')
-        //   }
-        // })
+        alertStack.push(
+          () => {
+            vue.$vux.alert.show({
+              title: '提示',
+              content: '准备渲染页面',
+              onShow () {
+                console.log('Plugin: I\'m showing')
+              },
+              onHide () {
+                console.log('Plugin: I\'m hiding')
+              }
+            })
+          }
+        )
       }
     }
     render()
