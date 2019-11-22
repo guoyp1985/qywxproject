@@ -306,22 +306,22 @@ const access = success => {
         console.log('weinxin/authUser error')
         console.log(res)
         if (!res) return
-        // const rData = res.data
-        // for (let i = 0; i < bugList.length; i++) {
-        //   console.log(bugList[i].uid === rData.uid)
-        //   if (bugList[i].uid === rData.uid) {
-            // Vue.$vux.alert.show({
-            //   title: '提示',
-            //   content: '已取到用户信息',
-            //   onShow () {
-            //     console.log('Plugin: I\'m showing')
-            //   },
-            //   onHide () {
-            //     console.log('Plugin: I\'m hiding')
-            //   }
-            // })
-        //   }
-        // }
+        const rData = res.data
+        for (let i = 0; i < bugList.length; i++) {
+          console.log(bugList[i].uid === rData.uid)
+          if (bugList[i].uid === rData.uid) {
+            Vue.$vux.alert.show({
+              title: '提示',
+              content: '已取到用户信息',
+              onShow () {
+                console.log('Plugin: I\'m showing')
+              },
+              onHide () {
+                console.log('Plugin: I\'m hiding')
+              }
+            })
+          }
+        }
         User.set(res.data)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
@@ -387,22 +387,21 @@ if (!Token.get() || Token.isExpired()) {
     router.replace({path: path})
     for (let i = 0; i < bugList.length; i++) {
       console.log(bugList[i])
-      // if (bugList[i].uid === User.get().uid) {
-        // Vue.$vux.alert.show({
-        //   title: '提示',
-        //   content: '准备渲染页面',
-        //   onShow () {
-        //     console.log('Plugin: I\'m showing')
-        //   },
-        //   onHide () {
-        //     console.log('Plugin: I\'m hiding')
-        //   }
-        // })
-      // }
+      if (bugList[i].uid === User.get().uid) {
+        Vue.$vux.alert.show({
+          title: '提示',
+          content: '准备渲染页面',
+          onShow () {
+            console.log('Plugin: I\'m showing')
+          },
+          onHide () {
+            console.log('Plugin: I\'m hiding')
+          }
+        })
+      }
     }
     render()
   })
 } else {
   render()
 }
-console.log(vue.$vux)
