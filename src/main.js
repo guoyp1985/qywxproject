@@ -283,11 +283,6 @@ const access = success => {
         console.log(res)
         if (!res || !res.data || res.data.errcode) {
           Token.remove()
-          User.remove()
-          Access.remove()
-          Version.remove()
-          Version.set(ENV.Version)
-          SystemParams.remove()
           return
         }
         Token.set(res.data.data)
@@ -296,11 +291,6 @@ const access = success => {
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
       }, res => {
         Token.remove()
-        User.remove()
-        Access.remove()
-        Version.remove()
-        Version.set(ENV.Version)
-        SystemParams.remove()
       }
     )
     .then(
