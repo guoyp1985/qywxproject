@@ -325,19 +325,23 @@ const access = success => {
         for (let i = 0; i < ENV.DebugList.length; i++) {
           console.log(ENV.DebugList[i].uid === rData.uid)
           if (ENV.DebugList[i].uid === rData.uid) {
-            vue.$vux.alert.show({
-              title: '提示',
-              content: `token:${Token.get().token} :: 已取到用户信息`,
-              onShow () {
-                console.log('Plugin: I\'m showing')
-              },
-              onHide () {
-                const f = alertStack.pop()
-                if (f) {
-                  f()
-                }
+            alertStack.push(
+              () => {
+                vue.$vux.alert.show({
+                  title: '提示',
+                  content: `token:${Token.get().token} :: 已取到用户信息`,
+                  onShow () {
+                    console.log('Plugin: I\'m showing')
+                  },
+                  onHide () {
+                    const f = alertStack.pop()
+                    if (f) {
+                      f()
+                    }
+                  }
+                })
               }
-            })
+            )
           }
         }
         User.set(res.data)
@@ -399,6 +403,23 @@ const render = () => {
 clearCache()
 
 const alertStack = []
+for (let i = 0; i < ENV.DebugList.length; i++) {
+  if (ENV.DebugList[i].uid === User.get().uid) {
+    vue.$vux.alert.show({
+      title: '提示',
+      content: `token:${JSON.stringify(Token.get())} :: 核对Token实例准备渲染页面`,
+      onShow () {
+        console.log('Plugin: I\'m showing')
+      },
+      onHide () {
+        const f = alertStack.pop()
+        if (f) {
+          f()
+        }
+      }
+    })
+  }
+}
 // 页面入口
 if (!Token.get() || Token.isExpired()) {
   access(path => {
@@ -410,7 +431,7 @@ if (!Token.get() || Token.isExpired()) {
           () => {
             vue.$vux.alert.show({
               title: '提示',
-              content: `token:${Token.get().token} :: 准备渲染页面`,
+              content: `token:${Token.get().token} :: 开始渲染页面`,
               onShow () {
                 console.log('Plugin: I\'m showing')
               },
@@ -427,16 +448,20 @@ if (!Token.get() || Token.isExpired()) {
 } else {
   for (let i = 0; i < ENV.DebugList.length; i++) {
     if (ENV.DebugList[i].uid === User.get().uid) {
-      vue.$vux.alert.show({
-        title: '提示',
-        content: `有token:${Token.get().token} :: 开始渲染页面`,
-        onShow () {
-          console.log('Plugin: I\'m showing')
-        },
-        onHide () {
-          console.log('Plugin: I\'m hiding')
+      alertStack.push(
+        () => {
+          vue.$vux.alert.show({
+            title: '提示',
+            content: `有token:${Token.get().token} :: 开始渲染页面`,
+            onShow () {
+              console.log('Plugin: I\'m showing')
+            },
+            onHide () {
+              console.log('Plugin: I\'m hiding')
+            }
+          })
         }
-      })
+      )
     }
   }
   render()
