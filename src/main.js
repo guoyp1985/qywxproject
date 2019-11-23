@@ -325,23 +325,19 @@ const access = success => {
         for (let i = 0; i < ENV.DebugList.length; i++) {
           console.log(ENV.DebugList[i].uid === rData.uid)
           if (ENV.DebugList[i].uid === rData.uid) {
-            alertStack.push(
-              () => {
-                vue.$vux.alert.show({
-                  title: '提示',
-                  content: `token:${Token.get().token} :: 已取到用户信息`,
-                  onShow () {
-                    console.log('Plugin: I\'m showing')
-                  },
-                  onHide () {
-                    const f = alertStack.pop()
-                    if (f) {
-                      f()
-                    }
-                  }
-                })
+            vue.$vux.alert.show({
+              title: '提示',
+              content: `token:${Token.get().token} :: 已取到用户信息`,
+              onShow () {
+                console.log('Plugin: I\'m showing')
+              },
+              onHide () {
+                const f = alertStack.pop()
+                if (f) {
+                  f()
+                }
               }
-            )
+            })
           }
         }
         User.set(res.data)
