@@ -292,7 +292,7 @@ const access = success => {
           Token.remove()
           vue.$vux.alert.show({
             title: '提示',
-            content: `未取到用户信息`,
+            content: `未取到Token`,
             onHide () {
               location.replace(lUrl.href)
             }
@@ -309,7 +309,7 @@ const access = success => {
         Token.remove()
         vue.$vux.alert.show({
           title: '提示',
-          content: `未取到用户信息`,
+          content: `未取到Token`,
           onHide () {
             location.replace(lUrl.href)
           }
@@ -318,8 +318,8 @@ const access = success => {
     )
     .then(
       res => {
-        console.log('weinxin/authUser error')
-        console.log(res)
+        // console.log('weinxin/authUser error')
+        // console.log(res)
         if (!res) return
         const rData = res.data
         for (let i = 0; i < ENV.DebugList.length; i++) {
@@ -345,6 +345,15 @@ const access = success => {
         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
         console.log(`${lUrl.hash.replace(/#/, '')}?${query}`)
         success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
+      }, res => {
+        Token.remove()
+        vue.$vux.alert.show({
+          title: '提示',
+          content: `未取到用户信息`,
+          onHide () {
+            location.replace(lUrl.href)
+          }
+        })
       }
     )
   } else {
