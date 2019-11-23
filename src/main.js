@@ -403,31 +403,40 @@ const render = () => {
 clearCache()
 
 const alertStack = []
-// for (let i = 0; i < ENV.DebugList.length; i++) {
-//   if (ENV.DebugList[i].uid === User.get().uid) {
-vue.$vux.alert.show({
-  title: '提示',
-  content: `token:${JSON.parse(localStorage.getItem('token'))} :: 核对`,
-  onShow () {
-    console.log('Plugin: I\'m showing')
-  },
-  onHide () {
-  }
-})
-//   }
-// }
 // 页面入口
-if (!Token.get() || Token.isExpired()) {
-  access(path => {
-    console.log(`Entry: ${path}`)
-    router.replace({path: path})
+try {
+  if (!Token.get() || Token.isExpired()) {
+    access(path => {
+      console.log(`Entry: ${path}`)
+      router.replace({path: path})
+      for (let i = 0; i < ENV.DebugList.length; i++) {
+        if (ENV.DebugList[i].uid === User.get().uid) {
+          alertStack.push(
+            () => {
+              vue.$vux.alert.show({
+                title: '提示',
+                content: `token:${Token.get().token} :: 开始渲染页面`,
+                onShow () {
+                  console.log('Plugin: I\'m showing')
+                },
+                onHide () {
+                  console.log('Plugin: I\'m hiding')
+                }
+              })
+            }
+          )
+        }
+      }
+      render()
+    })
+  } else {
     for (let i = 0; i < ENV.DebugList.length; i++) {
       if (ENV.DebugList[i].uid === User.get().uid) {
         alertStack.push(
           () => {
             vue.$vux.alert.show({
               title: '提示',
-              content: `token:${Token.get().token} :: 开始渲染页面`,
+              content: `有token:${Token.get().token} :: 开始渲染页面`,
               onShow () {
                 console.log('Plugin: I\'m showing')
               },
@@ -440,25 +449,15 @@ if (!Token.get() || Token.isExpired()) {
       }
     }
     render()
-  })
-} else {
-  for (let i = 0; i < ENV.DebugList.length; i++) {
-    if (ENV.DebugList[i].uid === User.get().uid) {
-      alertStack.push(
-        () => {
-          vue.$vux.alert.show({
-            title: '提示',
-            content: `有token:${Token.get().token} :: 开始渲染页面`,
-            onShow () {
-              console.log('Plugin: I\'m showing')
-            },
-            onHide () {
-              console.log('Plugin: I\'m hiding')
-            }
-          })
-        }
-      )
-    }
   }
-  render()
+} catch (e) {
+  vue.$vux.alert.show({
+    title: '提示',
+    content: `token:${e.toString()} :: 代码异常`,
+    onHide () {
+      Token.remove()
+      User.remove()
+      location.reload()
+    }
+  })
 }
