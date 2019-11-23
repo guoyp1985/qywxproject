@@ -453,7 +453,7 @@ try {
 } catch (e) {
   vue.$vux.alert.show({
     title: '提示',
-    content: `token:${e.toString()} :: 代码异常`,
+    content: `error:${e.toString()} :: 代码异常`,
     onHide () {
       Token.remove()
       User.remove()
