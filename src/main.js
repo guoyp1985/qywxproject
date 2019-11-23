@@ -184,7 +184,6 @@ Vue.http.interceptors.response.use(response => {
   }
 })
 
-let bugList = [{uid: 25465, name: '黄一萌'}, {uid: 8, name: 'young'}, {uid: 27531, name: '戴飞'}, {uid: 24675, name: '兰花草'}, {uid: 1694}, {uid: 65231}]
 const access = success => {
   let query = ''
   const url = location.href
@@ -307,9 +306,9 @@ const access = success => {
         console.log(res)
         if (!res) return
         const rData = res.data
-        for (let i = 0; i < bugList.length; i++) {
-          console.log(bugList[i].uid === rData.uid)
-          if (bugList[i].uid === rData.uid) {
+        for (let i = 0; i < ENV.DebugList.length; i++) {
+          console.log(ENV.DebugList[i].uid === rData.uid)
+          if (ENV.DebugList[i].uid === rData.uid) {
             vue.$vux.alert.show({
               title: '提示',
               content: `token:${Token.get().token} :: 已取到用户信息`,
@@ -389,8 +388,8 @@ if (!Token.get() || Token.isExpired()) {
   access(path => {
     console.log(`Entry: ${path}`)
     router.replace({path: path})
-    for (let i = 0; i < bugList.length; i++) {
-      if (bugList[i].uid === User.get().uid) {
+    for (let i = 0; i < ENV.DebugList.length; i++) {
+      if (ENV.DebugList[i].uid === User.get().uid) {
         alertStack.push(
           () => {
             vue.$vux.alert.show({
@@ -410,8 +409,8 @@ if (!Token.get() || Token.isExpired()) {
     render()
   })
 } else {
-  for (let i = 0; i < bugList.length; i++) {
-    if (bugList[i].uid === User.get().uid) {
+  for (let i = 0; i < ENV.DebugList.length; i++) {
+    if (ENV.DebugList[i].uid === User.get().uid) {
       vue.$vux.alert.show({
         title: '提示',
         content: `有token:${Token.get().token} :: 开始渲染页面`,
