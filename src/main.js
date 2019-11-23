@@ -183,7 +183,6 @@ Vue.http.interceptors.response.use(response => {
           router.push('login')
         }
       })
-      return
     }
   }
 })
@@ -315,7 +314,6 @@ const access = success => {
             location.replace(lUrl.href)
           }
         })
-        return
       }
     )
     .then(
