@@ -441,5 +441,3 @@ if (!Token.get() || Token.isExpired()) {
   }
   render()
 }
-
-console.log(JSON.parse(localStorage.getItem('test')))
