@@ -295,7 +295,7 @@ const access = success => {
             title: '提示',
             content: `未取到用户信息`,
             onHide () {
-              location.replace(lUrl)
+              location.replace(lUrl.href)
             }
           })
           return
@@ -312,7 +312,7 @@ const access = success => {
           title: '提示',
           content: `未取到用户信息`,
           onHide () {
-            location.replace(lUrl)
+            location.replace(lUrl.href)
           }
         })
         return
