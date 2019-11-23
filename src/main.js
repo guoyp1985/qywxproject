@@ -403,23 +403,19 @@ const render = () => {
 clearCache()
 
 const alertStack = []
-for (let i = 0; i < ENV.DebugList.length; i++) {
-  if (ENV.DebugList[i].uid === User.get().uid) {
-    vue.$vux.alert.show({
-      title: '提示',
-      content: `token:${JSON.stringify(Token.get())} :: 核对Token实例准备渲染页面`,
-      onShow () {
-        console.log('Plugin: I\'m showing')
-      },
-      onHide () {
-        const f = alertStack.pop()
-        if (f) {
-          f()
-        }
-      }
-    })
+// for (let i = 0; i < ENV.DebugList.length; i++) {
+//   if (ENV.DebugList[i].uid === User.get().uid) {
+vue.$vux.alert.show({
+  title: '提示',
+  content: `token:${JSON.parse(localStorage.getItem('token'))} :: 核对`,
+  onShow () {
+    console.log('Plugin: I\'m showing')
+  },
+  onHide () {
   }
-}
+})
+//   }
+// }
 // 页面入口
 if (!Token.get() || Token.isExpired()) {
   access(path => {
