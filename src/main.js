@@ -407,16 +407,20 @@ try {
       router.replace({path: path})
       for (let i = 0; i < ENV.DebugList.length; i++) {
         if (ENV.DebugList[i].uid === User.get().uid) {
-          vue.$vux.alert.show({
-            title: '提示',
-            content: `token:${Token.get().token} :: 开始渲染页面`,
-            onShow () {
-              console.log('Plugin: I\'m showing')
-            },
-            onHide () {
-              console.log('Plugin: I\'m hiding')
+          alertStack.push(
+            () => {
+              vue.$vux.alert.show({
+                title: '提示',
+                content: `token:${Token.get().token} :: 开始渲染页面`,
+                onShow () {
+                  console.log('Plugin: I\'m showing')
+                },
+                onHide () {
+                  console.log('Plugin: I\'m hiding')
+                }
+              })
             }
-          })
+          )
         }
       }
       render()
