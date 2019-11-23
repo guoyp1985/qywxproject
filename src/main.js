@@ -172,11 +172,6 @@ Vue.http.interceptors.response.use(response => {
 }, error => {
   if (error.response) {
     Token.remove()
-    vue.$vux.alert.show({
-      title: '提示',
-      content: `无效token:${Token.get().token} :: 禁止未授权访问`
-    })
-    return
     if (error.response.status === 401) {
       console.error('未授权请求')
       Vue.access(isPC => {
@@ -184,7 +179,13 @@ Vue.http.interceptors.response.use(response => {
           router.push('login')
         }
       })
+      return
     }
+    vue.$vux.alert.show({
+      title: '提示',
+      content: `无效token:${Token.get().token} :: 禁止未授权访问`
+    })
+    return
   }
 })
 
