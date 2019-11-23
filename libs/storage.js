@@ -1,15 +1,15 @@
 const Token = {
   set (token) {
     if (!token) return
-    localStorage.setItem('token', JSON.stringify(token))
+    localStorage.setItem('utoken', JSON.stringify(token))
   },
   get () {
-    return JSON.parse(localStorage.getItem('token'))
+    return JSON.parse(localStorage.getItem('utoken'))
   },
   remove () {
     const token = Token.get()
     if (token) {
-      localStorage.removeItem('token')
+      localStorage.removeItem('utoken')
     }
   },
   isExpired () {
