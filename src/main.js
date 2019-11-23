@@ -172,7 +172,11 @@ Vue.http.interceptors.response.use(response => {
 }, error => {
   if (error.response) {
     Token.remove()
-    alert('禁止未授权访问')
+    vue.$vux.alert.show({
+      title: '提示',
+      content: `无效token:${Token.get().token} :: 禁止未授权访问`
+    })
+    return
     if (error.response.status === 401) {
       console.error('未授权请求')
       Vue.access(isPC => {
@@ -287,6 +291,13 @@ const access = success => {
           alert('清空缓存重试')
           console.log('进入到了authUser请求未返回数据')
           Token.remove()
+          vue.$vux.alert.show({
+            title: '提示',
+            content: `未取到用户信息`,
+            onHide () {
+              location.replace(lUrl)
+            }
+          })
           return
         }
         Token.set(res.data.data)
@@ -294,10 +305,17 @@ const access = success => {
         // console.log(`defaultAccess: /user/show`)
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
       }, res => {
-        alert('刷新试试')
         console.log('进入到了authUser请求失败')
         console.log(res)
         Token.remove()
+        vue.$vux.alert.show({
+          title: '提示',
+          content: `未取到用户信息`,
+          onHide () {
+            location.replace(lUrl)
+          }
+        })
+        return
       }
     )
     .then(
