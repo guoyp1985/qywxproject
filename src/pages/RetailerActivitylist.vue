@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea font14 havetoptab bg-page ractivitylist">
-    <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
+    <subscribe v-if="loginUser.subscribe == 0 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
       <div class="pagetop">
@@ -307,7 +307,7 @@ export default {
       this.$vux.loading.show()
       this.loginUser = User.get()
       this.initData()
-      if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
+      if (this.loginUser && (this.loginUser.subscribe !== 0 || this.loginUser.isretailer)) {
         if (!this.loginUser.isretailer) {
           this.$vux.loading.hide()
           self.initContainer()

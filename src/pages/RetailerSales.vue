@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea  bg-page  fong14 rsales">
-    <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
+    <subscribe v-if="loginUser.subscribe == 0 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
       <div class="s-topbanner s-topbanner1">
@@ -484,7 +484,7 @@ export default {
         const data = res.data
         this.loginUser = data
         User.set(data)
-        if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
+        if (this.loginUser && (this.loginUser.subscribe !== 0 || this.loginUser.isretailer)) {
           self.initContainer()
           self.$vux.loading.hide()
           if (!self.loginUser.isretailer) {

@@ -13,6 +13,12 @@
         <input ref="fileInput1" class="hide" type="file" name="files" @change="fileChange('photo')" />
       </form>
       <form class="addForm">
+        <div class="form-item fg bg-white b-top b-bottom" v-if="shareUser && shareUser.uid">
+          <div class="t-table">
+            <div class="t-cell title-cell w80 font14 v_middle">推荐人</div>
+            <div class="t-cell input-cell v_middle flex_right" style="position:relative;">{{ shareUser.linkman }}</div>
+          </div>
+        </div>
         <div class="form-item fg bg-white b-top b-bottom">
           <div class="t-table">
             <div class="t-cell title-cell w80 font14 v_middle">公司名称<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
@@ -96,10 +102,18 @@
             </div>
           </div>
         </div>
-
+        <!-- 合作模式 -->
+        <div class="form-item fg bg-white b-top b-bottom">
+          <div class="t-table">
+            <div class="t-cell title-cell font14 v_middle" style="width:100px;">合作模式<span @click="clickCommission"><i class="al al-wenhao color-red ml5 font24" style="vertical-align:-4px;"></i></span></div>
+            <div class="t-cell v_middle flex_right" style="position:relative;top:6px;">每月分佣模式</div>
+          </div>
+        </div>
         <!-- 分润比例设置 -->
         <div class="form-item bg-white fg b-top">
-          <div class=""><span>分润比例设置</span><span @click="clickTip"><i class="al al-wenhao color-red ml5 font24" style="vertical-align:-4px;"></i></span></div>
+          <div class="">
+            <span>分润比例设置</span><span @click="clickTip"><i class="al al-wenhao color-red ml5 font24" style="vertical-align:-4px;"></i></span>
+          </div>
           <div class="flex_left padding10 b_bottom_after">
             <div class="flex_left title-cell w90">推荐人佣金</div>
             <div class="flex_cell input-cell flex_right" style="position:relative;">
@@ -160,6 +174,18 @@
         </div>
       </div>
     </div>
+    <div v-if="showMonthlyCommission" class="auto-modal flex_center">
+      <div class="modal-inner border-box" style="width:80%;">
+        <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">每月分佣模式</div>
+        <div class="align_left txt padding10">
+          <div>每月分佣合作模式：厂家需根据使用"共销客企业小程序"每月产生的交易额中,拿出5%的费用给予平台。如果本月没有销售额时,则无需支付使用费用</div>
+          <div class="mt10 color-red">注意：共销客企业小程序使用达到一个月后,如未进行缴费时,则平台有权关闭厂家的使用权限!</div>
+        </div>
+        <div class="close-area flex_center" @click="closeCommission">
+          <i class="al al-close"></i>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -209,6 +235,7 @@ export default {
   },
   data () {
     return {
+      query: {},
       flags: null,
       btnSubmit: '提交申请',
       message: '获取验证码',
@@ -225,7 +252,9 @@ export default {
       getCodeIng: false,
       requireddata: { title: '', company: '', licensephoto: '', licensecode: '' },
       isLoadPhoto: false,
-      showTop: false
+      showTop: false,
+      showMonthlyCommission: false,
+      shareUser: {}
     }
   },
   watch: {
@@ -265,6 +294,12 @@ export default {
     },
     closeTip () {
       this.showTip = false
+    },
+    clickCommission () {
+      this.showMonthlyCommission = true
+    },
+    closeCommission () {
+      this.showMonthlyCommission = false
     },
     textareaChange (refname) {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
@@ -388,6 +423,12 @@ export default {
         postData.id = this.factoryInfo.id
       }
       self.$vux.loading.show()
+      if (self.shareUser && self.shareUser.uid) {
+        postData.inviter = self.shareUser.uid
+      }
+      if (self.query.share_fid) {
+        postData.fid = self.query.share_fid
+      }
       self.$http.post(`${ENV.BokaApi}/api/factory/applyFactory`, postData).then(res => {
         let data = res.data
         let error = data.flag === 1 ? '申请成功' : data.error
@@ -515,6 +556,14 @@ export default {
     this.initData()
     this.watchPhoto()
     this.watchTop()
+  },
+  created () {
+    this.query = this.$route.query
+    if (this.query.share_uid) {
+      this.$http.get(`${ENV.BokaApi}/api/getUser/${this.query.share_uid}`).then(res => {
+        this.shareUser = res.data
+      })
+    }
   }
 };
 </script>

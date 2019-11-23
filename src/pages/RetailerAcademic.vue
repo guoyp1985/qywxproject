@@ -6,7 +6,7 @@
 <template>
   <div class="containerarea font14 knowledgeclass notop nobottom bg-page">
     <apply-tip v-if="showApply"></apply-tip>
-    <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
+    <subscribe v-if="loginUser.subscribe == 0 && !loginUser.isretailer"></subscribe>
     <template v-if="showContainer">
       <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
         <template v-if="disData">
@@ -83,6 +83,9 @@ export default {
     getData () {
       const self = this
       const params = { pagestart: pageStart, limit: limit, module: 'academic' }
+      if (this.query.fid) {
+        params.fid = this.query.fid
+      }
       this.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/retailer/recommendNews`, params).then(function (res) {
         const data = res.data
@@ -112,7 +115,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$vux.loading.show()
       this.loginUser = User.get()
-      if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
+      if (this.loginUser && (this.loginUser.subscribe !== 0 || this.loginUser.isretailer)) {
         // if (self.loginUser.isretailer === 2) {
         //   this.$vux.loading.hide()
         //   self.initContainer()

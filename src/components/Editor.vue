@@ -218,7 +218,7 @@ export default {
       radiodata: [],
       searchword: '',
       searchresult: false,
-      limit: 10,
+      limit: 20,
       pagestart1: 0,
       insertProductCallback: Function,
       isDown: false,
@@ -356,12 +356,19 @@ export default {
       })
     },
     getProductData () {
-      let params = {pagestart: self.pagestart1, limit: self.limit, wid: this.loginUser.uid}
+      let ajaxUrl = `${ENV.BokaApi}/api/retailer/getRetailerProducts`
+      let params = {pagestart: self.pagestart1, limit: self.limit}
       let keyword = self.searchword
       if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
         params.keyword = keyword
       }
-      self.$http.get(`${ENV.BokaApi}/api/retailer/getRetailerProducts`, {
+      if (self.module === 'factorynews') {
+        ajaxUrl = `${ENV.BokaApi}/api/factory/getfpimportList`
+        params.fid = this.loginUser.fid
+      } else {
+        params.wid = this.loginUser.uid
+      }
+      self.$http.get(ajaxUrl, {
         params: params
       }).then(function (res) {
         let data = res.data
@@ -415,7 +422,7 @@ export default {
         'cancel'
       ]
       if (self.module === 'factorynews') {
-        toolbars.splice(0, 1)
+        // toolbars.splice(0, 1)
       }
       if (editor) {
         editor.destory()
@@ -689,11 +696,15 @@ export default {
       }
       if (linkurl) {
         let pquery = self.$route.query
-        if (pquery.from === 'miniprogram') {
-          const params = self.$util.query(linkurl)
+        const params = self.$util.query(linkurl)
+        if (pquery.fromapp === 'factory' && self.module === 'factorynews') {
+          self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.factoryAppProduct}?id=${params.id}`})
+        } else if (pquery.from === 'miniprogram') {
           self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}&module=product`})
         } else {
-          self.$router.push({path: linkurl})
+          if (self.module !== 'factorynews') {
+            self.$router.push({path: linkurl})
+          }
         }
       }
     }

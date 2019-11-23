@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea font14 notop nobottom stat-page">
-    <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
+    <subscribe v-if="loginUser.subscribe == 0 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <Sos v-if="showSos" :title="sosTitle"></Sos>
     <template v-if="showContainer">
@@ -16,13 +16,16 @@
         <div v-if="query.from == 'miniprogram'" class="v-top font16 color-white clamp1">{{ data.title }}</div>
         <template v-else>
           <router-link v-if="module == 'activity' && data.type === 'groupbuy'" :to="{path: '/product', query: {id: query.id}}" class="v-top font16 color-white clamp1">{{ data.title }}</router-link>
-          <router-link v-else :to="{path: `/${module}`, query: {id: query.id}}" class="v-top font16 color-white clamp1">{{ data.title }}</router-link>
+          <div v-else class="v-top font16 color-white clamp1">{{ data.title }}</div>
         </template>
         <div v-if="statData && statData.length > 0" class="radiusarea mb10 pb15 bg-white list-shadow01">
           <div class="item" v-for="(item,index) in statData" :key="index">
             <div class="inner">
-              <div class="radius font15 clamp1" v-if="item.key == 'salesmoney'">{{ item.value }}</div>
-              <div class="radius font22 clamp1" v-else>{{ item.value }}</div>
+              <!-- <div class="radius font15 clamp1" v-if="item.key == 'salesmoney'">{{ item.value }}</div>
+              <div class="radius font22 clamp1" v-else>{{ item.value }}</div> -->
+              <div class="radius font22 clamp1" v-if="item.value.length <= 4">{{ item.value }}</div>
+              <div class="radius font15 clamp1" v-else-if="item.value.length > 4">{{ item.value }}</div>
+              <div class="radius font12 clamp1" v-else>{{ item.value }}</div>
               <div class="title color-gray">{{ item.title }}</div>
             </div>
           </div>
@@ -76,7 +79,7 @@
                 </div>
               </template>
             </div>
-            <div v-if="tabitem.type == 'buylist'" class="scroll_list border-box">
+            <div v-else-if="tabitem.type == 'buylist'" class="scroll_list border-box">
               <template>
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
@@ -119,7 +122,7 @@
                 </div>
               </template>
             </div>
-            <div v-if="tabitem.type == 'sharelist'" class="scroll_list border-box">
+            <div v-else-if="tabitem.type == 'sharelist' || tabitem.type == 'factorysharelist'" class="scroll_list border-box">
               <template>
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
@@ -130,7 +133,7 @@
                     <div class="flex_cell pl10 pr20" @click="toMembersView(item)">
                       <div class="clamp1 color-gray2">{{ item.username }}</div>
                       <div class="clamp1 color-gray">传播级别: {{ item.level }}</div>
-                      <div class="clamp1 color-gray">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
+                      <div class="clamp1 color-gray" v-if="item.yingxiangli">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
                     </div>
                     <div class="w60 flex_right">
@@ -162,7 +165,7 @@
                 </div>
               </template>
             </div>
-            <div v-if="tabitem.type == 'asklist'" class="scroll_list border-box">
+            <div v-else-if="tabitem.type == 'asklist'" class="scroll_list border-box">
               <template>
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
@@ -205,7 +208,7 @@
                 </div>
               </template>
             </div>
-            <div v-if="tabitem.type == 'viewlist'" class="scroll_list border-box">
+            <div v-else-if="tabitem.type == 'viewlist' || tabitem.type == 'factoryviewlist'" class="scroll_list border-box">
               <template>
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
@@ -216,7 +219,7 @@
                     <div class="flex_cell pl10 pr20" @click="toMembersView(item)">
                       <div class="clamp1 color-gray2">{{ item.username }}</div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
-                      <div class="clamp1 color-gray">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
+                      <div class="clamp1 color-gray" v-if="item.yingxiangli">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
                       <div class="color-gray">
                         <div class="clamp1 w_100">停留: {{ item.staytime | staytimeFormat }}  阅读: {{ item.number }}次</div>
                       </div>
@@ -250,7 +253,7 @@
                 </div>
               </template>
             </div>
-            <div v-if="tabitem.type == 'second'" class="scroll_list border-box">
+            <div v-else-if="tabitem.type == 'second'" class="scroll_list border-box">
               <template>
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
@@ -293,7 +296,7 @@
                 </div>
               </template>
             </div>
-            <div v-if="tabitem.type == 'crowdlist'" class="scroll_list border-box">
+            <div v-else-if="tabitem.type == 'crowdlist'" class="scroll_list border-box">
               <template>
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
@@ -336,7 +339,7 @@
                 </div>
               </template>
             </div>
-            <div v-if="tabitem.type == 'crowdlist_isdeliver_1'" class="scroll_list border-box">
+            <div v-else-if="tabitem.type == 'crowdlist_isdeliver_1'" class="scroll_list border-box">
               <template>
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
@@ -378,7 +381,7 @@
                 </div>
               </template>
             </div>
-            <div v-if="tabitem.type == 'crowdlist_isdeliver_0'" class="scroll_list border-box">
+            <div v-else-if="tabitem.type == 'crowdlist_isdeliver_0'" class="scroll_list border-box">
               <template>
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
@@ -424,7 +427,7 @@
                 </div>
               </template>
             </div>
-            <div v-if="tabitem.type == 'agentlist'" class="scroll_list border-box">
+            <div v-else-if="tabitem.type == 'agentlist'" class="scroll_list border-box">
               <template>
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
@@ -436,6 +439,9 @@
                       <div class="clamp1 color-gray2">{{ item.linkman }}</div>
                       <div class="clamp1 color-gray" v-if="query.module != 'factoryproduct'">{{ item.dateline | dateformat }}</div>
                       <div class="clamp1 color-gray">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
+                      <div class="color-gray">
+                        <div class="clamp1 w_100">停留: {{ item.staytime | staytimeFormat }}  阅读: {{ item.number }}次</div>
+                      </div>
                     </div>
                     <div class="w60 flex_right">
                       <div class="qbtnInfo bg-red color-white" @click="toChat(item)">联系</div>
@@ -466,7 +472,7 @@
                 </div>
               </template>
             </div>
-            <div v-if="tabitem.type == 'retailerShare'" class="scroll_list border-box">
+            <div v-else-if="tabitem.type == 'retailerShare'" class="scroll_list border-box">
               <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
               <template v-else v-for="(item,index1) in arrData">
                 <router-link v-if="item.module === 'retailer'" to="/centerSales" class="scroll_item db padding10">
@@ -495,7 +501,7 @@
                 </router-link>
               </template>
             </div>
-            <div v-if="tabitem.type == 'productlist'" class="scroll_list border-box">
+            <div v-else-if="tabitem.type == 'productlist'" class="scroll_list border-box">
               <template>
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
@@ -511,7 +517,7 @@
                 </div>
               </template>
             </div>
-            <div v-if="tabitem.type == 'newslist'" class="scroll_list border-box">
+            <div v-else-if="tabitem.type == 'newslist'" class="scroll_list border-box">
               <template>
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
@@ -527,7 +533,7 @@
                 </div>
               </template>
             </div>
-            <div v-if="tabitem.type == 'academiclist'" class="scroll_list border-box">
+            <div v-else-if="tabitem.type == 'academiclist'" class="scroll_list border-box">
               <template>
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
@@ -539,6 +545,54 @@
                       <div class="clamp1 color-gray2">{{ item.title }}</div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
                     </router-link>
+                  </div>
+                </div>
+              </template>
+            </div>
+            <div v-else-if="tabitem.type == 'factorycardlist'" class="scroll_list border-box">
+              <template>
+                <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
+                <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
+                  <div class="flex_left">
+                    <div class="pic">
+                      <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
+                    </div>
+                    <div class="flex_cell pl10 pr20">
+                      <div class="clamp1 color-gray2">{{ item.linkman }}</div>
+                      <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+            </div>
+            <div v-else-if="tabitem.type == 'factoryagentlist'" class="scroll_list border-box">
+              <template>
+                <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
+                <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
+                  <div class="flex_left">
+                    <div class="pic">
+                      <img class="avatarimg2 imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+                    </div>
+                    <div class="flex_cell pl10 pr20">
+                      <div class="clamp1 color-gray2">{{ item.title }}</div>
+                      <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+            </div>
+            <div v-else class="scroll_list border-box">
+              <template>
+                <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
+                <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
+                  <div class="flex_left">
+                    <div class="pic">
+                      <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
+                    </div>
+                    <div class="flex_cell pl10 pr20">
+                      <div class="clamp1 color-gray2">{{ item.linkman }}</div>
+                      <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
+                    </div>
                   </div>
                 </div>
               </template>
@@ -701,6 +755,9 @@ export default {
       if (self.query.wid) {
         params.wid = self.query.wid
       }
+      if (self.module === 'factorynews' || self.module === 'fpimport') {
+        params.from = 'miniprograms'
+      }
       self.$http.get(`${ENV.BokaApi}/api/statDetail/${self.module}`, {
         params: params
       }).then(function (res) {
@@ -738,6 +795,9 @@ export default {
       if (self.query.wid) {
         statParams.wid = self.query.wid
       }
+      if (self.module === 'factorynews' || self.module === 'fpimport') {
+        statParams.from = 'miniprograms'
+      }
       self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, { module: this.module, action: 'stat', id: this.query.id })
       .then(res => self.$http.get(`${ENV.BokaApi}/api/statData/${self.module}`, { params: statParams }))
       .then(res => {
@@ -764,7 +824,11 @@ export default {
       this.$router.push({path: '/membersView', query: params})
     },
     toChat (item) {
-      let params = this.$util.handleAppParams(this.query, {uid: item.uid})
+      let uid = item.uid
+      if (item.gxkuid) {
+        uid = item.gxkuid
+      }
+      let params = this.$util.handleAppParams(this.query, {uid: uid})
       this.$router.push({path: '/chat', query: params})
     },
     init () {
@@ -786,7 +850,7 @@ export default {
       if (this.$route.query.from && this.loginUser.subscribe !== 1) {
         this.showTip = true
       }
-      if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
+      if (this.loginUser && (this.loginUser.subscribe !== 0 || this.loginUser.isretailer)) {
         let isAdmin = false
         for (let i = 0; i < self.loginUser.usergroup.length; i++) {
           if (self.loginUser.usergroup[i] === 1) {

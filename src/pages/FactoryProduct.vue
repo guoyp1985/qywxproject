@@ -58,8 +58,8 @@
             </span>
           </div>
         </div>
-        <div class="flex_left padding10 color-gray b_bottom_after" v-if="(productdata.tb_price != '' && productdata.tb_price > 0) || (productdata.jd_price != '' && productdata.jd_price > 0)">
-          <span v-if="productdata.tb_price != '' && productdata.tb_price > 0">猫价: ￥{{productdata.tb_price}}</span><span :class="{'ml10': (productdata.tb_price != '' && productdata.jd_price > 0)}" v-if="productdata.jd_price != '' && productdata.jd_price > 0">狗价: ￥{{productdata.jd_price}}</span>
+        <div class="flex_left padding10 color-gray b_bottom_after" v-if="showTb && showJd">
+          <span>猫价: ￥{{productdata.tb_price}}</span><span class="ml10">狗价: ￥{{productdata.jd_price}}</span>
         </div>
         <div class="bg-page" style="height:10px;"></div>
         <div class="b_top_after"></div>
@@ -82,12 +82,12 @@
         </template>
         <div class="padding10 b_bottom_after levelarea">
           <div class="levelitem">
-            <div><span class="bold">推荐人佣金:</span><span class="bold">{{ $t('RMB') }}{{ productdata.superiorrebate }}</span><i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp"></i></div>
+            <div><span class="bold">推荐人佣金:</span><span class="bold">{{ $t('RMB') }}{{ module == 'fpimport' ? productdata.newsuperrebate : productdata.superiorrebate }}</span><i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp"></i></div>
           </div>
         </div>
         <div class="padding10 b_bottom_after levelarea">
           <div class="levelitem">
-            <div><span class="bold">销售佣金:</span><span class="bold"> {{ $t('RMB') }}{{ productdata.salesrebate }}</span><i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp1"></i></div>
+            <div><span class="bold">销售佣金:</span><span class="bold"> {{ $t('RMB') }}{{ module == 'fpimport' ? productdata.newsalesrebate : productdata.salesrebate }}</span><i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp1"></i></div>
           </div>
         </div>
         <!-- <template v-if="feeData.length != 0 && (productdata.identity == 'factory' || productdata.joinstatus == 0)">
@@ -133,7 +133,7 @@
           </div>
         </div>
       </div>
-      <div v-if="loginUser.isretailer" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
+      <div v-if="loginUser.isretailer && query.frompage != 'manager'" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
         <!-- <div class="align_center flex_center flex_cell" v-if="!loginUser.retailerinfo.fid || loginUser.retailerinfo.fid == query.fid"> -->
         <div class="align_center flex_center flex_cell">
           <div class="btn-bottom-red flex_center" style="width:90%;" v-if="productdata.haveimport == 1">已上架</div>
@@ -297,7 +297,9 @@ export default {
       selectedOption: {},
       selectedOptionIndex: 0,
       previewerOptionsPhoto: [],
-      VipFree: false
+      VipFree: false,
+      showJd: false,
+      showTb: false
     }
   },
   watch: {
@@ -598,6 +600,16 @@ export default {
           } else {
             self.showContainer = true
             self.productdata = data.data
+            if (this.productdata.jd_price && this.productdata.jd_price !== '' && parseFloat(this.productdata.jd_price) > 0) {
+              this.showJd = true
+            } else {
+              this.showJd = false
+            }
+            if (this.productdata.tb_price && this.productdata.tb_price !== '' && parseFloat(this.productdata.tb_price) > 0) {
+              this.showTb = true
+            } else {
+              this.showTb = false
+            }
             self.factoryinfo = self.productdata.factoryinfo
             document.title = self.productdata.title
             const photo = self.productdata.photo
@@ -620,7 +632,7 @@ export default {
               self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
             }
             self.handelShare()
-            if (!self.loginUser.isretailer) {
+            if (!self.loginUser.isretailer || this.query.frompage === 'manager') {
               self.topcss = 'nobottom'
             }
             self.feeData = self.productdata.agentfee ? self.productdata.agentfee : []
@@ -640,6 +652,9 @@ export default {
         User.set(data)
         this.retailerInfo = this.loginUser.retailerinfo
         this.query = this.$route.query
+        if (this.query.module) {
+          this.module = this.query.module
+        }
         if (this.query.allowfirst !== 'false') {
           if (this.retailerInfo && `${this.retailerInfo.firstinfo.importproduct}` === '0' && this.query.from) {
             this.isFirst = true

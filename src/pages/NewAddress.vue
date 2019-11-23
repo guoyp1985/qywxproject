@@ -6,13 +6,7 @@
 <template>
   <div id="new-address">
     <group label-width="6em">
-        <x-input :title="$t('Detailed Address')" :placeholder="`${$t('Selectable')}${$t('Detailed Address')}`" v-model="details"></x-input>
-    </group>
-    <box gap="20px 10px">
-      <x-button type="primary" @click.native="identify">{{$t('Identify')}}</x-button>
-    </box>
-    <group label-width="6em">
-      <x-input :title="$t('Addressee')" required :placeholder="`${$t('Necessary')}${$t('Addressee')}`" v-model="item.linkman"></x-input>
+      <x-input :title="$t('Addressee')" required :placeholder="`${$t('Necessary')}${$t('Addressee')}`" v-model="item.linkman" :max="6"></x-input>
       <x-input :title="$t('Cell Phone Number')" required :placeholder="`${$t('Necessary')}${$t('Cell Phone Number')}`" mask="999 9999 9999" :max="13" is-type="china-mobile" v-model="item.telephone"></x-input>
       <x-address :title="$t('Select Address')" raw-value v-model="item.area" :list="addressData" :placeholder="`${$t('Necessary')}${$t('Please Select Address')}`">
         <template slot="title" slot-scope="props">
@@ -25,6 +19,14 @@
       <x-input :title="$t('Detailed Address')" required :placeholder="`${$t('Necessary')}${$t('Detailed Address')}`" v-model="item.address"></x-input>
       <x-switch :title="$t('Default Address')" v-model="getSwitcher"></x-switch>
     </group>
+    <div class="db-flex w_100 mt10">
+      <group style="width:85%;">
+          <x-textarea placeholder="粘贴整段地址,自动识别电话、姓名和地址" v-model="details"></x-textarea>
+      </group>
+      <box style="width:15%">
+        <x-button style="height:92px;" type="primary" @click.native="identify">{{$t('Identify')}}</x-button>
+      </box>
+    </div>
     <box gap="20px 10px">
       <x-button type="primary" @click.native="save">{{$t('Save')}}</x-button>
       <x-button type="default" link="BACK">{{$t('Cancel')}}</x-button>
@@ -32,12 +34,12 @@
   </div>
 </template>
 <script>
-import { Group, XInput, XAddress, XSwitch, Box, XButton, ChinaAddressV4Data, Value2nameFilter as value2name } from 'vux'
+import { Group, XInput, XAddress, XSwitch, Box, XButton, XTextarea, ChinaAddressV4Data, Value2nameFilter as value2name } from 'vux'
 import ENV from 'env'
 import Reg from '#/reg'
 export default {
   components: {
-    Group, XInput, XAddress, XSwitch, Box, XButton
+    Group, XInput, XAddress, XSwitch, Box, XButton, XTextarea
   },
   data () {
     return {
@@ -189,12 +191,18 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 #personal-address .top-gap {
   margin-top: 20px;
 }
 #personal-address .address-item {
   padding: 5px 15px;
+}
+.weui-cells{
+  margin-top: 0 !important;
+}
+.vux-no-group-title{
+  margin-top: 0 !important;
 }
 /* weui css hack */
 </style>

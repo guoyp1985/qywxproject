@@ -4,156 +4,219 @@
       <Sos :title="sosTitle"></Sos>
     </template>
     <template v-if="showContainer">
-      <div class="s-container" style="top:0;">
-        <form enctype="multipart/form-data">
-          <input ref="fileInput1" class="hide" type="file" name="files" @change="fileChange('photo')" />
-        </form>
-        <form enctype="multipart/form-data">
-          <input ref="fileInput2" class="hide" type="file" name="files" @change="fileChange('qrcode')" />
-        </form>
-        <form class="addForm">
-          <div class="form-item fg bg-white b-top b-bottom">
-            <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Fatory name') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
-              <div class="t-cell input-cell v_middle flex_right" style="position:relative;">
-                <x-input style="width:80%;padding-right:5px;" v-model="submitData.company" type="text" class="input" :placeholder="$t('Fatory name')" ></x-input>
-              </div>
-              <div class="t-cell v_middle font14 w50 align_right">旗舰店</div>
-            </div>
-          </div>
-          <div class="form-item bg-white fg b-top">
-            <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product summary') }}</div>
-              <div class="t-cell input-cell v_middle" style="position:relative;">
-                <group class="textarea-outer" style="padding:0;">
-                  <x-textarea
-                    ref="summaryTextarea"
-                    v-model="submitData.summary"
-                    class="x-textarea noborder"
-                    :placeholder="$t('Product summary')"
-                    :show-counter="false"
-                    :rows="1"
-                    :max="30"
-                    @on-change="textareaChange('summaryTextarea')"
-                    @on-focus="textareaFocus('summaryTextarea')"
-                    autosize>
-                  </x-textarea>
-                </group>
+      <div class="s-topbanner s-topbanner1">
+        <tab class="v-tab" v-model="selectedIndex">
+          <tab-item :selected="selectedIndex==0" @on-item-click="clickTab">基本信息</tab-item>
+          <tab-item :selected="selectedIndex==1" @on-item-click="clickTab">收款信息</tab-item>
+        </tab>
+      </div>
+      <div class="s-container" style="top:45px;">
+        <div v-show="selectedIndex==0">
+          <form enctype="multipart/form-data">
+            <input ref="fileInput1" class="hide" type="file" name="files" @change="fileChange('photo')" />
+          </form>
+          <form enctype="multipart/form-data">
+            <input ref="fileInput2" class="hide" type="file" name="files" @change="fileChange('qrcode')" />
+          </form>
+          <form class="addForm">
+            <div class="form-item fg bg-white b-top b-bottom">
+              <div class="t-table">
+                <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Fatory name') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
+                <div class="t-cell input-cell v_middle flex_right" style="position:relative;">
+                  <x-input style="width:80%;padding-right:5px;" v-model="submitData.company" type="text" class="input" :placeholder="$t('Fatory name')" ></x-input>
+                </div>
+                <div class="t-cell v_middle font14 w50 align_right">旗舰店</div>
               </div>
             </div>
-          </div>
-          <div class="form-item bg-white fg b-top">
-            <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">缩写码<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
-              <div class="t-cell input-cell v_middle" style="position:relative;">
-                <x-input v-model="submitData.shortcode" type="text" class="input font14 align_right" :max="3" placeholder="必须为三位大写字母"></x-input>
+            <div class="form-item bg-white fg b-top">
+              <div class="t-table">
+                <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product summary') }}</div>
+                <div class="t-cell input-cell v_middle" style="position:relative;">
+                  <group class="textarea-outer" style="padding:0;">
+                    <x-textarea
+                      ref="summaryTextarea"
+                      v-model="submitData.summary"
+                      class="x-textarea noborder"
+                      :placeholder="$t('Product summary')"
+                      :show-counter="false"
+                      :rows="1"
+                      :max="30"
+                      @on-change="textareaChange('summaryTextarea')"
+                      @on-focus="textareaFocus('summaryTextarea')"
+                      autosize>
+                    </x-textarea>
+                  </group>
+                </div>
               </div>
-              <!-- <div class="t-cell title-cell color-red v_middle font12 align_right" style="width:130px;">(必须为三位大写字母)</div> -->
             </div>
-          </div>
-          <div v-if="tradeData.length" class="form-item required bg-white">
+            <!-- 合作模式 -->
+            <div class="form-item fg bg-white b-top b-bottom">
+              <div class="t-table">
+                <div class="t-cell title-cell font14 v_middle" style="width:100px;">合作模式<span @click="clickCommission"><i class="al al-wenhao color-red ml5 font24" style="vertical-align:-4px;"></i></span></div>
+                <div class="t-cell v_middle flex_right" style="position:relative;top:6px;">每月分佣模式</div>
+              </div>
+            </div>
+            <div class="form-item bg-white fg b-top">
+              <div class="t-table">
+                <div class="t-cell title-cell w80 font14 v_middle">缩写码<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
+                <div class="t-cell input-cell v_middle" style="position:relative;">
+                  <x-input v-model="submitData.shortcode" type="text" class="input font14 align_right" :max="3" placeholder="必须为三位大写字母"></x-input>
+                </div>
+                <!-- <div class="t-cell title-cell color-red v_middle font12 align_right" style="width:130px;">(必须为三位大写字母)</div> -->
+              </div>
+            </div>
+            <div v-if="tradeData.length" class="form-item required bg-white">
+              <div class="t-table">
+                <div class="t-cell title-cell w80 font14 v_middle">行业<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+                <div class="t-cell input-cell v_middle" style="position:relative;">
+                  <select v-model="submitData.trade" class="w_100" style="height:35px;">
+                    <option v-for="(item,index) in tradeData" :value="item.skey" :selected="submitData.trade === item.skey">{{ item.value }}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="form-item bg-white fg b-top">
+              <div class="t-table">
+                <div class="t-cell title-cell w100 font14 v_middle">公众号二维码</div>
+                <div class="t-cell input-cell v_middle" style="position:relative;">
+                  <div class="q_photolist align_left bg-white">
+                    <template v-if="qrcodearr.length > 0">
+                      <div v-for="(item,index) in qrcodearr" :key="index" class="photoitem">
+                        <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
+                          <div class="close" @click="deletephoto(item,index,'qrcode')">×</div>
+                        </div>
+                      </div>
+                    </template>
+                    <div v-if="qrcodearr.length < maxnum" @click="uploadPhoto('fileInput2', 'qrcode')" class="align_right">
+                      <span class="color-red">公众号二维码 ></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-item bg-white fg b-top">
+              <div class="t-table">
+                <div class="t-cell title-cell w100 font14 v_middle">客服</div>
+                <div class="t-cell input-cell v_middle" style="position:relative;text-align:right;" @click="clickUserEvent">
+                  <template v-if="serviceUser && serviceUser.uid"><img class="v_middle" :src="serviceUser.avatar" style="width:30px;height:30px;object-fit:cover;border-radius:50%;" /><span class="ml5 v_middle">{{serviceUser.linkman}}</span></template>
+                  <span v-else class="color-red">去选择 ></span>
+                </div>
+              </div>
+            </div>
+            <div class="form-item bg-white fg b-top">
+              <div class="t-table">
+                <div class="t-cell title-cell w80 font14 v_middle">logo</div>
+                <div class="t-cell input-cell v_middle" style="position:relative;">
+                  <div class="q_photolist align_left bg-white">
+                    <template v-if="photoarr.length > 0">
+                      <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
+                        <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
+                          <div class="close" @click="deletephoto(item,index,'photo')">×</div>
+                        </div>
+                      </div>
+                    </template>
+                    <div v-if="photoarr.length < maxnum" @click="uploadPhoto('fileInput1', 'photo')" class="align_right">
+                      <span class="color-red">添加logo ></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-item bg-white fg b-top">
+              <div class="t-table">
+                <div class="t-cell title-cell w80 font14 v_middle">商城模板</div>
+                <div class="t-cell input-cell v_middle" style="position:relative;">
+                  <check-icon class="red-check" :value.sync="template1" @click.native.stop="clickTemplate(1)">通用版</check-icon>
+                  <check-icon class="red-check" :value.sync="template2" @click.native.stop="clickTemplate(2)">大图版</check-icon>
+                </div>
+              </div>
+            </div>
+
+            <!-- 分润比例设置 -->
+            <div class="form-item bg-white fg b-top">
+              <div class=""><span>分润比例设置</span><span @click="clickTip"><i class="al al-wenhao color-red ml5 font24" style="vertical-align:-4px;"></i></span></div>
+              <div class="flex_left padding10 b_bottom_after">
+                <div class="flex_left title-cell w90">推荐人佣金</div>
+                <div class="flex_cell input-cell flex_right" style="position:relative;">
+                  <x-input class="input" type="tel" v-model="submitData.superiorrate" placeholder="输入百分比，例如10%则填写10"></x-input>
+                </div>
+                <div class="flex_right color-gray" style="width:20px;">%</div>
+              </div>
+              <div class="flex_left padding10">
+                <div class="flex_left title-cell w90">销售佣金</div>
+                <div class="flex_cell input-cell flex_right" style="position:relative;">
+                  <x-input class="input" type="tel" v-model="submitData.salesrate" placeholder="输入百分比，例如10%则填写10"></x-input>
+                </div>
+                <div class="flex_right color-gray" style="width:20px;">%</div>
+              </div>
+            </div>
+            <template v-if="disClassData">
+              <div class="form-item required border-box bg-white padding10 fg b-top" v-if="classData.length > 0">
+                <div class="pb10">经营产品<span class="color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+                <checker
+                class="x-checker"
+                type="checkbox"
+                v-model="productClass"
+                :max="3"
+                default-item-class="ck-item"
+                selected-item-class="ck-item-selected">
+                  <checker-item class="border1px color-gray" v-for="(item, index) in classData" :key="index" :value="item.id">{{ item.title }}</checker-item>
+                </checker>
+              </div>
+            </template>
+          </form>
+        </div>
+        <div v-show="selectedIndex == 1">
+          <div class="form-item required bg-white">
             <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">行业<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+              <div class="t-cell title-cell w80 font14 v_middle">开户银行</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <select v-model="submitData.trade" class="w_100" style="height:35px;">
-                  <option v-for="(item,index) in tradeData" :value="item.skey" :selected="submitData.trade === item.skey">{{ item.value }}</option>
+                <select v-model="collectData.newbankcode" class="w_100" style="height:35px;">
+                  <option value='0'>请选择银行</option>
+                  <option v-for="(item,index) in cardList" :value="item.id">{{ item.name }}</option>
                 </select>
               </div>
             </div>
           </div>
-          <div class="form-item bg-white fg b-top">
+          <div class="form-item required bg-white">
             <div class="t-table">
-              <div class="t-cell title-cell w100 font14 v_middle">公众号二维码</div>
+              <div class="t-cell title-cell w80 font14 v_middle">开户名</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <div class="q_photolist align_left bg-white">
-                  <template v-if="qrcodearr.length > 0">
-                    <div v-for="(item,index) in qrcodearr" :key="index" class="photoitem">
-                      <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
-                        <div class="close" @click="deletephoto(item,index,'qrcode')">×</div>
-                      </div>
-                    </div>
-                  </template>
-                  <div v-if="qrcodearr.length < maxnum" @click="uploadPhoto('fileInput2', 'qrcode')" class="align_right">
-                    <span class="color-red">公众号二维码 ></span>
-                  </div>
-                </div>
+                <input v-model="collectData.accountname" type="text" class="input priceInput" name="username" placeholder="开户名" />
               </div>
             </div>
           </div>
-          <div class="form-item bg-white fg b-top">
+          <div class="form-item required bg-white">
             <div class="t-table">
-              <div class="t-cell title-cell w100 font14 v_middle">客服</div>
-              <div class="t-cell input-cell v_middle" style="position:relative;text-align:right;" @click="clickUserEvent">
-                <template v-if="serviceUser && serviceUser.uid"><img class="v_middle" :src="serviceUser.avatar" style="width:30px;height:30px;object-fit:cover;border-radius:50%;" /><span class="ml5 v_middle">{{serviceUser.linkman}}</span></template>
-                <span v-else class="color-red">去选择 ></span>
-              </div>
-            </div>
-          </div>
-          <div class="form-item bg-white fg b-top">
-            <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">logo</div>
+              <div class="t-cell title-cell w80 font14 v_middle">开户账号</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <div class="q_photolist align_left bg-white">
-                  <template v-if="photoarr.length > 0">
-                    <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
-                      <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
-                        <div class="close" @click="deletephoto(item,index,'photo')">×</div>
-                      </div>
-                    </div>
-                  </template>
-                  <div v-if="photoarr.length < maxnum" @click="uploadPhoto('fileInput1', 'photo')" class="align_right">
-                    <span class="color-red">添加logo ></span>
-                  </div>
-                </div>
+                <input v-model="collectData.newbankcardno" type="text" class="input priceInput" name="username" placeholder="开户账号" />
               </div>
             </div>
           </div>
-          <div class="form-item bg-white fg b-top">
+          <div class="form-item required bg-white">
             <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">商城模板</div>
+              <div class="t-cell title-cell w80 font14 v_middle">联系人</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <check-icon class="red-check" :value.sync="template1" @click.native.stop="clickTemplate(1)">通用版</check-icon>
-                <check-icon class="red-check" :value.sync="template2" @click.native.stop="clickTemplate(2)">大图版</check-icon>
+                <input v-model="collectData.newbankuser" type="text" class="input priceInput" name="username" placeholder="联系人" />
               </div>
             </div>
           </div>
-
-          <!-- 分润比例设置 -->
-          <div class="form-item bg-white fg b-top">
-            <div class=""><span>分润比例设置</span><span @click="clickTip"><i class="al al-wenhao color-red ml5 font24" style="vertical-align:-4px;"></i></span></div>
-            <div class="flex_left padding10 b_bottom_after">
-              <div class="flex_left title-cell w90">推荐人佣金</div>
-              <div class="flex_cell input-cell flex_right" style="position:relative;">
-                <x-input class="input" type="tel" v-model="submitData.superiorrate" placeholder="输入百分比，例如10%则填写10"></x-input>
+          <div class="form-item required bg-white">
+            <div class="t-table">
+              <div class="t-cell title-cell w80 font14 v_middle">手机号</div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <input v-model="collectData.mobile" type="text" class="input priceInput" name="username" placeholder="手机号" />
               </div>
-              <div class="flex_right color-gray" style="width:20px;">%</div>
-            </div>
-            <div class="flex_left padding10">
-              <div class="flex_left title-cell w90">销售佣金</div>
-              <div class="flex_cell input-cell flex_right" style="position:relative;">
-                <x-input class="input" type="tel" v-model="submitData.salesrate" placeholder="输入百分比，例如10%则填写10"></x-input>
-              </div>
-              <div class="flex_right color-gray" style="width:20px;">%</div>
             </div>
           </div>
-          <template v-if="disClassData">
-            <div class="form-item required border-box bg-white padding10 fg b-top" v-if="classData.length > 0">
-              <div class="pb10">经营产品<span class="color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
-              <checker
-              class="x-checker"
-              type="checkbox"
-              v-model="productClass"
-              :max="3"
-              default-item-class="ck-item"
-              selected-item-class="ck-item-selected">
-                <checker-item class="border1px color-gray" v-for="(item, index) in classData" :key="index" :value="item.id">{{ item.title }}</checker-item>
-              </checker>
-            </div>
-          </template>
-        </form>
+        </div>
       </div>
-      <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
-        <div class="flex_cell flex_center btn-bottom-red" @click="saveEvent">{{ $t('Submit') }}</div>
+      <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white" v-if="selectedIndex == 0">
+        <div class="flex_cell flex_center btn-bottom-red" @click="saveEvent">提交基本信息</div>
+      </div>
+      <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white" v-else>
+        <div class="flex_cell flex_center btn-bottom-red" @click="saveCollect">提交收款信息</div>
       </div>
       <div v-if="showTip" class="auto-modal flex_center">
         <div class="modal-inner border-box" style="width:80%;">
@@ -165,6 +228,18 @@
             <div class="mt10">注意：销售佣金比例+推荐人佣金比例需小于100%，否则厂家将没有收入。</div>
           </div>
           <div class="close-area flex_center" @click="closeTip">
+            <i class="al al-close"></i>
+          </div>
+        </div>
+      </div>
+      <div v-if="showMonthlyCommission" class="auto-modal flex_center">
+        <div class="modal-inner border-box" style="width:80%;">
+          <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">每月分佣模式</div>
+          <div class="align_left txt padding10">
+            <div>每月分佣合作模式：厂家需根据使用"共销客企业小程序"每月产生的交易额中,拿出5%的费用给予平台。如果本月没有销售额时,则无需支付使用费用</div>
+            <div class="mt10 color-red">注意：共销客企业小程序使用达到一个月后,如未进行缴费时,则平台有权关闭厂家的使用权限!</div>
+          </div>
+          <div class="close-area flex_center" @click="closeCommission">
             <i class="al al-close"></i>
           </div>
         </div>
@@ -205,8 +280,9 @@
 </i18n>
 
 <script>
-import { Group, XInput, TransferDom, Popup, Checker, Datetime, CheckerItem, CheckIcon, XTextarea } from 'vux'
+import { Tab, TabItem, Group, XInput, TransferDom, Popup, Checker, Datetime, CheckerItem, CheckIcon, XTextarea } from 'vux'
 import ENV from 'env'
+import Reg from '#/reg'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
 
@@ -215,7 +291,7 @@ export default {
     TransferDom
   },
   components: {
-    Group, XInput, Popup, Checker, Datetime, CheckerItem, CheckIcon, XTextarea, Sos
+    Tab, TabItem, Group, XInput, Popup, Checker, Datetime, CheckerItem, CheckIcon, XTextarea, Sos
   },
   data () {
     return {
@@ -244,7 +320,11 @@ export default {
       userData: [],
       pageStart: 0,
       limit: 20,
-      clickUser: null
+      clickUser: null,
+      showMonthlyCommission: false,
+      selectedIndex: 0,
+      collectData: {newbankcode: '', accountname: '', newbankcardno: '', newbankuser: '', mobile: ''},
+      cardList: []
     }
   },
   watch: {
@@ -262,6 +342,9 @@ export default {
     }
   },
   methods: {
+    clickTab () {
+
+    },
     clearChecked () {
       for (let i = 0; i < this.userData.length; i++) {
         delete this.userData[i].checked
@@ -325,6 +408,12 @@ export default {
     },
     closeTip () {
       this.showTip = false
+    },
+    clickCommission () {
+      this.showMonthlyCommission = true
+    },
+    closeCommission () {
+      this.showMonthlyCommission = false
     },
     textareaChange (refname) {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
@@ -475,6 +564,11 @@ export default {
               time: timeout
             })
             if (data.flag === 1) {
+              if (self.query.fromapp === 'factory') {
+                self.$wechat.miniProgram.navigateTo({url: '/pages/own'})
+              }
+              console.log('= self.query.minibackurl =')
+              console.log(self.query.minibackurl)
               setTimeout(() => {
                 if (self.query.minibackurl) {
                   let minibackurl = decodeURIComponent(self.query.minibackurl)
@@ -497,6 +591,34 @@ export default {
         }
       })
     },
+    saveCollect () {
+      let iscontinue = true
+      for (let key in this.collectData) {
+        if (this.collectData[key] === '') {
+          this.$vux.toast.text('请输入收款信息', 'middle')
+          iscontinue = false
+          return false
+        }
+      }
+      if (!Reg.rPhone.test(this.collectData.mobile)) {
+        this.$vux.toast.text('请输入正确的手机号', 'middle')
+        iscontinue = false
+        return false
+      }
+      if (!iscontinue) return false
+      this.$vux.loading.show()
+      let params = {...this.collectData, id: this.fid}
+      this.$http.post(`${ENV.BokaApi}/api/factory/add`, params).then(res => {
+        let data = res.data
+        this.$vux.loading.hide()
+        let error = data.flag ? '成功' : data.error
+        this.$vux.toast.show({
+          text: error,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: this.$util.delay(error)
+        })
+      })
+    },
     getData () {
       const self = this
       self.$vux.loading.show()
@@ -509,6 +631,9 @@ export default {
           console.log('in getData')
           console.log(retdata)
           self.infoData = retdata
+          for (let key in self.collectData) {
+            self.collectData[key] = self.infoData[key]
+          }
           if (retdata.services && retdata.services !== '') {
             let suid = retdata.services.split(',')[0]
             for (let i = 0; i < retdata.services_data.length; i++) {
@@ -619,7 +744,11 @@ export default {
         self.showSos = false
         self.showContainer = true
         this.$vux.loading.hide()
-        self.getData()
+        this.$http.post(`${ENV.BokaApi}/api/common/getBankNames`).then(res => {
+          const data = res.data
+          this.cardList = data.data ? data.data : data
+          self.getData()
+        })
       } else {
         this.$vux.loading.hide()
         self.showSos = true

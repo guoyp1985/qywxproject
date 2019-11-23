@@ -18,23 +18,23 @@
         </div> -->
         <div class="bg-white b_bottom_after padding10">
           <div class="flex_left">
-            <router-link class="flex_cell" :to="{path:'/store',query:{wid:orderData.retailer.uid}}">
+            <div @click="toStore" class="flex_cell">
               <i class="al al-dianpufill v_middle color-red font20"></i>
               <span class="v_middle">{{orderData.retailer.title}}</span>
-            </router-link>
-            <div class="w80 align_right">
-              <router-link class="qbtn bg-red color-white font12" :to="{path:'/chat',query:{uid:orderData.retailer.uid, from: query.from}}">联系卖家</router-link>
+            </div>
+            <div class="w80 align_right" v-if="query.fromapp != 'factory'">
+              <div @click="toChat" class="qbtn bg-red color-white font12">联系卖家</div>
             </div>
           </div>
         </div>
         <div class="bg-white b_bottom_after padding10">
           <div class="flex_left">买家：{{ orderData.username }}  累计消费：<span class="color-red">{{ $t('RMB') }}{{ orderData.summoney }}</span></div>
         </div>
-        <div v-if="orderData.flag != 0" class="bg-white b_bottom_after padding10">
-          <div v-if="orderData.flag != 0 && orderData.flag != 1 && orderData.flag != 2" class="t-table mb10">
+        <div class="bg-white b_bottom_after padding10">
+          <div v-if="orderData.flag != 1 && orderData.flag != 2" class="t-table mb10">
             <div class="t-cell v_middle">{{ orderData.delivercompanyname }} {{ orderData.delivercode }}</div>
             <div class="t-cell v_middle align_right w60">
-              <router-link :to="{path: '/deliverinfo', query: {id: orderData.id}}" class="font12 color-orange5">查看详情</router-link>
+              <router-link :to="{path: '/deliverinfo', query: {id: orderData.id}}" class="font12 color-orange5">查看物流</router-link>
             </div>
           </div>
           <div class="t-table">
@@ -58,7 +58,7 @@
         </div>
         <div class="bg-white">
           <div class="scroll_list productlist color_gray appendarea" ajaxurl="" template=".template">
-            <div v-for="(item,index) in orderData.orderlist" :key="item.id" @click="toProduct(item)" class="scroll_item db padding10 bg-gray4">
+            <div v-for="(item,index) in orderData.orderlist" :key="item.id" class="scroll_item db padding10 bg-gray4">
               <div class="t-table">
                 <div class="t-cell v_middle w60 algin_left">
                   <template v-if="item.options && item.options.id">
@@ -79,12 +79,25 @@
               </div>
             </div>
           </div>
-          <div class="align_right pt10 pl10 pr10 flex_right">
-            <span class="v_middle">商品: {{ $t('RMB') }}</span><span class="font16 v_middle">{{ orderData.special }}</span>
-            <span class="v_middle font12 color-gray ml5">( 运费:<span v-if="orderData.postage == 0 || orderData.postage== '0.00'">包邮</span><span v-else>{{ $t('RMB') }}{{orderData.postage}}</span> )</span>
+        </div>
+        <div class="b_top_after padding10 bg-white">
+          <div class="flex_left font12 color-gray">
+            <div class="flex_left w80">运费</div>
+            <div class="flex_right flex_cell">
+              <span v-if="orderData.postage == 0">包邮</span>
+              <span v-else>{{ $t('RMB') }}{{ orderData.postage }}</span>
+            </div>
           </div>
-          <div class="align_right padding10 flex_right">合计:{{ $t('RMB') }} <span class="font16">{{ totalPrice }}</span></div>
-          <div class="pl10 pr10 pb10 flex_right color-gray font12" v-if="orderData.delivertype == 2">到店自提</div>
+          <div class="flex_left font12 color-gray mt10" v-if="orderData.carddeduct > 0">
+            <div class="flex_left w100">优惠券抵扣</div>
+            <div class="flex_right flex_cell">{{ $t('RMB') }}{{orderData.carddeduct}}</div>
+          </div>
+        </div>
+        <div class="b_top_after padding10 bg-white flex_right">
+          <span class="v_middle font12">实际支付: </span><span class="v_middle font16 color-orange">{{ $t('RMB') }}{{orderData.needpaymoney}}</span>
+        </div>
+        <div v-if="orderData && orderData.delivertype ==2"  class="padding10 b_top_after bg-white">
+          <div class="flex_right font12 color-gray">到店自提</div>
         </div>
         <div class="align_right">
           <div v-if="!orderData.payorder && orderData.flag != 1" class="b_bottom_after pl10 pr10 pb10 bg-white">
@@ -113,20 +126,33 @@
             </div>
           </div>
         </template>
-        <div class="bg-white mt12" v-if="recordData.length">
-          <div class="padding10 b_bottom_after">售后记录</div>
-          <div class="scroll_list mt12">
-            <div class="scroll_item padding10" v-for="(item, index) in recordData" :key="index">
-              <div class="color-theme">{{item.description}}</div>
-              <div class="mt5" v-html="item.content"></div>
-              <div class="mt5" v-if="item.photo && item.photo != ''">
-                <img :src="item.photo" style="width:100px;max-width:100%;" @click="viewBigImg(item.photo,index)" />
+        <div class="mt12" v-if="recordData.length">
+          <div class="line-area">
+            <div class="txt bg-page flex_center">售后记录</div>
+          </div>
+          <div class="bg-white mb12" v-for="(item, index) in recordData" :key="index">
+            <div class="b_top_after flex_left padding10">
+              <div class="flex_left flex_cell">
+                <span v-if="item.isadmin" class="color-theme bold">售后客服</span>
+                <template v-else>
+                  <img :src="orderData.avatar" style="width:30px;height:30px;border-radius:50%;object-fit:cover;"/>
+                  <span class="bold ml5">{{orderData.username}}</span>
+                </template>
+              </div>
+              <div class="flex_right color-gray" style="width:130px;">{{item.dateline | dateformat}}</div>
+            </div>
+            <div class="b_top_after">
+              <div class="color-gray padding10" v-html="item.content"></div>
+              <div class="padding10" v-if="item.photo && item.photo != ''">
+                <div style="width:110px;display:inline-block;" v-for="(photo,index1) in item.photoarr">
+                  <img :src="photo" style="width:100px;height:100px;object-fit:cover;" @click="viewBigImg(photo,index,index1)" />
+                </div>
                 <div v-transfer-dom>
                   <previewer :list="item.previewerPhoto" :ref="`previewerPhoto-${index}`"></previewer>
                 </div>
               </div>
-              <div class="color-gray font12 mt5">{{item.dateline | dateformat}}</div>
             </div>
+            <div class="b_bottom_after"></div>
           </div>
         </div>
       </div>
@@ -299,6 +325,15 @@ export default {
       this.recordPageStart = 0
       this.deliverdata = { delivercompany: '-1', delivercode: '' }
     },
+    toStore () {
+      if (this.query.fromapp !== 'factory') {
+        this.$router.push({path: '/store', query: {wid: this.orderData.retailer.uid}})
+      }
+    },
+    toChat () {
+      let params = this.$util.handleAppParams(this.query, {uid: this.orderData.retailer.uid})
+      this.$router.push({path: '/chat', query: params})
+    },
     handleScroll (refname, type) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
@@ -313,11 +348,11 @@ export default {
         }
       })
     },
-    viewBigImg (photo, index) {
+    viewBigImg (photo, index, index1) {
       const self = this
       if (self.$util.isPC()) {
         let refarea = self.$refs[`previewerPhoto-${index}`][0] ? self.$refs[`previewerPhoto-${index}`][0] : self.$refs[`previewerPhoto-${index}`]
-        refarea.show(0)
+        refarea.show(index1)
       } else {
         window.WeixinJSBridge.invoke('imagePreview', {
           current: photo,
@@ -436,11 +471,14 @@ export default {
       })
     },
     toProduct (item) {
-      if (this.query.fromapp === 'factory') {
-        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&module=product`})
-      } else if (this.query.from) {
-        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&wid=${item.wid}`})
-      } else {
+      // if (this.query.fromapp === 'factory') {
+      //   this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&module=product`})
+      // } else if (this.query.from) {
+      //   this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&wid=${item.wid}`})
+      // } else {
+      //   this.$router.push({path: '/product', query: {id: item.pid, wid: item.wid}})
+      // }
+      if (!this.query.from && !this.query.fromapp) {
         this.$router.push({path: '/product', query: {id: item.pid, wid: item.wid}})
       }
     },
@@ -496,6 +534,7 @@ export default {
         self.$vux.toast.text('请输入物流单号', 'middle')
         return false
       }
+      self.deliverdata.delivercode = self.$util.trim(self.deliverdata.delivercode)
       self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/order/deliver`, self.deliverdata).then(function (res) {
         let data = res.data
@@ -651,7 +690,7 @@ export default {
       })
     },
     getRecordData () {
-      this.$http.post(`${ENV.BokaApi}/api/order/recordList`, {
+      this.$http.post(`${ENV.BokaApi}/api/order/getServiceInfo`, {
         type: 'service', id: this.query.id, pagestart: this.recordPageStart, limit: 10
       }).then(res => {
         this.$vux.loading.hide()
@@ -659,7 +698,9 @@ export default {
         let retdata = data.data ? data.data : data
         for (let i in retdata) {
           if (retdata[i].photo && retdata[i].photo !== '') {
-            retdata[i].previewerPhoto = this.$util.previewerImgdata([retdata[i].photo])
+            let parr = retdata[i].photo.split(',')
+            retdata[i].photoarr = parr
+            retdata[i].previewerPhoto = this.$util.previewerImgdata(parr)
           }
           if (retdata[i].content && retdata[i].content !== '') {
             retdata[i].content = retdata[i].content.replace(/\n/g, '<br/>')
@@ -750,5 +791,16 @@ export default {
 .fix-home-icon{
   position:absolute;right:20px;bottom:80px;
   width:50px;height:50px;border-radius:50%;
+}
+#order-detail{
+  .line-area:after{
+    content:"";display:block;position:absolute;left:50%;;top:50%;
+    width:160px;height:1px;margin-left:-80px;
+    background-color:#000;
+  }
+  .line-area{
+    position:relative;width:100%;height:50px;text-align:center;
+    .txt{margin:0 auto;width:90px;height:50px;position:relative;z-index:1;}
+  }
 }
 </style>

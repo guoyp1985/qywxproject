@@ -1,5 +1,5 @@
 var ENV = {
-  Version: '2.0.0.7',
+  Version: '2.0.0.21',
   AppId: 'wxd50f3623bec2f5b5', // vux:'wx1e72f0c45242a94e' // vue: 'wxd50f3623bec2f5b5'
   // AppSecret: 'f22214afc8a01ec9a769bd0ba8551c48',
   FeedChars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
@@ -13,6 +13,9 @@ var ENV = {
   SocketServer: 'wss://chat.boka.cn/wss', //'wss://chat.boka.cn/wss', // vux: 'ws://123.206.77.217:7272', // vue: 'ws://124.207.246.109:7272'
   AdminUrl: 'http://laravelcms.boka.cn/admin/login/unionIdLogin',
   FactoryApi: 'https://factorydev.boka.cn',
+  ApiVersion: 'V2',
+  ApiAccept: 'application/vnd.factorydev.v2+json',
+  showTestManager: true, //正式平台不需要添加 ,控制测试管理功能按钮
   OrderStatus: [
     {id: 0, status: '订单取消'},
     {id: 1, status: '已确认订单'},
@@ -29,7 +32,9 @@ var ENV = {
     pay: '/packageB/pages/pay',
     product: '/packageB/pages/product',
     store: '/packageB/pages/store',
-    addCard: '/packageA/pages/addCard'
+    addCard: '/packageA/pages/addCard',
+    factoryAppProduct: '/pages/product',
+    chat: '/pages/chat'
   },
   Emots: [
     '微笑', '撇嘴', '色', '发呆', '得意', '流泪', '害羞', '闭嘴',
@@ -62,17 +67,20 @@ var ENV = {
   FactoryManagerUid: 9,
   SuggestFid: 2,
   AppHomePage: {
-    'default': '/pages/wymh',
-    'factory': '/pages/index',
-    'qxb': '/pages/wymh',
-    'wl': '/pages/index'
+    default: '/pages/wymh',
+    factory: '/pages/index',
+    qxb: '/pages/wymh',
+    wl: '/pages/index'
   },
   FactoryLoginUrl: 'http://laravelcms.boka.cn/admin/login/login?role=factory',
   RetailerLoginUrl: 'http://laravelcms.boka.cn/admin/login/login?role=retailer',
   AdminLoginUrl: 'http://laravelcms.boka.cn/admin/login/login?role=admin',
   AdminFactoryImg1: 'https://tossharingsales.boka.cn/images/vue_admin_factory1.png',
   AdminFactoryImg2: 'https://tossharingsales.boka.cn/images/vue_admin_factory2.png',
-  CommissionFid: 97
+  CommissionFid: 97,
+  KefuQrcode: 'https://tossharingsales.boka.cn/images/kefu_qrcode.jpg',
+  KefuWxNo: 'sharingsales',
+  AllowQuickService: true // 控制显示【完成售后按钮】，正式平台不需要
 }
 
 ENV.NoAccessUrls = [

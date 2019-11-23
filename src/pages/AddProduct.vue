@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea s-havebottom font14 addproduct">
-    <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
+    <subscribe v-if="loginUser.subscribe == 0 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
       <div class="s-container">
@@ -84,15 +84,15 @@
             </div>
           </div>
           <div class="flex_center">
-          <div class="form-item required bg-white b_right">
-            <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">商品现价<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
-              <div class="t-cell input-cell v_middle" style="position:relative;">
-                <x-input v-model="submitdata.price" @keyup="priceChange('price')" maxlength="9" size="9" type="text" class="input priceInput" name="price" placeholder="现价" ></x-input>
+            <div class="form-item required bg-white b_right">
+              <div class="t-table">
+                <div class="t-cell title-cell w80 font14 v_middle">商品现价<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+                <div class="t-cell input-cell v_middle" style="position:relative;">
+                  <x-input v-model="submitdata.price" @keyup="priceChange('price')" maxlength="9" size="9" type="text" class="input priceInput" name="price" placeholder="现价" ></x-input>
+                </div>
+                <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
               </div>
-              <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>
-          </div>
             <div class="form-item required bg-white">
               <div class="t-table">
                 <div class="t-cell title-cell w80 font14 v_middle">商品原价</div>
@@ -791,10 +791,15 @@ export default {
         }
         let price = postdata.price.toString().replace(/,/g, '')
         let oriprice = postdata.oriprice.toString().replace(/,/g, '')
+        console.log(oriprice)
         let tbprice = postdata.tb_price.toString().replace(/,/g, '')
         let jdprice = postdata.jd_price.toString().replace(/,/g, '')
         let postage = postdata.postage.toString().replace(/,/g, '')
         let rebate = postdata.rebate
+        if (self.$util.trim(price).length > 7 || self.$util.trim(oriprice).length > 7 || self.$util.trim(tbprice).length > 7 || self.$util.trim(jdprice).length > 7) {
+          self.$vux.toast.text('商品价格不能超过7位数', 'middle')
+          return false
+        }
         if (self.$util.trim(rebate) !== '') {
           rebate = rebate.toString().replace(/,/g, '')
         }
@@ -1043,7 +1048,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       self.submitIng = false
-      if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
+      if (this.loginUser && (this.loginUser.subscribe !== 0 || this.loginUser.isretailer)) {
         // if (self.loginUser.isretailer === 2) {
         //   self.initContainer()
         //   self.$vux.loading.hide()

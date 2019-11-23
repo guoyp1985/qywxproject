@@ -219,7 +219,8 @@ export default {
       action: '',
       sysParams: {},
       disProductData: false,
-      productmodule: 'product'
+      productmodule: 'product',
+      submiting: false
     }
   },
   watch: {
@@ -479,6 +480,7 @@ export default {
     },
     saveAjax () {
       const self = this
+      self.submiting = true
       let postData = self.submitdata
       if (this.query.fid) {
         postData.fid = this.query.fid
@@ -499,6 +501,7 @@ export default {
                 this.afterSave(data)
               }
             }
+            self.submiting = false
           }
         })
       })
@@ -665,6 +668,7 @@ export default {
     },
     saveevent () {
       const self = this
+      if (self.submiting) return false
       if (self.loginUser.isretailer === 1) {
         self.saveData()
       } else if (self.loginUser.isretailer === 2) {
@@ -763,14 +767,14 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.initData()
       this.loginUser = User.get()
-      if (this.loginUser.subscribe !== 1 && !this.loginUser.isretailer) {
+      if (this.loginUser.subscribe === 0 && !this.loginUser.isretailer) {
         this.showSubscribe = true
         return false
       }
       if (this.$route.query.fid) {
         this.handleinit()
       } else {
-        if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
+        if (this.loginUser && (this.loginUser.subscribe !== 0 || this.loginUser.isretailer)) {
           if (((`${this.loginUser.retailerinfo.firstinfo.groupbuy}` === '0' && this.$route.query.type === 'groupbuy') || (`${this.loginUser.retailerinfo.firstinfo.bargainbuy}` === '0' && this.$route.query.type === 'bargainbuy')) && this.$route.query.from) {
             this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
               const data = res.data

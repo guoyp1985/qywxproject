@@ -286,31 +286,72 @@
               </template>
             </template>
           </div>
+          <div v-show="(selectedIndex == 5)" class="swiper-inner" ref="scrollContainer6" @scroll="handleScroll('scrollContainer6',5)">
+            <template v-if="disTabData6">
+              <template v-if="!tabData6.length">
+                <div class="scroll_list">
+                  <div class="emptyitem">
+                    <div class="t-table" style="padding-top:20%;">
+                      <div class="t-cell padding10">暂无数据</div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+              <template v-else>
+                <div class="scroll_list " >
+                  <div class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData6" :key="item.id" style="color:inherit;">
+                    <div class="t-table bg-white pl10 pr10 pt10 pb10 border-box">
+                      <div class="t-cell v_middle w70">
+                        <img class="avatarimg3 imgcover" :src="item.factoryinfo.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+                      </div>
+                      <div class="t-cell v_middle pr10" style="box-sizing:border-box;">
+                        <div class="clamp1 font16">{{item.factoryinfo.title}}</div>
+                        <div class="mt5 font12 color-gray">应打款金额: {{item.needpaymoney}}</div>
+                      </div>
+                      <div class="align_right t-cell v_middle w80">
+                        <div class="btnicon bg-red color-white font12" @click="controlPopup1(item,index)">
+                          <i class="al al-asmkticon0165 v_middle"></i>
+                        </div>
+                      </div>
+                		</div>
+                  </div>
+                </div>
+              </template>
+            </template>
+          </div>
         </template>
       </div>
       <div v-transfer-dom>
         <popup class="menuwrap" v-model="showPopup1">
           <div class="popup0">
             <div class="list" v-if="clickData">
-              <div class="item" v-if="clickData.identity == 'D'">
-                <div class="inner" @click="clickPopup('up')">升级到C</div>
+              <div class="item" v-if="selectedIndex == 5">
+                <div class="inner" @click="clickPopup('pay')">核销打款金额</div>
               </div>
-              <div class="item" v-if="selectedIndex == 3">
-                <div class="inner" @click="clickPopup('level')">更改级别</div>
-              </div>
-              <div class="item" >
-                <div class="inner" @click="clickPopup('uploader')">更改推荐人</div>
-              </div>
-              <div class="item" v-if="clickData.fulltime">
-                <div class="inner" @click="clickPopup('fulltime')">设置为兼职卖家</div>
-              </div>
-              <router-link class="item" :to="{path:'/store',query:{wid:clickData.wid}}">
-                <div class="inner">进入店铺</div>
-              </router-link>
-              <router-link class="item" :to="{path:'/factoryOrders',query:{wid:clickData.wid}}">
+              <template v-else>
+                <div class="item" v-if="clickData.identity == 'D'">
+                  <div class="inner" @click="clickPopup('up')">升级到C</div>
+                </div>
+                <div class="item" v-if="selectedIndex == 3">
+                  <div class="inner" @click="clickPopup('level')">更改级别</div>
+                </div>
+                <div class="item" >
+                  <div class="inner" @click="clickPopup('uploader')">更改推荐人</div>
+                </div>
+                <div class="item" v-if="clickData.fulltime">
+                  <div class="inner" @click="clickPopup('fulltime')">设置为兼职卖家</div>
+                </div>
+                <router-link class="item" :to="{path:'/store',query:{wid:clickData.wid}}">
+                  <div class="inner">进入店铺</div>
+                </router-link>
+              </template>
+              <router-link v-if="selectedIndex != 5" class="item" :to="{path:'/factoryOrders',query:{wid:clickData.wid}}">
                 <div class="inner">相关订单</div>
               </router-link>
-              <router-link class="item" :to="{path:'/stat',query:{module:'factoryretailer',id:query.id,wid:clickData.wid}}">
+              <router-link v-if="selectedIndex == 5" class="item" :to="{path:'/factoryBill',query:{fid:clickData.fid, fromfid: loginUser.fid}}">
+                <div class="inner">统计</div>
+              </router-link>
+              <router-link v-else class="item" :to="{path:'/stat',query:{module:'factoryretailer',id:query.id,wid:clickData.wid}}">
                 <div class="inner">统计</div>
               </router-link>
               <div class="item close mt10" @click="clickPopup">
@@ -429,6 +470,38 @@
         </div>
       </div>
     </div>
+    <div v-transfer-dom class="x-popup">
+      <popup v-model="showPayPopup" height="100%">
+        <div class="popup1">
+          <div class="popup-top flex_center">厂家已打款</div>
+          <div class="popup-middle font14">
+            <div class="pt10 pb10 pl12 pr12" v-if="clickData && clickData.factoryinfo">
+              <div class="t-table bg-white pt10 pb10">
+                <div class="t-cell pl12 v_middle" style="width:110px;">
+                  <img class="imgcover v_middle" :src="clickData.factoryinfo.photo" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+                </div>
+                <div class="t-cell v_middle">
+                  <div class="clamp1 font16">{{clickData.factoryinfo.title}}</div>
+                  <div class="font12 color-gray">应打款金额: {{clickData.needpaymoney}}</div>
+                </div>
+              </div>
+              <div class="form-item">
+                <div class="t-table">
+                  <div class="t-cell title-cell w100 font14 v_middle">已打款金额<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
+                  <div class="t-cell input-cell v_middle" style="position:relative;">
+                    <x-input v-model="payMoney" type="text" class="input" placeholder="已打款金额"></x-input>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="popup-bottom flex_center">
+            <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closePayPopup">{{ $t('Close') }}</div>
+            <div class="flex_cell h_100 flex_center bg-green color-white" @click="submitPay">提交</div>
+          </div>
+        </div>
+      </popup>
+    </div>
   </div>
 </template>
 
@@ -438,7 +511,7 @@ Add factory:
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Popup, Confirm, CheckIcon, XImg, Search, Group, XTextarea } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Popup, Confirm, CheckIcon, XImg, Search, Group, XTextarea, XInput } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
@@ -448,7 +521,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Popup, Confirm, CheckIcon, XImg, Sos, Search, Group, XTextarea
+    Tab, TabItem, Swiper, SwiperItem, Popup, Confirm, CheckIcon, XImg, Sos, Search, Group, XTextarea, XInput
   },
   data () {
     return {
@@ -458,7 +531,7 @@ export default {
       query: {},
       fid: 0,
       loginUser: {},
-      tabtxts: ['全职卖家', '兼职卖家', '待审核卖家', '经销商', '待审核经销商'],
+      tabtxts: ['全职卖家', '兼职卖家', '待审核卖家', '经销商', '待审核经销商', '代理厂家'],
       selectedIndex: 0,
       searchword1: '',
       searchword2: '',
@@ -469,12 +542,14 @@ export default {
       tabData3: [],
       tabData4: [],
       tabData5: [],
+      tabData6: [],
       disSearchData: false,
       disTabData1: false,
       disTabData2: false,
       disTabData3: false,
       disTabData4: false,
       disTabData5: false,
+      disTabData6: false,
       userPpageStart: 0,
       searchPageStart: 0,
       pageStart1: 0,
@@ -482,6 +557,7 @@ export default {
       pageStart3: 0,
       pageStart4: 0,
       pageStart5: 0,
+      pageStart6: 0,
       limit: 20,
       showPopup1: false,
       clickData: {},
@@ -499,7 +575,10 @@ export default {
       idArr: [],
       refuseContent: '',
       showRefuseModal: false,
-      levelPolicy: {}
+      levelPolicy: {},
+      showPayPopup: false,
+      payMoney: '',
+      allchoosed: false
     }
   },
   methods: {
@@ -617,6 +696,12 @@ export default {
               self.$vux.loading.show()
               self.getData5()
             }
+          } else if (index === 5) {
+            if (self.tabData6.length === (self.pageStart6 + 1) * self.limit) {
+              self.pageStart6++
+              self.$vux.loading.show()
+              self.getData6()
+            }
           }
         }
       })
@@ -682,6 +767,14 @@ export default {
             self.disTabData5 = false
             this.tabData5 = []
             self.getData5()
+          }
+          break
+        case 5:
+          if (this.tabData6.length < this.limit) {
+            self.pageStart6 = 0
+            self.disTabData6 = false
+            this.tabData6 = []
+            self.getData6()
           }
           break
       }
@@ -757,7 +850,46 @@ export default {
             })
           }
         })
+      } else if (key === 'pay') {
+        this.payMoney = ''
+        this.showPayPopup = true
       }
+    },
+    closePayPopup () {
+      this.showPayPopup = false
+    },
+    submitPay () {
+      const self = this
+      let money = self.payMoney
+      if (self.$util.trim(money) === '') {
+        self.$vux.toast.show({
+          text: '请输入核销金额'
+        })
+        return false
+      }
+      if (isNaN(money) || parseFloat(money) < 0) {
+        self.$vux.toast.show({
+          text: '请输入正确的核销金额'
+        })
+        return false
+      }
+      self.$http.post(`${ENV.BokaApi}/api/factory/factoryPaymoeny`, {
+        fid: self.clickData.fid, fromfid: self.loginUser.fid, paymoeny: money
+      }).then(res => {
+        let data = res.data
+        self.$vux.loading.hide()
+        self.$vux.toast.show({
+          text: data.error,
+          type: data.flag !== 1 ? 'warn' : 'success',
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+              self.showPayPopup = false
+              self.refresh()
+            }
+          }
+        })
+      })
     },
     closeLevelPopup () {
       this.showLevelPopup = false
@@ -804,8 +936,13 @@ export default {
     },
     allchoose () {  // 全选
       let checkdoms = this.$refs.inputCheckbox
+      this.allchoosed = !this.allchoosed
       for (var i = 0; i < checkdoms.length; i++) {
-        checkdoms[i].checked = !checkdoms[i].checked
+        if (this.allchoosed) {
+          checkdoms[i].checked = true
+        } else {
+          checkdoms[i].checked = false
+        }
       }
       this.getDshsSellerInfo()
     },
@@ -1122,9 +1259,25 @@ export default {
         self.disTabData5 = true
       })
     },
+    getData6 (isone) {
+      const self = this
+      let params = {fid: this.loginUser.fid, type: 'join', pagestart: self.pageStart6, limit: self.limit}
+      if (isone) {
+        params.pagestart = self.tabData6.length
+        params.limit = 1
+      }
+      this.$http.post(`${ENV.BokaApi}/api/factory/fpimportapplyList`, params)
+      .then(res => {
+        self.$vux.loading.hide()
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        self.tabData6 = self.tabData6.concat(retdata)
+        self.disTabData6 = true
+      })
+    },
     searchUser () {
       const self = this
-      const params = {fid: self.query.id, pagestart: self.userPpageStart, limit: self.limit}
+      const params = {fid: self.query.id, pagestart: self.userPpageStart, limit: self.limit, agent: 0}
       let keyword = self.searchword2
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         params.keyword = keyword
@@ -1159,7 +1312,7 @@ export default {
             break
           }
         }
-        if (!(self.loginUser.fid && parseInt(self.loginUser.fid) === parseInt(self.$route.query.id)) && !isAdmin) {
+        if (!(self.loginUser.fid && parseInt(self.loginUser.fid) === parseInt(self.$route.query.id)) && !isAdmin && !self.query.fromapp === 'factory') {
           this.$vux.loading.hide()
           self.showSos = true
           self.showContainer = false

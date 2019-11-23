@@ -31,7 +31,7 @@
               </div>
             </template>
           </div>
-          <router-link :to="{path: '/factoryNews', query: {id: item.id, fid: query.fid}}" v-else v-for="(item,index1) in tabdata1" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
+          <div @click="toDetail(item)" v-else v-for="(item,index1) in tabdata1" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
             <div class="t-table">
               <div class="t-cell v_middle w70">
                 <img class="imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
@@ -45,20 +45,23 @@
                 </div>
               </div>
               <div class="align_right t-cell v_bottom w80 pb8">
-                  <div class="btnicon bg-red color-white font12" @click="controlpopup(item)">
+                  <div class="btnicon bg-red color-white font12" @click.stop="controlpopup(item)">
                     <i class="al al-asmkticon0165 v_middle"></i>
                   </div>
               </div>
             </div>
-          </router-link>
+          </div>
         </div>
       </div>
       <div class="s-bottom list-shadow flex_center bg-white pl12 pr12">
         <div class="flex_cell flex_center">
-          <router-link class="flex_center btn-bottom-orange" style="width:80%;" :to="{path: '/factoryNewsClass', query: {fid: query.fid}}" >文章分类</router-link>
+          <div class="flex_center btn-bottom-red font14" style="width:80%;" @click="toGoodeazy">易采集</div>
         </div>
         <div class="flex_cell flex_center">
-          <router-link class="flex_center btn-bottom-red" style="width:80%;" :to="{path: '/addFactoryNews', query: {fid: query.fid}}" >{{ $t('Create news') }}</router-link>
+          <div class="flex_center btn-bottom-orange font14" style="width:80%;" @click="toClass">文章分类</div>
+        </div>
+        <div class="flex_cell flex_center">
+          <div class="flex_center btn-bottom-red font14" style="width:80%;" @click="toAdd">{{ $t('Create news') }}</div>
         </div>
       </div>
       <div v-transfer-dom>
@@ -66,7 +69,7 @@
           <div class="popup0">
             <div class="list">
               <div class="item" v-for="(row,index1) in controldata" :key="index1">
-                <router-link class="inner" v-if="row.key == 'stat'" :to="{path:'/stat',query:{id:clickdata.id,module:'factorynews', fid: query.fid}}">{{ row.title }}</router-link>
+                <div class="inner" v-if="row.key == 'stat'" @click="toStat">{{ row.title }}</div>
                 <router-link class="inner" v-else-if="row.key == 'set'" :to="{path:'/addFactoryNews',query:{id:clickdata.id, fid: query.fid}}">{{ row.title }}</router-link>
               </div>
               <div class="item close mt10" @click="clickpopup('row.key,clickdata')">
@@ -142,6 +145,26 @@ export default {
     }
   },
   methods: {
+    toDetail (item) {
+      let params = this.$util.handleAppParams(this.query, {id: item.id, fid: this.query.fid})
+      this.$router.push({path: '/factoryNews', query: params})
+    },
+    toGoodeazy () {
+      let params = this.$util.handleAppParams(this.query, {fid: this.query.fid})
+      this.$router.push({path: '/factoryGoodeazy', query: params})
+    },
+    toClass () {
+      let params = this.$util.handleAppParams(this.query, {fid: this.query.fid})
+      this.$router.push({path: '/factoryNewsClass', query: params})
+    },
+    toAdd () {
+      let params = this.$util.handleAppParams(this.query, {fid: this.query.fid})
+      this.$router.push({path: '/addFactoryNews', query: params})
+    },
+    toStat () {
+      let params = this.$util.handleAppParams(this.query, {id: this.clickdata.id, module: 'factorynews', fid: this.query.fid})
+      this.$router.push({path: '/stat', query: params})
+    },
     handleScroll (refname, type) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]

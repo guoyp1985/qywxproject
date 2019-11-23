@@ -4,7 +4,7 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div :class="`containerarea font14 bg-white news notop ${loginUser.isretailer ? '' : 'nobottom'}`">
+  <div :class="`containerarea font14 bg-white news notop ${(loginUser.isretailer && !editIng && !query.from && !query.fromapp) ? '' : 'nobottom'}`">
     <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
     </template>
@@ -22,8 +22,8 @@
           </div>
           <div class="article-info" style="position:relative;">
             <span class="article-date color-gray">{{article.dateline | dateFormat}}</span>
-            <span v-if="reward.subscribe != 1" @click="popupSubscribe" class="article-ex color-blue">{{ WeixinName }}</span>
-            <router-link v-else to="/subscribeInfo" class="article-ex color-blue">{{ WeixinName }}</router-link>
+            <!-- <span v-if="reward.subscribe != 1" @click="popupSubscribe" class="article-ex color-blue">{{ WeixinName }}</span>
+            <router-link v-else to="/subscribeInfo" class="article-ex color-blue">{{ WeixinName }}</router-link> -->
             <router-link class="article-author" :to="{ name: '', params: {} }">{{article.author}}</router-link>
           </div>
           <template v-if="showArticle">
@@ -53,7 +53,7 @@
               </template>
             </template>
             <template v-else>
-              <template v-if="article.uploader == reward.uid">
+              <template v-if="article.uploader == reward.uid || article.fid == reward.fid">
                 <div v-if="article.content == '' && !afterEdit" id="editor-content" class="article-content color-gray font16">
                   <p>文章内容为空，点击【编辑】按钮可修改内容哦！</p>
                 </div>
@@ -70,7 +70,7 @@
           </div>
         </div>
       </div>
-      <div v-if="loginUser.isretailer && !editIng" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
+      <div v-if="loginUser.isretailer && !editIng && !query.from && !query.fromapp" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
         <div class="align_center flex_center flex_cell">
           <div class="flex_cell flex_center btn-bottom-red" v-if="article.haveimport" >已导入</div>
           <div class="flex_cell flex_center btn-bottom-red" v-else @click="importEvent">导入到我的文章</div>
@@ -84,7 +84,7 @@
         :module="module"
         :on-close="closeShareSuccess">
       </share-success>
-      <editor v-if="reward.uid == article.uploader && showEditor && article.c_format != 'json'" elem="#editor-content" module="factorynews" :loginUser="loginUser" :query="query" @on-edit="clickEdit" @on-auto-save="autoSave" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
+      <editor v-if="(reward.uid == article.uploader || reward.fid == article.fid) && showEditor && article.c_format != 'json'" elem="#editor-content" module="factorynews" :loginUser="loginUser" :query="query" @on-edit="clickEdit" @on-auto-save="autoSave" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
       <div v-transfer-dom class="x-popup">
         <popup v-model="showSubscribe" height="100%">
           <div class="popup1">
@@ -190,8 +190,10 @@ export default {
       this.showSubscribe = false
     },
     clickProduct (event) {
+      const self = this
       console.log('进入点出商品事件')
-      if (parseInt(self.reward.uid) !== parseInt(self.article.uploader)) {
+      console.log(self.loginUser)
+      if (parseInt(self.loginUser.uid) !== parseInt(self.article.uploader)) {
         console.log('in news clickproduct')
         let node = event.target
         let linkurl = null
@@ -207,14 +209,16 @@ export default {
         }
         if (linkurl) {
           console.log(linkurl)
-          if (self.query.from === 'miniprogram') {
-            const params = self.$util.query(linkurl)
+          let pquery = self.$route.query
+          const params = self.$util.query(linkurl)
+          if (pquery.fromapp === 'factory' && self.module === 'factorynews') {
+            self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.factoryAppProduct}?id=${params.id}&type=others`})
+          } else if (pquery.from === 'miniprogram') {
             self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}&module=product`})
-          } else if (self.query.fromapp === 'factory') {
-            const params = self.$util.query(linkurl)
-            self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&fid=${params.fid}&module=product`})
           } else {
-            self.$router.push({path: linkurl})
+            if (self.module !== 'factorynews') {
+              self.$router.push({path: linkurl})
+            }
           }
         }
       }
@@ -337,6 +341,11 @@ export default {
             }
           }
           self.handleImg()
+          if (self.query.control === 'edit' && parseInt(self.reward.uid) === parseInt(self.article.uploader)) {
+            setTimeout(() => {
+              jQuery('.news .edit-btn')[0].click()
+            }, 100)
+          }
           const data = res.data
           if (data.flag === 1) {
             self.isdig = 1
@@ -428,7 +437,11 @@ export default {
     },
     editSave () {
       this.editIng = false
-      this.save()
+      this.save(() => {
+        if (this.query.fromapp) {
+          this.$wechat.miniProgram.reLaunch({url: `${ENV.MiniRouter.news}?id=${this.query.id}&add=1`})
+        }
+      })
     },
     editSetting () {
       this.$router.push({name: 'tAddFacotryNews', params: {id: this.article.id, fid: this.article.fid}})
@@ -523,12 +536,12 @@ export default {
       this.$util.wxAccessListening()
     },
     refresh (query) {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       const self = this
       this.loginUser = User.get()
       this.showArticle = false
       this.showEditor = false
       this.editIng = false
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       if (this.query.id !== query.id) {
         self.showSos = false
         self.showContainer = false

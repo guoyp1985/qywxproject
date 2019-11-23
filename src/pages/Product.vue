@@ -71,8 +71,8 @@
               <span class="v_middle">{{ productdata.oriprice }}</span>
             </span>
           </div>
-          <div class="flex_left mt5 color-gray" v-if="(productdata.tb_price != '' && productdata.tb_price > 0) || (productdata.jd_price != '' && productdata.jd_price > 0)">
-            <span v-if="productdata.tb_price != '' && productdata.tb_price > 0">猫价: ￥{{productdata.tb_price}}</span><span :class="{'ml10': (productdata.tb_price != '' && productdata.jd_price > 0)}" v-if="productdata.jd_price != '' && productdata.jd_price > 0">狗价: ￥{{productdata.jd_price}}</span>
+          <div class="flex_left mt5 color-gray" v-if="productdata.showTb || productdata.showJd">
+            <span v-if="productdata.showTb">猫价: ￥{{productdata.tb_price}}</span><span v-if="productdata.showJd" class="ml10">狗价: ￥{{productdata.jd_price}}</span>
           </div>
           <div class="flex_left font12 mt5 color-gray2">
   					<div v-if="productdata.postage == 0" class="flex_left">{{ $t('Postage') }}: 包邮</div>
@@ -1151,6 +1151,16 @@ export default {
             self.showcontainer = true
             self.productdata = data.data
             this.createSocket()
+            if (this.productdata.jd_price && this.productdata.jd_price !== '' && parseFloat(this.productdata.jd_price) > 0) {
+              this.productdata.showJd = true
+            } else {
+              this.productdata.showJd = false
+            }
+            if (this.productdata.tb_price && this.productdata.tb_price !== '' && parseFloat(this.productdata.tb_price) > 0) {
+              this.productdata.showTb = true
+            } else {
+              this.productdata.showTb = false
+            }
             if (this.productdata.options.length) {
               this.selectedOption = {storage: this.productdata.storage, photo: this.productdata.options[0].photo}
               this.previewerOptionsPhoto = this.$util.previewerImgdata([this.productdata.options[0].photo])

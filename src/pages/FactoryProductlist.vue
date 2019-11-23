@@ -21,21 +21,27 @@
           </template>
           <template v-else>
             <div class="scroll_list ">
-              <div @click="toFactoryProduct(item)" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
-                <div v-if="item.moderate == 0" class="ico down"></div>
+              <div @click="toFactoryProduct(item)" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in productdata" :key="index" style="color:inherit;">
+                <!-- <div v-if="item.moderate == 0 || (clickdata.fromfid && clickdata.originmoderate == 0)" class="ico down"></div> -->
+                <div v-if="item.isshow == 0" class="ico down"></div>
             		<div class="t-table bg-white pt10 pb10">
             			<div class="t-cell pl12 v_middle" style="width:110px;">
                     <img class="imgcover v_middle" :src="getPhoto(item.photo)" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                   </div>
             			<div class="t-cell v_middle">
-                    <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
+                    <div class="clamp1 font16 pr10 color-lightgray"><span class="color-theme" v-if="item.fromfid">【货源】</span><span>{{item.title}}</span></div>
                     <div class="t-table pr12 border-box mt15">
                       <div class="t-cell color-999 font14">
                         <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ item.price }}</span></div>
-                        <div class="clamp1 mt5">
+                        <div class="clamp1">
                             <span class="v_middle db-in">库存: {{ item.storage }}{{item.unit}}</span>
-                            <span class="v_middle db-in ml5">已售: {{ item.saled }}{{item.unit}}</span>
+                            <span class="v_middle db-in ml5">已售: {{ item.truesaled }}{{item.unit}}</span>
                         </div>
+                        <div class="font12" v-if="item.fromfid">利润空间:<span class="color-red"> {{ $t('RMB') }}{{ item.lirun }}</span></div>
+                        <!-- <div class="clamp1 mt5">
+                            <span class="v_middle db-in">销售佣金: {{ item.salesrebate }}</span>
+                            <span class="v_middle db-in ml5">推荐佣金: {{ item.superrebate }}</span>
+                        </div> -->
                       </div>
                       <div class="align_right t-cell v_bottom w80">
                         <div class="btnicon bg-red color-white font12" @click.stop="controlpopup1(item,index)">
@@ -51,9 +57,9 @@
         </template>
       </div>
       <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
-        <!-- <div class="align_center flex_center flex_cell">
-          <router-link class="flex_center bg-orange color-white" style="width:85%;border-radius:50px;height:35px;" to="/factoryGoodeazy">采集商品</router-link>
-        </div> -->
+        <div class="flex_center flex_cell">
+          <router-link class="flex_center bg-orange color-white" style="width:85%;border-radius:50px;height:35px;" to="/sourceList">货源</router-link>
+        </div>
         <div class="flex_cell flex_center">
           <div class="bg-red flex_center color-white" style="width:85%;border-radius:50px;height:35px;" @click="toAdd">{{ $t('Add product') }}</div>
         </div>
@@ -62,40 +68,247 @@
         <popup class="menuwrap" v-model="showpopup1">
           <div class="popup0">
             <div class="list" v-if="clickdata">
-              <div class="item">
-                <div class="inner" @click="clickpopup('copy')">复制商品信息</div>
-              </div>
-              <div class="item">
-                <router-link class="inner" :to="{path: '/agentProduct', query: {pid: clickdata.id}}">经销商价格</router-link>
-              </div>
-              <div class="item">
-                <router-link class="inner" :to="{path: '/materialbank', query: {pid: clickdata.id}}">素材库</router-link>
-              </div>
-              <div class="item" v-if="clickdata.moderate == 1">
-                <div class="inner" @click="clickpopup('recommend')" v-if="clickdata.recommend == 0">商品推荐</div>
-                <div class="inner" @click="clickpopup('recommend')" v-else>取消推荐</div>
-              </div>
-              <div class="item">
-                <router-link class="inner" :to="{path: '/postageArea', query: {type: 'factoryproduct',id: clickdata.id}}">偏远地区运费</router-link>
-              </div>
-              <div class="item" v-if="!clickdata.activityid || clickdata.activityid == 0">
-                <router-link class="inner" :to="{path: '/addFactoryProduct', query: {id: clickdata.id, fid: query.fid}}">编辑</router-link>
-              </div>
-              <div class="item" v-if="clickdata.moderate == 0">
+              <template v-if="!clickdata.fromfid">
+                <div class="item">
+                  <div class="inner" @click="clickpopup('copy')">复制商品信息</div>
+                </div>
+                <div class="item">
+                  <router-link class="inner" :to="{path: '/agentProduct', query: {pid: clickdata.moduleid}}">经销商价格</router-link>
+                </div>
+                <div class="item">
+                  <router-link class="inner" :to="{path: '/materialbank', query: {pid: clickdata.moduleid}}">素材库</router-link>
+                </div>
+                <div class="item" v-if="clickdata.moderate == 1">
+                  <div class="inner" @click="clickpopup('recommend')" v-if="clickdata.recommend == 0">商品推荐</div>
+                  <div class="inner" @click="clickpopup('recommend')" v-else>取消推荐</div>
+                </div>
+                <div class="item">
+                  <router-link class="inner" :to="{path: '/postageArea', query: {type: 'factoryproduct',id: clickdata.moduleid}}">偏远地区运费</router-link>
+                </div>
+                <div class="item" v-if="!clickdata.activityid || clickdata.activityid == 0">
+                  <div class="inner" @click="clickpopup('edit')">编辑</div>
+                </div>
+                <div class="item">
+                  <div class="inner" @click="clickpopup('storage')">修改库存</div>
+                </div>
+              </template>
+              <div class="item" v-if="clickdata.isshow == 0">
                 <div class="inner" @click="clickpopup('up')">上架</div>
               </div>
-              <div class="item" v-else-if="clickdata.moderate == 1">
+              <div class="item" v-else>
                 <div class="inner" @click="clickpopup('down')">下架</div>
               </div>
-              <div class="item">
-                <router-link class="inner" :to="{path: '/stat', query: {id: clickdata.id, module: 'factoryproduct'}}">统计</router-link>
+              <template v-if="!clickdata.fromfid">
+                <div class="item" v-if="clickdata.shelf == 0 && clickdata.isshow">
+                  <div class="inner" @click="clickpopup('upShelf')">推荐到货源</div>
+                </div>
+                <div class="item" v-if="clickdata.shelf == 1">
+                  <div class="inner" @click="clickpopup('downShelf')">从货源移出</div>
+                </div>
+              </template>
+              <div class="item" v-if="clickdata.fromfid">
+                <div class="inner" @click="clickpopup('fee')">设置佣金</div>
               </div>
-              <!-- <div class="item">
-                <router-link class="inner" :to="{ path: '/factoryAgentFee', query: { id: clickdata.id, fid: query.fid } }">设置佣金</router-link>
-              </div> -->
+              <div class="item">
+                <div class="inner" @click="clickpopup('stat')">统计</div>
+              </div>
               <div class="item close mt10" @click="clickpopup">
                 <div class="inner">{{ $t('Cancel txt') }}</div>
               </div>
+            </div>
+          </div>
+        </popup>
+      </div>
+      <div v-transfer-dom class="x-popup">
+        <popup v-model="showStoragePopup" height="100%">
+          <div class="popup1">
+            <div class="popup-top flex_center">修改库存</div>
+            <div class="popup-middle font14">
+              <div class="pt10 pb10 pl12 pr12">
+                <div class="t-table bg-white pt10 pb10">
+            			<div class="t-cell pl12 v_middle" style="width:110px;">
+                    <img class="imgcover v_middle" :src="getPhoto(clickdata.photo)" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+                  </div>
+            			<div class="t-cell v_middle">
+                    <div class="clamp1 font16 pr10 color-lightgray">{{clickdata.title}}</div>
+                    <div class="t-table pr12 border-box mt15" v-if="!clickdata.options || !clickdata.options.length">
+                      <div class="t-cell color-999 font14">
+                        <div class="clamp1">现有库存: <span class="color-red">{{ clickdata.storage }}</span></div>
+                      </div>
+                    </div>
+            			</div>
+            		</div>
+                <template v-if="clickdata.options && clickdata.options.length">
+                  <template v-for="(oitem,index) in clickdata.options">
+                    <div class="form-item bold">{{oitem.title}}</div>
+                    <div class="form-item">
+                      <div class="t-table">
+                        <div class="t-cell title-cell w80 font14 v_middle">现有库存</div>
+                        <div class="t-cell input-cell v_middle" style="position:relative;">{{oitem.storage}}</div>
+                      </div>
+                    </div>
+                    <div class="form-item">
+                      <div class="t-table">
+                        <div class="t-cell title-cell w80 font14 v_middle">库存数量</div>
+                        <div class="t-cell input-cell v_middle" style="position:relative;">
+                          <x-input v-model="oitem.newstorage" type="text" class="input" placeholder="库存数量"></x-input>
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                </template>
+                <template v-else>
+                  <div class="form-item">
+                    <div class="t-table">
+                      <div class="t-cell title-cell w80 font14 v_middle">库存数量</div>
+                      <div class="t-cell input-cell v_middle" style="position:relative;">
+                        <x-input v-model="clickdata.newstorage" type="text" class="input" placeholder="库存数量"></x-input>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+    					</div>
+            </div>
+            <div class="popup-bottom flex_center">
+              <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeStoragePopup">{{ $t('Close') }}</div>
+              <div class="flex_cell h_100 flex_center bg-orange color-white" @click="submitStorage">减少库存</div>
+              <div class="flex_cell h_100 flex_center bg-green color-white" @click="submitStorage('add')">增加库存</div>
+            </div>
+          </div>
+        </popup>
+      </div>
+      <div v-transfer-dom class="x-popup">
+        <popup v-model="showFeePopup" height="100%">
+          <div class="popup1">
+            <div class="popup-top flex_center">设置佣金</div>
+            <div class="popup-middle font14">
+              <div class="pt10 pb10 pl12 pr12">
+                <div class="t-table bg-white pt10 pb10">
+            			<div class="t-cell pl12 v_middle" style="width:110px;">
+                    <img class="imgcover v_middle" :src="getPhoto(feeData.photo)" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+                  </div>
+            			<div class="t-cell v_middle">
+                    <div class="clamp1 font16 pr10 color-lightgray">{{feeData.title}}</div>
+                    <div class="t-table pr12 border-box mt15">
+                      <div class="t-cell color-999 font14">
+                        <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ feeData.price }}</span></div>
+                        <div class="clamp1 mt5" v-if="feeData.fpid > 0">厂家佣金:<span class="color-red"> {{ $t('RMB') }}{{ feeData.rebatein }}</span></div>
+                        <div class="clamp1 mt5">
+                            <span class="v_middle db-in">已售: {{ feeData.saled }}{{feeData.unit}}</span>
+                        </div>
+                      </div>
+                    </div>
+            			</div>
+            		</div>
+                <div class="form-item">
+                  <div class="t-table">
+                    <div class="t-cell title-cell w80 font14 v_middle">销售佣金<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
+                    <div class="t-cell input-cell v_middle" style="position:relative;">
+                      <x-input v-model="postSalesRebate" type="text" class="input" placeholder="销售佣金"></x-input>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-item">
+                  <div class="t-table">
+                    <div class="t-cell title-cell w80 font14 v_middle">推荐佣金<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
+                    <div class="t-cell input-cell v_middle" style="position:relative;">
+                      <x-input v-model="postSuperRebate" type="text" class="input" placeholder="推荐佣金"></x-input>
+                    </div>
+                  </div>
+                </div>
+    					</div>
+            </div>
+            <div class="popup-bottom flex_center">
+              <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeFeePopup">{{ $t('Close') }}</div>
+              <div class="flex_cell h_100 flex_center bg-green color-white" @click="submitFee">提交</div>
+            </div>
+          </div>
+        </popup>
+      </div>
+      <div v-transfer-dom class="x-popup">
+        <popup v-model="showBankPopup" height="100%">
+          <div class="popup1">
+            <div class="popup-middle font14 bank-pop" style="top:0;">
+              <div class="box-area">
+                <div class="box-inner">
+                  <div class="title">推荐到货源优势</div>
+                  <div class="con">
+                    <div>平台卖家可帮您销售商品</div>
+                    <div>平台厂家也可帮您销售商品</div>
+                  </div>
+                </div>
+              </div>
+              <div class="line bg-page pt10"></div>
+              <div class="box-area">
+                <div class="box-inner">
+                  <div class="title">交易流程</div>
+                  <div class="con">
+                    <div>商品产生交易后</div>
+                    <div>由于订单收入是在代理厂家账户上进行的交易</div>
+                    <div>所以在产生交易后</div>
+                    <div>代理厂家需将供货商应获得的订单交易额</div>
+                    <div>从线下打款到供货商的对公账户内</div>
+                    <div>再由供货商对订单进行发货</div>
+                    <div>代理厂家可通过订单列表查看订单的状态</div>
+                    <div class="mt10">注意: 当订单出现售后情况时，需双方线下沟通协商处理</div>
+                  </div>
+                </div>
+              </div>
+              <div class="line bg-page pt10"></div>
+              <div class="box-area">
+                <div class="box-inner">
+                  <div class="title">收款信息填写</div>
+                  <div class="con">
+                    <div class="form-item required bg-white">
+                      <div class="t-table">
+                        <div class="t-cell title-cell w80 font14 v_middle">开户银行</div>
+                        <div class="t-cell input-cell v_middle" style="position:relative;">
+                          <select v-model="submitData.newbankcode" class="w_100" style="height:35px;">
+                            <option value='0'>请选择银行</option>
+                            <option v-for="(item,index) in cardList" :value="item.id">{{ item.name }}</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-item required bg-white">
+                      <div class="t-table">
+                        <div class="t-cell title-cell w80 font14 v_middle">开户名</div>
+                        <div class="t-cell input-cell v_middle" style="position:relative;">
+                          <x-input v-model="submitData.accountname" type="text" class="input" placeholder="开户名"></x-input>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-item required bg-white">
+                      <div class="t-table">
+                        <div class="t-cell title-cell w80 font14 v_middle">开户账号</div>
+                        <div class="t-cell input-cell v_middle" style="position:relative;">
+                          <x-input v-model="submitData.newbankcardno" :max="23" maxlength="23" size="23" type="text" class="input" placeholder="开户账号"></x-input>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-item required bg-white">
+                      <div class="t-table">
+                        <div class="t-cell title-cell w80 font14 v_middle">联系人</div>
+                        <div class="t-cell input-cell v_middle" style="position:relative;">
+                          <x-input v-model="submitData.newbankuser" :max="6" maxlength="6" size="6" type="text" class="input" placeholder="联系人"></x-input>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-item required bg-white">
+                      <div class="t-table">
+                        <div class="t-cell title-cell w80 font14 v_middle">手机号</div>
+                        <div class="t-cell input-cell v_middle" style="position:relative;">
+                          <x-input v-model="submitData.mobile" :max="11" maxlength="11" size="11" type="text" class="input" placeholder="手机号"></x-input>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="popup-bottom flex_center">
+              <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeBank">{{ $t('Close') }}</div>
+              <div class="flex_cell h_100 flex_center bg-theme color-white" @click="toRecommend">去推荐</div>
             </div>
           </div>
         </popup>
@@ -117,8 +330,9 @@
 </i18n>
 
 <script>
-import { TransferDom, Popup, Confirm, CheckIcon, XImg } from 'vux'
+import { TransferDom, Popup, Confirm, CheckIcon, XImg, XInput } from 'vux'
 import ENV from 'env'
+import Reg from '#/reg'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
 import TipLayer from '@/components/TipLayer'
@@ -131,7 +345,7 @@ export default {
     TransferDom
   },
   components: {
-    Popup, Confirm, CheckIcon, XImg, Sos, TipLayer
+    Popup, Confirm, CheckIcon, XImg, Sos, TipLayer, XInput
   },
   data () {
     return {
@@ -145,7 +359,18 @@ export default {
       clickdata: {},
       clickindex: 0,
       disproductdata: false,
-      showTip: false
+      showTip: false,
+      Fid: 0,
+      showFeePopup: false,
+      feeData: {},
+      postSalesRebate: '',
+      postSuperRebate: '',
+      showBankPopup: false,
+      submitData: {newbankcode: '', accountname: '', newbankcardno: '', newbankuser: '', mobile: ''},
+      cardList: [],
+      factoryInfo: {},
+      showStoragePopup: false,
+      submiting: false
     }
   },
   watch: {
@@ -155,12 +380,17 @@ export default {
   },
   methods: {
     toFactoryProduct (item) {
-      let params = this.$util.handleAppParams(this.query, {id: item.id, fid: this.query.fid})
-      this.$router.push({path: '/factoryProduct', query: params})
+      if (item.fromfid) {
+        let params = this.$util.handleAppParams(this.query, {id: item.id, fid: this.Fid, module: 'fpimport'})
+        this.$router.push({path: '/fpimportProduct', query: params})
+      } else {
+        let params = this.$util.handleAppParams(this.query, {id: item.moduleid, fid: this.Fid, frompage: 'manager'})
+        this.$router.push({path: '/factoryProduct', query: params})
+      }
     },
     toAdd () {
-      let params = this.$util.handleAppParams(this.query, {fid: this.query.fid})
-      this.$router.push({path: '/addFactoryProduct', query: params})
+      let params = this.$util.handleAppParams(this.query, {fid: this.Fid})
+      this.$router.push({path: '/addFpimportProduct', query: params})
     },
     getPhoto (src) {
       return this.$util.getPhoto(src)
@@ -190,22 +420,27 @@ export default {
     clickpopup (key) {
       const self = this
       if (key === 'up') {
+        if (self.clickdata.fromfid && !self.clickdata.originmoderate) {
+          self.$vux.toast.text('货源商品已下架，不能上架该商品', 'middle')
+          return false
+        }
         self.$vux.confirm.show({
           title: '确定要上架该商品吗？',
           onConfirm () {
             self.$vux.loading.show()
             let params = { id: self.clickdata.id, moderate: 1 }
-            self.$http.post(`${ENV.BokaApi}/api/moderate/factoryproduct`, params).then(function (res) {
+            self.$http.post(`${ENV.BokaApi}/api/moderate/fpimport`, params).then(res => {
               let data = res.data
               self.$vux.loading.hide()
               self.$vux.toast.show({
                 text: data.error,
                 type: (data.flag !== 1 ? 'warn' : 'success'),
                 time: self.$util.delay(data.error),
-                onHide: function () {
+                onHide: () => {
                   if (data.flag === 1) {
                     self.clickdata.moderate = 1
                     self.productdata[self.clickindex].moderate = 1
+                    self.productdata[self.clickindex].isshow = 1
                     self.showpopup1 = false
                   }
                 }
@@ -219,17 +454,18 @@ export default {
           onConfirm () {
             self.$vux.loading.show()
             let params = { id: self.clickdata.id, moderate: 0 }
-            self.$http.post(`${ENV.BokaApi}/api/moderate/factoryproduct`, params).then(function (res) {
+            self.$http.post(`${ENV.BokaApi}/api/moderate/fpimport`, params).then(res => {
               let data = res.data
               self.$vux.loading.hide()
               self.$vux.toast.show({
                 text: data.error,
                 type: (data.flag !== 1 ? 'warn' : 'success'),
                 time: self.$util.delay(data.error),
-                onHide: function () {
+                onHide: () => {
                   if (data.flag === 1) {
                     self.clickdata.moderate = 0
                     self.productdata[self.clickindex].moderate = 0
+                    self.productdata[self.clickindex].isshow = 0
                     self.showpopup1 = false
                   }
                 }
@@ -252,7 +488,7 @@ export default {
           onConfirm: () => {
             self.$vux.loading.show()
             self.$http.post(`${ENV.BokaApi}/api/copy/factoryproduct`, {
-              id: this.clickdata.id
+              id: this.clickdata.moduleid
             }).then(res => {
               let data = res.data
               self.$vux.loading.hide()
@@ -274,9 +510,228 @@ export default {
             })
           }
         })
+      } else if (key === 'upShelf') {
+        self.showpopup1 = false
+        this.showBankPopup = true
+      } else if (key === 'downShelf') {
+        self.showpopup1 = false
+        self.$vux.confirm.show({
+          title: '确定要将该商品从货源移出吗？',
+          onConfirm () {
+            self.$vux.loading.show()
+            let params = { id: self.clickdata.id, shelf: 0 }
+            self.$http.post(`${ENV.BokaApi}/api/factory/productset`, params).then(res => {
+              let data = res.data
+              self.$vux.loading.hide()
+              self.$vux.toast.show({
+                text: data.error,
+                type: (data.flag !== 1 ? 'warn' : 'success'),
+                time: self.$util.delay(data.error),
+                onHide: function () {
+                  if (data.flag === 1) {
+                    self.clickdata.shelf = 0
+                    self.productdata[self.clickindex].shelf = 0
+                    self.showpopup1 = false
+                  }
+                }
+              })
+            })
+          }
+        })
+      } else if (key === 'fee') {
+        self.showpopup1 = false
+        self.postSalesRebate = self.clickdata.newsalesrebate
+        self.postSuperRebate = self.clickdata.newsuperrebate
+        self.showFeePopup = true
+        self.feeData = self.clickdata
+      } else if (key === 'stat') {
+        self.showpopup1 = false
+        let params = this.$util.handleAppParams(this.query, {id: this.clickdata.id, module: 'fpimport'})
+        this.$router.push({path: '/stat', query: params})
+      } else if (key === 'storage') {
+        self.showpopup1 = false
+        this.showStoragePopup = true
+      } else if (key === 'edit') {
+        let params = this.$util.handleAppParams(this.query, {id: this.clickdata.id, fid: this.Fid})
+        this.$router.push({path: '/addFpimportProduct', query: params})
       } else {
         self.showpopup1 = false
       }
+    },
+    closeStoragePopup () {
+      this.showStoragePopup = false
+    },
+    submitStorage (type) {
+      console.log(this.clickdata)
+      if (this.submiting) return false
+      let params = {id: this.clickdata.moduleid}
+      let curOptions = this.clickdata.options
+      let isContinue = true
+      if (curOptions && curOptions.length) {
+        params.haveoptions = 1
+        let addvalue = []
+        let poid = []
+        for (let i = 0; i < curOptions.length; i++) {
+          let newval = curOptions[i].newstorage
+          if (!newval || isNaN(newval)) {
+            newval = 0
+          }
+          if (type === 'add') {
+            if (!/^[0-9]*[1-9][0-9]*$/.test(newval)) {
+              this.$vux.toast.text('请输入大于0的库存')
+              isContinue = false
+              return false
+            }
+          } else {
+            if (!/^-[0-9]*[1-9][0-9]*$/.test(newval)) {
+              this.$vux.toast.text('请输入负数库存')
+              isContinue = false
+              return false
+            }
+          }
+          this.clickdata.options[i].newstorage = newval
+          addvalue.push(newval)
+          poid.push(curOptions[i].id)
+        }
+        params.addvalue = addvalue
+        params.poid = poid
+      } else {
+        params.haveoptions = 0
+        let newval = this.clickdata.newstorage
+        if (!newval || isNaN(newval)) {
+          newval = 0
+        }
+        if (type === 'add') {
+          if (!/^[0-9]*[1-9][0-9]*$/.test(newval)) {
+            this.$vux.toast.text('请输入大于0的库存')
+            isContinue = false
+            return false
+          }
+        } else {
+          if (!/^-[0-9]*[1-9][0-9]*$/.test(newval)) {
+            this.$vux.toast.text('请输入负数库存')
+            isContinue = false
+            return false
+          }
+        }
+        this.clickdata.newstorage = newval
+        params.addvalue = newval
+      }
+      if (!isContinue) return false
+      this.submiting = true
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/FP/addStorage`, params).then(res => {
+        let data = res.data
+        this.$vux.loading.hide()
+        if (data.flag) {
+          let newData = this.productdata[this.clickindex]
+          if (!newData.options || !newData.options.length) {
+            newData.storage = newData.storage + parseInt(this.clickdata.newstorage)
+          } else {
+            let total = newData.storage
+            for (let i = 0; i < newData.options.length; i++) {
+              newData.options[i].storage = newData.options[i].storage + parseInt(newData.options[i].newstorage)
+              total = total + parseInt(newData.options[i].newstorage)
+            }
+            newData.storage = total
+          }
+          this.productdata[this.clickindex] = newData
+        }
+        this.$vux.toast.show({
+          text: data.error,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: this.$util.delay(data.error),
+          onHide: () => {
+            if (data.flag === 1) {
+              this.clickdata = {}
+              this.clickindex = 0
+              this.showStoragePopup = false
+              setTimeout(() => {
+                this.submiting = false
+              }, 1000)
+            }
+          }
+        })
+      })
+    },
+    closeBank () {
+      this.showBankPopup = false
+    },
+    toRecommend () {
+      let iscontinue = true
+      for (let key in this.submitData) {
+        if (this.submitData[key] === '') {
+          this.$vux.toast.text('请输入收款信息', 'middle')
+          iscontinue = false
+          return false
+        }
+      }
+      if (!Reg.rPhone.test(this.submitData.mobile)) {
+        this.$vux.toast.text('请输入正确的手机号', 'middle')
+        iscontinue = false
+        return false
+      }
+      if (!iscontinue) return false
+      this.$vux.loading.show()
+      let params = {...this.submitData, id: this.clickdata.id, shelf: 1}
+      this.$http.post(`${ENV.BokaApi}/api/factory/productset`, params).then(res => {
+        let data = res.data
+        this.$vux.loading.hide()
+        this.$vux.toast.show({
+          text: (data.flag !== 1 ? '商品正在活动中,不能推荐货源' : '推荐成功'),
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: this.$util.delay(data.error),
+          onHide: () => {
+            if (data.flag === 1) {
+              this.clickdata.shelf = 1
+              this.productdata[this.clickindex].shelf = 1
+              this.showBankPopup = false
+              for (let key in this.submitData) {
+                this.factoryInfo[key] = this.submitData[key]
+              }
+            }
+          }
+        })
+      })
+    },
+    closeFeePopup () {
+      this.showFeePopup = false
+      this.postSalesRebate = ''
+      this.postSuperRebate = ''
+    },
+    submitFee () {
+      const self = this
+      let salesRebate = self.postSalesRebate
+      let superRebate = self.postSuperRebate
+      if (self.$util.trim(salesRebate) === '' || self.$util.trim(superRebate) === '') {
+        self.$vux.toast.show({
+          text: '请输入销售佣金和推荐佣金'
+        })
+        return false
+      }
+      if (isNaN(salesRebate) || parseFloat(salesRebate) < 0 || isNaN(superRebate) || parseFloat(superRebate) < 0) {
+        self.$vux.toast.show({
+          text: '请输入正确的佣金'
+        })
+        return false
+      }
+      self.$http.post(`${ENV.BokaApi}/api/factory/productset`, {
+        id: self.clickdata.id, newsalesrebate: salesRebate, newsuperrebate: superRebate
+      }).then(res => {
+        let data = res.data
+        self.$vux.loading.hide()
+        self.$vux.toast.show({
+          text: data.error,
+          type: data.flag !== 1 ? 'warn' : 'success',
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+              self.showFeePopup = false
+              self.refresh()
+            }
+          }
+        })
+      })
     },
     closeTipModal () {
       this.showTip = false
@@ -285,7 +740,7 @@ export default {
       this.showTip = false
       this.$vux.loading.show()
       let oldValue = this.clickdata.recommend
-      let params = {param: 'recommend', paramvalue: 1, id: this.clickdata.id, module: 'factoryproduct'}
+      let params = {param: 'recommend', paramvalue: 1, id: this.clickdata.moduleid, module: 'factoryproduct'}
       if (this.clickdata.recommend) {
         params.paramvalue = 0
       }
@@ -318,8 +773,8 @@ export default {
     },
     getData1 () {
       const self = this
-      const params = { fid: self.query.fid, from: 'factory', pagestart: pageStart1, limit: limit }
-      this.$http.get(`${ENV.BokaApi}/api/list/factoryproduct`, {
+      const params = { fid: self.Fid, pagestart: pageStart1, limit: limit }
+      this.$http.get(`${ENV.BokaApi}/api/list/fpimport`, {
         params: params
       })
       .then(res => {
@@ -352,13 +807,35 @@ export default {
           self.showContainer = true
           this.$vux.loading.hide()
           this.query = this.$route.query
+          if (this.query.fid) {
+            this.Fid = this.query.fid
+          } else {
+            this.Fid = this.loginUser.fid
+          }
           this.disproductdata = false
           this.productdata = []
           this.$vux.loading.show()
           pageStart1 = 0
           this.getData1()
+          this.$http.post(`${ENV.BokaApi}/api/common/getBankNames`).then(res => {
+            const data = res.data
+            this.cardList = data.data ? data.data : data
+            return this.$http.get(`${ENV.BokaApi}/api/factory/info`, {
+              params: {fid: this.Fid}
+            })
+          }).then((res) => {
+            let data = res.data
+            let retdata = data.data ? data.data : data
+            this.factoryInfo = retdata
+            for (let key in this.submitData) {
+              this.submitData[key] = this.factoryInfo[key]
+            }
+          })
         }
       }
+    },
+    clearValue () {
+
     }
   },
   activated () {
@@ -404,6 +881,19 @@ export default {
   background-size: cover;
   background-size: 100%;
   height: 20px;
+}
+.bank-pop{
+  .box-area{
+    padding:10px;box-sizing:border-box;
+    .box-inner{
+      padding-left:10px;padding-bottom:10px;box-sizing:border-box;position:relative;
+      .title:before{
+        content:'';width:6px;height:6px;border-radius:50%;background-color:#ff6a61;
+        position:absolute;left:-10px;top:50%;margin-top:-3px;
+      }
+      .title{color:#ff6a61;font-size:18px;font-weight:bold;position:relative;}
+    }
+  }
 }
 
 </style>

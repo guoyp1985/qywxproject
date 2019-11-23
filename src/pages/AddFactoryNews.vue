@@ -18,19 +18,15 @@
         </div>
         <group label-width="5em">
           <group class="textarea-outer">
-            <x-textarea
+            <x-input
               ref="titleTextarea"
               v-model="submitdata.title"
               :title="$t('News title')"
               class="x-textarea noborder"
               :placeholder="`${$t('Necessary')}${$t('Title')}`"
-              :show-counter="false"
-              :rows="1"
               :max="30"
-              @on-change="textareaChange('titleTextarea')"
-              @on-focus="textareaFocus('titleTextarea')"
-              autosize>
-            </x-textarea>
+              :size="30">
+            </x-input>
           </group>
           <cell :title="$t('Cover photo')" class="font14">
             {{$t('Necessary')}}<!--上传图像后可点击<i class="al al-set font14"></i>进行剪裁-->
@@ -44,7 +40,7 @@
           <div class="q_photolist align_left">
             <template v-if="photoarr.length > 0">
               <div v-for="(item, index) in photoarr" :key="index" class="img-box">
-                <img class="img" :src="item"/>
+                <img class="img imgcover" :src="item"/>
                 <a class="setting-btn" @click="clipPhoto(item)">
                   <i class="al al-set font16"></i>
                 </a>
@@ -63,7 +59,7 @@
             </div>
           </div>
         </div>
-        <div class="form-item bg-white">
+        <!-- <div class="form-item bg-white">
           <div class="t-table">
             <div class="t-cell title-cell w80 font14 v_middle">视频</div>
             <div class="t-cell input-cell v_middle" style="position:relative;">
@@ -85,7 +81,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
         <!-- <group label-width="5em">
           <group class="textarea-outer">
             <x-textarea
@@ -103,7 +99,7 @@
             </x-textarea>
           </group>
         </group> -->
-        <group class="option-area" label-width="6em">
+        <!-- <group class="option-area" label-width="6em">
           <x-textarea
             ref="descTextarea"
             class="font14"
@@ -126,7 +122,7 @@
             :rows="1"
             autosize>
           </x-textarea>
-        </group>
+        </group> -->
       </div>
       <div class="pagebottom flex_center pl12 pr12 list-shadow02 bg-white">
         <div class="flex_cell flex_center btn-bottom-red" @click="save">下一步，编辑内容</div>
@@ -159,7 +155,8 @@ export default {
       photoarr: [],
       maxnum: 1,
       havenum: 0,
-      submitdata: {classid: 0, title: '', photo: '', video: '', seodescription: '', summary: ''},
+      // submitdata: {classid: 0, title: '', photo: '', video: '', seodescription: '', summary: ''},
+      submitdata: {classid: 0, title: '', photo: ''},
       requireddata: {title: '', 'photo': ''},
       submitIng: false,
       classData: [],
@@ -176,7 +173,8 @@ export default {
       this.allowsubmit = true
       this.photoarr = []
       this.havenum = 0
-      this.submitdata = {classid: 0, title: '', photo: '', seodescription: '', summary: ''}
+      // this.submitdata = {classid: 0, title: '', photo: '', seodescription: '', summary: ''}
+      this.submitdata = {classid: 0, title: '', photo: ''}
       this.requireddata = {title: '', 'photo': ''}
     },
     textareaChange (refname) {
@@ -335,15 +333,18 @@ export default {
         document.title = '更多设置'
         this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
           params: { id: this.query.id, module: 'factorynews' }
-        }).then(function (res) {
+        }).then(res => {
           const data = res.data
           const retdata = data.data ? data.data : data
           if (retdata.video && retdata.video !== '') {
             self.videoarr = [retdata.video]
           }
+          self.photoarr = []
           if (retdata) {
             for (let key in self.submitdata) {
-              self.submitdata[key] = retdata[key]
+              if (retdata[key]) {
+                self.submitdata[key] = retdata[key]
+              }
             }
             if (self.submitdata.photo && self.$util.trim(self.submitdata.photo) !== '') {
               const parr = self.submitdata.photo.split(',')
@@ -390,9 +391,9 @@ export default {
           }
           if (this.query.id === undefined || this.query.id !== this.$route.query.id || this.query.fid !== this.$route.query.fid) {
             this.initData()
-            this.query = this.$route.query
-            this.getData()
           }
+          this.query = this.$route.query
+          this.getData()
         }
       }
     }

@@ -584,7 +584,16 @@ export default {
         self.$http.post(`${ENV.BokaApi}/api/order/delivercompany`).then(function (res) {
           let data = res.data
           self.delivercompany = data.data ? data.data : data
+          if (!self.deliverdata.delivercompany || self.deliverdata.delivercompany === '-1') {
+            self.deliverdata.delivercompanyname = self.delivercompany[0].name
+            self.deliverdata.delivercompany = self.delivercompany[0].id
+          }
         })
+      } else {
+        if (!self.deliverdata.delivercompany || self.deliverdata.delivercompany === '-1') {
+          self.deliverdata.delivercompanyname = self.delivercompany[0].name
+          self.deliverdata.delivercompany = self.delivercompany[0].id
+        }
       }
       this.showpopup = true
     },
@@ -597,6 +606,7 @@ export default {
       }
       self.$vux.loading.show()
       self.deliverdata.id = self.deliveritem.id
+      self.deliverdata.delivercode = self.$util.trim(self.deliverdata.delivercode)
       self.$http.post(`${ENV.BokaApi}/api/order/deliver`, self.deliverdata).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
@@ -646,9 +656,9 @@ export default {
     },
     closepopup () {
       this.showpopup = false
-      self.deliveritem = null
-      self.deliverindex = 0
-      self.deliverdata = { delivercompany: '-1', delivercode: '' }
+      this.deliveritem = null
+      this.deliverindex = 0
+      this.deliverdata = { delivercompany: '-1', delivercode: '' }
     },
     scanClick () {
       const self = this
@@ -696,10 +706,12 @@ export default {
           self.showSos = false
           self.showContainer = true
           this.$vux.loading.hide()
+          if (this.query.wid !== this.$route.query.wid) {
+            self.pagestart1 = 0
+            self.distabdata1 = false
+            this.tabdata1 = []
+          }
           this.query = this.$route.query
-          // self.pagestart1 = 0
-          // self.distabdata1 = false
-          // this.tabdata1 = []
           this.swiperChange()
         }
       }

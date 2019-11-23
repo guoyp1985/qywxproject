@@ -151,11 +151,14 @@ Vue.http.interceptors.request.use(config => {
       // console.log(config.url)
       cancelAllPendings(config)
       access((path) => {
-        router.push({path: path})
+        router.replace({path: path})
       })
     } else {
       console.log(`interceptors: Bearer ${token.token}`)
       config.headers['Authorization'] = `Bearer ${token.token}`
+      if (config.url.indexOf(ENV.FactoryApi) > -1 && ENV.ApiVersion === 'V2') {
+        config.headers['Accept'] = ENV.ApiAccept
+      }
     }
   }
   return config
@@ -168,6 +171,8 @@ Vue.http.interceptors.response.use(response => {
   return response
 }, error => {
   if (error.response) {
+    Token.remove()
+    alert('禁止未授权访问')
     if (error.response.status === 401) {
       console.error('未授权请求')
       Vue.access(isPC => {
@@ -179,6 +184,7 @@ Vue.http.interceptors.response.use(response => {
   }
 })
 
+let bugList = [{uid: 25465, name: '黄一萌'}, {uid: 8, name: 'young'}, {uid: 27531, name: '戴飞'}, {uid: 24675, name: '兰花草'}, {uid: 1694}, {uid: 65231}]
 const access = success => {
   let query = ''
   const url = location.href
@@ -271,20 +277,54 @@ const access = success => {
       )
     }
   } else if (state === 'defaultAccess' && code) {
+    console.log('进入到了defaultAccess code 的判断内')
     // 401授权，取得token
     Vue.http.get(`${ENV.BokaApi}/api/authUser/${code}`)
     .then(
       res => {
-        if (!res || !res.data || res.data.errcode) return
+        console.log('weinxin/authUser success')
+        console.log(res)
+        if (!res || !res.data || res.data.errcode) {
+          alert('清空缓存重试')
+          console.log('进入到了authUser请求未返回数据')
+          Token.remove()
+          return
+        }
         Token.set(res.data.data)
         // 取用户信息
         // console.log(`defaultAccess: /user/show`)
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
+      }, res => {
+        alert('刷新试试')
+        console.log('进入到了authUser请求失败')
+        console.log(res)
+        Token.remove()
       }
     )
     .then(
       res => {
+        console.log('weinxin/authUser error')
+        console.log(res)
         if (!res) return
+        const rData = res.data
+        for (let i = 0; i < bugList.length; i++) {
+          console.log(bugList[i].uid === rData.uid)
+          if (bugList[i].uid === rData.uid) {
+            vue.$vux.alert.show({
+              title: '提示',
+              content: `token:${Token.get().token} :: 已取到用户信息`,
+              onShow () {
+                console.log('Plugin: I\'m showing')
+              },
+              onHide () {
+                const f = alertStack.pop()
+                if (f) {
+                  f()
+                }
+              }
+            })
+          }
+        }
         User.set(res.data)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
@@ -293,6 +333,7 @@ const access = success => {
       }
     )
   } else {
+    console.log('已经授权过了')
     Vue.access(isPC => {
       if (isPC) {
         success && success()
@@ -330,23 +371,58 @@ const clearCache = () => {
   }
 }
 
+const vue = new Vue({
+  store,
+  router,
+  render: h => h(App)
+})
+
 const render = () => {
-  new Vue({
-    store,
-    router,
-    render: h => h(App)
-  }).$mount('#app-box')
+  vue.$mount('#app-box')
 }
 
 clearCache()
 
+const alertStack = []
 // 页面入口
 if (!Token.get() || Token.isExpired()) {
   access(path => {
     console.log(`Entry: ${path}`)
-    router.push({path: path})
+    router.replace({path: path})
+    for (let i = 0; i < bugList.length; i++) {
+      if (bugList[i].uid === User.get().uid) {
+        alertStack.push(
+          () => {
+            vue.$vux.alert.show({
+              title: '提示',
+              content: `token:${Token.get().token} :: 准备渲染页面`,
+              onShow () {
+                console.log('Plugin: I\'m showing')
+              },
+              onHide () {
+                console.log('Plugin: I\'m hiding')
+              }
+            })
+          }
+        )
+      }
+    }
     render()
   })
 } else {
+  for (let i = 0; i < bugList.length; i++) {
+    if (bugList[i].uid === User.get().uid) {
+      vue.$vux.alert.show({
+        title: '提示',
+        content: `有token:${Token.get().token} :: 开始渲染页面`,
+        onShow () {
+          console.log('Plugin: I\'m showing')
+        },
+        onHide () {
+          console.log('Plugin: I\'m hiding')
+        }
+      })
+    }
+  }
   render()
 }

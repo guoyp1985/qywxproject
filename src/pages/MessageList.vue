@@ -8,10 +8,10 @@
         </div>
       </div>
     </div>
-    <div class="s-container scroll-container" style="top:44px;">
+    <div class="s-container scroll-container" style="top:44px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
       <div v-if="disData" class="scroll_list pl10 pr10">
-        <div v-if="!data || data.length == 0" class="emptyitem flex_center">暂无消息</div>
-        <div v-else @click="toChat(item)" class="scroll_item pt10 pb10 db" v-for="(item,index) in data" :key="item.id">
+        <div v-if="!listData || listData.length == 0" class="emptyitem flex_center">暂无消息</div>
+        <div v-else @click="toChat(item)" class="scroll_item pt10 pb10 db" v-for="(item,index) in listData" :key="item.id">
           <div class="t-table">
             <div class="t-cell v_middle align_left" style="width:50px;">
               <img class="avatarimg1 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
@@ -47,9 +47,11 @@ export default {
   },
   data () {
     return {
-      data: [],
+      listData: [],
       disData: false,
-      query: {}
+      query: {},
+      pageStart: 0,
+      limit: 10
     }
   },
   methods: {
@@ -61,12 +63,29 @@ export default {
       ret = `${ret} mr5`
       return ret
     },
+    handleScroll (refname, type) {
+      const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      self.$util.scrollEvent({
+        element: scrollarea,
+        callback: function () {
+          if (self.listData.length === (self.pageStart + 1) * self.limit) {
+            self.pageStart++
+            self.$vux.loading.show()
+            self.getData()
+          }
+        }
+      })
+    },
     getData () {
       const self = this
-      this.$http.get(`${ENV.BokaApi}/api/message/list`).then(res => {
+      this.$http.get(`${ENV.BokaApi}/api/message/list`, {
+        params: {pagestart: this.pageStart, limit: this.limit}
+      }).then(res => {
         const data = res.data
         self.$vux.loading.hide()
-        self.data = data.data ? data.data : data
+        const retdata = data.data ? data.data : data
+        self.listData = self.listData.concat(retdata)
         self.disData = true
       })
     },
@@ -77,8 +96,10 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
-      this.$vux.loading.show()
-      this.getData()
+      if (!this.listData.length) {
+        this.$vux.loading.show()
+        this.getData()
+      }
     }
   },
   activated () {

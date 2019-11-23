@@ -13,9 +13,9 @@
           <template v-if="onlineVal">
     				<div class="padding10 b_bottom_after bg-white" @click="showaddress">
     					<div class="t-table">
-    						<div v-if="selectaddress" class="t-cell v_middle">
-    							<div>收货人：{{ selectaddress.linkman }} {{ selectaddress.telephone}}</div>
-    							<div>收货地址：{{ selectaddress.fulladdress }}</div>
+    						<div v-if="selectAddress" class="t-cell v_middle">
+    							<div>收货人：{{ selectAddress.linkman }} {{ selectAddress.telephone}}</div>
+    							<div>收货地址：{{ selectAddress.fulladdress }}</div>
     						</div>
     						<div v-else class="t-cell v_middle color-red">请选择地址</div>
     						<div class="t-cell v_middle" style="width:30px;">
@@ -107,7 +107,7 @@
               </div>
               <div class="b_bottom_after padding10 color-theme" v-if="!allowSend && !offlineVal">该地区不在派送范围内</div>
             </template>
-            <div class="b_bottom_after padding10">
+            <div class="b_bottom_after padding10" v-if="query.appid != 'wx93366404c4cbc761'">
               <div class="t-table">
                 <div class="t-cell v_middle" style="width:40px;">留言</div>
                 <div class="t-cell v_middle">
@@ -131,10 +131,10 @@
           </div>
         </form>
       </div>
-      <div class="s-bottom toolbar_bg" v-if="disPostageArea">
+      <div class="s-bottom toolbar_bg" v-if="disPostageArea || offlineVal || !selectAddress || !selectAddress.id">
         <div class="t-table h_100 align_center">
   				<div class="t-cell h_100 v_middle">需付：<span class="color-orange1">{{ $t('RMB') }}{{ payPrice }}</span></div>
-  				<div class="t-cell h_100 v_middle w100 bg-orange1 color-white" v-if="allowSend || offlineVal" @click="submitOrder">确认订单</div>
+  				<div class="t-cell h_100 v_middle w100 bg-orange1 color-white" v-if="allowSend || offlineVal || !selectAddress || !selectAddress.id" @click="submitOrder">确认订单</div>
   				<div class="t-cell h_100 v_middle bg-gray color-white" style="width:130px;" v-else>该地区无法派送</div>
   			</div>
       </div>
@@ -203,7 +203,7 @@
                   <template v-else>
                     <div class="x-check-icon scroll_item padding10 color-gray">
                       <div class="t-table">
-                        <div class="t-cell v_middle w80">【不可用】</div>
+                        <div class="t-cell v_middle" style="width:60%;">【订单金额不满足使用条件】</div>
                         <div class="t-cell v_middle">
                           <div class="clamp1">满{{item.ordermoney}}减{{item.money}}</div>
                         </div>
@@ -314,7 +314,7 @@ export default {
       cardPrice: '0.00',
       postage: 0,
       postPostage: 0,
-      selectaddress: null,
+      selectAddress: null,
       orderdata: [],
       showpopup: false,
       addressdata: [],
@@ -356,8 +356,8 @@ export default {
     payPrice: function () {
       return this.payPrice
     },
-    selectaddress: function () {
-      return this.selectaddress
+    selectAddress: function () {
+      return this.selectAddress
     }
   },
   computed: {
@@ -373,7 +373,7 @@ export default {
       this.query = {}
       this.payPrice = '0.00'
       this.cardPrice = '0.00'
-      this.selectaddress = null
+      this.selectAddress = null
       this.orderdata = []
       this.showpopup = false
       this.addressdata = []
@@ -460,8 +460,8 @@ export default {
             })
             if (data.flag) {
               this.addressdata.splice(index, 1)
-              if (this.selectaddress.id === item.id) {
-                this.selectaddress = {}
+              if (this.selectAddress.id === item.id) {
+                this.selectAddress = {}
                 this.submitdata.addressid = 0
               }
             }
@@ -524,9 +524,10 @@ export default {
       }
       this.orderPrice = total
       if (this.selectedCard) {
-        let cha = parseFloat(this.orderPrice) - parseFloat(this.postPostage.replace(/,/g, '')) - parseFloat(this.selectedCard.money)
+        let postageStr = `${this.postPostage}`
+        let cha = parseFloat(this.orderPrice) - parseFloat(postageStr.replace(/,/g, '')) - parseFloat(this.selectedCard.money)
         cha = cha < 0 ? 0 : cha
-        this.payPrice = (cha + parseFloat(this.postPostage.replace(/,/g, ''))).toFixed(2)
+        this.payPrice = (cha + parseFloat(postageStr.replace(/,/g, ''))).toFixed(2)
       } else {
         this.payPrice = total.toFixed(2)
       }
@@ -549,16 +550,16 @@ export default {
       })
     },
     clickAddress (data, index) {
-      this.selectaddress = data
+      this.selectAddress = data
       this.showpopup = false
       this.changeAddress()
     },
     radioclick (data, index) {
       const self = this
       if (data.checked) {
-        self.selectaddress = data
+        self.selectAddress = data
       } else {
-        self.selectaddress = null
+        self.selectAddress = null
       }
       for (let d of self.addressdata) {
         if (d.id !== data.id && d.checked) {
@@ -577,7 +578,7 @@ export default {
         self.payPrice = (cha + parseFloat(self.postage)).toFixed(2)
       } else {
         self.selectedCard = null
-        self.payPrice = self.orderPrice
+        self.payPrice = self.orderPrice.toFixed(2)
       }
       for (let d of self.cardList) {
         if (d.id !== data.id && d.checked) {
@@ -597,10 +598,15 @@ export default {
         if (self.selectedCard) {
           postData.cardid = self.selectedCard.id
         }
+        console.log('优惠券id')
+        console.log(postData.cardid)
         if (this.query.ordertype) {
           postData.ordertype = this.query.ordertype
         }
         postData.postage = this.postPostage
+        if (this.query.fromfid) {
+          postData.fromfid = this.query.fromfid
+        }
         self.$http.post(`${ENV.BokaApi}/api/order/addOrder`, postData).then(function (res) {
           let data = res.data
           self.isShowLoading = false
@@ -662,7 +668,7 @@ export default {
             })
             return
           }
-          self.submitdata.addressid = self.selectaddress.id
+          self.submitdata.addressid = self.selectAddress.id
           this.payData = this.submitdata
           if (this.curOrder.accounttype === 1 && !this.curOrder.info[0].fid) {
             this.showModal = true
@@ -681,7 +687,8 @@ export default {
       this.payData = {}
     },
     changeAddress () {
-      const selectedProvince = this.selectaddress.province
+      if (!this.selectAddress || !this.selectAddress.id) return false
+      const selectedProvince = this.selectAddress.province
       const postageSetting = this.curOrder.postageSetting
       this.allowSend = true
       let isset = false
@@ -721,24 +728,24 @@ export default {
         let a = self.addressdata[i]
         if (paramsid) {
           if (a.id === parseInt(paramsid)) {
-            self.selectaddress = a
+            self.selectAddress = a
             self.addressdata[i].checked = true
             break
           }
         } else {
           if (a.isdefault) {
-            self.selectaddress = a
+            self.selectAddress = a
             self.addressdata[i].checked = true
             break
           }
         }
       }
-      if (!self.selectaddress && self.addressdata.length > 0) {
-        self.selectaddress = self.addressdata[0]
+      if (!self.selectAddress && self.addressdata.length > 0) {
+        self.selectAddress = self.addressdata[0]
         self.addressdata[0].checked = true
       }
-      if (self.selectaddress) {
-        self.submitdata.addressid = self.selectaddress.id
+      if (self.selectAddress) {
+        self.submitdata.addressid = self.selectAddress.id
         this.changeAddress()
       }
     },
@@ -792,7 +799,7 @@ export default {
               total1 += parseFloat(order.postage.replace(/,/g, ''))
             }
             self.postage = parseFloat(order.postage.replace(/,/g, ''))
-            self.postPostage = parseFloat(order.postage.replace(/,/g, ''))
+            self.postPostage = parseFloat(order.postage.replace(/,/g, '')).toFixed(2)
           }
           self.cardPrice = total1
           // self.payPrice = total.toFixed(2)
@@ -809,6 +816,8 @@ export default {
               self.addressdata = retdata
               self.handleAddress()
             } else {
+              console.log('进入到了没有地址')
+              this.disPostageArea = true
               if (!this.query.from && !this.query.fromapp) {
                 this.$wechat.ready(() => {
                   this.$vux.confirm.show({
@@ -826,9 +835,13 @@ export default {
               }
             }
           }
-          return self.$http.post(`${ENV.BokaApi}/api/card/canUse`, {
-            wid: self.orderdata[0].wid, ordermoney: self.payPrice, productid: self.orderdata[0].info[0].pid
-          })
+          let cardParams = {wid: self.orderdata[0].wid, ordermoney: self.payPrice, productid: self.orderdata[0].info[0].pid}
+          if (self.query.shop_id) {
+            cardParams.shopid = self.query.shop_id
+          } else {
+            cardParams.shopid = self.query.id
+          }
+          return self.$http.post(`${ENV.BokaApi}/api/card/canUse`, cardParams)
         }
       }).then(res => {
         if (res) {
@@ -838,9 +851,10 @@ export default {
             if (self.cardPrice >= item.ordermoney && ((self.cardPrice - item.money - self.curOrder.rebate) >= 0 || (item.money > self.cardPrice && self.curOrder.rebate <= 0))) {
               self.selectedCard = item
               self.cardList[i].checked = true
-              let cha = parseFloat(this.orderPrice) - parseFloat(this.postPostage.replace(/,/g, '')) - parseFloat(this.selectedCard.money)
+              let postageStr = `${this.postPostage}`
+              let cha = parseFloat(this.orderPrice) - parseFloat(postageStr.replace(/,/g, '')) - parseFloat(this.selectedCard.money)
               cha = cha < 0 ? 0 : cha
-              this.payPrice = (cha + parseFloat(this.postPostage.replace(/,/g, ''))).toFixed(2)
+              this.payPrice = (cha + parseFloat(postageStr.replace(/,/g, ''))).toFixed(2)
               break
             }
           }

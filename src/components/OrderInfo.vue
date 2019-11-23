@@ -115,7 +115,8 @@ export default {
         {id: 4, name: '查看物流'},
         {id: 5, name: '申请售后'},
         {id: 6, name: '确认收货'},
-        {id: 7, name: '评价'}
+        {id: 7, name: '评价'},
+        {id: 8, name: '完成售后'}
       ]
     }
   },
@@ -141,17 +142,21 @@ export default {
   },
   methods: {
     toStore () {
-      if (this.item.retailertitle && this.item.retailertitle !== '') {
-        let params = {wid: this.item.wid}
-        if (this.$route.query.from) {
-          if (this.$route.query.fromapp === 'qxb') {
-            this.$wechat.miniProgram.reLaunch({url: `/pages/store?wid=${this.item.wid}`})
-            console.log(params)
-          } else {
+      if (this.$route.query.fromapp !== 'factory') {
+        if (this.item.retailertitle && this.item.retailertitle !== '') {
+          let params = {wid: this.item.wid}
+          if (this.$route.query.from) {
+            if (this.$route.query.fromapp === 'qxb') {
+              this.$wechat.miniProgram.reLaunch({url: `/pages/store?wid=${this.item.wid}`})
+              console.log(params)
+            } else {
+              this.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.store}?wid=${this.item.wid}`})
+            }
+          } else if (this.$route.query.fromapp === 'factory') {
             this.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.store}?wid=${this.item.wid}`})
+          } else {
+            this.$router.push({path: '/store', query: params})
           }
-        } else {
-          this.$router.push({path: '/store', query: params})
         }
       }
     },

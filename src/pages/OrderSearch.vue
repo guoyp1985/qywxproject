@@ -102,7 +102,7 @@
               ref="serviceTextarea"
               v-model="serviceContent"
               name="title" class="x-textarea noborder"
-              placeholder="请输入售后原因"
+              placeholder="请输入售后原因，并上传1张快递面单+2张商品照片"
               :show-counter="false"
               :rows="6"
               :max="200"
@@ -116,19 +116,20 @@
           <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange" />
         </form>
         <div class="q_photolist align_left bg-white">
-          <template v-if="servicePhoto && servicePhoto != ''">
-            <div class="photoitem" style="width:100px;">
-              <div class="inner photo imgcover">
-                <img :src="servicePhoto" class="pic" @click="uploadPhoto('fileInput')" />
-                <div class="close" @click.stop="deletephoto()">×</div>
-              </div>
+          <div class="photoitem" style="width:100px;" v-for="(photo,index) in servicePhotoArr" :key="index">
+            <div class="inner photo imgcover">
+              <img :src="photo" class="pic" @click="uploadPhoto('fileInput',index)" />
+              <div class="close" @click.stop="deletephoto(index)">×</div>
             </div>
-          </template>
-          <div v-else class="photoitem add" @click="uploadPhoto('fileInput')" style="width:100px;">
+          </div>
+          <div  v-if="servicePhotoArr.length < maxnum" class="photoitem add" @click="uploadPhoto('fileInput')" style="width:100px;">
             <div class="inner">
               <div class="innerlist">
                 <div class="flex_center h_100">
-                  <i class="al al-zhaopian" style="color:#bbb;line-height:30px;"></i>
+                  <div>
+                    <i class="al al-zhaopian" style="color:#bbb;line-height:30px;"></i>
+                    <div><span>{{ servicePhotoArr.length }}</span><span class="ml5 mr5">/</span><span>{{ maxnum }}</span></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -170,10 +171,10 @@ export default {
       tabdata3: [],
       tabdata4: [],
       limit: 10,
-      pagestart1: 1,
-      pagestart2: 1,
-      pagestart3: 1,
-      pagestart4: 1,
+      pagestart1: 0,
+      pagestart2: 0,
+      pagestart3: 0,
+      pagestart4: 0,
       showRefundModal: false,
       refundContent: '',
       clickOrder: {},
@@ -181,7 +182,10 @@ export default {
       pageTop: 0,
       showServiceModal: false,
       serviceContent: '',
-      servicePhoto: ''
+      servicePhoto: '',
+      servicePhotoArr: [],
+      maxnum: 4,
+      clickPhotoIndex: undefined
     }
   },
   computed: {
@@ -223,13 +227,18 @@ export default {
       this.clickOrder = {}
       this.clickIndex = 0
     },
-    deletephoto () {
-      this.servicePhoto = ''
+    deletephoto (index) {
+      this.servicePhotoArr.splice(index, 1)
     },
     photoCallback (data) {
       const self = this
+      let index = this.clickPhotoIndex
       if (data.flag === 1) {
-        self.servicePhoto = data.data
+        if (index !== undefined && index !== 'undefined') {
+          self.servicePhotoArr.splice(index, 1, data.data)
+        } else {
+          self.servicePhotoArr.push(data.data)
+        }
       } else if (data.error) {
         self.$vux.toast.show({
           text: data.error,
@@ -237,15 +246,16 @@ export default {
         })
       }
     },
-    uploadPhoto (refname) {
+    uploadPhoto (refname, index) {
       const self = this
+      this.clickPhotoIndex = index
       const fileInput = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       if (self.$util.isPC()) {
         fileInput.click()
       } else {
         self.$wechat.ready(function () {
           self.$util.wxUploadImage({
-            maxnum: 1,
+            maxnum: self.maxnum,
             handleCallback: function (data) {
               self.photoCallback(data)
             }
@@ -253,7 +263,7 @@ export default {
         })
       }
     },
-    fileChange (refname) {
+    fileChange (refname, index) {
       const self = this
       const target = event.target
       const files = target.files
@@ -309,24 +319,50 @@ export default {
             //   {id: 6, name: '确认收货'}
             // ]
             let arr = [{id: 4, name: '查看物流'}]
-            if (item.backflag !== 120) {
+            if (item.canservice) {
               arr.push({id: 5, name: '申请售后'})
             }
             arr.push({id: 6, name: '确认收货'})
             item.buttons = arr
             break
           case 4:
-            item.buttons = [
-              // {id: 5, name: '申请售后'},
-              {id: 7, name: '评价'}
-            ]
+            let arr1 = []
+            if (item.canservice) {
+              arr1.push({id: 5, name: '申请售后'})
+              if (ENV.AllowQuickService) {
+                arr1.push({id: 8, name: '完成售后'})
+              }
+            }
+            if (item.backflag === 120) {
+              arr1.push({id: 9, name: '查看售后进度'})
+            }
+            if (item.comment === 0) {
+              arr1.push({id: 7, name: '评价'})
+            }
+            item.buttons = arr1
             break
         }
       }
       return list
     },
     evaluate (order) {
-      this.$router.push({name: 'tEvaluation', query: {id: order.id}})
+      let params = this.$util.handleAppParams(this.query, {id: order.id})
+      this.$router.push({path: '/evaluation', query: params})
+    },
+    afterConfirm () {
+      this.distabdata1 = false
+      this.distabdata2 = false
+      this.distabdata3 = false
+      this.distabdata4 = false
+      this.tabdata1 = []
+      this.tabdata2 = []
+      this.tabdata3 = []
+      this.tabdata4 = []
+      this.pagestart1 = 0
+      this.pagestart2 = 0
+      this.pagestart3 = 0
+      this.pagestart4 = 0
+      this.toggleTab()
     },
     confirm (order) {
       const self = this
@@ -340,7 +376,27 @@ export default {
             self.$vux.loading.hide()
             if (res.data.flag) {
               self.$vux.toast.text(res.data.error)
-              self.changeOrderView(order, 4, [4, 6])
+              // self.changeOrderView(order, 4, [4, 6])
+              self.afterConfirm()
+            }
+          })
+        }
+      })
+    },
+    finishService (order) {
+      const self = this
+      this.$vux.confirm.show({
+        title: '您确认结束售后服务？',
+        content: '请确认售后结束',
+        onConfirm () {
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/order/finishService`, {id: order.id})
+          .then(res => {
+            self.$vux.loading.hide()
+            if (res.data.flag) {
+              self.$vux.toast.text(res.data.error)
+              // self.changeOrderView(order, 4, [4, 6])
+              self.afterConfirm()
             }
           })
         }
@@ -417,26 +473,36 @@ export default {
       })
     },
     viewShipping (order) {
-      this.$router.push({path: `/deliverinfo`, query: {id: order.id}})
+      if (this.query.fromapp !== 'factory') {
+        this.$router.push({path: `/deliverinfo`, query: {id: order.id}})
+      } else if (this.query.fromapp === 'factory') {
+        this.$router.push({path: `/deliverinfo`, query: {id: order.id, fromapp: 'factory'}})
+      }
     },
     closeService () {
       this.showServiceModal = false
       this.serviceContent = ''
       this.servicePhoto = ''
+      this.servicePhotoArr = []
     },
     submitService () {
       if (this.$util.trim(this.serviceContent) === '' && this.$util.trim(this.servicePhoto) === '') {
         this.$vux.toast.text('请完善售后信息', 'middle')
         return false
       }
+      let sphoto = ''
+      if (this.servicePhotoArr.length) {
+        sphoto = this.servicePhotoArr.join(',')
+      }
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/order/applyService`, {
-        id: this.clickOrder.id, reasonreturn: this.serviceContent, proofphoto: this.servicePhoto
+        id: this.clickOrder.id, reasonreturn: this.serviceContent, proofphoto: sphoto
       }).then(res => {
         this.$vux.loading.hide()
         const data = res.data
         this.$vux.toast.text(data.error)
         if (data.flag) {
+          this.afterConfirm()
           this.showServiceModal = false
           if (this.selectedIndex === 0) {
             this.tabdata1[this.clickIndex].backflag = 120
@@ -462,6 +528,7 @@ export default {
       // 售后
       this.serviceContent = ''
       this.servicePhoto = ''
+      this.servicePhotoArr = []
       this.showServiceModal = true
     },
     payment (order) {
@@ -496,9 +563,22 @@ export default {
         case 7:
           this.evaluate(order)
           break
+        case 8:
+          this.finishService(order)
+          break
+        case 9:
+          let params = this.$util.handleAppParams(this.query, {id: order.id})
+          this.$router.push({path: '/orderDetail', query: params})
+          break
       }
     },
     changeOrderView (order, status, buttons) {
+      console.log('====  order  ====')
+      console.log(order)
+      console.log('====  status  ====')
+      console.log(status)
+      console.log('====  buttons  ====')
+      console.log(buttons)
       const self = this
       let list = []
       switch (this.selectedIndex) {
@@ -516,10 +596,14 @@ export default {
           break
       }
       this.$util.changeItem(list, order.id, function (m) {
+        let retdata = { ...m, flag: status, flagstr: self.$util.getItem(ENV.OrderStatus, status).status, buttons: buttons }
+        console.log(retdata)
         return { ...m, flag: status, flagstr: self.$util.getItem(ENV.OrderStatus, status).status, buttons: buttons }
       })
     },
     toggleTab () {
+      console.log('in toggleTab')
+      console.log(this.selectedIndex)
       switch (this.selectedIndex) {
         case 0:
           !this.tabdata1.length && this.getData()
@@ -542,23 +626,27 @@ export default {
         callback: () => {
           switch (self.selectedIndex) {
             case 0:
-              if (self.tabdata1.length === self.pagestart1 * self.limit) {
-                self.getPageData(0, self.pagestart1)
+              if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+                self.pagestart1++
+                self.getData(0)
               }
               break
             case 1:
-              if (self.tabdata2.length === self.pagestart2 * self.limit) {
-                self.getPageData(2, self.pagestart2)
+              if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
+                self.pagestart2++
+                self.getData(2)
               }
               break
             case 2:
-              if (self.tabdata3.length === self.pagestart3 * self.limit) {
-                self.getPageData(3, self.pagestart3)
+              if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
+                self.pagestart3++
+                self.getData(3)
               }
               break
             case 3:
-              if (self.tabdata4.length === self.pagestart4 * self.limit) {
-                self.getPageData(4, self.pagestart4)
+              if (self.tabdata4.length === (self.pagestart4 + 1) * self.limit) {
+                self.pagestart4++
+                self.getData(4)
               }
               break
           }
@@ -569,59 +657,39 @@ export default {
       flag = flag || 0
       this.$vux.loading.show()
       const self = this
-      let params = { params: { flag: flag, pagestart: 0, limit: self.limit } }
-      this.$http.get(`${ENV.BokaApi}/api/order/orderList/user`, params).then((res) => {
+      let params = {flag: flag, limit: self.limit}
+      if (flag === 2) {
+        params.pagestart = this.pagestart2
+      } else if (flag === 3) {
+        params.pagestart = this.pagestart3
+      } else if (flag === 4) {
+        params.pagestart = this.pagestart4
+      } else {
+        params.pagestart = this.pagestart1
+      }
+      this.$http.get(`${ENV.BokaApi}/api/order/orderList/user`, {
+        params: params
+      }).then((res) => {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         retdata = this.setListButton(retdata)
         switch (flag) {
           case 0:
-            self.tabdata1 = retdata
+            self.tabdata1 = self.tabdata1.concat(retdata)
             self.distabdata1 = true
             break
           case 2:
-            self.tabdata2 = retdata
+            self.tabdata2 = self.tabdata2.concat(retdata)
             self.distabdata2 = true
             break
           case 3:
-            self.tabdata3 = retdata
+            self.tabdata3 = self.tabdata3.concat(retdata)
             self.distabdata3 = true
             break
           case 4:
-            self.tabdata4 = retdata
-            self.distabdata4 = true
-            break
-        }
-      })
-    },
-    getPageData (flag, page) {
-      flag = flag || 0
-      page = page || 0
-      this.$vux.loading.show()
-      const self = this
-      let params = { params: { flag: flag, pagestart: page, limit: self.limit } }
-      this.$http.get(`${ENV.BokaApi}/api/order/orderList/user`, params).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
-        retdata = self.setListButton(retdata)
-        switch (flag) {
-          case 0:
-            retdata.length && self.pagestart1++
-            self.tabdata1 = self.tabdata1.concat(retdata)
-            break
-          case 2:
-            retdata.length && self.pagestart2++
-            self.tabdata2 = self.tabdata2.concat(retdata)
-            break
-          case 3:
-            retdata.length && self.pagestart3++
-            self.tabdata3 = self.tabdata3.concat(retdata)
-            break
-          case 4:
-            retdata.length && self.pagestart4++
             self.tabdata4 = self.tabdata4.concat(retdata)
+            self.distabdata4 = true
             break
         }
       })
@@ -634,49 +702,53 @@ export default {
       this.loginUser = User.get()
       this.initData()
       this.query = this.$route.query
-      let flag = parseInt(this.query.flag)
+      let flag = 0
+      switch (this.selectedIndex) {
+        case 1:
+          flag = 2
+          break
+        case 2:
+          flag = 3
+          break
+        case 3:
+          flag = 4
+          break
+        default :
+          flag = 0
+          break
+      }
+      if (this.query.flag) {
+        flag = parseInt(this.query.flag)
+      }
       switch (flag) {
         case 2:
-          if (this.query.refresh) {
+          if (this.query.refresh || !this.tabdata2.length) {
             this.selectedIndex = 1
             this.pagestart2 = 0
             this.tabdata2 = []
             this.toggleTab()
-          } else if (!this.tabdata2.length) {
-            this.selectedIndex = 1
-            this.toggleTab()
           }
           break
         case 3:
-          if (this.query.refresh) {
+          if (this.query.refresh || !this.tabdata3.length) {
             this.selectedIndex = 2
             this.pagestart3 = 0
             this.tabdata3 = []
             this.toggleTab()
-          } else if (!this.tabdata3.length) {
-            this.selectedIndex = 2
-            this.toggleTab()
           }
           break
         case 4:
-          if (this.query.refresh) {
-            this.selectedIndex = 3
-            this.pagestart4 = 0
-            this.tabdata4 = []
-            this.toggleTab()
-          } else if (!this.tabdata4.length) {
-            this.selectedIndex = 3
-            this.toggleTab()
-          }
+          this.distabdata4 = false
+          this.selectedIndex = 3
+          this.pagestart4 = 0
+          this.tabdata4 = []
+          this.toggleTab()
           break
         default :
-          if (this.query.refresh) {
+          if (this.query.refresh || !this.tabdata1.length) {
             this.selectedIndex = 0
             this.pagestart1 = 0
             this.tabdata1 = []
-            this.toggleTab()
-          } else if (!this.tabdata1.length) {
-            this.selectedIndex = 0
             this.toggleTab()
           }
           break
