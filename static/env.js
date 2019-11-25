@@ -80,7 +80,19 @@ var ENV = {
   CommissionFid: 97,
   KefuQrcode: 'https://tossharingsales.boka.cn/images/kefu_qrcode.jpg',
   KefuWxNo: 'sharingsales',
-  AllowQuickService: true // 控制显示【完成售后按钮】，正式平台不需要
+  AllowQuickService: true, // 控制显示【完成售后按钮】，正式平台不需要
+  DebugList: [
+    {uid: 25465, name: '黄一萌'},
+    {uid: 8, name: 'young'},
+    {uid: 27531, name: '戴飞'},
+    {uid: 24675, name: '兰花草'},
+    {uid: 1694},
+    {uid: 65231},
+    {uid: 99756},
+    {uid: 39854},
+    {uid: 25421},
+    {uid: 98466}
+  ]
 }
 
 ENV.NoAccessUrls = [
