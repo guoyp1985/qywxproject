@@ -281,11 +281,12 @@ const access = success => {
   } else if (state === 'defaultAccess' && code) {
     console.log('进入到了defaultAccess code 的判断内')
     // 401授权，取得token
-    Vue.http.get(`${ENV.BokaApi}/api/authUser/${code}`, {params: {retry: 1}})
+    Vue.http.get(`${ENV.BokaApi}/api/authUser/${code}`)
     .then(
       res => {
         console.log('weinxin/authUser success')
         console.log(res)
+        alert(JSON.stringify(res))
         if (!res || !res.data || res.data.errcode || !res.data.flag) {
           // alert('清空缓存重试')
           console.log('进入到了authUser请求未返回数据')
