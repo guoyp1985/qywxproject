@@ -286,7 +286,7 @@ const access = success => {
       res => {
         console.log('weinxin/authUser success')
         console.log(res)
-        alert(JSON.stringify(res))
+        alert(JSON.stringify(res.data))
         if (!res || !res.data || res.data.errcode || !res.data.flag) {
           // alert('清空缓存重试')
           console.log('进入到了authUser请求未返回数据')
