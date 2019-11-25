@@ -281,7 +281,7 @@ const access = success => {
   } else if (state === 'defaultAccess' && code) {
     console.log('进入到了defaultAccess code 的判断内')
     // 401授权，取得token
-    Vue.http.get(`${ENV.BokaApi}/api/authUser/${code}`)
+    Vue.http.get(`${ENV.BokaApi}/api/authUser/${code}`, {params: {retry: 1}})
     .then(
       res => {
         console.log('weinxin/authUser success')
@@ -292,7 +292,7 @@ const access = success => {
           Token.remove()
           vue.$vux.alert.show({
             title: '提示',
-            content: `未取到Token`,
+            content: `用户信息获取失败，请重新进入`,
             onHide () {
               location.replace(lUrl.href)
             }
@@ -309,7 +309,7 @@ const access = success => {
         Token.remove()
         vue.$vux.alert.show({
           title: '提示',
-          content: `未取到Token`,
+          content: `未获取到用户信息`,
           onHide () {
             location.replace(lUrl.href)
           }
