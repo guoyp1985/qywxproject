@@ -286,13 +286,13 @@ const access = success => {
       res => {
         console.log('weinxin/authUser success')
         console.log(res)
-        if (!res || !res.data || res.data.errcode) {
-          alert('清空缓存重试')
+        if (!res || !res.data || res.data.errcode || !res.data.flag) {
+          // alert('清空缓存重试')
           console.log('进入到了authUser请求未返回数据')
           Token.remove()
           vue.$vux.alert.show({
             title: '提示',
-            content: `未取到Token`,
+            content: `用户信息获取失败，请重新进入`,
             onHide () {
               location.replace(lUrl.href)
             }
@@ -309,7 +309,7 @@ const access = success => {
         Token.remove()
         vue.$vux.alert.show({
           title: '提示',
-          content: `未取到Token`,
+          content: `未获取到用户信息`,
           onHide () {
             location.replace(lUrl.href)
           }
@@ -345,6 +345,9 @@ const access = success => {
         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
         console.log(`${lUrl.hash.replace(/#/, '')}?${query}`)
         success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
+        // setTimeout(() => {
+        //   success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
+        // }, 50)
       }, res => {
         Token.remove()
         vue.$vux.alert.show({
