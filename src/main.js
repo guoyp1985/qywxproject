@@ -344,9 +344,10 @@ const access = success => {
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
         console.log(`${lUrl.hash.replace(/#/, '')}?${query}`)
-        setTimeout(() => {
-          success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
-        }, 50)
+        success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
+        // setTimeout(() => {
+        //   success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
+        // }, 50)
       }, res => {
         Token.remove()
         vue.$vux.alert.show({
