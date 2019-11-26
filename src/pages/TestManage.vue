@@ -1,247 +1,436 @@
-/*
-* @description: 内测列表
-* @auther: gyp
-* @created_date: 2019-11-25
-*/
 <template>
   <div class="containerarea bg-page font14 test-manage-page">
-    <div class="s-topbanner s-topbanner1">
-      <div class="row">
-        <tab v-model="selectedIndex" active-color="#ea3a3a" default-color="#666666">
-          <tab-item v-for="(item,index) in tabtxts" :selected="index == selectedIndex" :key="index" @on-item-click="clickTab">{{item}}</tab-item>
-        </tab>
+    <template v-if="showSos">
+      <Sos :title="sosTitle"></Sos>
+    </template>
+    <template v-if="showContainer">
+      <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 'product')">
+        <template v-if="disList">
+          <template v-if="!listData || listData.length == 0">
+            <div class="scroll_list">
+              <div class="flex_empty">暂无内测功能</div>
+            </div>
+          </template>
+          <template v-else>
+            <div class="scroll_list ">
+              <router-link :to="{path:'/factory',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in listData" :key="item.id" style="color:inherit;">
+                <div v-if="item.moderate == 0" class="ico down"></div>
+            		<div class="t-table bg-white pt10 pb10">
+            			<div class="t-cell v_middle pl12">
+                    <div class="clamp1 font16 pr10 color-lightgray">{{item.content}}</div>
+                    <div class="t-table pr12 border-box mt15">
+                      <div class="t-cell color-999 font14">
+                        <div class="clamp1">{{ item.summary }}</span></div>
+                      </div>
+                      <div class="align_right t-cell v_bottom w80">
+                        <div class="btnicon bg-red color-white font12" @click="controlPopup1(item,index)">
+                          <i class="al al-asmkticon0165 v_middle"></i>
+                        </div>
+                      </div>
+                    </div>
+            			</div>
+            		</div>
+              </router-link>
+            </div>
+          </template>
+        </template>
       </div>
-    </div>
-    <div class="s-container s-container1">
-      <div v-show="(selectedIndex == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',0)">
-        <template v-if="distabdata1">
-          <div v-if="!tabdata1 || tabdata1.length === 0" class="w_100 h_100 flex_center color-gray">你还没有未使用的优惠券</div>
-          <div v-else class="lists">
-            <div v-for="(item,index1) in tabdata1" :key="index1" :class="`scroll_item ${item.validate ? '' : 'grayitem'}`">
-              <div class="flex_cell txt-cell" style="overflow:visible">
-                <div class="font20 mb5 clamp1 txt">满{{item.ordermoney}}减{{item.money}}</div>
-                <div class="font12 mb5 clamp1">限【{{item.retailer}}】店铺使用</div>
-                <div class="font12">自{{item.dateline_str}}起7日有效</div>
-                <div class="ball ball-up"></div>
-                <div class="ball ball-down"></div>
+      <div v-transfer-dom>
+        <popup class="menuwrap" v-model="showPopup1">
+          <div class="popup0">
+            <div class="list" v-if="clickData">
+              <div class="item" v-if="clickData.status">
+                <div class="inner" @click="clickPopup('manager')">内测人员列表</div>
               </div>
-              <div class="btn-cell flex_center" v-if="item.validate">
-                <router-link v-if="item.productcount > 0" class="rbtn color-theme" :to="{path: '/store',query: {wid:item.wid}}">进店使用</router-link>
-                <router-link v-else class="rbtn color-theme" :to="{path:'/chat',query:{uid:item.wid,from:query.from}}">联系卖家</router-link>
+              <div class="item" v-if="clickData.status">
+                <div class="inner" @click="showxdate2">添加内测人员</div>
               </div>
-              <div class="btn-cell flex_center" v-else>
-                <div class="al al-yiguoqi4"></div>
+              <div class="item" v-if="clickData.status">
+                <div class="inner" @click="clickPopup('close')">关闭内测功能</div>
+              </div>
+              <div class="item" v-else>
+                <div class="inner" @click="clickPopup('open')">开放内测功能</div>
+              </div>
+              <div class="item close mt10" @click="clickPopup('row.key')">
+                <div class="inner">{{ $t('Cancel txt') }}</div>
               </div>
             </div>
           </div>
-        </template>
+        </popup>
       </div>
-      <div v-show="(selectedIndex == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',1)">
-        <template v-if="distabdata2">
-          <div v-if="!tabdata2 || tabdata2.length === 0" class="w_100 h_100 flex_center color-gray">你还没有已使用的优惠券</div>
-          <div v-else class="lists">
-            <div v-for="(item,index1) in tabdata2" :key="index1" :class="`scroll_item ${item.validate ? '' : 'grayitem'}`">
-              <div class="flex_cell txt-cell" style="overflow:visible">
-                <div class="font20 mb5 clamp1 txt">满{{item.ordermoney}}减{{item.money}}</div>
-                <div class="font12 mb5 clamp1">限【{{item.retailer}}】店铺使用</div>
-                <div class="font12">自{{item.dateline_str}}起7日有效</div>
-                <div class="ball ball-up"></div>
-                <div class="ball ball-down"></div>
-              </div>
-              <div class="btn-cell flex_center" v-if="item.validate">
-                <router-link v-if="item.productcount > 0" class="rbtn color-theme" :to="{path: '/store',query: {wid:item.wid}}">进店使用</router-link>
-                <router-link v-else class="rbtn color-theme" :to="{path:'/chat',query:{uid:item.wid,from:query.from}}">联系卖家</router-link>
-              </div>
-              <div class="btn-cell flex_center" v-else>
-                <div class="al al-yishiyong11"></div>
+      <div v-transfer-dom class="x-popup">
+        <popup v-model="showManager" height="100%">
+          <div class="popup1 font14">
+            <div class="popup-top flex_center">【{{clickData.content}}】内测人员</div>
+            <div class="popup-middle padding10 border-box">
+              <div class="scroll_list" v-if="disManagerList">
+                <div v-if="!managerData || managerData.length == 0" class="scroll_item emptyitem flex_center">暂无内测人员</div>
+                <div v-else v-for="(item,index) in managerData" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
+                  <div class="t-table">
+                    <div class="t-cell v_middle w70">
+                      <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                    </div>
+                    <div class="t-cell v_middle">
+                      <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
+                    </div>
+                    <div class="t-cell v_middle w60 align_right">
+                      <div class="qbtn bg-red color-white" @click="deleteManager(item,index)">删除</div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
+            <div class="popup-bottom flex_center" style="width:50%;">
+              <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeManager">{{ $t('Close') }}</div>
+            </div>
+            <div class="popup-bottom flex_center" style="width:50%;left:50%;">
+              <div class="flex_cell h_100 flex_center bg-red color-white" @click="clickPopup1">添加内测人员</div>
+            </div>
           </div>
-        </template>
+        </popup>
       </div>
-    </div>
+      <div v-transfer-dom class="x-popup">
+        <popup v-model="showAddPopup" height="100%">
+          <div class="popup1">
+            <div class="popup-top flex_center">【{{clickData.content}}】添加内测人员</div>
+            <div class="flex_left border-box pl10 pr10" style="position:absolute;left:0;right:0;top:46px;height:40px;">
+              <div class="w_100">
+                <check-icon class="x-check-icon w_100" :value.sync="checkAll" @click.native.stop="checkAllEvent">
+                  <div class="flex_left">全选</div>
+                </check-icon>
+              </div>
+            </div>
+            <div ref="scrollCustomer" @scroll="handleScroll('scrollCustomer','customer')" class="popup-middle font14" style="top:85px;bottom:86px;">
+              <div class="padding10">
+                <div v-if="disUserData" class="scroll_list">
+                  <template v-if="!userData.length">
+                    <div class="scroll_item emptyitem">
+            					<div class="t-table">
+            						<div class="t-cell" style="padding:10px;">暂无返点客</div>
+            					</div>
+            				</div>
+                  </template>
+                  <check-icon v-else class="x-check-icon scroll_item pt10 pb10" v-for="(item,index) in userData" :key="item.uid" :value.sync="item.checked" @click.native.stop="radioclick1(item,index)">
+                    <div class="t-table">
+                      <div class="t-cell v_middle w50">
+                        <img :src="item.avatar" class="avatarimg imgcover" />
+                      </div>
+                      <div class="t-cell v_middle" style="color:inherit;">
+                        <div class="clamp1">{{ item.linkman }}</div>
+                      </div>
+                    </div>
+                  </check-icon>
+                </div>
+    					</div>
+            </div>
+            <div class="flex_left border-box pl10 pr10" style="position:absolute;left:0;right:0;bottom:46px;height:40px;">
+              <div class="w_100">
+                <div class="align_left color-red font12 w_100">提示：只有48小时内互动过的返点客才可以收到通知！</div>
+              </div>
+            </div>
+            <div class="popup-bottom flex_center">
+              <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeAdd">{{ $t('Close') }}</div>
+              <div class="flex_cell h_100 flex_center bg-green color-white" @click="submitAdd">提交</div>
+            </div>
+          </div>
+        </popup>
+      </div>
+    </template>
   </div>
 </template>
+
 <i18n>
-Add order1:
-  zh-CN: 返点客
-My orders:
-  zh-CN: 我的订单
+Add factory:
+  zh-CN: 添加厂家
 </i18n>
+
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, TransferDom, Popup, XImg } from 'vux'
-import Time from '#/time'
+import { Group, Datetime, TransferDom, Popup, Confirm, CheckIcon, XImg, XInput, Search } from 'vux'
 import ENV from 'env'
+import Time from '../../libs/time'
 import { User } from '#/storage'
-let self = {}
-const limit = 10
+import Sos from '@/components/Sos'
+
 let pageStart1 = 0
-let pageStart2 = 0
+const limit = 10
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, Popup, XImg
-  },
-  filters: {
-    dateformat: function (value) {
-      return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
-    }
+    Popup, Confirm, CheckIcon, XImg, Sos, Datetime, Group, XInput, Search
   },
   data () {
     return {
-      showApply: false,
+      day: null,
+      endTime: '',
+      visibility2: false,
+      timeShow: false,
+      showSos: false,
+      sosTitle: '抱歉，您暂无权限访问此页面！',
       showContainer: false,
       query: {},
       loginUser: {},
-      tabtxts: ['内测人员', '内测功能'],
-      selectedIndex: 0,
-      distabdata1: false,
-      distabdata2: false,
-      tabdata1: [],
-      tabdata2: [],
-      showpopup: false,
-      deliveritem: null,
-      deliverindex: 0,
-      delivercompany: [],
-      deliverdata: { delivercompany: '-1', delivercode: '' }
+      listData: [],
+      showPopup1: false,
+      clickData: {},
+      clickIndex: 0,
+      showAddPopup: false,
+      disList: false,
+      showManager: false,
+      managerData: [],
+      disManagerList: false,
+      checkAll: false,
+      disUserData: false,
+      userData: []
     }
   },
   methods: {
-    handleScroll (refname, index) {
+    btnClose () {
+      this.timeShow = false
+    },
+    saveSuess (e) {
+      const self = this
+      self.day = self.$refs.input1.value
+      self.$http.post(`${ENV.BokaApi}/api/factory/addFactoryDays`, {
+        fid: self.clickData.id, days: self.day
+      }).then(function (res) {
+        const data = res.data
+        if (data.flag === 1) {
+          self.timeShow = false
+          self.day = ''
+          self.$vux.toast.show({
+            text: '保存成功！',
+            type: 'text',
+            width: '200px'
+          })
+        } else {
+          self.timeShow = false
+          self.day = ''
+          self.$vux.toast.show({
+            text: '操作失败！！！',
+            type: 'text',
+            width: '200px'
+          })
+        }
+      })
+    },
+    showxdate2 () {
+      this.timeShow = true
+      this.showPopup1 = false
+    },
+    getPhoto (src) {
+      return this.$util.getPhoto(src)
+    },
+    checkAllEvent () {
+      for (let i = 0; i < self.customerdata.length; i++) {
+        if (self.checkAll) {
+          self.customerdata[i].checked = true
+        } else {
+          delete self.customerdata[i].checked
+        }
+      }
+    },
+    handleScroll: function (refname, index) {
+      const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
         element: scrollarea,
         callback: function () {
-          switch (self.selectedIndex) {
-            case 0:
-              if (self.tabdata1.length === (pageStart1 + 1) * limit) {
-                pageStart1++
-                self.getData1()
-              }
-              break
-            case 1:
-              if (self.tabdata2.length === (pageStart2 + 1) * limit) {
-                pageStart2++
-                self.getData2()
-              }
-              break
+          if (self.listData.length === (pageStart1 + 1) * limit) {
+            pageStart1++
+            self.$vux.loading.show()
+            self.getData1()
           }
         }
       })
     },
-    clickTab (index) {
-      this.swiperChange()
+    controlPopup1 (item, index) {
+      event.preventDefault()
+      this.showPopup1 = !this.showPopup1
+      this.clickData = item
+      this.clickIndex = index
+      let time = new Time(item.endtime * 1000).dateFormat('yyyy-MM-dd hh:mm')
+      this.endTime = time
+    },
+    clickPopup1 () {
+      const self = this
+      self.showPopup1 = false
+      self.showAddPopup = true
+    },
+    clickPopup (key) {
+      const self = this
+      if (key === 'manager') {
+        self.showPopup1 = false
+        self.showManager = true
+        self.$vux.loading.show()
+        self.$http.post(`${ENV.BokaApi}/api/Beta/getTestors`, {
+          fid: self.loginUser.fid, module: self.clickData.module
+        }).then(res => {
+          let data = res.data
+          self.$vux.loading.hide()
+          self.managerData = data.data ? data.data : data
+          self.disManagerList = true
+        })
+      } else if (key === 'close' || key === 'open') {
+        self.showPopup1 = false
+        let con = (key === 'close') ? '确定要关闭该内测功能吗？' : '确定要开启该内测功能吗？'
+        self.$vux.confirm.show({
+          content: con,
+          onConfirm: () => {
+            let newval = (key === 'close') ? 0 : 1
+            self.$http.post(`${ENV.BokaApi}/api/Beta/setModuleStatus`, {
+              fid: self.loginUser.fid, module: self.clickData.module, status: newval
+            }).then(res => {
+              let data = res.data
+              self.$vux.loading.hide()
+              self.$vux.toast.show({
+                text: data.error,
+                type: data.flag ? 'success' : 'warning',
+                time: self.$util.delay(data.error)
+              })
+              if (data.flag) {
+                self.clickData.status = newval
+                self.listData[self.clickIndex].status = newval
+              }
+            })
+          }
+        })
+      } else {
+        self.showPopup1 = false
+      }
+    },
+    closeAdd () {
+      this.showAddPopup = false
+    },
+    closeManager () {
+      this.showManager = false
+      this.disManagerList = false
+      this.managerData = []
+    },
+    submitAdd () {
+
+    },
+    deleteManager (item, index) {
+      const self = this
+      self.$vux.confirm.show({
+        title: '确定要删除吗？',
+        onConfirm () {
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/factory/delAdmin`, {
+            fid: self.clickData.id, uid: item.uid
+          }).then(function (res) {
+            self.$vux.loading.hide()
+            let data = res.data
+            if (data.flag) {
+              self.managerData.splice(index, 1)
+            } else {
+              self.$vux.toast.show({
+                text: data.error,
+                type: 'warning',
+                time: self.$util.delay(data.error)
+              })
+            }
+          })
+        }
+      })
     },
     getData1 () {
-      this.$vux.loading.show()
-      const params = {from: 'user', used: 0, pagestart: pageStart1, limit: limit}
-      self.$http.post(`${ENV.BokaApi}/api/card/cardList`, params).then(function (res) {
-        const data = res.data
-        self.$vux.loading.hide()
-        const retdata = data.data ? data.data : data
-        self.tabdata1 = self.tabdata1.concat(retdata)
-        self.distabdata1 = true
-      })
-    },
-    getData2 () {
-      this.$vux.loading.show()
       const self = this
-      const params = {from: 'user', used: 1, pagestart: pageStart2, limit: limit}
-      self.$http.post(`${ENV.BokaApi}/api/card/cardList`, params).then(function (res) {
-        const data = res.data
+      const params = {fid: this.loginUser.fid, pagestart: pageStart1, limit: limit}
+      this.$http.post(`${ENV.BokaApi}/api/Beta/getModules`, params)
+      .then(res => {
         self.$vux.loading.hide()
+        const data = res.data
         const retdata = data.data ? data.data : data
-        self.tabdata2 = self.tabdata2.concat(retdata)
-        self.distabdata2 = true
+        self.listData = self.listData.concat(retdata)
+        self.disList = true
       })
-    },
-    swiperChange (index) {
-      const self = this
-      if (index !== undefined) {
-        this.selectedIndex = index
-      }
-      switch (this.selectedIndex) {
-        case 0:
-          if (this.tabdata1.length < limit) {
-            pageStart1 = 0
-            self.distabdata1 = false
-            this.tabdata1 = []
-            self.getData1()
-          }
-          break
-        case 1:
-          if (this.tabdata2.length < limit) {
-            pageStart2 = 0
-            self.distabdata2 = false
-            this.tabdata2 = []
-            self.getData2()
-          }
-          break
-      }
     },
     refresh () {
+      const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.$vux.loading.show()
       this.loginUser = User.get()
-      this.query = this.$route.query
-      this.swiperChange()
+      if (this.loginUser) {
+        this.$vux.loading.show()
+        let isAdmin = false
+        for (let i = 0; i < self.loginUser.usergroup.length; i++) {
+          if (self.loginUser.usergroup[i] === 1) {
+            isAdmin = true
+            break
+          }
+        }
+        if (!isAdmin && !this.loginUser.fid) {
+          this.$vux.loading.hide()
+          self.showSos = true
+          self.showContainer = false
+        } else {
+          self.showSos = false
+          self.showContainer = true
+          this.$vux.loading.hide()
+          this.query = this.$route.query
+          if (this.listData.length < limit) {
+            this.disList = false
+            this.listData = []
+            this.$vux.loading.show()
+            pageStart1 = 0
+            this.getData1()
+          }
+        }
+      }
     }
   },
   activated () {
-    self = this
     this.refresh()
-    this.$util.miniPost()
   }
 }
 </script>
 
 <style lang="less" scoped>
 .test-manage-page{
-  .lists{padding:0px 20px;}
-  .nodata{
-      width: 100%;
-      height: 100%;
-      box-sizing: border-box;
-      display:flex !important;justify-content: center; align-items: center;
-      color:#666666;
-      padding:10px;
+  .scroll_item{overflow:hidden;position:relative;}
+  .scroll_item .ico{display:none;}
+  .scroll_item .down.ico{
+    display:block;
+    position:absolute;right:0;top:0;width:96px;height:25px;line-height:25px;
+    background-color:#8a8a8a;color:#fff;text-align:center;font-size: 12px;
+    -webkit-transform: translate(30px,5px) rotate(45deg);
+    transform: translate(30px,5px) rotate(45deg);
   }
-  .scroll_item{
-    width: 100%;position:relative;background-color: #eb6b5e;color:#fff;
-    display: flex;justify-content: center;align-items: center;
-    margin-top:20px;
+  .scroll_item .down.ico:after{content:"已下架";}
+  .btnicon{
+    display: inline-block;
+    color: #ea3a3a;
+    border: 1px solid #ea3a3a;
+    text-align: center;
+    border-radius: 30px;
+    letter-spacing: 0px;
+    height: 21px;
+    width: 41px;
+    line-height: 21px;
   }
-  .scroll_item.grayitem{background-color: #999;}
-  .scroll_item .txt{color:#fff;}
-  .scroll_item.grayitem .txt{color:orange;}
-  .txt-cell{position:relative;padding-top:15px;padding-bottom:15px;padding-left:10px;box-sizing: border-box;}
-  .txt-cell:after{
-    content:"";display:block;
-    border-right:#fff 1px dashed;
-  	position: absolute;right: 0;top: 0;bottom:0px;
-  	-webkit-transform: scaleX(0.5) translateX(0.5px);
-  	transform: scaleX(0.5) translateX(0.5px);
-  	-webkit-transform-origin: 0% 0%;
-  	transform-origin: 0% 0%;
+  .l-line{
+    width:100%;
+    height:8px;
+    background:#fff;
   }
-  .scroll_item .ball{
-    position: absolute;
-    right: -14px;
-    width: 30px;
-    height: 30px;
-    background-color: #f5f9fa;
-    border-radius: 50%;
+  .s-container{bottom:50px;}
+  .s-bottom{height: 50px;}
+  .addproduct{border-radius: 50px;height: 36px;width: 100%;}
+  .pro_list_top{
+    background: url(../assets/images/product_list_top.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-size: 100%;
+    height: 20px;
   }
-  .scroll_item .ball-up{top: -15px;}
-  .scroll_item .ball-down{bottom: -15px;}
-  .scroll_item .pic{width:50px;}
-  .scroll_item .pic image{width:40px;height:40px;border-radius:50%;}
-  .btn-cell{width:90px;padding-top:15px;padding-bottom:15px;box-sizing: border-box;}
-  .btn-cell .al{font-size:40px;}
-  .btn-cell .icon-chat{margin-top:4px;}
-  .rbtn{display:inline-block;padding:5px;border-radius:5px;background-color: #fff;}
-  .scroll_item .rtxt{flex:1;text-align:right;color:#ff6a61;}
+  .modalarea{
+    .modals{padding:20px 20px 10px 20px;box-sizing:border-box;background-color:#fff;border-radius:5px;}
+    .btns{padding:3px 25px;font-size:14px;border-radius:5px;text-align:center;color:#fff;}
+  }
+  .input-bor{
+    border:1px solid #e5e5e5;
+  }
 }
 </style>

@@ -414,25 +414,29 @@ const alertStack = []
 // 页面入口
 try {
   if (!Token.get() || Token.isExpired()) {
+    console.log('进入到了不存')
     access(path => {
       console.log(`Entry: ${path}`)
       router.replace({path: path})
-      for (let i = 0; i < ENV.DebugList.length; i++) {
-        if (ENV.DebugList[i].uid === User.get().uid) {
-          alertStack.push(
-            () => {
-              vue.$vux.alert.show({
-                title: '提示',
-                content: `token:${Token.get().token} :: 开始渲染页面`,
-                onShow () {
-                  console.log('Plugin: I\'m showing')
-                },
-                onHide () {
-                  console.log('Plugin: I\'m hiding')
-                }
-              })
-            }
-          )
+      let curUser = User.get()
+      if (curUser && curUser.uid) {
+        for (let i = 0; i < ENV.DebugList.length; i++) {
+          if (ENV.DebugList[i].uid === User.get().uid) {
+            alertStack.push(
+              () => {
+                vue.$vux.alert.show({
+                  title: '提示',
+                  content: `token:${Token.get().token} :: 开始渲染页面`,
+                  onShow () {
+                    console.log('Plugin: I\'m showing')
+                  },
+                  onHide () {
+                    console.log('Plugin: I\'m hiding')
+                  }
+                })
+              }
+            )
+          }
         }
       }
       render()
