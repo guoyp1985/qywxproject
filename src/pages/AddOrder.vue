@@ -142,6 +142,16 @@
         <popup v-model="showpopup" height="100%">
           <div class="popup1">
             <div class="popup-top flex_center">选择地址</div>
+            <search
+              class="v-search"
+              v-model='searchword1'
+              :auto-fixed="autofixed"
+              @on-submit="onSubmit1"
+              @on-change="onChange1"
+              @on-cancel="onCancel1"
+              placeholder="请输入收货人或收货地址"
+              ref="search">
+            </search>
             <div class="popup-middle font14">
               <div class="scroll_list">
                 <template v-if="addressdata.length == 0">
@@ -288,7 +298,7 @@ Please select address:
 </i18n>
 
 <script>
-import { Group, XNumber, XTextarea, TransferDom, Popup, CheckIcon, XImg } from 'vux'
+import { Group, XNumber, XTextarea, TransferDom, Search, Popup, CheckIcon, XImg } from 'vux'
 import { mapState } from 'vuex'
 import Sos from '@/components/Sos'
 import ENV from 'env'
@@ -299,7 +309,7 @@ export default {
     TransferDom
   },
   components: {
-    Group, XNumber, XTextarea, Popup, CheckIcon, XImg, Sos
+    Group, XNumber, XTextarea, Search, Popup, CheckIcon, XImg, Sos
   },
   data () {
     return {
@@ -340,7 +350,9 @@ export default {
       sellerUser: {},
       defaultIng: false,
       allowSend: true,
-      disPostageArea: false
+      disPostageArea: false,
+      searchword1: '',
+      autofixed: false
     }
   },
   watch: {
@@ -390,6 +402,22 @@ export default {
       this.buyType = 'online'
       this.onlineVal = true
       this.offlineVal = false
+    },
+    onChange1 (val) {
+      this.searchword1 = val
+    },
+    onCancel1 () {
+      const self = this
+      self.searchword1 = ''
+      self.$vux.loading.show()
+      self.addressdata = []
+      self.getData()
+    },
+    onSubmit1 () {
+      const self = this
+      self.$vux.loading.show()
+      self.addressdata = []
+      self.getData()
     },
     setDefault (item, index) {
       console.log('设置默认')
@@ -805,13 +833,14 @@ export default {
           // self.payPrice = total.toFixed(2)
           // self.orderPrice = self.payPrice
           this.computePrice()
-          return self.$http.get(`${ENV.BokaApi}/api/user/address/list`)
+          return self.$http.get(`${ENV.BokaApi}/api/user/address/list`, {params: {keyword: self.searchword1}})
         }
       }).then(res => {
         if (res) {
           let data = res.data
           let retdata = data.data ? data.data : data
           if (retdata) {
+            self.$vux.loading.hide()
             if (retdata.length) {
               self.addressdata = retdata
               self.handleAddress()
