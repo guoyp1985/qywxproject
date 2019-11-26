@@ -31,7 +31,7 @@
           </div>
         </div>
         <div style="margin: 10px 10px 10px 10px;background-color: white;border-radius:5px">
-          <div class="form-item padding10 required">
+          <!-- <div class="form-item padding10 required">
             <div class="t-table">
               <div class="t-cell title-cell font14 v_middle w100">
                 <span>优惠券类型</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span>
@@ -41,7 +41,7 @@
                 <check-icon class="red-check" :value.sync="template2" @click.native.stop="clickTemplate(2)">直播优惠券</check-icon>
               </div>
             </div>
-          </div>
+          </div> -->
           <div class="form-item padding10 required">
             <div class="t-table">
               <div class="t-cell title-cell font14 v_middle w100">
@@ -53,7 +53,7 @@
               </div>
             </div>
           </div>
-          <div class="padding10 required">
+          <!-- <div class="padding10 required">
             <div class="t-table">
               <div class="t-cell title-cell font14 v_middle w100">
                 <span>可领取数量</span>
@@ -63,7 +63,7 @@
                 <div class="flex_right w30">张</div>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
         <div style="margin: 0px 10px 0px 10px;background-color: white;border-radius:5px">
           <div class="form-item required">
