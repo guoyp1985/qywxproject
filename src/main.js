@@ -346,7 +346,7 @@ const access = success => {
         console.log(`${lUrl.hash.replace(/#/, '')}?${query}`)
         setTimeout(() => {
           success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
-        }, 100)
+        }, 50)
       }, res => {
         Token.remove()
         vue.$vux.alert.show({
