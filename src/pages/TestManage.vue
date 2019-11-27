@@ -217,6 +217,8 @@ export default {
       })
     },
     showxdate2 () {
+      const self = this
+      console.log('进入到了点击')
       this.timeShow = true
       this.showPopup1 = false
       this.showAddPopup = true
@@ -230,9 +232,7 @@ export default {
         console.log('=== 合伙人数据 ===')
         console.log(data)
         self.userData = data.data ? data.data : data
-        if (data.flag) {
-          self.disUserData = true
-        }
+        self.disUserData = true
         console.log('== 请求之后的userData ==')
         console.log(self.disUserData)
         console.log(self.userData)
