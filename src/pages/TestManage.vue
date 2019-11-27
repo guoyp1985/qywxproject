@@ -220,7 +220,6 @@ export default {
       })
     },
     showxdate2 () {
-      const self = this
       console.log('进入到了点击')
       this.timeShow = true
       this.showPopup1 = false
@@ -232,7 +231,7 @@ export default {
     getRetailerList () {
       const self = this
       let params = {fid: self.loginUser.fid, fulltime: 2, pagestart: self.pageStart2, limit: limit}
-      this.$http.get(`${ENV.BokaApi}/api/factory/retailerList`, {
+      self.$http.get(`${ENV.BokaApi}/api/factory/retailerList`, {
         params: params
       }).then(function (res) {
         const data = res.data
