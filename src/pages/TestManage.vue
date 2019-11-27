@@ -110,7 +110,7 @@
             					</div>
             				</div>
                   </template>
-                  <check-icon v-else class="x-check-icon scroll_item pt10 pb10" v-for="(item,index) in userData" :key="item.uid" :value.sync="item.checked" @click.native.stop="radioclick1(item,index)">
+                  <check-icon v-else class="x-check-icon scroll_item pt10 pb10" v-for="(item,index) in userData" :index="index" :key="item.uid" :value.sync="item.checked" @click.native.stop="radioclick1(item,index)">
                     <div class="t-table">
                       <div class="t-cell v_middle w50">
                         <img :src="item.avatar" class="avatarimg imgcover" />
@@ -182,7 +182,8 @@ export default {
       disManagerList: false,
       checkAll: false,
       disUserData: false,
-      userData: []
+      userData: [],
+      pageStart2: 0
     }
   },
   methods: {
@@ -218,6 +219,24 @@ export default {
     showxdate2 () {
       this.timeShow = true
       this.showPopup1 = false
+      this.showAddPopup = true
+      console.log('== 当前登录对象 ==')
+      console.log(this.loginUser)
+      let params = {fid: this.loginUser.fid, fulltime: 2, pagestart: pageStart1, limit: limit}
+      this.$http.get(`${ENV.BokaApi}/api/factory/retailerList`, {
+        params: params
+      }).then(function (res) {
+        const data = res.data
+        console.log('=== 合伙人数据 ===')
+        console.log(data)
+        self.userData = data.data ? data.data : data
+        if (data.flag) {
+          self.disUserData = true
+        }
+        console.log('== 请求之后的userData ==')
+        console.log(self.disUserData)
+        console.log(self.userData)
+      })
     },
     getPhoto (src) {
       return this.$util.getPhoto(src)
