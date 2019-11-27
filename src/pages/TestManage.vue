@@ -236,20 +236,10 @@ export default {
         params: params
       }).then(function (res) {
         const data = res.data
-<<<<<<< HEAD
         const retdata = data.data ? data.data : data
         self.userData = self.userData.concat(retdata)
         self.disUserData = true
         self.$vux.loading.hide()
-=======
-        console.log('=== 合伙人数据 ===')
-        console.log(data)
-        self.userData = data.data ? data.data : data
-        self.disUserData = true
-        console.log('== 请求之后的userData ==')
-        console.log(self.disUserData)
-        console.log(self.userData)
->>>>>>> 096ff47a0ede4b647127ef0e606334280eb007b1
       })
     },
     getPhoto (src) {
