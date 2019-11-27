@@ -667,6 +667,9 @@ export default {
       } else {
         params.pagestart = this.pagestart1
       }
+      if (this.query.factoryuid) {
+        params.factoryuid = this.query.factoryuid
+      }
       this.$http.get(`${ENV.BokaApi}/api/order/orderList/user`, {
         params: params
       }).then((res) => {
