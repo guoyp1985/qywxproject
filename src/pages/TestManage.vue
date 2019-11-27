@@ -43,7 +43,7 @@
                 <div class="inner" @click="clickPopup('manager')">内测人员列表</div>
               </div>
               <div class="item" v-if="clickData.status">
-                <div class="inner" @click="showxdate2">添加内测人员</div>
+                <div class="inner" @click="showxdate2">重置内测人员</div>
               </div>
               <div class="item" v-if="clickData.status">
                 <div class="inner" @click="clickPopup('close')">关闭内测功能</div>
@@ -73,9 +73,9 @@
                     <div class="t-cell v_middle">
                       <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
                     </div>
-                    <div class="t-cell v_middle w60 align_right">
+                    <!-- <div class="t-cell v_middle w60 align_right">
                       <div class="qbtn bg-red color-white" @click="deleteManager(item,index)">删除</div>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
               </div>
@@ -183,7 +183,10 @@ export default {
       checkAll: false,
       disUserData: false,
       userData: [],
-      pageStart2: 0
+      pageStart2: 0,
+      pushdata: [],
+      submiting: false,
+      oldManagerData: []
     }
   },
   methods: {
@@ -220,46 +223,72 @@ export default {
       this.timeShow = true
       this.showPopup1 = false
       this.showAddPopup = true
-      console.log('== 当前登录对象 ==')
-      console.log(this.loginUser)
-      let params = {fid: this.loginUser.fid, fulltime: 2, pagestart: pageStart1, limit: limit}
+      this.pushdata = []
+      this.oldManagerData = []
+      this.getRetailerList()
+    },
+    getRetailerList () {
+      const self = this
+      let params = {fid: self.loginUser.fid, fulltime: 2, pagestart: self.pageStart2, limit: limit}
       this.$http.get(`${ENV.BokaApi}/api/factory/retailerList`, {
         params: params
       }).then(function (res) {
         const data = res.data
-        console.log('=== 合伙人数据 ===')
-        console.log(data)
-        self.userData = data.data ? data.data : data
-        if (data.flag) {
-          self.disUserData = true
-        }
-        console.log('== 请求之后的userData ==')
-        console.log(self.disUserData)
-        console.log(self.userData)
+        const retdata = data.data ? data.data : data
+        self.userData = self.userData.concat(retdata)
+        self.disUserData = true
+        self.$vux.loading.hide()
       })
     },
     getPhoto (src) {
       return this.$util.getPhoto(src)
     },
     checkAllEvent () {
-      for (let i = 0; i < self.customerdata.length; i++) {
+      const self = this
+      self.pushdata = []
+      for (let i = 0; i < self.userData.length; i++) {
         if (self.checkAll) {
-          self.customerdata[i].checked = true
+          self.userData[i].checked = true
+          self.pushdata.push(self.userData[i].uid)
         } else {
-          delete self.customerdata[i].checked
+          delete self.userData[i].checked
         }
       }
     },
-    handleScroll: function (refname, index) {
+    radioclick1 (data, index) {
+      const self = this
+      if (data.checked) {
+        self.pushdata.push(data.uid)
+      } else {
+        self.checkAll = false
+        for (let i = 0; i < self.pushdata.length; i++) {
+          if (self.pushdata[i] === data.uid) {
+            self.pushdata.splice(i, 1)
+            break
+          }
+        }
+      }
+      console.log('=== this.pushdata ===')
+      console.log(self.pushdata)
+    },
+    handleScroll: function (refname, type) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
         element: scrollarea,
         callback: function () {
-          if (self.listData.length === (pageStart1 + 1) * limit) {
-            pageStart1++
-            self.$vux.loading.show()
-            self.getData1()
+          if (type === 'product') {
+            if (self.listData.length === (pageStart1 + 1) * limit) {
+              pageStart1++
+              self.$vux.loading.show()
+              self.getData1()
+            }
+          } else if (type === 'customer') {
+            if (self.userData.length === (self.pageStart2 + 1) * limit) {
+              self.pageStart2++
+              self.$vux.loading.show()
+              self.getRetailerList()
+            }
           }
         }
       })
@@ -276,6 +305,7 @@ export default {
       const self = this
       self.showPopup1 = false
       self.showAddPopup = true
+      self.getRetailerList()
     },
     clickPopup (key) {
       const self = this
@@ -290,6 +320,9 @@ export default {
           self.$vux.loading.hide()
           self.managerData = data.data ? data.data : data
           self.disManagerList = true
+          for (var i = 0; i < self.managerData.length; i++) {
+            self.oldManagerData.push(self.managerData[i].wid)
+          }
         })
       } else if (key === 'close' || key === 'open') {
         self.showPopup1 = false
@@ -328,21 +361,48 @@ export default {
       this.managerData = []
     },
     submitAdd () {
-
+      const self = this
+      if (self.submiting) return false
+      self.submiting = true
+      for (var i = 0; i < self.oldManagerData.length; i++) {
+        self.pushdata.push(parseInt(self.oldManagerData[i]))
+      }
+      self.$http.post(`${ENV.BokaApi}/api/Beta/SetTestor`, {
+        fid: self.loginUser.fid, module: self.clickData.module, wids: self.pushdata
+      }).then(function (res) {
+        let data = res.data
+        self.$vux.toast.show({
+          text: data.error,
+          type: 'warning',
+          time: self.$util.delay(data.error)
+        })
+        self.showAddPopup = false
+        self.pushdata = []
+        self.oldManagerData = []
+        self.submiting = false
+        self.clickPopup('manager')
+      })
     },
     deleteManager (item, index) {
       const self = this
+      console.log('=== 当前点击对象 ===')
+      console.log(item)
       self.$vux.confirm.show({
         title: '确定要删除吗？',
         onConfirm () {
           self.$vux.loading.show()
           self.$http.post(`${ENV.BokaApi}/api/factory/delAdmin`, {
-            fid: self.clickData.id, uid: item.uid
+            fid: self.loginUser.fid, uid: item.wid
           }).then(function (res) {
             self.$vux.loading.hide()
             let data = res.data
             if (data.flag) {
               self.managerData.splice(index, 1)
+              self.$vux.toast.show({
+                text: data.error,
+                type: 'warning',
+                time: self.$util.delay(data.error)
+              })
             } else {
               self.$vux.toast.show({
                 text: data.error,
