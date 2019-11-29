@@ -5,17 +5,17 @@
 */
 <template>
   <div id="order-search" :class="`containerarea font14 ${(loginUser.isretailer && query.fromapp != 'factory') ? 's-havebottom' : ''}`">
+    <search
+      class="v-search bg-white"
+      v-model='searchword1'
+      :auto-fixed="autofixed"
+      @on-submit="onSubmit1"
+      @on-change="onChange1"
+      @on-cancel="onCancel1"
+      placeholder="请输入商品名称"
+      ref="search">
+    </search>
     <div class="s-topbanner s-topbanner1">
-      <search
-        class="v-search bg-white"
-        v-model='searchword1'
-        :auto-fixed="autofixed"
-        @on-submit="onSubmit1"
-        @on-change="onChange1"
-        @on-cancel="onCancel1"
-        placeholder="请输入商品名称"
-        ref="search">
-      </search>
       <tab class="b-tab" v-model="selectedIndex">
         <tab-item :selected="selectedIndex==0" @on-item-click="toggleTab">{{ $t('All') }}</tab-item>
         <tab-item :selected="selectedIndex==1" @on-item-click="toggleTab">{{ $t('To Be Delivered') }}</tab-item>
@@ -828,4 +828,6 @@ export default {
 <style lang="less">
 .b-tab .vux-tab .vux-tab-item.vux-tab-selected{color:#ea3a3a;}
 .b-tab .vux-tab-ink-bar{background-color:#ea3a3a;}
+.s-topbanner1{top:55px;}
+.s-container1{top:99px !important;}
 </style>
