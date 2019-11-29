@@ -266,6 +266,9 @@ export default {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
+        for (let i = 0; i < retdata.length; i++) {
+          retdata[i].checked = false
+        }
         self.userData = self.userData.concat(retdata)
         self.disUserData = true
       })
@@ -275,13 +278,13 @@ export default {
     },
     checkAllEvent () {
       const self = this
+      console.log('点击了全选')
+      console.log(self.checkAll)
       self.pushdata = []
       for (let i = 0; i < self.userData.length; i++) {
+        self.userData[i].checked = self.checkAll
         if (self.checkAll) {
-          self.userData[i].checked = true
           self.pushdata.push(self.userData[i].uid)
-        } else {
-          delete self.userData[i].checked
         }
       }
     },
