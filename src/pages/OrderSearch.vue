@@ -6,7 +6,7 @@
 <template>
   <div id="order-search" :class="`containerarea font14 ${(loginUser.isretailer && query.fromapp != 'factory') ? 's-havebottom' : ''}`">
     <div class="s-topbanner s-topbanner1">
-      <search
+      <!-- <search
         class="v-search bg-white"
         v-model='searchword1'
         :auto-fixed="autofixed"
@@ -15,7 +15,7 @@
         @on-cancel="onCancel1"
         placeholder="请输入商品名称"
         ref="search">
-      </search>
+      </search> -->
       <tab class="b-tab" v-model="selectedIndex">
         <tab-item :selected="selectedIndex==0" @on-item-click="toggleTab">{{ $t('All') }}</tab-item>
         <tab-item :selected="selectedIndex==1" @on-item-click="toggleTab">{{ $t('To Be Delivered') }}</tab-item>
