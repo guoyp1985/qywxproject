@@ -116,7 +116,7 @@
                   <template v-if="!testUserData.length">
                     <div class="scroll_item emptyitem">
             					<div class="t-table">
-            						<div class="t-cell" style="padding:10px;">暂无返点客</div>
+            						<div class="t-cell" style="padding:10px;">暂无用户信息</div>
             					</div>
             				</div>
                   </template>
@@ -453,9 +453,9 @@ export default {
       const self = this
       if (self.submiting) return false
       self.submiting = true
-      for (var i = 0; i < self.oldManagerData.length; i++) {
-        self.pushdata.push(parseInt(self.oldManagerData[i]))
-      }
+      // for (var i = 0; i < self.oldManagerData.length; i++) {
+      //   self.pushdata.push(parseInt(self.oldManagerData[i]))
+      // }
       self.$http.post(`${ENV.BokaApi}/api/Beta/SetTestor`, {
         fid: self.loginUser.fid, module: self.clickData.module, wids: self.pushdata
       }).then(function (res) {
