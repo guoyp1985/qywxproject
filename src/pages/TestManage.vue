@@ -113,23 +113,27 @@
             <div ref="scrollCustomer" @scroll="handleScroll('scrollCustomer','customer')" class="popup-middle font14" style="top:126px;">
               <div class="padding10">
                 <div v-if="disUserData" class="scroll_list">
-                  <template v-if="!userData.length">
+                  <template v-if="!testUserData.length">
                     <div class="scroll_item emptyitem">
             					<div class="t-table">
             						<div class="t-cell" style="padding:10px;">暂无返点客</div>
             					</div>
             				</div>
                   </template>
-                  <check-icon v-else class="x-check-icon scroll_item pt10 pb10" v-for="(item,index) in userData" :index="index" :key="item.uid" :value.sync="item.checked" @click.native.stop="radioclick1(item,index)">
-                    <div class="t-table">
-                      <div class="t-cell v_middle w50">
-                        <img :src="item.avatar" class="avatarimg imgcover" />
-                      </div>
-                      <div class="t-cell v_middle" style="color:inherit;">
-                        <div class="clamp1">{{ item.linkman }}</div>
-                      </div>
-                    </div>
-                  </check-icon>
+                  <template v-else>
+                    <template v-for="(item,index) in testUserData" :index="index">
+                      <check-icon class="x-check-icon scroll_item pt10 pb10" :value.sync="item.checked" @click.native.stop="radioclick1(item,index)">
+                        <div class="t-table">
+                          <div class="t-cell v_middle w50">
+                            <img :src="item.avatar" class="avatarimg imgcover" />
+                          </div>
+                          <div class="t-cell v_middle" style="color:inherit;">
+                            <div class="clamp1">{{ item.linkman }}</div>
+                          </div>
+                        </div>
+                      </check-icon>
+                    </template>
+                  </template>
                 </div>
     					</div>
             </div>
@@ -193,7 +197,9 @@ export default {
       submiting: false,
       oldManagerData: [],
       autofixed: false,
-      searchword: ''
+      searchword: '',
+      testUserData: [],
+      checkedUserData: []
     }
   },
   methods: {
@@ -202,6 +208,10 @@ export default {
       this.disUserData = false
       this.userData = []
       this.pageStart2 = 0
+      this.testUserData = []
+      for (let i = 0; i < this.checkedUserData.length; i++) {
+        this.testUserData.push(this.checkedUserData[i])
+      }
       this.getRetailerList()
     },
     onChange (val) {
@@ -213,6 +223,10 @@ export default {
       this.disUserData = false
       this.userData = []
       this.pageStart2 = 0
+      this.testUserData = []
+      for (let i = 0; i < this.checkedUserData.length; i++) {
+        this.testUserData.push(this.checkedUserData[i])
+      }
       this.getRetailerList()
     },
     btnClose () {
@@ -255,6 +269,7 @@ export default {
     },
     getRetailerList () {
       const self = this
+      self.$vux.loading.show()
       let params = {fid: self.loginUser.fid, fulltime: 2, pagestart: self.pageStart2, limit: limit}
       if (this.searchword && this.$util.trim(this.searchword) !== '') {
         params.keyword = this.searchword
@@ -267,6 +282,16 @@ export default {
         const retdata = data.data ? data.data : data
         for (let i = 0; i < retdata.length; i++) {
           retdata[i].checked = false
+          let isadd = true
+          for (let j = 0; j < self.checkedUserData.length; j++) {
+            if (parseInt(self.checkedUserData[j].wid) === retdata[i].uid) {
+              isadd = false
+              break
+            }
+          }
+          if (isadd) {
+            self.testUserData.push(retdata[i])
+          }
         }
         self.userData = self.userData.concat(retdata)
         self.disUserData = true
@@ -285,8 +310,26 @@ export default {
         }
       }
     },
+    radioclick2 (data, index) {
+      console.log(data)
+      const self = this
+      if (data.checked) {
+        self.pushdata.push(parseInt(data.wid))
+      } else {
+        self.checkAll = false
+        for (let i = 0; i < self.pushdata.length; i++) {
+          if (self.pushdata[i] === data.uid) {
+            self.pushdata.splice(i, 1)
+            break
+          }
+        }
+      }
+      console.log('=== this.pushdata ===')
+      console.log(self.pushdata)
+    },
     radioclick1 (data, index) {
       const self = this
+      this.testUserData.splice(index, data)
       if (data.checked) {
         self.pushdata.push(data.uid)
       } else {
@@ -332,10 +375,13 @@ export default {
       this.endTime = time
     },
     clickPopup1 () {
-      const self = this
-      self.showPopup1 = false
-      self.showAddPopup = true
-      self.getRetailerList()
+      this.showPopup1 = false
+      this.showAddPopup = true
+      this.testUserData = []
+      for (let i = 0; i < this.checkedUserData.length; i++) {
+        this.testUserData.push(this.checkedUserData[i])
+      }
+      this.getRetailerList()
     },
     clickPopup (key) {
       const self = this
@@ -343,6 +389,11 @@ export default {
         self.showPopup1 = false
         self.showManager = true
         self.$vux.loading.show()
+        self.managerData = []
+        self.oldManagerData = []
+        self.checkedUserData = []
+        self.testUserData = []
+        self.pushdata = []
         self.$http.post(`${ENV.BokaApi}/api/Beta/getTestors`, {
           fid: self.loginUser.fid, module: self.clickData.module
         }).then(res => {
@@ -350,9 +401,17 @@ export default {
           self.$vux.loading.hide()
           self.managerData = data.data ? data.data : data
           self.disManagerList = true
+          self.pushdata = []
           for (var i = 0; i < self.managerData.length; i++) {
+            self.managerData[i].checked = true
+            self.managerData[i].uid = parseInt(self.managerData[i].wid)
             self.oldManagerData.push(self.managerData[i].wid)
+            self.checkedUserData.push(self.managerData[i])
+            self.testUserData.push(self.managerData[i])
+            self.pushdata.push(parseInt(self.managerData[i].wid))
           }
+          console.log('this.checkedUserData')
+          console.log(this.checkedUserData)
         })
       } else if (key === 'close' || key === 'open') {
         self.showPopup1 = false
