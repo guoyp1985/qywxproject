@@ -94,13 +94,24 @@
           <div class="popup1">
             <div class="popup-top flex_center">【{{clickData.content}}】添加内测人员</div>
             <div class="flex_left border-box pl10 pr10" style="position:absolute;left:0;right:0;top:46px;height:40px;">
+              <search
+                class="x-search"
+                v-model="searchword"
+                :auto-fixed="autofixed"
+                @on-submit="onSubmit"
+                @on-change="onChange"
+                @on-cancel="onCancel"
+                ref="search">
+              </search>
+            </div>
+            <div class="flex_left border-box pl10 pr10" style="position:absolute;left:0;right:0;top:86px;height:40px;">
               <div class="w_100">
                 <check-icon class="x-check-icon w_100" :value.sync="checkAll" @click.native.stop="checkAllEvent">
                   <div class="flex_left">全选</div>
                 </check-icon>
               </div>
             </div>
-            <div ref="scrollCustomer" @scroll="handleScroll('scrollCustomer','customer')" class="popup-middle font14" style="top:85px;bottom:86px;">
+            <div ref="scrollCustomer" @scroll="handleScroll('scrollCustomer','customer')" class="popup-middle font14" style="top:126px;">
               <div class="padding10">
                 <div v-if="disUserData" class="scroll_list">
                   <template v-if="!userData.length">
@@ -122,11 +133,6 @@
                   </check-icon>
                 </div>
     					</div>
-            </div>
-            <div class="flex_left border-box pl10 pr10" style="position:absolute;left:0;right:0;bottom:46px;height:40px;">
-              <div class="w_100">
-                <div class="align_left color-red font12 w_100">提示：只有48小时内互动过的返点客才可以收到通知！</div>
-              </div>
             </div>
             <div class="popup-bottom flex_center">
               <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeAdd">{{ $t('Close') }}</div>
@@ -152,7 +158,7 @@ import { User } from '#/storage'
 import Sos from '@/components/Sos'
 
 let pageStart1 = 0
-const limit = 10
+const limit = 20
 export default {
   directives: {
     TransferDom
@@ -186,10 +192,30 @@ export default {
       pageStart2: 0,
       pushdata: [],
       submiting: false,
-      oldManagerData: []
+      oldManagerData: [],
+      autofixed: false,
+      searchword: ''
     }
   },
   methods: {
+    onSubmit () {
+      this.$vux.loading.show()
+      this.disUserData = false
+      this.userData = []
+      this.pageStart2 = 0
+      this.getRetailerList()
+    },
+    onChange (val) {
+      this.searchword = val
+    },
+    onCancel () {
+      this.searchword = ''
+      this.$vux.loading.show()
+      this.disUserData = false
+      this.userData = []
+      this.pageStart2 = 0
+      this.getRetailerList()
+    },
     btnClose () {
       this.timeShow = false
     },
@@ -231,14 +257,20 @@ export default {
     getRetailerList () {
       const self = this
       let params = {fid: self.loginUser.fid, fulltime: 2, pagestart: self.pageStart2, limit: limit}
+      if (this.searchword && this.$util.trim(this.searchword) !== '') {
+        params.keyword = this.searchword
+      }
       self.$http.get(`${ENV.BokaApi}/api/factory/retailerList`, {
         params: params
-      }).then(function (res) {
+      }).then(res => {
+        self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
+        for (let i = 0; i < retdata.length; i++) {
+          retdata[i].checked = false
+        }
         self.userData = self.userData.concat(retdata)
         self.disUserData = true
-        self.$vux.loading.hide()
       })
     },
     getPhoto (src) {
@@ -246,13 +278,13 @@ export default {
     },
     checkAllEvent () {
       const self = this
+      console.log('点击了全选')
+      console.log(self.checkAll)
       self.pushdata = []
       for (let i = 0; i < self.userData.length; i++) {
+        self.userData[i].checked = self.checkAll
         if (self.checkAll) {
-          self.userData[i].checked = true
           self.pushdata.push(self.userData[i].uid)
-        } else {
-          delete self.userData[i].checked
         }
       }
     },
