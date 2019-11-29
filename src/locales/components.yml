@@ -746,7 +746,7 @@ zh-CN:
   Groupprice: 团购价
   Group numbers: 成团人数
   Person: 人
-  Online consulting: 在线联系
+  Online consulting: 在线咨询
   I am the seller: 我是卖家
   Sales Assistant: 销售助手
   Newcomer Guide: 新手指南
@@ -976,3 +976,5 @@ zh-CN:
   TtEstClassList: 测试管理
   AtBnormalFunction: 非正常功能
   tAbnormalFunction: 非正常功能
+  tClear: 清除缓存
+  tTestManage: 内测管理

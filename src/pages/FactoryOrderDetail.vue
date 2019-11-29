@@ -18,12 +18,12 @@
         </div> -->
         <div class="bg-white b_bottom_after padding10">
           <div class="flex_left">
-            <router-link class="flex_cell" :to="{path:'/store',query:{wid:orderData.retailer.uid}}">
+            <div @click="toStore" class="flex_cell">
               <i class="al al-dianpufill v_middle color-red font20"></i>
               <span class="v_middle">{{orderData.retailer.title}}</span>
-            </router-link>
-            <div class="w80 align_right">
-              <router-link class="qbtn bg-red color-white font12" :to="{path:'/chat',query:{uid:orderData.retailer.uid, from: query.from}}">联系卖家</router-link>
+            </div>
+            <div class="w80 align_right" v-if="query.fromapp != 'factory'">
+              <div @click="toChat" class="qbtn bg-red color-white font12">联系卖家</div>
             </div>
           </div>
         </div>
@@ -34,7 +34,7 @@
           <div v-if="orderData.flag != 1 && orderData.flag != 2" class="t-table mb10">
             <div class="t-cell v_middle">{{ orderData.delivercompanyname }} {{ orderData.delivercode }}</div>
             <div class="t-cell v_middle align_right w60">
-              <router-link :to="{path: '/deliverinfo', query: {id: orderData.id}}" class="font12 color-orange5">查看详情</router-link>
+              <router-link :to="{path: '/deliverinfo', query: {id: orderData.id}}" class="font12 color-orange5">查看物流</router-link>
             </div>
           </div>
           <div class="t-table">
@@ -325,6 +325,15 @@ export default {
       this.recordPageStart = 0
       this.deliverdata = { delivercompany: '-1', delivercode: '' }
     },
+    toStore () {
+      if (this.query.fromapp !== 'factory') {
+        this.$router.push({path: '/store', query: {wid: this.orderData.retailer.uid}})
+      }
+    },
+    toChat () {
+      let params = this.$util.handleAppParams(this.query, {uid: this.orderData.retailer.uid})
+      this.$router.push({path: '/chat', query: params})
+    },
     handleScroll (refname, type) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
@@ -525,6 +534,7 @@ export default {
         self.$vux.toast.text('请输入物流单号', 'middle')
         return false
       }
+      self.deliverdata.delivercode = self.$util.trim(self.deliverdata.delivercode)
       self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/order/deliver`, self.deliverdata).then(function (res) {
         let data = res.data

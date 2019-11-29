@@ -34,9 +34,9 @@
             <div v-else-if="index + 1 < messages.length && messages[index].dateline - messages[index - 1].dateline > diffSeconds" class="messages-date">{{messages[index].dateline | dateFormat}}</div>
             <div v-else-if="index + 1 == messages.length && messages[index].dateline - messages[index - 1].dateline > diffSeconds" class="messages-date">{{messages[index].dateline | dateFormat}}</div>
             <div :class="`chatitem chatitem-${item.id} ${getItemClass(item)}`">
-              <router-link class="head" :to="{path: '/membersView', query: {uid: item.uid}}">
+              <div @click="toMemberView(item)" class="head">
                 <img :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
-              </router-link>
+              </div>
               <div class="name disusername">{{item.username}}</div>
               <div class="msg">
                 <template v-if="item.msgtype == 'image'">
@@ -324,6 +324,12 @@ export default {
     }
   },
   methods: {
+    toMemberView (item) {
+      if (this.query.fromapp !== 'factory') {
+        let params = this.$util.handleAppParams(this.query, {uid: item.uid})
+        this.$router.push({path: '/membersView', query: params})
+      }
+    },
     clickQrcode () {
       if (this.retailerInfo.qrcode && this.retailerInfo.qrcode !== '') {
         this.showQrcodeModal = true

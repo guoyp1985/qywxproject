@@ -577,7 +577,8 @@ export default {
       showRefuseModal: false,
       levelPolicy: {},
       showPayPopup: false,
-      payMoney: ''
+      payMoney: '',
+      allchoosed: false
     }
   },
   methods: {
@@ -935,8 +936,13 @@ export default {
     },
     allchoose () {  // 全选
       let checkdoms = this.$refs.inputCheckbox
+      this.allchoosed = !this.allchoosed
       for (var i = 0; i < checkdoms.length; i++) {
-        checkdoms[i].checked = !checkdoms[i].checked
+        if (this.allchoosed) {
+          checkdoms[i].checked = true
+        } else {
+          checkdoms[i].checked = false
+        }
       }
       this.getDshsSellerInfo()
     },
@@ -1306,7 +1312,7 @@ export default {
             break
           }
         }
-        if (!(self.loginUser.fid && parseInt(self.loginUser.fid) === parseInt(self.$route.query.id)) && !isAdmin) {
+        if (!(self.loginUser.fid && parseInt(self.loginUser.fid) === parseInt(self.$route.query.id)) && !isAdmin && !self.query.fromapp === 'factory') {
           this.$vux.loading.hide()
           self.showSos = true
           self.showContainer = false

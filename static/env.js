@@ -1,5 +1,5 @@
 var ENV = {
-  Version: '2.0.0.19',
+  Version: '2.0.0.21',
   AppId: 'wxd50f3623bec2f5b5', // vux:'wx1e72f0c45242a94e' // vue: 'wxd50f3623bec2f5b5'
   // AppSecret: 'f22214afc8a01ec9a769bd0ba8551c48',
   FeedChars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
@@ -33,7 +33,8 @@ var ENV = {
     product: '/packageB/pages/product',
     store: '/packageB/pages/store',
     addCard: '/packageA/pages/addCard',
-    factoryAppProduct: '/pages/product'
+    factoryAppProduct: '/pages/product',
+    chat: '/pages/chat'
   },
   Emots: [
     '微笑', '撇嘴', '色', '发呆', '得意', '流泪', '害羞', '闭嘴',
@@ -79,7 +80,19 @@ var ENV = {
   CommissionFid: 97,
   KefuQrcode: 'https://tossharingsales.boka.cn/images/kefu_qrcode.jpg',
   KefuWxNo: 'sharingsales',
-  AllowQuickService: true // 控制显示【完成售后按钮】，正式平台不需要
+  AllowQuickService: true, // 控制显示【完成售后按钮】，正式平台不需要
+  DebugList: [
+    {uid: 25465, name: '黄一萌'},
+    {uid: 8, name: 'young'},
+    {uid: 27531, name: '戴飞'},
+    {uid: 24675, name: '兰花草'},
+    {uid: 1694},
+    {uid: 65231},
+    {uid: 99756},
+    {uid: 39854},
+    {uid: 25421},
+    {uid: 98466}
+  ]
 }
 
 ENV.NoAccessUrls = [

@@ -5,6 +5,16 @@
 */
 <template>
   <div id="order-search" :class="`containerarea font14 ${(loginUser.isretailer && query.fromapp != 'factory') ? 's-havebottom' : ''}`">
+    <search
+      class="v-search bg-white"
+      v-model='searchword1'
+      :auto-fixed="autofixed"
+      @on-submit="onSubmit1"
+      @on-change="onChange1"
+      @on-cancel="onCancel1"
+      placeholder="请输入商品名称"
+      ref="search">
+    </search>
     <div class="s-topbanner s-topbanner1">
       <tab class="b-tab" v-model="selectedIndex">
         <tab-item :selected="selectedIndex==0" @on-item-click="toggleTab">{{ $t('All') }}</tab-item>
@@ -148,14 +158,14 @@
 </i18n>
 
 <script>
-import { Sticky, Tab, TabItem, Group, XTextarea } from 'vux'
+import { Sticky, Tab, TabItem, Group, XTextarea, Search } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
 import {User} from '#/storage'
 import ENV from 'env'
 
 export default {
   components: {
-    Sticky, Tab, TabItem, OrderInfo, Group, XTextarea
+    Sticky, Tab, TabItem, OrderInfo, Group, XTextarea, Search
   },
   data () {
     return {
@@ -185,7 +195,9 @@ export default {
       servicePhoto: '',
       servicePhotoArr: [],
       maxnum: 4,
-      clickPhotoIndex: undefined
+      clickPhotoIndex: undefined,
+      searchword1: '',
+      autofixed: false
     }
   },
   computed: {
@@ -226,6 +238,52 @@ export default {
       this.refundContent = ''
       this.clickOrder = {}
       this.clickIndex = 0
+    },
+    onSubmit1 () {
+      switch (this.selectedIndex) {
+        case 0:
+          this.tabdata1 = []
+          this.pagestart1 = 0
+          break
+        case 1:
+          this.tabdata2 = []
+          this.pagestart2 = 0
+          break
+        case 2:
+          this.tabdata3 = []
+          this.pagestart3 = 0
+          break
+        case 3:
+          this.tabdata4 = []
+          this.pagestart4 = 0
+          break
+      }
+      this.toggleTab()
+    },
+    onChange1 (val) {
+      this.searchword1 = val
+    },
+    onCancel1 () {
+      this.searchword1 = ''
+      switch (this.selectedIndex) {
+        case 0:
+          this.tabdata1 = []
+          this.pagestart1 = 0
+          break
+        case 1:
+          this.tabdata2 = []
+          this.pagestart2 = 0
+          break
+        case 2:
+          this.tabdata3 = []
+          this.pagestart3 = 0
+          break
+        case 3:
+          this.tabdata4 = []
+          this.pagestart4 = 0
+          break
+      }
+      this.toggleTab()
     },
     deletephoto (index) {
       this.servicePhotoArr.splice(index, 1)
@@ -336,7 +394,9 @@ export default {
             if (item.backflag === 120) {
               arr1.push({id: 9, name: '查看售后进度'})
             }
-            arr1.push({id: 7, name: '评价'})
+            if (item.comment === 0) {
+              arr1.push({id: 7, name: '评价'})
+            }
             item.buttons = arr1
             break
         }
@@ -471,7 +531,11 @@ export default {
       })
     },
     viewShipping (order) {
-      this.$router.push({path: `/deliverinfo`, query: {id: order.id}})
+      if (this.query.fromapp !== 'factory') {
+        this.$router.push({path: `/deliverinfo`, query: {id: order.id}})
+      } else if (this.query.fromapp === 'factory') {
+        this.$router.push({path: `/deliverinfo`, query: {id: order.id, fromapp: 'factory'}})
+      }
     },
     closeService () {
       this.showServiceModal = false
@@ -661,6 +725,12 @@ export default {
       } else {
         params.pagestart = this.pagestart1
       }
+      if (this.searchword1) {
+        params.keyword = this.searchword1
+      }
+      if (this.query.factoryuid) {
+        params.factoryuid = this.query.factoryuid
+      }
       this.$http.get(`${ENV.BokaApi}/api/order/orderList/user`, {
         params: params
       }).then((res) => {
@@ -696,7 +766,24 @@ export default {
       this.loginUser = User.get()
       this.initData()
       this.query = this.$route.query
-      let flag = parseInt(this.query.flag)
+      let flag = 0
+      switch (this.selectedIndex) {
+        case 1:
+          flag = 2
+          break
+        case 2:
+          flag = 3
+          break
+        case 3:
+          flag = 4
+          break
+        default :
+          flag = 0
+          break
+      }
+      if (this.query.flag) {
+        flag = parseInt(this.query.flag)
+      }
       switch (flag) {
         case 2:
           if (this.query.refresh || !this.tabdata2.length) {
@@ -715,12 +802,11 @@ export default {
           }
           break
         case 4:
-          if (this.query.refresh || !this.tabdata4.length) {
-            this.selectedIndex = 3
-            this.pagestart4 = 0
-            this.tabdata4 = []
-            this.toggleTab()
-          }
+          this.distabdata4 = false
+          this.selectedIndex = 3
+          this.pagestart4 = 0
+          this.tabdata4 = []
+          this.toggleTab()
           break
         default :
           if (this.query.refresh || !this.tabdata1.length) {
@@ -761,4 +847,6 @@ export default {
 <style lang="less">
 .b-tab .vux-tab .vux-tab-item.vux-tab-selected{color:#ea3a3a;}
 .b-tab .vux-tab-ink-bar{background-color:#ea3a3a;}
+.s-topbanner1{top:55px;}
+.s-container1{top:99px !important;}
 </style>

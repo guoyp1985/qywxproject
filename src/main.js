@@ -171,6 +171,11 @@ Vue.http.interceptors.response.use(response => {
   return response
 }, error => {
   if (error.response) {
+    Token.remove()
+    vue.$vux.alert.show({
+      title: '提示',
+      content: `无效token:${Token.get().token} :: 禁止未授权访问`
+    })
     if (error.response.status === 401) {
       console.error('未授权请求')
       Vue.access(isPC => {
@@ -281,23 +286,77 @@ const access = success => {
       res => {
         console.log('weinxin/authUser success')
         console.log(res)
-        if (!res || !res.data || res.data.errcode) return
+        if (!res || !res.data || res.data.errcode || !res.data.flag) {
+          // alert('清空缓存重试')
+          console.log('进入到了authUser请求未返回数据')
+          Token.remove()
+          vue.$vux.alert.show({
+            title: '提示',
+            content: `用户信息获取失败，请重新进入`,
+            onHide () {
+              location.replace(lUrl.href)
+            }
+          })
+          return
+        }
         Token.set(res.data.data)
         // 取用户信息
         // console.log(`defaultAccess: /user/show`)
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
+      }, res => {
+        console.log('进入到了authUser请求失败')
+        console.log(res)
+        Token.remove()
+        vue.$vux.alert.show({
+          title: '提示',
+          content: `未获取到用户信息`,
+          onHide () {
+            location.replace(lUrl.href)
+          }
+        })
       }
     )
     .then(
       res => {
-        console.log('weinxin/authUser error')
-        console.log(res)
+        // console.log('weinxin/authUser error')
+        // console.log(res)
         if (!res) return
+        const rData = res.data
+        for (let i = 0; i < ENV.DebugList.length; i++) {
+          console.log(ENV.DebugList[i].uid === rData.uid)
+          if (ENV.DebugList[i].uid === rData.uid) {
+            vue.$vux.alert.show({
+              title: '提示',
+              content: `token:${Token.get().token} :: 已取到用户信息`,
+              onShow () {
+                console.log('Plugin: I\'m showing')
+              },
+              onHide () {
+                const f = alertStack.pop()
+                if (f) {
+                  f()
+                }
+              }
+            })
+          }
+        }
         User.set(res.data)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
         console.log(`${lUrl.hash.replace(/#/, '')}?${query}`)
         success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
+        // setTimeout(() => {
+        //   success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
+        // }, 50)
+      }, res => {
+        Token.remove()
+        vue.$vux.alert.show({
+          title: '提示',
+          content: `未取到用户信息`,
+          onHide () {
+            location.replace(lUrl.href)
+          }
+        })
       }
     )
   } else {
@@ -339,23 +398,74 @@ const clearCache = () => {
   }
 }
 
+const vue = new Vue({
+  store,
+  router,
+  render: h => h(App)
+})
+
 const render = () => {
-  new Vue({
-    store,
-    router,
-    render: h => h(App)
-  }).$mount('#app-box')
+  vue.$mount('#app-box')
 }
 
 clearCache()
 
+const alertStack = []
 // 页面入口
-if (!Token.get() || Token.isExpired()) {
-  access(path => {
-    console.log(`Entry: ${path}`)
-    router.replace({path: path})
+try {
+  if (!Token.get() || Token.isExpired()) {
+    console.log('进入到了不存')
+    access(path => {
+      console.log(`Entry: ${path}`)
+      router.replace({path: path})
+      let curUser = User.get()
+      if (curUser && curUser.uid) {
+        for (let i = 0; i < ENV.DebugList.length; i++) {
+          if (ENV.DebugList[i].uid === User.get().uid) {
+            alertStack.push(
+              () => {
+                vue.$vux.alert.show({
+                  title: '提示',
+                  content: `token:${Token.get().token} :: 开始渲染页面`,
+                  onShow () {
+                    console.log('Plugin: I\'m showing')
+                  },
+                  onHide () {
+                    console.log('Plugin: I\'m hiding')
+                  }
+                })
+              }
+            )
+          }
+        }
+      }
+      render()
+    })
+  } else {
+    for (let i = 0; i < ENV.DebugList.length; i++) {
+      if (ENV.DebugList[i].uid === User.get().uid) {
+        vue.$vux.alert.show({
+          title: '提示',
+          content: `有token:${Token.get().token} :: 开始渲染页面`,
+          onShow () {
+            console.log('Plugin: I\'m showing')
+          },
+          onHide () {
+            console.log('Plugin: I\'m hiding')
+          }
+        })
+      }
+    }
     render()
+  }
+} catch (e) {
+  vue.$vux.alert.show({
+    title: '提示',
+    content: `error:${e.toString()} :: 代码异常`,
+    onHide () {
+      Token.remove()
+      User.remove()
+      location.reload()
+    }
   })
-} else {
-  render()
 }

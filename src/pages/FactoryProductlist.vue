@@ -86,7 +86,10 @@
                   <router-link class="inner" :to="{path: '/postageArea', query: {type: 'factoryproduct',id: clickdata.moduleid}}">偏远地区运费</router-link>
                 </div>
                 <div class="item" v-if="!clickdata.activityid || clickdata.activityid == 0">
-                  <router-link class="inner" :to="{path: '/addFpimportProduct', query: {id: clickdata.id, fid: Fid}}">编辑</router-link>
+                  <div class="inner" @click="clickpopup('edit')">编辑</div>
+                </div>
+                <div class="item">
+                  <div class="inner" @click="clickpopup('storage')">修改库存</div>
                 </div>
               </template>
               <div class="item" v-if="clickdata.isshow == 0">
@@ -112,6 +115,64 @@
               <div class="item close mt10" @click="clickpopup">
                 <div class="inner">{{ $t('Cancel txt') }}</div>
               </div>
+            </div>
+          </div>
+        </popup>
+      </div>
+      <div v-transfer-dom class="x-popup">
+        <popup v-model="showStoragePopup" height="100%">
+          <div class="popup1">
+            <div class="popup-top flex_center">修改库存</div>
+            <div class="popup-middle font14">
+              <div class="pt10 pb10 pl12 pr12">
+                <div class="t-table bg-white pt10 pb10">
+            			<div class="t-cell pl12 v_middle" style="width:110px;">
+                    <img class="imgcover v_middle" :src="getPhoto(clickdata.photo)" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+                  </div>
+            			<div class="t-cell v_middle">
+                    <div class="clamp1 font16 pr10 color-lightgray">{{clickdata.title}}</div>
+                    <div class="t-table pr12 border-box mt15" v-if="!clickdata.options || !clickdata.options.length">
+                      <div class="t-cell color-999 font14">
+                        <div class="clamp1">现有库存: <span class="color-red">{{ clickdata.storage }}</span></div>
+                      </div>
+                    </div>
+            			</div>
+            		</div>
+                <template v-if="clickdata.options && clickdata.options.length">
+                  <template v-for="(oitem,index) in clickdata.options">
+                    <div class="form-item bold">{{oitem.title}}</div>
+                    <div class="form-item">
+                      <div class="t-table">
+                        <div class="t-cell title-cell w80 font14 v_middle">现有库存</div>
+                        <div class="t-cell input-cell v_middle" style="position:relative;">{{oitem.storage}}</div>
+                      </div>
+                    </div>
+                    <div class="form-item">
+                      <div class="t-table">
+                        <div class="t-cell title-cell w80 font14 v_middle">库存数量</div>
+                        <div class="t-cell input-cell v_middle" style="position:relative;">
+                          <x-input v-model="oitem.newstorage" type="text" class="input" placeholder="库存数量"></x-input>
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                </template>
+                <template v-else>
+                  <div class="form-item">
+                    <div class="t-table">
+                      <div class="t-cell title-cell w80 font14 v_middle">库存数量</div>
+                      <div class="t-cell input-cell v_middle" style="position:relative;">
+                        <x-input v-model="clickdata.newstorage" type="text" class="input" placeholder="库存数量"></x-input>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+    					</div>
+            </div>
+            <div class="popup-bottom flex_center">
+              <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeStoragePopup">{{ $t('Close') }}</div>
+              <div class="flex_cell h_100 flex_center bg-orange color-white" @click="submitStorage">减少库存</div>
+              <div class="flex_cell h_100 flex_center bg-green color-white" @click="submitStorage('add')">增加库存</div>
             </div>
           </div>
         </popup>
@@ -307,7 +368,9 @@ export default {
       showBankPopup: false,
       submitData: {newbankcode: '', accountname: '', newbankcardno: '', newbankuser: '', mobile: ''},
       cardList: [],
-      factoryInfo: {}
+      factoryInfo: {},
+      showStoragePopup: false,
+      submiting: false
     }
   },
   watch: {
@@ -482,11 +545,114 @@ export default {
         self.showFeePopup = true
         self.feeData = self.clickdata
       } else if (key === 'stat') {
+        self.showpopup1 = false
         let params = this.$util.handleAppParams(this.query, {id: this.clickdata.id, module: 'fpimport'})
         this.$router.push({path: '/stat', query: params})
+      } else if (key === 'storage') {
+        self.showpopup1 = false
+        this.showStoragePopup = true
+      } else if (key === 'edit') {
+        let params = this.$util.handleAppParams(this.query, {id: this.clickdata.id, fid: this.Fid})
+        this.$router.push({path: '/addFpimportProduct', query: params})
       } else {
         self.showpopup1 = false
       }
+    },
+    closeStoragePopup () {
+      this.showStoragePopup = false
+    },
+    submitStorage (type) {
+      console.log(this.clickdata)
+      if (this.submiting) return false
+      let params = {id: this.clickdata.moduleid}
+      let curOptions = this.clickdata.options
+      let isContinue = true
+      if (curOptions && curOptions.length) {
+        params.haveoptions = 1
+        let addvalue = []
+        let poid = []
+        for (let i = 0; i < curOptions.length; i++) {
+          let newval = curOptions[i].newstorage
+          if (!newval || isNaN(newval)) {
+            newval = 0
+          }
+          if (type === 'add') {
+            if (!/^[0-9]*[1-9][0-9]*$/.test(newval)) {
+              this.$vux.toast.text('请输入大于0的库存')
+              isContinue = false
+              return false
+            }
+          } else {
+            if (!/^-[0-9]*[1-9][0-9]*$/.test(newval)) {
+              this.$vux.toast.text('请输入负数库存')
+              isContinue = false
+              return false
+            }
+          }
+          this.clickdata.options[i].newstorage = newval
+          addvalue.push(newval)
+          poid.push(curOptions[i].id)
+        }
+        params.addvalue = addvalue
+        params.poid = poid
+      } else {
+        params.haveoptions = 0
+        let newval = this.clickdata.newstorage
+        if (!newval || isNaN(newval)) {
+          newval = 0
+        }
+        if (type === 'add') {
+          if (!/^[0-9]*[1-9][0-9]*$/.test(newval)) {
+            this.$vux.toast.text('请输入大于0的库存')
+            isContinue = false
+            return false
+          }
+        } else {
+          if (!/^-[0-9]*[1-9][0-9]*$/.test(newval)) {
+            this.$vux.toast.text('请输入负数库存')
+            isContinue = false
+            return false
+          }
+        }
+        this.clickdata.newstorage = newval
+        params.addvalue = newval
+      }
+      if (!isContinue) return false
+      this.submiting = true
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/FP/addStorage`, params).then(res => {
+        let data = res.data
+        this.$vux.loading.hide()
+        if (data.flag) {
+          let newData = this.productdata[this.clickindex]
+          if (!newData.options || !newData.options.length) {
+            newData.storage = newData.storage + parseInt(this.clickdata.newstorage)
+          } else {
+            let total = newData.storage
+            for (let i = 0; i < newData.options.length; i++) {
+              newData.options[i].storage = newData.options[i].storage + parseInt(newData.options[i].newstorage)
+              total = total + parseInt(newData.options[i].newstorage)
+            }
+            newData.storage = total
+          }
+          this.productdata[this.clickindex] = newData
+        }
+        this.$vux.toast.show({
+          text: data.error,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: this.$util.delay(data.error),
+          onHide: () => {
+            if (data.flag === 1) {
+              this.clickdata = {}
+              this.clickindex = 0
+              this.showStoragePopup = false
+              setTimeout(() => {
+                this.submiting = false
+              }, 1000)
+            }
+          }
+        })
+      })
     },
     closeBank () {
       this.showBankPopup = false
@@ -512,7 +678,7 @@ export default {
         let data = res.data
         this.$vux.loading.hide()
         this.$vux.toast.show({
-          text: data.error,
+          text: (data.flag !== 1 ? '商品正在活动中,不能推荐货源' : '推荐成功'),
           type: (data.flag !== 1 ? 'warn' : 'success'),
           time: this.$util.delay(data.error),
           onHide: () => {

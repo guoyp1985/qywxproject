@@ -31,7 +31,18 @@
           </div>
         </div>
         <div style="margin: 10px 10px 10px 10px;background-color: white;border-radius:5px">
-          <div class="padding10 required">
+          <!-- <div class="form-item padding10 required">
+            <div class="t-table">
+              <div class="t-cell title-cell font14 v_middle w100">
+                <span>优惠券类型</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span>
+              </div>
+              <div class="t-cell input-cell v_middle db-flex" style="position:relative;">
+                <check-icon class="red-check" :value.sync="template1" @click.native.stop="clickTemplate(1)">活动优惠券</check-icon>
+                <check-icon class="red-check" :value.sync="template2" @click.native.stop="clickTemplate(2)">直播优惠券</check-icon>
+              </div>
+            </div>
+          </div> -->
+          <div class="form-item padding10 required">
             <div class="t-table">
               <div class="t-cell title-cell font14 v_middle w100">
                 <span>优惠券数量</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span>
@@ -42,6 +53,17 @@
               </div>
             </div>
           </div>
+          <!-- <div class="padding10 required">
+            <div class="t-table">
+              <div class="t-cell title-cell font14 v_middle w100">
+                <span>可领取数量</span>
+              </div>
+              <div class="t-cell input-cell v_middle db-flex" style="position:relative;">
+                <x-input class="flex_cell" v-model='submitdata.klqcount' type="number" placeholder="请输入每位用户可领取数量" ></x-input>
+                <div class="flex_right w30">张</div>
+              </div>
+            </div>
+          </div> -->
         </div>
         <div style="margin: 0px 10px 0px 10px;background-color: white;border-radius:5px">
           <div class="form-item required">
@@ -213,7 +235,9 @@ export default {
       Fid: 0,
       submitIng: false,
       checkedProduct: null,
-      selectedProduct: null
+      selectedProduct: null,
+      template1: false,
+      template2: false
     }
   },
   watch: {
@@ -303,6 +327,18 @@ export default {
       // console.log('----当前点击的对象----')
       // console.log(self.selectpopupdata)
     },
+    clickTemplate (val) {
+      let curval = parseInt(val)
+      if (curval === 1) {
+        this.template1 = true
+        this.template2 = false
+        // this.submitData.shopmodel = 1
+      } else if (curval === 2) {
+        this.template1 = false
+        this.template2 = true
+        // this.submitData.shopmodel = 2
+      }
+    },
     onSubmit () {
       const self = this
       self.$vux.loading.show()
@@ -378,7 +414,7 @@ export default {
               this.submitdata[key] = this.viewData[key]
             }
           }
-          this.submitdata['totalcount'] = parseInt(this.viewData['totalcount']) - parseInt(this.viewData['budget']) // 编辑时计算剩余数量
+          // this.submitdata['totalcount'] = parseInt(this.viewData['totalcount']) - parseInt(this.viewData['budget']) // 编辑时计算剩余数量
           console.log(this.submitdata)
           return this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
             params: {id: this.viewData.fpid, module: 'factoryproduct'}

@@ -77,7 +77,8 @@
                     <div class="qbtn4 font12" style="padding:1px 14px;" @click="uploaddeliver(item,index1)">{{ $t('Deliver goods') }}</div>
                   </div>
                   <div class="t-cell v_middle appendcontrol align_right w80" v-if="item.flag == 3">
-                    <router-link :to="{path: '/deliverinfo', query: {id: item.id}}" class="qbtn4 color-orange7 font12" style="border:1px solid #ee9f25;padding:1px 8px">{{ $t('View deliver') }}</router-link>
+                    <router-link v-if="query.fromapp != 'factory'" :to="{path: '/deliverinfo', query: {id: item.id}}" class="qbtn4 color-orange7 font12" style="border:1px solid #ee9f25;padding:1px 8px">{{ $t('View deliver') }}</router-link>
+                    <router-link v-if="query.fromapp == 'factory'" :to="{path: '/deliverinfo', query: {id: item.id, fromapp: 'factory'}}" class="qbtn4 color-orange7 font12" style="border:1px solid #ee9f25;padding:1px 8px">{{ $t('View deliver') }}</router-link>
                   </div>
                 </div>
               </div>
@@ -865,7 +866,16 @@ export default {
         self.$http.post(`${ENV.BokaApi}/api/order/delivercompany`).then(function (res) {
           let data = res.data
           self.delivercompany = data.data ? data.data : data
+          if (!self.deliverdata.delivercompany || self.deliverdata.delivercompany === '-1') {
+            self.deliverdata.delivercompanyname = self.delivercompany[0].name
+            self.deliverdata.delivercompany = self.delivercompany[0].id
+          }
         })
+      } else {
+        if (!self.deliverdata.delivercompany || self.deliverdata.delivercompany === '-1') {
+          self.deliverdata.delivercompanyname = self.delivercompany[0].name
+          self.deliverdata.delivercompany = self.delivercompany[0].id
+        }
       }
       this.deliverdata = { delivercompany: '-1', delivercode: '' }
       this.showpopup = true
@@ -879,6 +889,7 @@ export default {
       }
       self.$vux.loading.show()
       self.deliverdata.id = self.deliveritem.id
+      self.deliverdata.delivercode = self.$util.trim(self.deliverdata.delivercode)
       self.$http.post(`${ENV.BokaApi}/api/order/deliver`, self.deliverdata).then(res => {
         let data = res.data
         self.$vux.loading.hide()

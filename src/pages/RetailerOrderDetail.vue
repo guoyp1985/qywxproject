@@ -32,7 +32,8 @@
           <div v-if="orderData.flag != 1 && orderData.flag != 2" class="t-table mb10">
             <div class="t-cell v_middle">{{ orderData.delivercompanyname }} {{ orderData.delivercode }}</div>
             <div class="t-cell v_middle align_right w60">
-              <router-link :to="{path: '/deliverinfo', query: {id: orderData.id}}" class="font12 color-orange5">查看详情</router-link>
+              <router-link v-if="query.fromapp != 'factory'" :to="{path: '/deliverinfo', query: {id: orderData.id}}" class="font12 color-orange5">查看物流</router-link>
+              <router-link v-if="query.fromapp == 'factory'" :to="{path: '/deliverinfo', query: {id: orderData.id, fromapp: 'factory'}}" class="font12 color-orange5">查看物流</router-link>
             </div>
           </div>
           <div class="t-table">
@@ -582,8 +583,10 @@ export default {
       }
     },
     toMemberView () {
-      let params = this.$util.handleAppParams(this.query, {uid: this.orderData.uid})
-      this.$router.push({path: '/membersView', query: params})
+      if (this.query.fromapp !== 'factory') {
+        let params = this.$util.handleAppParams(this.query, {uid: this.orderData.uid})
+        this.$router.push({path: '/membersView', query: params})
+      }
     },
     toCard (item) {
       if (this.query.from) {
@@ -815,6 +818,7 @@ export default {
         self.$vux.toast.text('请输入物流单号', 'middle')
         return false
       }
+      self.deliverdata.delivercode = self.$util.trim(self.deliverdata.delivercode)
       self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/order/deliver`, {...self.deliverdata, id: this.query.id}).then((res) => {
         let data = res.data

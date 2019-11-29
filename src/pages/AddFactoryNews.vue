@@ -339,6 +339,7 @@ export default {
           if (retdata.video && retdata.video !== '') {
             self.videoarr = [retdata.video]
           }
+          self.photoarr = []
           if (retdata) {
             for (let key in self.submitdata) {
               if (retdata[key]) {
