@@ -6,6 +6,16 @@
 <template>
   <div id="order-search" :class="`containerarea font14 ${(loginUser.isretailer && query.fromapp != 'factory') ? 's-havebottom' : ''}`">
     <div class="s-topbanner s-topbanner1">
+      <search
+        class="v-search bg-white"
+        v-model='searchword1'
+        :auto-fixed="autofixed"
+        @on-submit="onSubmit1"
+        @on-change="onChange1"
+        @on-cancel="onCancel1"
+        placeholder="请输入商品名称"
+        ref="search">
+      </search>
       <tab class="b-tab" v-model="selectedIndex">
         <tab-item :selected="selectedIndex==0" @on-item-click="toggleTab">{{ $t('All') }}</tab-item>
         <tab-item :selected="selectedIndex==1" @on-item-click="toggleTab">{{ $t('To Be Delivered') }}</tab-item>
@@ -148,14 +158,14 @@
 </i18n>
 
 <script>
-import { Sticky, Tab, TabItem, Group, XTextarea } from 'vux'
+import { Sticky, Tab, TabItem, Group, XTextarea, Search } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
 import {User} from '#/storage'
 import ENV from 'env'
 
 export default {
   components: {
-    Sticky, Tab, TabItem, OrderInfo, Group, XTextarea
+    Sticky, Tab, TabItem, OrderInfo, Group, XTextarea, Search
   },
   data () {
     return {
@@ -185,7 +195,9 @@ export default {
       servicePhoto: '',
       servicePhotoArr: [],
       maxnum: 4,
-      clickPhotoIndex: undefined
+      clickPhotoIndex: undefined,
+      searchword1: '',
+      autofixed: false
     }
   },
   computed: {
@@ -226,6 +238,33 @@ export default {
       this.refundContent = ''
       this.clickOrder = {}
       this.clickIndex = 0
+    },
+    onSubmit1 () {
+      switch (this.selectedIndex) {
+        case 0:
+          this.tabdata1 = []
+          this.pagestart1 = 0
+          break
+        case 1:
+          this.tabdata2 = []
+          this.pagestart2 = 0
+          break
+        case 2:
+          this.tabdata3 = []
+          this.pagestart3 = 0
+          break
+        case 3:
+          this.tabdata4 = []
+          this.pagestart4 = 0
+          break
+      }
+      this.toggleTab()
+    },
+    onChange1 (val) {
+      this.searchword1 = val
+    },
+    onCancel1 () {
+      this.searchword1 = ''
     },
     deletephoto (index) {
       this.servicePhotoArr.splice(index, 1)
@@ -666,6 +705,9 @@ export default {
         params.pagestart = this.pagestart4
       } else {
         params.pagestart = this.pagestart1
+      }
+      if (this.searchword1) {
+        params.keyword = this.searchword1
       }
       if (this.query.factoryuid) {
         params.factoryuid = this.query.factoryuid
