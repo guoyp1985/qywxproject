@@ -13,8 +13,7 @@
           </template>
           <template v-else>
             <div class="scroll_list ">
-              <router-link :to="{path:'/factory',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in listData" :key="item.id" style="color:inherit;">
-                <div v-if="item.moderate == 0" class="ico down"></div>
+              <div class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in listData" :key="item.id" style="color:inherit;">
             		<div class="t-table bg-white pt10 pb10">
             			<div class="t-cell v_middle pl12">
                     <div class="clamp1 font16 pr10 color-lightgray">{{item.content}}</div>
@@ -30,7 +29,7 @@
                     </div>
             			</div>
             		</div>
-              </router-link>
+              </div>
             </div>
           </template>
         </template>
