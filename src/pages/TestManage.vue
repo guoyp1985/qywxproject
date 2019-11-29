@@ -100,7 +100,7 @@
                 </check-icon>
               </div>
             </div>
-            <div ref="scrollCustomer" @scroll="handleScroll('scrollCustomer','customer')" class="popup-middle font14" style="top:85px;bottom:86px;">
+            <div ref="scrollCustomer" @scroll="handleScroll('scrollCustomer','customer')" class="popup-middle font14" style="top:85px;">
               <div class="padding10">
                 <div v-if="disUserData" class="scroll_list">
                   <template v-if="!userData.length">
@@ -122,11 +122,6 @@
                   </check-icon>
                 </div>
     					</div>
-            </div>
-            <div class="flex_left border-box pl10 pr10" style="position:absolute;left:0;right:0;bottom:46px;height:40px;">
-              <div class="w_100">
-                <div class="align_left color-red font12 w_100">提示：只有48小时内互动过的返点客才可以收到通知！</div>
-              </div>
             </div>
             <div class="popup-bottom flex_center">
               <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeAdd">{{ $t('Close') }}</div>
