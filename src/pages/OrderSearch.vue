@@ -265,6 +265,25 @@ export default {
     },
     onCancel1 () {
       this.searchword1 = ''
+      switch (this.selectedIndex) {
+        case 0:
+          this.tabdata1 = []
+          this.pagestart1 = 0
+          break
+        case 1:
+          this.tabdata2 = []
+          this.pagestart2 = 0
+          break
+        case 2:
+          this.tabdata3 = []
+          this.pagestart3 = 0
+          break
+        case 3:
+          this.tabdata4 = []
+          this.pagestart4 = 0
+          break
+      }
+      this.toggleTab()
     },
     deletephoto (index) {
       this.servicePhotoArr.splice(index, 1)
