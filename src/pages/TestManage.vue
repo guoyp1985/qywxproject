@@ -278,8 +278,6 @@ export default {
     },
     checkAllEvent () {
       const self = this
-      console.log('点击了全选')
-      console.log(self.checkAll)
       self.pushdata = []
       for (let i = 0; i < self.userData.length; i++) {
         self.userData[i].checked = self.checkAll
