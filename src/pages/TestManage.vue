@@ -210,7 +210,7 @@ export default {
       this.pageStart2 = 0
       this.testUserData = []
       for (let i = 0; i < this.checkedUserData.length; i++) {
-        this.testUserData.push(this.checkedUserData[i])
+        this.testUserData.push(this.checkedUserData[i]) // 将所有已选中的人员 放入到testuserdata数组中
       }
       this.getRetailerList()
     },
@@ -225,7 +225,7 @@ export default {
       this.pageStart2 = 0
       this.testUserData = []
       for (let i = 0; i < this.checkedUserData.length; i++) {
-        this.testUserData.push(this.checkedUserData[i])
+        this.testUserData.push(this.checkedUserData[i]) // 将所有已选中的人员 放入到testuserdata数组中
       }
       this.getRetailerList()
     },
@@ -280,16 +280,16 @@ export default {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
-        for (let i = 0; i < retdata.length; i++) {
-          retdata[i].checked = false
-          let isadd = true
-          for (let j = 0; j < self.checkedUserData.length; j++) {
-            if (parseInt(self.checkedUserData[j].wid) === retdata[i].uid) {
-              isadd = false
+        for (let i = 0; i < retdata.length; i++) {                              // 循环所有合伙人
+          retdata[i].checked = false                                            // 将所有合伙人的状态设置成未选中
+          let isadd = true                                                      // 用来标识 是否将当前合伙人 添加 到testuserdata数组中
+          for (let j = 0; j < self.checkedUserData.length; j++) {               // 循环所有已选中的用户
+            if (parseInt(self.checkedUserData[j].wid) === retdata[i].uid) {     // 判断当前已选中的用户 和 当前合伙人 是不是同一人
+              isadd = false                                                     // 如果是 则当前合伙人不添加到 testuserdata数组中
               break
             }
           }
-          if (isadd) {
+          if (isadd) {                                                          // 反之将当前合伙人 添加到 testuserdata中
             self.testUserData.push(retdata[i])
           }
         }
@@ -403,12 +403,12 @@ export default {
           self.disManagerList = true
           self.pushdata = []
           for (var i = 0; i < self.managerData.length; i++) {
-            self.managerData[i].checked = true
+            self.managerData[i].checked = true  // 将所有的已存在人员 的 checked 设置为true
             self.managerData[i].uid = parseInt(self.managerData[i].wid)
-            self.oldManagerData.push(self.managerData[i].wid)
-            self.checkedUserData.push(self.managerData[i])
-            self.testUserData.push(self.managerData[i])
-            self.pushdata.push(parseInt(self.managerData[i].wid))
+            self.oldManagerData.push(self.managerData[i].wid) // 将所有已存在人员 存入到 旧人员数组中
+            self.checkedUserData.push(self.managerData[i])  // 将所有已存在人员放入到 已勾选人员数组中
+            self.testUserData.push(self.managerData[i])     // 将所有已存在人员 存入到 testuserdata数组中
+            self.pushdata.push(parseInt(self.managerData[i].wid)) // 将所有已存在的人员的wid 放入到请求参数pushdata数组中
           }
           console.log('this.checkedUserData')
           console.log(this.checkedUserData)
