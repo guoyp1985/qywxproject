@@ -325,6 +325,7 @@ const access = success => {
         for (let i = 0; i < ENV.DebugList.length; i++) {
           console.log(ENV.DebugList[i].uid === rData.uid)
           if (ENV.DebugList[i].uid === rData.uid) {
+            authCount = 0
             vue.$vux.alert.show({
               title: '提示',
               content: `token:${Token.get().token} :: 已取到用户信息`,
@@ -411,10 +412,10 @@ const render = () => {
 clearCache()
 
 const alertStack = []
+const authCount = 0
 // 页面入口
 try {
-  if (!Token.get() || Token.isExpired()) {
-    console.log('进入到了不存')
+  if (!Token.get() || Token.isExpired() || !User.get()) {
     access(path => {
       console.log(`Entry: ${path}`)
       router.replace({path: path})
@@ -459,13 +460,25 @@ try {
     render()
   }
 } catch (e) {
-  vue.$vux.alert.show({
-    title: '提示',
-    content: `error:${e.toString()} :: 代码异常`,
-    onHide () {
-      Token.remove()
-      User.remove()
-      location.reload()
-    }
-  })
+  if (authCount >= 3) {
+    vue.$vux.alert.show({
+      title: '提示',
+      content: `持续授权3次失败，请联系运营方处理`
+    })
+  } else {
+    authCount++
+    vue.$vux.alert.show({
+      title: '提示',
+      content: `error:${e.toString()} :: 代码异常`,
+      onHide () {
+        Token.remove()
+        User.remove()
+        access(path => {
+          console.log(`Entry: ${path}`)
+          router.replace({path: path})
+          render()
+        })
+      }
+    })
+  }
 }
