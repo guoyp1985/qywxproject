@@ -277,10 +277,12 @@
               </div>
             </div>
             <template v-if="query.id">
-              <div class="flex_center pt10 pb10" v-if="disOptionsArea">
-                <div class="color-theme btn-add flex_center" @click="addOption">添加一项</div>
-              </div>
-              <div class="flex_center pt10 pb10 color-theme" v-else>当前商品已经产生交易，无法添加规格</div>
+              <template v-if="afterOptions">
+                <div class="flex_center pt10 pb10" v-if="disOptionsArea">
+                  <div class="color-theme btn-add flex_center" @click="addOption">添加一项</div>
+                </div>
+                <div class="flex_center pt10 pb10 color-theme" v-else>当前商品已经产生交易，无法添加规格</div>
+              </template>
             </template>
             <template v-else>
               <div class="flex_center pt10 pb10">
@@ -499,7 +501,8 @@ export default {
       optionsPhoto: [],
       clickPhotoIndex: -1,
       productData: {},
-      disOptionsArea: false
+      disOptionsArea: false,
+      afterOptions: false
     }
   },
   watch: {
@@ -1191,6 +1194,7 @@ export default {
             console.log('处理过的规格参数')
             this.optionsData = retOptions
             console.log(this.optionsData)
+            self.disOptionsArea = true
           } else {
             self.submitdata.storage = retdata.storage
             if (retdata.truesaled !== 0 && retdata.truesaled !== '0') {
@@ -1199,6 +1203,7 @@ export default {
               self.disOptionsArea = true
             }
           }
+          self.afterOptions = true
           self.data = retdata
           self.productData = retdata
           self.activityInfo = self.data.activitinfo

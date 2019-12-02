@@ -1165,6 +1165,7 @@ export default {
             console.log('处理过的规格参数')
             this.optionsData = retOptions
             console.log(this.optionsData)
+            self.disOptionsArea = true
           } else {
             self.submitdata.storage = retdata.storage
             if (retdata.truesaled !== 0 && retdata.truesaled !== '0') {
