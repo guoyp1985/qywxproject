@@ -410,7 +410,7 @@ clearCache()
 const alertStack = []
 // 页面入口
 try {
-  if (!Token.get() || Token.isExpired()) {
+  if (!Token.get() || Token.isExpired() || !User.get()) {
     access(path => {
       console.log(`Entry: ${path}`)
       router.replace({path: path})
