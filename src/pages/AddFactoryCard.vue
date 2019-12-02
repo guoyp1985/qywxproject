@@ -2,6 +2,47 @@
   <div id="addfactory-card-page" class="containerarea bg-page font14 addFactoryCard">
     <div class="s-container">
       <form class="addForm">
+        <div style="margin: 10px 10px 10px 10px;background-color: white;border-radius:5px">
+          <!-- <div class="form-item required">
+            <div class="t-table">
+              <div class="t-cell title-cell font14 v_middle w100">
+                <span>选择商品</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span>
+              </div>
+              <check-icon class="red-check" :value.sync="singlePro" @click.stop="setType(1)">单件商品</check-icon>
+              <check-icon class="red-check" :value.sync="allPro" @click.stop="setType(0)">所有商品</check-icon>
+            </div>
+          </div> -->
+          <div class="form-item required">
+            <div class="t-table">
+              <div class="t-cell title-cell font14 v_middle w100">
+                <span>指定商品</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span>
+              </div>
+            </div>
+          </div>
+          <div class="padding10 required">
+            <template v-if="selectedProduct">
+              <div class="border db">
+                <div class="t-table">
+                  <div class="t-cell v_middle" style="width:50px;">
+                    <img class="v_middle imgcover" style="width:40px;height:40px;" :src="selectedProduct.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+                  </div>
+                  <div class="t-cell v_middle">
+                    <div class="clamp1">{{selectedProduct.title}}</div>
+                    <div class="mt5 font12 clamp1"><span class="color-orange">{{ $t('RMB') }}{{selectedProduct.price}}</span><span class="ml10 color-gray">{{ $t('Storage') }}{{selectedProduct.storage}}</span></div>
+                  </div>
+                  <div class="t-cell align_center v_middle" style="width:60px;" v-if="!query.id">
+                    <div class="qbtn color-red btnchange" style="border:#ff3b30 1px solid;line-height:1;" @click="selectevent">修改</div>
+                  </div>
+                </div>
+              </div>
+            </template>
+            <div v-else class="flex_center w_100">
+              <div class="qbtn flex_center color-orange mt10" style="border:orange 1px solid;width:90%;line-height:1;padding:4px 0;" @click="selectevent">
+                <span class="mr5 v_middle db-in" style="margin-top:-3px;">+</span><span class="v_middle db-in">{{ $t('Select product') }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
         <div style="margin: 10px 10px 0px 10px;background-color: white;border-radius:5px">
           <div class="form-item required">
             <div class="t-table">
@@ -83,47 +124,6 @@
               <span class="pl19 pl10 pr10">减</span>
               <x-input class="border-input flex_cell" v-model='submitdata.facemoney' name="facemoney" type="text" size="10" maxlength="6"></x-input>
               <span class="pl10">元</span>
-            </div>
-          </div>
-        </div>
-        <div style="margin: 10px 10px 10px 10px;background-color: white;border-radius:5px">
-          <!-- <div class="form-item required">
-            <div class="t-table">
-              <div class="t-cell title-cell font14 v_middle w100">
-                <span>选择商品</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span>
-              </div>
-              <check-icon class="red-check" :value.sync="singlePro" @click.stop="setType(1)">单件商品</check-icon>
-              <check-icon class="red-check" :value.sync="allPro" @click.stop="setType(0)">所有商品</check-icon>
-            </div>
-          </div> -->
-          <div class="form-item required">
-            <div class="t-table">
-              <div class="t-cell title-cell font14 v_middle w100">
-                <span>指定商品</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span>
-              </div>
-            </div>
-          </div>
-          <div class="padding10 required">
-            <template v-if="selectedProduct">
-              <div class="border db">
-                <div class="t-table">
-                  <div class="t-cell v_middle" style="width:50px;">
-                    <img class="v_middle imgcover" style="width:40px;height:40px;" :src="selectedProduct.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-                  </div>
-                  <div class="t-cell v_middle">
-                    <div class="clamp1">{{selectedProduct.title}}</div>
-                    <div class="mt5 font12 clamp1"><span class="color-orange">{{ $t('RMB') }}{{selectedProduct.price}}</span><span class="ml10 color-gray">{{ $t('Storage') }}{{selectedProduct.storage}}</span></div>
-                  </div>
-                  <div class="t-cell align_center v_middle" style="width:60px;" v-if="!query.id">
-                    <div class="qbtn color-red btnchange" style="border:#ff3b30 1px solid;line-height:1;" @click="selectevent">修改</div>
-                  </div>
-                </div>
-              </div>
-            </template>
-            <div v-else class="flex_center w_100">
-              <div class="qbtn flex_center color-orange mt10" style="border:orange 1px solid;width:90%;line-height:1;padding:4px 0;" @click="selectevent">
-                <span class="mr5 v_middle db-in" style="margin-top:-3px;">+</span><span class="v_middle db-in">{{ $t('Select product') }}</span>
-              </div>
             </div>
           </div>
         </div>
