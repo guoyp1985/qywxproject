@@ -412,7 +412,7 @@ const render = () => {
 clearCache()
 
 const alertStack = []
-const authCount = 0
+let authCount = 0
 // 页面入口
 try {
   if (!Token.get() || Token.isExpired() || !User.get()) {
