@@ -87,6 +87,53 @@
         </div>
       </div>
     </div>
+    <div v-if="showCheckModal" class="auto-modal flex_center check-modal" style="position:fixed;">
+      <div class="modal-inner border-box" style="width:80%;">
+        <div class="padding20">
+          <div class="flex_center font16 bold">请选择供货方式</div>
+          <div class="con">
+            <div class="flex_left check-item">
+              <div class="flex_left pr10">
+                <div class="radius">
+                  <span class="al al-weibiaoti509 bold color-theme"></span>
+                </div>
+              </div>
+              <div class="flex_cell flex_left">
+                <div class="w_100">
+                  <div class="bold">托管运营</div>
+                  <div class="color-gray font12">不具备选货能力，自动托管给供货商进行商品运营</div>
+                </div>
+              </div>
+              <div class="flex_right">
+                <span class="al al-mjiantou-copy2 font20 bold color-gray"></span>
+              </div>
+            </div>
+            <div class="flex_left check-item" @click="clickSelf">
+              <div class="flex_left pr10">
+                <div class="radius">
+                  <span class="al al-aixin bold color-theme font22"></span>
+                </div>
+              </div>
+              <div class="flex_cell flex_left">
+                <div class="w_100">
+                  <div class="bold">自由选货</div>
+                  <div class="color-gray font12">具备选货能力，自由选货上架到商城</div>
+                </div>
+              </div>
+              <div class="flex_right">
+                <div :class="{'checked': checkedSelf}" class="radio-ico"></div>
+              </div>
+            </div>
+            <div class="mt12 flex_center" v-if="checkedSelf">
+              <div class="bg-theme color-white flex_center" style="width:80%;height:40px;border-radius:20px;">确定</div>
+            </div>
+          </div>
+        </div>
+        <div class="close-area flex_center" @click="closeCheckModal">
+          <i class="al al-close"></i>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -134,7 +181,9 @@ export default {
       joinStatus: 0,
       disJoin: false,
       needpaymoney: '0.00',
-      showInfo: false
+      showInfo: false,
+      showCheckModal: true,
+      checkedSelf: false
     }
   },
   watch: {
@@ -157,6 +206,12 @@ export default {
       this.productCount = 0
       this.newsCount = 0
       this.needpaymoney = '0.00'
+    },
+    closeCheckModal () {
+      this.closeCheckModal = false
+    },
+    clickSelf () {
+      this.checkedSelf = !this.checkedSelf
     },
     closeInfo () {
       this.showInfo = false
@@ -423,4 +478,20 @@ export default {
 }
 .x-checker .border1px.ck-item-selected:after{border:1px solid #ea3a3a;}
 .addFactory .vux-check-icon > span{color:#666;display: inline-block;vertical-align: bottom;line-height: 19px;}
+.check-modal{
+  .check-item{
+    background-color:#ffe9e6;margin-top:15px;border-radius:5px;padding:10px;width:100%;box-sizing:border-box;
+    .radius{
+      width:40px;height:40px;background-color:#fff;border-radius:50%;
+      display:flex;justify-content:center;align-items:center;
+    }
+    .radio-ico{
+      width:20px;height:20px;border:#ff6a61 1px solid;border-radius:50%;box-sizing:border-box;background-color:#fff;
+      display:flex;justify-content:center;align-items:center;
+    }
+    .radio-ico.checked:after{
+      content:"";width:10px;height:10px;background-color:#ff6a61;border-radius:50%;
+    }
+  }
+}
 </style>
