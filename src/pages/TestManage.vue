@@ -38,15 +38,17 @@
         <popup class="menuwrap" v-model="showPopup1">
           <div class="popup0">
             <div class="list" v-if="clickData">
-              <div class="item" v-if="clickData.status">
-                <div class="inner" @click="clickPopup('manager')">内测人员列表</div>
-              </div>
-              <div class="item" v-if="clickData.status">
-                <div class="inner" @click="showxdate2">重置内测人员</div>
-              </div>
-              <div class="item" v-if="clickData.status">
-                <div class="inner" @click="clickPopup('close')">关闭内测功能</div>
-              </div>
+              <template v-if="clickData.status">
+                <div class="item">
+                  <div class="inner" @click="clickPopup('manager')">内测人员列表</div>
+                </div>
+                <div class="item">
+                  <div class="inner" @click="showxdate2">重置内测人员</div>
+                </div>
+                <div class="item">
+                  <div class="inner" @click="clickPopup('close')">关闭内测功能</div>
+                </div>
+              </template>
               <div class="item" v-else>
                 <div class="inner" @click="clickPopup('open')">开放内测功能</div>
               </div>
@@ -259,13 +261,32 @@ export default {
       })
     },
     showxdate2 () {
-      console.log('进入到了点击')
       this.timeShow = true
       this.showPopup1 = false
       this.showAddPopup = true
-      this.pushdata = []
       this.oldManagerData = []
-      this.getRetailerList()
+      this.checkedUserData = []
+      this.testUserData = []
+      this.pushdata = []
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/Beta/getTestors`, {
+        fid: this.loginUser.fid, module: this.clickData.module
+      }).then(res => {
+        let data = res.data
+        this.managerData = data.data ? data.data : data
+        this.disManagerList = true
+        for (var i = 0; i < this.managerData.length; i++) {
+          this.managerData[i].checked = true  // 将所有的已存在人员 的 checked 设置为true
+          this.managerData[i].uid = parseInt(this.managerData[i].wid)
+          this.oldManagerData.push(this.managerData[i].wid) // 将所有已存在人员 存入到 旧人员数组中
+          this.checkedUserData.push(this.managerData[i])  // 将所有已存在人员放入到 已勾选人员数组中
+          this.testUserData.push(this.managerData[i])     // 将所有已存在人员 存入到 testuserdata数组中
+          this.pushdata.push(parseInt(this.managerData[i].wid)) // 将所有已存在的人员的wid 放入到请求参数pushdata数组中
+        }
+        console.log('this.checkedUserData')
+        console.log(this.checkedUserData)
+        this.getRetailerList()
+      })
     },
     getRetailerList () {
       const self = this
