@@ -540,7 +540,7 @@ export default {
         let productinfos = order.info
         for (let j = 0; j < productinfos.length; j++) {
           let pd = productinfos[j]
-          total += parseFloat(pd.special) * this.submitdata.quantity
+          total += parseFloat(pd.special.replace(/,/g, '')) * this.submitdata.quantity
         }
       }
       this.cardPrice = total
