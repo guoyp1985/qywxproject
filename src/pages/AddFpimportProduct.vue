@@ -963,7 +963,7 @@ export default {
         let profit = postdata.profit.toString().replace(/,/g, '')
         let salesrebate = postdata.salesrebate.toString().replace(/,/g, '')
         let superrebate = postdata.superrebate.toString().replace(/,/g, '')
-        if (self.$util.trim(price).length > 7 || self.$util.trim(oriprice).length > 7 || self.$util.trim(tbprice).length > 7 || self.$util.trim(jdprice).length > 7) {
+        if (self.$util.trim(price.substr(0, price.indexOf('.'))).length > 7 || self.$util.trim(oriprice.substr(0, oriprice.indexOf('.'))).length > 7) {
           self.$vux.alert.show({
             title: '',
             content: '商品价格不能超过7位数'
