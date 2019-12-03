@@ -148,6 +148,52 @@
         </div>
       </popup>
     </div>
+    <div class="auto-modal modalarea1 flex_center store-modal supply" style="position:fixed;" v-if="showSupplyWay">
+      <div class="modal-inner">
+        <div class="flex_center font16 pt10 pb10">请先选择供货方式</div>
+        <div class="flex_left supply_way" @click="toSupplierList">
+          <div class="ico down"></div>
+          <div class="flex_left pr5">
+            <div class="flex_center bg-white" style="height:40px;width:40px;border-radius:50%;">
+              <div class="al al-tuoguan color-red font26" style="margin-top:3px;"></div>
+            </div>
+          </div>
+          <div class="flex_cell padding5 flex_left">
+            <div class="w_100">
+              <div>托管运营</div>
+              <div class="font12 color-gray">不具备选货能力，自动托管给供货商进行商品运营</div>
+            </div>
+          </div>
+          <div class="flex_right">
+            <div class="al al-mjiantou-copy2 color-gray font20"></div>
+          </div>
+        </div>
+        <div class="flex_left supply_way" @click="radioclick">
+          <div class="flex_left pr5">
+            <div class="flex_center bg-white" style="height:40px;width:40px;border-radius:50%;">
+              <div class="al al-aixin color-red font22" style="margin-top:3px;"></div>
+            </div>
+          </div>
+          <div class="flex_cell padding5 flex_left">
+            <div class="w_100">
+              <div>自由选货</div>
+              <div class="font12 color-gray">具备选货能力，自由选货上架到商城</div>
+            </div>
+          </div>
+          <div class="flex_right" style="width:20px;">
+            <div :class="{'checked': freedomChoose}" class="radio-ico"></div>
+          </div>
+        </div>
+        <div v-if="freedomChoose">
+          <div class="btn-bottom" @click="closeSupplyWay">
+            <div class="btn font14">确定</div>
+          </div>
+        </div>
+        <div class="close-area flex_center" @click="closeSupplyWay">
+          <i class="al al-close"></i>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -157,7 +203,7 @@ Apply join:
 </i18n>
 
 <script>
-import { TransferDom, Popup, Tab, TabItem, Search, Swiper, SwiperItem } from 'vux'
+import { TransferDom, Popup, Tab, TabItem, Search, Swiper, SwiperItem, CheckIcon } from 'vux'
 import { User } from '#/storage'
 import ENV from 'env'
 import Time from '#/time'
@@ -171,7 +217,7 @@ export default {
     TransferDom
   },
   components: {
-    Popup, Tab, TabItem, Search, Swiper, SwiperItem
+    Popup, Tab, TabItem, Search, Swiper, SwiperItem, CheckIcon
   },
   filters: {
     dateformat: function (value) {
@@ -218,7 +264,9 @@ export default {
       Fid: 0,
       showBankPopup: false,
       factoryInfo: {},
-      isIng: false
+      isIng: false,
+      showSupplyWay: true,
+      freedomChoose: false
     }
   },
   watch: {
@@ -227,6 +275,18 @@ export default {
     }
   },
   methods: {
+    toSupplierList () {
+      this.$router.push({path: '/SupplierList'})
+    },
+    closeSupplyWay () {
+      this.showSupplyWay = false
+      this.freedomChoose = false
+    },
+    radioclick () {
+      console.log('=== 进来了点击事件 ===')
+      this.freedomChoose = !this.freedomChoose
+      console.log(this.freedomChoose)
+    },
     hideMenu () {
       this.menuFlag = !this.menuFlag
       this.menuFlag ? this.flagTxt = '收起' : this.flagTxt = '展开'
@@ -641,6 +701,31 @@ export default {
       }
       .title{color:#ff6a61;font-size:18px;font-weight:bold;position:relative;}
     }
+  }
+}
+.supply{
+  .modal-inner{padding:15px;}
+  .supply_way{
+    background-color: #FFE9E7;border-radius: 5px;box-sizing: border-box;margin-top: 10px;position: relative;overflow:hidden;
+    padding:10px;box-sizing: border-box;
+  }
+  .weui-icon-circle{font-size: 18px;}
+  .x-check-icon.vux-check-icon > span{padding-right: 0;padding-left: 0;}
+  .weui-icon-success{font-size: 16px;}
+  .down.ico{
+    display:block;
+    position:absolute;right:-6px;top:-2px;width:96px;height:20px;line-height:20px;
+    background-color:#F25242;color:#fff;text-align:center;font-size: 12px;
+    -webkit-transform: translate(30px,5px) rotate(45deg);
+    transform: translate(30px,5px) rotate(45deg);
+  }
+  .down.ico:after{content:"推荐";}
+  .radio-ico{
+    width:16px;height:16px;border:#ff6a61 1px solid;border-radius:50%;box-sizing:border-box;background-color:#fff;
+    display:flex;justify-content:center;align-items:center;
+  }
+  .radio-ico.checked:after{
+    content:"";width:6px;height:6px;background-color:#ff6a61;border-radius:50%;
   }
 }
 </style>
