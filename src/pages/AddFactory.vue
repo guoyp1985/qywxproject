@@ -302,7 +302,7 @@ export default {
       loginUser: {},
       infoData: {},
       allowsubmit: true,
-      submitData: { company: '', summary: '', shortcode: '', publicqrcode: '', services: '', photo: '', superiorrate: '20', salesrate: '80', trade: 1, shopmodel: '1' },
+      submitData: { company: '', summary: '', shortcode: '', publicqrcode: '', services: '', photo: '', superiorrate: '20', salesrate: '80', trade: 1, shopmodel: '2' },
       requireddata: { company: '' },
       classData: [],
       tradeData: [],
@@ -656,7 +656,7 @@ export default {
 
           if (retdata.shopmodel === '' || !retdata.shopmodel) {
             this.template1 = true
-            this.submitData.shopmodel = '1'
+            this.submitData.shopmodel = '2'
           } else {
             if (retdata.shopmodel === '2') {
               this.template2 = true
@@ -684,7 +684,7 @@ export default {
           }
         })
       } else {
-        this.template1 = true
+        this.template2 = true
         self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
           { params: { limit: 100 } }
         ).then(function (res) {
@@ -711,7 +711,7 @@ export default {
     },
     initData () {
       const self = this
-      self.submitData = { company: '', summary: '', shortcode: '', photo: '', superiorrate: '20', salesrate: '80', trade: 0, shopmodel: '1' }
+      self.submitData = { company: '', summary: '', shortcode: '', photo: '', superiorrate: '20', salesrate: '80', trade: 0, shopmodel: '2' }
       self.requireddata = { company: '' }
       self.disClassData = false
     },

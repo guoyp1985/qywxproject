@@ -150,44 +150,47 @@
     </div>
     <div class="auto-modal modalarea1 flex_center store-modal supply" style="position:fixed;" v-if="showSupplyWay">
       <div class="modal-inner">
-        <div class="pagetop flex_left font16 pl10 pr10" @click="closeSupplyWay">
-          <div class="close flex_center"><i class="al al-guanbi"></i></div>
-        </div>
-        <div class="czlc">请先选择供货方式</div>
-        <div class="flex_table supply_way" @click="toSupplierList">
+        <div class="flex_center font16 pt10 pb10">请先选择供货方式</div>
+        <div class="flex_left supply_way" @click="toSupplierList">
           <div class="ico down"></div>
-          <div class="flex_left padding5">
-            <div class="flex_center bg-white" style="height:60px;width:60px;border-radius:50%;">
-              <div class="al al-tuoguan color-red font34"></div>
+          <div class="flex_left pr5">
+            <div class="flex_center bg-white" style="height:40px;width:40px;border-radius:50%;">
+              <div class="al al-tuoguan color-red font26" style="margin-top:3px;"></div>
             </div>
           </div>
-          <div class="flex_cell padding5">
-            <div>托管运营</div>
-            <div class="font12" style="color:#666666;">不具备选货能力，自动托管给供货商进行商品运营</div>
+          <div class="flex_cell padding5 flex_left">
+            <div class="w_100">
+              <div>托管运营</div>
+              <div class="font12 color-gray">不具备选货能力，自动托管给供货商进行商品运营</div>
+            </div>
           </div>
           <div class="flex_right">
-            <div class="al al-mjiantou-copy2"></div>
+            <div class="al al-mjiantou-copy2 color-gray font20"></div>
           </div>
         </div>
-        <div class="flex_table supply_way">
-          <div class="flex_left padding5">
-            <div class="flex_center bg-white" style="height:60px;width:60px;border-radius:50%;">
-              <div class="al al-tuoguan color-red font34"></div>
+        <div class="flex_left supply_way" @click="radioclick">
+          <div class="flex_left pr5">
+            <div class="flex_center bg-white" style="height:40px;width:40px;border-radius:50%;">
+              <div class="al al-aixin color-red font22" style="margin-top:3px;"></div>
             </div>
           </div>
-          <div class="flex_cell padding5">
-            <div>自由选货</div>
-            <div class="font12" style="color:#666666;">具备选货能力，自由选货上架到商城</div>
+          <div class="flex_cell padding5 flex_left">
+            <div class="w_100">
+              <div>自由选货</div>
+              <div class="font12 color-gray">具备选货能力，自由选货上架到商城</div>
+            </div>
           </div>
-          <div class="flex_right">
-            <check-icon class="x-check-icon w_100" :value="freedomChoose" @click.native.stop="radioclick">
-            </check-icon>
+          <div class="flex_right" style="width:20px;">
+            <div :class="{'checked': freedomChoose}" class="radio-ico"></div>
           </div>
         </div>
         <div v-if="freedomChoose">
-          <div class="btn-bottom" @click="closeChat">
+          <div class="btn-bottom" @click="closeSupplyWay">
             <div class="btn font14">确定</div>
           </div>
+        </div>
+        <div class="close-area flex_center" @click="closeSupplyWay">
+          <i class="al al-close"></i>
         </div>
       </div>
     </div>
@@ -702,8 +705,10 @@ export default {
 }
 .supply{
   .modal-inner{padding:15px;}
-  .czlc{text-align: center;font-size: 16px;padding: 5px 0 20px 0;}
-  .supply_way{background-color: #FFE9E7;border-radius: 5px;box-sizing: border-box;margin-bottom: 15px;position: relative;overflow:hidden;}
+  .supply_way{
+    background-color: #FFE9E7;border-radius: 5px;box-sizing: border-box;margin-top: 10px;position: relative;overflow:hidden;
+    padding:10px;box-sizing: border-box;
+  }
   .weui-icon-circle{font-size: 18px;}
   .x-check-icon.vux-check-icon > span{padding-right: 0;padding-left: 0;}
   .weui-icon-success{font-size: 16px;}
@@ -715,5 +720,12 @@ export default {
     transform: translate(30px,5px) rotate(45deg);
   }
   .down.ico:after{content:"推荐";}
+  .radio-ico{
+    width:16px;height:16px;border:#ff6a61 1px solid;border-radius:50%;box-sizing:border-box;background-color:#fff;
+    display:flex;justify-content:center;align-items:center;
+  }
+  .radio-ico.checked:after{
+    content:"";width:6px;height:6px;background-color:#ff6a61;border-radius:50%;
+  }
 }
 </style>
