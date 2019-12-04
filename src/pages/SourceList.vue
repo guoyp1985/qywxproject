@@ -276,7 +276,7 @@ export default {
   },
   methods: {
     toSupplierList () {
-      this.$router.push({path: '/SupplierList'})
+      this.$router.push({path: '/supplierList'})
     },
     closeSupplyWay () {
       this.showSupplyWay = false
