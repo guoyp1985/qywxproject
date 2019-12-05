@@ -14,7 +14,7 @@
         			<div @click="toDetail(item)" class="t-cell v_middle">
                 <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
         			</div>
-              <div @click="toRecommend(item)" class="t-cell v_middle w100">
+              <div @click="submitEvent(item)" class="t-cell v_middle w100">
                 <div class="btnicon bg-theme color-white font12">我要托管</div>
               </div>
         		</div>
@@ -51,7 +51,8 @@ export default {
       tabData1: [],
       disTabData1: false,
       clickData: {},
-      clickIndex: 0
+      clickIndex: 0,
+      isIng: false
     }
   },
   methods: {
@@ -62,8 +63,21 @@ export default {
       let params = this.$util.handleAppParams(this.query, {id: item.id, wid: this.loginUser.uid})
       this.$router.push({path: '/factory', query: params})
     },
-    toRecommend (item) {
-      this.$router.push({path: '/recommendFactory', query: {id: item.id}})
+    submitEvent (item) {
+      if (this.isIng) return false
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/factory/fpimportApply`, {
+        trustmode: 1, fid: this.loginUser.fid, fromfid: item.id
+      }).then(res => {
+        this.isIng = false
+        let data = res.data
+        this.$vux.loading.hide()
+        this.$vux.toast.show({
+          text: data.error,
+          type: data.flag === 1 ? 'success' : 'warn',
+          time: this.$util.delay(data.error)
+        })
+      })
     },
     handleScroll: function (refname, index) {
       const self = this

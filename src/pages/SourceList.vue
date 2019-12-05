@@ -265,7 +265,7 @@ export default {
       showBankPopup: false,
       factoryInfo: {},
       isIng: false,
-      showSupplyWay: true,
+      showSupplyWay: false,
       freedomChoose: false
     }
   },
@@ -280,9 +280,10 @@ export default {
     },
     submitMode () {
       if (this.isIng) return false
+      this.isIng = true
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/factory/fpimportApply`, {
-        trustmode: 0
+        trustmode: 2, fid: this.loginUser.fid
       }).then(res => {
         this.isIng = false
         let data = res.data
@@ -587,6 +588,11 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       this.loginUser = User.get()
+      console.log('用户信息')
+      console.log(this.loginUser)
+      if (!this.loginUser.factoryinfo.supplymode) {
+        this.showSupplyWay = true
+      }
       this.initData()
       if (this.query.fid) {
         this.Fid = this.query.fid
