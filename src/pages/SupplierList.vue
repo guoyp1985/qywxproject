@@ -65,18 +65,27 @@ export default {
     },
     submitEvent (item) {
       if (this.isIng) return false
-      this.$vux.loading.show()
-      this.$http.post(`${ENV.BokaApi}/api/factory/fpimportApply`, {
-        trustmode: 1, fid: this.loginUser.fid, fromfid: item.id
-      }).then(res => {
-        this.isIng = false
-        let data = res.data
-        this.$vux.loading.hide()
-        this.$vux.toast.show({
-          text: data.error,
-          type: data.flag === 1 ? 'success' : 'warn',
-          time: this.$util.delay(data.error)
-        })
+      this.$vux.confirm.show({
+        content: '确定要托管给该供应商',
+        onConfirm: () => {
+          this.$vux.loading.show()
+          this.$http.post(`${ENV.BokaApi}/api/factory/fpimportApply`, {
+            trustmode: 1, fid: this.loginUser.fid, fromfid: item.id
+          }).then(res => {
+            this.isIng = false
+            let data = res.data
+            this.$vux.loading.hide()
+            this.$vux.toast.show({
+              text: data.error,
+              type: data.flag === 1 ? 'success' : 'warn',
+              time: this.$util.delay(data.error)
+            })
+            if (data.flag) {
+              this.loginUser.factoryinfo.supplymode = 1
+              User.set(this.loginUser)
+            }
+          })
+        }
       })
     },
     handleScroll: function (refname, index) {

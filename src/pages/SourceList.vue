@@ -295,6 +295,8 @@ export default {
         })
         if (data.flag) {
           this.showSupplyWay = false
+          this.loginUser.factoryinfo.supplymode = 2
+          User.set(this.loginUser)
         }
       })
     },
@@ -592,6 +594,8 @@ export default {
       console.log(this.loginUser)
       if (!this.loginUser.factoryinfo.supplymode) {
         this.showSupplyWay = true
+      } else {
+        this.showSupplyWay = false
       }
       this.initData()
       if (this.query.fid) {
