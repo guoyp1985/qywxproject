@@ -60,7 +60,7 @@ export default {
       return this.$util.getPhoto(src)
     },
     toDetail (item) {
-      let params = this.$util.handleAppParams(this.query, {id: item.id, wid: this.loginUser.uid})
+      let params = this.$util.handleAppParams(this.query, {id: item.id, wid: this.loginUser.uid, fromsupply: 1})
       this.$router.push({path: '/factory', query: params})
     },
     submitEvent (item) {
