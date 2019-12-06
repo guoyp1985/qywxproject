@@ -494,7 +494,7 @@ export default {
         superrebate: '',
         sellingpoint: '',
         netincome: '',
-        calcsales: 0,
+        calcsales: 1,
         agentrebate: ''
       },
       allowsubmit: true,
@@ -510,7 +510,7 @@ export default {
       clickPhotoIndex: -1,
       disOptionsArea: false,
       afterOptions: false,
-      calcsales: 0
+      calcsales: true
     }
   },
   watch: {
@@ -571,10 +571,10 @@ export default {
         superrebate: '',
         sellingpoint: '',
         netincome: '',
-        calcsales: 0,
+        calcsales: 1,
         agentrebate: ''
       }
-      this.calcsales = 0
+      this.calcsales = true
       this.listphotoarr = []
       this.photoarr = []
       this.photoarr1 = []
