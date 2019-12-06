@@ -1218,6 +1218,11 @@ export default {
           for (let key in self.submitdata) {
             self.submitdata[key] = self.data[key]
           }
+          if (retdata.calcsales) {
+            self.calcsales = true
+          } else {
+            self.calcsales = false
+          }
           if (self.submitdata.listphoto && self.$util.trim(self.submitdata.listphoto) !== '') {
             self.listphotoarr = self.submitdata.listphoto.split(',')
           }
