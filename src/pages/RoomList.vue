@@ -101,13 +101,13 @@
         </div>
       </div>
     </div> -->
-    <template v-if="showFirst">
+    <!-- <template v-if="showFirst">
       <firstTip @submitFirstTip="submitFirstTip">
         <div class="font15 bold txt">
           <div class="flex_center">{{sysParams.advance_addgroup}}</div>
         </div>
       </firstTip>
-    </template>
+    </template> -->
   </div>
 </template>
 <script>

@@ -145,7 +145,7 @@
         </div>
       </popup>
     </div>
-    <template v-if="showFirst">
+    <!-- <template v-if="showFirst">
       <firstTip @submitFirstTip="submitFirstTip">
         <div class="font15 bold txt">
           <div class="flex_center">{{sysParams.advance_seller}}</div>
@@ -154,7 +154,7 @@
     </template>
     <template v-if="showHb">
       <firstHb action="seller" @closeFirstHb="closeFirstHb" @afterOpen="afterClickOpen"></firstHb>
-    </template>
+    </template> -->
   </div>
 </template>
 

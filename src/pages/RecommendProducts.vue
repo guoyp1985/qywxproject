@@ -102,7 +102,7 @@
         <tip-layer buttonTxt="立即申请" content="会员卖家才可代理厂家商品，赶快入驻申请吧！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
       </template>
     </template>
-    <template v-if="showFirst">
+    <!-- <template v-if="showFirst">
       <firstTip @submitFirstTip="submitFirstTip">
         <div class="font15 bold txt">
           <div class="flex_center">{{sysParams.advance_importproduct}}</div>
@@ -111,7 +111,7 @@
     </template>
     <template v-if="showHb">
       <firstHb action="importproduct" @closeFirstHb="closeFirstHb" @afterOpen="afterClickOpen"></firstHb>
-    </template>
+    </template> -->
   </div>
 </template>
 
