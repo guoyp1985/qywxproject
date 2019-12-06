@@ -494,7 +494,7 @@ export default {
         superrebate: '',
         sellingpoint: '',
         netincome: '',
-        calcsales: 0,
+        calcsales: 1,
         agentrebate: ''
       },
       allowsubmit: true,
@@ -510,7 +510,7 @@ export default {
       clickPhotoIndex: -1,
       disOptionsArea: false,
       afterOptions: false,
-      calcsales: 0
+      calcsales: true
     }
   },
   watch: {
@@ -571,10 +571,10 @@ export default {
         superrebate: '',
         sellingpoint: '',
         netincome: '',
-        calcsales: 0,
+        calcsales: 1,
         agentrebate: ''
       }
-      this.calcsales = 0
+      this.calcsales = true
       this.listphotoarr = []
       this.photoarr = []
       this.photoarr1 = []
@@ -1217,6 +1217,11 @@ export default {
           self.activityInfo = self.data.activitinfo
           for (let key in self.submitdata) {
             self.submitdata[key] = self.data[key]
+          }
+          if (retdata.calcsales) {
+            self.calcsales = true
+          } else {
+            self.calcsales = false
           }
           if (self.submitdata.listphoto && self.$util.trim(self.submitdata.listphoto) !== '') {
             self.listphotoarr = self.submitdata.listphoto.split(',')
