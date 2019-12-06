@@ -323,7 +323,7 @@
           </div>
         </popup>
       </div>
-      <template v-if="showFirst">
+      <!-- <template v-if="showFirst">
         <firstTip @submitFirstTip="submitFirstTip">
           <div class="font15 bold txt">
             <div class="flex_center">{{sysParams.advance_orderdeliver}}</div>
@@ -332,7 +332,7 @@
       </template>
       <template v-if="showHb">
         <firstHb action="orderdeliver" @closeFirstHb="closeFirstHb"></firstHb>
-      </template>
+      </template> -->
     </template>
     <div class="auto-modal flex_center confirm-tip-modal" v-if="showConfirmModal">
       <div class="modal-inner border-box">

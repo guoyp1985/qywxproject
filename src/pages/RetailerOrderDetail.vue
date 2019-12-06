@@ -266,7 +266,7 @@
         </div>
       </div>
       <template v-if="orderData.flag == 2 && orderData.backflag != 20 && orderData.candeliver">
-        <template v-if="showFirst">
+        <!-- <template v-if="showFirst">
           <firstTip @submitFirstTip="submitFirstTip">
             <div class="font15 bold txt">
               <div class="flex_center">{{sysParams.advance_orderdeliver}}</div>
@@ -275,7 +275,7 @@
         </template>
         <template v-if="showHb">
           <firstHb action="orderdeliver"></firstHb>
-        </template>
+        </template> -->
       </template>
       <div class="auto-modal flex_center confirm-tip-modal" v-show="showConfirmModal">
         <div class="modal-inner border-box">
