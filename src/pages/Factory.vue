@@ -13,11 +13,11 @@
         <router-link :to="{path: '/chat', query: {uid: viewData.uploader,from:query.from}}" class="qbtn7 font14 bg-white color-red5">联系</router-link>
       -->
       </div>
-      <tab v-model="selectedIndex" class="v-tab">
+      <tab v-model="selectedIndex" class="v-tab" v-if="(loginUser.factoryinfo && loginUser.factoryinfo.supplymode) || !query.fromsupply">
         <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="swiperChange">{{item}}</tab-item>
       </tab>
     </div>
-    <div class="pagemiddle" style="top:132px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
+    <div class="pagemiddle" :style="`top:${((!loginUser.factoryinfo || !loginUser.factoryinfo.supplymode) && query.fromsupply) ? '88' : '132'}px;`" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
       <template v-if="selectedIndex == 0">
         <div v-if="disTabData1" class="productlist squarepic pb10">
           <div v-if="tabData1.length == 0" class="emptyitem flex_center flex_cell">暂无商品</div>
