@@ -67,6 +67,7 @@
   "FactoryOrders",
   "FactoryOrderDetail",
   "FactoryProduct",
+  "FactoryProductGoodeazy",
   "FactoryProductlist",
   "FactoryReport",
   "FactoryRevenue",

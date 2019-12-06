@@ -185,7 +185,7 @@
           </div>
         </div>
         <div v-if="freedomChoose">
-          <div class="btn-bottom" @click="closeSupplyWay">
+          <div class="btn-bottom" @click="submitMode">
             <div class="btn font14">确定</div>
           </div>
         </div>
@@ -265,7 +265,7 @@ export default {
       showBankPopup: false,
       factoryInfo: {},
       isIng: false,
-      showSupplyWay: true,
+      showSupplyWay: false,
       freedomChoose: false
     }
   },
@@ -276,7 +276,29 @@ export default {
   },
   methods: {
     toSupplierList () {
-      this.$router.push({path: '/SupplierList'})
+      this.$router.push({path: '/supplierList'})
+    },
+    submitMode () {
+      if (this.isIng) return false
+      this.isIng = true
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/factory/fpimportApply`, {
+        trustmode: 2, fid: this.loginUser.fid
+      }).then(res => {
+        this.isIng = false
+        let data = res.data
+        this.$vux.loading.hide()
+        this.$vux.toast.show({
+          text: data.error,
+          type: data.flag === 1 ? 'success' : 'warn',
+          time: self.$util.delay(data.error)
+        })
+        if (data.flag) {
+          this.showSupplyWay = false
+          this.loginUser.factoryinfo.supplymode = 2
+          User.set(this.loginUser)
+        }
+      })
     },
     closeSupplyWay () {
       this.showSupplyWay = false
@@ -568,6 +590,13 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       this.loginUser = User.get()
+      console.log('用户信息')
+      console.log(this.loginUser)
+      if (!this.loginUser.factoryinfo.supplymode) {
+        this.showSupplyWay = true
+      } else {
+        this.showSupplyWay = false
+      }
       this.initData()
       if (this.query.fid) {
         this.Fid = this.query.fid

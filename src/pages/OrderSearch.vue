@@ -242,18 +242,22 @@ export default {
     onSubmit1 () {
       switch (this.selectedIndex) {
         case 0:
+          this.distabdata1 = false
           this.tabdata1 = []
           this.pagestart1 = 0
           break
         case 1:
+          this.distabdata2 = false
           this.tabdata2 = []
           this.pagestart2 = 0
           break
         case 2:
+          this.distabdata3 = false
           this.tabdata3 = []
           this.pagestart3 = 0
           break
         case 3:
+          this.distabdata4 = false
           this.tabdata4 = []
           this.pagestart4 = 0
           break

@@ -192,6 +192,13 @@
           </div>
           <div class="form-item required bg-white">
             <div class="t-table">
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <x-switch title='是否计入联创销售额' v-model="calcsales"></x-switch>
+              </div>
+            </div>
+          </div>
+          <div class="form-item required bg-white">
+            <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">厂家收入</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
                 <x-input v-model="submitdata.netincome" @keyup="priceChange('netincome')" type="text" class="input priceInput" name="netincome" placeholder="厂家收入" ></x-input>
@@ -487,7 +494,8 @@ export default {
         superrebate: '',
         sellingpoint: '',
         netincome: '',
-        manufacturer: ''
+        manufacturer: '',
+        calcsales: 0
       },
       allowsubmit: true,
       requireddata: {title: '', 'price': '', 'postage': '', 'photo': ''},
@@ -502,7 +510,8 @@ export default {
       clickPhotoIndex: -1,
       productData: {},
       disOptionsArea: false,
-      afterOptions: false
+      afterOptions: false,
+      calcsales: 0
     }
   },
   watch: {
@@ -563,8 +572,10 @@ export default {
         superrebate: '',
         sellingpoint: '',
         netincome: '',
-        manufacturer: ''
+        manufacturer: '',
+        calcsales: 0
       }
+      this.calcsales = 0
       this.listphotoarr = []
       this.photoarr = []
       this.photoarr1 = []
@@ -1156,6 +1167,11 @@ export default {
       const self = this
       let postdata = self.submitdata
       postdata['moderate'] = 1
+      if (this.calcsales) {
+        postdata.calcsales = 1
+      } else {
+        postdata.calcsales = 0
+      }
       self.savedata(postdata)
     },
     priceChange (key) {

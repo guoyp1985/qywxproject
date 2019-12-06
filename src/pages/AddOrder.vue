@@ -721,6 +721,7 @@ export default {
       this.allowSend = true
       let isset = false
       this.postPostage = 0
+      this.postage = parseFloat(this.curOrder.postage.replace(/,/g, ''))
       if (postageSetting && postageSetting.length) {
         for (let i = 0; i < postageSetting.length; i++) {
           const curProvince = postageSetting[i].province
@@ -737,6 +738,7 @@ export default {
               this.allowSend = true
             } else {
               this.allowSend = false
+              this.postage = 0
             }
             isset = true
             break
