@@ -20,6 +20,7 @@
             @on-submit="onSubmit1"
             @on-change="onChange1"
             @on-cancel="onCancel1"
+            placeholder="请输入订单号/收货人姓名/手机号"
             ref="search">
           </search>
           <tab v-model="selectedIndex" class="" active-color="#ea3a3a" default-color="#666666">
