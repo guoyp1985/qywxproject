@@ -76,7 +76,7 @@
     </div>
     <!-- 新增按钮 -->
     <div class="btn-bottom" @click="closeChat">
-      <div class="btn font14">我加盟的厂家</div>
+      <div class="btn font14">我的供货商</div>
     </div>
     <div class="auto-modal flex_center wechat-modal" v-if="showSubscribe">
       <div class="modal-inner padding20 border-box" style="width:80%;">
