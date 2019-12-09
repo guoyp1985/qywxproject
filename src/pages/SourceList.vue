@@ -189,9 +189,9 @@
             <div class="btn font14">确定</div>
           </div>
         </div>
-        <div class="close-area flex_center" @click="closeSupplyWay">
+        <!-- <div class="close-area flex_center" @click="closeSupplyWay">
           <i class="al al-close"></i>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
