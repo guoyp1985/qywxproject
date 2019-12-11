@@ -592,11 +592,11 @@ export default {
       this.loginUser = User.get()
       console.log('用户信息')
       console.log(this.loginUser)
-      if (!this.loginUser.factoryinfo.supplymode) {
-        this.showSupplyWay = true
-      } else {
-        this.showSupplyWay = false
-      }
+      // if (!this.loginUser.factoryinfo.supplymode) {
+      //   this.showSupplyWay = true
+      // } else {
+      //   this.showSupplyWay = false
+      // }
       this.initData()
       if (this.query.fid) {
         this.Fid = this.query.fid
