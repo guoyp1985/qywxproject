@@ -37,7 +37,7 @@
                             <span class="v_middle db-in">库存: {{ item.storage }}{{item.unit}}</span>
                             <span class="v_middle db-in ml5">已售: {{ item.truesaled }}{{item.unit}}</span>
                         </div>
-                        <div class="font12" v-if="item.fromfid">利润空间:<span class="color-red"> {{ $t('RMB') }}{{ item.lirun }}</span></div>
+                        <div class="font12" v-if="item.fromfid"><span v-if="factoryInfo.agentid">平台佣金:</span><span v-else>利润空间:</span><span class="color-red"> {{ $t('RMB') }}{{ item.lirun }}</span></div>
                         <!-- <div class="clamp1 mt5">
                             <span class="v_middle db-in">销售佣金: {{ item.salesrebate }}</span>
                             <span class="v_middle db-in ml5">推荐佣金: {{ item.superrebate }}</span>
