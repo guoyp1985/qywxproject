@@ -13,7 +13,7 @@
         <sticky scroll-box="order-detail">
           <div class="order-service">
             <div class="seller-cell flex_left">
-              <div class="font14 clamp1">卖家: {{retailerInfo.title}}</div>
+              <div class="font14 clamp1">{{orderData.super}}卖家: {{retailerInfo.title}}</div>
             </div>
             <div class="flex_right" @click="toChat(orderData)" style="width:80px;padding-right:10px;box-sizing:border-box;">
               <span class="bg-theme color-white font12" style="padding:5px 10px;border-radius:30px;">联系客服</span>
