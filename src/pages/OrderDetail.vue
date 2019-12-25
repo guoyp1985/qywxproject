@@ -20,7 +20,7 @@
               <!-- <span class="al al-pinglun3 color-order-detail font14"></span>
               <span class="font13 ml5">客服</span> -->
               <div class="orderinfo_txt" style="opacity:0;height:0px;width:0px;">
-                <template v-if="isIOS">订单编号：{{orderData.orderno}}<br/>商品：{{orders[0].name}}<br/>数量：{{orders[0].quantity}}<br/>收货人： {{orderData.linkman}}<br/>电话: {{orderData.telephone}}<br/>地址: {{orderData.address}}<br/>合伙人：{{retailerInfo.title}}<br/>经理：{{orderData.super | stringempty}}<br/>状态：{{orderData.flagstr}}<br/>下单时间：{{ orderData.dateline | dateformat }}</template>
+                <template v-if="isIOS">订单编号：{{orderData.orderno}}<br/>商品：{{orders[0].name}}<br/>数量：{{orders[0].quantity}}<br/>收货人： {{orderData.linkman}}<br/>电话: {{orderData.telephone}}<br/>地址: {{orderData.address}}<br/>合伙人：{{retailerInfo.title}}<br/>经理：{{orderData.super_str}}<br/>状态：{{orderData.flagstr}}<br/>下单时间：{{ orderData.dateline | dateformat }}</template>
                 <template v-else>
 订单编号：{{orderData.orderno}}
 商品：{{orders[0].name}}
@@ -29,7 +29,7 @@
 电话: {{orderData.telephone}}
 地址: {{orderData.address}}
 合伙人：{{retailerInfo.title}}
-经理：{{orderData.super | stringempty}}
+经理：{{orderData.super_str}}
 状态：{{orderData.flagstr}}
 下单时间：{{ orderData.dateline | dateformat}}
                 </template>
@@ -705,6 +705,11 @@ export default {
             self.showSos = false
             self.showContainer = true
             const retdata = data.data
+            if (retdata.super && retdata.super !== '') {
+              retdata.super_str = retdata.super
+            } else {
+              retdata.super_str = '无'
+            }
             self.orderData = retdata
             this.orderData.content = this.orderData.content.replace(/\n/g, '<br/>')
             self.orders = retdata.orderlist

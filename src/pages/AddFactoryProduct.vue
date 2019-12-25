@@ -192,9 +192,9 @@
           </div>
           <div class="form-item required bg-white bright" v-if="loginUser.factoryinfo && loginUser.factoryinfo.issupply">
             <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">分销佣金</div>
+              <div class="t-cell title-cell w80 font14 v_middle">平台佣金</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <x-input v-model="submitdata.agentrebate" @keyup="priceChange('agentrebate')" maxlength="7" size="7" type="text" class="input priceInput" name="agentrebate" placeholder="分销佣金" ></x-input>
+                <x-input v-model="submitdata.agentrebate" @keyup="priceChange('agentrebate')" maxlength="7" size="7" type="text" class="input priceInput" name="agentrebate" placeholder="平台佣金" ></x-input>
               </div>
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>

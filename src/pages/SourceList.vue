@@ -50,7 +50,7 @@
           			<div class="picarea">
           				<div class="pic">
                     <img class="imgcover" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-                    <div class="t-icon color-theme flex_center"><i class="al al-zhuanqian font18"></i><span class="font12">利润空间 {{$t('RMB')}}{{item.newprofit}}</span></div>
+                    <div class="t-icon color-theme flex_center"><i class="al al-zhuanqian font18"></i><span class="font12" v-if="factoryInfo.agentid">平台佣金</span><span class="font12" v-else>利润空间</span><span class="font12"> {{$t('RMB')}}{{item.newprofit}}</span></div>
                   </div>
           			</div>
           			<div class="desbox" style="overflow:hidden;">
@@ -189,9 +189,9 @@
             <div class="btn font14">确定</div>
           </div>
         </div>
-        <div class="close-area flex_center" @click="closeSupplyWay">
+        <!-- <div class="close-area flex_center" @click="closeSupplyWay">
           <i class="al al-close"></i>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -592,11 +592,11 @@ export default {
       this.loginUser = User.get()
       console.log('用户信息')
       console.log(this.loginUser)
-      if (!this.loginUser.factoryinfo.supplymode) {
-        this.showSupplyWay = true
-      } else {
-        this.showSupplyWay = false
-      }
+      // if (!this.loginUser.factoryinfo.supplymode) {
+      //   this.showSupplyWay = true
+      // } else {
+      //   this.showSupplyWay = false
+      // }
       this.initData()
       if (this.query.fid) {
         this.Fid = this.query.fid
