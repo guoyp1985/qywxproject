@@ -343,7 +343,8 @@ export default {
       recordPageStart: 0,
       limit: 10,
       screenHeight: document.body.clientHeight,
-      isIOS: false
+      isIOS: false,
+      submitIng: false
     }
   },
   computed: {
@@ -448,6 +449,8 @@ export default {
       this.serviceContent = ''
     },
     submitService (type) {
+      if (this.submitIng) return false
+      this.submitIng = true
       if (this.$util.trim(this.serviceContent) === '' && this.$util.trim(this.servicePhoto) === '') {
         this.$vux.toast.text('请完善售后信息', 'middle')
         return false
@@ -475,6 +478,7 @@ export default {
         const data = res.data
         this.$vux.toast.text(data.error)
         if (data.flag) {
+          this.submitIng = false
           this.showServiceModal = false
           this.orderData.canservice = false
           if (this.recordData.length === (this.recordPageStart + 1) * this.limit) {
