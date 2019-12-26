@@ -67,6 +67,7 @@
   "FactoryNewsList",
   "FactoryOrders",
   "FactoryOrderDetail",
+  "FactoryRetailerProductList",
   "FactoryProduct",
   "FactoryProductGoodeazy",
   "FactoryProductlist",
