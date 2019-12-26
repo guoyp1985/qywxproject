@@ -1270,27 +1270,25 @@ export default {
       const self = this
       this.loginUser = User.get()
       self.submitIng = false
-      if (this.loginUser) {
-        this.$vux.loading.show()
-        let isAdmin = false
-        for (let i = 0; i < self.loginUser.usergroup.length; i++) {
-          if (self.loginUser.usergroup[i] === 1) {
-            isAdmin = true
-            break
-          }
-        }
-        if (!(self.loginUser.fid && parseInt(self.loginUser.fid) === parseInt(self.$route.query.fid)) && !isAdmin && self.$route.query.fromapp !== 'factory') {
-          this.$vux.loading.hide()
-          // self.showSos = true
-          self.showContainer = false
-        } else {
-          // self.showSos = false
-          self.showContainer = true
-          this.$vux.loading.hide()
-          this.query = this.$route.query
-          this.getData()
-        }
-      }
+      // if (this.loginUser) {
+        // let isAdmin = false
+        // for (let i = 0; i < self.loginUser.usergroup.length; i++) {
+        //   if (self.loginUser.usergroup[i] === 1) {
+        //     isAdmin = true
+        //     break
+        //   }
+        // }
+      // if (!(self.loginUser.fid && parseInt(self.loginUser.fid) === parseInt(self.$route.query.fid)) && !isAdmin && self.$route.query.fromapp !== 'factory') {
+      //   this.$vux.loading.hide()
+      //   // self.showSos = true
+      //   self.showContainer = false
+      // } else {
+        // self.showSos = false
+      self.showContainer = true
+      this.query = this.$route.query
+      this.getData()
+      // }
+      // }
     }
   },
   created () {
