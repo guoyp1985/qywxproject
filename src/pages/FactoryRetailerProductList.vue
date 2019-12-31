@@ -1,8 +1,8 @@
 <template>
   <div class="containerarea bg-page font14 s-havebottom frproductlist">
-    <template v-if="showSos">
+    <!-- <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
-    </template>
+    </template> -->
     <template v-if="showContainer">
       <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 'product')">
         <template v-if="disproductdata">

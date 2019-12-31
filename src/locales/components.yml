@@ -746,7 +746,7 @@ zh-CN:
   Groupprice: 团购价
   Group numbers: 成团人数
   Person: 人
-  Online consulting: 在线咨询
+  Online consulting: 在线联系
   I am the seller: 我是卖家
   Sales Assistant: 销售助手
   Newcomer Guide: 新手指南
@@ -981,4 +981,5 @@ zh-CN:
   tFactoryProductGoodeazy: 采集商品
   tSupplierList: 供应商列表
   AtDdFactoryRetailerProduct: 添加商品
+  tAddFactoryRetailerProduct: 添加商品
   FtActoryRetailerProductList: 商品列表
