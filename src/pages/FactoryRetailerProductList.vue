@@ -140,7 +140,7 @@ export default {
     },
     getData1 () {
       const self = this
-      const params = { fid: self.Fid, pagestart: pageStart1, limit: limit }
+      const params = { fid: self.Fid, pagestart: pageStart1, limit: limit, from: 'myupload' }
       this.$http.get(`${ENV.BokaApi}/api/list/fpimport`, {
         params: params
       })
@@ -157,7 +157,7 @@ export default {
       const self = this
       this.loginUser = User.get()
       if (this.loginUser) {
-        // this.$vux.loading.show()
+        this.$vux.loading.show()
         // let isAdmin = false
         // for (let i = 0; i < self.loginUser.usergroup.length; i++) {
         //   if (self.loginUser.usergroup[i] === 1) {
@@ -165,25 +165,25 @@ export default {
         //     break
         //   }
         // }
-        // if (!(self.loginUser.fid && parseInt(self.loginUser.fid) === parseInt(self.$route.query.fid)) && !isAdmin && self.$route.query.fromapp !== 'factory') {
-        //   this.$vux.loading.hide()
-        //   self.showSos = true
-        //   self.showContainer = false
-        // } else {
-        self.showSos = false
-        self.showContainer = true
-        // this.$vux.loading.hide()
-        this.query = this.$route.query
-        if (this.query.fid) {
-          this.Fid = this.query.fid
+        if (self.loginUser.subscribe !== 2) {
+          this.$vux.loading.hide()
+          self.showSos = true
+          self.showContainer = false
         } else {
-          this.Fid = this.loginUser.fid
-        }
-        this.disproductdata = false
-        this.productdata = []
-        this.$vux.loading.show()
-        pageStart1 = 0
-        this.getData1()
+          self.showSos = false
+          self.showContainer = true
+          // this.$vux.loading.hide()
+          this.query = this.$route.query
+          if (this.query.fid) {
+            this.Fid = this.query.fid
+          } else {
+            this.Fid = this.loginUser.fid
+          }
+          this.disproductdata = false
+          this.productdata = []
+          this.$vux.loading.show()
+          pageStart1 = 0
+          this.getData1()
         // this.$http.post(`${ENV.BokaApi}/api/common/getBankNames`).then(res => {
         //   const data = res.data
         //   this.cardList = data.data ? data.data : data
@@ -198,7 +198,7 @@ export default {
         //     this.submitData[key] = this.factoryInfo[key]
         //   }
         // })
-        // }
+        }
       }
     },
     clearValue () {

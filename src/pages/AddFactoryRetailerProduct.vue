@@ -1,8 +1,8 @@
 <template>
   <div class="containerarea s-havebottom font14 add-factory-retailer-product-page">
-    <!-- <template v-if="showSos">
+    <template v-if="showSos">
       <sos :title="sosTitle"></sos>
-    </template> -->
+    </template>
     <template v-if="showContainer">
       <div class="s-container" style="top:0;">
         <form ref="listFileForm" enctype="multipart/form-data">
@@ -465,7 +465,7 @@ export default {
   data () {
     return {
       module: 'fpimport',
-      // showSos: false,
+      showSos: false,
       sosTitle: '抱歉，您暂无权限访问此页面！',
       showContainer: false,
       query: {},
@@ -1270,7 +1270,7 @@ export default {
       const self = this
       this.loginUser = User.get()
       self.submitIng = false
-      // if (this.loginUser) {
+      if (this.loginUser) {
         // let isAdmin = false
         // for (let i = 0; i < self.loginUser.usergroup.length; i++) {
         //   if (self.loginUser.usergroup[i] === 1) {
@@ -1278,17 +1278,17 @@ export default {
         //     break
         //   }
         // }
-      // if (!(self.loginUser.fid && parseInt(self.loginUser.fid) === parseInt(self.$route.query.fid)) && !isAdmin && self.$route.query.fromapp !== 'factory') {
-      //   this.$vux.loading.hide()
-      //   // self.showSos = true
-      //   self.showContainer = false
-      // } else {
-        // self.showSos = false
-      self.showContainer = true
-      this.query = this.$route.query
-      this.getData()
-      // }
-      // }
+        if (self.loginUser.subscribe !== 2) {
+          this.$vux.loading.hide()
+          self.showSos = true
+          self.showContainer = false
+        } else {
+          self.showSos = false
+          self.showContainer = true
+          this.query = this.$route.query
+          this.getData()
+        }
+      }
     }
   },
   created () {
