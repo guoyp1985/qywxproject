@@ -1,8 +1,8 @@
 <template>
   <div class="containerarea bg-page font14 s-havebottom frproductlist">
-    <!-- <template v-if="showSos">
+    <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
-    </template> -->
+    </template>
     <template v-if="showContainer">
       <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 'product')">
         <template v-if="disproductdata">
@@ -157,48 +157,48 @@ export default {
       const self = this
       this.loginUser = User.get()
       if (this.loginUser) {
-        this.$vux.loading.show()
-        let isAdmin = false
-        for (let i = 0; i < self.loginUser.usergroup.length; i++) {
-          if (self.loginUser.usergroup[i] === 1) {
-            isAdmin = true
-            break
-          }
-        }
-        if (!(self.loginUser.fid && parseInt(self.loginUser.fid) === parseInt(self.$route.query.fid)) && !isAdmin && self.$route.query.fromapp !== 'factory') {
-          this.$vux.loading.hide()
-          self.showSos = true
-          self.showContainer = false
+        // this.$vux.loading.show()
+        // let isAdmin = false
+        // for (let i = 0; i < self.loginUser.usergroup.length; i++) {
+        //   if (self.loginUser.usergroup[i] === 1) {
+        //     isAdmin = true
+        //     break
+        //   }
+        // }
+        // if (!(self.loginUser.fid && parseInt(self.loginUser.fid) === parseInt(self.$route.query.fid)) && !isAdmin && self.$route.query.fromapp !== 'factory') {
+        //   this.$vux.loading.hide()
+        //   self.showSos = true
+        //   self.showContainer = false
+        // } else {
+        self.showSos = false
+        self.showContainer = true
+        // this.$vux.loading.hide()
+        this.query = this.$route.query
+        if (this.query.fid) {
+          this.Fid = this.query.fid
         } else {
-          self.showSos = false
-          self.showContainer = true
-          this.$vux.loading.hide()
-          this.query = this.$route.query
-          if (this.query.fid) {
-            this.Fid = this.query.fid
-          } else {
-            this.Fid = this.loginUser.fid
-          }
-          this.disproductdata = false
-          this.productdata = []
-          this.$vux.loading.show()
-          pageStart1 = 0
-          this.getData1()
-          this.$http.post(`${ENV.BokaApi}/api/common/getBankNames`).then(res => {
-            const data = res.data
-            this.cardList = data.data ? data.data : data
-            return this.$http.get(`${ENV.BokaApi}/api/factory/info`, {
-              params: {fid: this.Fid}
-            })
-          }).then((res) => {
-            let data = res.data
-            let retdata = data.data ? data.data : data
-            this.factoryInfo = retdata
-            for (let key in this.submitData) {
-              this.submitData[key] = this.factoryInfo[key]
-            }
-          })
+          this.Fid = this.loginUser.fid
         }
+        this.disproductdata = false
+        this.productdata = []
+        this.$vux.loading.show()
+        pageStart1 = 0
+        this.getData1()
+        // this.$http.post(`${ENV.BokaApi}/api/common/getBankNames`).then(res => {
+        //   const data = res.data
+        //   this.cardList = data.data ? data.data : data
+        //   return this.$http.get(`${ENV.BokaApi}/api/factory/info`, {
+        //     params: {fid: this.Fid}
+        //   })
+        // }).then((res) => {
+        //   let data = res.data
+        //   let retdata = data.data ? data.data : data
+        //   this.factoryInfo = retdata
+        //   for (let key in this.submitData) {
+        //     this.submitData[key] = this.factoryInfo[key]
+        //   }
+        // })
+        // }
       }
     },
     clearValue () {
