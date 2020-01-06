@@ -6,7 +6,7 @@
       </div>
       <div class="pagebottom flex_center b_top_after font16">请先关注</div>
     </template>
-    <template else>
+    <template v-else>
       <div class="s-container" style="top:0;">
         <form ref="listFileForm" enctype="multipart/form-data">
           <input ref="listFileInput" class="hide" type="file" name="files" @change="fileChange('listFileForm', 'listphoto')" />
