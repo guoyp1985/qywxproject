@@ -1,9 +1,12 @@
 <template>
   <div class="containerarea s-havebottom font14 add-factory-retailer-product-page">
-    <template v-if="showSos">
-      <sos :title="sosTitle"></sos>
+    <template v-if="loginUser.subscribe != 1">
+      <div class="pagemiddle flex_center" style="top:0;">
+        <img :src="WeixinQrcode" style="max-width:90%;max-height:90%;" />
+      </div>
+      <div class="pagebottom flex_center b_top_after font16">请先关注</div>
     </template>
-    <template v-if="showContainer">
+    <template else>
       <div class="s-container" style="top:0;">
         <form ref="listFileForm" enctype="multipart/form-data">
           <input ref="listFileInput" class="hide" type="file" name="files" @change="fileChange('listFileForm', 'listphoto')" />
@@ -521,7 +524,8 @@ export default {
       productData: {},
       disOptionsArea: false,
       afterOptions: false,
-      calcsales: true
+      calcsales: true,
+      WeixinQrcode: ENV.WeixinQrcode
     }
   },
   watch: {
