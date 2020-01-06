@@ -1278,7 +1278,7 @@ export default {
         //     break
         //   }
         // }
-        if (!self.loginUser.subscribe) {
+        if (!this.loginUser.subscribe) {
           this.$vux.loading.hide()
           self.showSos = true
           self.showContainer = false
