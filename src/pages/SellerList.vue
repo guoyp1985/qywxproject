@@ -800,6 +800,12 @@ export default {
         }
       } else if (key === 'uploader') {
         self.showUploaderPopup = true
+        for (let i = 0; i < this.userData.length; i++) {
+          let curd = this.userData[i]
+          if (curd.checked) {
+            delete this.userData[i].checked
+          }
+        }
         if (!self.userData.length) {
           self.searchword2 = ''
           self.searchUser()
@@ -1113,8 +1119,10 @@ export default {
           onHide: function () {
             if (data.flag === 1) {
               if (self.disSearchList) {
-                self.tabData3[self.clickIndex].uploader = self.selectUploader.wid
-                self.tabData3[self.clickIndex].uploadname = self.selectUploader.linkman
+                // self.tabData3[self.clickIndex].uploader = self.selectUploader.wid
+                // self.tabData3[self.clickIndex].uploadname = self.selectUploader.linkman
+                self.searchData[self.clickIndex].uploader = self.selectUploader.wid
+                self.searchData[self.clickIndex].uploadname = self.selectUploader.linkman
               } else {
                 if (self.selectedIndex === 0) {
                   self.tabData1[self.clickIndex].uploader = self.selectUploader.wid
