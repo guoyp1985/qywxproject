@@ -27,6 +27,12 @@ Vue.use(ConfirmPlugin)
 console.log(Vue.wechat)
 require('es6-promise').polyfill()
 
+if (ENV.DebugMode) {
+  const VConsole = require('vconsole')
+  const vConsole = new VConsole()
+  vConsole.setOption({maxLogNumber: 5000})
+}
+
 const CancelToken = AjaxPlugin.$http.CancelToken
 const vuxLocales = require('./locales/all.yml')
 const componentsLocales = require('./locales/components.yml')
