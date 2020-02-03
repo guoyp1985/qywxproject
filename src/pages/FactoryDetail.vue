@@ -71,7 +71,7 @@
           </div>
         </template>
       </div>
-      <div v-if="(selectedIndex == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3', 2)">
+      <!-- <div v-if="(selectedIndex == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3', 2)">
         <template v-if="disNewsData">
           <div v-if="!newsData.length" class="flex_empty">
             <div>
@@ -101,7 +101,7 @@
             </div>
           </div>
         </template>
-      </div>
+      </div> -->
     </div>
     <div class="pagebottom db-flex bg-page">
       <div class="flex_cell">
@@ -137,7 +137,8 @@ export default {
       factoryInfo: {photo: 'https://tossharingsales.boka.cn/images/nopic.jpg'},
       contentArr: [],
       selectedIndex: 0,
-      tabtxts: [ '品牌简介', '全部商品', '品牌资讯' ],
+      // tabtxts: [ '品牌简介', '全部商品', '品牌资讯' ],
+      tabtxts: ['品牌简介', '全部商品'],
       disList: false,
       list: [],
       pagestart1: 0,
