@@ -64,7 +64,7 @@
         </template>
       </div>
       <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
-        <div class="flex_center flex_cell">
+        <div class="flex_center flex_cell" v-if="query.fromapp == 'factory'">
           <!-- <router-link class="flex_center bg-orange color-white" style="width:85%;border-radius:50px;height:35px;" to="/sourceList">货源</router-link> -->
           <div class="flex_center bg-orange color-white" style="width:85%;border-radius:50px;height:35px;" @click="toFactory">货源</div>
         </div>
@@ -408,7 +408,7 @@ export default {
       this.$router.push({path: '/factoryProductGoodeazy', query: params})
     },
     toFactory () {
-      let params = this.$util.handleAppParams(this.query, {fid: this.Fid})
+      let params = this.$util.handleAppParams(this.query, {fid: this.query.sourceFid})
       if (this.loginUser.factoryinfo) {
         if (this.loginUser.factoryinfo.issupply) {
           this.$router.push({path: '/sourceList', query: params})
