@@ -243,9 +243,9 @@ export default {
         self.$vux.toast.show({
           text: error,
           time: self.$util.delay(error),
-          onHide: function () {
+          onHide: () => {
             if (data.flag === 1) {
-              let params = this.$util.handleAppParams(this.query, {id: data.data})
+              let params = self.$util.handleAppParams(this.query, {id: data.data})
               self.$router.push({path: '/addFactoryProduct', query: params})
             }
           }
