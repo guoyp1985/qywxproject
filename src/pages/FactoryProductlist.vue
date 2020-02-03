@@ -409,7 +409,13 @@ export default {
     },
     toFactory () {
       let params = this.$util.handleAppParams(this.query, {fid: this.Fid})
-      this.$router.push({path: '/factoryDetail', query: params})
+      if (this.loginUser.factoryinfo) {
+        if (this.loginUser.factoryinfo.issupply) {
+          this.$router.push({path: '/sourceList', query: params})
+        } else {
+          this.$router.push({path: '/factoryDetail', query: params})
+        }
+      }
     },
     getPhoto (src) {
       return this.$util.getPhoto(src)
