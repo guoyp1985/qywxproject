@@ -18,8 +18,8 @@
         </div>
       </div>
       <div class="w100 flex_center">
-        <div class="box-area bg-theme color-white flex_center" v-if="isJoin">已加盟</div>
-        <div class="box-area bg-theme color-white flex_center" @click="toJoin" v-else>申请加盟</div>
+        <div class="box-area bg-theme color-white flex_center" v-if="isJoin">已托管</div>
+        <div class="box-area bg-theme color-white flex_center" @click="toJoin" v-else>申请托管</div>
       </div>
     </div>
     <div class="pagemiddle">
@@ -222,7 +222,7 @@ export default {
         })
       } else {
         this.$vux.confirm.show({
-          content: '确定要加盟吗？',
+          content: '确定要托管吗？',
           onConfirm: () => {
             let params = {fid: self.fid}
             if (self.query.wid) {
