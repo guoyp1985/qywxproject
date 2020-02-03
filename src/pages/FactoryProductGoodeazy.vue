@@ -236,7 +236,7 @@ export default {
       self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/product/goodTaoMao`,
         {do: 'download', url: self.collecturl, fid: this.loginUser.fid}
-      ).then(function (res) {
+      ).then(res => {
         const data = res.data
         self.$vux.loading.hide()
         let error = data.flag ? '成功' : data.error
@@ -245,7 +245,8 @@ export default {
           time: self.$util.delay(error),
           onHide: function () {
             if (data.flag === 1) {
-              self.$router.push({path: '/addFactoryProduct', query: {id: data.data}})
+              let params = this.$util.handleAppParams(this.query, {id: data.data})
+              self.$router.push({path: '/addFactoryProduct', query: params})
             }
           }
         })

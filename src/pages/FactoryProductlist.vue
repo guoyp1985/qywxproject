@@ -71,7 +71,7 @@
           <div class="bg-red flex_center color-white" style="width:85%;border-radius:50px;height:35px;" @click="toAdd">{{ $t('Add product') }}</div>
         </div>
         <div class="flex_center flex_cell">
-          <router-link class="flex_center bg-orange color-white" style="width:85%;border-radius:50px;height:35px;" to="/factoryProductGoodeazy">采集商品</router-link>
+          <div class="flex_center bg-orange color-white" style="width:85%;border-radius:50px;height:35px;" @click="toGoodeazy">采集商品</div>
         </div>
       </div>
       <div v-transfer-dom>
@@ -401,6 +401,10 @@ export default {
     toAdd () {
       let params = this.$util.handleAppParams(this.query, {fid: this.Fid})
       this.$router.push({path: '/addFpimportProduct', query: params})
+    },
+    toGoodeazy () {
+      let params = this.$util.handleAppParams(this.query, {fid: this.Fid})
+      this.$router.push({path: '/factoryProductGoodeazy', query: params})
     },
     getPhoto (src) {
       return this.$util.getPhoto(src)
