@@ -342,6 +342,7 @@ export default {
     onSubmit () {
       const self = this
       self.$vux.loading.show()
+      self.disProductData = false
       self.productList = []
       self.pagestart1 = 0
       self.getProductData()
@@ -353,6 +354,7 @@ export default {
       const self = this
       self.searchword = ''
       self.$vux.loading.show()
+      self.disProductData = false
       self.productList = []
       self.pagestart1 = 0
       self.getProductData()
