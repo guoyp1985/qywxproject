@@ -342,6 +342,7 @@ export default {
     onSubmit () {
       const self = this
       self.$vux.loading.show()
+      self.disProductData = false
       self.productList = []
       self.pagestart1 = 0
       self.getProductData()
@@ -353,6 +354,7 @@ export default {
       const self = this
       self.searchword = ''
       self.$vux.loading.show()
+      self.disProductData = false
       self.productList = []
       self.pagestart1 = 0
       self.getProductData()
@@ -374,7 +376,7 @@ export default {
     getProductData () {
       // 获取厂家商品数据
       const self = this
-      let params = {fid: this.loginUser.fid, pagestart: self.pagestart1, limit: self.limit}
+      let params = {fid: this.loginUser.fid, pagestart: self.pagestart1, limit: self.limit, from: 'factory'}
       let ajaxurl = `${ENV.BokaApi}/api/list/factoryproduct`
       let keyword = self.searchword
       if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {

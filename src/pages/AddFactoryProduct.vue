@@ -1143,8 +1143,12 @@ export default {
             onHide: () => {
               self.submitIng = false
               if (data.flag === 1) {
-                let rparams = self.$util.handleAppParams(self.query, {id: data.data, fid: self.query.fid})
-                self.$router.push({path: '/factoryProduct', query: rparams})
+                if (self.query.fromapp === 'factory') {
+                  self.$wechat.miniProgram.reLaunch({url: `/pages/product?id=${data.data}&module=fpimport`})
+                } else {
+                  let rparams = self.$util.handleAppParams(self.query, {id: data.data, fid: self.query.fid})
+                  self.$router.push({path: '/factoryProduct', query: rparams})
+                }
               }
             }
           })

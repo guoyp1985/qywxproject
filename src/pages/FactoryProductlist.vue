@@ -64,14 +64,15 @@
         </template>
       </div>
       <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
-        <div class="flex_center flex_cell">
-          <router-link class="flex_center bg-orange color-white" style="width:85%;border-radius:50px;height:35px;" to="/sourceList">货源</router-link>
+        <div class="flex_center flex_cell" v-if="query.fromapp == 'factory'">
+          <!-- <router-link class="flex_center bg-orange color-white" style="width:85%;border-radius:50px;height:35px;" to="/sourceList">货源</router-link> -->
+          <div class="flex_center bg-orange color-white" style="width:85%;border-radius:50px;height:35px;" @click="toFactory">货源</div>
         </div>
         <div class="flex_cell flex_center">
           <div class="bg-red flex_center color-white" style="width:85%;border-radius:50px;height:35px;" @click="toAdd">{{ $t('Add product') }}</div>
         </div>
         <div class="flex_center flex_cell">
-          <router-link class="flex_center bg-orange color-white" style="width:85%;border-radius:50px;height:35px;" to="/factoryProductGoodeazy">采集商品</router-link>
+          <div class="flex_center bg-orange color-white" style="width:85%;border-radius:50px;height:35px;" @click="toGoodeazy">采集商品</div>
         </div>
       </div>
       <div v-transfer-dom>
@@ -401,6 +402,20 @@ export default {
     toAdd () {
       let params = this.$util.handleAppParams(this.query, {fid: this.Fid})
       this.$router.push({path: '/addFpimportProduct', query: params})
+    },
+    toGoodeazy () {
+      let params = this.$util.handleAppParams(this.query, {fid: this.Fid})
+      this.$router.push({path: '/factoryProductGoodeazy', query: params})
+    },
+    toFactory () {
+      let params = this.$util.handleAppParams(this.query, {fid: this.query.sourceFid})
+      if (this.loginUser.factoryinfo) {
+        if (this.loginUser.factoryinfo.issupply) {
+          this.$router.push({path: '/sourceList', query: params})
+        } else {
+          this.$router.push({path: '/factoryDetail', query: params})
+        }
+      }
     },
     getPhoto (src) {
       return this.$util.getPhoto(src)

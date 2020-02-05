@@ -17,7 +17,10 @@
           </div>
         </div>
       </div>
-      <div class="w100 flex_center">
+      <div class="w100 flex_center" v-if="query.fromapp == 'factory'">
+        <div class="box-area bg-theme color-white flex_center" @click="toSupply" v-if="query.fid && query.fid != loginUser.fid && !loginUser.factoryinfo.issupply">我要托管</div>
+      </div>
+      <div class="w100 flex_center" v-else>
         <div class="box-area bg-theme color-white flex_center" v-if="isJoin">已加盟</div>
         <div class="box-area bg-theme color-white flex_center" @click="toJoin" v-else>申请加盟</div>
       </div>
@@ -106,7 +109,9 @@
     <div class="pagebottom db-flex bg-page">
       <div class="flex_cell">
         <tab v-model="selectedIndex" class="v-tab">
-          <tab-item v-for="(item,index) in tabtxts" :selected="index == selectedIndex" :key="index" @on-item-click="clickTab">{{item}}</tab-item>
+          <tab-item :selected="0 == selectedIndex" @on-item-click="clickTab(0)">品牌简介</tab-item>
+          <tab-item :selected="1 == selectedIndex" @on-item-click="clickTab(1)">全部商品</tab-item>
+          <tab-item :selected="2 == selectedIndex" @on-item-click="clickTab(2)" v-if="query.fromapp != 'factory'">品牌资讯</tab-item>
         </tab>
       </div>
     </div>
@@ -137,7 +142,6 @@ export default {
       factoryInfo: {photo: 'https://tossharingsales.boka.cn/images/nopic.jpg'},
       contentArr: [],
       selectedIndex: 0,
-      tabtxts: [ '品牌简介', '全部商品', '品牌资讯' ],
       disList: false,
       list: [],
       pagestart1: 0,
@@ -148,12 +152,14 @@ export default {
       disNewsData: false,
       newsData: [],
       fid: 0,
+      fromfid: 0,
       showEdit: false,
       isJoin: false,
       previewerPhotoarr: [],
       wxPhotoArr: [],
       shareUser: {},
-      disShareUser: false
+      disShareUser: false,
+      isIng: false
     }
   },
   filters: {
@@ -203,6 +209,33 @@ export default {
         })
       }
     },
+    toSupply (item) {
+      if (this.isIng) return false
+      this.$vux.confirm.show({
+        content: '确定要托管给该供应商',
+        onConfirm: () => {
+          this.isIng = true
+          this.$vux.loading.show()
+          this.$http.post(`${ENV.BokaApi}/api/factory/fpimportApply`, {
+            trustmode: 1, fid: this.loginUser.fid, fromfid: this.query.fid
+          }).then(res => {
+            this.isIng = false
+            let data = res.data
+            this.$vux.loading.hide()
+            this.$vux.toast.show({
+              text: data.error,
+              type: data.flag === 1 ? 'success' : 'warn',
+              time: this.$util.delay(data.error)
+            })
+            if (data.flag) {
+              this.loginUser.factoryinfo.issupply = 1
+              this.loginUser.factoryinfo.supplymode = 1
+              User.set(this.loginUser)
+            }
+          })
+        }
+      })
+    },
     toJoin () {
       const self = this
       if (!this.loginUser.isretailer || !this.loginUser.retailerinfo.moderate) {
@@ -221,7 +254,7 @@ export default {
         })
       } else {
         this.$vux.confirm.show({
-          content: '确定要加盟吗？',
+          content: '确定要托管吗？',
           onConfirm: () => {
             let params = {fid: self.fid}
             if (self.query.wid) {
@@ -309,7 +342,8 @@ export default {
         self.disNewsData = true
       })
     },
-    clickTab () {
+    clickTab (index) {
+      this.selectedIndex = parseInt(index)
       this.swiperChange()
     },
     swiperChange (index) {
