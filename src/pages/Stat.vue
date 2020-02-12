@@ -820,8 +820,10 @@ export default {
       })
     },
     toMembersView (item) {
-      let params = this.$util.handleAppParams(this.query, {uid: item.uid})
-      this.$router.push({path: '/membersView', query: params})
+      if (item.external !== 1) {
+        let params = this.$util.handleAppParams(this.query, {uid: item.uid})
+        this.$router.push({path: '/membersView', query: params})
+      }
     },
     toChat (item) {
       let uid = item.uid
