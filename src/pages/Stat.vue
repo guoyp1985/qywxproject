@@ -47,10 +47,10 @@
                     </div>
                     <div class="flex_cell pl10 pr20" @click="toMembersView(item)">
                       <div class="clamp1 color-gray2">{{ item.linkman }}</div>
-                      <div class="clamp1 color-gray">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
+                      <div class="clamp1 color-gray" v-if="item.external != 1">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
                     </div>
-                    <div class="w60 flex_right">
+                    <div class="w60 flex_right" v-if="item.external != 1">
                       <div class="qbtnInfo bg-red color-white" @click="toChat(item)">联系</div>
                     </div>
                   </div>
@@ -59,7 +59,7 @@
                       <div class="txt-item" @click="expandEvent(item, index1)">性别: {{userData[item.uid].sexname}}</div>
                       <div class="txt-item db-flex" v-if="userData[item.uid].mobile && userData[item.uid].mobile != ''" @click="toPhone(item)">手机: <span>{{userData[item.uid].mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
                       <div class="txt-item" @click="expandEvent(item, index1)">地区: {{ userData[item.uid].country }} {{ userData[item.uid].province }} {{ userData[item.uid].city }}</div>
-                      <div class="txt-item flex_left" @click="influence">影响力:
+                      <div class="txt-item flex_left" v-if="item.external != 1" @click="influence">影响力:
                         <span class="color-red4">{{userData[item.uid].yingxiangli}}</span>
                         <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
                       </div>
@@ -69,7 +69,7 @@
                     </div>
                     <div class="flex_center bg-white h40">
                       <div class="t-table align_center color-gray2 font14 color-gray2">
-                        <div class="t-cell v_middle b_right_after" @click="toChat(item)">
+                        <div class="t-cell v_middle b_right_after" v-if="item.external != 1" @click="toChat(item)">
                           <div>联系TA</div>
                         </div>
                         <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
@@ -91,9 +91,9 @@
                       <div class="clamp1 color-gray2">{{ item.username }}</div>
                       <div class="clamp1 color-gray">订单金额：{{$t('RMB')}}{{ item.special }}</div>
                       <div class="clamp1 color-gray">购买时间：{{ item.dateline | dateformat }}</div>
-                      <div class="clamp1 color-gray">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
+                      <div class="clamp1 color-gray" v-if="item.external != 1">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
                     </div>
-                    <div class="w60 flex_right">
+                    <div class="w60 flex_right" v-if="item.external != 1">
                       <div class="qbtnInfo bg-red color-white" @click="toChat(item)">联系</div>
                     </div>
                   </div>
@@ -102,7 +102,7 @@
                       <div class="txt-item" @click="expandEvent(item, index1)">性别: {{userData[item.uid].sexname}}</div>
                       <div class="txt-item db-flex" v-if="userData[item.uid].mobile && userData[item.uid].mobile != ''" @click="toPhone(item)">手机: <span>{{userData[item.uid].mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
                       <div class="txt-item" @click="expandEvent(item, index1)">地区: {{ userData[item.uid].country }} {{ userData[item.uid].province }} {{ userData[item.uid].city }}</div>
-                      <div class="txt-item flex_left" @click="influence">影响力:
+                      <div class="txt-item flex_left" v-if="item.external != 1" @click="influence">影响力:
                         <span class="color-red4">{{userData[item.uid].yingxiangli}}</span>
                         <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
                       </div>
@@ -112,7 +112,7 @@
                     </div>
                     <div class="flex_center bg-white h40">
                       <div class="t-table align_center color-gray2 font14 color-gray2">
-                        <div class="t-cell v_middle b_right_after" @click="toChat(item)">
+                        <div class="t-cell v_middle b_right_after" v-if="item.external != 1" @click="toChat(item)">
                           <div>联系TA</div>
                         </div>
                         <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
@@ -133,11 +133,11 @@
                     <div class="flex_cell pl10 pr20" @click="toMembersView(item)">
                       <div class="clamp1 color-gray2">{{ item.username }}</div>
                       <div class="clamp1 color-gray">传播级别: {{ item.level }}</div>
-                      <div class="clamp1 color-gray" v-if="item.yingxiangli">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
+                      <div class="clamp1 color-gray" v-if="item.yingxiangli && item.external != 1">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
                     </div>
                     <div class="w60 flex_right">
-                      <div class="qbtnInfo bg-red color-white" @click="toChat(item)">联系</div>
+                      <div class="qbtnInfo bg-red color-white" v-if="item.external != 1" @click="toChat(item)">联系</div>
                     </div>
                   </div>
                   <div v-if="item.checked" class="detail_card">
@@ -145,7 +145,7 @@
                       <div class="txt-item" @click="expandEvent(item, index1)">性别: {{userData[item.uid].sexname}}</div>
                       <div class="txt-item db-flex" v-if="userData[item.uid].mobile && userData[item.uid].mobile != ''" @click="toPhone(item)">手机: <span>{{userData[item.uid].mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
                       <div class="txt-item" @click="expandEvent(item, index1)">地区: {{ userData[item.uid].country }} {{ userData[item.uid].province }} {{ userData[item.uid].city }}</div>
-                      <div class="txt-item flex_left" @click="influence">影响力:
+                      <div class="txt-item flex_left" v-if="item.external != 1" @click="influence">影响力:
                         <span class="color-red4">{{userData[item.uid].yingxiangli}}</span>
                         <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
                       </div>
@@ -155,7 +155,7 @@
                     </div>
                     <div class="flex_center bg-white h40">
                       <div class="t-table align_center color-gray2 font14 color-gray2">
-                        <div class="t-cell v_middle b_right_after" @click="toChat(item)">
+                        <div class="t-cell v_middle b_right_after" v-if="item.external != 1" @click="toChat(item)">
                           <div>联系TA</div>
                         </div>
                         <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
@@ -176,10 +176,10 @@
                     <div class="flex_cell pl10 pr20" @click="toMembersView(item)">
                       <div class="clamp1 color-gray2">{{ item.linkman }}</div>
                       <div class="clamp1">{{ item.content }}</div>
-                      <div class="clamp1 color-gray">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
+                      <div class="clamp1 color-gray" v-if="item.external != 1">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
                     </div>
-                    <div class="w60 flex_right">
+                    <div class="w60 flex_right" v-if="item.external != 1">
                       <div class="qbtnInfo bg-red color-white" @click="toChat(item)">联系</div>
                     </div>
                   </div>
@@ -188,7 +188,7 @@
                       <div class="txt-item" @click="expandEvent(item, index1)">性别: {{userData[item.uid].sexname}}</div>
                       <div class="txt-item db-flex" v-if="userData[item.uid].mobile && userData[item.uid].mobile != ''" @click="toPhone(item)">手机: <span>{{userData[item.uid].mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
                       <div class="txt-item" @click="expandEvent(item, index1)">地区: {{ userData[item.uid].country }} {{ userData[item.uid].province }} {{ userData[item.uid].city }}</div>
-                      <div class="txt-item flex_left" @click="influence">影响力:
+                      <div class="txt-item flex_left" v-if="item.external != 1" @click="influence">影响力:
                         <span class="color-red4">{{userData[item.uid].yingxiangli}}</span>
                         <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
                       </div>
@@ -198,7 +198,7 @@
                     </div>
                     <div class="flex_center bg-white h40">
                       <div class="t-table align_center color-gray2 font14 color-gray2">
-                        <div class="t-cell v_middle b_right_after" @click="toChat(item)">
+                        <div class="t-cell v_middle b_right_after" v-if="item.external != 1" @click="toChat(item)">
                           <div>联系TA</div>
                         </div>
                         <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
@@ -219,12 +219,12 @@
                     <div class="flex_cell pl10 pr20" @click="toMembersView(item)">
                       <div class="clamp1 color-gray2">{{ item.username }}</div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
-                      <div class="clamp1 color-gray" v-if="item.yingxiangli">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
+                      <div class="clamp1 color-gray" v-if="item.yingxiangli && item.external != 1">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
                       <div class="color-gray">
                         <div class="clamp1 w_100">停留: {{ item.staytime | staytimeFormat }}  阅读: {{ item.number }}次</div>
                       </div>
                     </div>
-                    <div class="w60 flex_right">
+                    <div class="w60 flex_right" v-if="item.external != 1">
                       <div class="qbtnInfo bg-red color-white" @click="toChat(item)">联系</div>
                     </div>
                   </div>
@@ -233,7 +233,7 @@
                       <div class="txt-item" @click="expandEvent(item, index1)">性别: {{userData[item.uid].sexname}}</div>
                       <div class="txt-item db-flex" v-if="userData[item.uid].mobile && userData[item.uid].mobile != ''" @click="toPhone(item)">手机: <span>{{userData[item.uid].mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
                       <div class="txt-item" @click="expandEvent(item, index1)">地区: {{ userData[item.uid].country }} {{ userData[item.uid].province }} {{ userData[item.uid].city }}</div>
-                      <div class="txt-item flex_left" @click="influence">影响力:
+                      <div class="txt-item flex_left" v-if="item.external != 1" @click="influence">影响力:
                         <span class="color-red4">{{userData[item.uid].yingxiangli}}</span>
                         <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
                       </div>
@@ -243,7 +243,7 @@
                     </div>
                     <div class="flex_center bg-white h40">
                       <div class="t-table align_center color-gray2 font14 color-gray2">
-                        <div class="t-cell v_middle b_right_after" @click="toChat(item)">
+                        <div class="t-cell v_middle b_right_after" v-if="item.external != 1" @click="toChat(item)">
                           <div>联系TA</div>
                         </div>
                         <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
@@ -264,10 +264,10 @@
                     <div class="flex_cell pl10 pr20" @click="toMembersView(item)">
                       <div class="clamp1 color-gray2">{{ item.linkman }}</div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
-                      <div class="clamp1 color-gray">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
+                      <div class="clamp1 color-gray" v-if="item.external != 1">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
                       <div class="clamp1 color-gray">停留: {{ item.staytime | staytimeFormat }}  阅读: {{ item.number }}次</div>
                     </div>
-                    <div class="w60 flex_right">
+                    <div class="w60 flex_right" v-if="item.external != 1">
                       <div class="qbtnInfo bg-red color-white" @click="toChat(item)">联系</div>
                     </div>
                   </div>
@@ -276,7 +276,7 @@
                       <div class="txt-item" @click="expandEvent(item, index1)">性别: {{userData[item.uid].sexname}}</div>
                       <div class="txt-item db-flex" v-if="userData[item.uid].mobile && userData[item.uid].mobile != ''" @click="toPhone(item)">手机: <span>{{userData[item.uid].mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
                       <div class="txt-item" @click="expandEvent(item, index1)">地区: {{ userData[item.uid].country }} {{ userData[item.uid].province }} {{ userData[item.uid].city }}</div>
-                      <div class="txt-item flex_left" @click="influence">影响力:
+                      <div class="txt-item flex_left" v-if="item.external != 1" @click="influence">影响力:
                         <span class="color-red4">{{userData[item.uid].yingxiangli}}</span>
                         <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
                       </div>
@@ -286,7 +286,7 @@
                     </div>
                     <div class="flex_center bg-white h40">
                       <div class="t-table align_center color-gray2 font14 color-gray2">
-                        <div class="t-cell v_middle b_right_after" @click="toChat(item)">
+                        <div class="t-cell v_middle b_right_after" v-if="item.external != 1" @click="toChat(item)">
                           <div>联系TA</div>
                         </div>
                         <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
@@ -308,9 +308,9 @@
                       <div class="flex_left"><span class="clamp1 color-gray2 pr5" style="max-width:60%;">{{ item.linkman }}</span><span class="clamp1 color-orange">{{ item.isfull }}</span></div>
                       <div class="color-gray">团员: {{ item.otherusers }}</div>
                       <div class="clamp1 color-gray">开团时间: {{ item.dateline }}</div>
-                      <div class="clamp1 color-gray">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
+                      <div class="clamp1 color-gray" v-if="item.external != 1">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
                     </div>
-                    <div class="w60 flex_right">
+                    <div class="w60 flex_right" v-if="item.external != 1">
                       <div class="qbtnInfo bg-red color-white" @click="toChat(item)">联系</div>
                     </div>
                   </div>
@@ -319,7 +319,7 @@
                       <div class="txt-item" @click="expandEvent(item, index1)">性别: {{userData[item.uid].sexname}}</div>
                       <div class="txt-item db-flex" v-if="userData[item.uid].mobile && userData[item.uid].mobile != ''" @click="toPhone(item)">手机: <span>{{userData[item.uid].mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
                       <div class="txt-item" @click="expandEvent(item, index1)">地区: {{ userData[item.uid].country }} {{ userData[item.uid].province }} {{ userData[item.uid].city }}</div>
-                      <div class="txt-item flex_left" @click="influence">影响力:
+                      <div class="txt-item flex_left" v-if="item.external != 1" @click="influence">影响力:
                         <span class="color-red4">{{userData[item.uid].yingxiangli}}</span>
                         <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
                       </div>
@@ -329,7 +329,7 @@
                     </div>
                     <div class="flex_center bg-white h40">
                       <div class="t-table align_center color-gray2 font14 color-gray2">
-                        <div class="t-cell v_middle b_right_after" @click="toChat(item)">
+                        <div class="t-cell v_middle b_right_after" v-if="item.external != 1" @click="toChat(item)">
                           <div>联系TA</div>
                         </div>
                         <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
@@ -350,9 +350,9 @@
                     <div :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20" @click="toMembersView(item)">
                       <div class="clamp1 color-gray2">{{ item.linkman }}</div>
                       <div class="clamp1 color-gray">{{ item.dateline }}</div>
-                      <div class="clamp1 color-gray">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
+                      <div class="clamp1 color-gray" v-if="item.external != 1">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
                     </div>
-                    <div class="w60 flex_right">
+                    <div class="w60 flex_right" v-if="item.external != 1">
                       <div class="qbtnInfo bg-red color-white" @click="toChat(item)">联系</div>
                     </div>
                   </div>
@@ -361,7 +361,7 @@
                       <div class="txt-item" @click="expandEvent(item, index1)">性别: {{userData[item.uid].sexname}}</div>
                       <div class="txt-item db-flex" v-if="userData[item.uid].mobile && userData[item.uid].mobile != ''" @click="toPhone(item)">手机: <span>{{userData[item.uid].mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
                       <div class="txt-item" @click="expandEvent(item, index1)">地区: {{ userData[item.uid].country }} {{ userData[item.uid].province }} {{ userData[item.uid].city }}</div>
-                      <div class="txt-item flex_left" @click="influence">影响力:
+                      <div class="txt-item flex_left" v-if="item.external != 1" @click="influence">影响力:
                         <span class="color-red4">{{userData[item.uid].yingxiangli}}</span>
                         <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
                       </div>
@@ -371,7 +371,7 @@
                     </div>
                     <div class="flex_center bg-white h40">
                       <div class="t-table align_center color-gray2 font14 color-gray2">
-                        <div class="t-cell v_middle b_right_after" @click="toChat(item)">
+                        <div class="t-cell v_middle b_right_after" v-if="item.external != 1" @click="toChat(item)">
                           <div>联系TA</div>
                         </div>
                         <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
@@ -396,9 +396,9 @@
                         <span class="db-in ml5">助力: {{ item.sumothers }}人</span>
                       </div>
                       <div class="clamp1 color-gray">{{ item.dateline }}</div>
-                      <div class="clamp1 color-gray">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
+                      <div class="clamp1 color-gray" v-if="item.external != 1">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
                     </div>
-                    <div class="w60 flex_right">
+                    <div class="w60 flex_right" v-if="item.external != 1">
                       <div class="qbtnInfo bg-red color-white" @click="toChat(item)">联系</div>
                     </div>
                   </div>
@@ -407,7 +407,7 @@
                       <div class="txt-item" @click="expandEvent(item, index1)">性别: {{userData[item.uid].sexname}}</div>
                       <div class="txt-item db-flex" v-if="userData[item.uid].mobile && userData[item.uid].mobile != ''" @click="toPhone(item)">手机: <span>{{userData[item.uid].mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
                       <div class="txt-item" @click="expandEvent(item, index1)">地区: {{ userData[item.uid].country }} {{ userData[item.uid].province }} {{ userData[item.uid].city }}</div>
-                      <div class="txt-item flex_left" @click="influence">影响力:
+                      <div class="txt-item flex_left" v-if="item.external != 1" @click="influence">影响力:
                         <span class="color-red4">{{userData[item.uid].yingxiangli}}</span>
                         <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
                       </div>
@@ -417,7 +417,7 @@
                     </div>
                     <div class="flex_center bg-white h40">
                       <div class="t-table align_center color-gray2 font14 color-gray2">
-                        <div class="t-cell v_middle b_right_after" @click="toChat(item)">
+                        <div class="t-cell v_middle b_right_after" v-if="item.external != 1" @click="toChat(item)">
                           <div>联系TA</div>
                         </div>
                         <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
@@ -438,12 +438,12 @@
                     <div class="flex_cell pl10 pr20" @click="toMembersView(item)">
                       <div class="clamp1 color-gray2">{{ item.linkman }}</div>
                       <div class="clamp1 color-gray" v-if="query.module != 'factoryproduct'">{{ item.dateline | dateformat }}</div>
-                      <div class="clamp1 color-gray">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
+                      <div class="clamp1 color-gray" v-if="item.external != 1">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
                       <div class="color-gray">
                         <div class="clamp1 w_100">停留: {{ item.staytime | staytimeFormat }}  阅读: {{ item.number }}次</div>
                       </div>
                     </div>
-                    <div class="w60 flex_right">
+                    <div class="w60 flex_right" v-if="item.external != 1">
                       <div class="qbtnInfo bg-red color-white" @click="toChat(item)">联系</div>
                     </div>
                   </div>
@@ -452,7 +452,7 @@
                       <div class="txt-item" @click="expandEvent(item, index1)">性别: {{userData[item.uid].sexname}}</div>
                       <div class="txt-item db-flex" v-if="userData[item.uid].mobile && userData[item.uid].mobile != ''" @click="toPhone(item)">手机: <span>{{userData[item.uid].mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
                       <div class="txt-item" @click="expandEvent(item, index1)">地区: {{ userData[item.uid].country }} {{ userData[item.uid].province }} {{ userData[item.uid].city }}</div>
-                      <div class="txt-item flex_left" @click="influence">影响力:
+                      <div class="txt-item flex_left" v-if="item.external != 1" @click="influence">影响力:
                         <span class="color-red4">{{userData[item.uid].yingxiangli}}</span>
                         <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
                       </div>
@@ -462,7 +462,7 @@
                     </div>
                     <div class="flex_center bg-white h40">
                       <div class="t-table align_center color-gray2 font14 color-gray2">
-                        <div class="t-cell v_middle b_right_after" @click="toChat(item)">
+                        <div class="t-cell v_middle b_right_after" v-if="item.external != 1" @click="toChat(item)">
                           <div>联系TA</div>
                         </div>
                         <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
