@@ -18,7 +18,7 @@
         </div>
       </div>
       <div class="w100 flex_center" v-if="query.fromapp == 'factory'">
-        <div class="box-area bg-theme color-white flex_center" @click="toSupply" v-if="query.fid && query.fid != loginUser.fid && !loginUser.factoryinfo.issupply">我要托管</div>
+        <!-- <div class="box-area bg-theme color-white flex_center" @click="toSupply" v-if="query.fid && query.fid != loginUser.fid && !loginUser.factoryinfo.issupply">我要托管</div> -->
       </div>
       <div class="w100 flex_center" v-else>
         <div class="box-area bg-theme color-white flex_center" v-if="isJoin">已加盟</div>
