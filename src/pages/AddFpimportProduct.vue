@@ -284,9 +284,27 @@
                     </template>
                   </div>
                   <div class="flex_left mt10 con-item">
+                    <div class="title-cell1 flex_left">价格</div>
+                    <div class="border-cell flex_left flex_cell">
+                      <x-input v-model="item.price" class="input" placeholder="价格" maxlength="7" size="7" ></x-input>
+                    </div>
+                  </div>
+                  <div class="flex_left mt10 con-item">
+                    <div class="title-cell1 flex_left">销售佣金</div>
+                    <div class="border-cell flex_left flex_cell">
+                      <x-input v-model="item.salesrebate" class="input" placeholder="销售佣金" maxlength="7" size="7" ></x-input>
+                    </div>
+                  </div>
+                  <div class="flex_left mt10 con-item">
+                    <div class="title-cell1 flex_left">推荐人佣金</div>
+                    <div class="border-cell flex_left flex_cell">
+                      <x-input v-model="item.superrebate" class="input" placeholder="推荐人佣金" maxlength="7" size="7" ></x-input>
+                    </div>
+                  </div>
+                  <div class="flex_left mt10 con-item">
                     <div class="title-cell1 flex_left">库存</div>
                     <div class="border-cell flex_left flex_cell">
-                      <x-input v-model="item.storage" @keyup="optionStorageChange(index)" type="tel" class="input" :placeholder="$t('Storage')" maxlength="5" size="5" ></x-input>
+                      <x-input v-model="item.storage" @keyup="optionStorageChange(index,'storage')" type="tel" class="input" :placeholder="$t('Storage')" maxlength="5" size="5" ></x-input>
                     </div>
                   </div>
                 </div>
@@ -969,11 +987,11 @@ export default {
           self.$vux.toast.text('请输入商品名称', 'middle')
           return false
         }
-        if (self.$util.trim(postdata.price) === '') {
+        if (self.$util.trim(postdata.price) === '' && !self.optionsData.length) {
           self.$vux.toast.text('请输入商品价格', 'middle')
           return false
         }
-        if (self.$util.trim(postdata.profit) === '' && self.$util.trim(postdata.salesrebate) === '' && self.$util.trim(postdata.superrebate) === '') {
+        if (!self.optionsData.length && self.$util.trim(postdata.profit) === '' && self.$util.trim(postdata.salesrebate) === '' && self.$util.trim(postdata.superrebate) === '') {
           self.$vux.toast.text('请输入商品利润', 'middle')
           return false
         }
@@ -992,7 +1010,7 @@ export default {
           })
           return false
         }
-        if ((self.$util.trim(oriprice) !== '' && (isNaN(oriprice) || parseFloat(oriprice) < 0)) || isNaN(price) || parseFloat(price) <= 0) {
+        if ((self.$util.trim(oriprice) !== '' && (isNaN(oriprice) || parseFloat(oriprice) < 0)) || (!self.optionsData.length && (isNaN(price) || parseFloat(price) <= 0))) {
           self.$vux.alert.show({
             title: '',
             content: '请输入正确的价格'
@@ -1017,64 +1035,66 @@ export default {
           self.$vux.toast.text('商品现价不能大于等于原价', 'middle')
           return false
         }
-        // 商品利润
-        if (self.$util.trim(oriprice) !== '' && (isNaN(profit) || parseFloat(profit) < 0)) {
-          self.$vux.alert.show({
-            title: '',
-            content: '请输入正确的利润'
-          })
-          return false
-        }
-        if (parseFloat(profit) >= parseFloat(price)) {
-          self.$vux.alert.show({
-            title: '',
-            content: '利润不能大于商品现价'
-          })
-          return false
-        }
-        if (self.$util.trim(salesrebate) !== '') {
-          if (isNaN(salesrebate) || parseFloat(salesrebate) < 0) {
+        if (!self.optionsData.length) {
+          // 商品利润
+          if (self.$util.trim(oriprice) !== '' && (isNaN(profit) || parseFloat(profit) < 0)) {
             self.$vux.alert.show({
               title: '',
-              content: '请输入正确的销售佣金'
-            })
-            return false
-          } else if (parseFloat(salesrebate) > price) {
-            self.$vux.alert.show({
-              title: '',
-              content: '销售佣金不能大于商品现价'
+              content: '请输入正确的利润'
             })
             return false
           }
-        }
-        if (self.$util.trim(superrebate) !== '') {
-          if (isNaN(superrebate) || parseFloat(superrebate) < 0) {
+          if (parseFloat(profit) >= parseFloat(price)) {
             self.$vux.alert.show({
               title: '',
-              content: '请输入正确的推荐人佣金'
-            })
-            return false
-          } else if (parseFloat(superrebate) > price) {
-            self.$vux.alert.show({
-              title: '',
-              content: '推荐人佣金不能大于商品现价'
+              content: '利润不能大于商品现价'
             })
             return false
           }
-        }
-        if (self.$util.trim(salesrebate) !== '' && self.$util.trim(superrebate) !== '' && parseFloat(salesrebate) + parseFloat(superrebate) > price) {
-          self.$vux.alert.show({
-            title: '',
-            content: '销售佣金+推荐人佣金不能大于商品现价'
-          })
-          return false
-        }
-        if (parseFloat(profit) > parseFloat(price)) {
-          self.$vux.alert.show({
-            title: '',
-            content: '商品利润不得大于商品现价'
-          })
-          return false
+          if (self.$util.trim(salesrebate) !== '') {
+            if (isNaN(salesrebate) || parseFloat(salesrebate) < 0) {
+              self.$vux.alert.show({
+                title: '',
+                content: '请输入正确的销售佣金'
+              })
+              return false
+            } else if (parseFloat(salesrebate) > price) {
+              self.$vux.alert.show({
+                title: '',
+                content: '销售佣金不能大于商品现价'
+              })
+              return false
+            }
+          }
+          if (self.$util.trim(superrebate) !== '') {
+            if (isNaN(superrebate) || parseFloat(superrebate) < 0) {
+              self.$vux.alert.show({
+                title: '',
+                content: '请输入正确的推荐人佣金'
+              })
+              return false
+            } else if (parseFloat(superrebate) > price) {
+              self.$vux.alert.show({
+                title: '',
+                content: '推荐人佣金不能大于商品现价'
+              })
+              return false
+            }
+          }
+          if (self.$util.trim(salesrebate) !== '' && self.$util.trim(superrebate) !== '' && parseFloat(salesrebate) + parseFloat(superrebate) > price) {
+            self.$vux.alert.show({
+              title: '',
+              content: '销售佣金+推荐人佣金不能大于商品现价'
+            })
+            return false
+          }
+          if (parseFloat(profit) > parseFloat(price)) {
+            self.$vux.alert.show({
+              title: '',
+              content: '商品利润不得大于商品现价'
+            })
+            return false
+          }
         }
         if (!self.optionsData.length) {
           if (self.$util.trim(postdata.storage) === '') {
@@ -1100,9 +1120,17 @@ export default {
             let curOption = this.optionsData[i]
             let curTitle = curOption.title
             // let curPhoto = curOption.photo
+            let curPrice = curOption.price
+            let curSales = curOption.salesrebate
+            let curSuper = curOption.superrebate
             let curStorage = curOption.storage
-            if (self.$util.trim(curTitle) === '' || self.$util.trim(curStorage) === '') {
+            if (self.$util.trim(curTitle) === '' || self.$util.trim(curPrice) === '' || self.$util.trim(curStorage) === '') {
               self.$vux.toast.text('请完规格信息', 'middle')
+              iscontinue = false
+              break
+            }
+            if (isNaN(curPrice) || parseFloat(curPrice) < 0) {
+              self.$vux.toast.text('请输入正确的价格', 'middle')
               iscontinue = false
               break
             }
@@ -1134,7 +1162,14 @@ export default {
           for (let i = 0; i < this.optionsData.length; i++) {
             let curOption = this.optionsData[i]
             let oPhoto = curOption.photo ? curOption.photo : self.photoarr[0]
-            let addoption = {title: curOption.title, photo: oPhoto, storage: curOption.storage}
+            let addoption = {
+              title: curOption.title,
+              photo: oPhoto,
+              price: curOption.price,
+              salesrebate: curOption.salesrebate,
+              superrebate: curOption.superrebate,
+              storage: curOption.storage
+            }
             if (curOption.id) {
               addoption.id = curOption.id
             }
@@ -1175,6 +1210,7 @@ export default {
       self.savedata(postdata)
     },
     saveupevent () {
+      console.log(this.optionsData)
       const self = this
       let postdata = self.submitdata
       postdata['moderate'] = 1
@@ -1194,10 +1230,6 @@ export default {
         val = val.substr(0, vallen - cha + 2)
       }
       this.submitdata[key] = val
-    },
-    optionStorageChange (index) {
-      let val = event.target.value
-      this.optionsData[index].storage = val
     },
     getData () {
       const self = this
@@ -1357,7 +1389,7 @@ export default {
         .con-item:not(:last-child) {margin-bottom:10px;}
         .con-item{
           width:100%;height:30px;
-          .title-cell1{width:60px;height:100%;}
+          .title-cell1{width:80px;height:100%;}
           .border-cell{
             border:#ccc 1px solid;height:100%;
             .input{width:100%;height:100%;padding:0 5px;box-sizing: border-box;}
