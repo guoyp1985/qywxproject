@@ -116,7 +116,7 @@
           </div>
           <div class="pt10 bg-page"></div>
           <div class="flex_center">
-            <div class="form-item required bg-white bright">
+            <div v-if="!optionsData.length" class="form-item required bg-white bright">
               <div class="t-table">
                 <div class="t-cell title-cell w80 font14 v_middle">商品现价<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
                 <div class="t-cell input-cell v_middle" style="position:relative;">
@@ -158,7 +158,7 @@
           <div class="pt10 bg-page"></div>
 
           <!-- 商品利润 -->
-          <div class="form-item required bg-white">
+          <div v-if="!optionsData.length" class="form-item required bg-white">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">商品利润</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
@@ -170,7 +170,7 @@
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>
           </div>
-          <div class="flex_row">
+          <div v-if="!optionsData.length" class="flex_row">
             <div class="form-item required bg-white bright">
               <div class="t-table">
                 <div class="t-cell title-cell w80 font14 v_middle">销售佣金</div>
