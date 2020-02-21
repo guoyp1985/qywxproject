@@ -6,8 +6,8 @@
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "start": "npm run dev",
-    "start1": "forever start forever/config.json",
+    "start1": "npm run dev",
+    "start": "forever start forever/config.json",
     "restart": "forever restart forever/config.json",
     "unit": "jest --config test/unit/jest.conf.js --coverage",
     "e2e": "node test/e2e/runner.js",
