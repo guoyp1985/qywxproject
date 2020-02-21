@@ -1134,6 +1134,16 @@ export default {
               iscontinue = false
               break
             }
+            if (self.$util.trim(curSales) !== '' && (isNaN(curSales) || parseFloat(curSales) < 0)) {
+              self.$vux.toast.text('请输入正确的佣金', 'middle')
+              iscontinue = false
+              break
+            }
+            if (self.$util.trim(curSuper) !== '' && (isNaN(curSuper) || parseFloat(curSuper) < 0)) {
+              self.$vux.toast.text('请输入正确的佣金', 'middle')
+              iscontinue = false
+              break
+            }
             if (isNaN(curStorage) || parseFloat(curStorage) <= 0) {
               self.$vux.toast.text('库存必须大于0', 'middle')
               iscontinue = false
