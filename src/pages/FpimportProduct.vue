@@ -51,7 +51,8 @@
           <div v-if="productdata.sellingpoint && productdata.sellingpoint != ''" class="color-theme">{{productdata.sellingpoint}}</div>
           <div class="color-red">
             <span class="font18 mr3 v_middle">{{ $t('RMB') }}</span>
-            <span class="font18 mr5 v_middle">{{ productdata.price }}</span>
+            <span class="font18 mr5 v_middle" v-if="productdata.minprice && productdata.maxprice && productdata.minprice != productdata.maxprice">{{ productdata.minprice }}-{{productdata.maxprice}}</span>
+            <span class="font18 mr5 v_middle" v-else>{{ productdata.price }}</span>
             <span class="color-gray font14 line-through" v-if="productdata.oriprice && productdata.oriprice > 0">
               <span class="mr3 v_middle">{{ $t('RMB') }}</span>
               <span class="v_middle">{{ productdata.oriprice }}</span>
@@ -82,12 +83,24 @@
         </template>
         <div class="padding10 b_bottom_after levelarea">
           <div class="levelitem">
-            <div><span class="bold">推荐人佣金:</span><span class="bold">{{ $t('RMB') }}{{ productdata.newsuperrebate }}</span><i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp"></i></div>
+            <div>
+              <span class="bold">推荐人佣金:</span>
+              <span class="bold">{{ $t('RMB') }}</span>
+              <span class="bold" v-if="productdata.minsuperrebate && productdata.maxsuperrebate && productdata.minsuperrebate != productdata.maxsuperrebate">{{ productdata.minsuperrebate }}-{{productdata.maxsuperrebate}}</span>
+              <span class="bold" v-else>{{ productdata.newsuperrebate }}</span>
+              <i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp"></i>
+            </div>
           </div>
         </div>
         <div class="padding10 b_bottom_after levelarea">
           <div class="levelitem">
-            <div><span class="bold">销售佣金:</span><span class="bold"> {{ $t('RMB') }}{{ productdata.newsalesrebate }}</span><i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp1"></i></div>
+            <div>
+              <span class="bold">销售佣金:</span>
+              <span class="bold"> {{ $t('RMB') }}</span>
+              <span class="bold" v-if="productdata.minsalesrebate && productdata.maxsalesrebate && productdata.minsalesrebate != productdata.maxsalesrebate">{{ productdata.minsalesrebate }}-{{productdata.maxsalesrebate}}</span>
+              <span class="bold" v-else>{{ productdata.newsalesrebate }}</span>
+              <i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp1"></i>
+            </div>
           </div>
         </div>
         <!-- <template v-if="feeData.length != 0 && (productdata.identity == 'factory' || productdata.joinstatus == 0)">
@@ -195,7 +208,7 @@
                 </div>
                 <div class="flex_cell flex_left">
                   <div class="w_100">
-                    <div class="color-theme"><span>￥</span><span class="bold font16">{{productdata.price}}</span></div>
+                    <div class="color-theme"><span>￥</span><span class="bold font16">{{selectedOption.price}}</span></div>
                     <div class="mt10 color-gray">库存{{selectedOption.storage}}{{productdata.unit}}</div>
                     <div class="mt10" v-if="selectedOption.title">规格: {{selectedOption.title}}</div>
                     <div class="mt10" v-else>规格</div>

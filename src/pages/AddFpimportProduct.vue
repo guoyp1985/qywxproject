@@ -1124,8 +1124,9 @@ export default {
             let curSales = curOption.salesrebate
             let curSuper = curOption.superrebate
             let curStorage = curOption.storage
+            console.log(curOption)
             if (self.$util.trim(curTitle) === '' || self.$util.trim(curPrice) === '' || self.$util.trim(curStorage) === '') {
-              self.$vux.toast.text('请完规格信息', 'middle')
+              self.$vux.toast.text('请完善规格信息', 'middle')
               iscontinue = false
               break
             }
