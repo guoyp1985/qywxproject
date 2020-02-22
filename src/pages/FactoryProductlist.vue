@@ -605,13 +605,13 @@ export default {
             newval = 0
           }
           if (type === 'add') {
-            if (!/^[0-9]*[1-9][0-9]*$/.test(newval)) {
+            if (newval !== 0 && !/^[0-9]*[1-9][0-9]*$/.test(newval)) {
               this.$vux.toast.text('请输入大于0的库存')
               isContinue = false
               return false
             }
           } else {
-            if (!/^-[0-9]*[1-9][0-9]*$/.test(newval)) {
+            if (newval !== 0 && !/^-[0-9]*[1-9][0-9]*$/.test(newval)) {
               this.$vux.toast.text('请输入负数库存')
               isContinue = false
               return false
