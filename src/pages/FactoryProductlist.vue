@@ -32,7 +32,10 @@
                     <div class="clamp1 font16 pr10 color-lightgray"><span class="color-theme" v-if="item.fromfid">【货源】</span><span>{{item.title}}</span></div>
                     <div class="t-table pr12 border-box mt15">
                       <div class="t-cell color-999 font14">
-                        <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ item.price }}</span></div>
+                        <div class="clamp1">售价:
+                          <span class="color-red" v-if="item.minprice && item.maxprice && item.minprice != '' && item.maxprice != '' && item.minprice != item.maxprice">￥{{item.minprice}}-{{item.maxprice}}</span>
+                          <span class="color-red" v-else>￥{{item.price}}</span>
+                        </div>
                         <div class="clamp1">
                             <span class="v_middle db-in">库存: {{ item.storage }}{{item.unit}}</span>
                             <span class="v_middle db-in ml5">已售: {{ item.truesaled }}{{item.unit}}</span>
