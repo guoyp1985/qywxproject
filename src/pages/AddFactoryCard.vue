@@ -166,6 +166,7 @@
                     <div class="font12 clamp1">
                       <span class="color-orange">¥</span>
                       <span class="color-orange" v-if="item.minprice && item.maxprice && item.minprice != item.maxprice">{{ item.minprice }}-{{item.maxprice}}</span>
+                      <span class="color-orange" v-else-if="item.minprice && item.minprice != ''">{{ item.minprice }}</span>
                       <span class="color-orange" v-else>{{ item.price }}</span>
                       <span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span>
                     </div>

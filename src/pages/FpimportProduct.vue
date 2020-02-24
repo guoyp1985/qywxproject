@@ -52,6 +52,7 @@
           <div class="color-red">
             <span class="font18 mr3 v_middle">{{ $t('RMB') }}</span>
             <span class="font18 mr5 v_middle" v-if="productdata.minprice && productdata.maxprice && productdata.minprice != productdata.maxprice">{{ productdata.minprice }}-{{productdata.maxprice}}</span>
+            <span class="font18 mr5 v_middle" v-else-if="productdata.minprice && productdata.minprice != ''">{{ productdata.minprice }}</span>
             <span class="font18 mr5 v_middle" v-else>{{ productdata.price }}</span>
             <span class="color-gray font14 line-through" v-if="productdata.oriprice && productdata.oriprice > 0">
               <span class="mr3 v_middle">{{ $t('RMB') }}</span>

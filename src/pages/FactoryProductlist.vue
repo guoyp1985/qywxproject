@@ -34,6 +34,7 @@
                       <div class="t-cell color-999 font14">
                         <div class="clamp1">售价:
                           <span class="color-red" v-if="item.minprice && item.maxprice && item.minprice != '' && item.maxprice != '' && item.minprice != item.maxprice">￥{{item.minprice}}-{{item.maxprice}}</span>
+                          <span class="color-red" v-else-if="item.minprice && item.minprice != ''">￥{{ item.minprice }}</span>
                           <span class="color-red" v-else>￥{{item.price}}</span>
                         </div>
                         <div class="clamp1">
