@@ -190,7 +190,7 @@
               </div>
             </div>
           </div>
-          <div class="form-item required bg-white bright" v-if="loginUser.factoryinfo && loginUser.factoryinfo.issupply">
+          <div class="form-item required bg-white bright" v-if="!optionsData.length && loginUser.factoryinfo && loginUser.factoryinfo.issupply">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">平台佣金</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
@@ -291,6 +291,12 @@
                     <div class="title-cell1 flex_left">推荐人佣金</div>
                     <div class="border-cell flex_left flex_cell">
                       <x-input v-model="item.superrebate" class="input" placeholder="推荐人佣金" maxlength="7" size="7" ></x-input>
+                    </div>
+                  </div>
+                  <div class="flex_left mt10 con-item" v-if="loginUser.factoryinfo && loginUser.factoryinfo.issupply">
+                    <div class="title-cell1 flex_left">平台佣金</div>
+                    <div class="border-cell flex_left flex_cell">
+                      <x-input v-model="item.agentrebate" class="input" placeholder="平台佣金" maxlength="7" size="7" ></x-input>
                     </div>
                   </div>
                   <div class="flex_left mt10 con-item">
@@ -989,6 +995,7 @@ export default {
         let profit = postdata.profit.toString().replace(/,/g, '')
         let salesrebate = postdata.salesrebate.toString().replace(/,/g, '')
         let superrebate = postdata.superrebate.toString().replace(/,/g, '')
+        let agentrebate = postdata.agentrebate.toString().replace(/,/g, '')
         if (self.$util.trim(price).length > 7 || self.$util.trim(oriprice).length > 7 || self.$util.trim(tbprice).length > 7 || self.$util.trim(jdprice).length > 7) {
           self.$vux.alert.show({
             title: '',
@@ -1081,6 +1088,13 @@ export default {
             })
             return false
           }
+          if (self.$util.trim(agentrebate) !== '' && (isNaN(agentrebate) || parseFloat(agentrebate) < 0)) {
+            self.$vux.alert.show({
+              title: '',
+              content: '请输入正确的平台佣金'
+            })
+            return false
+          }
         }
         if (!self.optionsData.length) {
           if (self.$util.trim(postdata.storage) === '') {
@@ -1109,6 +1123,7 @@ export default {
             let curPrice = curOption.price
             let curSales = curOption.salesrebate
             let curSuper = curOption.superrebate
+            let curRebate = curOption.agentrebate
             let curStorage = curOption.storage
             if (self.$util.trim(curTitle) === '' || self.$util.trim(curPrice) === '' || self.$util.trim(curStorage) === '') {
               self.$vux.toast.text('请完规格信息', 'middle')
@@ -1126,6 +1141,11 @@ export default {
               break
             }
             if (self.$util.trim(curSuper) !== '' && (isNaN(curSuper) || parseFloat(curSuper) < 0)) {
+              self.$vux.toast.text('请输入正确的佣金', 'middle')
+              iscontinue = false
+              break
+            }
+            if (self.$util.trim(curRebate) !== '' && (isNaN(curRebate) || parseFloat(curRebate) < 0)) {
               self.$vux.toast.text('请输入正确的佣金', 'middle')
               iscontinue = false
               break
@@ -1164,6 +1184,7 @@ export default {
               price: curOption.price,
               salesrebate: curOption.salesrebate,
               superrebate: curOption.superrebate,
+              agentrebate: curOption.agentrebate,
               storage: curOption.storage
             }
             if (curOption.id) {
