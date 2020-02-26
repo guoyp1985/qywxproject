@@ -47,7 +47,7 @@
               </div>
             </div>
             <div class="con-area">
-              <div>最后得分: {{score}}分</div>
+              <div class="flex_center">最后得分: {{score}}分</div>
             </div>
             <div class="bottom-btn">
               <div class="btn btn-blue" @click="toStudy">
@@ -227,7 +227,7 @@ export default {
     .radius-bg.green{background-color:#27db40;}
     .bg-txt{
       position:absolute;left:0;right:0;top:0;bottom:0;border-radius:50%;
-      background-color:#86aeff;color:#fff;font-size:30px;
+      color:#fff;font-size:24px;
       display:flex;justify-content: center;align-items: center;
     }
   }
