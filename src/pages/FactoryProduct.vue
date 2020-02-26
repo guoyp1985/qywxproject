@@ -84,38 +84,24 @@
         </template>
         <div class="padding10 b_bottom_after levelarea">
           <div class="levelitem">
-<<<<<<< HEAD
-            <div><span class="bold">推荐人佣金:</span>
-              <span v-if="productdata.minsuperrebate && productdata.maxsuperrebate && productdata.minsuperrebate != productdata.maxsuperrebate">￥{{productdata.minsuperrebate}}-{{productdata.maxsuperrebate}}</span>
-              <span v-else>￥{{productdata.superrebate}}</span>
-              <i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp"></i></div>
-=======
             <div>
               <span class="bold">推荐人佣金:</span>
               <span class="bold">{{ $t('RMB') }}</span>
               <span class="bold" v-if="productdata.minsuperrebate && productdata.maxsuperrebate && productdata.minsuperrebate != productdata.maxsuperrebate">{{ productdata.minsuperrebate }}-{{productdata.maxsuperrebate}}</span>
-              <span class="bold" v-else>{{ productdata.newsuperrebate }}</span>
+              <span class="bold" v-else>{{ productdata.superrebate }}</span>
               <i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp"></i>
             </div>
->>>>>>> 911db0b98dee133e4788833d615e11bf74c751b2
           </div>
         </div>
         <div class="padding10 b_bottom_after levelarea">
           <div class="levelitem">
-<<<<<<< HEAD
-            <div><span class="bold">销售佣金:</span>
-              <span v-if="productdata.maxsalesrebate && productdata.minsalesrebate && productdata.minsalesrebate != productdata.maxsalesrebate">￥{{productdata.minsalesrebate}}-{{productdata.maxsalesrebate}}</span>
-              <span v-else>￥{{productdata.salesrebate}}</span>
-              <i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp1"></i></div>
-=======
             <div>
               <span class="bold">销售佣金:</span>
               <span class="bold"> {{ $t('RMB') }}</span>
               <span class="bold" v-if="productdata.minsalesrebate && productdata.maxsalesrebate && productdata.minsalesrebate != productdata.maxsalesrebate">{{ productdata.minsalesrebate }}-{{productdata.maxsalesrebate}}</span>
-              <span class="bold" v-else>{{ productdata.newsalesrebate }}</span>
+              <span class="bold" v-else>{{ productdata.salesrebate }}</span>
               <i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp1"></i>
             </div>
->>>>>>> 911db0b98dee133e4788833d615e11bf74c751b2
           </div>
         </div>
         <!-- <template v-if="feeData.length != 0 && (productdata.identity == 'factory' || productdata.joinstatus == 0)">
