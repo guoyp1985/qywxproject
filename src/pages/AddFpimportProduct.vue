@@ -1166,6 +1166,11 @@ export default {
               iscontinue = false
               break
             }
+            if (parseFloat(curPrice) < parseFloat(curSales) + parseFloat(curSuper)) {
+              self.$vux.toast.text('销售佣金+推荐人佣金不得大于现价', 'middle')
+              iscontinue = false
+              break
+            }
             if (self.$util.trim(curRebate) !== '' && (isNaN(curRebate) || parseFloat(curRebate) < 0)) {
               self.$vux.toast.text('请输入正确的佣金', 'middle')
               iscontinue = false
