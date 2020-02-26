@@ -88,7 +88,7 @@
               <span class="bold">推荐人佣金:</span>
               <span class="bold">{{ $t('RMB') }}</span>
               <span class="bold" v-if="productdata.minsuperrebate && productdata.maxsuperrebate && productdata.minsuperrebate != productdata.maxsuperrebate">{{ productdata.minsuperrebate }}-{{productdata.maxsuperrebate}}</span>
-              <span class="bold" v-else>{{ productdata.newsuperrebate }}</span>
+              <span class="bold" v-else>{{ productdata.superrebate }}</span>
               <i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp"></i>
             </div>
           </div>
@@ -99,7 +99,7 @@
               <span class="bold">销售佣金:</span>
               <span class="bold"> {{ $t('RMB') }}</span>
               <span class="bold" v-if="productdata.minsalesrebate && productdata.maxsalesrebate && productdata.minsalesrebate != productdata.maxsalesrebate">{{ productdata.minsalesrebate }}-{{productdata.maxsalesrebate}}</span>
-              <span class="bold" v-else>{{ productdata.newsalesrebate }}</span>
+              <span class="bold" v-else>{{ productdata.salesrebate }}</span>
               <i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp1"></i>
             </div>
           </div>
