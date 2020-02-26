@@ -3,53 +3,66 @@
     <div class="page-bg">
       <div class="page-inner">
         <div class="page-box">
-          <div class="top-radius">
-            <div class="radius-bg">
-              <div class="bg2">
-                <span v-if="isIng"><span class="big-txt">{{ingIndex}}</span>/{{examData.length}}</span>
-                <span v-if="isEnd">学习结束</span>
+          <template v-if="isIng">
+            <div class="top-radius">
+              <div class="radius-bg">
+                <div class="bg2">
+                  <span><span class="big-txt">{{ingIndex}}</span>/{{examData.length}}</span>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="con-area">
-            <div>{{ingIndex}}：{{examData[ingIndex-1].title}}</div>
-            <div class="btn-list">
-              <template v-for="(item,index) in examData[ingIndex-1].questions">
-                <template v-if="clickIndex >= 0 && (clickIndex == index ||  examData[ingIndex-1].answer == index + 1)">
-                  <div v-if="clickIndex == index" :class="`btn-item ${clickData[ingIndex-1] == examData[ingIndex-1].answer ? 'right' : 'wrong'}`" @click="toChoose(index, item)">
-                    <span>{{item}}</span>
-                  </div>
-                  <div v-else :class="`btn-item ${index + 1 == examData[ingIndex-1].answer ? 'right' : ''}`" @click="toChoose(index, item)">
+            <div class="con-area">
+              <div>{{ingIndex}}：{{examData[ingIndex-1].title}}</div>
+              <div class="btn-list">
+                <template v-for="(item,index) in examData[ingIndex-1].questions">
+                  <template v-if="clickIndex >= 0 && (clickIndex == index ||  examData[ingIndex-1].answer == index + 1)">
+                    <div v-if="clickIndex == index" :class="`btn-item ${clickData[ingIndex-1] == examData[ingIndex-1].answer ? 'right' : 'wrong'}`" @click="toChoose(index, item)">
+                      <span>{{item}}</span>
+                    </div>
+                    <div v-else :class="`btn-item ${index + 1 == examData[ingIndex-1].answer ? 'right' : ''}`" @click="toChoose(index, item)">
+                      <span>{{item}}</span>
+                    </div>
+                  </template>
+                  <div v-else class="btn-item" @click="toChoose(index)">
                     <span>{{item}}</span>
                   </div>
                 </template>
-                <div v-else class="btn-item" @click="toChoose(index)">
-                  <span>{{item}}</span>
+              </div>
+            </div>
+            <div class="bottom-btn">
+              <template v-if="showNext">
+                <div class="btn btn-blue" @click="toNext">
+                  <div class="btn-inner">
+                    <div class="btn-txt">下一题</div>
+                  </div>
+                </div>
+              </template>
+              <template v-if="isEnd">
+                <div class="btn btn-blue">
+                  <div class="btn-inner">
+                    <div class="btn-txt">我要学习</div>
+                  </div>
+                </div>
+                <div class="btn btn-green">
+                  <div class="btn-inner">
+                    <div class="btn-txt">我要考试</div>
+                  </div>
                 </div>
               </template>
             </div>
-          </div>
-          <div class="bottom-btn">
-            <template v-if="showNext">
-              <div class="btn btn-blue" @click="toNext">
-                <div class="btn-inner">
-                  <div class="btn-txt">下一题</div>
+          </template>
+          <template v-if="isEnd">
+            <div class="top-radius2">
+              <div class="radius-bg">
+                <div class="bg2">
+                  <span><span class="big-txt">{{ingIndex}}</span>/{{examData.length}}</span>
                 </div>
               </div>
-            </template>
-            <template v-if="isEnd">
-              <div class="btn btn-blue">
-                <div class="btn-inner">
-                  <div class="btn-txt">我要学习</div>
-                </div>
-              </div>
-              <div class="btn btn-green">
-                <div class="btn-inner">
-                  <div class="btn-txt">我要考试</div>
-                </div>
-              </div>
-            </template>
-          </div>
+            </div>
+            <div class="con-area">
+              <div>最后得分: {{score}}分</div>
+            </div>
+          </template>
         </div>
       </div>
     </div>
@@ -88,7 +101,11 @@ export default {
       ],
       clickIndex: -1,
       clickData: [],
-      showNext: false
+      showNext: false,
+      rightData: [],
+      wrongData: [],
+      score: 0,
+      perscore: 10
     }
   },
   computed: {
@@ -99,8 +116,16 @@ export default {
         let val = parseInt(index) + 1
         this.clickIndex = parseInt(index)
         this.clickData.push(val)
+        let isRight = (val === this.examData[this.ingIndex - 1].answer) ? true : false
+        let valObject = {}
+        p[this.ingIndex] = val
+        if (isRight) {
+          this.rightData.push(valObject)
+        } else {
+          this.wrongData.push(valObject)
+        }
         if (this.ingIndex < this.examData.length) {
-          if (val === this.examData[this.ingIndex - 1].answer) {
+          if (isRight) {
             setTimeout(() => {
               this.ingIndex++
               this.clickIndex = -1
@@ -108,6 +133,9 @@ export default {
           } else {
             this.showNext = true
           }
+        } else {
+          this.isIng = false
+          this.isEnd = true
         }
       }
     },
@@ -162,6 +190,22 @@ export default {
       width:100%;padding-bottom:100%;border-radius:50%;
       background-color:#417bf2;position:relative;
     }
+    .bg2{
+      position:absolute;left:7%;right:7%;top:7%;bottom:7%;border-radius:50%;
+      background-color:#86aeff;color:#fff;
+      display:flex;justify-content: center;align-items: center;
+    }
+    .big-txt{font-size:30px;}
+  }
+
+  .top-radius2{
+    width:42%;position:relative;margin:3% auto 0;
+    .radius-bg{
+      width:100%;padding-bottom:100%;border-radius:50%;
+      background-color:#417bf2;position:relative;
+    }
+    .radius-bg.red{background-color:#ff0000;}
+    .radius-bg.green{background-color:#27db40;}
     .bg2{
       position:absolute;left:7%;right:7%;top:7%;bottom:7%;border-radius:50%;
       background-color:#86aeff;color:#fff;
