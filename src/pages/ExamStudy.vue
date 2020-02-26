@@ -5,25 +5,50 @@
         <div class="page-box">
           <div class="top-radius">
             <div class="radius-bg">
-              <div class="bg2">答题说明</div>
+              <div class="bg2">
+                <span v-if="isIng"><span class="big-txt">{{ingIndex}}</span>/{{examData.length}}</span>
+                <span v-if="isEnd">学习结束</span>
+              </div>
             </div>
           </div>
           <div class="con-area">
-            <div>1.本活动100题，满分100分。</div>
-            <div>2.答题次数不限，多次答题取最高成绩。</div>
-            <div>3.成绩达到90分，则推广人员身份开通成功，如成绩未达到90分，则答题失败，可重新答题。</div>
+            <div>{{ingIndex}}：{{examData[ingIndex-1].title}}</div>
+            <div class="btn-list">
+              <template v-for="(item,index) in examData[ingIndex-1].questions">
+                <template v-if="clickIndex >= 0 && (clickIndex == index ||  examData[ingIndex-1].answer == index + 1)">
+                  <div v-if="clickIndex == index" :class="`btn-item ${clickData[ingIndex-1] == examData[ingIndex-1].answer ? 'right' : 'wrong'}`" @click="toChoose(index, item)">
+                    <span>{{item}}</span>
+                  </div>
+                  <div v-else :class="`btn-item ${index + 1 == examData[ingIndex-1].answer ? 'right' : ''}`" @click="toChoose(index, item)">
+                    <span>{{item}}</span>
+                  </div>
+                </template>
+                <div v-else class="btn-item" @click="toChoose(index)">
+                  <span>{{item}}</span>
+                </div>
+              </template>
+            </div>
           </div>
-          <div  class="bottom-btn">
-            <div class="btn btn-blue">
-              <div class="btn-inner">
-                <div class="btn-txt">我要学习</div>
+          <div class="bottom-btn">
+            <template v-if="showNext">
+              <div class="btn btn-blue" @click="toNext">
+                <div class="btn-inner">
+                  <div class="btn-txt">下一题</div>
+                </div>
               </div>
-            </div>
-            <div class="btn btn-green">
-              <div class="btn-inner">
-                <div class="btn-txt">我要考试</div>
+            </template>
+            <template v-if="isEnd">
+              <div class="btn btn-blue">
+                <div class="btn-inner">
+                  <div class="btn-txt">我要学习</div>
+                </div>
               </div>
-            </div>
+              <div class="btn btn-green">
+                <div class="btn-inner">
+                  <div class="btn-txt">我要考试</div>
+                </div>
+              </div>
+            </template>
           </div>
         </div>
       </div>
@@ -33,7 +58,7 @@
 
 <script>
 import {} from 'vux'
-import ENV from 'env'
+// import ENV from 'env'
 import { User } from '#/storage'
 export default {
   components: {
@@ -41,20 +66,65 @@ export default {
   data () {
     return {
       loginUser: {},
-      query: {}
+      query: {},
+      isIng: true,
+      isEnd: false,
+      ingIndex: 1,
+      total: 0,
+      afterClick: false,
+      examData: [
+        {
+          id: 1,
+          title: '贝叶斯网络是一种模拟人类推理过程中（）关系的不确定性处理模型。',
+          questions: ['主次', '总分', '因果'],
+          answer: 2
+        },
+        {
+          id: 2,
+          title: '世界四大洋中面积最小的是',
+          questions: ['太平洋', '大西洋', '印度洋', '北冰洋'],
+          answer: 4
+        }
+      ],
+      clickIndex: -1,
+      clickData: [],
+      showNext: false
     }
   },
   computed: {
   },
   methods: {
-    toExam () {
-      let params = this.$util.handleAppParams(this.query)
-      this.$router.push({path: '/examStudy', query: params})
+    toChoose (index) {
+      if (!this.clickData[this.ingIndex - 1]) {
+        let val = parseInt(index) + 1
+        this.clickIndex = parseInt(index)
+        this.clickData.push(val)
+        if (this.ingIndex < this.examData.length) {
+          if (val === this.examData[this.ingIndex - 1].answer) {
+            setTimeout(() => {
+              this.ingIndex++
+              this.clickIndex = -1
+            }, 500)
+          } else {
+            this.showNext = true
+          }
+        }
+      }
+    },
+    toNext () {
+      if (this.ingIndex < this.examData.length) {
+        this.ingIndex++
+        this.clickIndex = -1
+        this.showNext = false
+      }
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.query = this.$route.query
+      this.isIng = true
+      this.ingIndex = 1
+      this.isEnd = false
     }
   },
   activated () {
@@ -97,6 +167,7 @@ export default {
       background-color:#86aeff;color:#fff;
       display:flex;justify-content: center;align-items: center;
     }
+    .big-txt{font-size:30px;}
   }
   .con-area{width:85.5%;margin:20px auto 0;text-align:left;font-weight:bold;}
   .bottom-btn{
@@ -114,6 +185,17 @@ export default {
           display:flex;justify-content: center;align-items: center;
         }
       }
+    }
+  }
+
+  .btn-list{
+    margin-top:20px;
+    .btn-item:not(:first-child){margin-top:10px;}
+    .btn-item.right{border-color:#27db40;}
+    .btn-item.wrong{border-color:#ff0000;}
+    .btn-item{
+      width:100%;min-height:30px;border-radius:9px;border:#86aeff 2px solid;
+      padding:0 10px;background-color:#ffb527;color:#fff;box-sizing: border-box;
     }
   }
 }
