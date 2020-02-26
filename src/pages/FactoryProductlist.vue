@@ -34,6 +34,7 @@
                       <div class="t-cell color-999 font14">
                         <div class="clamp1">售价:
                           <span class="color-red" v-if="item.minprice && item.maxprice && item.minprice != '' && item.maxprice != '' && item.minprice != item.maxprice">￥{{item.minprice}}-{{item.maxprice}}</span>
+                          <span class="color-red" v-else-if="item.minprice && item.minprice != ''">￥{{ item.minprice }}</span>
                           <span class="color-red" v-else>￥{{item.price}}</span>
                         </div>
                         <div class="clamp1">
@@ -605,13 +606,13 @@ export default {
             newval = 0
           }
           if (type === 'add') {
-            if (!/^[0-9]*[1-9][0-9]*$/.test(newval)) {
+            if (newval !== 0 && !/^[0-9]*[1-9][0-9]*$/.test(newval)) {
               this.$vux.toast.text('请输入大于0的库存')
               isContinue = false
               return false
             }
           } else {
-            if (!/^-[0-9]*[1-9][0-9]*$/.test(newval)) {
+            if (newval !== 0 && !/^-[0-9]*[1-9][0-9]*$/.test(newval)) {
               this.$vux.toast.text('请输入负数库存')
               isContinue = false
               return false

@@ -163,10 +163,20 @@
                   </div>
                   <div class="t-cell v_middle" style="color:inherit;">
                     <div class="clamp1">{{item.title}}</div>
-                    <div class="font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
+                    <div class="font12 clamp1">
+                      <span class="color-orange">¥</span>
+                      <span class="color-orange" v-if="item.minprice && item.maxprice && item.minprice != item.maxprice">{{ item.minprice }}-{{item.maxprice}}</span>
+                      <span class="color-orange" v-else-if="item.minprice && item.minprice != ''">{{ item.minprice }}</span>
+                      <span class="color-orange" v-else>{{ item.price }}</span>
+                      <span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span>
+                    </div>
                     <div class="font12 clamp1 color-orange" v-if="item.allowcard">允许使用优惠券</div>
                     <template v-else-if="item.salesrebate">
-                      <div class="font12 clamp1 color-orange">销售佣金: ¥{{ item.salesrebate }}</div>
+                      <div class="font12 clamp1 color-orange">
+                        <span>销售佣金: ¥</span>
+                        <span v-if="item.minsalesrebate && item.maxsalesrebate && item.minsalesrebate != item.maxsalesrebate">{{ item.minsalesrebate }}-{{item.maxsalesrebate}}</span>
+                        <span v-else>{{ item.salesrebate }}</span>
+                      </div>
                     </template>
                   </div>
                 </div>

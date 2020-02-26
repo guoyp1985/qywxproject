@@ -8,9 +8,9 @@
     <div class="s-topbanner s-topbanner1">
       <tab class="b-tab" v-model="selectedIndex">
         <tab-item :selected="selectedIndex==0" @on-item-click="toggleTab">全部</tab-item>
-        <tab-item :selected="selectedIndex==1" @on-item-click="toggleTab">待审核</tab-item>
+        <tab-item :selected="selectedIndex==1" @on-item-click="toggleTab">待运营</tab-item>
         <tab-item :selected="selectedIndex==2" @on-item-click="toggleTab">运营中</tab-item>
-        <tab-item :selected="selectedIndex==3" @on-item-click="toggleTab">已完成</tab-item>
+        <!-- <tab-item :selected="selectedIndex==3" @on-item-click="toggleTab">已完成</tab-item> -->
       </tab>
     </div>
     <div ref="scrollContainer" class="s-container s-container1 scroll-container" @scroll="scrollHandle">
