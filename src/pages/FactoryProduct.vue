@@ -84,7 +84,7 @@
           <div class="levelitem">
             <div><span class="bold">推荐人佣金:</span>
               <span v-if="productdata.minsuperrebate && productdata.maxsuperrebate && productdata.minsuperrebate != productdata.maxsuperrebate">￥{{productdata.minsuperrebate}}-{{productdata.maxsuperrebate}}</span>
-              <span v-else>￥{{productdata.newsuperrebate}}</span>
+              <span v-else>￥{{productdata.superrebate}}</span>
               <i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp"></i></div>
           </div>
         </div>
@@ -92,7 +92,7 @@
           <div class="levelitem">
             <div><span class="bold">销售佣金:</span>
               <span v-if="productdata.maxsalesrebate && productdata.minsalesrebate && productdata.minsalesrebate != productdata.maxsalesrebate">￥{{productdata.minsalesrebate}}-{{productdata.maxsalesrebate}}</span>
-              <span v-else>￥{{productdata.newsalesrebate}}</span>
+              <span v-else>￥{{productdata.salesrebate}}</span>
               <i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp1"></i></div>
           </div>
         </div>
