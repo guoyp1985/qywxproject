@@ -29,38 +29,37 @@
                 </template>
               </div>
             </div>
-            <div class="bottom-btn">
-              <template v-if="showNext">
-                <div class="btn btn-blue" @click="toNext">
-                  <div class="btn-inner">
-                    <div class="btn-txt">下一题</div>
-                  </div>
+            <div v-if="showNext" class="bottom-btn">
+              <div class="btn btn-blue" @click="toNext">
+                <div class="btn-inner">
+                  <div class="btn-txt">下一题</div>
                 </div>
-              </template>
-              <template v-if="isEnd">
-                <div class="btn btn-blue">
-                  <div class="btn-inner">
-                    <div class="btn-txt">我要学习</div>
-                  </div>
-                </div>
-                <div class="btn btn-green">
-                  <div class="btn-inner">
-                    <div class="btn-txt">我要考试</div>
-                  </div>
-                </div>
-              </template>
+              </div>
             </div>
           </template>
           <template v-if="isEnd">
             <div class="top-radius2">
-              <div class="radius-bg">
-                <div class="bg2">
-                  <span><span class="big-txt">{{ingIndex}}</span>/{{examData.length}}</span>
-                </div>
+              <div class="radius-bg green" v-if="rightData.length / examData.length >= 0.9">
+                <div class="bg-txt">答题成功</div>
+              </div>
+              <div class="radius-bg red" v-else>
+                <div class="bg-txt">答题失败</div>
               </div>
             </div>
             <div class="con-area">
               <div>最后得分: {{score}}分</div>
+            </div>
+            <div class="bottom-btn">
+              <div class="btn btn-blue" @click="toStudy">
+                <div class="btn-inner">
+                  <div class="btn-txt">继续学习</div>
+                </div>
+              </div>
+              <div class="btn btn-green" @click="toTest">
+                <div class="btn-inner">
+                  <div class="btn-txt">立即考试</div>
+                </div>
+              </div>
             </div>
           </template>
         </div>
@@ -105,7 +104,8 @@ export default {
       rightData: [],
       wrongData: [],
       score: 0,
-      perscore: 10
+      perscore: 10,
+      maxscore: 100
     }
   },
   computed: {
@@ -116,9 +116,12 @@ export default {
         let val = parseInt(index) + 1
         this.clickIndex = parseInt(index)
         this.clickData.push(val)
-        let isRight = (val === this.examData[this.ingIndex - 1].answer) ? true : false
+        let isRight = false
+        if (val === this.examData[this.ingIndex - 1].answer) {
+          isRight = true
+        }
         let valObject = {}
-        p[this.ingIndex] = val
+        valObject[this.ingIndex] = val
         if (isRight) {
           this.rightData.push(valObject)
         } else {
@@ -134,6 +137,7 @@ export default {
             this.showNext = true
           }
         } else {
+          this.score = Math.floor(this.rightData.length * this.perscore)
           this.isIng = false
           this.isEnd = true
         }
@@ -146,6 +150,20 @@ export default {
         this.showNext = false
       }
     },
+    toStudy () {
+      this.isEnd = false
+      this.clickIndex = -1
+      this.clickData = []
+      this.ingIndex = 1
+      this.rightData = []
+      this.wrongData = []
+      this.score = 0
+      this.isIng = true
+    },
+    toTest () {
+      let params = this.$util.handleAppParams(this.query)
+      this.$router.push({path: '/examTest', query: params})
+    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
@@ -153,6 +171,7 @@ export default {
       this.isIng = true
       this.ingIndex = 1
       this.isEnd = false
+      this.perscore = this.maxscore / this.examData.length
     }
   },
   activated () {
@@ -206,12 +225,11 @@ export default {
     }
     .radius-bg.red{background-color:#ff0000;}
     .radius-bg.green{background-color:#27db40;}
-    .bg2{
-      position:absolute;left:7%;right:7%;top:7%;bottom:7%;border-radius:50%;
-      background-color:#86aeff;color:#fff;
+    .bg-txt{
+      position:absolute;left:0;right:0;top:0;bottom:0;border-radius:50%;
+      background-color:#86aeff;color:#fff;font-size:30px;
       display:flex;justify-content: center;align-items: center;
     }
-    .big-txt{font-size:30px;}
   }
   .con-area{width:85.5%;margin:20px auto 0;text-align:left;font-weight:bold;}
   .bottom-btn{
