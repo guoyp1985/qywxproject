@@ -131,6 +131,13 @@
             </div>
           </grid-item>
         </div>
+        <div class="gridlist">
+          <grid-item label="运营大使" :link="{path:'/examHome', query: {fid: loginUser.fid}}" style="position:relative;">
+            <div slot="icon">
+              <i class="al al-yunying"></i>
+            </div>
+          </grid-item>
+        </div>
       </grid>
     </div>
     <group class="list-shadow02 order_list_show posi_r">
@@ -386,6 +393,7 @@ export default {
 .centersales .weui-grids .gridlist:nth-child(7) .weui-grid{background: linear-gradient(#9364f2, #694ba6);}
 .centersales .weui-grids .gridlist:nth-child(8) .weui-grid{background: linear-gradient(#fac45b, #efac2c);}
 .centersales .weui-grids .gridlist:nth-child(9) .weui-grid{background: linear-gradient(#3f9ccc, #3480a8);}
+.centersales .weui-grids .gridlist:nth-child(10) .weui-grid{background: linear-gradient(#86aeff, #417bf2);}
 .centersales .weui-grids .gridlist.disabled .weui-grid{background: linear-gradient(#b9b9b9, #afafaf);}
 .listitem.disabled {position:relative;background-color:#d8d8d8;}
 

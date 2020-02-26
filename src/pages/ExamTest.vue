@@ -168,6 +168,10 @@ export default {
       }
     },
     toStudy () {
+      let params = this.$util.handleAppParams(this.query)
+      this.$router.push({path: '/examStudy', query: params})
+    },
+    toTest () {
       this.isEnd = false
       this.isSuccess = false
       this.clickIndex = -1
@@ -177,10 +181,6 @@ export default {
       this.wrongData = []
       this.score = 0
       this.isIng = true
-    },
-    toTest () {
-      let params = this.$util.handleAppParams(this.query)
-      this.$router.push({path: '/examTest', query: params})
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
