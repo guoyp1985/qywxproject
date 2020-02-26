@@ -39,7 +39,7 @@
           </template>
           <template v-if="isEnd">
             <div class="top-radius2">
-              <div class="radius-bg green" v-if="rightData.length / examData.length >= 0.9">
+              <div class="radius-bg green" v-if="isSuccess">
                 <div class="bg-txt">答题成功</div>
               </div>
               <div class="radius-bg red" v-else>
@@ -105,7 +105,8 @@ export default {
       wrongData: [],
       score: 0,
       perscore: 10,
-      maxscore: 100
+      maxscore: 100,
+      isSuccess: false
     }
   },
   computed: {
@@ -137,9 +138,16 @@ export default {
             this.showNext = true
           }
         } else {
-          this.score = Math.floor(this.rightData.length * this.perscore)
-          this.isIng = false
-          this.isEnd = true
+          setTimeout(() => {
+            this.score = Math.floor(this.rightData.length * this.perscore)
+            this.isIng = false
+            this.isEnd = true
+            if (this.rightData.length / this.examData.length >= 0.9) {
+              this.isSuccess = true
+            } else {
+              this.isSuccess = false
+            }
+          }, 500)
         }
       }
     },
@@ -152,6 +160,7 @@ export default {
     },
     toStudy () {
       this.isEnd = false
+      this.isSuccess = false
       this.clickIndex = -1
       this.clickData = []
       this.ingIndex = 1
@@ -171,6 +180,7 @@ export default {
       this.isIng = true
       this.ingIndex = 1
       this.isEnd = false
+      this.isSuccess = false
       this.perscore = this.maxscore / this.examData.length
     }
   },
