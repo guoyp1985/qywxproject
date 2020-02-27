@@ -292,7 +292,7 @@ export default {
 */
 .exam-study-page{
   width:100%;position:relative;
-  .page-bg{width:100%;padding-bottom:212.2%;position:relative;}
+  .page-bg{width:100%;padding-bottom:216.5%;position:relative;}
   .page-inner{
     position:absolute;left:0;top:0;bottom:0;right:0;overflow-y:auto;
     background-image:url('../assets/images/exam_bg.png');
