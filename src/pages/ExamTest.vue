@@ -21,7 +21,7 @@
                         <span class="flex_cell">{{item.title}}</span>
                         <span class="al al-gou font14"></span>
                       </div>
-                      <div v-else class="btn-item" @click="toChoose(index)">
+                      <div v-else class="btn-item clicked" @click="toChoose(index)">
                         <span class="flex_cell">{{item.title}}</span>
                         <span class="al al-gou font14"></span>
                       </div>
@@ -360,15 +360,16 @@ export default {
     .btn-item:not(:first-child){margin-top:10px;}
     .btn-item.right{border-color:#27db40;}
     .btn-item.wrong{border-color:#ff0000;}
+    .btn-item.clicked{background-color:#27db40;}
     .btn-item{
-      width:100%;min-height:30px;border-radius:9px;border:#86aeff 2px solid;
-      display:flex;
-      padding:0 10px;background-color:#ffb527;color:#fff;box-sizing: border-box;
+      width:100%;min-height:40px;border-radius:9px;border:#86aeff 2px solid;
+      display:flex;justify-content: flex-start;align-items: center;
+      padding:5px 10px;background-color:#ffb527;color:#fff;box-sizing: border-box;
     }
   }
 
   .btn-submit{
-    width:50%;height:30px;border-radius:9px;
+    width:50%;height:40px;border-radius:9px;
     background-color:#417bf2;color:#fff;
     display:flex;justify-content: center;align-items: center;
   }
