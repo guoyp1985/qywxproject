@@ -28,7 +28,12 @@
                   </div>
                   <div class="t-cell v_middle">
                     <div class="clamp1">{{selectedProduct.title}}</div>
-                    <div class="mt5 font12 clamp1"><span class="color-orange">{{ $t('RMB') }}{{selectedProduct.price}}</span><span class="ml10 color-gray">{{ $t('Storage') }}{{selectedProduct.storage}}</span></div>
+                    <div class="mt5 font12 clamp1">
+                      <!-- <span class="color-orange">{{ $t('RMB') }}{{selectedProduct.price}}</span> -->
+                      <span class="color-orange" v-if="selectedProduct.minprice && selectedProduct.maxprice && selectedProduct.minprice != selectedProduct.maxprice">{{ $t('RMB') }}{{ selectedProduct.minprice }}-{{selectedProduct.maxprice}}</span>
+                      <span class="color-orange" v-else-if="selectedProduct.minprice && selectedProduct.minprice != ''">{{ $t('RMB') }}{{ selectedProduct.minprice }}</span>
+                      <span class="color-orange" v-else>{{ $t('RMB') }}{{ selectedProduct.price }}</span>
+                      <span class="ml10 color-gray">{{ $t('Storage') }}{{selectedProduct.storage}}</span></div>
                   </div>
                   <div class="t-cell align_center v_middle" style="width:60px;" v-if="!query.id">
                     <div class="qbtn color-red btnchange" style="border:#ff3b30 1px solid;line-height:1;" @click="selectevent">修改</div>
@@ -462,6 +467,8 @@ export default {
     radioclick (data, index) {
       if (data.checked) {
         this.checkedProduct = data
+        console.log('=========')
+        console.log(this.checkedProduct)
       } else {
         this.checkedProduct = null
       }
