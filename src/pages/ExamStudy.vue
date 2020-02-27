@@ -237,6 +237,7 @@ export default {
       this.$http.get(`${ENV.BokaApi}/api/examination/getlist`, {
         params: {type: 'rand'}
       }).then((res) => {
+        this.$vux.loading.hide()
         let data = res.data
         let retdata = data.data ? data.data : data
         for (let i = 0; i < retdata.length; i++) {
@@ -270,6 +271,7 @@ export default {
       this.isEnd = false
       this.isSuccess = false
       this.isDone = false
+      this.$vux.loading.show()
       this.getData()
     }
   },

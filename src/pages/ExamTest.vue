@@ -26,9 +26,6 @@
                         <span class="al al-gou font14"></span>
                       </div>
                     </template>
-                    <div v-else-if="isDone && examData[ingIndex-1].clicked && examData[ingIndex-1].answerObject[index+1]" class="btn-item right" @click="toChoose(index)">
-                      <span class="flex_cell">{{item.title}}</span>
-                    </div>
                     <div v-else class="btn-item" @click="toChoose(index)">
                       <span class="flex_cell">{{item.title}}</span>
                     </div>
@@ -37,9 +34,6 @@
                     <div v-if="item.clicked" :class="`btn-item ${(index+1) == examData[ingIndex-1].answer ? 'right' : 'wrong'}`" @click="toChoose(index)">
                       <span class="flex_cell">{{item.title}}</span>
                       <span v-if="examData[ingIndex-1].maxselect" class="al al-gou font14"></span>
-                    </div>
-                    <div v-else-if="examData[ingIndex-1].clicked && (index + 1) == examData[ingIndex-1].answer" class="btn-item right" @click="toChoose(index)">
-                      <span class="flex_cell">{{item.title}}</span>
                     </div>
                     <div v-else class="btn-item" @click="toChoose(index)">
                       <span class="flex_cell">{{item.title}}</span>
@@ -243,6 +237,7 @@ export default {
       this.$http.get(`${ENV.BokaApi}/api/examination/getlist`, {
         params: {type: 'rand'}
       }).then((res) => {
+        this.$vux.loading.hide()
         let data = res.data
         let retdata = data.data ? data.data : data
         for (let i = 0; i < retdata.length; i++) {
@@ -276,6 +271,7 @@ export default {
       this.isEnd = false
       this.isSuccess = false
       this.isDone = false
+      this.$vux.loading.show()
       this.getData()
     }
   },
