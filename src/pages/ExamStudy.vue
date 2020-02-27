@@ -352,8 +352,8 @@ export default {
   .btn-list{
     margin-top:20px;
     .btn-item:not(:first-child){margin-top:10px;}
-    .btn-item.right{border-color:#27db40;}
-    .btn-item.wrong{border-color:#ff0000;}
+    .btn-item.right{border-color:#27db40;background-color:#27db40;}
+    .btn-item.wrong{border-color:#ff0000;background-color:#ff0000;}
     .btn-item.clicked{background-color:#27db40;}
     .btn-item{
       width:100%;min-height:40px;border-radius:9px;border:#86aeff 2px solid;
