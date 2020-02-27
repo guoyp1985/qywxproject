@@ -50,7 +50,7 @@
               <div class="mt20 flex_center" v-if="examData[ingIndex-1].maxselect">
                 <div class="btn-submit" @click="subEvent">确定</div>
               </div>
-              <div v-if="showNext" class="bottom-btn next">
+              <div v-if="showNext" class="bottom-btn">
                 <div class="btn btn-blue" @click="toNext">
                   <div class="btn-inner">
                     <div class="btn-txt">下一题</div>
@@ -71,7 +71,7 @@
             <div class="con-area">
               <div class="flex_center">最后得分: {{score}}分</div>
             </div>
-            <div class="bottom-btn fixed">
+            <div class="bottom-btn">
               <div class="btn btn-blue" @click="toStudy">
                 <div class="btn-inner">
                   <div class="btn-txt">继续学习</div>
@@ -333,9 +333,8 @@ export default {
     }
   }
   .con-area{width:85.5%;margin:20px auto 0;text-align:left;font-weight:bold;}
-  .bottom-btn.fixed{position:absolute;left:6.5%;right:6.5%;bottom:5.3%;}
-  .bottom-btn.next{margin-top:40px;}
   .bottom-btn{
+    margin-top:40px;
     .btn-blue{background-color:#417bf2;}
     .btn-green{background-color:#27db40;}
     .btn:not(:first-child){margin-top:10px;}
