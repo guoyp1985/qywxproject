@@ -81,9 +81,8 @@ export default {
       this.showContainer1 = true
       this.showContainer2 = false
       let shareParams = {
-        data: '推广大使',
-        module: 'factory',
-        moduleid: this.loginUser.fid,
+        title: '推广大使',
+        desc: '邀请你成为推广大使',
         link: `${ENV.Host}/#/examHome?share_uid=${this.loginUser.uid}`
       }
       if (this.query.share_uid) {
