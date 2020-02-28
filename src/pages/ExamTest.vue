@@ -67,7 +67,7 @@
             </div>
             <div class="bottom-btn">
               <template v-if="isSuccess">
-                <div class="btn btn-blue">
+                <div class="btn btn-blue" @click="toSuccess">
                   <div class="btn-inner">
                     <div class="btn-txt">开启推广之路</div>
                   </div>
@@ -162,6 +162,13 @@ export default {
           this.clearStatus(this.ingIndex - 1)
           if (this.rightData.length / this.examData.length >= 0.9) {
             this.isSuccess = true
+            let params = {}
+            if (this.query.share_uid) {
+              params.shareuid = this.query.share_uid
+            }
+            this.$http.get(`${ENV.BokaApi}/api/salesman/add`, {
+              params: params
+            })
           } else {
             this.isSuccess = false
           }
@@ -215,6 +222,13 @@ export default {
         this.clickIndex = -1
         this.showNext = false
         this.clearStatus(this.ingIndex - 2)
+      }
+    },
+    toSuccess () {
+      if (this.query.fromapp === 'factory') {
+        this.$wechat.miniProgram.navigateTo({url: `/pages/mark`})
+      } else {
+        this.$router.push('/centerFactory')
       }
     },
     toStudy () {
@@ -334,7 +348,7 @@ export default {
   }
   .con-area{width:85.5%;margin:20px auto 0;text-align:left;font-weight:bold;}
   .bottom-btn{
-    margin-top:40px;
+    width:87%;margin:40px auto 0;
     .btn-blue{background-color:#417bf2;}
     .btn-green{background-color:#27db40;}
     .btn:not(:first-child){margin-top:10px;}
