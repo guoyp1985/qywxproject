@@ -163,12 +163,10 @@ export default {
           if (this.rightData.length / this.examData.length >= 0.9) {
             this.isSuccess = true
             let params = {}
-            if (this.query.share_uid) {
-              params.shareuid = this.query.share_uid
+            if (this.query.regwid) {
+              params.shareuid = this.query.regwid
             }
-            this.$http.get(`${ENV.BokaApi}/api/salesman/add`, {
-              params: params
-            })
+            this.$http.post(`${ENV.BokaApi}/api/salesman/add`, params)
           } else {
             this.isSuccess = false
           }
@@ -226,7 +224,7 @@ export default {
     },
     toSuccess () {
       if (this.query.fromapp === 'factory') {
-        this.$wechat.miniProgram.navigateTo({url: `/pages/mark`})
+        this.$util.routerMiniUrl(this.query)
       } else {
         this.$router.push('/centerFactory')
       }
