@@ -46,7 +46,7 @@
 
 <script>
 import {} from 'vux'
-// import ENV from 'env'
+import ENV from 'env'
 import { User } from '#/storage'
 export default {
   components: {
@@ -80,6 +80,15 @@ export default {
       this.query = this.$route.query
       this.showContainer1 = true
       this.showContainer2 = false
+      let shareParams = {
+        data: '推广答题',
+        link: `${ENV.Host}/#/examHome?share_uid=${this.loginUser.uid}`
+      }
+      if (this.query.share_uid) {
+        shareParams.link = `${shareParams.link}&lastshareuid=${this.query.share_uid}`
+        shareParams.lastshareuid = this.query.share_uid
+      }
+      this.$util.handleWxShare(shareParams)
     }
   },
   activated () {
