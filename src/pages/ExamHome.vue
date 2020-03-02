@@ -46,7 +46,7 @@
 
 <script>
 import {} from 'vux'
-// import ENV from 'env'
+import ENV from 'env'
 import { User } from '#/storage'
 export default {
   components: {
@@ -80,6 +80,16 @@ export default {
       this.query = this.$route.query
       this.showContainer1 = true
       this.showContainer2 = false
+      let shareParams = {
+        title: '推广大使',
+        desc: '邀请你成为推广大使',
+        link: `${ENV.Host}/#/examHome?share_uid=${this.loginUser.uid}`
+      }
+      if (this.query.share_uid) {
+        shareParams.link = `${shareParams.link}&lastshareuid=${this.query.share_uid}`
+        shareParams.lastshareuid = this.query.share_uid
+      }
+      this.$util.handleWxShare(shareParams)
     }
   },
   activated () {
@@ -91,7 +101,7 @@ export default {
 <style lang="less">
 .exam-home-page{
   width:100%;position:relative;
-  .page-bg{width:100%;padding-bottom:212.2%;position:relative;}
+  .page-bg{width:100%;padding-bottom:216.5%;position:relative;}
   .page-inner{
     position:absolute;left:0;top:0;bottom:0;right:0;overflow-y:auto;
     background-image:url('../assets/images/exam_bg.png');
