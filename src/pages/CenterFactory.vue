@@ -14,6 +14,9 @@
           :classData="classData"
           :productClass="productClass"
           :classTitle="classTitle"
+          :identityArr="identityArr"
+          :factoryIdentity="factoryIdentity"
+          :identityTitle="identityTitle"
           :submitData="submitData"
           :tradeData="tradeData"
           @clickPhoto="afterUploadPhoto"
@@ -53,10 +56,17 @@ export default {
       WeixinQrcode: ENV.WeixinQrcode,
       messages: 0,
       endTime: '',
-      submitkey: { title: '', mobile: '', company: '', licensephoto: '', licensecode: '', superiorrate: '20', salesrate: '80' },
+      submitkey: { title: '', mobile: '', company: '', licensephoto: '', licensecode: '', superiorrate: '20', salesrate: '80', identity: '' },
       submitData: {},
       productClass: [],
       classTitle: '',
+      identityArr: [
+        {id: 1, title: '社群团队'},
+        {id: 2, title: '供应链'},
+        {id: 3, title: '生产厂家'}
+      ],
+      factoryIdentity: [],
+      identityTitle: '',
       tradeData: []
     }
   },
@@ -84,6 +94,7 @@ export default {
           self.classTitle = classStr.join(',')
         }
       }
+      console.log(this.productClass)
     },
     afterApply (data) {
       delete this.factoryInfo.id
@@ -104,12 +115,32 @@ export default {
           self.showCenter = true
           if (self.loginUser.factoryinfo) {
             self.factoryInfo = self.loginUser.factoryinfo
+            self.factoryInfo.moderate = 1
             self.endTime = new Time(self.factoryInfo.endtime * 1000).dateFormat('yyyy-MM-dd')
             let photoArr = [self.factoryInfo.photo]
             self.factoryInfo.photoArr = self.$util.previewerImgdata(photoArr)
             for (let key in self.submitkey) {
               self.submitData[key] = self.factoryInfo[key]
             }
+            self.factoryIdentity = []
+            if (self.factoryInfo.identity && self.$util.trim(self.factoryInfo.identity) !== '') {
+              let iStr = []
+              let idarr = self.factoryInfo.identity.split(',')
+              for (let i = 0; i < idarr.length; i++) {
+                self.factoryIdentity.push(parseInt(idarr[i]))
+                for (let j = 0; j < self.identityArr.length; j++) {
+                  if (parseInt(idarr[i]) === self.identityArr[j].id) {
+                    iStr.push(self.identityArr[j].title)
+                    break
+                  }
+                }
+              }
+              if (iStr.length) {
+                self.identityTitle = iStr.join(',')
+              }
+            }
+            console.log('厂家身份')
+            console.log(self.factoryIdentity)
           } else {
             self.submitData = self.submitkey
           }

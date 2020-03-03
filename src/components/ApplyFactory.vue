@@ -57,6 +57,7 @@
             </div>
           </div>
         </div>
+        <!--
         <div class="form-item bg-white fg b-top">
           <div class="t-table">
             <div class="t-cell title-cell w80 font14 v_middle">营业执照<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
@@ -102,6 +103,7 @@
             </div>
           </div>
         </div>
+      -->
         <!--
         <div class="form-item fg bg-white b-top b-bottom">
           <div class="t-table">
@@ -166,6 +168,27 @@
         <template v-if="factoryInfo && factoryInfo.moderate == 0">
           <div class="form-item fg bg-white b-top b-bottom mb5">
             <div class="t-table">
+              <div class="t-cell title-cell font14 v_middle" style="width:100px;">身份<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
+              <div class="t-cell input-cell v_middle flex_table" style="position:relative;">{{identityTitle}}</div>
+            </div>
+          </div>
+        </template>
+        <template v-else>
+          <div class="form-item fg bg-white b-top b-bottom required">
+            <div class="pb10">请选择您的身份<span class="color-gray">(可多选)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+            <checker
+            class="x-checker"
+            type="checkbox"
+            v-model="fIdentity"
+            default-item-class="ck-item"
+            selected-item-class="ck-item-selected">
+              <checker-item class="border1px color-gray" v-for="(item, index) in identityArr" :key="index" :value="item.id">{{ item.title }}</checker-item>
+            </checker>
+          </div>
+        </template>
+        <template v-if="factoryInfo && factoryInfo.moderate == 0">
+          <div class="form-item fg bg-white b-top b-bottom mb5">
+            <div class="t-table">
               <div class="t-cell title-cell font14 v_middle" style="width:100px;">经营产品<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
               <div class="t-cell input-cell v_middle flex_table" style="position:relative;">{{classTitle}}</div>
             </div>
@@ -187,12 +210,15 @@
         </template>
       </form>
     </div>
-    <!-- <div class="s-bottom flex_center bg-orange color-white" @click="saveEvent">{{ $t('Submit') }}</div> -->
     <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
       <div v-if="factoryInfo && factoryInfo.id && factoryInfo.moderate == 0" class="flex_cell flex_center btn-bottom-red disable">审核中...</div>
       <template v-else>
-        <div :class="`flex_cell flex_center btn-bottom-red ${this.flags ? 'disable' : ''}`" @click="saveEvent">提交申请</div>
-        <div :class="`flex_cell flex_center btn-bottom-green ${this.flags ? 'disable' : ''}`" @click="fastEvent">快速注册</div>
+        <div class="flex_cell flex_center">
+          <div style="width:85%;" :class="`flex_center btn-bottom-red ${this.flags ? 'disable' : ''}`" @click="saveEvent">提交申请</div>
+        </div>
+        <div class="flex_cell flex_center">
+          <div style="width:85%;" :class="`flex_center btn-bottom-orange`" @click="fastEvent">快速注册</div>
+        </div>
       </template>
     </div>
     <div v-if="showTip" class="auto-modal flex_center">
@@ -230,10 +256,10 @@
         <div class="padding10">
           <div class="flex_center">
             <div class="flex_cell flex_center">
-              <div @click="closeTip" class="bg-gray color-white" style="width:80%;height:35px;border-radius:10px;">取消</div>
+              <div @click="closeTip" class="flex_center bg-gray color-white" style="width:80%;height:35px;border-radius:10px;">取消</div>
             </div>
             <div class="flex_cell flex_center">
-              <div @click="toPay" class="bg-green color-white" style="width:80%;height:35px;border-radius:10px;">去支付</div>
+              <div @click="toPay" class="flex_center bg-green color-white" style="width:80%;height:35px;border-radius:10px;">去支付</div>
             </div>
           </div>
         </div>
@@ -286,7 +312,19 @@ export default {
       type: Array,
       default: []
     },
+    identityArr: {
+      type: Array,
+      default: []
+    },
     classTitle: {
+      type: String,
+      default: ''
+    },
+    factoryIdentity: {
+      type: Array,
+      default: []
+    },
+    identityTitle: {
       type: String,
       default: ''
     },
@@ -302,6 +340,8 @@ export default {
     Group, XInput, Popup, Checker, Datetime, CheckerItem, CheckIcon, XTextarea
   },
   data () {
+    let fIdentity = this.factoryIdentity
+    let curfid = this.factoryInfo.id
     return {
       query: {},
       flags: null,
@@ -316,15 +356,17 @@ export default {
       photoarr: [],
       maxnum: 1,
       showTip: false,
-      fid: 0,
+      fid: curfid,
       getCodeIng: false,
-      requireddata: { title: '', company: '', licensephoto: '', licensecode: '' },
+      requireddata: {title: '', company: ''},
       isLoadPhoto: false,
       showTop: false,
       showMonthlyCommission: false,
       shareUser: {},
       showPay: false,
-      showQrcode: false
+      showQrcode: false,
+      submitIng: false,
+      fIdentity: fIdentity
     }
   },
   watch: {
@@ -430,14 +472,38 @@ export default {
       }
     },
     fastEvent () {
-      this.showPay = true
+      if (this.fid) {
+        this.showPay = true
+      } else {
+        this.ajaxSave((data) => {
+          this.$vux.loading.hide()
+          if (data.flag) {
+            this.showPay = true
+          } else {
+            this.$vux.toast.show({
+              text: data.error,
+              type: 'warn',
+              time: this.$util.delay(data.error)
+            })
+          }
+        })
+      }
     },
     toPay () {
-      if (this.query.fromapp === 'factory') {
-        this.$wechat.miniProgram.redirectTo({url: `/pages/pay`})
-      } else {
-        this.$router.push('/pay')
-      }
+      this.$http.post(`${ENV.BokaApi}/api/factory/FactoryfeePay`, {
+        fi: this.fid
+      }).then(res => {
+        const data = res.data
+        if (data.flag) {
+          location.replace(`${ENV.Host}/#/pay?id=${data.orderid}&module=payorders`)
+        } else {
+          this.$vux.toast.show({
+            text: data.error,
+            type: 'warn',
+            time: this.$util.delay(data.error)
+          })
+        }
+      })
     },
     closeQrcode () {
       this.showQrcode = false
@@ -445,8 +511,9 @@ export default {
     clickChat () {
       this.showQrcode = true
     },
-    saveEvent () {
+    ajaxSave (callback) {
       const self = this
+      if (this.submitIng) return false
       let postData = self.submitData
       console.log(this.yzmcode)
       console.log(postData)
@@ -455,6 +522,11 @@ export default {
       } else {
         postData.productclass = self.factoryInfo.productclass
       }
+      if (self.fIdentity) {
+        postData.identity = self.fIdentity.join(',')
+      } else {
+        postData.identity = self.factoryInfo.identity
+      }
       let validateData = []
       for (let key in self.requireddata) {
         let v = {}
@@ -462,6 +534,10 @@ export default {
         validateData.push(v)
       }
       if (postData.productclass.length === 0 || !postData.productclass) {
+        self.$vux.toast.text('必填项不能为空', 'middle')
+        return false
+      }
+      if (postData.identity.length === 0 || !postData.identity) {
         self.$vux.toast.text('必填项不能为空', 'middle')
         return false
       }
@@ -515,18 +591,32 @@ export default {
       if (self.query.share_fid) {
         postData.fid = self.query.share_fid
       }
+      this.submitIng = true
       self.$http.post(`${ENV.BokaApi}/api/factory/applyFactory`, postData).then(res => {
         let data = res.data
+        this.count = TimeCount
+        this.message = '获取验证码'
+        this.getCodeIng = false
+        clearInterval(this.intervalId)
+        if (data.flag) {
+          this.fid = data.data.id
+        }
+        this.submitIng = false
+        callback && callback(data)
+      })
+    },
+    saveEvent (type) {
+      this.ajaxSave((data) => {
         let error = data.flag === 1 ? '申请成功' : data.error
-        self.$vux.loading.hide()
-        self.$vux.toast.show({
+        this.$vux.loading.hide()
+        this.$vux.toast.show({
           text: error,
           type: (data.flag !== 1 ? 'warn' : 'success'),
-          time: self.$util.delay(error),
+          time: this.$util.delay(error),
           onHide: () => {
             if (data.flag === 1) {
-              self.initCode()
-              self.$emit('afterApply', data.data)
+              this.initCode()
+              this.$emit('afterApply', data.data)
             }
           }
         })
@@ -572,59 +662,6 @@ export default {
         }
       }
     },
-    handleProductClass () {
-      const self = this
-      self.productClass = []
-      if (self.factoryInfo.productclass && self.$util.trim(self.factoryInfo.productclass) !== '') {
-        let classStr = []
-        let idarr = self.factoryInfo.productclass.split(',')
-        for (let i = 0; i < idarr.length; i++) {
-          self.productClass.push(parseInt(idarr[i]))
-          for (let j = 0; j < self.classData.length; j++) {
-            if (parseInt(idarr[i]) === self.classData[j].id) {
-              classStr.push(self.classData[j].title)
-              break
-            }
-          }
-        }
-        if (classStr.length) {
-          self.classTitle = classStr.join(',')
-        }
-      }
-    },
-    getData () {
-      const self = this
-      self.$vux.loading.show()
-      self.$http.get(`${ENV.BokaApi}/api/factory/info`,
-        { params: { } }
-      ).then(function (res) {
-        self.$vux.loading.hide()
-        let data = res.data
-        if (data.flag) {
-          let retdata = data.data ? data.data : data
-          console.log('in getData')
-          console.log(retdata)
-          self.factoryInfo = retdata
-          self.photoarr = []
-          if (retdata.licensephoto && self.$util.trim(retdata.licensephoto) !== '') {
-            self.photoarr = retdata.licensephoto.split(',')
-          }
-          for (let key in self.submitData) {
-            self.submitData[key] = retdata[key]
-          }
-        }
-        return self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
-          { params: { limit: 100 } }
-        )
-      }).then(function (res) {
-        if (res) {
-          let data = res.data
-          data = data.data ? data.data : data
-          self.classData = data
-          self.handleProductClass()
-        }
-      })
-    },
     initCode () {
       this.count = TimeCount
       this.message = '获取验证码'
@@ -657,6 +694,7 @@ export default {
 <style lang="less">
 .apply-factory-page{
   background-color:#EFF2F3;
+  .s-container{padding-bottom:65px;}
   .fg{margin-top:5px;}
   .b-border{border-bottom:1px solid #e5e5e5;}
   .b-top{border-top:1px solid #e5e5e5;}
@@ -686,6 +724,9 @@ export default {
   }
   .x-checker .border1px.ck-item-selected:after{border:1px solid #ea3a3a;}
   .vux-check-icon > span{color:#666;display: inline-block;vertical-align: bottom;line-height: 19px;}
-  .fixed-chat{width:50px;height:50px;border-radius:50%;}
+  .fixed-chat{
+    width:50px;height:50px;border-radius:50%;
+    position:fixed;right:10px;bottom:60px;
+  }
 }
 </style>
