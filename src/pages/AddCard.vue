@@ -94,7 +94,11 @@
                   </div>
                   <div class="t-cell v_middle">
                     <div class="clamp1">{{selectedProduct.title}}</div>
-                    <div class="mt5 font12 clamp1"><span class="color-orange">{{ $t('RMB') }}{{selectedProduct.price}}</span><span class="ml10 color-gray">{{ $t('Storage') }}{{selectedProduct.storage}}</span></div>
+                    <div class="mt5 font12 clamp1">
+                      <span class="color-orange" v-if="selectedProduct.minprice && selectedProduct.maxprice && selectedProduct.minprice != selectedProduct.maxprice">{{ $t('RMB') }}{{ selectedProduct.minprice }}-{{selectedProduct.maxprice}}</span>
+                      <span class="color-orange" v-else-if="selectedProduct.minprice && selectedProduct.minprice != ''">{{ $t('RMB') }}{{ selectedProduct.minprice }}</span>
+                      <span class="color-orange" v-else>{{ $t('RMB') }}{{ selectedProduct.price }}</span>
+                      <span class="ml10 color-gray">{{ $t('Storage') }}{{selectedProduct.storage}}</span></div>
                   </div>
                   <div class="t-cell align_center v_middle" style="width:60px;">
                     <div class="qbtn color-red btnchange" style="border:#ff3b30 1px solid;line-height:1;" @click="selectevent">修改</div>
@@ -146,10 +150,20 @@
                   </div>
                   <div class="t-cell v_middle" style="color:inherit;">
                     <div class="clamp1">{{item.title}}</div>
-                    <div class="font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
+                    <div class="font12 clamp1">
+                      <span class="color-orange">¥</span>
+                      <span class="color-orange" v-if="item.minprice && item.maxprice && item.minprice != item.maxprice">{{ item.minprice }}-{{item.maxprice}}</span>
+                      <span class="color-orange" v-else-if="item.minprice && item.minprice != ''">{{ item.minprice }}</span>
+                      <span class="color-orange" v-else>{{ item.price }}</span>
+                      <span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span>
+                    </div>
                     <div class="font12 clamp1 color-orange" v-if="item.allowcard">允许使用优惠券</div>
                     <template v-else-if="item.salesrebate">
-                      <div class="font12 clamp1 color-orange">销售佣金: ¥{{ item.salesrebate }}</div>
+                      <div class="font12 clamp1 color-orange">
+                        <span>销售佣金: ¥</span>
+                        <span v-if="item.minsalesrebate && item.maxsalesrebate && item.minsalesrebate != item.maxsalesrebate">{{ item.minsalesrebate }}-{{item.maxsalesrebate}}</span>
+                        <span v-else>{{ item.salesrebate }}</span>
+                      </div>
                     </template>
                   </div>
                 </div>
