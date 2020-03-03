@@ -256,7 +256,7 @@
         <div class="padding10">
           <div class="flex_center">
             <div class="flex_cell flex_center">
-              <div @click="closeTip" class="flex_center bg-gray color-white" style="width:80%;height:35px;border-radius:10px;">取消</div>
+              <div @click="closePay" class="flex_center bg-gray color-white" style="width:80%;height:35px;border-radius:10px;">取消</div>
             </div>
             <div class="flex_cell flex_center">
               <div @click="toPay" class="flex_center bg-green color-white" style="width:80%;height:35px;border-radius:10px;">去支付</div>
@@ -489,12 +489,16 @@ export default {
         })
       }
     },
+    closePay () {
+      this.showPay = false
+    },
     toPay () {
       this.$http.post(`${ENV.BokaApi}/api/factory/FactoryfeePay`, {
         fi: this.fid
       }).then(res => {
         const data = res.data
         if (data.flag) {
+          this.showPay = false
           location.replace(`${ENV.Host}/#/pay?id=${data.orderid}&module=payorders&type=applyfactory`)
         } else {
           this.$vux.toast.show({
