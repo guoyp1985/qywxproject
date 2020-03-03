@@ -495,7 +495,7 @@ export default {
       }).then(res => {
         const data = res.data
         if (data.flag) {
-          location.replace(`${ENV.Host}/#/pay?id=${data.orderid}&module=payorders`)
+          location.replace(`${ENV.Host}/#/pay?id=${data.orderid}&module=payorders&type=applyfactory`)
         } else {
           this.$vux.toast.show({
             text: data.error,
