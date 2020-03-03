@@ -163,8 +163,8 @@ export default {
           if (this.rightData.length / this.examData.length >= 0.9) {
             this.isSuccess = true
             let params = {}
-            if (this.query.regwid) {
-              params.shareuid = this.query.regwid
+            if (this.query.appuid) {
+              params.shareuid = this.query.appuid
             }
             this.$http.post(`${ENV.BokaApi}/api/salesman/add`, params)
           } else {

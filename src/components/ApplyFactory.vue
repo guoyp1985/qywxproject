@@ -102,6 +102,38 @@
             </div>
           </div>
         </div>
+        <!--
+        <div class="form-item fg bg-white b-top b-bottom">
+          <div class="t-table">
+            <div class="t-cell title-cell font14 v_middle" style="width:100px;">公众号名称<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
+            <div class="t-cell input-cell v_middle flex_right" style="position:relative;">
+              <template v-if="factoryInfo && factoryInfo.moderate == 0">{{factoryInfo.licensecode}}</template>
+              <x-input v-else style="padding-right:5px;" v-model="submitData.licensecode" type="text" class="input" placeholder="请填写公众号名称，若无则填无" ></x-input>
+            </div>
+          </div>
+        </div>
+        <div class="form-item fg bg-white b-top b-bottom">
+          <div class="t-table">
+            <div class="t-cell title-cell font14 v_middle" style="width:100px;">有无供应链资源<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
+            <div class="t-cell input-cell v_middle flex_right" style="position:relative;">
+              <template v-if="factoryInfo && factoryInfo.moderate == 0">{{factoryInfo.licensecode}}</template>
+              <select>
+                <option value="有">有</option>
+                <option value="无">无</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="form-item fg bg-white b-top b-bottom">
+          <div class="t-table">
+            <div class="t-cell title-cell font14 v_middle" style="width:100px;">企业粉丝人数<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
+            <div class="t-cell input-cell v_middle flex_right" style="position:relative;">
+              <template v-if="factoryInfo && factoryInfo.moderate == 0">{{factoryInfo.licensecode}}</template>
+              <x-input v-else style="padding-right:5px;" v-model="submitData.licensecode" type="text" class="input" placeholder="请填写企业粉丝人数或代理人数" ></x-input>
+            </div>
+          </div>
+        </div>
+      -->
         <!-- 合作模式 -->
         <div class="form-item fg bg-white b-top b-bottom">
           <div class="t-table">
@@ -158,7 +190,10 @@
     <!-- <div class="s-bottom flex_center bg-orange color-white" @click="saveEvent">{{ $t('Submit') }}</div> -->
     <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
       <div v-if="factoryInfo && factoryInfo.id && factoryInfo.moderate == 0" class="flex_cell flex_center btn-bottom-red disable">审核中...</div>
-      <div v-else :class="`flex_cell flex_center btn-bottom-red ${this.flags ? 'disable' : ''}`" @click="saveEvent">提交申请</div>
+      <template v-else>
+        <div :class="`flex_cell flex_center btn-bottom-red ${this.flags ? 'disable' : ''}`" @click="saveEvent">提交申请</div>
+        <div :class="`flex_cell flex_center btn-bottom-green ${this.flags ? 'disable' : ''}`" @click="fastEvent">快速注册</div>
+      </template>
     </div>
     <div v-if="showTip" class="auto-modal flex_center">
       <div class="modal-inner border-box" style="width:80%;">
@@ -182,6 +217,39 @@
           <div class="mt10 color-red">注意：共销客企业小程序使用达到一个月后,如未进行缴费时,则平台有权关闭厂家的使用权限!</div>
         </div>
         <div class="close-area flex_center" @click="closeCommission">
+          <i class="al al-close"></i>
+        </div>
+      </div>
+    </div>
+    <div v-if="showPay" class="auto-modal flex_center">
+      <div class="modal-inner border-box" style="width:80%;">
+        <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">快速注册</div>
+        <div class="align_left txt padding10">
+          <div>支付 1000 元，添加客服微信，客服人员将单独为 您提供技术客服，并可立即开通厂家身份，无需进行审核</div>
+        </div>
+        <div class="padding10">
+          <div class="flex_center">
+            <div class="flex_cell flex_center">
+              <div @click="closeTip" class="bg-gray color-white" style="width:80%;height:35px;border-radius:10px;">取消</div>
+            </div>
+            <div class="flex_cell flex_center">
+              <div @click="toPay" class="bg-green color-white" style="width:80%;height:35px;border-radius:10px;">去支付</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div @click="clickChat" class="fixed-chat flex_center bg-theme color-white">客服</div>
+    <div v-if="showQrcode" class="auto-modal flex_center">
+      <div class="modal-inner border-box" style="width:80%;">
+        <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">客服</div>
+        <div class="flex_center">
+          <img style="max-width:90%;" src="https://tossharingsales.boka.cn/minigxk/gxkKeFu.jpg" />
+        </div>
+        <div class="align_left txt padding10">
+          <div class="align_center mt10">长按识别二维码</div>
+        </div>
+        <div class="close-area flex_center" @click="closeQrcode">
           <i class="al al-close"></i>
         </div>
       </div>
@@ -254,7 +322,9 @@ export default {
       isLoadPhoto: false,
       showTop: false,
       showMonthlyCommission: false,
-      shareUser: {}
+      shareUser: {},
+      showPay: false,
+      showQrcode: false
     }
   },
   watch: {
@@ -358,6 +428,22 @@ export default {
           self.photoCallback(data, type)
         })
       }
+    },
+    fastEvent () {
+      this.showPay = true
+    },
+    toPay () {
+      if (this.query.fromapp === 'factory') {
+        this.$wechat.miniProgram.redirectTo({url: `/pages/pay`})
+      } else {
+        this.$router.push('/pay')
+      }
+    },
+    closeQrcode () {
+      this.showQrcode = false
+    },
+    clickChat () {
+      this.showQrcode = true
     },
     saveEvent () {
       const self = this
@@ -600,5 +686,6 @@ export default {
   }
   .x-checker .border1px.ck-item-selected:after{border:1px solid #ea3a3a;}
   .vux-check-icon > span{color:#666;display: inline-block;vertical-align: bottom;line-height: 19px;}
+  .fixed-chat{width:50px;height:50px;border-radius:50%;}
 }
 </style>
