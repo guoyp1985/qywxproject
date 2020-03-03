@@ -115,7 +115,6 @@ export default {
           self.showCenter = true
           if (self.loginUser.factoryinfo) {
             self.factoryInfo = self.loginUser.factoryinfo
-            self.factoryInfo.moderate = 1
             self.endTime = new Time(self.factoryInfo.endtime * 1000).dateFormat('yyyy-MM-dd')
             let photoArr = [self.factoryInfo.photo]
             self.factoryInfo.photoArr = self.$util.previewerImgdata(photoArr)
