@@ -223,7 +223,7 @@ export default {
       }
     },
     toSuccess () {
-      if (this.query.fromapp === 'factory') {
+      if (this.query.fromapp === 'boka') {
         this.$util.routerMiniUrl(this.query)
       } else {
         this.$router.push('/centerFactory')
