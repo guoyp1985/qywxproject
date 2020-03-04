@@ -211,15 +211,15 @@
       </form>
     </div>
     <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
-      <div v-if="factoryInfo && factoryInfo.id && factoryInfo.moderate == 0" class="flex_cell flex_center btn-bottom-red disable">审核中...</div>
-      <template v-else>
-        <div class="flex_cell flex_center">
-          <div style="width:85%;" :class="`flex_center btn-bottom-red ${this.flags ? 'disable' : ''}`" @click="saveEvent">提交申请</div>
-        </div>
-        <div class="flex_cell flex_center">
-          <div style="width:85%;" :class="`flex_center btn-bottom-orange`" @click="fastEvent">快速注册</div>
-        </div>
-      </template>
+      <div v-if="factoryInfo && factoryInfo.id && factoryInfo.moderate == 0" class="flex_cell flex_center">
+        <div style="width:85%;" class="flex_center btn-bottom-red disable">审核中...</div>
+      </div>
+      <div v-else class="flex_cell flex_center">
+        <div style="width:85%;" :class="`flex_center btn-bottom-red ${this.flags ? 'disable' : ''}`" @click="saveEvent">提交申请</div>
+      </div>
+      <div class="flex_cell flex_center">
+        <div style="width:85%;" :class="`flex_center btn-bottom-orange`" @click="fastEvent">快速注册</div>
+      </div>
     </div>
     <div v-if="showTip" class="auto-modal flex_center">
       <div class="modal-inner border-box" style="width:80%;">
