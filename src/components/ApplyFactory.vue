@@ -494,7 +494,7 @@ export default {
     },
     toPay () {
       this.$http.post(`${ENV.BokaApi}/api/factory/FactoryfeePay`, {
-        fi: this.fid
+        fid: this.fid
       }).then(res => {
         const data = res.data
         if (data.flag) {
