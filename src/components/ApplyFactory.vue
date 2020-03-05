@@ -384,6 +384,9 @@ export default {
     },
     productClass: function () {
       return this.productClass
+    },
+    fIdentity: function () {
+      return this.fIdentity
     }
   },
   methods: {

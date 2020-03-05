@@ -96,12 +96,32 @@ export default {
       }
       console.log(this.productClass)
     },
+    handleIndentity () {
+      this.factoryIdentity = []
+      if (this.factoryInfo.identity && this.$util.trim(this.factoryInfo.identity) !== '') {
+        let iStr = []
+        let idarr = this.factoryInfo.identity.split(',')
+        for (let i = 0; i < idarr.length; i++) {
+          this.factoryIdentity.push(parseInt(idarr[i]))
+          for (let j = 0; j < this.identityArr.length; j++) {
+            if (parseInt(idarr[i]) === this.identityArr[j].id) {
+              iStr.push(this.identityArr[j].title)
+              break
+            }
+          }
+        }
+        if (iStr.length) {
+          this.identityTitle = iStr.join(',')
+        }
+      }
+    },
     afterApply (data) {
       delete this.factoryInfo.id
       this.loginUser.factoryinfo = data
       User.set(this.loginUser)
       this.factoryInfo = data
       this.handleProductClass()
+      this.handleIndentity()
     },
     getData () {
       const self = this
@@ -121,23 +141,7 @@ export default {
             for (let key in self.submitkey) {
               self.submitData[key] = self.factoryInfo[key]
             }
-            self.factoryIdentity = []
-            if (self.factoryInfo.identity && self.$util.trim(self.factoryInfo.identity) !== '') {
-              let iStr = []
-              let idarr = self.factoryInfo.identity.split(',')
-              for (let i = 0; i < idarr.length; i++) {
-                self.factoryIdentity.push(parseInt(idarr[i]))
-                for (let j = 0; j < self.identityArr.length; j++) {
-                  if (parseInt(idarr[i]) === self.identityArr[j].id) {
-                    iStr.push(self.identityArr[j].title)
-                    break
-                  }
-                }
-              }
-              if (iStr.length) {
-                self.identityTitle = iStr.join(',')
-              }
-            }
+            this.handleIndentity()
             console.log('厂家身份')
             console.log(self.factoryIdentity)
           } else {
