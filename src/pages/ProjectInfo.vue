@@ -25,7 +25,7 @@
     <div class="s-topbanner1">
       <tab class="b-tab" v-model="selectedIndex">
         <tab-item :selected="selectedIndex==0" @on-item-click="toggleTab">项目进度</tab-item>
-        <tab-item :selected="selectedIndex==1" @on-item-click="toggleTab">经营统计</tab-item>
+        <!-- <tab-item :selected="selectedIndex==1" @on-item-click="toggleTab">经营统计</tab-item> -->
       </tab>
     </div>
     <div v-if="selectedIndex === 0" class="bg-white padding15 db-flex">
