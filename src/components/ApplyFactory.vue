@@ -689,9 +689,22 @@ export default {
   },
   created () {
     this.query = this.$route.query
+    let shareuid = ''
     if (this.query.share_uid) {
-      this.$http.get(`${ENV.BokaApi}/api/getUser/${this.query.share_uid}`).then(res => {
+      shareuid = this.query.share_uid
+      this.$http.post(`${ENV.BokaApi}/api/salesman/recordView`, {
+        shareuid: this.query.share_uid
+      })
+      this.$http.get(`${ENV.BokaApi}/api/getUser/${shareuid}`).then(res => {
         this.shareUser = res.data
+      })
+    } else {
+      this.$http.post(`${ENV.BokaApi}/api/salesman/inviter`).then(res => {
+        const data = res.data
+        if (data.flag) {
+          const retdata = data.data
+          this.shareUser = {uid: retdata.uid, linkman: retdata.invitername}
+        }
       })
     }
   }
