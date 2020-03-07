@@ -163,8 +163,8 @@ export default {
           if (this.rightData.length / this.examData.length >= 0.9) {
             this.isSuccess = true
             let params = {}
-            if (this.query.appuid) {
-              params.shareuid = this.query.appuid
+            if (this.query.share_uid) {
+              params.shareuid = this.query.share_uid
             }
             console.log('添加成为推广人员身份')
             console.log('传参')
