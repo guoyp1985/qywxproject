@@ -166,7 +166,11 @@ export default {
             if (this.query.appuid) {
               params.shareuid = this.query.appuid
             }
-            this.$http.post(`${ENV.BokaApi}/api/salesman/add`, params)
+            this.$http.post(`${ENV.BokaApi}/api/salesman/add`, params).then(res => {
+              const data = res.data
+              console.log('添加成为推广人员身份')
+              console.log(data)
+            })
           } else {
             this.isSuccess = false
           }
