@@ -152,7 +152,7 @@ Vue.http.interceptors.request.use(config => {
 
     const token = Token.get()
     console.log(`interceptors: ${config.url}`)
-    console.log(`interceptors: ${JSON.stringify(token)}`)
+    // console.log(`interceptors: ${JSON.stringify(token)}`)
     if (Token.isExpired()) {
       // console.log(config.url)
       cancelAllPendings(config)
@@ -160,7 +160,7 @@ Vue.http.interceptors.request.use(config => {
         router.replace({path: path})
       })
     } else {
-      console.log(`interceptors: Bearer ${token.token}`)
+      // console.log(`interceptors: Bearer ${token.token}`)
       config.headers['Authorization'] = `Bearer ${token.token}`
       if (config.url.indexOf(ENV.FactoryApi) > -1 && ENV.ApiVersion === 'V2') {
         config.headers['Accept'] = ENV.ApiAccept
@@ -174,6 +174,8 @@ Vue.http.interceptors.request.use(config => {
 
 // 响应拦截器
 Vue.http.interceptors.response.use(response => {
+  console.log('请求执行后')
+  console.log(response)
   return response
 }, error => {
   if (error.response) {
