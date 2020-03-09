@@ -24,7 +24,7 @@
       </tab>
     </div>
     <div ref="scrollContainer" class="s-container s-container1 scroll-container" @scroll="scrollHandle">
-      <div v-show="selectedIndex===0">
+      <div v-show="selectedIndex==0">
         <template v-if="distabdata1">
           <template v-if="tabdata1.length">
             <order-info v-for="(item, index) in tabdata1" :item="item" :key="index" :index="index" @on-process="orderProcess"></order-info>
@@ -36,7 +36,7 @@
           </template>
         </template>
       </div>
-      <div v-show="selectedIndex===1">
+      <div v-show="selectedIndex==1">
         <template v-if="distabdata2">
           <template v-if="tabdata2.length">
             <order-info v-for="(item, index) in tabdata2" :item="item" :key="index" :index="index" @on-process="orderProcess"></order-info>
@@ -48,7 +48,7 @@
           </template>
         </template>
       </div>
-      <div v-show="selectedIndex===2">
+      <div v-show="selectedIndex==2">
         <template v-if="distabdata3">
           <template v-if="tabdata3.length">
             <order-info v-for="(item, index) in tabdata3" :item="item" :key="index" :index="index" @on-process="orderProcess"></order-info>
@@ -60,7 +60,7 @@
           </template>
         </template>
       </div>
-      <div v-show="selectedIndex===3">
+      <div v-show="selectedIndex==3">
         <template v-if="distabdata4">
           <template v-if="tabdata4.length">
             <order-info v-for="(item, index) in tabdata4" :item="item" :key="index" :index="index" @on-process="orderProcess"></order-info>

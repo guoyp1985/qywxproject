@@ -236,7 +236,7 @@ export default {
       }
     },
     toStudy () {
-      let params = this.$util.handleAppParams(this.query)
+      let params = this.$util.handleAppParams(this.query, {})
       this.$router.push({path: '/examStudy', query: params})
     },
     toTest () {

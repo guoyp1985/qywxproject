@@ -67,11 +67,11 @@ export default {
       this.showContainer2 = true
     },
     toStudy () {
-      let params = this.$util.handleAppParams(this.query)
+      let params = this.$util.handleAppParams(this.query, {})
       this.$router.push({path: '/examStudy', query: params})
     },
     toTest () {
-      let params = this.$util.handleAppParams(this.query)
+      let params = this.$util.handleAppParams(this.query, {})
       this.$router.push({path: '/examTest', query: params})
     },
     refresh () {
