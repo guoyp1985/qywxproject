@@ -17,10 +17,14 @@
     </search>
     <div class="s-topbanner s-topbanner1">
       <tab class="b-tab" v-model="selectedIndex">
-        <tab-item :selected="selectedIndex==0" @on-item-click="toggleTab">{{ $t('All') }}</tab-item>
+        <!-- <tab-item :selected="selectedIndex==0" @on-item-click="toggleTab">{{ $t('All') }}</tab-item>
         <tab-item :selected="selectedIndex==1" @on-item-click="toggleTab">{{ $t('To Be Delivered') }}</tab-item>
         <tab-item :selected="selectedIndex==2" @on-item-click="toggleTab">{{ $t('Shipped') }}</tab-item>
-        <tab-item :selected="selectedIndex==3" @on-item-click="toggleTab">{{ $t('Completed') }}</tab-item>
+        <tab-item :selected="selectedIndex==3" @on-item-click="toggleTab">{{ $t('Completed') }}</tab-item> -->
+        <tab-item @on-item-click="toggleTab">{{ $t('All') }}</tab-item>
+        <tab-item @on-item-click="toggleTab">{{ $t('To Be Delivered') }}</tab-item>
+        <tab-item @on-item-click="toggleTab">{{ $t('Shipped') }}</tab-item>
+        <tab-item @on-item-click="toggleTab">{{ $t('Completed') }}</tab-item>
       </tab>
     </div>
     <div ref="scrollContainer" class="s-container s-container1 scroll-container" @scroll="scrollHandle">
@@ -227,19 +231,6 @@ export default {
   },
   methods: {
     initData () {
-      // this.selectedIndex = 0
-      // this.distabdata1 = false
-      // this.distabdata2 = false
-      // this.distabdata3 = false
-      // this.distabdata4 = false
-      // this.tabdata1 = []
-      // this.tabdata2 = []
-      // this.tabdata3 = []
-      // this.tabdata4 = []
-      // this.pagestart1 = 1
-      // this.pagestart2 = 1
-      // this.pagestart3 = 1
-      // this.pagestart4 = 1
       this.showRefundModal = false
       this.refundContent = ''
       this.clickOrder = {}
@@ -842,7 +833,7 @@ export default {
       this.$refs.scrollContainer.scrollTop = this.pageTop
     }
     if (document.querySelector('.vux-tab')) {
-     document.querySelector('.vux-tab').scrollLeft = this.tabLeft
+      document.querySelector('.vux-tab').scrollLeft = this.tabLeft
     }
     this.refresh()
     this.$util.miniPost()
