@@ -17,14 +17,10 @@
     </search>
     <div class="s-topbanner s-topbanner1">
       <tab class="b-tab" v-model="selectedIndex">
-        <!-- <tab-item :selected="selectedIndex==0" @on-item-click="toggleTab">{{ $t('All') }}</tab-item>
+        <tab-item :selected="selectedIndex==0" @on-item-click="toggleTab">{{ $t('All') }}</tab-item>
         <tab-item :selected="selectedIndex==1" @on-item-click="toggleTab">{{ $t('To Be Delivered') }}</tab-item>
         <tab-item :selected="selectedIndex==2" @on-item-click="toggleTab">{{ $t('Shipped') }}</tab-item>
-        <tab-item :selected="selectedIndex==3" @on-item-click="toggleTab">{{ $t('Completed') }}</tab-item> -->
-        <tab-item @on-item-click="toggleTab">{{ $t('All') }}</tab-item>
-        <tab-item @on-item-click="toggleTab">{{ $t('To Be Delivered') }}</tab-item>
-        <tab-item @on-item-click="toggleTab">{{ $t('Shipped') }}</tab-item>
-        <tab-item @on-item-click="toggleTab">{{ $t('Completed') }}</tab-item>
+        <tab-item :selected="selectedIndex==3" @on-item-click="toggleTab">{{ $t('Completed') }}</tab-item>
       </tab>
     </div>
     <div ref="scrollContainer" class="s-container s-container1 scroll-container" @scroll="scrollHandle">
