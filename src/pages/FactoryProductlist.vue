@@ -46,7 +46,7 @@
                             <span>平台佣金:</span><span class="color-red"> {{ $t('RMB') }}{{ item.agentrebate }}</span>
                           </template>
                           <template v-else>
-                            <span>利润空间:</span>
+                            <span>平台佣金:</span>
                             <span class="color-red" v-if="item.minlirun && item.maxlirun && item.minlirun != '' && item.maxlirun != '' && item.minlirun != item.maxlirun">￥{{item.minlirun}}-{{item.maxlirun}}</span>
                             <span class="color-red" v-else-if="item.minlirun && item.minlirun != ''">￥{{ item.minlirun }}</span>
                             <span class="color-red" v-else>￥{{item.lirun}}</span>
