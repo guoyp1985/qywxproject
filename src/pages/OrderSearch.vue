@@ -798,44 +798,40 @@ export default {
       if (this.query.flag) {
         flag = parseInt(this.query.flag)
       }
-      switch (flag) {
-        case 2:
-          if (this.query.refresh || !this.tabdata2.length) {
-            console.log('flag=2')
-            this.selectedIndex = 1
-            this.pagestart2 = 0
-            this.tabdata2 = []
-            this.toggleTab()
-          }
-          break
-        case 3:
-          if (this.query.refresh || !this.tabdata3.length) {
-            console.log('flag=3')
-            this.selectedIndex = 2
-            this.pagestart3 = 0
-            this.tabdata3 = []
-            this.toggleTab()
-          }
-          break
-        case 4:
-          if (this.query.refresh || !this.tabdata4.length) {
-            console.log('flag=4')
-            this.distabdata4 = false
-            this.selectedIndex = 3
-            this.pagestart4 = 0
-            this.tabdata4 = []
-            this.toggleTab()
-          }
-          break
-        default :
-          if (this.query.refresh || !this.tabdata1.length) {
-            console.log('flag=0')
-            this.selectedIndex = 0
-            this.pagestart1 = 0
-            this.tabdata1 = []
-            this.toggleTab()
-          }
-          break
+      console.log('refresh')
+      if (flag === 2) {
+        if (this.query.refresh || !this.tabdata2.length) {
+          console.log('flag=2')
+          this.selectedIndex = 1
+          this.pagestart2 = 0
+          this.tabdata2 = []
+          this.toggleTab()
+        }
+      } else if (flag === 3) {
+        if (this.query.refresh || !this.tabdata3.length) {
+          console.log('flag=3')
+          this.selectedIndex = 2
+          this.pagestart3 = 0
+          this.tabdata3 = []
+          this.toggleTab()
+        }
+      } else if (flag === 4) {
+        if (this.query.refresh || !this.tabdata4.length) {
+          console.log('flag=4')
+          this.distabdata4 = false
+          this.selectedIndex = 3
+          this.pagestart4 = 0
+          this.tabdata4 = []
+          this.toggleTab()
+        }
+      } else {
+        if (this.query.refresh || !this.tabdata1.length) {
+          console.log('flag=0')
+          this.selectedIndex = 0
+          this.pagestart1 = 0
+          this.tabdata1 = []
+          this.toggleTab()
+        }
       }
     }
   },
