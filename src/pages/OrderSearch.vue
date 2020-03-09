@@ -852,7 +852,7 @@ export default {
       this.pageTop = this.$refs.scrollContainer.scrollTop
     }
     if (document.querySelector('.vux-tab')) {
-      this.tabLeft = document.querySelector('.vux-tab').scrollLeft
+    //  this.tabLeft = document.querySelector('.vux-tab').scrollLeft
     }
     next()
   }
