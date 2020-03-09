@@ -824,13 +824,13 @@ export default {
           this.toggleTab()
         }
       } else {
-        if (this.query.refresh || !this.tabdata1.length) {
-          console.log('flag=0')
-          this.selectedIndex = 0
-          this.pagestart1 = 0
-          this.tabdata1 = []
-          this.toggleTab()
-        }
+        // if (this.query.refresh || !this.tabdata1.length) {
+        //   console.log('flag=0')
+        //   this.selectedIndex = 0
+        //   this.pagestart1 = 0
+        //   this.tabdata1 = []
+        //   this.toggleTab()
+        // }
       }
     }
   },
@@ -838,22 +838,22 @@ export default {
     this.init()
   },
   activated () {
-    // if (this.$refs.scrollContainer) {
-    //   this.$refs.scrollContainer.scrollTop = this.pageTop
-    // }
-    // if (document.querySelector('.vux-tab')) {
-    //  document.querySelector('.vux-tab').scrollLeft = this.tabLeft
-    // }
+    if (this.$refs.scrollContainer) {
+      this.$refs.scrollContainer.scrollTop = this.pageTop
+    }
+    if (document.querySelector('.vux-tab')) {
+     document.querySelector('.vux-tab').scrollLeft = this.tabLeft
+    }
     this.refresh()
     this.$util.miniPost()
   },
   beforeRouteLeave (to, from, next) {
-    // if (this.$refs.scrollContainer) {
-    //   this.pageTop = this.$refs.scrollContainer.scrollTop
-    // }
-    // if (document.querySelector('.vux-tab')) {
-    //   this.tabLeft = document.querySelector('.vux-tab').scrollLeft
-    // }
+    if (this.$refs.scrollContainer) {
+      this.pageTop = this.$refs.scrollContainer.scrollTop
+    }
+    if (document.querySelector('.vux-tab')) {
+      this.tabLeft = document.querySelector('.vux-tab').scrollLeft
+    }
     next()
   }
 }
