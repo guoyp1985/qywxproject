@@ -670,8 +670,7 @@ export default {
       })
     },
     toggleTab () {
-      console.log('in toggleTab')
-      console.log(this.selectedIndex)
+      console.log('in toggleTab, this.selectedIndex=', this.selectedIndex)
       switch (this.selectedIndex) {
         case 0:
           !this.tabdata1.length && this.getData()
