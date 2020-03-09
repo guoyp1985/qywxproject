@@ -838,22 +838,22 @@ export default {
     this.init()
   },
   activated () {
-    if (this.$refs.scrollContainer) {
-      this.$refs.scrollContainer.scrollTop = this.pageTop
-    }
-    if (document.querySelector('.vux-tab')) {
+    // if (this.$refs.scrollContainer) {
+    //   this.$refs.scrollContainer.scrollTop = this.pageTop
+    // }
+    // if (document.querySelector('.vux-tab')) {
     //  document.querySelector('.vux-tab').scrollLeft = this.tabLeft
-    }
+    // }
     this.refresh()
     this.$util.miniPost()
   },
   beforeRouteLeave (to, from, next) {
-    if (this.$refs.scrollContainer) {
-      this.pageTop = this.$refs.scrollContainer.scrollTop
-    }
-    if (document.querySelector('.vux-tab')) {
-      this.tabLeft = document.querySelector('.vux-tab').scrollLeft
-    }
+    // if (this.$refs.scrollContainer) {
+    //   this.pageTop = this.$refs.scrollContainer.scrollTop
+    // }
+    // if (document.querySelector('.vux-tab')) {
+    //   this.tabLeft = document.querySelector('.vux-tab').scrollLeft
+    // }
     next()
   }
 }
