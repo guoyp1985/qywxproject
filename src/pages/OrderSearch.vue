@@ -744,18 +744,22 @@ export default {
         retdata = this.setListButton(retdata)
         switch (flag) {
           case 0:
+            console.log('getdata 0')
             self.tabdata1 = self.tabdata1.concat(retdata)
             self.distabdata1 = true
             break
           case 2:
+            console.log('getdata 2')
             self.tabdata2 = self.tabdata2.concat(retdata)
             self.distabdata2 = true
             break
           case 3:
+            console.log('getdata 3')
             self.tabdata3 = self.tabdata3.concat(retdata)
             self.distabdata3 = true
             break
           case 4:
+            console.log('getdata 4')
             self.tabdata4 = self.tabdata4.concat(retdata)
             self.distabdata4 = true
             break
