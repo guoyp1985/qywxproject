@@ -221,6 +221,7 @@ export default {
   },
   watch: {
     selectedIndex () {
+      console.log('监控到selectedIndex变化', this.selectedIndex)
       return this.selectedIndex
     }
   },
