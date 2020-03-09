@@ -824,13 +824,13 @@ export default {
           this.toggleTab()
         }
       } else {
-        // if (this.query.refresh || !this.tabdata1.length) {
-        //   console.log('flag=0')
-        //   this.selectedIndex = 0
-        //   this.pagestart1 = 0
-        //   this.tabdata1 = []
-        //   this.toggleTab()
-        // }
+        if (this.query.refresh || !this.tabdata1.length) {
+          console.log('flag=0')
+          this.selectedIndex = 0
+          this.pagestart1 = 0
+          this.tabdata1 = []
+          this.toggleTab()
+        }
       }
     }
   },
