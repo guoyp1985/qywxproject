@@ -219,6 +219,11 @@ export default {
       return `${address.area.join('')}${address.details}`
     }
   },
+  watch: {
+    selectedIndex () {
+      return this.selectedIndex
+    }
+  },
   methods: {
     initData () {
       // this.selectedIndex = 0
