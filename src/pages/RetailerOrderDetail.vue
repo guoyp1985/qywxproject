@@ -682,20 +682,20 @@ export default {
       })
     },
     agreeEvent (val) {
-      const self = this
+      // const self = this
       if (val === 1) {
         this.$vux.confirm.show({
           title: '您确认同意退款？',
           onConfirm: () => {
-            self.$vux.loading.show()
-            self.$http.post(`${ENV.BokaApi}/api/order/refund`, {id: this.query.id, agree: 1})
+            this.$vux.loading.show()
+            this.$http.post(`${ENV.BokaApi}/api/order/refund`, {id: this.query.id, agree: 1})
             .then(res => {
-              self.$vux.loading.hide()
+              this.$vux.loading.hide()
               const data = res.data
-              self.$vux.toast.show({
+              this.$vux.toast.show({
                 text: data.error,
-                type: (data.flag !== 1 ? 'warn' : 'success'),
-                time: self.$util.delay(data.error),
+                type: data.flag !== 1 ? 'warn' : 'success',
+                time: this.$util.delay(data.error),
                 onHide: () => {
                   if (data.flag === 1) {
                     // this.orderData.cancensorback = 0
