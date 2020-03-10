@@ -46,7 +46,10 @@
                             <span>平台佣金:</span><span class="color-red"> {{ $t('RMB') }}{{ item.agentrebate }}</span>
                           </template>
                           <template v-else>
-                            <span>利润空间:</span><span class="color-red"> {{ $t('RMB') }}{{ item.lirun }}</span>
+                            <span>平台佣金:</span>
+                            <span class="color-red" v-if="item.minlirun && item.maxlirun && item.minlirun != '' && item.maxlirun != '' && item.minlirun != item.maxlirun">￥{{item.minlirun}}-{{item.maxlirun}}</span>
+                            <span class="color-red" v-else-if="item.minlirun && item.minlirun != ''">￥{{ item.minlirun }}</span>
+                            <span class="color-red" v-else>￥{{item.lirun}}</span>
                           </template>
                         </div>
                         <!-- <div class="clamp1 mt5">
@@ -121,7 +124,7 @@
                   <div class="inner" @click="clickpopup('downShelf')">从货源移出</div>
                 </div>
               </template>
-              <div class="item" v-if="clickdata.fromfid">
+              <div class="item" v-if="clickdata.fromfid && !loginUser.factoryinfo.issupply">
                 <div class="inner" @click="clickpopup('fee')">设置佣金</div>
               </div>
               <div class="item">

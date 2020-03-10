@@ -230,7 +230,7 @@ export default {
       console.log(this.examData)
     },
     toTest () {
-      let params = this.$util.handleAppParams(this.query)
+      let params = this.$util.handleAppParams(this.query, {})
       this.$router.push({path: '/examTest', query: params})
     },
     getData () {
