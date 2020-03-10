@@ -717,6 +717,8 @@ export default {
     },
     getData (flag) {
       flag = flag || 0
+      console.log('=== 请求中的flag ===')
+      console.log(flag)
       this.$vux.loading.show()
       const self = this
       let params = {flag: flag, limit: self.limit}
@@ -771,6 +773,9 @@ export default {
       this.initData()
       this.query = this.$route.query
       let flag = 0
+      console.log('=== selectedIndex ===')
+      console.log(this.selectedIndex)
+      console.log(this.query)
       switch (this.selectedIndex) {
         case 1:
           flag = 2
@@ -788,6 +793,8 @@ export default {
       if (this.query.flag) {
         flag = parseInt(this.query.flag)
       }
+      console.log('=== flag ===')
+      console.log(flag)
       switch (flag) {
         case 2:
           if (this.query.refresh || !this.tabdata2.length) {
@@ -825,6 +832,7 @@ export default {
   },
   created () {
     this.init()
+    this.refresh()
   },
   activated () {
     if (this.$refs.scrollContainer) {
