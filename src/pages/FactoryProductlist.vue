@@ -42,15 +42,10 @@
                             <span class="v_middle db-in ml5">已售: {{ item.truesaled }}{{item.unit}}</span>
                         </div>
                         <div class="font12" v-if="item.fromfid">
-                          <template v-if="factoryInfo.agentid">
-                            <span>平台佣金:</span><span class="color-red"> {{ $t('RMB') }}{{ item.agentrebate }}</span>
-                          </template>
-                          <template v-else>
-                            <span>平台佣金:</span>
-                            <span class="color-red" v-if="item.minlirun && item.maxlirun && item.minlirun != '' && item.maxlirun != '' && item.minlirun != item.maxlirun">￥{{item.minlirun}}-{{item.maxlirun}}</span>
-                            <span class="color-red" v-else-if="item.minlirun && item.minlirun != ''">￥{{ item.minlirun }}</span>
-                            <span class="color-red" v-else>￥{{item.lirun}}</span>
-                          </template>
+                          <span>平台佣金:</span>
+                          <span class="color-red" v-if="item.minagentrebate && item.maxagentrebate && item.minagentrebate != '' && item.maxagentrebate != '' && item.minagentrebate != item.maxagentrebate">￥{{item.minagentrebate}}-{{item.maxagentrebate}}</span>
+                          <span class="color-red" v-else-if="item.minagentrebate && item.minagentrebate != ''">￥{{ item.minagentrebate }}</span>
+                          <span class="color-red" v-else>￥{{item.agentrebate}}</span>
                         </div>
                         <!-- <div class="clamp1 mt5">
                             <span class="v_middle db-in">销售佣金: {{ item.salesrebate }}</span>
