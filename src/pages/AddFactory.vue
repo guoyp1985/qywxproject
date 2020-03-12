@@ -18,6 +18,9 @@
           <form enctype="multipart/form-data">
             <input ref="fileInput2" class="hide" type="file" name="files" @change="fileChange('qrcode')" />
           </form>
+          <form enctype="multipart/form-data">
+            <input ref="fileInput3" class="hide" type="file" name="files" @change="fileChange('shoukuanma')" />
+          </form>
           <form class="addForm">
             <div class="form-item fg bg-white b-top b-bottom">
               <div class="t-table">
@@ -210,6 +213,25 @@
               </div>
             </div>
           </div>
+          <div class="form-item bg-white fg b-top">
+            <div class="t-table">
+              <div class="t-cell title-cell w80 font14 v_middle">收款码</div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <div class="q_photolist align_left bg-white">
+                  <template v-if="skmarr.length > 0">
+                    <div v-for="(item,index) in skmarr" :key="index" class="photoitem">
+                      <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
+                        <div class="close" @click="deletephoto(item,index,'shoukuanma')">×</div>
+                      </div>
+                    </div>
+                  </template>
+                  <div v-if="skmarr.length < maxnum" @click="uploadPhoto('fileInput3', 'shoukuanma')" class="align_right">
+                    <span class="color-red">上传收款码 ></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white" v-if="selectedIndex == 0">
@@ -324,7 +346,8 @@ export default {
       showMonthlyCommission: false,
       selectedIndex: 0,
       collectData: {newbankcode: '', accountname: '', newbankcardno: '', newbankuser: '', mobile: ''},
-      cardList: []
+      cardList: [],
+      skmarr: []
     }
   },
   watch: {
@@ -428,6 +451,9 @@ export default {
       if (type === 'qrcode') {
         self.qrcodearr.splice(index, 1)
         self.submitData.photo = self.qrcodearr.join(',')
+      } else if (type === 'shoukuanma') {
+        self.skmarr.splice(index, 1)
+        self.submitData.shoukuanma = self.skmarr.join(',')
       } else {
         self.photoarr.splice(index, 1)
         self.submitData.publicqrcode = self.photoarr.join(',')
@@ -440,6 +466,11 @@ export default {
           if (self.qrcodearr.length < self.maxnum) {
             self.qrcodearr.push(data.data)
             self.submitData.publicqrcode = self.qrcodearr.join(',')
+          }
+        } else if (type === 'shoukuanma') {
+          if (self.skmarr.length < self.maxnum) {
+            self.skmarr.push(data.data)
+            self.submitData.shoukuanma = self.skmarr.join(',')
           }
         } else {
           if (self.photoarr.length < self.maxnum) {
@@ -607,7 +638,7 @@ export default {
       }
       if (!iscontinue) return false
       this.$vux.loading.show()
-      let params = {...this.collectData, id: this.fid}
+      let params = {...this.collectData, id: this.fid, shoukuanma: this.skmarr.join(',')}
       this.$http.post(`${ENV.BokaApi}/api/factory/add`, params).then(res => {
         let data = res.data
         this.$vux.loading.hide()
@@ -633,6 +664,10 @@ export default {
           self.infoData = retdata
           for (let key in self.collectData) {
             self.collectData[key] = self.infoData[key]
+          }
+          self.skmarr = []
+          if (retdata.shoukuanma && self.$util.trim(retdata.shoukuanma) !== '') {
+            self.skmarr.push(retdata.shoukuanma)
           }
           if (retdata.services && retdata.services !== '') {
             let suid = retdata.services.split(',')[0]
