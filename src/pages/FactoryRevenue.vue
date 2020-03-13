@@ -4,7 +4,6 @@
       <div class="in-item flex_center pr20 pl20 pt20">
         <div class="item mr10 flex_center" @click="toBank">我的银行卡</div>
         <div class="item ml10 flex_center" @click="popupexplain">提现说明</div>
-        <div class="top-menu" v-if="menuData.length" @click="clickMenu"><span class="al al-daohang"></span></div>
       </div>
     </div>
     <div class="middle-content">
@@ -152,18 +151,6 @@
         </div>
       </div>
     </div>
-    <div v-transfer-dom class="x-popup" position="bottom" v-if="menuData.length">
-      <popup v-model="showMenu">
-        <div class="top-menu-area" v-if="showMenu">
-          <div class="menu-list scroll_list">
-            <div v-for="(item,index) in menuData" :key="item.id" class="menu-item scroll_item flex_left" @click="toMenu(item)">
-              <div class="flex_cell flex_left">{{item.value}}</div>
-              <div class="w30 flex_center"><span class="al al-mjiantou-copy color-gray font16"></span></div>
-            </div>
-          </div>
-        </div>
-      </popup>
-    </div>
   </div>
 </template>
 <script>
@@ -193,44 +180,10 @@ export default {
       fromPage: '',
       fid: 0,
       isagree: false,
-      showKefu: false,
-      showMenu: false,
-      menuData: []
+      showKefu: false
     }
   },
   methods: {
-    clickMenu () {
-      this.showMenu = !this.showMenu
-    },
-    toMenu (item) {
-      let params = this.$util.handleAppParams(this.query, {})
-      switch (item.skey) {
-        case 'factoryproduct':
-          this.$router.push({path: '/factoryProductlist', query: {...params, fid: this.fid}})
-          break
-        case 'factorynews':
-          this.$router.push({path: '/factoryNewsList', query: {...params, fid: this.fid}})
-          break
-        case 'retailer':
-          this.$router.push({path: '/sellerList', query: {...params, id: this.fid}})
-          break
-        case 'customers':
-          this.$router.push({path: '/factoryCustomer', query: params})
-          break
-        case 'orders':
-          this.$router.push({path: '/factoryOrders', query: params})
-          break
-        case 'income':
-          this.$router.push({path: '/factoryRevenue', query: {...params, fid: this.fid}})
-          break
-        case 'friends':
-          this.$router.push({path: '/factoryDetail', query: params})
-          break
-        case 'settings':
-          this.$router.push({path: '/addFactory', query: {...params, fid: this.fid}})
-          break
-      }
-    },
     onBlur () {
       console.log('进入到了失焦页面')
       let revenueContainer = this.$refs.revenueContainer[0] ? this.$refs.revenueContainer[0] : this.$refs.revenueContainer
@@ -414,22 +367,6 @@ export default {
       const retdata = data.data ? data.data : data
       this.factoryInfo = retdata
       this.factoryInfo.waitcash = `${this.factoryInfo.waitcashmoney}`
-      let apistr = 'api'
-      if (ENV.ApiVersion === 'V2' && this.query.appid) {
-        apistr = `api/${this.query.appid}`
-      }
-      return this.$http.post(`${ENV.FactoryApi}/${apistr}/factory/controlsettingList`,
-        {fid: this.fid, type: 'my'}
-      )
-    }).then(res => {
-      const data = res.data
-      const retdata = data.data ? data.data : data
-      this.menuData = []
-      for (let i = 0; i < retdata.length; i++) {
-        if (retdata[i].moderate) {
-          this.menuData.push(retdata[i])
-        }
-      }
     })
   }
 }
