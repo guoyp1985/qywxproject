@@ -131,7 +131,7 @@
             </div>
           </grid-item>
         </div>
-        <div class="gridlist">
+        <div class="gridlist" v-if="!query.from">
           <grid-item label="运营大使" :link="{path:'/examHome', query: navParams}" style="position:relative;">
             <div slot="icon">
               <i class="al al-yunying"></i>
