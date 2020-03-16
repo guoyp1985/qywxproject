@@ -132,7 +132,7 @@
           </grid-item>
         </div>
         <div class="gridlist">
-          <grid-item label="运营大使" :link="{path:'/examHome', query: {fid: loginUser.fid}}" style="position:relative;">
+          <grid-item label="运营大使" :link="{path:'/examHome', query: navParams}" style="position:relative;">
             <div slot="icon">
               <i class="al al-yunying"></i>
             </div>
@@ -274,7 +274,8 @@ export default {
   },
   data () {
     return {
-      showQrcode: false
+      showQrcode: false,
+      navParams: {}
     }
   },
   watch: {
@@ -325,6 +326,9 @@ export default {
     toRevenue () {
       this.$router.push({path: 'factoryRevenue', query: {fid: this.loginUser.fid}})
     }
+  },
+  created () {
+    this.navParams = this.$util.handleAppParams(this.$route.query, {fid: this.loginUser.fid})
   }
 }
 </script>
