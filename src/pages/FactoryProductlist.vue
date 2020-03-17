@@ -652,16 +652,19 @@ export default {
         this.$vux.loading.hide()
         if (data.flag) {
           let newData = this.productdata[this.clickindex]
+          let total = 0
           if (!newData.options || !newData.options.length) {
-            newData.storage = newData.storage + parseInt(this.clickdata.newstorage)
+            total = newData.storage + parseInt(this.clickdata.newstorage)
           } else {
-            let total = newData.storage
+            total = newData.storage
             for (let i = 0; i < newData.options.length; i++) {
               newData.options[i].storage = newData.options[i].storage + parseInt(newData.options[i].newstorage)
               total = total + parseInt(newData.options[i].newstorage)
             }
-            newData.storage = total
           }
+          total = total - this.clickdata.saled
+          if (total < 0) total = 0
+          newData.storage = total
           this.productdata[this.clickindex] = newData
         }
         this.$vux.toast.show({
