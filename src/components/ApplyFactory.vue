@@ -502,11 +502,7 @@ export default {
         const data = res.data
         if (data.flag) {
           this.showPay = false
-          if (this.query.from) {
-            this.$wechat.miniProgram.redirectTo({url: `/packageB/pages/pay?id=${data.orderid}&module=payorders&type=applyfactory`})
-          } else {
-            location.replace(`${ENV.Host}/#/pay?id=${data.orderid}&module=payorders&type=applyfactory`)
-          }
+          location.replace(`${ENV.Host}/#/pay?id=${data.orderid}&module=payorders&type=applyfactory`)
         } else {
           this.$vux.toast.show({
             text: data.error,

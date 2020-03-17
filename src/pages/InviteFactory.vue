@@ -23,7 +23,7 @@
       <div class="flex_center mt20">保存图片发送给好友，邀请加盟</div> -->
     </div>
     <div class="bottom-area flex_center">
-      <div class="flex_cell flex_center">
+      <div class="flex_cell flex_center" v-if="!query.from">
         <div class="btn bg-theme color-white flex_center" @click="toUse">马上使用</div>
       </div>
       <div class="flex_cell flex_center" v-if="loginUser.fid">
