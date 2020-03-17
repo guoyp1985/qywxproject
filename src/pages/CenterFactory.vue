@@ -1,6 +1,6 @@
 <template>
   <div id="centersales" class="containerarea font14">
-    <template v-if="loginUser.uid">
+    <!-- <template v-if="loginUser.uid">
       <template v-if="loginUser.subscribe != 1 && !query.from">
         <div class="pagemiddle flex_center" style="top:0;">
           <img :src="WeixinQrcode" style="max-width:90%;max-height:90%;" />
@@ -28,7 +28,21 @@
           <center-factory :query="query" :factory-info="factoryInfo" :endTime="endTime" :messages="messages" :login-user="loginUser"></center-factory>
         </template>
       </template>
-    </template>
+    </template> -->
+    <apply-factory
+      :factory-info="factoryInfo"
+      :login-user="loginUser"
+      :classData="classData"
+      :productClass="productClass"
+      :classTitle="classTitle"
+      :identityArr="identityArr"
+      :factoryIdentity="factoryIdentity"
+      :identityTitle="identityTitle"
+      :submitData="submitData"
+      :tradeData="tradeData"
+      @clickPhoto="afterUploadPhoto"
+      @afterApply="afterApply">
+    </apply-factory>
   </div>
 </template>
 
