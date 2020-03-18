@@ -26,7 +26,7 @@
       <div class="flex_cell flex_center" v-if="!query.from">
         <div class="btn bg-theme color-white flex_center" @click="toUse">马上使用</div>
       </div>
-      <div class="flex_cell flex_center" v-if="loginUser.fid">
+      <div class="flex_cell flex_center" v-if="loginUser.fid && query.from">
         <div class="btn color-white flex_center" style="background-color:#6080ec;" @click="toQrcode">邀请码</div>
       </div>
     </div>
