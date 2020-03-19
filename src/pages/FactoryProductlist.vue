@@ -204,7 +204,13 @@
                     <div class="clamp1 font16 pr10 color-lightgray">{{feeData.title}}</div>
                     <div class="t-table pr12 border-box mt15">
                       <div class="t-cell color-999 font14">
-                        <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ feeData.price }}</span></div>
+                        <div class="clamp1">
+                          <span>售价:</span>
+                          <span class="color-red"> {{ $t('RMB') }}</span>
+                          <span class="color-red" v-if="feeData.minprice && feeData.maxprice && feeData.minprice != '' && feeData.maxprice != '' && feeData.minprice != feeData.maxprice">{{feeData.minprice}}-{{feeData.maxprice}}</span>
+                          <span class="color-red" v-else-if="feeData.minprice && feeData.minprice != ''">{{ feeData.minprice }}</span>
+                          <span class="color-red" v-else>{{feeData.price}}</span>
+                        </div>
                         <div class="clamp1 mt5" v-if="feeData.fpid > 0">厂家佣金:<span class="color-red"> {{ $t('RMB') }}{{ feeData.rebatein }}</span></div>
                         <div class="clamp1 mt5">
                             <span class="v_middle db-in">已售: {{ feeData.saled }}{{feeData.unit}}</span>
