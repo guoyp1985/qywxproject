@@ -131,6 +131,7 @@
                 <div class="t-cell input-cell v_middle" style="position:relative;">
                   <check-icon class="red-check" :value.sync="template1" @click.native.stop="clickTemplate(1)">通用版</check-icon>
                   <check-icon class="red-check" :value.sync="template2" @click.native.stop="clickTemplate(2)">大图版</check-icon>
+                  <check-icon class="red-check" :value.sync="template3" @click.native.stop="clickTemplate(3)">列表版</check-icon>
                 </div>
               </div>
             </div>
@@ -337,6 +338,7 @@ export default {
       qrcodearr: [],
       template1: false,
       template2: false,
+      template3: false,
       serviceUser: {},
       showUserPopup: false,
       userData: [],
@@ -419,11 +421,18 @@ export default {
       if (curval === 1) {
         this.template1 = true
         this.template2 = false
+        this.template3 = false
         this.submitData.shopmodel = 1
       } else if (curval === 2) {
         this.template1 = false
         this.template2 = true
+        this.template3 = false
         this.submitData.shopmodel = 2
+      } else if (curval === 3) {
+        this.template1 = false
+        this.template2 = false
+        this.template3 = true
+        this.submitData.shopmodel = 3
       }
     },
     clickTip () {
@@ -695,6 +704,8 @@ export default {
           } else {
             if (retdata.shopmodel === '2') {
               this.template2 = true
+            } else if (retdata.shopmodel === '3') {
+              this.template3 = true
             } else {
               this.template1 = true
             }
