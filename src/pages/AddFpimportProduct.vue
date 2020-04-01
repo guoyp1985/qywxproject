@@ -1088,10 +1088,10 @@ export default {
               return false
             }
           }
-          if (self.$util.trim(salesrebate) !== '' && self.$util.trim(superrebate) !== '' && parseFloat(salesrebate) + parseFloat(superrebate) > price) {
+          if (self.$util.trim(salesrebate) !== '' && self.$util.trim(superrebate) !== '' && parseFloat(salesrebate) + parseFloat(superrebate) >= price) {
             self.$vux.alert.show({
               title: '',
-              content: '销售佣金+推荐人佣金不能大于商品现价'
+              content: '销售佣金+推荐人佣金应小于商品现价'
             })
             return false
           }
