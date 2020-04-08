@@ -1241,7 +1241,7 @@ export default {
                 }
                 let rparams = self.$util.handleAppParams(self.query, {id: pid, fid: self.query.fid})
                 if (self.query.fromapp === 'factory') {
-                  self.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.factoryAppProduct}?id=pid&type=fpimport`})
+                  self.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.factoryAppProduct}?id=${pid}&type=fpimport`})
                 } else {
                   self.$router.push({path: '/fpimportProduct', query: rparams})
                 }
