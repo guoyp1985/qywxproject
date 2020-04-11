@@ -185,6 +185,10 @@ export default {
       pagestart2: 0,
       pagestart3: 0,
       pagestart4: 0,
+      isLoading1: false,
+      isLoading2: false,
+      isLoading3: false,
+      isLoading4: false,
       showRefundModal: false,
       refundContent: '',
       clickOrder: {},
@@ -708,6 +712,19 @@ export default {
       })
     },
     getData (flag) {
+      if (flag === 2) {
+        if (this.isLoading2) return false
+        this.isLoading2 = true
+      } else if (flag === 3) {
+        if (this.isLoading3) return false
+        this.isLoading3 = true
+      } else if (flag === 4) {
+        if (this.isLoading4) return false
+        this.isLoading4 = true
+      } else {
+        if (this.isLoading1) return false
+        this.isLoading1 = true
+      }
       flag = flag || 0
       console.log('=== 请求中的flag ===')
       console.log(flag)
@@ -738,21 +755,25 @@ export default {
         retdata = this.setListButton(retdata)
         switch (flag) {
           case 0:
+            this.isLoading1 = false
             console.log('getdata 0')
             self.tabdata1 = self.tabdata1.concat(retdata)
             self.distabdata1 = true
             break
           case 2:
+            this.isLoading2 = false
             console.log('getdata 2')
             self.tabdata2 = self.tabdata2.concat(retdata)
             self.distabdata2 = true
             break
           case 3:
+            this.isLoading3 = false
             console.log('getdata 3')
             self.tabdata3 = self.tabdata3.concat(retdata)
             self.distabdata3 = true
             break
           case 4:
+            this.isLoading4 = false
             console.log('getdata 4')
             self.tabdata4 = self.tabdata4.concat(retdata)
             self.distabdata4 = true
