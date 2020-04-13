@@ -8,8 +8,8 @@
         <div v-if="orderData.seller && orderData.seller.username && (!orderData.frommin || orderData.frommin == '')">
           <div class="b_bottom_after padding10 bg-white">
             <div class="t-table">
-              <div class="t-cell w100">返点客：</div>
-              <div class="t-cell sellername align_right clamp1">
+              <div class="t-cell w60">返点客：</div>
+              <div class="t-cell sellername align_left clamp1">
                 <div class="clamp1">{{ orderData.seller.username }}</div>
               </div>
             </div>
