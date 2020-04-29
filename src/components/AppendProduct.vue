@@ -101,9 +101,11 @@ export default {
         this.selectProdcut = null
         this.selectProductIndex = -1
       }
-      for (let d of this.products) {
+      for (let i = 0; i < this.products.length; i++) {
+        let d = this.products[i]
         if (d.id !== data.id && d.checked) {
           delete d.checked
+          this.products.splice(i, d)
           break
         }
       }
