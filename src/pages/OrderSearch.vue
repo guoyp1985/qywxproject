@@ -4,7 +4,7 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div id="order-search" :class="`containerarea font14 ${(loginUser.isretailer && query.fromapp != 'factory') ? 's-havebottom' : ''} ${query.form == 'miniprogram' ? 'minigxk' : ''}`">
+  <div id="order-search" :class="`containerarea font14 ${(loginUser.isretailer && query.fromapp != 'factory') ? 's-havebottom' : ''} ${query.from == 'miniprogram' ? 'minigxk' : ''}`">
     <search
       class="v-search bg-white"
       v-model='searchword1'
