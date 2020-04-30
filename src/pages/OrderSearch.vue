@@ -879,8 +879,8 @@ export default {
 .s-topbanner1{top:55px;}
 .s-container1{top:99px !important;}
 #order-search.minigxk{
-  padding-top:40px;
-  .s-topbanner1{top:95px;}
-  .s-container1{top:140px !important;}
+  padding-top:60px;
+  .s-topbanner1{top:115px;}
+  .s-container1{top:160px !important;}
 }
 </style>
