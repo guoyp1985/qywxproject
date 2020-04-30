@@ -116,7 +116,7 @@
           </div>
           <div class="pt10 bg-page"></div>
           <div class="flex_center">
-            <div class="form-item required bg-white bright">
+            <div v-if="!optionsData.length" class="form-item required bg-white bright">
               <div class="t-table">
                 <div class="t-cell title-cell w80 font14 v_middle">商品现价<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
                 <div class="t-cell input-cell v_middle" style="position:relative;">
@@ -158,7 +158,7 @@
           <div class="pt10 bg-page"></div>
 
           <!-- 商品利润 -->
-          <div class="form-item required bg-white">
+          <div v-if="!optionsData.length" class="form-item required bg-white">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">商品利润</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
@@ -170,7 +170,7 @@
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>
           </div>
-          <div class="flex_row">
+          <div v-if="!optionsData.length" class="flex_row">
             <div class="form-item required bg-white bright">
               <div class="t-table">
                 <div class="t-cell title-cell w80 font14 v_middle">销售佣金</div>
@@ -187,6 +187,22 @@
                   <x-input v-model="submitdata.superrebate" @keyup="priceChange('superrebate')" maxlength="7" size="7" type="text" class="input priceInput" name="superrebate" placeholder="推荐人佣金" ></x-input>
                 </div>
                 <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-item required bg-white bright" v-if="loginUser.factoryinfo && loginUser.factoryinfo.issupply">
+            <div class="t-table">
+              <div class="t-cell title-cell w80 font14 v_middle">平台佣金</div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <x-input v-model="submitdata.agentrebate" @keyup="priceChange('agentrebate')" maxlength="7" size="7" type="text" class="input priceInput" name="agentrebate" placeholder="平台佣金" ></x-input>
+              </div>
+              <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
+            </div>
+          </div>
+          <div class="form-item required bg-white">
+            <div class="t-table">
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <x-switch title='是否计入联创销售额' v-model="calcsales"></x-switch>
               </div>
             </div>
           </div>
@@ -268,9 +284,33 @@
                     </template>
                   </div>
                   <div class="flex_left mt10 con-item">
+                    <div class="title-cell1 flex_left">价格</div>
+                    <div class="border-cell flex_left flex_cell">
+                      <x-input v-model="item.price" class="input" placeholder="价格" maxlength="7" size="7" ></x-input>
+                    </div>
+                  </div>
+                  <div class="flex_left mt10 con-item">
+                    <div class="title-cell1 flex_left">销售佣金</div>
+                    <div class="border-cell flex_left flex_cell">
+                      <x-input v-model="item.salesrebate" class="input" placeholder="销售佣金" maxlength="7" size="7" ></x-input>
+                    </div>
+                  </div>
+                  <div class="flex_left mt10 con-item">
+                    <div class="title-cell1 flex_left">推荐人佣金</div>
+                    <div class="border-cell flex_left flex_cell">
+                      <x-input v-model="item.superrebate" class="input" placeholder="推荐人佣金" maxlength="7" size="7" ></x-input>
+                    </div>
+                  </div>
+                  <div class="flex_left mt10 con-item" v-if="loginUser.factoryinfo && loginUser.factoryinfo.issupply">
+                    <div class="title-cell1 flex_left">平台佣金</div>
+                    <div class="border-cell flex_left flex_cell">
+                      <x-input v-model="item.agentrebate" class="input" placeholder="平台佣金" maxlength="7" size="7" ></x-input>
+                    </div>
+                  </div>
+                  <div class="flex_left mt10 con-item">
                     <div class="title-cell1 flex_left">库存</div>
                     <div class="border-cell flex_left flex_cell">
-                      <x-input v-model="item.storage" @keyup="optionStorageChange(index)" type="tel" class="input" :placeholder="$t('Storage')" maxlength="5" size="5" ></x-input>
+                      <x-input v-model="item.storage" @keyup="optionStorageChange(index,'storage')" type="tel" class="input" :placeholder="$t('Storage')" maxlength="5" size="5" ></x-input>
                     </div>
                   </div>
                 </div>
@@ -487,7 +527,9 @@ export default {
         superrebate: '',
         sellingpoint: '',
         netincome: '',
-        manufacturer: ''
+        manufacturer: '',
+        calcsales: 1,
+        agentrebate: ''
       },
       allowsubmit: true,
       requireddata: {title: '', 'price': '', 'postage': '', 'photo': ''},
@@ -502,7 +544,8 @@ export default {
       clickPhotoIndex: -1,
       productData: {},
       disOptionsArea: false,
-      afterOptions: false
+      afterOptions: false,
+      calcsales: true
     }
   },
   watch: {
@@ -563,8 +606,11 @@ export default {
         superrebate: '',
         sellingpoint: '',
         netincome: '',
-        manufacturer: ''
+        manufacturer: '',
+        calcsales: 1,
+        agentrebate: ''
       }
+      this.calcsales = true
       this.listphotoarr = []
       this.photoarr = []
       this.photoarr1 = []
@@ -947,11 +993,11 @@ export default {
           self.$vux.toast.text('请输入商品名称', 'middle')
           return false
         }
-        if (self.$util.trim(postdata.price) === '') {
+        if (self.$util.trim(postdata.price) === '' && !self.optionsData.length) {
           self.$vux.toast.text('请输入商品价格', 'middle')
           return false
         }
-        if (self.$util.trim(postdata.profit) === '' && self.$util.trim(postdata.salesrebate) === '' && self.$util.trim(postdata.superrebate) === '') {
+        if (!self.optionsData.length && self.$util.trim(postdata.profit) === '' && self.$util.trim(postdata.salesrebate) === '' && self.$util.trim(postdata.superrebate) === '') {
           self.$vux.toast.text('请输入商品利润', 'middle')
           return false
         }
@@ -963,14 +1009,15 @@ export default {
         let profit = postdata.profit.toString().replace(/,/g, '')
         let salesrebate = postdata.salesrebate.toString().replace(/,/g, '')
         let superrebate = postdata.superrebate.toString().replace(/,/g, '')
-        if (self.$util.trim(price).length > 7 || self.$util.trim(oriprice).length > 7 || self.$util.trim(tbprice).length > 7 || self.$util.trim(jdprice).length > 7) {
+        let agentrebate = postdata.agentrebate.toString().replace(/,/g, '')
+        if (self.$util.trim(price.substr(0, price.indexOf('.'))).length > 7 || self.$util.trim(oriprice.substr(0, oriprice.indexOf('.'))).length > 7) {
           self.$vux.alert.show({
             title: '',
             content: '商品价格不能超过7位数'
           })
           return false
         }
-        if ((self.$util.trim(oriprice) !== '' && (isNaN(oriprice) || parseFloat(oriprice) < 0)) || isNaN(price) || parseFloat(price) <= 0) {
+        if ((self.$util.trim(oriprice) !== '' && (isNaN(oriprice) || parseFloat(oriprice) < 0)) || (!self.optionsData.length && (isNaN(price) || parseFloat(price) <= 0))) {
           self.$vux.alert.show({
             title: '',
             content: '请输入正确的价格'
@@ -995,64 +1042,73 @@ export default {
           self.$vux.toast.text('商品现价不能大于等于原价', 'middle')
           return false
         }
-        // 商品利润
-        if (self.$util.trim(oriprice) !== '' && (isNaN(profit) || parseFloat(profit) < 0)) {
-          self.$vux.alert.show({
-            title: '',
-            content: '请输入正确的利润'
-          })
-          return false
-        }
-        if (parseFloat(profit) >= parseFloat(price)) {
-          self.$vux.alert.show({
-            title: '',
-            content: '利润不能大于商品现价'
-          })
-          return false
-        }
-        if (self.$util.trim(salesrebate) !== '') {
-          if (isNaN(salesrebate) || parseFloat(salesrebate) < 0) {
+        if (!self.optionsData.length) {
+          // 商品利润
+          if (self.$util.trim(oriprice) !== '' && (isNaN(profit) || parseFloat(profit) < 0)) {
             self.$vux.alert.show({
               title: '',
-              content: '请输入正确的销售佣金'
-            })
-            return false
-          } else if (parseFloat(salesrebate) > price) {
-            self.$vux.alert.show({
-              title: '',
-              content: '销售佣金不能大于商品现价'
+              content: '请输入正确的利润'
             })
             return false
           }
-        }
-        if (self.$util.trim(superrebate) !== '') {
-          if (isNaN(superrebate) || parseFloat(superrebate) < 0) {
+          if (parseFloat(profit) >= parseFloat(price)) {
             self.$vux.alert.show({
               title: '',
-              content: '请输入正确的推荐人佣金'
-            })
-            return false
-          } else if (parseFloat(superrebate) > price) {
-            self.$vux.alert.show({
-              title: '',
-              content: '推荐人佣金不能大于商品现价'
+              content: '利润不能大于商品现价'
             })
             return false
           }
-        }
-        if (self.$util.trim(salesrebate) !== '' && self.$util.trim(superrebate) !== '' && parseFloat(salesrebate) + parseFloat(superrebate) > price) {
-          self.$vux.alert.show({
-            title: '',
-            content: '销售佣金+推荐人佣金不能大于商品现价'
-          })
-          return false
-        }
-        if (parseFloat(profit) > parseFloat(price)) {
-          self.$vux.alert.show({
-            title: '',
-            content: '商品利润不得大于商品现价'
-          })
-          return false
+          if (self.$util.trim(salesrebate) !== '') {
+            if (isNaN(salesrebate) || parseFloat(salesrebate) < 0) {
+              self.$vux.alert.show({
+                title: '',
+                content: '请输入正确的销售佣金'
+              })
+              return false
+            } else if (parseFloat(salesrebate) > price) {
+              self.$vux.alert.show({
+                title: '',
+                content: '销售佣金不能大于商品现价'
+              })
+              return false
+            }
+          }
+          if (self.$util.trim(superrebate) !== '') {
+            if (isNaN(superrebate) || parseFloat(superrebate) < 0) {
+              self.$vux.alert.show({
+                title: '',
+                content: '请输入正确的推荐人佣金'
+              })
+              return false
+            } else if (parseFloat(superrebate) > price) {
+              self.$vux.alert.show({
+                title: '',
+                content: '推荐人佣金不能大于商品现价'
+              })
+              return false
+            }
+          }
+          if (self.$util.trim(salesrebate) !== '' && self.$util.trim(superrebate) !== '' && parseFloat(salesrebate) + parseFloat(superrebate) > price) {
+            self.$vux.alert.show({
+              title: '',
+              content: '销售佣金+推荐人佣金不能大于商品现价'
+            })
+            return false
+          }
+          if (parseFloat(profit) > parseFloat(price)) {
+            self.$vux.alert.show({
+              title: '',
+              content: '商品利润不得大于商品现价'
+            })
+            return false
+          }
+          if (self.$util.trim(agentrebate) !== '' && (isNaN(agentrebate) || parseFloat(agentrebate) < 0)) {
+            self.$vux.alert.show({
+              title: '',
+              content: '请输入正确的平台佣金'
+            })
+            return false
+          }
         }
         if (!self.optionsData.length) {
           if (self.$util.trim(postdata.storage) === '') {
@@ -1078,9 +1134,45 @@ export default {
             let curOption = this.optionsData[i]
             let curTitle = curOption.title
             // let curPhoto = curOption.photo
+            let curPrice = curOption.price
+            let curSales = curOption.salesrebate
+            let curSuper = curOption.superrebate
+            let curRebate = curOption.agentrebate
             let curStorage = curOption.storage
-            if (self.$util.trim(curTitle) === '' || self.$util.trim(curStorage) === '') {
-              self.$vux.toast.text('请完规格信息', 'middle')
+            console.log(curOption)
+            if (self.$util.trim(curTitle) === '' || self.$util.trim(curPrice) === '' || self.$util.trim(curStorage) === '') {
+              self.$vux.toast.text('请完善规格信息', 'middle')
+              iscontinue = false
+              break
+            }
+            if (isNaN(curPrice) || parseFloat(curPrice) <= 0) {
+              self.$vux.toast.text('请输入正确的价格', 'middle')
+              iscontinue = false
+              break
+            }
+            if (self.$util.trim(curSales) !== '' && (isNaN(curSales) || parseFloat(curSales) < 0)) {
+              self.$vux.toast.text('请输入正确的佣金', 'middle')
+              iscontinue = false
+              break
+            }
+            if (self.$util.trim(curSuper) !== '' && (isNaN(curSuper) || parseFloat(curSuper) < 0)) {
+              self.$vux.toast.text('请输入正确的佣金', 'middle')
+              iscontinue = false
+              break
+            }
+
+            if (parseFloat(curPrice) < parseFloat(curSales) || parseFloat(curPrice) < parseFloat(curSuper)) {
+              self.$vux.toast.text('佣金不得大于现价', 'middle')
+              iscontinue = false
+              break
+            }
+            if (parseFloat(curPrice) < parseFloat(curSales) + parseFloat(curSuper)) {
+              self.$vux.toast.text('销售佣金+推荐人佣金不得大于现价', 'middle')
+              iscontinue = false
+              break
+            }
+            if (self.$util.trim(curRebate) !== '' && (isNaN(curRebate) || parseFloat(curRebate) < 0)) {
+              self.$vux.toast.text('请输入正确的佣金', 'middle')
               iscontinue = false
               break
             }
@@ -1112,7 +1204,15 @@ export default {
           for (let i = 0; i < this.optionsData.length; i++) {
             let curOption = this.optionsData[i]
             let oPhoto = curOption.photo ? curOption.photo : self.photoarr[0]
-            let addoption = {title: curOption.title, photo: oPhoto, storage: curOption.storage}
+            let addoption = {
+              title: curOption.title,
+              photo: oPhoto,
+              price: curOption.price,
+              salesrebate: curOption.salesrebate,
+              superrebate: curOption.superrebate,
+              agentrebate: curOption.agentrebate,
+              storage: curOption.storage
+            }
             if (curOption.id) {
               addoption.id = curOption.id
             }
@@ -1153,9 +1253,15 @@ export default {
       self.savedata(postdata)
     },
     saveupevent () {
+      console.log(this.optionsData)
       const self = this
       let postdata = self.submitdata
       postdata['moderate'] = 1
+      if (this.calcsales) {
+        postdata.calcsales = 1
+      } else {
+        postdata.calcsales = 0
+      }
       self.savedata(postdata)
     },
     priceChange (key) {
@@ -1167,10 +1273,6 @@ export default {
         val = val.substr(0, vallen - cha + 2)
       }
       this.submitdata[key] = val
-    },
-    optionStorageChange (index) {
-      let val = event.target.value
-      this.optionsData[index].storage = val
     },
     getData () {
       const self = this
@@ -1209,6 +1311,11 @@ export default {
           self.activityInfo = self.data.activitinfo
           for (let key in self.submitdata) {
             self.submitdata[key] = self.data[key]
+          }
+          if (retdata.calcsales) {
+            self.calcsales = true
+          } else {
+            self.calcsales = false
           }
           if (self.submitdata.listphoto && self.$util.trim(self.submitdata.listphoto) !== '') {
             self.listphotoarr = self.submitdata.listphoto.split(',')
@@ -1325,7 +1432,7 @@ export default {
         .con-item:not(:last-child) {margin-bottom:10px;}
         .con-item{
           width:100%;height:30px;
-          .title-cell1{width:60px;height:100%;}
+          .title-cell1{width:80px;height:100%;}
           .border-cell{
             border:#ccc 1px solid;height:100%;
             .input{width:100%;height:100%;padding:0 5px;box-sizing: border-box;}

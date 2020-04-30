@@ -38,15 +38,17 @@
         <popup class="menuwrap" v-model="showPopup1">
           <div class="popup0">
             <div class="list" v-if="clickData">
-              <div class="item" v-if="clickData.status">
-                <div class="inner" @click="clickPopup('manager')">内测人员列表</div>
-              </div>
-              <div class="item" v-if="clickData.status">
-                <div class="inner" @click="showxdate2">重置内测人员</div>
-              </div>
-              <div class="item" v-if="clickData.status">
-                <div class="inner" @click="clickPopup('close')">关闭内测功能</div>
-              </div>
+              <template v-if="clickData.status">
+                <div class="item">
+                  <div class="inner" @click="clickPopup('manager')">内测人员列表</div>
+                </div>
+                <div class="item">
+                  <div class="inner" @click="showxdate2">重置内测人员</div>
+                </div>
+                <div class="item">
+                  <div class="inner" @click="clickPopup('close')">关闭内测功能</div>
+                </div>
+              </template>
               <div class="item" v-else>
                 <div class="inner" @click="clickPopup('open')">开放内测功能</div>
               </div>
@@ -210,7 +212,7 @@ export default {
       this.pageStart2 = 0
       this.testUserData = []
       for (let i = 0; i < this.checkedUserData.length; i++) {
-        this.testUserData.push(this.checkedUserData[i])
+        this.testUserData.push(this.checkedUserData[i]) // 将所有已选中的人员 放入到testuserdata数组中
       }
       this.getRetailerList()
     },
@@ -225,7 +227,7 @@ export default {
       this.pageStart2 = 0
       this.testUserData = []
       for (let i = 0; i < this.checkedUserData.length; i++) {
-        this.testUserData.push(this.checkedUserData[i])
+        this.testUserData.push(this.checkedUserData[i]) // 将所有已选中的人员 放入到testuserdata数组中
       }
       this.getRetailerList()
     },
@@ -259,13 +261,32 @@ export default {
       })
     },
     showxdate2 () {
-      console.log('进入到了点击')
       this.timeShow = true
       this.showPopup1 = false
       this.showAddPopup = true
-      this.pushdata = []
       this.oldManagerData = []
-      this.getRetailerList()
+      this.checkedUserData = []
+      this.testUserData = []
+      this.pushdata = []
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/Beta/getTestors`, {
+        fid: this.loginUser.fid, module: this.clickData.module
+      }).then(res => {
+        let data = res.data
+        this.managerData = data.data ? data.data : data
+        this.disManagerList = true
+        for (var i = 0; i < this.managerData.length; i++) {
+          this.managerData[i].checked = true  // 将所有的已存在人员 的 checked 设置为true
+          this.managerData[i].uid = parseInt(this.managerData[i].wid)
+          this.oldManagerData.push(this.managerData[i].wid) // 将所有已存在人员 存入到 旧人员数组中
+          this.checkedUserData.push(this.managerData[i])  // 将所有已存在人员放入到 已勾选人员数组中
+          this.testUserData.push(this.managerData[i])     // 将所有已存在人员 存入到 testuserdata数组中
+          this.pushdata.push(parseInt(this.managerData[i].wid)) // 将所有已存在的人员的wid 放入到请求参数pushdata数组中
+        }
+        console.log('this.checkedUserData')
+        console.log(this.checkedUserData)
+        this.getRetailerList()
+      })
     },
     getRetailerList () {
       const self = this
@@ -280,16 +301,16 @@ export default {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
-        for (let i = 0; i < retdata.length; i++) {
-          retdata[i].checked = false
-          let isadd = true
-          for (let j = 0; j < self.checkedUserData.length; j++) {
-            if (parseInt(self.checkedUserData[j].wid) === retdata[i].uid) {
-              isadd = false
+        for (let i = 0; i < retdata.length; i++) {                              // 循环所有合伙人
+          retdata[i].checked = false                                            // 将所有合伙人的状态设置成未选中
+          let isadd = true                                                      // 用来标识 是否将当前合伙人 添加 到testuserdata数组中
+          for (let j = 0; j < self.checkedUserData.length; j++) {               // 循环所有已选中的用户
+            if (parseInt(self.checkedUserData[j].wid) === retdata[i].uid) {     // 判断当前已选中的用户 和 当前合伙人 是不是同一人
+              isadd = false                                                     // 如果是 则当前合伙人不添加到 testuserdata数组中
               break
             }
           }
-          if (isadd) {
+          if (isadd) {                                                          // 反之将当前合伙人 添加到 testuserdata中
             self.testUserData.push(retdata[i])
           }
         }
@@ -403,12 +424,12 @@ export default {
           self.disManagerList = true
           self.pushdata = []
           for (var i = 0; i < self.managerData.length; i++) {
-            self.managerData[i].checked = true
+            self.managerData[i].checked = true  // 将所有的已存在人员 的 checked 设置为true
             self.managerData[i].uid = parseInt(self.managerData[i].wid)
-            self.oldManagerData.push(self.managerData[i].wid)
-            self.checkedUserData.push(self.managerData[i])
-            self.testUserData.push(self.managerData[i])
-            self.pushdata.push(parseInt(self.managerData[i].wid))
+            self.oldManagerData.push(self.managerData[i].wid) // 将所有已存在人员 存入到 旧人员数组中
+            self.checkedUserData.push(self.managerData[i])  // 将所有已存在人员放入到 已勾选人员数组中
+            self.testUserData.push(self.managerData[i])     // 将所有已存在人员 存入到 testuserdata数组中
+            self.pushdata.push(parseInt(self.managerData[i].wid)) // 将所有已存在的人员的wid 放入到请求参数pushdata数组中
           }
           console.log('this.checkedUserData')
           console.log(this.checkedUserData)

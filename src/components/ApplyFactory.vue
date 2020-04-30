@@ -57,6 +57,7 @@
             </div>
           </div>
         </div>
+        <!--
         <div class="form-item bg-white fg b-top">
           <div class="t-table">
             <div class="t-cell title-cell w80 font14 v_middle">营业执照<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
@@ -102,6 +103,39 @@
             </div>
           </div>
         </div>
+      -->
+        <!--
+        <div class="form-item fg bg-white b-top b-bottom">
+          <div class="t-table">
+            <div class="t-cell title-cell font14 v_middle" style="width:100px;">公众号名称<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
+            <div class="t-cell input-cell v_middle flex_right" style="position:relative;">
+              <template v-if="factoryInfo && factoryInfo.moderate == 0">{{factoryInfo.licensecode}}</template>
+              <x-input v-else style="padding-right:5px;" v-model="submitData.licensecode" type="text" class="input" placeholder="请填写公众号名称，若无则填无" ></x-input>
+            </div>
+          </div>
+        </div>
+        <div class="form-item fg bg-white b-top b-bottom">
+          <div class="t-table">
+            <div class="t-cell title-cell font14 v_middle" style="width:100px;">有无供应链资源<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
+            <div class="t-cell input-cell v_middle flex_right" style="position:relative;">
+              <template v-if="factoryInfo && factoryInfo.moderate == 0">{{factoryInfo.licensecode}}</template>
+              <select>
+                <option value="有">有</option>
+                <option value="无">无</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="form-item fg bg-white b-top b-bottom">
+          <div class="t-table">
+            <div class="t-cell title-cell font14 v_middle" style="width:100px;">企业粉丝人数<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
+            <div class="t-cell input-cell v_middle flex_right" style="position:relative;">
+              <template v-if="factoryInfo && factoryInfo.moderate == 0">{{factoryInfo.licensecode}}</template>
+              <x-input v-else style="padding-right:5px;" v-model="submitData.licensecode" type="text" class="input" placeholder="请填写企业粉丝人数或代理人数" ></x-input>
+            </div>
+          </div>
+        </div>
+      -->
         <!-- 合作模式 -->
         <div class="form-item fg bg-white b-top b-bottom">
           <div class="t-table">
@@ -134,6 +168,27 @@
         <template v-if="factoryInfo && factoryInfo.moderate == 0">
           <div class="form-item fg bg-white b-top b-bottom mb5">
             <div class="t-table">
+              <div class="t-cell title-cell font14 v_middle" style="width:100px;">身份<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
+              <div class="t-cell input-cell v_middle flex_table" style="position:relative;">{{identityTitle}}</div>
+            </div>
+          </div>
+        </template>
+        <template v-else>
+          <div class="form-item fg bg-white b-top b-bottom required">
+            <div class="pb10">请选择您的身份<span class="color-gray">(可多选)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+            <checker
+            class="x-checker"
+            type="checkbox"
+            v-model="fIdentity"
+            default-item-class="ck-item"
+            selected-item-class="ck-item-selected">
+              <checker-item class="border1px color-gray" v-for="(item, index) in identityArr" :key="index" :value="item.id">{{ item.title }}</checker-item>
+            </checker>
+          </div>
+        </template>
+        <template v-if="factoryInfo && factoryInfo.moderate == 0">
+          <div class="form-item fg bg-white b-top b-bottom mb5">
+            <div class="t-table">
               <div class="t-cell title-cell font14 v_middle" style="width:100px;">经营产品<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
               <div class="t-cell input-cell v_middle flex_table" style="position:relative;">{{classTitle}}</div>
             </div>
@@ -155,10 +210,16 @@
         </template>
       </form>
     </div>
-    <!-- <div class="s-bottom flex_center bg-orange color-white" @click="saveEvent">{{ $t('Submit') }}</div> -->
     <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
-      <div v-if="factoryInfo && factoryInfo.id && factoryInfo.moderate == 0" class="flex_cell flex_center btn-bottom-red disable">审核中...</div>
-      <div v-else :class="`flex_cell flex_center btn-bottom-red ${this.flags ? 'disable' : ''}`" @click="saveEvent">提交申请</div>
+      <div v-if="factoryInfo && factoryInfo.id && factoryInfo.moderate == 0" class="flex_cell flex_center">
+        <div style="width:85%;" class="flex_center btn-bottom-red disable">审核中...</div>
+      </div>
+      <div v-else class="flex_cell flex_center">
+        <div style="width:85%;" :class="`flex_center btn-bottom-red ${this.flags ? 'disable' : ''}`" @click="saveEvent">提交申请</div>
+      </div>
+      <div class="flex_cell flex_center">
+        <div style="width:85%;" :class="`flex_center btn-bottom-orange`" @click="fastEvent">快速注册</div>
+      </div>
     </div>
     <div v-if="showTip" class="auto-modal flex_center">
       <div class="modal-inner border-box" style="width:80%;">
@@ -178,10 +239,43 @@
       <div class="modal-inner border-box" style="width:80%;">
         <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">每月分佣模式</div>
         <div class="align_left txt padding10">
-          <div>每月分佣合作模式：厂家需根据使用"共销客企业小程序"每月产生的交易额中,拿出5%的费用给予平台。如果本月没有销售额时,则无需支付使用费用</div>
+          <div>每月分佣合作模式：厂家需根据使用"共销客企业小程序"每月产生的交易额中,拿出2%的费用给予平台。如果本月没有销售额时,则无需支付使用费用</div>
           <div class="mt10 color-red">注意：共销客企业小程序使用达到一个月后,如未进行缴费时,则平台有权关闭厂家的使用权限!</div>
         </div>
         <div class="close-area flex_center" @click="closeCommission">
+          <i class="al al-close"></i>
+        </div>
+      </div>
+    </div>
+    <div v-if="showPay" class="auto-modal flex_center">
+      <div class="modal-inner border-box" style="width:80%;">
+        <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">快速注册</div>
+        <div class="align_left txt padding10">
+          <div>支付 1000 元，添加客服微信，客服人员将单独为 您提供技术客服，并可立即开通厂家身份，无需进行审核</div>
+        </div>
+        <div class="padding10">
+          <div class="flex_center">
+            <div class="flex_cell flex_center">
+              <div @click="closePay" class="flex_center bg-gray color-white" style="width:80%;height:35px;border-radius:10px;">取消</div>
+            </div>
+            <div class="flex_cell flex_center">
+              <div @click="toPay" class="flex_center bg-green color-white" style="width:80%;height:35px;border-radius:10px;">去支付</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div @click="clickChat" class="fixed-chat flex_center bg-theme color-white">客服</div>
+    <div v-if="showQrcode" class="auto-modal flex_center">
+      <div class="modal-inner border-box" style="width:80%;">
+        <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">客服</div>
+        <div class="flex_center">
+          <img style="max-width:90%;" src="https://tossharingsales.boka.cn/minigxk/gxkKeFu.jpg" />
+        </div>
+        <div class="align_left txt padding10">
+          <div class="align_center mt10">长按识别二维码</div>
+        </div>
+        <div class="close-area flex_center" @click="closeQrcode">
           <i class="al al-close"></i>
         </div>
       </div>
@@ -218,7 +312,19 @@ export default {
       type: Array,
       default: []
     },
+    identityArr: {
+      type: Array,
+      default: []
+    },
     classTitle: {
+      type: String,
+      default: ''
+    },
+    factoryIdentity: {
+      type: Array,
+      default: []
+    },
+    identityTitle: {
       type: String,
       default: ''
     },
@@ -234,6 +340,8 @@ export default {
     Group, XInput, Popup, Checker, Datetime, CheckerItem, CheckIcon, XTextarea
   },
   data () {
+    let fIdentity = this.factoryIdentity
+    let curfid = this.factoryInfo.id
     return {
       query: {},
       flags: null,
@@ -248,13 +356,17 @@ export default {
       photoarr: [],
       maxnum: 1,
       showTip: false,
-      fid: 0,
+      fid: curfid,
       getCodeIng: false,
-      requireddata: { title: '', company: '', licensephoto: '', licensecode: '' },
+      requireddata: {title: '', company: ''},
       isLoadPhoto: false,
       showTop: false,
       showMonthlyCommission: false,
-      shareUser: {}
+      shareUser: {},
+      showPay: false,
+      showQrcode: false,
+      submitIng: false,
+      fIdentity: fIdentity
     }
   },
   watch: {
@@ -272,6 +384,9 @@ export default {
     },
     productClass: function () {
       return this.productClass
+    },
+    fIdentity: function () {
+      return this.fIdentity
     }
   },
   methods: {
@@ -359,8 +474,53 @@ export default {
         })
       }
     },
-    saveEvent () {
+    fastEvent () {
+      if (this.fid) {
+        this.showPay = true
+      } else {
+        this.ajaxSave((data) => {
+          this.$vux.loading.hide()
+          if (data.flag) {
+            this.showPay = true
+          } else {
+            this.$vux.toast.show({
+              text: data.error,
+              type: 'warn',
+              time: this.$util.delay(data.error)
+            })
+          }
+        })
+      }
+    },
+    closePay () {
+      this.showPay = false
+    },
+    toPay () {
+      this.$http.post(`${ENV.BokaApi}/api/factory/FactoryfeePay`, {
+        fid: this.fid
+      }).then(res => {
+        const data = res.data
+        if (data.flag) {
+          this.showPay = false
+          location.replace(`${ENV.Host}/#/pay?id=${data.orderid}&module=payorders&type=applyfactory`)
+        } else {
+          this.$vux.toast.show({
+            text: data.error,
+            type: 'warn',
+            time: this.$util.delay(data.error)
+          })
+        }
+      })
+    },
+    closeQrcode () {
+      this.showQrcode = false
+    },
+    clickChat () {
+      this.showQrcode = true
+    },
+    ajaxSave (callback) {
       const self = this
+      if (this.submitIng) return false
       let postData = self.submitData
       console.log(this.yzmcode)
       console.log(postData)
@@ -369,6 +529,11 @@ export default {
       } else {
         postData.productclass = self.factoryInfo.productclass
       }
+      if (self.fIdentity) {
+        postData.identity = self.fIdentity.join(',')
+      } else {
+        postData.identity = self.factoryInfo.identity
+      }
       let validateData = []
       for (let key in self.requireddata) {
         let v = {}
@@ -376,6 +541,10 @@ export default {
         validateData.push(v)
       }
       if (postData.productclass.length === 0 || !postData.productclass) {
+        self.$vux.toast.text('必填项不能为空', 'middle')
+        return false
+      }
+      if (postData.identity.length === 0 || !postData.identity) {
         self.$vux.toast.text('必填项不能为空', 'middle')
         return false
       }
@@ -429,18 +598,32 @@ export default {
       if (self.query.share_fid) {
         postData.fid = self.query.share_fid
       }
+      this.submitIng = true
       self.$http.post(`${ENV.BokaApi}/api/factory/applyFactory`, postData).then(res => {
         let data = res.data
+        this.count = TimeCount
+        this.message = '获取验证码'
+        this.getCodeIng = false
+        clearInterval(this.intervalId)
+        if (data.flag) {
+          this.fid = data.data.id
+        }
+        this.submitIng = false
+        callback && callback(data)
+      })
+    },
+    saveEvent (type) {
+      this.ajaxSave((data) => {
         let error = data.flag === 1 ? '申请成功' : data.error
-        self.$vux.loading.hide()
-        self.$vux.toast.show({
+        this.$vux.loading.hide()
+        this.$vux.toast.show({
           text: error,
           type: (data.flag !== 1 ? 'warn' : 'success'),
-          time: self.$util.delay(error),
+          time: this.$util.delay(error),
           onHide: () => {
             if (data.flag === 1) {
-              self.initCode()
-              self.$emit('afterApply', data.data)
+              this.initCode()
+              this.$emit('afterApply', data.data)
             }
           }
         })
@@ -486,59 +669,6 @@ export default {
         }
       }
     },
-    handleProductClass () {
-      const self = this
-      self.productClass = []
-      if (self.factoryInfo.productclass && self.$util.trim(self.factoryInfo.productclass) !== '') {
-        let classStr = []
-        let idarr = self.factoryInfo.productclass.split(',')
-        for (let i = 0; i < idarr.length; i++) {
-          self.productClass.push(parseInt(idarr[i]))
-          for (let j = 0; j < self.classData.length; j++) {
-            if (parseInt(idarr[i]) === self.classData[j].id) {
-              classStr.push(self.classData[j].title)
-              break
-            }
-          }
-        }
-        if (classStr.length) {
-          self.classTitle = classStr.join(',')
-        }
-      }
-    },
-    getData () {
-      const self = this
-      self.$vux.loading.show()
-      self.$http.get(`${ENV.BokaApi}/api/factory/info`,
-        { params: { } }
-      ).then(function (res) {
-        self.$vux.loading.hide()
-        let data = res.data
-        if (data.flag) {
-          let retdata = data.data ? data.data : data
-          console.log('in getData')
-          console.log(retdata)
-          self.factoryInfo = retdata
-          self.photoarr = []
-          if (retdata.licensephoto && self.$util.trim(retdata.licensephoto) !== '') {
-            self.photoarr = retdata.licensephoto.split(',')
-          }
-          for (let key in self.submitData) {
-            self.submitData[key] = retdata[key]
-          }
-        }
-        return self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
-          { params: { limit: 100 } }
-        )
-      }).then(function (res) {
-        if (res) {
-          let data = res.data
-          data = data.data ? data.data : data
-          self.classData = data
-          self.handleProductClass()
-        }
-      })
-    },
     initCode () {
       this.count = TimeCount
       this.message = '获取验证码'
@@ -559,9 +689,22 @@ export default {
   },
   created () {
     this.query = this.$route.query
+    let shareuid = ''
     if (this.query.share_uid) {
-      this.$http.get(`${ENV.BokaApi}/api/getUser/${this.query.share_uid}`).then(res => {
+      shareuid = this.query.share_uid
+      this.$http.post(`${ENV.BokaApi}/api/salesman/recordView`, {
+        shareuid: this.query.share_uid
+      })
+      this.$http.get(`${ENV.BokaApi}/api/getUser/${shareuid}`).then(res => {
         this.shareUser = res.data
+      })
+    } else {
+      this.$http.post(`${ENV.BokaApi}/api/salesman/inviter`).then(res => {
+        const data = res.data
+        if (data.flag) {
+          const retdata = data.data
+          this.shareUser = {uid: retdata.uid, linkman: retdata.invitername}
+        }
       })
     }
   }
@@ -571,6 +714,7 @@ export default {
 <style lang="less">
 .apply-factory-page{
   background-color:#EFF2F3;
+  .s-container{padding-bottom:65px;}
   .fg{margin-top:5px;}
   .b-border{border-bottom:1px solid #e5e5e5;}
   .b-top{border-top:1px solid #e5e5e5;}
@@ -600,5 +744,9 @@ export default {
   }
   .x-checker .border1px.ck-item-selected:after{border:1px solid #ea3a3a;}
   .vux-check-icon > span{color:#666;display: inline-block;vertical-align: bottom;line-height: 19px;}
+  .fixed-chat{
+    width:50px;height:50px;border-radius:50%;
+    position:fixed;right:10px;bottom:60px;
+  }
 }
 </style>

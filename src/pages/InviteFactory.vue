@@ -1,13 +1,13 @@
 <style lang="less">
 .invite-factory-page{
-  padding-bottom:50px;background-color:#ff9691;
+  padding-bottom:50px;background-color:#ff9691;box-sizing: border-box;
   .btn-create{
     width:200px;height:40px;border-radius:70px;
   }
   .bottom-area{
     position:fixed;left:0;bottom:20px;right:0;height:50px;
     .btn{
-      width:100px;height:35px;border-radius:35px;box-shadow:0px 0px 3px 1px #fff;
+      width:85%;height:35px;border-radius:35px;box-shadow:0px 0px 3px 1px #fff;
     }
   }
 }
@@ -23,11 +23,11 @@
       <div class="flex_center mt20">保存图片发送给好友，邀请加盟</div> -->
     </div>
     <div class="bottom-area flex_center">
-      <div class="flex_cell flex_center">
+      <div class="flex_cell flex_center" v-if="!query.from">
         <div class="btn bg-theme color-white flex_center" @click="toUse">马上使用</div>
       </div>
-      <div class="flex_cell flex_center" v-if="loginUser.fid">
-        <div class="btn color-white flex_center" style="background-color:#6080ec;" @click="toQrcode">二维码</div>
+      <div class="flex_cell flex_center" v-if="loginUser.fid && query.from">
+        <div class="btn color-white flex_center" style="background-color:#6080ec;" @click="toQrcode">邀请码</div>
       </div>
     </div>
     <div v-if="showQrcode" class="auto-modal flex_center" style="position:fixed;">

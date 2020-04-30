@@ -51,7 +51,9 @@
           <div v-if="productdata.sellingpoint && productdata.sellingpoint != ''" class="color-theme">{{productdata.sellingpoint}}</div>
           <div class="color-red">
             <span class="font18 mr3 v_middle">{{ $t('RMB') }}</span>
-            <span class="font18 mr5 v_middle">{{ productdata.price }}</span>
+            <span class="font18 mr5 v_middle" v-if="productdata.minprice && productdata.maxprice && productdata.minprice != productdata.maxprice">{{ productdata.minprice }}-{{productdata.maxprice}}</span>
+            <span class="font18 mr5 v_middle" v-else-if="productdata.minprice && productdata.minprice != ''">{{ productdata.minprice }}</span>
+            <span class="font18 mr5 v_middle" v-else>{{ productdata.price }}</span>
             <span class="color-gray font14 line-through" v-if="productdata.oriprice && productdata.oriprice > 0">
               <span class="mr3 v_middle">{{ $t('RMB') }}</span>
               <span class="v_middle">{{ productdata.oriprice }}</span>
@@ -82,12 +84,24 @@
         </template>
         <div class="padding10 b_bottom_after levelarea">
           <div class="levelitem">
-            <div><span class="bold">推荐人佣金:</span><span class="bold">{{ $t('RMB') }}{{ module == 'fpimport' ? productdata.newsuperrebate : productdata.superiorrebate }}</span><i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp"></i></div>
+            <div>
+              <span class="bold">推荐人佣金:</span>
+              <span class="bold">{{ $t('RMB') }}</span>
+              <span class="bold" v-if="productdata.minsuperrebate && productdata.maxsuperrebate && productdata.minsuperrebate != productdata.maxsuperrebate">{{ productdata.minsuperrebate }}-{{productdata.maxsuperrebate}}</span>
+              <span class="bold" v-else>{{ productdata.minsuperrebate }}</span>
+              <i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp"></i>
+            </div>
           </div>
         </div>
         <div class="padding10 b_bottom_after levelarea">
           <div class="levelitem">
-            <div><span class="bold">销售佣金:</span><span class="bold"> {{ $t('RMB') }}{{ module == 'fpimport' ? productdata.newsalesrebate : productdata.salesrebate }}</span><i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp1"></i></div>
+            <div>
+              <span class="bold">销售佣金:</span>
+              <span class="bold"> {{ $t('RMB') }}</span>
+              <span class="bold" v-if="productdata.minsalesrebate && productdata.maxsalesrebate && productdata.minsalesrebate != productdata.maxsalesrebate">{{ productdata.minsalesrebate }}-{{productdata.maxsalesrebate}}</span>
+              <span class="bold" v-else>{{ productdata.minsalesrebate }}</span>
+              <i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp1"></i>
+            </div>
           </div>
         </div>
         <!-- <template v-if="feeData.length != 0 && (productdata.identity == 'factory' || productdata.joinstatus == 0)">
@@ -133,7 +147,7 @@
           </div>
         </div>
       </div>
-      <div v-if="loginUser.isretailer && query.frompage != 'manager'" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
+      <div v-if="loginUser.isretailer && query.frompage != 'manager' && (!loginUser.factoryinfo || !loginUser.factoryinfo.issupply)" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
         <!-- <div class="align_center flex_center flex_cell" v-if="!loginUser.retailerinfo.fid || loginUser.retailerinfo.fid == query.fid"> -->
         <div class="align_center flex_center flex_cell">
           <div class="btn-bottom-red flex_center" style="width:90%;" v-if="productdata.haveimport == 1">已上架</div>
@@ -198,7 +212,7 @@
                 </div>
                 <div class="flex_cell flex_left">
                   <div class="w_100">
-                    <div class="color-theme"><span>￥</span><span class="bold font16">{{productdata.price}}</span></div>
+                    <div class="color-theme"><span>￥</span><span class="bold font16">{{selectedOption.price}}</span></div>
                     <div class="mt10 color-gray">库存{{selectedOption.storage}}{{productdata.unit}}</div>
                     <div class="mt10" v-if="selectedOption.title">规格: {{selectedOption.title}}</div>
                     <div class="mt10" v-else>规格</div>
@@ -632,7 +646,7 @@ export default {
               self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
             }
             self.handelShare()
-            if (!self.loginUser.isretailer || this.query.frompage === 'manager') {
+            if (!self.loginUser.isretailer || this.query.frompage === 'manager' || (this.loginUser.factoryinfo && this.loginUser.factoryinfo.issupply)) {
               self.topcss = 'nobottom'
             }
             self.feeData = self.productdata.agentfee ? self.productdata.agentfee : []

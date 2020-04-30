@@ -32,12 +32,21 @@
                     <div class="clamp1 font16 pr10 color-lightgray"><span class="color-theme" v-if="item.fromfid">【货源】</span><span>{{item.title}}</span></div>
                     <div class="t-table pr12 border-box mt15">
                       <div class="t-cell color-999 font14">
-                        <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ item.price }}</span></div>
+                        <div class="clamp1">售价:
+                          <span class="color-red" v-if="item.minprice && item.maxprice && item.minprice != '' && item.maxprice != '' && item.minprice != item.maxprice">￥{{item.minprice}}-{{item.maxprice}}</span>
+                          <span class="color-red" v-else-if="item.minprice && item.minprice != ''">￥{{ item.minprice }}</span>
+                          <span class="color-red" v-else>￥{{item.price}}</span>
+                        </div>
                         <div class="clamp1">
                             <span class="v_middle db-in">库存: {{ item.storage }}{{item.unit}}</span>
                             <span class="v_middle db-in ml5">已售: {{ item.truesaled }}{{item.unit}}</span>
                         </div>
-                        <div class="font12" v-if="item.fromfid">利润空间:<span class="color-red"> {{ $t('RMB') }}{{ item.lirun }}</span></div>
+                        <div class="font12" v-if="item.fromfid">
+                          <span>平台佣金:</span>
+                          <span class="color-red" v-if="item.minagentrebate && item.maxagentrebate && item.minagentrebate != '' && item.maxagentrebate != '' && item.minagentrebate != item.maxagentrebate">￥{{item.minagentrebate}}-{{item.maxagentrebate}}</span>
+                          <span class="color-red" v-else-if="item.minagentrebate && item.minagentrebate != ''">￥{{ item.minagentrebate }}</span>
+                          <span class="color-red" v-else>￥{{item.agentrebate}}</span>
+                        </div>
                         <!-- <div class="clamp1 mt5">
                             <span class="v_middle db-in">销售佣金: {{ item.salesrebate }}</span>
                             <span class="v_middle db-in ml5">推荐佣金: {{ item.superrebate }}</span>
@@ -57,11 +66,15 @@
         </template>
       </div>
       <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
-        <div class="flex_center flex_cell">
-          <router-link class="flex_center bg-orange color-white" style="width:85%;border-radius:50px;height:35px;" to="/sourceList">货源</router-link>
+        <div class="flex_center flex_cell" v-if="query.fromapp == 'factory'">
+          <!-- <router-link class="flex_center bg-orange color-white" style="width:85%;border-radius:50px;height:35px;" to="/sourceList">货源</router-link> -->
+          <div class="flex_center bg-orange color-white" style="width:85%;border-radius:50px;height:35px;" @click="toFactory">货源</div>
         </div>
         <div class="flex_cell flex_center">
           <div class="bg-red flex_center color-white" style="width:85%;border-radius:50px;height:35px;" @click="toAdd">{{ $t('Add product') }}</div>
+        </div>
+        <div class="flex_center flex_cell">
+          <div class="flex_center bg-orange color-white" style="width:85%;border-radius:50px;height:35px;" @click="toGoodeazy">采集商品</div>
         </div>
       </div>
       <div v-transfer-dom>
@@ -106,7 +119,7 @@
                   <div class="inner" @click="clickpopup('downShelf')">从货源移出</div>
                 </div>
               </template>
-              <div class="item" v-if="clickdata.fromfid">
+              <div class="item" v-if="clickdata.fromfid && !loginUser.factoryinfo.issupply">
                 <div class="inner" @click="clickpopup('fee')">设置佣金</div>
               </div>
               <div class="item">
@@ -191,7 +204,13 @@
                     <div class="clamp1 font16 pr10 color-lightgray">{{feeData.title}}</div>
                     <div class="t-table pr12 border-box mt15">
                       <div class="t-cell color-999 font14">
-                        <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ feeData.price }}</span></div>
+                        <div class="clamp1">
+                          <span>售价:</span>
+                          <span class="color-red"> {{ $t('RMB') }}</span>
+                          <span class="color-red" v-if="feeData.minprice && feeData.maxprice && feeData.minprice != '' && feeData.maxprice != '' && feeData.minprice != feeData.maxprice">{{feeData.minprice}}-{{feeData.maxprice}}</span>
+                          <span class="color-red" v-else-if="feeData.minprice && feeData.minprice != ''">{{ feeData.minprice }}</span>
+                          <span class="color-red" v-else>{{feeData.price}}</span>
+                        </div>
                         <div class="clamp1 mt5" v-if="feeData.fpid > 0">厂家佣金:<span class="color-red"> {{ $t('RMB') }}{{ feeData.rebatein }}</span></div>
                         <div class="clamp1 mt5">
                             <span class="v_middle db-in">已售: {{ feeData.saled }}{{feeData.unit}}</span>
@@ -392,6 +411,20 @@ export default {
       let params = this.$util.handleAppParams(this.query, {fid: this.Fid})
       this.$router.push({path: '/addFpimportProduct', query: params})
     },
+    toGoodeazy () {
+      let params = this.$util.handleAppParams(this.query, {fid: this.Fid})
+      this.$router.push({path: '/factoryProductGoodeazy', query: params})
+    },
+    toFactory () {
+      let params = this.$util.handleAppParams(this.query, {fid: this.query.sourceFid})
+      if (this.loginUser.factoryinfo) {
+        if (this.loginUser.factoryinfo.issupply) {
+          this.$router.push({path: '/sourceList', query: params})
+        } else {
+          this.$router.push({path: '/factoryDetail', query: params})
+        }
+      }
+    },
     getPhoto (src) {
       return this.$util.getPhoto(src)
     },
@@ -577,13 +610,13 @@ export default {
             newval = 0
           }
           if (type === 'add') {
-            if (!/^[0-9]*[1-9][0-9]*$/.test(newval)) {
+            if (newval !== 0 && !/^[0-9]*[1-9][0-9]*$/.test(newval)) {
               this.$vux.toast.text('请输入大于0的库存')
               isContinue = false
               return false
             }
           } else {
-            if (!/^-[0-9]*[1-9][0-9]*$/.test(newval)) {
+            if (newval !== 0 && !/^-[0-9]*[1-9][0-9]*$/.test(newval)) {
               this.$vux.toast.text('请输入负数库存')
               isContinue = false
               return false
@@ -625,16 +658,19 @@ export default {
         this.$vux.loading.hide()
         if (data.flag) {
           let newData = this.productdata[this.clickindex]
+          let total = 0
           if (!newData.options || !newData.options.length) {
-            newData.storage = newData.storage + parseInt(this.clickdata.newstorage)
+            total = newData.storage + parseInt(this.clickdata.newstorage)
           } else {
-            let total = newData.storage
+            total = newData.storage
             for (let i = 0; i < newData.options.length; i++) {
               newData.options[i].storage = newData.options[i].storage + parseInt(newData.options[i].newstorage)
               total = total + parseInt(newData.options[i].newstorage)
             }
-            newData.storage = total
           }
+          total = total - this.clickdata.saled
+          if (total < 0) total = 0
+          newData.storage = total
           this.productdata[this.clickindex] = newData
         }
         this.$vux.toast.show({

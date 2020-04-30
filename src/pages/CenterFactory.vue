@@ -14,6 +14,9 @@
           :classData="classData"
           :productClass="productClass"
           :classTitle="classTitle"
+          :identityArr="identityArr"
+          :factoryIdentity="factoryIdentity"
+          :identityTitle="identityTitle"
           :submitData="submitData"
           :tradeData="tradeData"
           @clickPhoto="afterUploadPhoto"
@@ -53,10 +56,17 @@ export default {
       WeixinQrcode: ENV.WeixinQrcode,
       messages: 0,
       endTime: '',
-      submitkey: { title: '', mobile: '', company: '', licensephoto: '', licensecode: '', superiorrate: '20', salesrate: '80' },
+      submitkey: { title: '', mobile: '', company: '', licensephoto: '', licensecode: '', superiorrate: '20', salesrate: '80', identity: '' },
       submitData: {},
       productClass: [],
       classTitle: '',
+      identityArr: [
+        {id: 1, title: '社群团队'},
+        {id: 2, title: '供应链'},
+        {id: 3, title: '生产厂家'}
+      ],
+      factoryIdentity: [],
+      identityTitle: '',
       tradeData: []
     }
   },
@@ -84,6 +94,26 @@ export default {
           self.classTitle = classStr.join(',')
         }
       }
+      console.log(this.productClass)
+    },
+    handleIndentity () {
+      this.factoryIdentity = []
+      if (this.factoryInfo.identity && this.$util.trim(this.factoryInfo.identity) !== '') {
+        let iStr = []
+        let idarr = this.factoryInfo.identity.split(',')
+        for (let i = 0; i < idarr.length; i++) {
+          this.factoryIdentity.push(parseInt(idarr[i]))
+          for (let j = 0; j < this.identityArr.length; j++) {
+            if (parseInt(idarr[i]) === this.identityArr[j].id) {
+              iStr.push(this.identityArr[j].title)
+              break
+            }
+          }
+        }
+        if (iStr.length) {
+          this.identityTitle = iStr.join(',')
+        }
+      }
     },
     afterApply (data) {
       delete this.factoryInfo.id
@@ -91,6 +121,7 @@ export default {
       User.set(this.loginUser)
       this.factoryInfo = data
       this.handleProductClass()
+      this.handleIndentity()
     },
     getData () {
       const self = this
@@ -110,6 +141,9 @@ export default {
             for (let key in self.submitkey) {
               self.submitData[key] = self.factoryInfo[key]
             }
+            this.handleIndentity()
+            console.log('厂家身份')
+            console.log(self.factoryIdentity)
           } else {
             self.submitData = self.submitkey
           }

@@ -24,51 +24,51 @@
       </tab>
     </div>
     <div ref="scrollContainer" class="s-container s-container1 scroll-container" @scroll="scrollHandle">
-      <div v-show="selectedIndex===0">
+      <div v-show="selectedIndex==0">
         <template v-if="distabdata1">
-          <template v-if="tabdata1.length">
+          <template v-if="!tabdata1.length">
+            <div class="no-related-x color-gray">
+              <span>{{$t('No Related Orders')}}</span>
+            </div>
+          </template>
+          <template v-else>
             <order-info v-for="(item, index) in tabdata1" :item="item" :key="index" :index="index" @on-process="orderProcess"></order-info>
           </template>
-          <template v-else>
+        </template>
+      </div>
+      <div v-show="selectedIndex==1">
+        <template v-if="distabdata2">
+          <template v-if="!tabdata2.length">
             <div class="no-related-x color-gray">
               <span>{{$t('No Related Orders')}}</span>
             </div>
           </template>
-        </template>
-      </div>
-      <div v-show="selectedIndex===1">
-        <template v-if="distabdata2">
-          <template v-if="tabdata2.length">
+          <template v-else>
             <order-info v-for="(item, index) in tabdata2" :item="item" :key="index" :index="index" @on-process="orderProcess"></order-info>
           </template>
-          <template v-else>
+        </template>
+      </div>
+      <div v-show="selectedIndex==2">
+        <template v-if="distabdata3">
+          <template v-if="!tabdata3.length">
             <div class="no-related-x color-gray">
               <span>{{$t('No Related Orders')}}</span>
             </div>
           </template>
-        </template>
-      </div>
-      <div v-show="selectedIndex===2">
-        <template v-if="distabdata3">
-          <template v-if="tabdata3.length">
+          <template v-else>
             <order-info v-for="(item, index) in tabdata3" :item="item" :key="index" :index="index" @on-process="orderProcess"></order-info>
           </template>
-          <template v-else>
-            <div class="no-related-x color-gray">
-              <span>{{$t('No Related Orders')}}</span>
-            </div>
-          </template>
         </template>
       </div>
-      <div v-show="selectedIndex===3">
+      <div v-show="selectedIndex==3">
         <template v-if="distabdata4">
-          <template v-if="tabdata4.length">
-            <order-info v-for="(item, index) in tabdata4" :item="item" :key="index" :index="index" @on-process="orderProcess"></order-info>
-          </template>
-          <template v-else>
+          <template v-if="!tabdata4.length">
             <div class="no-related-x color-gray">
               <span>{{$t('No Related Orders')}}</span>
             </div>
+          </template>
+          <template v-else>
+            <order-info v-for="(item, index) in tabdata4" :item="item" :key="index" :index="index" @on-process="orderProcess"></order-info>
           </template>
         </template>
       </div>
@@ -219,21 +219,14 @@ export default {
       return `${address.area.join('')}${address.details}`
     }
   },
+  watch: {
+    selectedIndex () {
+      console.log('监控到selectedIndex变化', this.selectedIndex)
+      return this.selectedIndex
+    }
+  },
   methods: {
     initData () {
-      // this.selectedIndex = 0
-      // this.distabdata1 = false
-      // this.distabdata2 = false
-      // this.distabdata3 = false
-      // this.distabdata4 = false
-      // this.tabdata1 = []
-      // this.tabdata2 = []
-      // this.tabdata3 = []
-      // this.tabdata4 = []
-      // this.pagestart1 = 1
-      // this.pagestart2 = 1
-      // this.pagestart3 = 1
-      // this.pagestart4 = 1
       this.showRefundModal = false
       this.refundContent = ''
       this.clickOrder = {}
@@ -242,18 +235,22 @@ export default {
     onSubmit1 () {
       switch (this.selectedIndex) {
         case 0:
+          this.distabdata1 = false
           this.tabdata1 = []
           this.pagestart1 = 0
           break
         case 1:
+          this.distabdata2 = false
           this.tabdata2 = []
           this.pagestart2 = 0
           break
         case 2:
+          this.distabdata3 = false
           this.tabdata3 = []
           this.pagestart3 = 0
           break
         case 3:
+          this.distabdata4 = false
           this.tabdata4 = []
           this.pagestart4 = 0
           break
@@ -660,8 +657,7 @@ export default {
       })
     },
     toggleTab () {
-      console.log('in toggleTab')
-      console.log(this.selectedIndex)
+      console.log('in toggleTab, this.selectedIndex=', this.selectedIndex)
       switch (this.selectedIndex) {
         case 0:
           !this.tabdata1.length && this.getData()
@@ -713,6 +709,8 @@ export default {
     },
     getData (flag) {
       flag = flag || 0
+      console.log('=== 请求中的flag ===')
+      console.log(flag)
       this.$vux.loading.show()
       const self = this
       let params = {flag: flag, limit: self.limit}
@@ -740,18 +738,22 @@ export default {
         retdata = this.setListButton(retdata)
         switch (flag) {
           case 0:
+            console.log('getdata 0')
             self.tabdata1 = self.tabdata1.concat(retdata)
             self.distabdata1 = true
             break
           case 2:
+            console.log('getdata 2')
             self.tabdata2 = self.tabdata2.concat(retdata)
             self.distabdata2 = true
             break
           case 3:
+            console.log('getdata 3')
             self.tabdata3 = self.tabdata3.concat(retdata)
             self.distabdata3 = true
             break
           case 4:
+            console.log('getdata 4')
             self.tabdata4 = self.tabdata4.concat(retdata)
             self.distabdata4 = true
             break
@@ -767,6 +769,9 @@ export default {
       this.initData()
       this.query = this.$route.query
       let flag = 0
+      console.log('=== selectedIndex ===')
+      console.log(this.selectedIndex)
+      console.log(this.query)
       switch (this.selectedIndex) {
         case 1:
           flag = 2
@@ -784,43 +789,46 @@ export default {
       if (this.query.flag) {
         flag = parseInt(this.query.flag)
       }
-      switch (flag) {
-        case 2:
-          if (this.query.refresh || !this.tabdata2.length) {
-            this.selectedIndex = 1
-            this.pagestart2 = 0
-            this.tabdata2 = []
-            this.toggleTab()
-          }
-          break
-        case 3:
-          if (this.query.refresh || !this.tabdata3.length) {
-            this.selectedIndex = 2
-            this.pagestart3 = 0
-            this.tabdata3 = []
-            this.toggleTab()
-          }
-          break
-        case 4:
+      console.log('refresh')
+      if (flag === 2) {
+        if (this.query.refresh || !this.tabdata2.length) {
+          console.log('flag=2')
+          this.selectedIndex = 1
+          this.pagestart2 = 0
+          this.tabdata2 = []
+          this.toggleTab()
+        }
+      } else if (flag === 3) {
+        if (this.query.refresh || !this.tabdata3.length) {
+          console.log('flag=3')
+          this.selectedIndex = 2
+          this.pagestart3 = 0
+          this.tabdata3 = []
+          this.toggleTab()
+        }
+      } else if (flag === 4) {
+        if (this.query.refresh || !this.tabdata4.length) {
+          console.log('flag=4')
           this.distabdata4 = false
           this.selectedIndex = 3
           this.pagestart4 = 0
           this.tabdata4 = []
           this.toggleTab()
-          break
-        default :
-          if (this.query.refresh || !this.tabdata1.length) {
-            this.selectedIndex = 0
-            this.pagestart1 = 0
-            this.tabdata1 = []
-            this.toggleTab()
-          }
-          break
+        }
+      } else {
+        if (this.query.refresh || !this.tabdata1.length) {
+          console.log('flag=0')
+          this.selectedIndex = 0
+          this.pagestart1 = 0
+          this.tabdata1 = []
+          this.toggleTab()
+        }
       }
     }
   },
   created () {
     this.init()
+    this.refresh()
   },
   activated () {
     if (this.$refs.scrollContainer) {

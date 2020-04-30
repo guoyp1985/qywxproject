@@ -40,16 +40,6 @@
 </template>
 
 <i18n>
-Home:
-  zh-CN: 首页
-Sales:
-  zh-CN: 促销
-Message:
-  zh-CN: 消息
-Favorite:
-  zh-CN: 收藏
-Center:
-  zh-CN: 个人中心
 </i18n>
 
 <script>

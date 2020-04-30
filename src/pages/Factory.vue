@@ -1,5 +1,5 @@
 <template>
-  <div :class="`containerarea bg-white font14 notop ${((selectedIndex == 1 && !tabData2.length) || (loginUser.retailerinfo.fid && loginUser.retailerinfo.fid != query.id)) ? 'nobottom' : ''}`">
+  <div :class="`containerarea bg-white font14 notop ${((selectedIndex == 1 && !tabData2.length) || (loginUser.retailerinfo && loginUser.retailerinfo.fid && loginUser.retailerinfo.fid != query.id)) ? 'nobottom' : ''}`">
     <div class="s-topbanner">
       <div class="flex_left border-box padding10 color-white" style="height:88px;">
         <div v-if="viewData.photo && viewData.photo != ''" class="w70">
@@ -13,11 +13,11 @@
         <router-link :to="{path: '/chat', query: {uid: viewData.uploader,from:query.from}}" class="qbtn7 font14 bg-white color-red5">联系</router-link>
       -->
       </div>
-      <tab v-model="selectedIndex" class="v-tab">
+      <tab v-model="selectedIndex" class="v-tab" v-if="(loginUser.factoryinfo && loginUser.factoryinfo.supplymode) || !query.fromsupply">
         <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="swiperChange">{{item}}</tab-item>
       </tab>
     </div>
-    <div class="pagemiddle" style="top:132px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
+    <div class="pagemiddle" :style="`top:${((!loginUser.factoryinfo || !loginUser.factoryinfo.supplymode) && query.fromsupply) ? '88' : '132'}px;`" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
       <template v-if="selectedIndex == 0">
         <div v-if="disTabData1" class="productlist squarepic pb10">
           <div v-if="tabData1.length == 0" class="emptyitem flex_center flex_cell">暂无商品</div>
@@ -66,16 +66,23 @@
       <template v-if="loginUser.isretailer">
         <template v-if="selectedIndex == 0">
           <div class="s-bottom list-shadow flex_center bg-white pl12 pr12">
-            <div v-if="tabData1 && tabData1.length > 0 && (!loginUser.retailerinfo.fid || loginUser.retailerinfo.fid == query.id)" class="align_center flex_center flex_cell">
-              <div class="flex_center btn-bottom-red" style="width:85%;" @click="upAll('product')">一键上架商品</div>
-            </div>
-            <div class="align_center flex_center flex_cell">
-              <div class="flex_center btn-bottom-orange" style="width:85%;" @click="toStore">我的店铺</div>
-            </div>
+            <template v-if="!loginUser.factoryinfo.supplymode && query.fromsupply">
+              <div class="flex_center flex_cell">
+                <div class="flex_center btn-bottom-red" style="width:85%;" @click="toJoinSupply">我要托管</div>
+              </div>
+            </template>
+            <template v-else>
+              <div v-if="tabData1 && tabData1.length > 0 && (!loginUser.retailerinfo || !loginUser.retailerinfo.fid || loginUser.retailerinfo.fid == query.id)" class="align_center flex_center flex_cell">
+                <div class="flex_center btn-bottom-red" style="width:85%;" @click="upAll('product')">一键上架商品</div>
+              </div>
+              <div class="align_center flex_center flex_cell">
+                <div class="flex_center btn-bottom-orange" style="width:85%;" @click="toStore">我的店铺</div>
+              </div>
+            </template>
           </div>
         </template>
         <template v-else>
-          <div v-if="tabData2 && tabData2.length > 0 && (!loginUser.retailerinfo.fid || loginUser.retailerinfo.fid == query.id)" class="s-bottom list-shadow flex_center bg-white pl12 pr12">
+          <div v-if="tabData2 && tabData2.length > 0 && (!loginUser.retailerinfo || !loginUser.retailerinfo.fid || loginUser.retailerinfo.fid == query.id)" class="s-bottom list-shadow flex_center bg-white pl12 pr12">
             <div class="align_center flex_center flex_cell">
               <div class="flex_center btn-bottom-red" style="width:85%;" @click="upAll('factorynews')">导入文章</div>
             </div>
@@ -152,6 +159,30 @@ export default {
       this.showBottom = false
       this.productCount = 0
       this.newsCount = 0
+    },
+    toJoinSupply () {
+      this.$vux.confirm.show({
+        content: '确定要托管给该供应商',
+        onConfirm: () => {
+          this.$vux.loading.show()
+          this.$http.post(`${ENV.BokaApi}/api/factory/fpimportApply`, {
+            trustmode: 1, fid: this.loginUser.fid, fromfid: this.query.id
+          }).then(res => {
+            this.isIng = false
+            let data = res.data
+            this.$vux.loading.hide()
+            this.$vux.toast.show({
+              text: data.error,
+              type: data.flag === 1 ? 'success' : 'warn',
+              time: this.$util.delay(data.error)
+            })
+            if (data.flag) {
+              this.loginUser.factoryinfo.supplymode = 1
+              User.set(this.loginUser)
+            }
+          })
+        }
+      })
     },
     toProduct (item) {
       let params = this.$util.handleAppParams(this.query, {id: item.id, fid: this.query.id})
@@ -356,6 +387,8 @@ export default {
       if (!this.query.id || this.query.id !== parseInt(this.$route.query.id)) {
         this.initData()
         this.loginUser = User.get()
+        console.log('用户信息')
+        console.log(this.loginUser)
         if (!self.loginUser.isretailer) {
           self.showBottom = true
         } else {

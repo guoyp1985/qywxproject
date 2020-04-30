@@ -80,7 +80,7 @@
         <div class="flex_cell flex_center btn-bottom-red" @click="save">下一步，编辑内容</div>
       </div>
       <clip-popup :show="popupShow" :img="cutImg" :after-submit="popupSubmit" @on-cancel="popupCancel"></clip-popup>
-      <template v-if="showFirst">
+      <!-- <template v-if="showFirst">
         <firstTip @submitFirstTip="submitFirstTip">
           <div class="font15 bold txt">
             <div class="flex_center">{{sysParams.advance_addnews}}</div>
@@ -89,7 +89,7 @@
       </template>
       <template v-if="showHb">
         <firstHb action="addnews" @closeFirstHb="closeFirstHb"></firstHb>
-      </template>
+      </template> -->
     </template>
   </div>
 </template>

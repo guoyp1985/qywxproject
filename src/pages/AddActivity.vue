@@ -126,7 +126,7 @@
           </div>
         </popup>
       </div>
-      <template v-if="showFirst">
+      <!-- <template v-if="showFirst">
         <firstTip @submitFirstTip="submitFirstTip">
           <div class="font15 bold txt">
             <div class="flex_center" v-if="query.type == 'groupbuy'">{{sysParams.advance_groupbuy}}</div>
@@ -136,7 +136,7 @@
       </template>
       <template v-if="showHb">
         <firstHb :action="action" @closeFirstHb="closeFirstHb"></firstHb>
-      </template>
+      </template> -->
     </template>
   </div>
 </template>

@@ -531,7 +531,8 @@ export default {
           break
         }
       }
-      this.computePrice()
+      this.changeAddress()
+      // this.computePrice()
     },
     computePrice () {
       let total = 0
@@ -540,7 +541,7 @@ export default {
         let productinfos = order.info
         for (let j = 0; j < productinfos.length; j++) {
           let pd = productinfos[j]
-          total += parseFloat(pd.special) * this.submitdata.quantity
+          total += parseFloat(pd.special.replace(/,/g, '')) * this.submitdata.quantity
         }
       }
       this.cardPrice = total
@@ -721,9 +722,11 @@ export default {
       this.allowSend = true
       let isset = false
       this.postPostage = 0
+      this.postage = parseFloat(this.curOrder.postage.replace(/,/g, ''))
       if (postageSetting && postageSetting.length) {
         for (let i = 0; i < postageSetting.length; i++) {
-          const curProvince = postageSetting[i].province
+          const curSet = postageSetting[i]
+          const curProvince = curSet.province
           let isTw = false
           let isAm = false
           if ((curProvince.indexOf('臺灣') > -1 || curProvince.indexOf('台湾') > -1) && (selectedProvince.indexOf('臺灣') > -1 || selectedProvince.indexOf('台湾') > -1)) {
@@ -732,11 +735,19 @@ export default {
             isAm = true
           }
           if (selectedProvince === curProvince || selectedProvince.indexOf(curProvince) > -1 || curProvince.indexOf(selectedProvince) > -1 || isTw || isAm) {
-            if (postageSetting[i].postage !== -1 && postageSetting[i].postage !== '-1' && postageSetting[i].postage !== '-1.00') {
-              this.postPostage = postageSetting[i].postage.replace(/,/g, '')
+            if (curSet.postage !== -1 && curSet.postage !== '-1' && curSet.postage !== '-1.00') {
+              if (curSet.standard === 0) {
+                this.postPostage = curSet.postage.replace(/,/g, '')
+              } else {
+                let addcount = curSet.addcount
+                let curp = curSet.postage.replace(/,/g, '')
+                let count = Math.ceil(this.quantity / addcount)
+                this.postPostage = (count * parseFloat(curp)).toFixed(2)
+              }
               this.allowSend = true
             } else {
               this.allowSend = false
+              this.postage = 0
             }
             isset = true
             break

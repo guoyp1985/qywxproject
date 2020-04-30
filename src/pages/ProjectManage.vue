@@ -8,9 +8,9 @@
     <div class="s-topbanner s-topbanner1">
       <tab class="b-tab" v-model="selectedIndex">
         <tab-item :selected="selectedIndex==0" @on-item-click="toggleTab">全部</tab-item>
-        <tab-item :selected="selectedIndex==1" @on-item-click="toggleTab">待审核</tab-item>
+        <tab-item :selected="selectedIndex==1" @on-item-click="toggleTab">待运营</tab-item>
         <tab-item :selected="selectedIndex==2" @on-item-click="toggleTab">运营中</tab-item>
-        <tab-item :selected="selectedIndex==3" @on-item-click="toggleTab">已完成</tab-item>
+        <!-- <tab-item :selected="selectedIndex==3" @on-item-click="toggleTab">已完成</tab-item> -->
       </tab>
     </div>
     <div ref="scrollContainer" class="s-container s-container1 scroll-container" @scroll="scrollHandle">
@@ -92,32 +92,6 @@
           </template>
         </template>
       </div>
-      <div v-show="selectedIndex===3">
-        <template v-if="distabdata4">
-          <template v-if="tabdata4.length">
-            <div class="scroll_item pt10 pb10  pl12 pr12 bg-white mt10 list-shadow" @click="toInfo(item)" v-for="(item,index) in tabdata4" :item="item" :key="index">
-              <div class="t-table">
-                <div class="t-cell v_middle" style="width:70px;">
-                  <img class="avatarimg3 imgcover v_middle" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-                </div>
-                <div class="t-cell v_middle">
-                  <div class="clamp1 font14">{{item.title}}</div>
-                  <div class="clamp1 font12 color-gray" v-if="item.inviteruploader == loginUser.uid">推荐人: {{item.invitername}}</div>
-                  <div class="clamp1 font12 color-gray">{{item.dateline | dateformat}}</div>
-                </div>
-                <div class="t-cell w60 align_right v_middle">
-                  <div style="color:#f6a843;">{{progressVal[item.progress]}}</div>
-                </div>
-              </div>
-            </div>
-          </template>
-          <template v-else>
-            <div class="no-related-x color-gray">
-              <span>暂无相关数据</span>
-            </div>
-          </template>
-        </template>
-      </div>
     </div>
   </div>
 </template>
@@ -165,26 +139,13 @@ export default {
       Fid: 0,
       progressVal: {
         0: '待审核',
-        1: '运营中',
-        2: '已完成'
+        1: '待运营',
+        2: '运营中'
       }
     }
   },
   methods: {
     initData () {
-      // this.selectedIndex = 0
-      // this.distabdata1 = false
-      // this.distabdata2 = false
-      // this.distabdata3 = false
-      // this.distabdata4 = false
-      // this.tabdata1 = []
-      // this.tabdata2 = []
-      // this.tabdata3 = []
-      // this.tabdata4 = []
-      // this.pagestart1 = 1
-      // this.pagestart2 = 1
-      // this.pagestart3 = 1
-      // this.pagestart4 = 1
       this.refundContent = ''
       this.clickOrder = {}
       this.clickIndex = 0
@@ -200,13 +161,10 @@ export default {
           !this.tabdata1.length && this.getData()
           break
         case 1:
-          !this.tabdata2.length && this.getData(0)
+          !this.tabdata2.length && this.getData(1)
           break
         case 2:
-          !this.tabdata3.length && this.getData(1)
-          break
-        case 3:
-          !this.tabdata4.length && this.getData(2)
+          !this.tabdata3.length && this.getData(2)
           break
       }
     },
@@ -225,18 +183,12 @@ export default {
             case 1:
               if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
                 self.pagestart2++
-                self.getData(0)
+                self.getData(1)
               }
               break
             case 2:
               if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
                 self.pagestart3++
-                self.getData(1)
-              }
-              break
-            case 3:
-              if (self.tabdata4.length === (self.pagestart4 + 1) * self.limit) {
-                self.pagestart4++
                 self.getData(2)
               }
               break
@@ -251,12 +203,10 @@ export default {
       if (flag !== undefined && flag !== 'undefined') {
         params.progress = flag
       }
-      if (flag === 0) {
+      if (flag === 1) {
         params.pagestart = this.pagestart2
-      } else if (flag === 1) {
-        params.pagestart = this.pagestart3
       } else if (flag === 2) {
-        params.pagestart = this.pagestart4
+        params.pagestart = this.pagestart3
       } else {
         params.pagestart = this.pagestart1
       }
@@ -265,17 +215,13 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         switch (flag) {
-          case 0:
+          case 1:
             self.tabdata2 = self.tabdata2.concat(retdata)
             self.distabdata2 = true
             break
-          case 1:
+          case 2:
             self.tabdata3 = self.tabdata3.concat(retdata)
             self.distabdata3 = true
-            break
-          case 2:
-            self.tabdata4 = self.tabdata4.concat(retdata)
-            self.distabdata4 = true
             break
           default:
             self.tabdata1 = self.tabdata1.concat(retdata)
@@ -299,7 +245,7 @@ export default {
       }
       let flag = parseInt(this.query.flag)
       switch (flag) {
-        case 0:
+        case 1:
           if (!this.tabdata2.length) {
             this.selectedIndex = 1
             this.pagestart2 = 0
@@ -307,19 +253,11 @@ export default {
             this.toggleTab()
           }
           break
-        case 1:
+        case 2:
           if (!this.tabdata3.length) {
             this.selectedIndex = 2
             this.pagestart3 = 0
             this.tabdata3 = []
-            this.toggleTab()
-          }
-          break
-        case 2:
-          if (!this.tabdata4.length) {
-            this.selectedIndex = 3
-            this.pagestart4 = 0
-            this.tabdata4 = []
             this.toggleTab()
           }
           break

@@ -423,4 +423,20 @@ export default {
 }
 .x-checker .border1px.ck-item-selected:after{border:1px solid #ea3a3a;}
 .addFactory .vux-check-icon > span{color:#666;display: inline-block;vertical-align: bottom;line-height: 19px;}
+.check-modal{
+  .check-item{
+    background-color:#ffe9e6;margin-top:15px;border-radius:5px;padding:10px;width:100%;box-sizing:border-box;
+    .radius{
+      width:40px;height:40px;background-color:#fff;border-radius:50%;
+      display:flex;justify-content:center;align-items:center;
+    }
+    .radio-ico{
+      width:20px;height:20px;border:#ff6a61 1px solid;border-radius:50%;box-sizing:border-box;background-color:#fff;
+      display:flex;justify-content:center;align-items:center;
+    }
+    .radio-ico.checked:after{
+      content:"";width:10px;height:10px;background-color:#ff6a61;border-radius:50%;
+    }
+  }
+}
 </style>

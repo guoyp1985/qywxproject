@@ -27,6 +27,12 @@ Vue.use(ConfirmPlugin)
 console.log(Vue.wechat)
 require('es6-promise').polyfill()
 
+if (ENV.DebugMode) {
+  const VConsole = require('vconsole')
+  const vConsole = new VConsole()
+  vConsole.setOption({maxLogNumber: 5000})
+}
+
 const CancelToken = AjaxPlugin.$http.CancelToken
 const vuxLocales = require('./locales/all.yml')
 const componentsLocales = require('./locales/components.yml')
@@ -146,7 +152,7 @@ Vue.http.interceptors.request.use(config => {
 
     const token = Token.get()
     console.log(`interceptors: ${config.url}`)
-    console.log(`interceptors: ${JSON.stringify(token)}`)
+    // console.log(`interceptors: ${JSON.stringify(token)}`)
     if (Token.isExpired()) {
       // console.log(config.url)
       cancelAllPendings(config)
@@ -154,7 +160,7 @@ Vue.http.interceptors.request.use(config => {
         router.replace({path: path})
       })
     } else {
-      console.log(`interceptors: Bearer ${token.token}`)
+      // console.log(`interceptors: Bearer ${token.token}`)
       config.headers['Authorization'] = `Bearer ${token.token}`
       if (config.url.indexOf(ENV.FactoryApi) > -1 && ENV.ApiVersion === 'V2') {
         config.headers['Accept'] = ENV.ApiAccept
@@ -168,6 +174,8 @@ Vue.http.interceptors.request.use(config => {
 
 // 响应拦截器
 Vue.http.interceptors.response.use(response => {
+  console.log('请求执行后')
+  console.log(response)
   return response
 }, error => {
   if (error.response) {
@@ -412,7 +420,7 @@ const render = () => {
 clearCache()
 
 const alertStack = []
-const authCount = 0
+let authCount = 0
 // 页面入口
 try {
   if (!Token.get() || Token.isExpired() || !User.get()) {

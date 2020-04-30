@@ -95,11 +95,15 @@ export default {
     getData () {
       const self = this
       this.$vux.loading.show()
+      let queryid = this.query.id
+      if (this.query.uid) {
+        queryid = this.query.uid
+      }
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-        module: 'retailer', action: 'accountdetail', id: this.query.id
+        module: 'retailer', action: 'accountdetail', id: queryid
       }).then(function () {
         return self.$http.get(`${ENV.BokaApi}/api/accounting/info`, {
-          params: { id: self.query.id }
+          params: { id: queryid }
         })
       }).then(function (res) {
         let data = res.data

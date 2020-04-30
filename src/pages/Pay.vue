@@ -53,17 +53,21 @@ export default {
         'getBrandWCPayRequest', params,
         function (res) {
           if (res.err_msg === 'get_brand_wcpay_request:ok') {
-            let backurl = self.query.backurl
-            if (backurl) {
-              self.$router.push({path: decodeURIComponent(backurl)})
+            if (self.query.type === 'applyfactory') {
+              self.$router.push({path: `/centerFactory`})
             } else {
-              if (self.query.module === 'payorders') {
-                self.$router.push({path: `/payment?wid=${self.wid}`})
+              let backurl = self.query.backurl
+              if (backurl) {
+                self.$router.push({path: decodeURIComponent(backurl)})
               } else {
-                if (self.query.lasturl) {
-                  self.$router.push({path: '/orderSearch'})
-                } else {
+                if (self.query.module === 'payorders') {
                   self.$router.push({path: `/payment?wid=${self.wid}`})
+                } else {
+                  if (self.query.lasturl) {
+                    self.$router.push({path: '/orderSearch'})
+                  } else {
+                    self.$router.push({path: `/payment?wid=${self.wid}`})
+                  }
                 }
               }
             }

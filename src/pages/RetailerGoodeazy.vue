@@ -120,7 +120,7 @@
           </swiper-item>
         </swiper>
       </div>
-      <template v-if="showFirst">
+      <!-- <template v-if="showFirst">
         <firstTip @submitFirstTip="submitFirstTip">
           <div class="font15 bold txt">
             <div class="flex_center">{{sysParams.advance_grabnews}}</div>
@@ -129,7 +129,7 @@
       </template>
       <template v-if="showHb">
         <firstHb action="grabnews" @closeFirstHb="closeFirstHb"></firstHb>
-      </template>
+      </template> -->
     </template>
   </div>
 </template>

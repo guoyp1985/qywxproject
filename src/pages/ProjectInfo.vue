@@ -17,6 +17,10 @@
       <div class="t-cell v_middle">
         <div class="clamp1 font14">{{infoData.factoryinfo.title}}</div>
         <div class="clamp1 mt5 font14" style="color:#ea3a3a">本月我的分佣: ￥{{infoData.mymonthmoney}}</div>
+        <template v-if="infoData.invitername && infoData.invitername != ''">
+          <div class="clamp1 mt5 font14" style="color:#ea3a3a">推广员: ￥{{infoData.invitername}}</div>
+          <div class="clamp1 mt5 font14" style="color:#ea3a3a">推广员佣金: ￥{{infoData.invitermoney}}</div>
+        </template>
       </div>
       <!-- <div class="t-cell align_right v_middle">
         <div class="qbtn w60">联系</div>
@@ -25,7 +29,7 @@
     <div class="s-topbanner1">
       <tab class="b-tab" v-model="selectedIndex">
         <tab-item :selected="selectedIndex==0" @on-item-click="toggleTab">项目进度</tab-item>
-        <tab-item :selected="selectedIndex==1" @on-item-click="toggleTab">经营统计</tab-item>
+        <!-- <tab-item :selected="selectedIndex==1" @on-item-click="toggleTab">经营统计</tab-item> -->
       </tab>
     </div>
     <div v-if="selectedIndex === 0" class="bg-white padding15 db-flex">

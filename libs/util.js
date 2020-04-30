@@ -707,7 +707,7 @@ Util.install = function (Vue, options) {
       })
     },
     handleAppParams: function (query, params) {
-      let arr = ['from', 'appid', 'minibackurl', 'backtype', 'control', 'miniconfig', 'fromapp', 'allowfirst', 'fromapp']
+      let arr = ['from', 'appid', 'minibackurl', 'backtype', 'control', 'miniconfig', 'fromapp', 'allowfirst', 'share_uid']
       for (let i = 0; i < arr.length; i++) {
         let pname = arr[i]
         if (query[pname]) {
@@ -764,15 +764,11 @@ Util.install = function (Vue, options) {
     },
     routerMiniUrl: (query) => {
       let minibackurl = decodeURIComponent(query.minibackurl)
-      console.log(minibackurl)
       if (query.backtype === 'relaunch') {
-        console.log(1)
         Vue.wechat.miniProgram.reLaunch({url: `${minibackurl}`})
       } else if (query.backtype === 'redirect') {
-        console.log(2)
         Vue.wechat.miniProgram.redirectTo({url: `${minibackurl}`})
       } else {
-        console.log(3)
         Vue.wechat.miniProgram.navigateTo({url: `${minibackurl}`})
       }
     }
