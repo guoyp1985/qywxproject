@@ -56,7 +56,12 @@
           			<div class="picarea">
           				<div class="pic">
                     <img class="imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-                    <div class="t-icon color-theme">佣金: {{$t('RMB')}}<template v-if="item.salesrebate">{{item.salesrebate}}</template><template v-else>{{item.levelagent}}</template></div>
+                    <div class="t-icon color-theme">
+                      <span>佣金: {{$t('RMB')}}</span>
+                      <span v-if="item.minsalesrebate && item.maxsalesrebate && item.minsalesrebate != item.maxsalesrebate">{{item.minsalesrebate}}-{{item.maxsalesrebate}}</span>
+                      <span v-else>{{item.minsalesrebate}}</span>
+                      <!-- <span v-else>{{item.levelagent}}</span> -->
+                    </div>
           				</div>
           			</div>
           			<div class="desbox" style="overflow:hidden;">
@@ -65,7 +70,7 @@
                   </div>
                   <div class="clamp1">
           					<div class="flex_table padding5 pro-desc">
-          						<span class="color-red font14 flex_cell" style="overflow: hidden;margin-right: 10px;white-space: nowrap;text-overflow: ellipsis;">{{ $t('RMB') }} <span style="margin-left:1px;">{{ item.price }}</span></span>
+          						<span class="color-red font14 flex_cell" style="overflow: hidden;margin-right: 10px;white-space: nowrap;text-overflow: ellipsis;">{{ $t('RMB') }} <span style="margin-left:1px;">{{item.showprice}}</span></span>
                     </div>
           				</div>
           			</div>
