@@ -27,11 +27,6 @@ Vue.use(ConfirmPlugin)
 console.log(Vue.wechat)
 require('es6-promise').polyfill()
 
-const VueRouterPush = VueRouter.prototype.push
-VueRouter.prototype.push = function push (to) {
-    return VueRouterPush.call(this, to).catch(err => err)
-}
-
 if (ENV.DebugMode) {
   const VConsole = require('vconsole')
   const vConsole = new VConsole()
