@@ -426,7 +426,8 @@ try {
   if (!Token.get() || Token.isExpired() || !User.get()) {
     access(path => {
       console.log(`Entry: ${path}`)
-      router.replace({path: path}).catch(err => err)
+      let p = {...path}
+      router.replace({path: p})
       let curUser = User.get()
       if (curUser && curUser.uid) {
         for (let i = 0; i < ENV.DebugList.length; i++) {
@@ -483,7 +484,8 @@ try {
         User.remove()
         access(path => {
           console.log(`Entry: ${path}`)
-          router.replace({path: path}).catch(err => err)
+          let p = {...path}
+          router.replace({path: p})
           render()
         })
       }
