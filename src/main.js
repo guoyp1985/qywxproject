@@ -157,7 +157,7 @@ Vue.http.interceptors.request.use(config => {
       // console.log(config.url)
       cancelAllPendings(config)
       access((path) => {
-        router.replace({path: path})
+        router.push({path: path})
       })
     } else {
       // console.log(`interceptors: Bearer ${token.token}`)
@@ -426,7 +426,7 @@ try {
   if (!Token.get() || Token.isExpired() || !User.get()) {
     access(path => {
       console.log(`Entry: ${path}`)
-      router.replace({path: path})
+      router.push({path: path})
       let curUser = User.get()
       if (curUser && curUser.uid) {
         for (let i = 0; i < ENV.DebugList.length; i++) {
@@ -483,7 +483,7 @@ try {
         User.remove()
         access(path => {
           console.log(`Entry: ${path}`)
-          router.replace({path: path})
+          router.push({path: path})
           render()
         })
       }
