@@ -570,7 +570,8 @@ export default {
         self.$vux.toast.text('结束时间应大于当前时间', 'middle')
         return false
       }
-      if (self.submitdata.totalcount <= 0 || !self.submitdata.totalcount) {
+      let numReg = /^[1-9]\d*$/
+      if (self.submitdata.totalcount <= 0 || !self.submitdata.totalcount || !numReg.test(self.submitdata.totalcount)) {
         self.$vux.toast.text('请输入正确的优惠券数量', 'middle')
         return false
       }

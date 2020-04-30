@@ -71,6 +71,7 @@ export default {
       }
     },
     '$route' (to, from) {
+      console.log(`set title:${this.getTitle(to.path)}`)
       document.title = this.getTitle(to.path)
     }
   },

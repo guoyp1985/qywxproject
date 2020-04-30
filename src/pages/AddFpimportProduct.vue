@@ -1054,7 +1054,7 @@ export default {
           if (parseFloat(profit) >= parseFloat(price)) {
             self.$vux.alert.show({
               title: '',
-              content: '利润不能大于商品现价'
+              content: '利润应小于商品现价'
             })
             return false
           }
@@ -1065,10 +1065,10 @@ export default {
                 content: '请输入正确的销售佣金'
               })
               return false
-            } else if (parseFloat(salesrebate) > price) {
+            } else if (parseFloat(salesrebate) >= price) {
               self.$vux.alert.show({
                 title: '',
-                content: '销售佣金不能大于商品现价'
+                content: '销售佣金应小于商品现价'
               })
               return false
             }
@@ -1080,25 +1080,25 @@ export default {
                 content: '请输入正确的推荐人佣金'
               })
               return false
-            } else if (parseFloat(superrebate) > price) {
+            } else if (parseFloat(superrebate) >= price) {
               self.$vux.alert.show({
                 title: '',
-                content: '推荐人佣金不能大于商品现价'
+                content: '推荐人佣金应小于商品现价'
               })
               return false
             }
           }
-          if (self.$util.trim(salesrebate) !== '' && self.$util.trim(superrebate) !== '' && parseFloat(salesrebate) + parseFloat(superrebate) > price) {
+          if (self.$util.trim(salesrebate) !== '' && self.$util.trim(superrebate) !== '' && parseFloat(salesrebate) + parseFloat(superrebate) >= price) {
             self.$vux.alert.show({
               title: '',
-              content: '销售佣金+推荐人佣金不能大于商品现价'
+              content: '销售佣金+推荐人佣金应小于商品现价'
             })
             return false
           }
-          if (parseFloat(profit) > parseFloat(price)) {
+          if (parseFloat(profit) >= parseFloat(price)) {
             self.$vux.alert.show({
               title: '',
-              content: '商品利润不得大于商品现价'
+              content: '商品利润应小于商品现价'
             })
             return false
           }
@@ -1240,7 +1240,11 @@ export default {
                   pid = data.fpimportid
                 }
                 let rparams = self.$util.handleAppParams(self.query, {id: pid, fid: self.query.fid})
-                self.$router.push({path: '/fpimportProduct', query: rparams})
+                if (self.query.fromapp === 'factory') {
+                  self.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.factoryAppProduct}?id=${pid}&type=fpimport`})
+                } else {
+                  self.$router.push({path: '/fpimportProduct', query: rparams})
+                }
               }
             }
           })
