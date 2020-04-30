@@ -73,7 +73,7 @@ let historyCount = history.getItem('count') * 1 || 0
 history.setItem('/', 0)
 let isPush = false
 let endTime = Date.now()
-let methods = ['push', 'go', 'replace', 'forward', 'back', 'indexOf']
+let methods = ['push', 'go', 'replace', 'forward', 'back']
 
 document.addEventListener('touchend', () => {
   endTime = Date.now()
