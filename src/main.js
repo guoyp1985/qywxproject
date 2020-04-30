@@ -81,6 +81,7 @@ document.addEventListener('touchend', () => {
 methods.forEach(key => {
   let method = router[key].bind(router)
   router[key] = function (...args) {
+    console.log(args)
     isPush = true
     method.apply(null, args)
   }
