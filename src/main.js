@@ -27,8 +27,8 @@ Vue.use(ConfirmPlugin)
 console.log(Vue.wechat)
 require('es6-promise').polyfill()
 
-const VueRouterPush = Router.prototype.push
-Router.prototype.push = function push (to) {
+const VueRouterPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push (to) {
     return VueRouterPush.call(this, to).catch(err => err)
 }
 
