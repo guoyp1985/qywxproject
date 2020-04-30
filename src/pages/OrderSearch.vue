@@ -4,7 +4,7 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div id="order-search" :class="`containerarea font14 ${(loginUser.isretailer && query.fromapp != 'factory') ? 's-havebottom' : ''}`">
+  <div id="order-search" :class="`containerarea font14 ${(loginUser.isretailer && query.fromapp != 'factory') ? 's-havebottom' : ''} ${query.form == 'miniprogram' ? 'minigxk' : ''}`">
     <search
       class="v-search bg-white"
       v-model='searchword1'
@@ -878,4 +878,9 @@ export default {
 .b-tab .vux-tab-ink-bar{background-color:#ea3a3a;}
 .s-topbanner1{top:55px;}
 .s-container1{top:99px !important;}
+#order-search.minigxk{
+  padding-top:40px;
+  .s-topbanner1{top:95px;}
+  .s-container1{top:140px !important;}
+}
 </style>
