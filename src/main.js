@@ -81,7 +81,6 @@ document.addEventListener('touchend', () => {
 methods.forEach(key => {
   let method = router[key].bind(router)
   router[key] = function (...args) {
-    console.log(args)
     isPush = true
     method.apply(null, args)
   }
@@ -427,8 +426,7 @@ try {
   if (!Token.get() || Token.isExpired() || !User.get()) {
     access(path => {
       console.log(`Entry: ${path}`)
-      let p = {...path}
-      router.replace({path: p})
+      router.replace({path: path})
       let curUser = User.get()
       if (curUser && curUser.uid) {
         for (let i = 0; i < ENV.DebugList.length; i++) {
@@ -485,8 +483,7 @@ try {
         User.remove()
         access(path => {
           console.log(`Entry: ${path}`)
-          let p = {...path}
-          router.replace({path: p})
+          router.replace({path: path})
           render()
         })
       }
