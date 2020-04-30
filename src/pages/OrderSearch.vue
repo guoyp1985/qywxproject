@@ -4,7 +4,7 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div id="order-search" :class="`containerarea font14 ${(loginUser.isretailer && query.fromapp != 'factory') ? 's-havebottom' : ''} ${query.from == 'miniprogram' ? 'minigxk' : ''}`">
+  <div id="order-search" :class="`containerarea font14 ${(loginUser.isretailer && query.fromapp != 'factory') ? 's-havebottom' : ''}`">
     <search
       class="v-search bg-white"
       v-model='searchword1'
@@ -876,11 +876,9 @@ export default {
 <style lang="less">
 .b-tab .vux-tab .vux-tab-item.vux-tab-selected{color:#ea3a3a;}
 .b-tab .vux-tab-ink-bar{background-color:#ea3a3a;}
-.s-topbanner1{top:55px;}
-.s-container1{top:99px !important;}
-#order-search.minigxk{
-  padding-top:60px;
-  .s-topbanner1{top:115px;}
-  .s-container1{top:160px !important;}
+#order-search{
+  .v-search{position:absolute;left:0;top:0;right:0;}
+  .s-topbanner1{top:55px;}
+  .s-container1{top:99px !important;}
 }
 </style>
