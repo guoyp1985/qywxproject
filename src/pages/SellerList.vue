@@ -231,7 +231,7 @@
                 <div class="item" v-if="clickData.identity == 'D'">
                   <div class="inner" @click="clickPopup('uploader')">修改推荐人</div>
                 </div>
-                <div class="item" v-if="clickData.identity == 'D'">
+                <div class="item" v-if="clickData.identity == 'C'">
                   <div class="inner" @click="clickPopup('fulltime')">降级</div>
                 </div>
             </div>
