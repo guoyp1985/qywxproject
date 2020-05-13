@@ -216,7 +216,7 @@
         <popup class="menuwrap" v-model="showPopup1">
           <div class="popup0">
             <div class="list" v-if="clickData">
-              <div class="item" v-if="selectedIndex == 0">
+              <div class="item" v-if="clickData.identity == 'D'">
                 <div class="inner" @click="clickPopup('pay')">关闭合伙人</div>
               </div>
                 <div class="item" v-if="clickData.identity == 'D'">
@@ -228,10 +228,10 @@
                 <div class="item" v-if="selectedIndex != 1">
                   <div class="inner" @click="clickPopup('level')">推荐记录</div>
                 </div>
-                <div class="item" >
+                <div class="item" v-if="clickData.identity == 'D'">
                   <div class="inner" @click="clickPopup('uploader')">修改推荐人</div>
                 </div>
-                <div class="item" v-if="clickData.identity == 'C'">
+                <div class="item" v-if="clickData.identity == 'D'">
                   <div class="inner" @click="clickPopup('fulltime')">降级</div>
                 </div>
             </div>
@@ -1041,7 +1041,7 @@ export default {
     submitRefuse () { // 拒绝审核
       this.showRefuseModal = false
       console.log('-----拒绝原因------')
-      console.log(this.refuseContent)
+      console.log(this.idArr)
       this.$vux.loading.show()
       let postParams = {fid: this.fid, uids: this.idArr, ok: 0, reason: this.refuseContent}
       if (this.selectedIndex === 4) {
