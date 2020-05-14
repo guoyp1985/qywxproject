@@ -778,10 +778,10 @@ export default {
         self.getRecordList()
       } else if (key === 'uploader') {
         self.showUploaderPopup = true
-        for (let i = 0; i < this.userData1.length; i++) {
-          let curd = this.userData1[i]
+        for (let i = 0; i < self.userData1.length; i++) {
+          let curd = self.userData1[i]
           if (curd.checked) {
-            delete this.userData1[i].checked
+            delete self.userData1[i].checked
           }
         }
         if (!self.userData1.length) {
@@ -790,11 +790,12 @@ export default {
         }
       } else if (key === 'fulltime') {
         self.showFulltimePopup = true
-        for (let i = 0; i < this.userData2.length; i++) {
-          let curd = this.userData2[i]
+        for (let i = 0; i < self.userData2.length; i++) {
+          let curd = self.userData2[i]
           if (curd.checked) {
-            delete this.userData2[i].checked
+            delete self.userData2[i].checked
           }
+          console.log(self.userData2[i].checked)
         }
         if (!self.userData2.length) {
           self.searchword3 = ''
@@ -891,8 +892,8 @@ export default {
     },
     getRecordList () {
       const self = this
-      const params = {fid: self.query.id, pagestart: self.userPpageStart3, limit: self.limit, uid: self.uid, agent: 0}
-      self.$http.get(`${ENV.BokaApi}/api/factory/retailerList`, {
+      const params = {fid: self.query.id, pagestart: self.userPpageStart3, limit: self.limit, uid: self.uid}
+      self.$http.get(`${ENV.BokaApi}/admin/sellers/getRecommends`, {
         params: params
       }).then(function (res) {
         const data = res.data
@@ -996,7 +997,8 @@ export default {
       for (let i = 0; i < this.userData1.length; i++) {
         let curd = this.userData1[i]
         if (data.uid !== curd.uid && curd.checked) {
-          delete this.userData1[i].checked
+          // delete this.userData1[i].checked
+          this.userData1[i].checked = false
         }
       }
     },
@@ -1010,7 +1012,7 @@ export default {
       for (let i = 0; i < this.userData2.length; i++) {
         let curd = this.userData2[i]
         if (data.uid !== curd.uid && curd.checked) {
-          delete this.userData2[i].checked
+          this.userData2[i].checked = false
         }
       }
     },
