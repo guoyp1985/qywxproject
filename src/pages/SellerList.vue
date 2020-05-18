@@ -775,6 +775,7 @@ export default {
         self.showLevelPopup = true
         self.userData3 = []
         self.userPpageStart3 = 0
+        self.$vux.loading.show()
         self.getRecordList()
       } else if (key === 'uploader') {
         self.showUploaderPopup = true
@@ -786,6 +787,7 @@ export default {
         }
         if (!self.userData1.length) {
           self.searchword2 = ''
+          self.$vux.loading.show()
           self.searchUser1()
         }
       } else if (key === 'fulltime') {
@@ -799,6 +801,7 @@ export default {
         }
         if (!self.userData2.length) {
           self.searchword3 = ''
+          self.$vux.loading.show()
           self.searchUser2()
         }
       } else if (key === 'upC') {
