@@ -892,10 +892,8 @@ export default {
     },
     getRecordList () {
       const self = this
-      const params = {fid: self.query.id, pagestart: self.userPpageStart3, limit: self.limit, uid: self.uid}
-      self.$http.get(`${ENV.BokaApi}/admin/sellers/getRecommends`, {
-        params: params
-      }).then(function (res) {
+      const params = {fid: self.query.id, pagestart: self.userPpageStart3, limit: self.limit, wid: self.clickData.uid, noauth: 1}
+      self.$http.post(`${ENV.BokaApi}/api/factory/myRecommend`, params).then(function (res) {
         const data = res.data
         self.$vux.loading.hide()
         const retdata = data.data ? data.data : data
