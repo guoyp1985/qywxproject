@@ -553,7 +553,11 @@ var Eleditor = function(){
     insertProduct: function(){
         _args.insertProductCallback && _args.insertProductCallback(function(data){
 					//必须为div标签，其它标签会被拆分
-		      var rethtml = '<div linkurl="/product?id='+data.id+'&wid='+data.uploader+'" class="insertproduct db"><img class="v_middle imgcover" src="'+data.photo+'" /><div class="iteminfo">￥'+data.price+' | 查看详情</div></div>'
+					var disprice = data.price
+					if (data.showprice && data.showprice != '') {
+						disprice = data.showprice
+					}
+		      var rethtml = '<div linkurl="/product?id='+data.id+'&wid='+data.uploader+'" class="insertproduct db"><img class="v_middle imgcover" src="'+data.photo+'" /><div class="iteminfo">￥'+disprice+' | 查看详情</div></div>'
 					//var rethtml = '<router-link to="/product?id='+data.id+'&wid='+data.uploader+'" class="insertproduct db"><img class="v_middle imgcover" src="'+data.photo+'" /><div class="iteminfo">￥'+data.price+' | 查看详情</div></router-link>'
 						var _buildWordHtml = '';
             var _buildWordHtml = $(rethtml);

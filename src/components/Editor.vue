@@ -66,25 +66,27 @@
               ref="search">
             </search>
             <div class="scroll_list">
-              <div v-if="!productdata || productdata.length === 0" class="scroll_item padding10 color-gray align_center">
-                <template v-if="searchresult">
-                  <div class="flex_center" style="height:80px;">暂无搜索结果</div>
-                </template>
-                <template v-else>
-                  <div class="flex_center" style="height:80px;">暂无商品</div>
-                </template>
-              </div>
-              <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in productdata" :key="item.id" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
-                <div class="t-table">
-                  <div class="t-cell pic v_middle w50">
-                    <img :src="item.photo" style="width:40px;height:40px;" class="v_middle imgcover" />
-                  </div>
-                  <div class="t-cell v_middle" style="color:inherit;">
-                    <div class="clamp1">{{item.title}}</div>
-                    <div class="mt5 font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
-                  </div>
+              <template v-if="disPopProductList">
+                <div v-if="!productdata || productdata.length === 0" class="scroll_item padding10 color-gray align_center">
+                  <template v-if="searchresult">
+                    <div class="flex_center" style="height:80px;">暂无搜索结果</div>
+                  </template>
+                  <template v-else>
+                    <div class="flex_center" style="height:80px;">暂无商品</div>
+                  </template>
                 </div>
-              </check-icon>
+                <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in productdata" :key="item.id" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
+                  <div class="t-table">
+                    <div class="t-cell pic v_middle w50">
+                      <img :src="item.photo" style="width:40px;height:40px;" class="v_middle imgcover" />
+                    </div>
+                    <div class="t-cell v_middle" style="color:inherit;">
+                      <div class="clamp1">{{item.title}}</div>
+                      <div class="mt5 font12 clamp1"><span class="color-orange">¥{{ item.showprice }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
+                    </div>
+                  </div>
+                </check-icon>
+              </template>
             </div>
           </div>
           <div class="popup-bottom flex_center">
@@ -238,7 +240,8 @@ export default {
       checkAll: false,
       customerPagestart: 0,
       touchElement: null,
-      editTipCss: ''
+      editTipCss: '',
+      disPopProductList: false
     }
   },
   computed: {
@@ -380,6 +383,7 @@ export default {
         }
         let retdata = data.data ? data.data : data
         self.productdata = self.productdata.concat(retdata)
+        self.disPopProductList = true
       })
     },
     getCustomerdata () {
