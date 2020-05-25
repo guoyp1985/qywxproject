@@ -821,7 +821,9 @@ export default {
     },
     toMembersView (item) {
       if (item.external !== 1) {
-        let params = this.$util.handleAppParams(this.query, {uid: item.uid})
+        let muid = item.uid
+        if (item.gxkuid) muid = item.gxkuid
+        let params = this.$util.handleAppParams(this.query, {uid: muid})
         this.$router.push({path: '/membersView', query: params})
       }
     },
