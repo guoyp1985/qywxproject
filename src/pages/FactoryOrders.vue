@@ -6,12 +6,22 @@
     <template v-if="showContainer">
       <div class="s-topbanner s-topbanner1">
         <div class="row">
+          <search
+            class="v-search bg-white"
+            v-model='searchword1'
+            :auto-fixed="autofixed"
+            @on-submit="onSubmit1"
+            @on-change="onChange1"
+            @on-cancel="onCancel1"
+            placeholder="请输入订单号/收货人姓名/手机号"
+            ref="search">
+          </search>
           <tab v-model="selectedIndex" class="" active-color="#ea3a3a" default-color="#666666">
             <tab-item v-for="(item,index) in tabtxts" :selected="index == selectedIndex" :key="index" @on-item-click="clickTab">{{item}}</tab-item>
           </tab>
         </div>
       </div>
-      <div class="s-container s-container1" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
+      <div class="s-container s-container1" ref="scrollContainer" style="top:99px;" @scroll="handleScroll('scrollContainer')">
         <div v-show="(selectedIndex == 0)">
           <div v-if="distabdata1" class="scroll_list">
             <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 align_center color-gray">
@@ -270,7 +280,7 @@ My orders:
   zh-CN: 我的订单
 </i18n>
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, TransferDom, Popup, XImg } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, TransferDom, Popup, XImg, Search } from 'vux'
 import Orderitemplate from '@/components/Orderitemplate'
 import Orderproductplate from '@/components/Orderproductplate'
 import Time from '#/time'
@@ -284,7 +294,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, Popup, Orderitemplate, Orderproductplate, XImg, Sos
+    Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, Popup, Orderitemplate, Orderproductplate, XImg, Sos, Search
   },
   filters: {
     dateformat: function (value) {
@@ -324,10 +334,24 @@ export default {
       pageTop: 0,
       imgList: ['https://tossharingsales.boka.cn/images/yjfh1.png', 'https://tossharingsales.boka.cn/images/yjfh3.png', 'https://tossharingsales.boka.cn/images/yjfh2.png'],
       showFhbz: false,
-      factoryHt: ENV.FactoryLoginUrl
+      factoryHt: ENV.FactoryLoginUrl,
+      autofixed: false,
+      searchword1: ''
     }
   },
   methods: {
+    onChange1 (val) {
+      this.searchword1 = val
+    },
+    onCancel1 () {
+      this.searchword1 = ''
+    },
+    onSubmit1 () {
+      const kw = this.searchword1
+      this.searchword1 = ''
+      let params = this.$util.handleAppParams(this.query, {keyword: kw})
+      this.$router.push({path: '/factoryOrderSearch', query: params})
+    },
     openFhbz () {
       this.showFhbz = true
     },

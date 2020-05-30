@@ -69,6 +69,7 @@
   "FactoryNewsClass",
   "FactoryNewsList",
   "FactoryOrders",
+  "FactoryOrderSearch",
   "FactoryOrderDetail",
   "FactoryRetailerProductList",
   "FactoryProduct",
