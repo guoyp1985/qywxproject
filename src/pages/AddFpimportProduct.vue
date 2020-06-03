@@ -260,6 +260,9 @@
               <div class="option-item" v-for="(item,index) in optionsData" :key="index">
                 <div class="option-title flex_left">
                   <div class="flex_cell flex_left">规格 {{index + 1}}</div>
+                  <div class="w60 flex_right color-theme" @click="copyOption(index)">复制规格</div>
+                  <div class="w60 flex_right color-theme" @click="moveOption(index, 'up')" v-if="index > 0">上移</div>
+                  <div class="w60 flex_right color-theme" @click="moveOption(index, 'down')" v-if="index < optionsData.length - 1">下移</div>
                   <div class="w60 flex_right color-theme" @click="deleteOption(index)">删除</div>
                 </div>
                 <div class="option-con">
@@ -650,6 +653,35 @@ export default {
     },
     addOption () {
       this.optionsData.push({})
+    },
+    copyOption (index) {
+      let curData = this.optionsData[index]
+      let newData = {}
+      for (let key in curData) {
+        if (key !== 'id') {
+          newData[key] = curData[key]
+        }
+      }
+      console.log(newData)
+      newData.photoarr = [newData.photo]
+      this.optionsData.splice(index, 1, curData, newData)
+      let curPhoto = this.optionsPhoto[index]
+      let newPhoto = curPhoto
+      this.optionsPhoto.splice(index, 1, curPhoto, newPhoto)
+    },
+    moveOption (index, type) {
+      let moveIndex = index - 1
+      if (type === 'down') {
+        moveIndex = index + 1
+      }
+      let curData = this.optionsData[index]
+      let moveData = this.optionsData[moveIndex]
+      this.optionsData.splice(moveIndex, 1, curData)
+      this.optionsData.splice(index, 1, moveData)
+      let curPhoto = this.optionsPhoto[index]
+      let movePhoto = this.optionsPhoto[moveIndex]
+      this.optionsPhoto.splice(moveIndex, 1, curPhoto)
+      this.optionsPhoto.splice(index, 1, movePhoto)
     },
     deleteOption (index) {
       this.$vux.confirm.show({
