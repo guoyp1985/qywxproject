@@ -8,7 +8,7 @@
     <div class="s-topbanner s-topbanner1">
       <div style="height:45px;" class="db-flex top-subscribe-tip">
         <div class="flex_cell h_100 flex_left">
-          <i class="al al-gantanhaozhong font20"></i><span>加运费地区和不派送地区，不可重复设置</span>
+          <i class="al al-gantanhaozhong font20"></i><span>偏远地区和不派送地区，不可重复设置</span>
         </div>
       </div>
       <div class="row">
@@ -19,67 +19,111 @@
     </div>
     <div class="s-container s-container1" style="top:90px;bottom:45px;">
       <div v-show="(selectedIndex == 0)" class="swiper-inner scroll-container1">
-        <div class="form-item bg-white">
-          <div class="option-list">
-            <div class="option-item" v-for="(item,index) in areaData" :key="index">
-                <div class="option-title flex_left">
-                  <div class="flex_cell flex_left">地区 {{index + 1}}</div>
-                  <div class="w60 flex_right color-theme" @click="deleteData(index)">删除</div>
-                </div>
-                <div class="option-con">
-                  <div class="flex_left con-item">
-                    <div class="title-cell1 flex_left">选择地区</div>
-                    <div class="border-cell flex_left flex_cell">
-                      <select v-model="item.province" class="w_100 h_100">
-                        <option value=''>请选择</option>
-                        <option v-for="(item,index) in provinceData" :key="index" :value="item.name">{{item.name}}</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="flex_left mt10 con-item">
-                    <div class="title-cell1 flex_left">运费金额</div>
-                    <div class="border-cell flex_left flex_cell">
-                      <x-input v-model="item.postage" class="input" @keyup="postageChange(index)" type="tel" placeholder="运费金额" maxlength="5" size="5"></x-input>
-                    </div>
-                    <div class="flex_right" style="width:20px;">元</div>
-                  </div>
-                </div>
-              </div>
+        <div class="check-list">
+          <div :class="`check-item ${areaObject[item.name] || sendObject[item.name] ? 'disabled' : ''} ${item.checked ? 'checked' : ''}`" v-for="(item,index) in listArea" :key="index" @click="clickAreaProvince(item,index)">
+            <div class="item-inner">
+              <div class="ico al"></div>
+              <div>{{item.name}}</div>
+            </div>
           </div>
-          <div class="flex_center pt10 pb10" @click="addArea">
-            <div class="color-theme btn-add flex_center">添加一项</div>
+        </div>
+        <div class="form-list">
+          <div class="form-item flex_left">
+            <div class="flex_left pr10">计费标准</div>
+            <div class="flex_left flex_cell">
+              <select v-model="postStandard" @change="selectChange">
+                <option value="0">购买多件只收1件运费</option>
+                <option value="1">每满几件递增运费</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-item flex_left" v-if="showStandard">
+            <div class="flex_left pr10">递增件数</div>
+            <div class="flex_left flex_cell">
+              <x-input v-model="postAddCount" class="input" type="tel" placeholder="递增件数" maxlength="5" size="5"></x-input>
+            </div>
+            <div class="flex_right" style="width:20px;">件</div>
+          </div>
+          <div class="form-item flex_left">
+            <div class="flex_left pr10">运费金额</div>
+            <div class="flex_left flex_cell">
+              <x-input v-model="postPostage" class="input" type="tel" placeholder="运费金额" maxlength="5" size="5"></x-input>
+            </div>
+            <div class="flex_right" style="width:20px;">元</div>
+          </div>
+        </div>
+        <div class="padding10 flex_center">
+          <div class="bg-theme color-white flex_center" style="width:100px;height:35px;border-radius:10px;" @click="addAreaEvent">增加</div>
+        </div>
+        <div class="flex_left padding10" v-if="areaData.length">
+          <div class="flex_left" @click="clickAreaAll">
+            <div :class="`check-ico mr5 ${checkedAllArea ? 'checked': ''}`">
+              <div class="ico al"></div>
+            </div>
+            <div>全选</div>
+          </div>
+          <div class="flex_left">
+            <div class="bg-theme color-white flex_center" style="width:100px;height:35px;border-radius:10px;margin-left:20px;" @click="deleteMore">批量删除</div>
+          </div>
+        </div>
+        <div class="form-list">
+          <div class="form-item" v-for="(item,index) in areaData" :key="index">
+            <div class="flex_left b_bottom_after pb10">
+              <div :class="`check-ico mr10 ${item.checked ? 'checked' : ''}`" @click="clickOneArea(item,index)">
+                <div class="ico al"></div>
+              </div>
+              <div class="flex_cell flex_left">{{item.province}}</div>
+              <div class="pl10 flex_right color-theme" @click="deleteData(index)">删除</div>
+            </div>
+            <div class="flex_left pt10">
+              <div class="flex_left pr10">计费标准</div>
+              <div class="flex_left flex_cell">{{standardObject[item.standard]}}</div>
+            </div>
+            <div class="flex_left" v-if="item.standard == 1">
+              <div class="flex_left pr10">递增件数</div>
+              <div class="flex_left flex_cell">{{item.addcount}}</div>
+            </div>
+            <div class="flex_left">
+              <div class="flex_left pr10">运费金额</div>
+              <div class="flex_left flex_cell">{{item.postage}}</div>
+            </div>
           </div>
         </div>
       </div>
       <div v-show="(selectedIndex == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',1)">
-        <div class="form-item bg-white">
-          <div class="option-list">
-            <div class="option-item" v-for="(item,index) in sendData" :key="index">
-                <div class="option-title flex_left">
-                  <div class="flex_cell flex_left">地区 {{index + 1}}</div>
-                  <div class="w60 flex_right color-theme" @click="deleteSend(index)">删除</div>
-                </div>
-                <div class="option-con">
-                  <div class="flex_left con-item">
-                    <div class="title-cell1 flex_left">选择地区</div>
-                    <div class="border-cell flex_left flex_cell">
-                      <select v-model="item.province" class="w_100 h_100">
-                        <option value=''>请选择</option>
-                        <option v-for="(item,index) in provinceData" :key="index" :value="item.name">{{item.name}}</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
+        <div class="check-list">
+          <div :class="`check-item ${areaObject[item.name] || sendObject[item.name] ? 'disabled' : ''} ${item.checked ? 'checked' : ''}`" v-for="(item,index) in listSend" :key="index" @click="clickSendProvince(item,index)">
+            <div class="item-inner">
+              <div class="ico al"></div>
+              <div>{{item.name}}</div>
+            </div>
           </div>
-          <div class="flex_center pt10 pb10" @click="addSend">
-            <div class="color-theme btn-add flex_center">添加地区</div>
+        </div>
+        <div class="padding10 flex_center">
+          <div class="bg-theme color-white flex_center" style="width:100px;height:35px;border-radius:10px;" @click="addSendEvent">增加</div>
+        </div>
+        <div class="flex_left padding10" v-if="sendData.length">
+          <div class="flex_left" @click="clickSendAll">
+            <div :class="`check-ico mr5 ${checkedAllSend ? 'checked': ''}`">
+              <div class="ico al"></div>
+            </div>
+            <div>全选</div>
+          </div>
+          <div class="flex_left">
+            <div class="bg-theme color-white flex_center" style="width:100px;height:35px;border-radius:10px;margin-left:20px;" @click="deleteMore">批量删除</div>
+          </div>
+        </div>
+        <div class="form-list">
+          <div class="form-item flex_left" v-for="(item,index) in sendData" :key="index">
+            <div :class="`check-ico mr10 ${item.checked ? 'checked' : ''}`" @click="clickOneSend(item,index)">
+              <div class="ico al"></div>
+            </div>
+            <div class="flex_cell flex_left">{{item.province}}</div>
+            <div class="w60 flex_right color-theme" @click="deleteSend(index)">删除</div>
           </div>
         </div>
       </div>
     </div>
-    <div v-if="selectedIndex == 0" class="s-bottom flex_center color-white bg-theme" @click="saveEvent">提交</div>
-    <div v-if="selectedIndex == 1" class="s-bottom flex_center color-white bg-theme" @click="saveSend">提交</div>
   </div>
 </template>
 <i18n>
@@ -111,7 +155,7 @@ export default {
       showContainer: false,
       query: {},
       loginUser: {},
-      tabtxts: ['加运费地区', '不派送地区'],
+      tabtxts: ['偏远地区运费', '不派送地区'],
       productType: 'product',
       moduleid: 0,
       selectedIndex: 0,
@@ -156,19 +200,180 @@ export default {
       sendData: [],
       postageData: [],
       areaObject: {},
-      sendObject: {}
+      sendObject: {},
+      listArea: [],
+      listSend: [],
+      showStandard: false,
+      postPostage: '',
+      postStandard: 0,
+      postAddCount: '',
+      checkedArea: [],
+      checkedSend: [],
+      standardObject: {
+        0: '购买多件只收1件运费',
+        1: '满几件递增运费'
+      },
+      checkedAllArea: false,
+      checkedAllSend: false
     }
   },
   methods: {
-    addArea () {
-      this.areaData.push({province: ''})
+    selectChange () {
+      if (parseInt(this.postStandard) === 1) {
+        this.showStandard = true
+      } else {
+        this.showStandard = false
+      }
     },
-    addSend () {
-      this.sendData.push({province: ''})
+    clickAreaProvince (item, index) {
+      if (item.disabled) return false
+      if (item.checked) {
+        for (let i = 0; i < this.checkedArea.length; i++) {
+          if (this.checkedArea[i].name === item.name) {
+            this.checkedArea.splice(i, 1)
+            break
+          }
+        }
+        item.checked = false
+        delete this.areaObject[item.name]
+        for (let i = 0; i < this.listSend.length; i++) {
+          if (this.listSend[i].name === item.name) {
+            let curD = this.listSend[i]
+            delete curD.disabled
+            this.listSend.splice(i, 1, curD)
+            break
+          }
+        }
+      } else {
+        this.checkedArea.push(item)
+        item.checked = true
+        this.areaObject[item.name] = item
+        for (let i = 0; i < this.listSend.length; i++) {
+          if (this.listSend[i].name === item.name) {
+            let curD = this.listSend[i]
+            curD.disabled = true
+            this.listSend.splice(i, 1, curD)
+            break
+          }
+        }
+      }
+      this.listArea.splice(index, 1, item)
     },
-    postageChange (index) {
-      let val = event.target.value
-      this.areaData[index].postage = val
+    clickSendProvince (item, index) {
+      if (item.disabled) return false
+      if (item.checked) {
+        for (let i = 0; i < this.checkedSend.length; i++) {
+          if (this.checkedSend[i].name === item.name) {
+            this.checkedSend.splice(i, 1)
+            break
+          }
+        }
+        item.checked = false
+        delete this.sendObject[item.name]
+        for (let i = 0; i < this.listArea.length; i++) {
+          if (this.listArea[i].name === item.name) {
+            let curD = this.listArea[i]
+            delete curD.disabled
+            this.listArea.splice(i, 1, curD)
+            break
+          }
+        }
+      } else {
+        this.checkedSend.push(item)
+        item.checked = true
+        this.sendObject[item.name] = item
+        for (let i = 0; i < this.listArea.length; i++) {
+          if (this.listArea[i].name === item.name) {
+            let curD = this.listArea[i]
+            curD.disabled = true
+            this.listArea.splice(i, 1, curD)
+            break
+          }
+        }
+      }
+      this.listSend.splice(index, 1, item)
+    },
+    clickAreaAll () {
+      this.checkedAllArea = !this.checkedAllArea
+      for (let i = 0; i < this.areaData.length; i++) {
+        this.areaData[i].checked = this.checkedAllArea
+        let changeData = this.areaData[i]
+        this.areaData.splice(i, 1, changeData)
+      }
+    },
+    clickSendAll () {
+      this.checkedAllSend = !this.checkedAllSend
+      for (let i = 0; i < this.sendData.length; i++) {
+        this.sendData[i].checked = this.checkedAllSend
+        let changeData = this.sendData[i]
+        this.sendData.splice(i, 1, changeData)
+      }
+    },
+    clickOneArea (item, index) {
+      this.checkedAllArea = false
+      item.checked = !item.checked
+      this.areaData.splice(index, 1, item)
+    },
+    clickOneSend (item, index) {
+      this.checkedAllSend = false
+      item.checked = !item.checked
+      this.sendData.splice(index, 1, item)
+    },
+    deleteMore () {
+      let delArr = []
+      let datas = this.areaData
+      if (this.selectedIndex === 1) {
+        datas = this.sendData
+      }
+      for (let i = 0; i < datas.length; i++) {
+        let curd = datas[i]
+        if (curd.checked) {
+          delArr.push({...curd, delindex: i})
+        }
+      }
+      if (!delArr.length) {
+        this.$vux.toast.text('请选择要删除的地区', 'middle')
+        return false
+      }
+      this.$vux.confirm.show({
+        content: '确定要删除吗？',
+        onConfirm: () => {
+          this.$vux.loading.show()
+          this.$util.taskData({
+            data: delArr,
+            handleFunction: (d) => {
+              return (done) => {
+                this.$http.post(`${ENV.BokaApi}/api/delete/postage`, {
+                  id: d.id
+                }).then((res) => {
+                  const data = res.data
+                  if (data.flag) {
+                    if (this.selectedIndex === 1) {
+                      delete this.sendObject[d.province]
+                      for (let i = 0; i < this.sendData.length; i++) {
+                        if (this.sendData[i].id === d.id) {
+                          this.sendData.splice(i, 1)
+                        }
+                      }
+                    } else {
+                      delete this.areaObject[d.province]
+                      for (let i = 0; i < this.areaData.length; i++) {
+                        if (this.areaData[i].id === d.id) {
+                          this.areaData.splice(i, 1)
+                        }
+                      }
+                    }
+                  }
+                })
+                done()
+              }
+            },
+            callback: () => {
+              this.$vux.loading.hide()
+            }
+          })
+        }
+      })
     },
     deleteData (index) {
       this.$vux.confirm.show({
@@ -226,61 +431,53 @@ export default {
         }
       })
     },
-    saveEvent () {
-      console.log('当前列表中的地区')
-      console.log(this.areaData)
-      console.log('已存在的偏远地区')
-      console.log(this.areaObject)
-      console.log('已存在的不派送地区')
-      console.log(this.sendObject)
-      if (this.submitIng) return false
-      // if (!this.areaData.length) {
-      //   this.$vux.toast.text('请设置运费信息', 'middle')
-      //   return false
-      // }
-      let iscontinue = true
-      for (let i = 0; i < this.areaData.length; i++) {
-        let curData = this.areaData[i]
-        let curProvince = curData.province
-        let curPostage = curData.postage
-        if (!curProvince || this.$util.trim(curProvince) === '' || !curPostage || this.$util.trim(curPostage) === '') {
-          this.$vux.toast.text('请完善运费信息', 'middle')
-          iscontinue = false
-          break
+    addAreaEvent () {
+      if (!this.checkedArea.length) {
+        this.$vux.toast.text('请选择偏远地区', 'middle')
+        return false
+      }
+      if (parseInt(this.postStandard) === 1) {
+        if (this.postAddCount === '') {
+          this.$vux.toast.text('请输入递增件数', 'middle')
+          return false
         }
-        if (this.sendObject[curProvince]) {
-          this.$vux.toast.text('偏远地区和不派送地区不可重复', 'middle')
-          iscontinue = false
-          break
-        }
-        let isSame = false
-        for (let j = 0; j < this.areaData.length; j++) {
-          if (j !== i && this.areaData[i].province === this.areaData[j].province) {
-            this.$vux.toast.text('偏远地区不可重复', 'middle')
-            isSame = true
-            break
-          }
-        }
-        if (isSame) {
-          iscontinue = false
-          break
-        }
-        if (isNaN(curPostage) || parseFloat(curPostage) <= 0) {
-          this.$vux.toast.text('运费金额必须大于0', 'middle')
-          iscontinue = false
-          break
-        }
-        if (parseFloat(curPostage) > 100000) {
-          this.$vux.toast.text('运费金额过大', 'middle')
-          iscontinue = false
-          break
+        if (isNaN(this.postAddCount) || parseFloat(this.postAddCount) <= 0) {
+          this.$vux.toast.text('请输入正确的递增件数', 'middle')
+          return false
         }
       }
+      if (this.postPostage === '') {
+        this.$vux.toast.text('请输入运费金额', 'middle')
+        return false
+      }
+      if (isNaN(this.postPostage) || parseFloat(this.postPostage) <= 0) {
+        this.$vux.toast.text('运费金额必须大于0', 'middle')
+        return false
+      }
+      if (parseFloat(this.postPostage) > 100000) {
+        this.$vux.toast.text('运费金额过大', 'middle')
+        return false
+      }
+      let iscontinue = true
+      let postData = []
+      for (let i = 0; i < this.checkedArea.length; i++) {
+        let curd = this.checkedArea[i]
+        if (this.sendObject[curd.name]) {
+          this.$vux.toast.show({
+            text: '偏远地区和不派送地区不可重复设置',
+            type: 'text'
+          })
+          iscontinue = false
+          break
+        }
+        postData.push({province: curd.name, standard: this.postStandard, addcount: 0, postage: this.postPostage})
+      }
+      postData = this.areaData.concat(postData)
       if (!iscontinue) return false
       this.submitIng = true
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/batchAddPostage`, {
-        data: this.areaData, type: this.productType, moduleid: this.moduleid, pianyuan: 1
+        data: postData, type: this.productType, moduleid: this.moduleid, pianyuan: 1
       }).then(res => {
         let data = res.data
         this.$vux.loading.hide()
@@ -292,60 +489,39 @@ export default {
             this.submitIng = false
             if (data.flag === 1) {
               this.refreshData()
-              // this.areaObject = {}
-              // for (let i = 0; i < this.areaData.length; i++) {
-              //   this.areaObject[this.areaData[i].province] = this.areaData[i]
-              // }
             }
           }
         })
       })
     },
-    saveSend () {
-      console.log('当前列表中的不派送地区')
-      console.log(this.sendData)
-      console.log('已存在的偏远地区')
-      console.log(this.areaObject)
-      console.log('已存在的不派送地区')
-      console.log(this.sendObject)
-      if (this.submitIng) return false
-      // if (!this.sendData.length) {
-      //   this.$vux.toast.text('请设置运费信息', 'middle')
-      //   return false
-      // }
+    addSendEvent () {
+      if (!this.checkedSend.length) {
+        this.$vux.toast.show({
+          text: '请选择不派送地区',
+          type: 'text'
+        })
+        return false
+      }
       let iscontinue = true
-      for (let i = 0; i < this.sendData.length; i++) {
-        let curData = this.sendData[i]
-        this.sendData[i].postage = -1
-        let curProvince = curData.province
-        if (!curProvince || this.$util.trim(curProvince) === '') {
-          this.$vux.toast.text('请选择不派送地区', 'middle')
+      let postData = []
+      for (let i = 0; i < this.checkedSend.length; i++) {
+        let curd = this.checkedSend[i]
+        if (this.areaObject[curd.name]) {
+          this.$vux.toast.show({
+            text: '偏远地区和不派送地区不可重复设置',
+            type: 'text'
+          })
           iscontinue = false
           break
         }
-        if (this.areaObject[curProvince]) {
-          this.$vux.toast.text('偏远地区和不派送地区不可重复', 'middle')
-          iscontinue = false
-          break
-        }
-        let isSame = false
-        for (let j = 0; j < this.sendData.length; j++) {
-          if (j !== i && this.sendData[i].province === this.sendData[j].province) {
-            this.$vux.toast.text('偏远地区不可重复', 'middle')
-            isSame = true
-            break
-          }
-        }
-        if (isSame) {
-          iscontinue = false
-          break
-        }
+        postData.push({province: curd.name, addcount: 0, postage: -1})
       }
       if (!iscontinue) return false
+      postData = this.sendData.concat(postData)
       this.submitIng = true
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/batchAddPostage`, {
-        data: this.sendData, type: this.productType, moduleid: this.moduleid, pianyuan: 0
+        data: postData, type: this.productType, moduleid: this.moduleid, pianyuan: 0
       }).then(res => {
         let data = res.data
         this.$vux.loading.hide()
@@ -357,10 +533,6 @@ export default {
             this.submitIng = false
             if (data.flag === 1) {
               this.refreshData()
-              // this.sendObject = {}
-              // for (let i = 0; i < this.sendData.length; i++) {
-              //   this.sendObject[this.sendData[i].province] = this.sendData[i]
-              // }
             }
           }
         })
@@ -384,9 +556,40 @@ export default {
             this.sendData.push(retdata[i])
           }
         }
+        for (let i = 0; i < this.provinceData.length; i++) {
+          let curd = this.provinceData[i]
+          let curArea = {}
+          let curSend = {}
+          for (let key in curd) {
+            curArea[key] = curd[key]
+            curSend[key] = curd[key]
+          }
+          if (this.sendObject[curd.name]) {
+            this.listArea.push({...curArea, disabled: true})
+          } else {
+            if (this.areaObject[curd.name]) {
+              this.listArea.push({...curArea, disabled: true})
+            } else {
+              this.listArea.push(curArea)
+            }
+          }
+          if (this.areaObject[curd.name]) {
+            this.listSend.push({...curSend, disabled: true})
+          } else {
+            if (this.sendObject[curd.name]) {
+              this.listSend.push({...curSend, disabled: true})
+            } else {
+              this.listSend.push(curSend)
+            }
+          }
+        }
       })
     },
     refreshData () {
+      this.checkedArea = []
+      this.checkedSend = []
+      this.listArea = []
+      this.listSend = []
       this.areaObject = {}
       this.sendObject = {}
       this.areaData = []
@@ -438,6 +641,48 @@ export default {
         .option-pic{width:30px;height:30px;object-fit:cover;}
       }
     }
+  }
+  .check-list{
+    display:flex;flex-wrap:wrap;padding:10px;box-sizing:border-box;
+    .check-item{
+        padding:5px 10px 5px 0px;display:flex;justify-content:center;align-items:center;
+    }
+    .check-item.disabled{
+      .item-inner{background-color:#d1d1d1;color:#eaeaea;}
+      .ico{border-color:#eaeaea;}
+    }
+    .item-inner{
+        border:#ccc 1px solid;border-radius:5px;padding:5px 10px;
+        display:flex;justify-content:center;align-items:center;
+    }
+    .ico{width:10px;height:10px;border:#000 1px solid;margin-right:5px;position:relative;}
+    .checked.check-item{
+      .ico{background-color:#ff6a61;color:#fff;border-color:#ff6a61;}
+      .ico:before{content:"\e778";font-size:10px;width:12px;height:12px;position:absolute;left:-1px;bottom:3px;font-weight:bold;}
+    }
+    .check-item.disabled.checked{
+      .item-inner{background-color:#fff;color:#000;}
+    }
+  }
+  .form-list{
+    padding:10px;box-sizing: border-box;
+    .form-item:not(:first-child){margin-top:10px;}
+    .form-item{
+      width: 100%;
+      box-sizing: border-box;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+      box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    }
+  }
+  .check-ico{
+    .ico{width:10px;height:10px;border:#000 1px solid;position:relative;}
+  }
+  .check-ico.checked{
+    .ico{background-color:#ff6a61;color:#fff;border-color:#ff6a61;}
+    .ico:before{content:"\e778";font-size:10px;width:12px;height:12px;position:absolute;left:-1px;bottom:3px;font-weight:bold;}
   }
 }
 </style>
