@@ -114,6 +114,22 @@
               </div>
             </div>
           </div>
+          <div class="form-item required bg-white">
+            <div class="flex_left">
+              <div class="w_100">
+                <x-switch title='销量刺激' v-model="autosales"></x-switch>
+                <div class="color-gray font12 mt5">开启状态在商品上线期间每5分钟随机增加5-10件初始销量。</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-item required bg-white">
+            <div class="flex_left">
+              <div class="w_100">
+                <x-switch title='只允许合伙人分享购买' v-model="retailerbuy"></x-switch>
+                <div class="color-gray font12 mt5">开启该功能的商品，需要求用户通过合伙人本人分享的链接才可下单购买，若通过二次分享，或用户主动进入小程序是无法下单购买的!</div>
+              </div>
+            </div>
+          </div>
           <div class="pt10 bg-page"></div>
           <div class="flex_center">
             <div v-if="!optionsData.length" class="form-item required bg-white bright">
@@ -522,7 +538,9 @@ export default {
         sellingpoint: '',
         netincome: '',
         calcsales: 1,
-        agentrebate: ''
+        agentrebate: '',
+        autosales: 0,
+        retailerbuy: 0
       },
       allowsubmit: true,
       requireddata: {title: '', 'price': '', 'postage': '', 'photo': ''},
@@ -537,7 +555,9 @@ export default {
       clickPhotoIndex: -1,
       disOptionsArea: false,
       afterOptions: false,
-      calcsales: true
+      calcsales: true,
+      autosales: false,
+      retailerbuy: false
     }
   },
   watch: {
@@ -599,9 +619,13 @@ export default {
         sellingpoint: '',
         netincome: '',
         calcsales: 1,
-        agentrebate: ''
+        agentrebate: '',
+        autosales: 0,
+        retailerbuy: 0
       }
       this.calcsales = true
+      this.autosales = false
+      this.retailerbuy = false
       this.listphotoarr = []
       this.photoarr = []
       this.photoarr1 = []
@@ -1265,6 +1289,16 @@ export default {
       } else {
         postdata.calcsales = 0
       }
+      if (this.autosales) {
+        postdata.autosales = 1
+      } else {
+        postdata.autosales = 0
+      }
+      if (this.retailerbuy) {
+        postdata.retailerbuy = 1
+      } else {
+        postdata.retailerbuy = 0
+      }
       self.savedata(postdata)
     },
     priceChange (key) {
@@ -1318,6 +1352,16 @@ export default {
             self.calcsales = true
           } else {
             self.calcsales = false
+          }
+          if (retdata.autosales) {
+            self.autosales = true
+          } else {
+            self.autosales = false
+          }
+          if (retdata.retailerbuy) {
+            self.retailerbuy = true
+          } else {
+            self.retailerbuy = false
           }
           if (self.submitdata.listphoto && self.$util.trim(self.submitdata.listphoto) !== '') {
             self.listphotoarr = self.submitdata.listphoto.split(',')
