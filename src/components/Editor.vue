@@ -368,6 +368,7 @@ export default {
       if (self.module === 'factorynews') {
         ajaxUrl = `${ENV.BokaApi}/api/factory/getfpimportList`
         params.fid = this.loginUser.fid
+        params.moderate = 100
       } else {
         params.wid = this.loginUser.uid
       }
