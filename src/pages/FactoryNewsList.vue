@@ -45,7 +45,7 @@
                 </div>
               </div>
               <div class="align_right t-cell v_bottom w80 pb8">
-                  <div class="btnicon bg-red color-white font12" @click.stop="controlpopup(item)">
+                  <div class="btnicon bg-red color-white font12" @click.stop="controlpopup(item, index)">
                     <i class="al al-asmkticon0165 v_middle"></i>
                   </div>
               </div>
@@ -71,6 +71,12 @@
               <div class="item" v-for="(row,index1) in controldata" :key="index1">
                 <div class="inner" v-if="row.key == 'stat'" @click="toStat">{{ row.title }}</div>
                 <router-link class="inner" v-else-if="row.key == 'set'" :to="{path:'/addFactoryNews',query:{id:clickdata.id, fid: query.fid}}">{{ row.title }}</router-link>
+              </div>
+              <div class="item" v-if="clickdata.moderate == 0">
+                <div class="inner" @click="toShow">显示</div>
+              </div>
+              <div class="item" v-else>
+                <div class="inner" @click="toHide">隐藏</div>
               </div>
               <div class="item close mt10" @click="clickpopup('row.key,clickdata')">
                 <div class="inner">{{ $t('Cancel txt') }}</div>
@@ -137,6 +143,7 @@ export default {
       ],
       showpopup: false,
       clickdata: {},
+      clickIndex: 0,
       limit: 10,
       pagestart1: 0,
       pagestart2: 0,
@@ -145,6 +152,44 @@ export default {
     }
   },
   methods: {
+    toShow () {
+      this.showpopup = false
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/moderate/factorynews`, {
+        id: this.clickdata.id, fid: this.loginUser.fid, moderate: 1
+      }).then(res => {
+        this.$vux.loading.hide()
+        const data = res.data
+        this.$vux.toast.show({
+          text: data.error,
+          type: data.flag === 1 ? 'success' : 'warn',
+          time: this.$util.delay(data.error)
+        })
+        if (data.flag) {
+          this.clickdata.moderate = 1
+          this.tabdata1.splice(this.clickIndex, this.clickdata)
+        }
+      })
+    },
+    toHide () {
+      this.showpopup = false
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/moderate/factorynews`, {
+        id: this.clickdata.id, fid: this.loginUser.fid, moderate: 0
+      }).then(res => {
+        this.$vux.loading.hide()
+        const data = res.data
+        this.$vux.toast.show({
+          text: data.error,
+          type: data.flag === 1 ? 'success' : 'warn',
+          time: this.$util.delay(data.error)
+        })
+        if (data.flag) {
+          this.clickdata.moderate = 0
+          this.tabdata1.splice(this.clickIndex, this.clickdata)
+        }
+      })
+    },
     toDetail (item) {
       let params = this.$util.handleAppParams(this.query, {id: item.id, fid: this.query.fid})
       this.$router.push({path: '/factoryNews', query: params})
@@ -230,10 +275,11 @@ export default {
       self.pagestart1 = 0
       self.getData1()
     },
-    controlpopup (item) {
+    controlpopup (item, index) {
       event.preventDefault()
       this.showpopup = !this.showpopup
       this.clickdata = item
+      this.clickIndex = index
     },
     getCustomerdata () {
       const self = this
