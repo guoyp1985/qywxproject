@@ -1241,6 +1241,15 @@ export default {
               agentrebate: curOption.agentrebate,
               storage: curOption.storage
             }
+            if (!addoption.salesrebate || addoption.salesrebate === '') {
+              addoption.salesrebate = 0
+            }
+            if (!addoption.superrebate || addoption.superrebate === '') {
+              addoption.superrebate = 0
+            }
+            if (!addoption.agentrebate || addoption.agentrebate === '') {
+              addoption.agentrebate = 0
+            }
             if (curOption.id) {
               addoption.id = curOption.id
             }

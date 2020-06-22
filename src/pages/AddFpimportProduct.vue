@@ -1195,7 +1195,6 @@ export default {
             let curSuper = curOption.superrebate
             let curRebate = curOption.agentrebate
             let curStorage = curOption.storage
-            console.log(curOption)
             if (self.$util.trim(curTitle) === '' || self.$util.trim(curPrice) === '' || self.$util.trim(curStorage) === '') {
               self.$vux.toast.text('请完善规格信息', 'middle')
               iscontinue = false
@@ -1216,7 +1215,6 @@ export default {
               iscontinue = false
               break
             }
-
             if (parseFloat(curPrice) < parseFloat(curSales) || parseFloat(curPrice) < parseFloat(curSuper)) {
               self.$vux.toast.text('佣金不得大于现价', 'middle')
               iscontinue = false
@@ -1268,6 +1266,15 @@ export default {
               superrebate: curOption.superrebate,
               agentrebate: curOption.agentrebate,
               storage: curOption.storage
+            }
+            if (!addoption.salesrebate || addoption.salesrebate === '') {
+              addoption.salesrebate = 0
+            }
+            if (!addoption.superrebate || addoption.superrebate === '') {
+              addoption.superrebate = 0
+            }
+            if (!addoption.agentrebate || addoption.agentrebate === '') {
+              addoption.agentrebate = 0
             }
             if (curOption.id) {
               addoption.id = curOption.id
