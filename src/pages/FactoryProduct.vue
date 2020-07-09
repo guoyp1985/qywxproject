@@ -147,7 +147,7 @@
           </div>
         </div>
       </div>
-      <div v-if="loginUser.isretailer && query.fromapp != 'factory' && query.frompage != 'manager' && (!loginUser.factoryinfo || !loginUser.factoryinfo.issupply)" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
+      <div v-if="loginUser.isretailer && query.fromapp != 'factory' && query.frompage != 'manager'" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
         <!-- <div class="align_center flex_center flex_cell" v-if="!loginUser.retailerinfo.fid || loginUser.retailerinfo.fid == query.fid"> -->
         <div class="align_center flex_center flex_cell">
           <div class="btn-bottom-red flex_center" style="width:90%;" v-if="productdata.haveimport == 1">已上架</div>
@@ -646,7 +646,7 @@ export default {
               self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
             }
             self.handelShare()
-            if (!self.loginUser.isretailer || this.query.frompage === 'manager' || (this.loginUser.factoryinfo && this.loginUser.factoryinfo.issupply)) {
+            if (!self.loginUser.isretailer || this.query.frompage === 'manager' || this.query.fromapp === 'factory') {
               self.topcss = 'nobottom'
             }
             self.feeData = self.productdata.agentfee ? self.productdata.agentfee : []
