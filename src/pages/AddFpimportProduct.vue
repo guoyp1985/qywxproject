@@ -182,6 +182,15 @@
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>
           </div>
+          <div class="form-item bg-white flex_left">
+            <div class="flex_left w80 font14">供应商</div>
+            <div class="flex_cell flex_left" style="position:relative;">
+              <select v-model="submitdata.supplierid" class="w_100" style="height:35px;">
+                <option value="">请选择</option>
+                <option v-for="(item,index) in supplyData" :value="item.id">{{ item.title }}</option>
+              </select>
+            </div>
+          </div>
           <!-- 商品利润 -->
           <div v-if="!optionsData.length" class="form-item required bg-white">
             <div class="t-table">
@@ -547,6 +556,8 @@ export default {
         title: '',
         oriprice: '',
         price: '',
+        supplyprice: '',
+        supplierid: '',
         tb_price: '',
         jd_price: '',
         postage: '0.00',
@@ -583,7 +594,8 @@ export default {
       afterOptions: false,
       calcsales: true,
       autosales: false,
-      retailerbuy: false
+      retailerbuy: false,
+      supplyData: []
     }
   },
   watch: {
@@ -628,6 +640,8 @@ export default {
         title: '',
         oriprice: '',
         price: '',
+        supplyprice: '',
+        supplierid: '',
         tb_price: '',
         jd_price: '',
         postage: '0.00',
@@ -1457,6 +1471,12 @@ export default {
       this.$http.get(`${ENV.BokaApi}/api/classList/product`).then(res => {
         const data = res.data
         self.classData = data.data ? data.data : data
+      })
+      this.$http.get(`${ENV.BokaApi}/api/factory/list`, {
+        params: {pagestart: 0, issupply: 1}
+      }).then(res => {
+        const data = res.data
+        this.supplyData = data.data ? data.data : data
       })
     },
     refresh () {
