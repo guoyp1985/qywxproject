@@ -838,6 +838,7 @@ export default {
   .pagebottom{height:50px;}
   .levelarea .levelitem:not(:last-child){margin-bottom:12px;}
 }
+.f-product-page.nobottom .pagemiddle{bottom:0;}
 .options-popup-layer{
   .vux-popup-dialog{
     background:rgba(0,0,0,0.5)
