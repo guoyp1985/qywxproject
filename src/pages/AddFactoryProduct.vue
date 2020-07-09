@@ -173,6 +173,15 @@
           </div>
           <div class="pt10 bg-page"></div>
 
+          <div v-if="!optionsData.length" class="form-item bg-white">
+            <div class="t-table">
+              <div class="t-cell title-cell w80 font14 v_middle">供货价</div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <x-input v-model="submitdata.supplyprice" @keyup="priceChange('supplyprice')" maxlength="7" size="7" type="text" class="input priceInput" name="supplyprice" placeholder="供货价" ></x-input>
+              </div>
+              <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
+            </div>
+          </div>
           <!-- 商品利润 -->
           <div v-if="!optionsData.length" class="form-item required bg-white">
             <div class="t-table">
@@ -298,6 +307,12 @@
                     <div class="title-cell1 flex_left">价格</div>
                     <div class="border-cell flex_left flex_cell">
                       <x-input v-model="item.price" class="input" placeholder="价格" maxlength="7" size="7" ></x-input>
+                    </div>
+                  </div>
+                  <div class="flex_left mt10 con-item">
+                    <div class="title-cell1 flex_left">供货价</div>
+                    <div class="border-cell flex_left flex_cell">
+                      <x-input v-model="item.supplyprice" class="input" placeholder="供货价" maxlength="7" size="7" ></x-input>
                     </div>
                   </div>
                   <div class="flex_left mt10 con-item">
@@ -1043,6 +1058,7 @@ export default {
         }
         let price = postdata.price.toString().replace(/,/g, '')
         let oriprice = postdata.oriprice.toString().replace(/,/g, '')
+        let sprice = postdata.supplyprice.toString().replace(/,/g, '')
         let tbprice = postdata.tb_price.toString().replace(/,/g, '')
         let jdprice = postdata.jd_price.toString().replace(/,/g, '')
         let postage = postdata.postage.toString().replace(/,/g, '')
@@ -1061,6 +1077,13 @@ export default {
           self.$vux.alert.show({
             title: '',
             content: '请输入正确的价格'
+          })
+          return false
+        }
+        if (!self.optionsData.length && self.$util.trim(sprice) !== '' && (isNaN(sprice) || parseFloat(sprice) < 0)) {
+          self.$vux.alert.show({
+            title: '',
+            content: '请输入正确的供货价'
           })
           return false
         }
@@ -1128,10 +1151,11 @@ export default {
               return false
             }
           }
-          if (self.$util.trim(salesrebate) !== '' && self.$util.trim(superrebate) !== '' && parseFloat(salesrebate) + parseFloat(superrebate) >= price) {
+          if (sprice === '') sprice = 0
+          if (self.$util.trim(salesrebate) !== '' && self.$util.trim(superrebate) !== '' && parseFloat(sprice) + parseFloat(salesrebate) + parseFloat(superrebate) >= price) {
             self.$vux.alert.show({
               title: '',
-              content: '销售佣金+推荐人佣金应小于商品现价'
+              content: '供货价+销售佣金+推荐人佣金应小于商品现价'
             })
             return false
           }
@@ -1174,10 +1198,11 @@ export default {
             let curOption = this.optionsData[i]
             let curTitle = curOption.title
             // let curPhoto = curOption.photo
-            let curPrice = curOption.price
-            let curSales = curOption.salesrebate
-            let curSuper = curOption.superrebate
-            let curRebate = curOption.agentrebate
+            let curPrice = curOption.price.toString().replace(/,/g, '')
+            let curSprice = curOption.supplyprice.toString().replace(/,/g, '')
+            let curSales = curOption.salesrebate.toString().replace(/,/g, '')
+            let curSuper = curOption.superrebate.toString().replace(/,/g, '')
+            let curRebate = curOption.agentrebate.toString().replace(/,/g, '')
             let curStorage = curOption.storage
             if (self.$util.trim(curTitle) === '' || self.$util.trim(curPrice) === '' || self.$util.trim(curStorage) === '') {
               self.$vux.toast.text('请完规格信息', 'middle')
@@ -1189,6 +1214,11 @@ export default {
               iscontinue = false
               break
             }
+            if (curSprice !== '' && (isNaN(curSprice) || parseFloat(curSprice) <= 0)) {
+              self.$vux.toast.text('请输入正确的供货价', 'middle')
+              iscontinue = false
+              break
+            }
             if (self.$util.trim(curSales) !== '' && (isNaN(curSales) || parseFloat(curSales) < 0)) {
               self.$vux.toast.text('请输入正确的佣金', 'middle')
               iscontinue = false
@@ -1196,6 +1226,17 @@ export default {
             }
             if (self.$util.trim(curSuper) !== '' && (isNaN(curSuper) || parseFloat(curSuper) < 0)) {
               self.$vux.toast.text('请输入正确的佣金', 'middle')
+              iscontinue = false
+              break
+            }
+            if (parseFloat(curPrice) < parseFloat(curSales) || parseFloat(curPrice) < parseFloat(curSuper)) {
+              self.$vux.toast.text('佣金不得大于现价', 'middle')
+              iscontinue = false
+              break
+            }
+            if (curSprice === '') curSprice = 0
+            if (parseFloat(curPrice) < parseFloat(curSprice) + parseFloat(curSales) + parseFloat(curSuper)) {
+              self.$vux.toast.text('供货价+销售佣金+推荐人佣金不得大于现价', 'middle')
               iscontinue = false
               break
             }
@@ -1235,10 +1276,11 @@ export default {
             let addoption = {
               title: curOption.title,
               photo: oPhoto,
-              price: curOption.price,
-              salesrebate: curOption.salesrebate,
-              superrebate: curOption.superrebate,
-              agentrebate: curOption.agentrebate,
+              price: curOption.price.toString().replace(/,/g, ''),
+              supplyprice: curOption.supplyprice.toString().replace(/,/g, ''),
+              salesrebate: curOption.salesrebate.toString().replace(/,/g, ''),
+              superrebate: curOption.superrebate.toString().replace(/,/g, ''),
+              agentrebate: curOption.agentrebate.toString().replace(/,/g, ''),
               storage: curOption.storage
             }
             if (!addoption.salesrebate || addoption.salesrebate === '') {
