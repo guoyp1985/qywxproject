@@ -159,6 +159,33 @@
           </div>
         </div>
         <div v-show="(selectedIndex == 3)">
+          <div v-if="distabdata6" class="scroll_list">
+            <div v-if="!tabdata6 || tabdata6.length === 0" class="scroll_item padding10 align_center color-gray">
+              <div><i class="al al-wushuju font60 pt20"></i></div>
+              <div class="mt5">暂无相关订单！</div>
+            </div>
+            <orderitemplate v-else v-for="(item,index1) in tabdata6" :key="index1" :data="item" order-link="/factoryOrderDetail">
+              <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item" :product="product"></Orderproductplate>
+              <div slot="receivearea">
+                <div class="t-table">
+                  <div class="font12 color-lightgray">
+                    <span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span>
+                    <span @click="copyTxt(item, 1)" class="ml5" style="position:relative;">
+                      <i class="al al-fuzhi font14 color-red4"></i><span class="font12 color-red4">复制</span>
+                      <template v-if="item.flag != 0 && item.flag != 1 && item.flag != 2">
+                        <div :class="`deliver_txt-2-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.delivercompanyname }} {{ item.delivercode }} {{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
+                      </template>
+                      <template v-else>
+                        <div :class="`deliver_txt-2-${item.id}`" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.address ? item.address + ', ' : '' }}{{ item.linkman ? item.linkman + ', ' : '' }}{{ item.telephone ? item.telephone : '' }}</div>
+                      </template>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </orderitemplate>
+          </div>
+        </div>
+        <div v-show="(selectedIndex == 4)">
           <div v-if="distabdata4" class="scroll_list">
             <div v-if="!tabdata4 || tabdata4.length === 0" class="scroll_item padding10 align_center color-gray">
               <div><i class="al al-wushuju font60 pt20"></i></div>
@@ -193,7 +220,7 @@
             </orderitemplate>
           </div>
         </div>
-        <div v-show="(selectedIndex == 4)">
+        <div v-show="(selectedIndex == 5)">
           <div v-if="distabdata5" class="scroll_list">
             <div v-if="!tabdata5 || tabdata5.length === 0" class="scroll_item padding10 align_center color-gray">
               <div><i class="al al-wushuju font60 pt20"></i></div>
@@ -308,24 +335,27 @@ export default {
       showContainer: false,
       query: {},
       loginUser: {},
-      tabtxts: [ '全部', '待付款', '待发货', '已发货', '退款订单' ],
+      tabtxts: [ '全部', '待付款', '待发货', '备货中', '已发货', '退款订单' ],
       selectedIndex: 0,
       distabdata1: false,
       distabdata2: false,
       distabdata3: false,
       distabdata4: false,
       distabdata5: false,
+      distabdata6: false,
       tabdata1: [],
       tabdata2: [],
       tabdata3: [],
       tabdata4: [],
       tabdata5: [],
+      tabdata6: [],
       limit: 10,
       pagestart1: 0,
       pagestart2: 0,
       pagestart3: 0,
       pagestart4: 0,
       pagestart5: 0,
+      pagestart6: 0,
       showpopup: false,
       deliveritem: null,
       deliverindex: 0,
@@ -415,10 +445,14 @@ export default {
               self.getData3()
               break
             case 3:
+              self.pagestart6++
+              self.getData6()
+              break
+            case 4:
               self.pagestart4++
               self.getData4()
               break
-            case 4:
+            case 5:
               self.pagestart5++
               self.getData5()
               break
@@ -543,6 +577,29 @@ export default {
         self.distabdata5 = true
       })
     },
+    getData6 () {
+      this.$vux.loading.show()
+      const self = this
+      let params = {flag: 101, pagestart: self.pagestart6, limit: self.limit}
+      if (self.query.wid) {
+        params.wid = self.query.wid
+      }
+      let ajaxUrl = `${ENV.BokaApi}/api/order/orderList/factory`
+      if (this.query.uid) {
+        ajaxUrl = `${ENV.BokaApi}/api/order/orderList/factoryuser`
+        params.fid = this.query.fid
+        params.searchuid = this.query.uid
+      }
+      self.$http.get(ajaxUrl, {
+        params: params
+      }).then(function (res) {
+        const data = res.data
+        self.$vux.loading.hide()
+        const retdata = data.data ? data.data : data
+        self.tabdata6 = self.tabdata6.concat(retdata)
+        self.distabdata6 = true
+      })
+    },
     clickTab () {
       this.swiperChange()
     },
@@ -577,6 +634,14 @@ export default {
           }
           break
         case 3:
+          if (this.tabdata6.length < this.limit) {
+            self.pagestart6 = 0
+            self.distabdata6 = false
+            this.tabdata6 = []
+            self.getData6()
+          }
+          break
+        case 4:
           if (this.tabdata4.length < this.limit) {
             self.pagestart4 = 0
             self.distabdata4 = false
@@ -584,7 +649,7 @@ export default {
             self.getData4()
           }
           break
-        case 4:
+        case 5:
           if (this.tabdata5.length < this.limit) {
             self.pagestart5 = 0
             self.distabdata5 = false

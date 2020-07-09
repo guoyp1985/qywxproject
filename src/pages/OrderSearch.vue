@@ -19,8 +19,9 @@
       <tab class="b-tab" v-model="selectedIndex">
         <tab-item :selected="selectedIndex==0" @on-item-click="toggleTab">{{ $t('All') }}</tab-item>
         <tab-item :selected="selectedIndex==1" @on-item-click="toggleTab">{{ $t('To Be Delivered') }}</tab-item>
-        <tab-item :selected="selectedIndex==2" @on-item-click="toggleTab">{{ $t('Shipped') }}</tab-item>
-        <tab-item :selected="selectedIndex==3" @on-item-click="toggleTab">{{ $t('Completed') }}</tab-item>
+        <tab-item :selected="selectedIndex==2" @on-item-click="toggleTab">备货中</tab-item>
+        <tab-item :selected="selectedIndex==3" @on-item-click="toggleTab">{{ $t('Shipped') }}</tab-item>
+        <tab-item :selected="selectedIndex==4" @on-item-click="toggleTab">{{ $t('Completed') }}</tab-item>
       </tab>
     </div>
     <div ref="scrollContainer" class="s-container s-container1 scroll-container" @scroll="scrollHandle">
@@ -49,6 +50,18 @@
         </template>
       </div>
       <div v-show="selectedIndex==2">
+        <template v-if="distabdata5">
+          <template v-if="!tabdata5.length">
+            <div class="no-related-x color-gray">
+              <span>{{$t('No Related Orders')}}</span>
+            </div>
+          </template>
+          <template v-else>
+            <order-info v-for="(item, index) in tabdata5" :item="item" :key="index" :index="index" @on-process="orderProcess"></order-info>
+          </template>
+        </template>
+      </div>
+      <div v-show="selectedIndex==3">
         <template v-if="distabdata3">
           <template v-if="!tabdata3.length">
             <div class="no-related-x color-gray">
@@ -60,7 +73,7 @@
           </template>
         </template>
       </div>
-      <div v-show="selectedIndex==3">
+      <div v-show="selectedIndex==4">
         <template v-if="distabdata4">
           <template v-if="!tabdata4.length">
             <div class="no-related-x color-gray">
@@ -176,19 +189,23 @@ export default {
       distabdata2: false,
       distabdata3: false,
       distabdata4: false,
+      distabdata5: false,
       tabdata1: [],
       tabdata2: [],
       tabdata3: [],
       tabdata4: [],
+      tabdata5: [],
       limit: 10,
       pagestart1: 0,
       pagestart2: 0,
       pagestart3: 0,
       pagestart4: 0,
+      pagestart5: 0,
       isLoading1: false,
       isLoading2: false,
       isLoading3: false,
       isLoading4: false,
+      isLoading5: false,
       showRefundModal: false,
       refundContent: '',
       clickOrder: {},
@@ -216,6 +233,9 @@ export default {
     },
     getList4 () {
       return this.setListButton(this.tabdata4)
+    },
+    getList5 () {
+      return this.setListButton(this.tabdata5)
     }
   },
   filters: {
@@ -249,11 +269,16 @@ export default {
           this.pagestart2 = 0
           break
         case 2:
+          this.distabdata5 = false
+          this.tabdata5 = []
+          this.pagestart5 = 0
+          break
+        case 3:
           this.distabdata3 = false
           this.tabdata3 = []
           this.pagestart3 = 0
           break
-        case 3:
+        case 4:
           this.distabdata4 = false
           this.tabdata4 = []
           this.pagestart4 = 0
@@ -276,10 +301,14 @@ export default {
           this.pagestart2 = 0
           break
         case 2:
+          this.tabdata5 = []
+          this.pagestart5 = 0
+          break
+        case 3:
           this.tabdata3 = []
           this.pagestart3 = 0
           break
-        case 3:
+        case 4:
           this.tabdata4 = []
           this.pagestart4 = 0
           break
@@ -413,14 +442,17 @@ export default {
       this.distabdata2 = false
       this.distabdata3 = false
       this.distabdata4 = false
+      this.distabdata5 = false
       this.tabdata1 = []
       this.tabdata2 = []
       this.tabdata3 = []
       this.tabdata4 = []
+      this.tabdata5 = []
       this.pagestart1 = 0
       this.pagestart2 = 0
       this.pagestart3 = 0
       this.pagestart4 = 0
+      this.pagestart5 = 0
       this.toggleTab()
     },
     confirm (order) {
@@ -632,12 +664,6 @@ export default {
       }
     },
     changeOrderView (order, status, buttons) {
-      console.log('====  order  ====')
-      console.log(order)
-      console.log('====  status  ====')
-      console.log(status)
-      console.log('====  buttons  ====')
-      console.log(buttons)
       const self = this
       let list = []
       switch (this.selectedIndex) {
@@ -648,6 +674,9 @@ export default {
           list = this.tabdata2
           break
         case 2:
+          list = this.tabdata5
+          break
+        case 3:
           list = this.tabdata3
           break
         case 3:
@@ -670,9 +699,12 @@ export default {
           !this.tabdata2.length && this.getData(2)
           break
         case 2:
-          !this.tabdata3.length && this.getData(3)
+          !this.tabdata5.length && this.getData(101)
           break
         case 3:
+          !this.tabdata3.length && this.getData(3)
+          break
+        case 4:
           !this.tabdata4.length && this.getData(4)
           break
       }
@@ -696,6 +728,12 @@ export default {
               }
               break
             case 2:
+              if (self.tabdata5.length === (self.pagestart5 + 1) * self.limit) {
+                self.pagestart5++
+                self.getData(101)
+              }
+              break
+            case 3:
               if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
                 self.pagestart3++
                 self.getData(3)
@@ -721,6 +759,9 @@ export default {
       } else if (flag === 4) {
         if (this.isLoading4) return false
         this.isLoading4 = true
+      } else if (flag === 101) {
+        if (this.isLoading5) return false
+        this.isLoading5 = true
       } else {
         if (this.isLoading1) return false
         this.isLoading1 = true
@@ -737,6 +778,8 @@ export default {
         params.pagestart = this.pagestart3
       } else if (flag === 4) {
         params.pagestart = this.pagestart4
+      } else if (flag === 101) {
+        params.pagestart = this.pagestart5
       } else {
         params.pagestart = this.pagestart1
       }
@@ -778,6 +821,11 @@ export default {
             self.tabdata4 = self.tabdata4.concat(retdata)
             self.distabdata4 = true
             break
+          case 101:
+            this.isLoading5 = false
+            self.tabdata5 = self.tabdata5.concat(retdata)
+            self.distabdata5 = true
+            break
         }
       })
     },
@@ -798,9 +846,12 @@ export default {
           flag = 2
           break
         case 2:
-          flag = 3
+          flag = 101
           break
         case 3:
+          flag = 3
+          break
+        case 4:
           flag = 4
           break
         default :
@@ -822,7 +873,7 @@ export default {
       } else if (flag === 3) {
         if (this.query.refresh || !this.tabdata3.length) {
           console.log('flag=3')
-          this.selectedIndex = 2
+          this.selectedIndex = 3
           this.pagestart3 = 0
           this.tabdata3 = []
           this.toggleTab()
@@ -831,9 +882,18 @@ export default {
         if (this.query.refresh || !this.tabdata4.length) {
           console.log('flag=4')
           this.distabdata4 = false
-          this.selectedIndex = 3
+          this.selectedIndex = 4
           this.pagestart4 = 0
           this.tabdata4 = []
+          this.toggleTab()
+        }
+      } else if (flag === 101) {
+        if (this.query.refresh || !this.tabdata5.length) {
+          console.log('flag=101')
+          this.distabdata5 = false
+          this.selectedIndex = 2
+          this.pagestart5 = 0
+          this.tabdata5 = []
           this.toggleTab()
         }
       } else {
