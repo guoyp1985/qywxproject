@@ -679,7 +679,7 @@ export default {
         case 3:
           list = this.tabdata3
           break
-        case 3:
+        case 4:
           list = this.tabdata4
           break
       }
@@ -739,7 +739,7 @@ export default {
                 self.getData(3)
               }
               break
-            case 3:
+            case 4:
               if (self.tabdata4.length === (self.pagestart4 + 1) * self.limit) {
                 self.pagestart4++
                 self.getData(4)

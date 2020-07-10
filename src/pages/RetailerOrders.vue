@@ -1109,7 +1109,7 @@ export default {
               this.selectedIndex = 4
               this.swiperChange()
             }
-          }  else if (this.query.flag === '101') {
+          } else if (this.query.flag === '101') {
             if (!this.tabdata6.length) {
               this.selectedIndex = 3
               this.swiperChange()
