@@ -1165,11 +1165,10 @@ export default {
               return false
             }
           }
-          if (sprice === '') sprice = 0
-          if (self.$util.trim(salesrebate) !== '' && self.$util.trim(superrebate) !== '' && parseFloat(sprice) + parseFloat(salesrebate) + parseFloat(superrebate) >= price) {
+          if (self.$util.trim(salesrebate) !== '' && self.$util.trim(superrebate) !== '' && parseFloat(salesrebate) + parseFloat(superrebate) >= price) {
             self.$vux.alert.show({
               title: '',
-              content: '供货价+销售佣金+推荐人佣金应小于商品现价'
+              content: '销售佣金+推荐人佣金应小于商品现价'
             })
             return false
           }
@@ -1249,8 +1248,8 @@ export default {
               break
             }
             if (curSprice === '') curSprice = 0
-            if (parseFloat(curPrice) < parseFloat(curSprice) + parseFloat(curSales) + parseFloat(curSuper)) {
-              self.$vux.toast.text('供货价+销售佣金+推荐人佣金不得大于现价', 'middle')
+            if (parseFloat(curPrice) < parseFloat(curSales) + parseFloat(curSuper)) {
+              self.$vux.toast.text('销售佣金+推荐人佣金不得大于现价', 'middle')
               iscontinue = false
               break
             }
