@@ -4,13 +4,24 @@
       <Sos :title="sosTitle"></Sos>
     </template>
     <template v-if="showContainer">
-      <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 'product')">
+      <search
+        class="v-search bg-white"
+        v-model='searchword1'
+        :auto-fixed="autofixed"
+        @on-submit="onSubmit1"
+        @on-change="onChange1"
+        @on-cancel="onCancel1"
+        placeholder="请输入厂家名称"
+        ref="search">
+      </search>
+      <div class="s-container scroll-container" style="top:55px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 'product')">
         <template v-if="disList">
           <template v-if="!Data || Data.length == 0">
             <div class="scroll_list">
               <div class="emptyitem">
                 <div class="t-table" style="padding-top:20%;">
-                  <div class="t-cell padding10">暂无厂家数据</div>
+                  <div class="t-cell padding10" v-if="isSearch">暂无搜索结果</div>
+                  <div class="t-cell padding10" v-else>暂无厂家数据</div>
                 </div>
               </div>
             </div>
@@ -151,20 +162,20 @@ Add factory:
 </i18n>
 
 <script>
-import { Group, Datetime, TransferDom, Popup, Confirm, CheckIcon, XImg, XInput } from 'vux'
+import { Group, Datetime, TransferDom, Popup, Confirm, CheckIcon, XImg, XInput, Search } from 'vux'
 import ENV from 'env'
 import Time from '../../libs/time'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
 
 let pageStart1 = 0
-const limit = 10
+const limit = 15
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Popup, Confirm, CheckIcon, XImg, Sos, Datetime, Group, XInput
+    Popup, Confirm, CheckIcon, XImg, Sos, Datetime, Group, XInput, Search
   },
   data () {
     return {
@@ -185,10 +196,29 @@ export default {
       disList: false,
       showManager: false,
       managerData: [],
-      disManagerList: false
+      disManagerList: false,
+      searchword1: '',
+      autofixed: false,
+      isSearch: false
     }
   },
   methods: {
+    onSubmit1 () {
+      this.disList = false
+      this.Data = []
+      pageStart1 = 0
+      this.getData1()
+    },
+    onChange1 (val) {
+      this.searchword1 = val
+    },
+    onCancel1 () {
+      this.searchword1 = ''
+      this.disList = false
+      this.Data = []
+      pageStart1 = 0
+      this.getData1()
+    },
     btnClose () {
       this.timeShow = false
     },
@@ -331,10 +361,17 @@ export default {
     },
     getData1 () {
       const self = this
-      const params = { params: { pagestart: pageStart1, limit: limit } }
-      this.$http.get(`${ENV.BokaApi}/api/factory/list`, params)
-      .then(res => {
+      let params = {pagestart: pageStart1, limit: limit}
+      if (this.searchword1 !== '') {
+        params.keyword = this.searchword1
+      }
+      this.$http.get(`${ENV.BokaApi}/api/factory/list`, {
+        params: params
+      }).then(res => {
         self.$vux.loading.hide()
+        if (params.keyword && params.keyword !== '') {
+          this.isSearch = true
+        }
         const data = res.data
         const retdata = data.data ? data.data : data
         self.Data = self.Data.concat(retdata)
@@ -381,6 +418,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.rproductlist{
+  .v-search{position:absolute;left:0;top:0;right:0;}
+}
 .rproductlist .scroll_item{overflow:hidden;position:relative;}
 .rproductlist .scroll_item .ico{display:none;}
 .rproductlist .scroll_item .down.ico{
