@@ -809,7 +809,7 @@ export default {
     },
     getData1 () {
       const self = this
-      const params = { fid: self.Fid, pagestart: pageStart1, limit: limit }
+      const params = { fid: self.Fid, pagestart: pageStart1, limit: limit, moderate: 100 }
       this.$http.get(`${ENV.BokaApi}/api/factory/getfpimportList`, {
         params: params
       })
