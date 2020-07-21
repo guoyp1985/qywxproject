@@ -117,18 +117,21 @@
           </grid-item>
         </grid>
       </div>
-      <wx-open-launch-weapp
-        id="launch-btn"
-        username="gh_dc6e3c73bc4c"
-        path="pages/index"
-        @launch="handleLaunchFn"
-        @error="handleErrorFn"
-        >
-        <script type="text/wxtag-template">
-          <style>.btn { display: flex;align-items: center; }</style>
-          <button class="wx-btn">跳转小程序</button>
-        </script>
-      </wx-open-launch-weapp>
+      <template v-if="showWeapp">
+        <wx-open-launch-weapp
+          id="launch-btn"
+          username="gh_dc6e3c73bc4c"
+          path="pages/index"
+          @launch="handleLaunchFn"
+          @error="handleErrorFn"
+          >
+          <script type="text/wxtag-template">
+            <style>.btn { display: flex;align-items: center; }</style>
+            <button class="wx-btn">跳转小程序</button>
+          </script>
+        </wx-open-launch-weapp>
+      </template>
+      <div v-html="weappHTML"></div>
     </div>
     <template v-if="showTip">
       <tip-layer buttonTxt="点击此处联系管理员" content="请联系管理员续费后，再来使用厂家功能哦！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
@@ -147,6 +150,8 @@ import ENV from 'env'
 import Time from '#/time'
 import Reg from '#/reg'
 import { Token, User, FirstInfo } from '#/storage'
+const jweixin = require('../../static/jweixin')
+console.log(jweixin)
 let self = {}
 export default {
   components: {
@@ -205,7 +210,9 @@ export default {
       showQuit: false,
       showTip: false,
       showApply: false,
-      showTestManager: ENV.showTestManager
+      showTestManager: ENV.showTestManager,
+      showWeapp: false,
+      weappHTML: ''
     }
   },
   methods: {
@@ -319,6 +326,21 @@ export default {
     self = this
     this.refresh()
     this.$util.miniPost()
+    let str = '<wx-open-launch-weapp'
+    str += ' id="launch-btn1"'
+    str += ' username="gh_dc6e3c73bc4c"'
+    str += ' path="pages/index">'
+    str += '<template>'
+    str += '<button class="list-shadow radius5 mt10 bg-white" style="padding:10px;">测试跳转灰太狼小程序，从代码里添加的</button>'
+    str += '</template>'
+    str += '</wx-open-launch-weapp>'
+    // if (document.getElementById('wxapp')) {
+    //   document.getElementById('wxapp').innerHTML = str
+    // }
+    this.weappHTML = str
+    setTimeout(() => {
+      this.showWeapp = true
+    }, 1000)
   }
 }
 </script>
