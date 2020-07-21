@@ -211,7 +211,7 @@ export default {
       showTip: false,
       showApply: false,
       showTestManager: ENV.showTestManager,
-      showWeapp: false,
+      showWeapp: true,
       weappHTML: ''
     }
   },
