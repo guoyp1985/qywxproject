@@ -116,12 +116,20 @@
             </div>
           </grid-item>
         </grid>
-        </div>
       </div>
-      <template v-if="showTip">
-        <tip-layer buttonTxt="点击此处联系管理员" content="请联系管理员续费后，再来使用厂家功能哦！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
-      </template>
+      <wx-open-launch-weapp
+        id="launch-btn"
+        username="gh_dc6e3c73bc4c"
+        path="pages/index">
+        <template>
+          <div class="list-shadow radius5 mt10 bg-white" style="padding:10px;">测试跳转灰太狼小程序</div>
+        </template>
+      </wx-open-launch-weapp>
     </div>
+    <template v-if="showTip">
+      <tip-layer buttonTxt="点击此处联系管理员" content="请联系管理员续费后，再来使用厂家功能哦！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
+    </template>
+  </div>
 </template>
 
 <i18n>
