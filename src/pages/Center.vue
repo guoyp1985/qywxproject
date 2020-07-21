@@ -120,10 +120,14 @@
       <wx-open-launch-weapp
         id="launch-btn"
         username="gh_dc6e3c73bc4c"
-        path="pages/index">
-        <template>
-          <div class="list-shadow radius5 mt10 bg-white" style="padding:10px;">测试跳转灰太狼小程序</div>
-        </template>
+        path="pages/index"
+        @launch="handleLaunchFn"
+        @error="handleErrorFn"
+        >
+        <script type="text/wxtag-template">
+          <style>.btn { display: flex;align-items: center; }</style>
+          <button class="wx-btn">跳转小程序</button>
+        </script>
       </wx-open-launch-weapp>
     </div>
     <template v-if="showTip">
@@ -303,6 +307,12 @@ export default {
       }
       this.$util.getSystemParams()
       this.getData()
+    },
+    handleLaunchFn (e) {
+      console.log(e)
+    },
+    handleErrorFn (e) {
+      console.log('fail', e.detail);
     }
   },
   activated () {
