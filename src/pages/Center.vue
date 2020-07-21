@@ -117,20 +117,18 @@
           </grid-item>
         </grid>
       </div>
-      <template v-if="showWeapp">
-        <wx-open-launch-weapp
-          id="launch-btn"
-          username="gh_dc6e3c73bc4c"
-          path="pages/index"
-          @launch="handleLaunchFn"
-          @error="handleErrorFn"
-          >
-          <script type="text/wxtag-template">
-            <style>.btn { display: flex;align-items: center; }</style>
-            <button class="wx-btn">跳转小程序</button>
-          </script>
-        </wx-open-launch-weapp>
-      </template>
+      <wx-open-launch-weapp
+        id="launch-btn"
+        username="gh_dc6e3c73bc4c"
+        path="pages/index"
+        @launch="handleLaunchFn"
+        @error="handleErrorFn"
+        >
+        <script type="text/wxtag-template">
+          <style>.btn { display: flex;align-items: center; }</style>
+          <button class="wx-btn">跳转小程序</button>
+        </script>
+      </wx-open-launch-weapp>
       <div v-html="weappHTML"></div>
     </div>
     <template v-if="showTip">
@@ -211,7 +209,7 @@ export default {
       showTip: false,
       showApply: false,
       showTestManager: ENV.showTestManager,
-      showWeapp: true,
+      showWeapp: false,
       weappHTML: ''
     }
   },
