@@ -810,7 +810,7 @@ export default {
     getData1 () {
       const self = this
       const params = { fid: self.Fid, pagestart: pageStart1, limit: limit }
-      this.$http.get(`${ENV.BokaApi}/api/list/fpimport`, {
+      this.$http.get(`${ENV.BokaApi}/api/factory/getfpimportList`, {
         params: params
       })
       .then(res => {
