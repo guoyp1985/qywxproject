@@ -143,6 +143,8 @@ import ENV from 'env'
 import Time from '#/time'
 import Reg from '#/reg'
 import { Token, User, FirstInfo } from '#/storage'
+const jweixin = require('../../static/jweixin')
+console.log(jweixin)
 let self = {}
 export default {
   components: {
