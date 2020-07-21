@@ -117,18 +117,20 @@
           </grid-item>
         </grid>
       </div>
-      <wx-open-launch-weapp
-        id="launch-btn"
-        username="gh_dc6e3c73bc4c"
-        path="pages/index"
-        @launch="handleLaunchFn"
-        @error="handleErrorFn"
-        >
-        <script type="text/wxtag-template">
-          <style>.btn { display: flex;align-items: center; }</style>
-          <button class="wx-btn">跳转小程序</button>
-        </script>
-      </wx-open-launch-weapp>
+      <template v-if="showWeapp">
+        <wx-open-launch-weapp
+          id="launch-btn"
+          username="gh_dc6e3c73bc4c"
+          path="pages/index"
+          @launch="handleLaunchFn"
+          @error="handleErrorFn"
+          >
+          <script type="text/wxtag-template">
+            <style>.btn { display: flex;align-items: center; }</style>
+            <button class="wx-btn">跳转小程序</button>
+          </script>
+        </wx-open-launch-weapp>
+      </template>
       <div v-html="weappHTML"></div>
     </div>
     <template v-if="showTip">
