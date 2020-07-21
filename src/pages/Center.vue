@@ -127,7 +127,7 @@
           </template>
         </wx-open-launch-weapp>
       </template>
-      <div id="wxapp"></div>
+      <div v-html="weappHTML"></div>
     </div>
     <template v-if="showTip">
       <tip-layer buttonTxt="点击此处联系管理员" content="请联系管理员续费后，再来使用厂家功能哦！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
@@ -207,7 +207,8 @@ export default {
       showTip: false,
       showApply: false,
       showTestManager: ENV.showTestManager,
-      showWeapp: false
+      showWeapp: false,
+      weappHTML: ''
     }
   },
   methods: {
@@ -323,9 +324,10 @@ export default {
     str += '<button class="list-shadow radius5 mt10 bg-white" style="padding:10px;">测试跳转灰太狼小程序，从代码里添加的</button>'
     str += '</template>'
     str += '</wx-open-launch-weapp>'
-    if (document.getElementById('wxapp')) {
-      document.getElementById('wxapp').innerHTML = str
-    }
+    // if (document.getElementById('wxapp')) {
+    //   document.getElementById('wxapp').innerHTML = str
+    // }
+    this.weappHTML = str
     setTimeout(() => {
       this.showWeapp = true
     }, 1000)
