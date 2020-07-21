@@ -125,7 +125,7 @@
           <button class="list-shadow radius5 mt10 bg-white" style="padding:10px;">测试跳转灰太狼小程序</button>
         </template>
       </wx-open-launch-weapp>
-      <!-- <div id="wxapp"></div> -->
+      <div id="wxapp"></div>
     </div>
     <template v-if="showTip">
       <tip-layer buttonTxt="点击此处联系管理员" content="请联系管理员续费后，再来使用厂家功能哦！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
