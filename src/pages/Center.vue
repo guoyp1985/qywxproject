@@ -327,10 +327,10 @@ export default {
     // if (document.getElementById('wxapp')) {
     //   document.getElementById('wxapp').innerHTML = str
     // }
-    this.weappHTML = str
     setTimeout(() => {
       this.showWeapp = true
-    }, 1000)
+      this.weappHTML = str
+    }, 2000)
   }
 }
 </script>
