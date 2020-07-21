@@ -117,16 +117,18 @@
           </grid-item>
         </grid>
       </div>
-      <template v-if="showWeapp">
-        <wx-open-launch-weapp
-          id="launch-btn"
-          username="gh_dc6e3c73bc4c"
-          path="pages/index">
-          <template>
-            <button class="list-shadow radius5 mt10 bg-white" style="padding:10px;">测试跳转灰太狼小程序</button>
-          </template>
-        </wx-open-launch-weapp>
-      </template>
+      <wx-open-launch-weapp
+        id="launch-btn"
+        username="gh_dc6e3c73bc4c"
+        path="pages/index"
+        @launch="handleLaunchFn"
+        @error="handleErrorFn"
+        >
+        <script type="text/wxtag-template">
+          <style>.btn { display: flex;align-items: center; }</style>
+          <button class="wx-btn">跳转小程序</button>
+        </script>
+      </wx-open-launch-weapp>
       <div v-html="weappHTML"></div>
       <template v-if="showWeapp">
         <wx-open-launch-weapp
@@ -328,6 +330,12 @@ export default {
       }
       this.$util.getSystemParams()
       this.getData()
+    },
+    handleLaunchFn (e) {
+      console.log(e)
+    },
+    handleErrorFn (e) {
+      console.log('fail', e.detail);
     }
   },
   activated () {
