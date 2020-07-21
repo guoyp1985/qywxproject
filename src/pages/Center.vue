@@ -117,14 +117,7 @@
           </grid-item>
         </grid>
       </div>
-      <wx-open-launch-weapp
-        id="launch-btn"
-        username="gh_dc6e3c73bc4c"
-        path="pages/index">
-        <template>
-          <div class="list-shadow radius5 mt10 bg-white" style="padding:10px;">测试跳转灰太狼小程序</div>
-        </template>
-      </wx-open-launch-weapp>
+      <div id="wxapp"></div>
     </div>
     <template v-if="showTip">
       <tip-layer buttonTxt="点击此处联系管理员" content="请联系管理员续费后，再来使用厂家功能哦！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
@@ -203,7 +196,8 @@ export default {
       showQuit: false,
       showTip: false,
       showApply: false,
-      showTestManager: ENV.showTestManager
+      showTestManager: ENV.showTestManager,
+      showWeapp: false
     }
   },
   methods: {
@@ -311,6 +305,18 @@ export default {
     self = this
     this.refresh()
     this.$util.miniPost()
+    setTimeout(() => {
+      this.showWeapp = true
+      let str = '<wx-open-launch-weapp'
+      str += ' id="launch-btn"'
+      str += ' username="gh_dc6e3c73bc4c"'
+      str += ' path="pages/index">'
+      str += '<template>'
+      str += '<div class="list-shadow radius5 mt10 bg-white" style="padding:10px;">测试跳转灰太狼小程序</div>'
+      str += '</template>'
+      str += '</wx-open-launch-weapp>'
+      document.getElementById('wxapp').innerHTML = str
+    }, 1000)
   }
 }
 </script>
