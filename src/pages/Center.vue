@@ -117,14 +117,16 @@
           </grid-item>
         </grid>
       </div>
-      <wx-open-launch-weapp
-        id="launch-btn"
-        username="gh_dc6e3c73bc4c"
-        path="pages/index">
-        <template>
-          <button class="list-shadow radius5 mt10 bg-white" style="padding:10px;">测试跳转灰太狼小程序</button>
-        </template>
-      </wx-open-launch-weapp>
+      <template v-if="showWeapp">
+        <wx-open-launch-weapp
+          id="launch-btn"
+          username="gh_dc6e3c73bc4c"
+          path="pages/index">
+          <template>
+            <button class="list-shadow radius5 mt10 bg-white" style="padding:10px;">测试跳转灰太狼小程序</button>
+          </template>
+        </wx-open-launch-weapp>
+      </template>
       <div id="wxapp"></div>
     </div>
     <template v-if="showTip">
@@ -204,7 +206,8 @@ export default {
       showQuit: false,
       showTip: false,
       showApply: false,
-      showTestManager: ENV.showTestManager
+      showTestManager: ENV.showTestManager,
+      showWeapp: false
     }
   },
   methods: {
@@ -323,6 +326,9 @@ export default {
     if (document.getElementById('wxapp')) {
       document.getElementById('wxapp').innerHTML = str
     }
+    setTimeout(() => {
+      this.showWeapp = true
+    }, 1000)
   }
 }
 </script>
