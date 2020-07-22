@@ -6,15 +6,15 @@ let switcher = true
 let time = null
 const Voice = {
   wxTestRecord: function() {
-    Vue.wechat.startRecord()
-    Vue.wechat.stopRecord()
+    jweixin.startRecord()
+    jweixin.stopRecord()
   },
   wxVoiceRecord: function (callback) {
     if (!switcher) return
     switcher = false
     time = new Time()
-    Vue.wechat.startRecord()
-    Vue.wechat.onVoiceRecordEnd({
+    jweixin.startRecord()
+    jweixin.onVoiceRecordEnd({
       complete: function (res) {
         switcher = true
         res.time = 60
@@ -28,10 +28,10 @@ const Voice = {
     console.log(seconds)
     if (seconds < 1) {
       fail && fail()
-      Vue.wechat.stopRecord()
+      jweixin.stopRecord()
       return
     }
-    Vue.wechat.stopRecord({
+    jweixin.stopRecord({
       success: function (res) {
         switcher = true
         res.time = seconds
@@ -41,7 +41,7 @@ const Voice = {
     })
   },
   wxVoiceUpload: function (data, callback) {
-    Vue.wechat.uploadVoice({
+    jweixin.uploadVoice({
       localId: data.localId,
       isShowProgressTips: 0,
       success: function (res) {
@@ -51,7 +51,7 @@ const Voice = {
     })
   },
   wxVoiceDownload: function (id, callback) {
-    Vue.wechat.downloadVoice({
+    jweixin.downloadVoice({
       serverId: id,
       isShowProgressTips: 0,
       success: function (res) {
@@ -61,8 +61,8 @@ const Voice = {
     })
   },
   wxVoicePlay: function (id, callback) {
-    Vue.wechat.playVoice({ localId: id })
-    Vue.wechat.onVoicePlayEnd({
+    jweixin.playVoice({ localId: id })
+    jweixin.onVoicePlayEnd({
       success: function (res) {
         const localId = res.localId
         callback && callback(localId)
@@ -70,10 +70,10 @@ const Voice = {
     })
   },
   wxVoicePause: function (id) {
-    Vue.wechat.pauseVoice({ localId: id })
+    jweixin.pauseVoice({ localId: id })
   },
   wxVoiceStop: function (id) {
-    Vue.wechat.stopVoice({ localId: id })
+    jweixin.stopVoice({ localId: id })
   },
   record: function (callback) {
     Voice.wxVoiceRecord(res => {
@@ -95,7 +95,7 @@ const Voice = {
     Voice.wxVoiceStop(lid)
   },
   recordCheck: function (success, fail) {
-    Vue.wechat.checkJsApi({
+    jweixin.checkJsApi({
       jsApiList: ['startRecord'],
       success: (res) => {
         // alert(res.checkResult.startRecord)
