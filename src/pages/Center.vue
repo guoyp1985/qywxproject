@@ -117,7 +117,7 @@
           </grid-item>
         </grid>
       </div>
-      <template v-if="showWeapp">
+      <!-- <template v-if="showWeapp">
         <wx-open-launch-weapp
           id="launch-btn"
           username="gh_dc6e3c73bc4c"
@@ -140,7 +140,7 @@
             <button class="wx-btn">跳转小程序</button>
           </script>
         </wx-open-launch-weapp>
-      </template>
+      </template> -->
     </div>
     <template v-if="showTip">
       <tip-layer buttonTxt="点击此处联系管理员" content="请联系管理员续费后，再来使用厂家功能哦！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
@@ -159,8 +159,8 @@ import ENV from 'env'
 import Time from '#/time'
 import Reg from '#/reg'
 import { Token, User, FirstInfo } from '#/storage'
-const jweixin = require('../../static/jweixin')
-console.log(jweixin)
+// const jweixin = require('../../static/jweixin')
+// console.log(jweixin)
 let self = {}
 export default {
   components: {
