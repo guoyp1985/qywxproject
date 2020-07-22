@@ -6,6 +6,7 @@ import Time from './time'
 import urlParse from 'url-parse'
 import jQuery from 'jquery'
 import { User, Roomid, Token, SystemParams } from './storage'
+const jweixin = require('../static/jweixin')
 const Util = {}
 
 Util.install = function (Vue, options) {
@@ -239,8 +240,8 @@ Util.install = function (Vue, options) {
         { params: { url: encodeURIComponent(location.href.split('#')[0]) } }
       ).then(res => {
         if (!res) return
-        Vue.wechat.config(res.data)
-        Vue.wechat.error(function () {
+        jweixin.config(res.data)
+        jweixin.error(function () {
           // Vue.$vux.toast.show({
           //   text: '微信还没有准备好，请刷新页面',
           //   type: 'warn',
