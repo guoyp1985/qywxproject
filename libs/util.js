@@ -240,6 +240,13 @@ Util.install = function (Vue, options) {
         { params: { url: encodeURIComponent(location.href.split('#')[0]) } }
       ).then(res => {
         if (!res) return
+        // jweixin.config(res.data)
+        // jweixin.error(function () {
+        //   // Vue.$vux.toast.show({
+        //   //   text: '微信还没有准备好，请刷新页面',
+        //   //   type: 'warn',
+        //   // })
+        // })
         jweixin.config(res.data)
         jweixin.error(function () {
           // Vue.$vux.toast.show({
@@ -254,15 +261,15 @@ Util.install = function (Vue, options) {
       const self = this
       let wxData = params.data
       let isUpdate = false
-      Vue.wechat.ready(function () {
+      jweixin.ready(function () {
         params.readyCallback && params.readyCallback()
-        Vue.wechat.showMenuItems({
+        jweixin.showMenuItems({
           menuList: [
             'menuItem:profile',
             'menuItem:addContact'
           ]
         })
-        Vue.wechat.hideMenuItems({
+        jweixin.hideMenuItems({
           menuList: [
             'menuItem:exposeArticle',
             'menuItem:setFont',
@@ -278,7 +285,7 @@ Util.install = function (Vue, options) {
         if (query.openid) {
             wxshareurl = wxshareurl.replace(`&openid=${query.openid}`, '').replace(`openid=${query.openid}`, '')
         }
-        Vue.wechat.checkJsApi({
+        jweixin.checkJsApi({
           jsApiList: ['onMenuShareAppMessage'],
           success: function(res) {
             if (!res.checkResult.onMenuShareAppMessage) {
@@ -286,7 +293,7 @@ Util.install = function (Vue, options) {
             }
           }
         })
-        Vue.wechat.onMenuShareAppMessage({
+        jweixin.onMenuShareAppMessage({
           title: wxData.title,
           desc: wxData.desc,
           link: wxshareurl,
@@ -321,7 +328,7 @@ Util.install = function (Vue, options) {
           cancel: function (resp) {
           }
         })
-        Vue.wechat.onMenuShareTimeline({
+        jweixin.onMenuShareTimeline({
           title: wxData.title,
           link: wxshareurl,
           imgUrl: wxData.photo,
@@ -343,7 +350,7 @@ Util.install = function (Vue, options) {
           cancel: function (resp) {
           }
         })
-        Vue.wechat.onMenuShareQQ({
+        jweixin.onMenuShareQQ({
           title: wxData.title,
           desc: wxData.desc,
           link: wxshareurl,
@@ -452,7 +459,7 @@ Util.install = function (Vue, options) {
                 urls.unshift(current)
                 params.urls = urls
               }
-              Vue.wechat.previewImage(params)
+              jweixin.previewImage(params)
               break
             }
           }
@@ -491,7 +498,7 @@ Util.install = function (Vue, options) {
     wxUploadImage: function (os) {
       const self = this
       let maxnum = os.maxnum ? os.maxnum : 9
-      Vue.wechat.chooseImage({
+      jweixin.chooseImage({
         count: maxnum,
         success: function (res) {
           let localIds = res.localIds
@@ -510,7 +517,7 @@ Util.install = function (Vue, options) {
             },
             handleFunction: function (d) {
               return function (done) {
-                Vue.wechat.uploadImage({
+                jweixin.uploadImage({
                   localId: d.toString(),
                   isShowProgressTips: 0,
                   success: function (res1) {
@@ -658,9 +665,9 @@ Util.install = function (Vue, options) {
       return src.replace(/\|\|/g, ',')
     },
     miniPost: function (pageData) {
-      Vue.wechat.miniProgram.getEnv(res => {
+      jweixin.miniProgram.getEnv(res => {
         if (res.miniprogram) {
-          Vue.wechat.miniProgram.postMessage({data: {token: Token.get(), pageData: pageData}})
+          jweixin.miniProgram.postMessage({data: {token: Token.get(), pageData: pageData}})
         }
       })
     },
@@ -731,7 +738,7 @@ Util.install = function (Vue, options) {
       })
     },
     wxAddress: (callback) => {
-      Vue.wechat.openAddress({
+      jweixin.openAddress({
         success: res => {
           // alert('22' + JSON.stringify(res))
           if (res.errMsg === 'openAddress:ok') {
@@ -766,11 +773,11 @@ Util.install = function (Vue, options) {
     routerMiniUrl: (query) => {
       let minibackurl = decodeURIComponent(query.minibackurl)
       if (query.backtype === 'relaunch') {
-        Vue.wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+        jweixin.miniProgram.reLaunch({url: `${minibackurl}`})
       } else if (query.backtype === 'redirect') {
-        Vue.wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+        jweixin.miniProgram.redirectTo({url: `${minibackurl}`})
       } else {
-        Vue.wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+        jweixin.miniProgram.navigateTo({url: `${minibackurl}`})
       }
     }
   }
