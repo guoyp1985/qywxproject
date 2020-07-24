@@ -116,10 +116,17 @@
           </div>
           <div class="form-item required bg-white">
             <div class="flex_left">
-              <div class="w_100">
+              <div class="w80 flex_left">销量刺激</div>
+              <div class="flex_left flex_cell">
+                <div class="w_100">
+                  <x-input v-model="submitdata.autosales" maxlength="7" size="7" type="text" class="input" name="autosales" placeholder="销量刺激" ></x-input>
+                </div>
+                <div class="color-gray font12 mt5">系统会根据填写的最高销量自动计算每 5 分钟递增多少销量</div>
+              </div>
+              <!-- <div class="w_100">
                 <x-switch title='销量刺激' v-model="autosales"></x-switch>
                 <div class="color-gray font12 mt5">开启状态在商品上线期间每5分钟随机增加5-10件初始销量。</div>
-              </div>
+              </div> -->
             </div>
           </div>
           <div class="form-item required bg-white">
@@ -1366,11 +1373,11 @@ export default {
       } else {
         postdata.calcsales = 0
       }
-      if (this.autosales) {
-        postdata.autosales = 1
-      } else {
-        postdata.autosales = 0
-      }
+      // if (this.autosales) {
+      //   postdata.autosales = 1
+      // } else {
+      //   postdata.autosales = 0
+      // }
       if (this.retailerbuy) {
         postdata.retailerbuy = 1
       } else {
@@ -1431,11 +1438,11 @@ export default {
           } else {
             self.calcsales = false
           }
-          if (retdata.autosales) {
-            self.autosales = true
-          } else {
-            self.autosales = false
-          }
+          // if (retdata.autosales) {
+          //   self.autosales = true
+          // } else {
+          //   self.autosales = false
+          // }
           if (retdata.retailerbuy) {
             self.retailerbuy = true
           } else {
