@@ -924,7 +924,10 @@ export default {
       if (self.$util.isPC() || type === 'video') {
         fileInput.click()
       } else {
-        self.$wechat.ready(function () {
+        console.log('in click')
+        console.log(jweixin)
+        // self.$wechat.ready(function () {
+        jweixin.ready(function () {
           let curMaxnum = self.maxnum
           if (type === 'video') {
             curMaxnum = 1
