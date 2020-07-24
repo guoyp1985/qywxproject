@@ -513,6 +513,7 @@ import { TransferDom, Previewer, Group, XInput, XTextarea, XSwitch } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
+const jweixin = require('../../static/jweixin')
 
 export default {
   directives: {
@@ -811,7 +812,7 @@ export default {
       if (self.$util.isPC()) {
         fileInput.click()
       } else {
-        self.$wechat.ready(function () {
+        jweixin.ready(function () {
           self.$util.wxUploadImage({
             maxnum: 1,
             handleCallback: (data) => {
@@ -916,7 +917,7 @@ export default {
       if (self.$util.isPC() || type === 'video') {
         fileInput.click()
       } else {
-        self.$wechat.ready(function () {
+        jweixin.ready(function () {
           let curMaxnum = self.maxnum
           if (type === 'video') {
             curMaxnum = 1
@@ -1328,7 +1329,7 @@ export default {
               self.submitIng = false
               if (data.flag === 1) {
                 if (self.query.fromapp === 'factory') {
-                  self.$wechat.miniProgram.reLaunch({url: `/pages/product?id=${data.data}&module=fpimport`})
+                  jweixin.miniProgram.reLaunch({url: `/pages/product?id=${data.data}&module=fpimport`})
                 } else {
                   let rparams = self.$util.handleAppParams(self.query, {id: data.data, fid: self.query.fid})
                   self.$router.push({path: '/factoryProduct', query: rparams})

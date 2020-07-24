@@ -72,6 +72,7 @@
 <script>
 import { XImg, XButton } from 'vux'
 import ENV from 'env'
+const jweixin = require('../../static/jweixin')
 export default {
   name: 'OrderInfo',
   components: {
@@ -147,13 +148,12 @@ export default {
           let params = {wid: this.item.wid}
           if (this.$route.query.from) {
             if (this.$route.query.fromapp === 'qxb') {
-              this.$wechat.miniProgram.reLaunch({url: `/pages/store?wid=${this.item.wid}`})
-              console.log(params)
+              jweixin.miniProgram.reLaunch({url: `/pages/store?wid=${this.item.wid}`})
             } else {
-              this.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.store}?wid=${this.item.wid}`})
+              jweixin.miniProgram.redirectTo({url: `${ENV.MiniRouter.store}?wid=${this.item.wid}`})
             }
           } else if (this.$route.query.fromapp === 'factory') {
-            this.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.store}?wid=${this.item.wid}`})
+            jweixin.miniProgram.redirectTo({url: `${ENV.MiniRouter.store}?wid=${this.item.wid}`})
           } else {
             this.$router.push({path: '/store', query: params})
           }

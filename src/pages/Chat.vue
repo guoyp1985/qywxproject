@@ -249,6 +249,7 @@ import Socket from '#/socket'
 import Voice from '#/voice'
 import Reg from '#/reg'
 import jQuery from 'jquery'
+const jweixin = require('../../static/jweixin')
 
 const prefix = (/webkit/i).test(navigator.appVersion) ? 'webkit' : (/firefox/i).test(navigator.userAgent) ? 'Moz' : 'opera' in window ? 'O' : ''
 let room = ''
@@ -1077,7 +1078,7 @@ export default {
     },
     toStore () {
       if (this.query.from === 'miniprogram') {
-        this.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.store}?wid=${this.retailerInfo.uid}`})
+        jweixin.miniProgram.redirectTo({url: `${ENV.MiniRouter.store}?wid=${this.retailerInfo.uid}`})
       } else {
         this.$router.push({path: '/store', query: {wid: this.retailerInfo.uid}})
       }
@@ -1087,7 +1088,7 @@ export default {
       console.log(news)
       if (this.query.from === 'miniprogram') {
         // console.log('i am from miniprogram')
-        this.$wechat.miniProgram.redirectTo({url: `/packageB/pages${news.link}`})
+        jweixin.miniProgram.redirectTo({url: `/packageB/pages${news.link}`})
       } else {
         this.$router.push({path: news.link})
       }

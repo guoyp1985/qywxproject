@@ -93,6 +93,7 @@ import { CheckIcon, XButton, XDialog, TransferDom, XInput } from 'vux'
 import ENV from 'env'
 import FirstHb from '@/components/FirstHb'
 import { User } from '#/storage'
+const jweixin = require('../../static/jweixin')
 export default {
   directives: {
     TransferDom
@@ -130,7 +131,7 @@ export default {
     },
     wxContact () {
       if (this.query.from) {
-        this.$wechat.miniProgram.navigateTo({url: '/pages/subscribe?type=addkefu'})
+        jweixin.miniProgram.navigateTo({url: '/pages/subscribe?type=addkefu'})
       } else {
         this.wxCardShow = true
       }

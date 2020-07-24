@@ -76,6 +76,7 @@ import RoomView from '@/components/RoomView'
 import forminputplate from '@/components/Forminputplate'
 import AppendProduct from '@/components/AppendProduct'
 import ENV from 'env'
+const jweixin = require('../../static/jweixin')
 export default {
   directives: {
     TransferDom
@@ -166,7 +167,7 @@ export default {
             if (data.flag === 1) {
               setTimeout(() => {
                 if (this.query.from) {
-                  this.$wechat.miniProgram.navigateTo({url: `/packageB/pages/pay?id=${data.data}&module=${data.ordermodule}&weburl=roomOrders`})
+                  jweixin.miniProgram.navigateTo({url: `/packageB/pages/pay?id=${data.data}&module=${data.ordermodule}&weburl=roomOrders`})
                 } else {
                   let backurl = encodeURIComponent(`/roomOrders`)
                   location.replace(`${ENV.Host}/#/pay?id=${data.data}&module=${data.ordermodule}&backurl=${backurl}`)

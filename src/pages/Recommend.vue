@@ -198,6 +198,7 @@
 import {Tab, TabItem, ViewBox, Group, Cell, CellBox, XImg, Sticky, XButton, Card, TransferDom, Popup} from 'vux'
 import Time from '#/time'
 import ENV from 'env'
+const jweixin = require('../../static/jweixin')
 
 let pageStart1 = 0
 let pageStart2 = 0
@@ -253,7 +254,7 @@ export default {
     },
     toProduct (item) {
       if (this.query.from) {
-        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.id}&wid=${item.uploader}&module=product`})
+        jweixin.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.id}&wid=${item.uploader}&module=product`})
       } else {
         this.$router.push({path: '/product', query: {id: item.id, wid: item.uploader}})
       }
@@ -261,9 +262,9 @@ export default {
     toProduct1 (item) {
       if (this.query.from) {
         if (item.type === 'groupbuy') {
-          this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.productid}&wid=${item.uploader}&module=product`})
+          jweixin.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.productid}&wid=${item.uploader}&module=product`})
         } else {
-          this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.activity}?id=${item.id}&wid=${item.uploader}`})
+          jweixin.miniProgram.navigateTo({url: `${ENV.MiniRouter.activity}?id=${item.id}&wid=${item.uploader}`})
         }
       } else {
         if (item.type === 'groupbuy') {
@@ -277,14 +278,14 @@ export default {
     },
     toActivity (item) {
       if (this.query.from) {
-        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.activity}?id=${item.id}&wid=${item.uploader}`})
+        jweixin.miniProgram.navigateTo({url: `${ENV.MiniRouter.activity}?id=${item.id}&wid=${item.uploader}`})
       } else {
         this.$router.push({path: '/activity', query: {id: item.id}})
       }
     },
     toNews (item) {
       if (this.query.from) {
-        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.news}?id=${item.id}&wid=${item.uploader}`})
+        jweixin.miniProgram.navigateTo({url: `${ENV.MiniRouter.news}?id=${item.id}&wid=${item.uploader}`})
       } else {
         this.$router.push({path: '/news', query: {id: item.id, wid: item.uploader}})
       }

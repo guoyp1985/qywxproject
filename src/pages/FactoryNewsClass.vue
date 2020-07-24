@@ -119,6 +119,7 @@ import Time from '#/time'
 import { User } from '#/storage'
 import ENV from 'env'
 import Sos from '@/components/Sos'
+const jweixin = require('../../static/jweixin')
 
 export default {
   directives: {
@@ -204,7 +205,7 @@ export default {
       if (self.$util.isPC()) {
         fileInput.click()
       } else {
-        self.$wechat.ready(function () {
+        jweixin.ready(function () {
           self.$util.wxUploadImage({
             maxnum: 1,
             handleCallback: function (data) {

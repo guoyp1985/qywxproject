@@ -84,6 +84,7 @@ import Sos from '@/components/Sos'
 import Time from '#/time'
 import jQuery from 'jquery'
 import ENV from 'env'
+const jweixin = require('../../static/jweixin')
 
 export default {
   components: {
@@ -220,7 +221,7 @@ export default {
       }
       if (this.query.fromapp === 'factory') {
         console.log('=== 进来了 ===')
-        this.$wechat.miniProgram.reLaunch({url: ENV.MiniRouter.chat})
+        jweixin.miniProgram.reLaunch({url: ENV.MiniRouter.chat})
       } else {
         let params = this.$util.handleAppParams(this.query, {uid: this.deliverinfo.retailer.uid, fromModule: 'order'})
         this.$router.push({path: '/chat', query: params})

@@ -138,6 +138,7 @@ import { Group, XTextarea, XImg } from 'vux'
 import ClipPopup from '@/components/ClipPopup'
 import Sos from '@/components/Sos'
 import ENV from 'env'
+const jweixin = require('../../static/jweixin')
 
 export default {
   components: {
@@ -210,7 +211,7 @@ export default {
       if (self.$util.isPC()) {
         fileInput.click()
       } else {
-        self.$wechat.ready(function () {
+        jweixin.ready(function () {
           self.$util.wxUploadImage({
             maxnum: 1,
             handleCallback: function (data) {

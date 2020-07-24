@@ -324,6 +324,7 @@ import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
 import OpenVip from '@/components/OpenVip'
+const jweixin = require('../../static/jweixin')
 
 export default {
   directives: {
@@ -523,7 +524,7 @@ export default {
       if (self.$util.isPC()) {
         fileInput.click()
       } else {
-        self.$wechat.ready(function () {
+        jweixin.ready(function () {
           self.$util.wxUploadImage({
             maxnum: 1,
             handleCallback: (data) => {
@@ -644,7 +645,7 @@ export default {
       if (self.$util.isPC() || type === 'video') {
         fileInput.click()
       } else {
-        self.$wechat.ready(function () {
+        jweixin.ready(function () {
           let curMaxnum = self.maxnum
           if (type === 'video') {
             curMaxnum = 1
@@ -908,11 +909,11 @@ export default {
                 if (self.query.minibackurl) {
                   let minibackurl = decodeURIComponent(self.query.minibackurl)
                   if (self.query.backtype === 'relaunch') {
-                    self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+                    jweixin.miniProgram.reLaunch({url: `${minibackurl}`})
                   } else if (self.query.backtype === 'redirect') {
-                    self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+                    jweixin.miniProgram.redirectTo({url: `${minibackurl}`})
                   } else {
-                    self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+                    jweixin.miniProgram.navigateTo({url: `${minibackurl}`})
                   }
                 } else if (self.query.from === 'apply') {
                   self.$router.push({path: '/centerSales'})

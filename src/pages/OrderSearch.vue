@@ -175,6 +175,7 @@ import { Sticky, Tab, TabItem, Group, XTextarea, Search } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
 import {User} from '#/storage'
 import ENV from 'env'
+const jweixin = require('../../static/jweixin')
 
 export default {
   components: {
@@ -341,7 +342,7 @@ export default {
       if (self.$util.isPC()) {
         fileInput.click()
       } else {
-        self.$wechat.ready(function () {
+        jweixin.ready(function () {
           self.$util.wxUploadImage({
             maxnum: self.maxnum,
             handleCallback: function (data) {
@@ -624,7 +625,7 @@ export default {
     },
     payment (order) {
       if (this.query.from) {
-        this.$wechat.miniProgram.navigateTo({url: `/packageB/pages/pay?id=${order.id}&weburl=orderSearch`})
+        jweixin.miniProgram.navigateTo({url: `/packageB/pages/pay?id=${order.id}&weburl=orderSearch`})
       } else {
         location.replace(`${ENV.Host}/#/pay?id=${order.id}`)
       }

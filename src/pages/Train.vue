@@ -58,6 +58,7 @@ import { Swiper, SwiperItem, TransferDom } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
+const jweixin = require('../../static/jweixin')
 export default {
   directives: {
     TransferDom
@@ -99,7 +100,7 @@ export default {
       this.photoarr = []
     },
     toMore () {
-      this.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.knowledgeList}`})
+      jweixin.miniProgram.redirectTo({url: `${ENV.MiniRouter.knowledgeList}`})
     },
     clickPlay (refname) {
       const self = this

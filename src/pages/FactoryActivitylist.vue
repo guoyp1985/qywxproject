@@ -123,6 +123,7 @@ import ENV from 'env'
 import { User } from '#/storage'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
+const jweixin = require('../../static/jweixin')
 
 const limit = 10
 let pageStart1 = 0
@@ -172,7 +173,7 @@ export default {
     toProduct (item) {
       const self = this
       if (self.query.from) {
-        self.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.fpid}&fid=${item.fid}&module=factoryproduct`})
+        jweixin.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.fpid}&fid=${item.fid}&module=factoryproduct`})
       } else {
         self.$router.push({path: '/product', query: {id: item.fpid, fid: item.fid, module: 'factoryproduct'}})
       }
@@ -180,7 +181,7 @@ export default {
     toActivity (item) {
       const self = this
       if (self.query.from) {
-        self.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.activity}?id=${item.id}`})
+        jweixin.miniProgram.navigateTo({url: `${ENV.MiniRouter.activity}?id=${item.id}`})
       } else {
         self.$router.push({path: '/activity', query: {id: item.id}})
       }

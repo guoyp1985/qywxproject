@@ -75,6 +75,7 @@ import Time from '#/time'
 import { User } from '#/storage'
 import jQuery from 'jquery'
 import TipButtonLayer from '@/components/TipButtonLayer'
+const jweixin = require('../../static/jweixin')
 
 const limit = 20
 let pageStart1 = 0
@@ -240,7 +241,7 @@ export default {
           if (data.orderid) {
             if (self.query.from) {
               let weburl = encodeURIComponent(`concession?id=${self.query.id}&type=pay`)
-              self.$wechat.miniProgram.navigateTo({url: `/packageB/pages/pay?id=${data.orderid}&module=${data.ordermodule}&weburl=${weburl}`})
+              jweixin.miniProgram.navigateTo({url: `/packageB/pages/pay?id=${data.orderid}&module=${data.ordermodule}&weburl=${weburl}`})
             } else {
               let backurl = encodeURIComponent(`concession?id=${self.query.id}&type=pay`)
               location.replace(`${ENV.Host}/#/pay?id=${data.orderid}&module=${data.ordermodule}&backurl=${backurl}`)

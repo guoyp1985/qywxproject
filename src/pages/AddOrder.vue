@@ -303,6 +303,7 @@ import { mapState } from 'vuex'
 import Sos from '@/components/Sos'
 import ENV from 'env'
 import { User } from '#/storage'
+const jweixin = require('../../static/jweixin')
 
 export default {
   directives: {
@@ -569,7 +570,7 @@ export default {
     },
     clickWxAddress () {
       this.showpopup = false
-      this.$wechat.ready(() => {
+      jweixin.ready(() => {
         this.$util.wxAddress((data1, newData) => {
           if (data1.flag) {
             this.addressdata = [newData]
@@ -645,10 +646,10 @@ export default {
             onHide: function () {
               if (data.flag === 1) {
                 if (data.external === 1) {
-                  self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.pay}?id=${data.id}`})
+                  jweixin.miniProgram.redirectTo({url: `${ENV.MiniRouter.pay}?id=${data.id}`})
                 } else {
                   if (self.isMiniInvoke) {
-                    self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.pay}?id=${data.id}`})
+                    jweixin.miniProgram.redirectTo({url: `${ENV.MiniRouter.pay}?id=${data.id}`})
                   } else {
                     if (data.id) {
                       location.replace(`${ENV.Host}/#/pay?id=${data.id}`)
@@ -859,7 +860,7 @@ export default {
               console.log('进入到了没有地址')
               this.disPostageArea = true
               if (!this.query.from && !this.query.fromapp) {
-                this.$wechat.ready(() => {
+                jweixin.ready(() => {
                   this.$vux.confirm.show({
                     content: '是否使用微信地址？',
                     onConfirm: () => {

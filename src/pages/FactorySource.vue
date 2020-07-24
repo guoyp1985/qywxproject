@@ -100,6 +100,7 @@ import { Tab, TabItem } from 'vux'
 import ENV from 'env'
 import Time from '#/time'
 import { User } from '#/storage'
+const jweixin = require('../../static/jweixin')
 
 const limit = 10
 let pageStart1 = 0
@@ -173,7 +174,7 @@ export default {
     },
     toStore () {
       if (this.query.from) {
-        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.store}?wid=${this.loginUser.uid}`})
+        jweixin.miniProgram.navigateTo({url: `${ENV.MiniRouter.store}?wid=${this.loginUser.uid}`})
       } else {
         this.$router.push({path: '/store', query: {wid: this.loginUser.uid}})
       }

@@ -103,6 +103,7 @@ import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
 import FirstTip from '@/components/FirstTip'
 import FirstHb from '@/components/FirstHb'
+const jweixin = require('../../static/jweixin')
 
 export default {
   components: {
@@ -182,7 +183,7 @@ export default {
       if (self.$util.isPC()) {
         fileInput.click()
       } else {
-        self.$wechat.ready(function () {
+        jweixin.ready(function () {
           self.$util.wxUploadImage({
             maxnum: self.maxnum,
             handleCallback: function (data) {
@@ -275,11 +276,11 @@ export default {
       if (self.query.minibackurl) {
         let minibackurl = decodeURIComponent(self.query.minibackurl)
         if (self.query.backtype === 'relaunch') {
-          self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+          jweixin.miniProgram.reLaunch({url: `${minibackurl}`})
         } else if (self.query.backtype === 'redirect') {
-          self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+          jweixin.miniProgram.redirectTo({url: `${minibackurl}`})
         } else {
-          self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+          jweixin.miniProgram.navigateTo({url: `${minibackurl}`})
         }
       } else {
         let params = this.$util.handleAppParams(this.query, {wid: this.loginUser.uid, id: data.data, control: 'edit'})

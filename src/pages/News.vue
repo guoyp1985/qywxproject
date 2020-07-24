@@ -154,6 +154,7 @@ import ENV from 'env'
 import jQuery from 'jquery'
 import { User } from '#/storage'
 import Socket from '#/socket'
+const jweixin = require('../../static/jweixin')
 
 let room = ''
 let self = {}
@@ -222,7 +223,7 @@ export default {
       console.log('in in in clickInsertProduct')
       if (self.query.from === 'miniprogram') {
         const params = self.$util.query(url)
-        self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}&module=product`})
+        jweixin.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}&module=product`})
       } else {
         self.$router.push({path: url})
       }
@@ -364,7 +365,7 @@ export default {
           console.log(linkurl)
           if (self.query.from === 'miniprogram') {
             const params = self.$util.query(linkurl)
-            self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}&module=product`})
+            jweixin.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}&module=product`})
           } else {
             self.$router.push({path: linkurl})
           }
@@ -509,7 +510,7 @@ export default {
     },
     onStore () {
       if (this.query.from === 'miniprogram') {
-        this.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.store}?wid=${this.retailerInfo.uid}`})
+        jweixin.miniProgram.redirectTo({url: `${ENV.MiniRouter.store}?wid=${this.retailerInfo.uid}`})
       } else {
         this.$router.push({path: '/store', query: {wid: this.retailerInfo.uid}})
       }
@@ -564,11 +565,11 @@ export default {
             minibackurl = `${minibackurl}?id=${self.query.id}`
           }
           if (self.query.backtype === 'relaunch') {
-            self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+            jweixin.miniProgram.reLaunch({url: `${minibackurl}`})
           } else if (self.query.backtype === 'redirect') {
-            self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+            jweixin.miniProgram.redirectTo({url: `${minibackurl}`})
           } else {
-            self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+            jweixin.miniProgram.navigateTo({url: `${minibackurl}`})
           }
         }
       })

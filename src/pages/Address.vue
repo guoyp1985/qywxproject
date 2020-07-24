@@ -46,6 +46,7 @@
 <script>
 import { Group, Cell, CellBox, ViewBox, CheckIcon, XSwitch, XButton, Box, Swipeout, SwipeoutItem, SwipeoutButton } from 'vux'
 import ENV from 'env'
+const jweixin = require('../../static/jweixin')
 
 export default {
   components: {
@@ -98,7 +99,7 @@ export default {
         if (retdata.length) {
           self.items = retdata
         } else {
-          this.$wechat.ready(() => {
+          jweixin.ready(() => {
             this.$vux.confirm.show({
               content: '是否使用微信地址？',
               onConfirm: () => {

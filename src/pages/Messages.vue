@@ -37,6 +37,7 @@ import { XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
+const jweixin = require('../../static/jweixin')
 
 export default {
   components: {
@@ -57,7 +58,7 @@ export default {
   },
   methods: {
     toSubscribe () {
-      this.$wechat.miniProgram.navigateTo({url: '/pages/subscribe'})
+      jweixin.miniProgram.navigateTo({url: '/pages/subscribe'})
     },
     getDateState (dt) {
       return this.$util.getDateState(dt)

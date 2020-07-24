@@ -315,6 +315,7 @@ import jQuery from 'jquery'
 import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
+const jweixin = require('../../static/jweixin')
 
 export default {
   directives: {
@@ -751,7 +752,7 @@ export default {
     },
     scanClick () {
       const self = this
-      self.$wechat.scanQRCode({
+      jweixin.scanQRCode({
         needResult: 1,
         desc: '识别物流信息',
         success: function (res) {

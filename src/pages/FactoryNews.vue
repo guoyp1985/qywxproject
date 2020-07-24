@@ -117,6 +117,7 @@ import Time from '#/time'
 import ENV from 'env'
 import jQuery from 'jquery'
 import { User } from '#/storage'
+const jweixin = require('../../static/jweixin')
 
 export default {
   directives: {
@@ -175,10 +176,10 @@ export default {
       console.log('in in in clickInsertProduct')
       if (self.query.from === 'miniprogram') {
         const params = self.$util.query(url)
-        self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}&module=product`})
+        jweixin.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}&module=product`})
       } else if (self.query.fromapp === 'factory') {
         const params = self.$util.query(url)
-        self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&fid=${params.fid}&module=product`})
+        jweixin.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&fid=${params.fid}&module=product`})
       } else {
         self.$router.push({path: url})
       }
@@ -212,9 +213,9 @@ export default {
           let pquery = self.$route.query
           const params = self.$util.query(linkurl)
           if (pquery.fromapp === 'factory' && self.module === 'factorynews') {
-            self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.factoryAppProduct}?id=${params.id}&type=others`})
+            jweixin.miniProgram.redirectTo({url: `${ENV.MiniRouter.factoryAppProduct}?id=${params.id}&type=others`})
           } else if (pquery.from === 'miniprogram') {
-            self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}&module=product`})
+            jweixin.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}&module=product`})
           } else {
             if (self.module !== 'factorynews') {
               self.$router.push({path: linkurl})
@@ -439,7 +440,7 @@ export default {
       this.editIng = false
       this.save(() => {
         if (this.query.fromapp) {
-          this.$wechat.miniProgram.reLaunch({url: `${ENV.MiniRouter.news}?id=${this.query.id}&add=1`})
+          jweixin.miniProgram.reLaunch({url: `${ENV.MiniRouter.news}?id=${this.query.id}&add=1`})
         }
       })
     },

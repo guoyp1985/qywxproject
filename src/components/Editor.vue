@@ -181,6 +181,7 @@ import { TransferDom, Flexbox, FlexboxItem, XButton, Popup, Search, CheckIcon } 
 import Eleditor from '#/Eleditor'
 import ENV from 'env'
 import jQuery from 'jquery'
+const jweixin = require('../../static/jweixin')
 let editor = null
 let self = {}
 export default {
@@ -467,7 +468,7 @@ export default {
               }
             })
           } else {
-            self.$wechat.ready(function () {
+            jweixin.ready(function () {
               self.$util.wxUploadImage({
                 maxnum: 1,
                 handleCallback: function (data) {
@@ -703,9 +704,9 @@ export default {
         let pquery = self.$route.query
         const params = self.$util.query(linkurl)
         if (pquery.fromapp === 'factory' && self.module === 'factorynews') {
-          self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.factoryAppProduct}?id=${params.id}`})
+          jweixin.miniProgram.redirectTo({url: `${ENV.MiniRouter.factoryAppProduct}?id=${params.id}`})
         } else if (pquery.from === 'miniprogram') {
-          self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}&module=product`})
+          jweixin.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}&module=product`})
         } else {
           if (self.module !== 'factorynews') {
             self.$router.push({path: linkurl})

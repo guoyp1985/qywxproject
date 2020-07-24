@@ -291,6 +291,7 @@ import { Group, XInput, TransferDom, Popup, Checker, Datetime, CheckerItem, Chec
 import ENV from 'env'
 import Reg from '#/reg'
 const TimeCount = 60
+const jweixin = require('../../static/jweixin')
 
 export default {
   name: 'ApplyFactory',
@@ -391,7 +392,7 @@ export default {
   },
   methods: {
     toSubscribe () {
-      this.$wechat.miniProgram.navigateTo({url: '/pages/subscribe'})
+      jweixin.miniProgram.navigateTo({url: '/pages/subscribe'})
     },
     watchTop () {
       if (this.loginUser.subscribe !== 1 && this.$route.query.from && !this.showTop) {
@@ -449,7 +450,7 @@ export default {
       if (self.$util.isPC()) {
         fileInput.click()
       } else {
-        self.$wechat.ready(function () {
+        jweixin.ready(function () {
           self.$util.wxUploadImage({
             maxnum: self.maxnum - self.photoarr.length,
             handleCallback: function (data) {

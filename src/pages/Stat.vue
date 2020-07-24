@@ -617,6 +617,7 @@ import ApplyTip from '@/components/ApplyTip'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
+const jweixin = require('../../static/jweixin')
 
 const limit = 10
 export default {
@@ -698,7 +699,7 @@ export default {
       this.isFirst = true
     },
     toSubscribe () {
-      this.$wechat.miniProgram.navigateTo({url: '/pages/subscribe'})
+      jweixin.miniProgram.navigateTo({url: '/pages/subscribe'})
     },
     expandEvent (item, index) {
       let curDataList = this.arrData

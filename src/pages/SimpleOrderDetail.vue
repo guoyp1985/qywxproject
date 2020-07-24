@@ -145,6 +145,7 @@ import { TransferDom, Popup, XInput } from 'vux'
 import ENV from 'env'
 import Time from '#/time'
 import { User } from '#/storage'
+const jweixin = require('../../static/jweixin')
 
 const BokaApi = ENV.BokaApi
 
@@ -256,7 +257,7 @@ export default {
     },
     scanClick () {
       const self = this
-      self.$wechat.scanQRCode({
+      jweixin.scanQRCode({
         needResult: 1,
         desc: '识别物流信息',
         success: function (res) {

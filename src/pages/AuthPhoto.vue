@@ -81,6 +81,7 @@
 <script>
 import ENV from 'env'
 import { User } from '#/storage'
+const jweixin = require('../../static/jweixin')
 let self = this
 export default {
   data () {
@@ -113,7 +114,7 @@ export default {
       }
     },
     wxUpload (callback) {
-      self.$wechat.ready(function () {
+      jweixin.ready(function () {
         self.$util.wxUploadImage({
           maxnum: 1,
           handleCallback: function (data) {

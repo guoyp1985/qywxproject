@@ -207,6 +207,7 @@ import { TransferDom, Popup, Tab, TabItem, Search, Swiper, SwiperItem, CheckIcon
 import { User } from '#/storage'
 import ENV from 'env'
 import Time from '#/time'
+const jweixin = require('../../static/jweixin')
 
 let self = this
 const limit = 10
@@ -336,7 +337,7 @@ export default {
       this.showTip = false
       if (this.query.from && this.query.fromapp !== 'ddzs') {
         let webquery = encodeURIComponent(`from=${this.query.from}`)
-        this.$wechat.miniProgram.redirectTo({url: `/pages/vip?weburl=recommendProducts&webquery=${webquery}`})
+        jweixin.miniProgram.redirectTo({url: `/pages/vip?weburl=recommendProducts&webquery=${webquery}`})
       } else {
         let backurl = `/recommendProducts`
         backurl = encodeURIComponent(backurl)

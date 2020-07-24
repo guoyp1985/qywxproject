@@ -367,6 +367,7 @@ import Time from '../../libs/time'
 import { User } from '#/storage'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
+const jweixin = require('../../static/jweixin')
 
 export default {
   directives: {
@@ -471,7 +472,7 @@ export default {
     },
     toCard (item) {
       if (this.query.from) {
-        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.addCard}?uid=${item.uid}`})
+        jweixin.miniProgram.navigateTo({url: `${ENV.MiniRouter.addCard}?uid=${item.uid}`})
       }
     },
     btnDetail (index) {
@@ -503,14 +504,14 @@ export default {
     },
     toStore () {
       if (this.query.from === 'miniprogram') {
-        this.$wechat.miniProgram.navigateTo({url: ENV.MiniRouter.store})
+        jweixin.miniProgram.navigateTo({url: ENV.MiniRouter.store})
       } else {
         this.$router.push({path: '/store'})
       }
     },
     toNews () {
       if (this.query.from === 'miniprogram') {
-        this.$wechat.miniProgram.navigateTo({url: ENV.MiniRouter.contentsNews})
+        jweixin.miniProgram.navigateTo({url: ENV.MiniRouter.contentsNews})
       } else {
         this.$router.push({path: '/store'})
       }

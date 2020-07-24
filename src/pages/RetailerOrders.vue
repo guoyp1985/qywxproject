@@ -408,6 +408,7 @@ import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
 import FirstTip from '@/components/FirstTip'
 import FirstHb from '@/components/FirstHb'
+const jweixin = require('../../static/jweixin')
 
 export default {
   directives: {
@@ -542,7 +543,7 @@ export default {
       }
     },
     toSubscribe () {
-      this.$wechat.miniProgram.navigateTo({url: '/pages/subscribe'})
+      jweixin.miniProgram.navigateTo({url: '/pages/subscribe'})
     },
     onChange1 (val) {
       this.searchword1 = val
@@ -1024,7 +1025,7 @@ export default {
     },
     scanClick () {
       const self = this
-      self.$wechat.scanQRCode({
+      jweixin.scanQRCode({
         needResult: 1,
         desc: '识别物流信息',
         success: function (res) {

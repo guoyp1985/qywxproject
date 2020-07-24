@@ -251,6 +251,7 @@ import ENV from 'env'
 import { User } from '#/storage'
 import OpenVip from '@/components/OpenVip'
 import FirstHb from '@/components/FirstHb'
+const jweixin = require('../../static/jweixin')
 
 export default {
   directives: {
@@ -430,7 +431,7 @@ export default {
       this.showTip = false
       if (this.query.from && this.query.fromapp !== 'ddzs') {
         let webquery = encodeURIComponent(`id=${this.query.id}&from=${this.query.from}`)
-        this.$wechat.miniProgram.redirectTo({url: `/pages/vip?weburl=factoryProduct&webquery=${webquery}`})
+        jweixin.miniProgram.redirectTo({url: `/pages/vip?weburl=factoryProduct&webquery=${webquery}`})
       } else {
         let backurl = `/factoryProduct?id=${this.query.id}`
         if (this.query.from) {
@@ -451,7 +452,7 @@ export default {
     },
     toStore () {
       if (this.query.from) {
-        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.store}?wid=${this.loginUser.uid}`})
+        jweixin.miniProgram.navigateTo({url: `${ENV.MiniRouter.store}?wid=${this.loginUser.uid}`})
       } else {
         this.$router.push({path: '/store', query: {wid: this.loginUser.uid}})
       }

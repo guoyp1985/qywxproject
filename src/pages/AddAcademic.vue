@@ -90,6 +90,7 @@ import ClipPopup from '@/components/ClipPopup'
 import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
+const jweixin = require('../../static/jweixin')
 
 export default {
   components: {
@@ -151,7 +152,7 @@ export default {
       if (self.$util.isPC()) {
         fileInput.click()
       } else {
-        self.$wechat.ready(function () {
+        jweixin.ready(function () {
           self.$util.wxUploadImage({
             maxnum: 9 - self.photoarr.length,
             handleCallback: function (data) {

@@ -33,6 +33,7 @@
 
 <script type="text/javascript">
 import ENV from 'env'
+const jweixin = require('../../static/jweixin')
 export default{
   created () {
     this.id = this.$route.query.id
@@ -90,7 +91,7 @@ export default{
       if (self.$util.isPC()) {
         fileInput.click()
       } else {
-        self.$wechat.ready(function () {
+        jweixin.ready(function () {
           self.$util.wxUploadImage({
             maxnum: self.maxnum - self.photos.length,
             handleCallback: function (data) {

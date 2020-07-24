@@ -293,6 +293,7 @@ import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
 import jQuery from 'jquery'
+const jweixin = require('../../static/jweixin')
 export default {
   directives: {
     TransferDom
@@ -376,9 +377,9 @@ export default {
     },
     toHome () {
       if (this.query.fromapp && ENV.AppHomePage[this.query.fromapp]) {
-        this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage[this.query.fromapp]})
+        jweixin.miniProgram.reLaunch({url: ENV.AppHomePage[this.query.fromapp]})
       } else {
-        this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage.default})
+        jweixin.miniProgram.reLaunch({url: ENV.AppHomePage.default})
       }
     },
     deletephoto (index) {
@@ -419,7 +420,7 @@ export default {
       if (self.$util.isPC()) {
         fileInput.click()
       } else {
-        self.$wechat.ready(function () {
+        jweixin.ready(function () {
           self.$util.wxUploadImage({
             maxnum: self.maxnum,
             handleCallback: function (data) {
@@ -498,16 +499,16 @@ export default {
     toCenter () {
       if (this.query.from) {
         console.log('in click wechate')
-        console.log(this.$wechat.miniProgram)
+        console.log(jweixin.miniProgram)
         this.clickTxt = '正在点击中'
-        this.$wechat.miniProgram.reLaunch({url: `/pages/user`})
+        jweixin.miniProgram.reLaunch({url: `/pages/user`})
       } else {
         this.$router.push({path: '/center'})
       }
     },
     toProduct (item) {
       // if (this.query.from) {
-      //   this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&wid=${item.wid}&module=product`})
+      //   jweixin.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&wid=${item.wid}&module=product`})
       // } else {
       //   this.$router.push({path: '/product', query: {id: item.pid, wid: item.wid}})
       // }
@@ -540,7 +541,7 @@ export default {
         document.removeEventListener('copy', save)
       }
       if (this.query.fromapp === 'factory') {
-        this.$wechat.miniProgram.reLaunch({url: ENV.MiniRouter.chat})
+        jweixin.miniProgram.reLaunch({url: ENV.MiniRouter.chat})
       } else {
         let params = this.$util.handleAppParams(this.query, {uid: this.retailerInfo.uid, fromModule: 'order'})
         this.$router.push({path: '/chat', query: params})

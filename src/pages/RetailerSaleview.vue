@@ -175,6 +175,7 @@ import ApplyTip from '@/components/ApplyTip'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
+const jweixin = require('../../static/jweixin')
 
 export default {
   directives: {
@@ -376,11 +377,11 @@ export default {
     },
     clickItem (item) {
       // if (item.module === 'news' && this.query.from) {
-      //   this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.news}?id=${item.id}&wid=${item.kefuid}`})
+      //   jweixin.miniProgram.navigateTo({url: `${ENV.MiniRouter.news}?id=${item.id}&wid=${item.kefuid}`})
       // } else if (item.module === 'product' && this.query.from) {
-      //   this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.id}&wid=${item.kefuid}&module=product`})
+      //   jweixin.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.id}&wid=${item.kefuid}&module=product`})
       // } else if (item.module === 'activity' && this.query.from) {
-      //   this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.activity}?id=${item.id}&wid=${item.kefuid}`})
+      //   jweixin.miniProgram.navigateTo({url: `${ENV.MiniRouter.activity}?id=${item.id}&wid=${item.kefuid}`})
       // } else {
       //   let params = this.$util.handleAppParams(this.query, {id: item.moduleid, wid: item.kefuid})
       //   this.$router.push({path: `/${item.module}`, query: params})

@@ -175,6 +175,7 @@ import FirstHb from '@/components/FirstHb'
 import Time from '#/time'
 import ENV from 'env'
 import { User, SystemParams } from '#/storage'
+const jweixin = require('../../static/jweixin')
 
 export default {
   directives: {
@@ -450,12 +451,12 @@ export default {
         } else {
           minibackurl = `${minibackurl}?id=${data.data}&type=${self.query.type}&productid=${self.submitdata.productid}`
         }
-        self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+        jweixin.miniProgram.redirectTo({url: `${minibackurl}`})
       } else if (self.query.from) {
         if (self.activityType === 'groupbuy') {
-          self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${self.submitdata.productid}&wid=${self.loginUser.uid}&module=${self.productmodule}`})
+          jweixin.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${self.submitdata.productid}&wid=${self.loginUser.uid}&module=${self.productmodule}`})
         } else {
-          self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.activity}?id=${data.data}`})
+          jweixin.miniProgram.redirectTo({url: `${ENV.MiniRouter.activity}?id=${data.data}`})
         }
       } else {
         if (self.query.id) {

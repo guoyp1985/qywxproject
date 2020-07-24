@@ -137,6 +137,7 @@ import ClipPopup from '@/components/ClipPopup'
 import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
+const jweixin = require('../../static/jweixin')
 
 export default {
   components: {
@@ -217,7 +218,7 @@ export default {
         fileInput.click()
       } else {
         let curmax = 1
-        self.$wechat.ready(function () {
+        jweixin.ready(function () {
           self.$util.wxUploadImage({
             maxnum: curmax,
             handleCallback: function (data) {

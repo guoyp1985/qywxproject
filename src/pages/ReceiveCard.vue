@@ -24,6 +24,7 @@
 <script>
 import ENV from 'env'
 import { User } from '#/storage'
+const jweixin = require('../../static/jweixin')
 let self = {}
 export default {
   data () {
@@ -55,11 +56,11 @@ export default {
             setTimeout(function () {
               let minibackurl = decodeURIComponent(self.query.minibackurl)
               if (self.query.backtype === 'relaunch') {
-                self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+                jweixin.miniProgram.reLaunch({url: `${minibackurl}`})
               } else if (self.query.backtype === 'redirect') {
-                self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+                jweixin.miniProgram.redirectTo({url: `${minibackurl}`})
               } else {
-                self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+                jweixin.miniProgram.navigateTo({url: `${minibackurl}`})
               }
             }, 600)
           } else {
@@ -72,11 +73,11 @@ export default {
             setTimeout(function () {
               let minibackurl = decodeURIComponent(self.query.minibackurl)
               if (self.query.backtype === 'relaunch') {
-                self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+                jweixin.miniProgram.reLaunch({url: `${minibackurl}`})
               } else if (self.query.backtype === 'redirect') {
-                self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+                jweixin.miniProgram.redirectTo({url: `${minibackurl}`})
               } else {
-                self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+                jweixin.miniProgram.navigateTo({url: `${minibackurl}`})
               }
             }, timeoute)
           }

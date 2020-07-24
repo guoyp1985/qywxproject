@@ -119,6 +119,7 @@ import Sos from '@/components/Sos'
 import FirstHb from '@/components/FirstHb'
 import { User } from '#/storage'
 import ENV from 'env'
+const jweixin = require('../../static/jweixin')
 
 const limit = 10
 let pagestart1 = 0
@@ -171,7 +172,7 @@ export default {
     },
     onProduct (item) {
       if (this.query.from === 'miniprogram') {
-        this.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${item.id}&wid=${this.loginUser.uid}&module=product`})
+        jweixin.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${item.id}&wid=${this.loginUser.uid}&module=product`})
       } else {
         this.$router.push({
           path: '/product',
@@ -233,7 +234,7 @@ export default {
       if (self.$util.isPC()) {
         fileInput.click()
       } else {
-        self.$wechat.ready(function () {
+        jweixin.ready(function () {
           self.$util.wxUploadImage({
             maxnum: 1,
             handleCallback: function (data) {

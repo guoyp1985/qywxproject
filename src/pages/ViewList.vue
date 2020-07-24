@@ -57,6 +57,7 @@ import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
+const jweixin = require('../../static/jweixin')
 
 const limit = 10
 let pageStart1 = 0
@@ -111,7 +112,7 @@ export default {
           if (this.query.fromapp) {
             type = this.query.fromapp
           }
-          this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage[type]})
+          jweixin.miniProgram.reLaunch({url: ENV.AppHomePage[type]})
         } else {
           this.$vux.toast.text('请在小程序内查看')
         }

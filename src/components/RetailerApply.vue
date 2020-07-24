@@ -510,6 +510,7 @@ Required item not empty:
 import { Group, XInput, TransferDom, Alert, Popup, Loading, Checker, CheckerItem, CheckIcon } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
+const jweixin = require('../../static/jweixin')
 
 export default {
   name: 'RetailerApply',
@@ -738,7 +739,7 @@ export default {
                 self.afterApply && self.afterApply()
               } else if (applydata.flag === 2) {
                 if (self.query.from === 'miniprogram') {
-                  self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.pay}?id=${applydata.orderid}&module=${applydata.ordermodule}`})
+                  jweixin.miniProgram.redirectTo({url: `${ENV.MiniRouter.pay}?id=${applydata.orderid}&module=${applydata.ordermodule}`})
                 } else {
                   location.replace(`${ENV.Host}/#/pay?id=${applydata.orderid}&module=${applydata.ordermodule}`)
                 }

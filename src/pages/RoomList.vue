@@ -117,6 +117,7 @@ import RoomOrderConsumer from '@/components/RoomOrderConsumer'
 import FirstTip from '@/components/FirstTip'
 import ENV from 'env'
 import { User, FirstInfo, SystemParams } from '#/storage'
+const jweixin = require('../../static/jweixin')
 
 export default {
   components: {
@@ -158,7 +159,7 @@ export default {
       this.showFirst = false
     },
     toSubscribe () {
-      this.$wechat.miniProgram.navigateTo({url: '/pages/subscribe'})
+      jweixin.miniProgram.navigateTo({url: '/pages/subscribe'})
     },
     toAdd () {
       let params = this.$util.handleAppParams(this.query, {})
@@ -225,7 +226,7 @@ export default {
       if (self.$util.isPC()) {
         fileInput.click()
       } else {
-        self.$wechat.ready(function () {
+        jweixin.ready(function () {
           self.$util.wxUploadImage({
             maxnum: 1,
             handleCallback: function (data) {

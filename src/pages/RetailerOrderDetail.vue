@@ -359,6 +359,7 @@ import Time from '#/time'
 import ENV from 'env'
 import jQuery from 'jquery'
 import { User, SystemParams } from '#/storage'
+const jweixin = require('../../static/jweixin')
 
 export default {
   directives: {
@@ -432,9 +433,9 @@ export default {
     },
     toHome () {
       if (this.query.fromapp && ENV.AppHomePage[this.query.fromapp]) {
-        this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage[this.query.fromapp]})
+        jweixin.miniProgram.reLaunch({url: ENV.AppHomePage[this.query.fromapp]})
       } else {
-        this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage.default})
+        jweixin.miniProgram.reLaunch({url: ENV.AppHomePage.default})
       }
     },
     initData () {
@@ -572,9 +573,9 @@ export default {
     },
     toProduct (item) {
       // if (this.query.fromapp === 'factory') {
-      //   this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&module=product`})
+      //   jweixin.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&module=product`})
       // } else if (this.query.from) {
-      //   this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&wid=${item.wid}&module=product`})
+      //   jweixin.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&wid=${item.wid}&module=product`})
       // } else {
       //   this.$router.push({path: '/product', query: {id: item.pid, wid: item.wid}})
       // }
@@ -590,7 +591,7 @@ export default {
     },
     toCard (item) {
       if (this.query.from) {
-        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.addCard}?uid=${this.orderData.uid}`})
+        jweixin.miniProgram.navigateTo({url: `${ENV.MiniRouter.addCard}?uid=${this.orderData.uid}`})
       }
     },
     textareaChange (refname) {
@@ -858,7 +859,7 @@ export default {
     },
     scanClick () {
       const self = this
-      self.$wechat.scanQRCode({
+      jweixin.scanQRCode({
         needResult: 1,
         desc: '识别物流信息',
         success: function (res) {

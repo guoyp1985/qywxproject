@@ -308,6 +308,7 @@ import ENV from 'env'
 import Reg from '#/reg'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
+const jweixin = require('../../static/jweixin')
 
 export default {
   directives: {
@@ -500,7 +501,7 @@ export default {
       if (self.$util.isPC()) {
         fileInput.click()
       } else {
-        self.$wechat.ready(function () {
+        jweixin.ready(function () {
           self.$util.wxUploadImage({
             maxnum: self.maxnum - self.photoarr.length,
             handleCallback: function (data) {
@@ -605,7 +606,7 @@ export default {
             })
             if (data.flag === 1) {
               if (self.query.fromapp === 'factory') {
-                self.$wechat.miniProgram.navigateTo({url: '/pages/own'})
+                jweixin.miniProgram.navigateTo({url: '/pages/own'})
               }
               console.log('= self.query.minibackurl =')
               console.log(self.query.minibackurl)
@@ -613,11 +614,11 @@ export default {
                 if (self.query.minibackurl) {
                   let minibackurl = decodeURIComponent(self.query.minibackurl)
                   if (self.query.backtype === 'relaunch') {
-                    self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+                    jweixin.miniProgram.reLaunch({url: `${minibackurl}`})
                   } else if (self.query.backtype === 'redirect') {
-                    self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+                    jweixin.miniProgram.redirectTo({url: `${minibackurl}`})
                   } else {
-                    self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+                    jweixin.miniProgram.navigateTo({url: `${minibackurl}`})
                   }
                 } else if (self.query.backurl) {
                   let backurl = decodeURIComponent(self.query.backurl)

@@ -24,6 +24,7 @@
 
 <script type="text/javascript">
 import Env from 'env'
+const jweixin = require('../../static/jweixin')
 export default {
   created () {
     console.log('in listothers activated')
@@ -200,7 +201,7 @@ export default {
               url = `${url}?weburl=${weburl}&webquery=${webquery}`
               _this.backurl = url
             }
-            _this.$wechat.miniProgram.navigateTo({url: url})
+            jweixin.miniProgram.navigateTo({url: url})
           }
         })
       } else if (!this.teamInfo.join) {

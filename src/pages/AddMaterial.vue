@@ -74,6 +74,7 @@
 <script>
 import { TransferDom, Group, XInput, XTextarea, Previewer } from 'vux'
 import ENV from 'env'
+const jweixin = require('../../static/jweixin')
 
 export default {
   directives: {
@@ -155,7 +156,7 @@ export default {
       if (self.$util.isPC() || type === 'video') {
         fileInput.click()
       } else {
-        self.$wechat.ready(function () {
+        jweixin.ready(function () {
           let curMaxnum = self.maxnum
           if (type === 'video') {
             curMaxnum = 1

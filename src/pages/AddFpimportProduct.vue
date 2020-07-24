@@ -820,7 +820,7 @@ export default {
       if (self.$util.isPC()) {
         fileInput.click()
       } else {
-        self.$wechat.ready(function () {
+        jweixin.ready(function () {
           self.$util.wxUploadImage({
             maxnum: 1,
             handleCallback: (data) => {
@@ -925,9 +925,6 @@ export default {
       if (self.$util.isPC() || type === 'video') {
         fileInput.click()
       } else {
-        console.log('in click')
-        console.log(jweixin)
-        // self.$wechat.ready(function () {
         jweixin.ready(function () {
           let curMaxnum = self.maxnum
           if (type === 'video') {
@@ -1344,7 +1341,7 @@ export default {
                 }
                 let rparams = self.$util.handleAppParams(self.query, {id: pid, fid: self.query.fid})
                 if (self.query.fromapp === 'factory') {
-                  self.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.factoryAppProduct}?id=${pid}&type=fpimport`})
+                  jweixin.miniProgram.navigateTo({url: `${ENV.MiniRouter.factoryAppProduct}?id=${pid}&type=fpimport`})
                 } else {
                   self.$router.push({path: '/fpimportProduct', query: rparams})
                 }

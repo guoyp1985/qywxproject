@@ -117,6 +117,7 @@ import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
+const jweixin = require('../../static/jweixin')
 export default {
   directives: {
     TransferDom
@@ -240,7 +241,7 @@ export default {
     },
     clickWxAddress () {
       this.showpopup = false
-      this.$wechat.ready(() => {
+      jweixin.ready(() => {
         this.$util.wxAddress((data1, newData) => {
           if (data1.flag) {
             this.addressdata = [newData]
@@ -304,9 +305,9 @@ export default {
     },
     toHome () {
       if (this.query.fromapp && ENV.AppHomePage[this.query.fromapp]) {
-        this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage[this.query.fromapp]})
+        jweixin.miniProgram.reLaunch({url: ENV.AppHomePage[this.query.fromapp]})
       } else {
-        this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage.default})
+        jweixin.miniProgram.reLaunch({url: ENV.AppHomePage.default})
       }
     },
     deletephoto () {
@@ -326,7 +327,7 @@ export default {
     },
     toProduct (item) {
       if (this.query.from) {
-        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&wid=${item.wid}&module=product`})
+        jweixin.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&wid=${item.wid}&module=product`})
       } else {
         this.$router.push({path: '/product', query: {id: item.pid, wid: item.wid}})
       }
@@ -404,7 +405,7 @@ export default {
               self.handleAddress()
             } else {
               if (!this.query.from) {
-                this.$wechat.ready(() => {
+                jweixin.ready(() => {
                   this.$vux.confirm.show({
                     content: '是否使用微信地址？',
                     onConfirm: () => {

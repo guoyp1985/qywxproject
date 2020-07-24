@@ -25,6 +25,7 @@
 import { Group, Cell, Box, XInput, PopupRadio, XButton, XImg } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
+const jweixin = require('../../static/jweixin')
 
 export default {
   components: {
@@ -102,7 +103,7 @@ export default {
           }
           minibackurl = `${minibackurl}gxkfid=${this.loginUser.fid}`
         }
-        this.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+        jweixin.miniProgram.reLaunch({url: `${minibackurl}`})
       } else {
         this.$router.go(-1)
       }

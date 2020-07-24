@@ -457,6 +457,7 @@ import { TransferDom, Previewer, Group, XInput, XTextarea, XSwitch } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
+const jweixin = require('../../static/jweixin')
 
 export default {
   directives: {
@@ -722,7 +723,7 @@ export default {
       if (self.$util.isPC()) {
         fileInput.click()
       } else {
-        self.$wechat.ready(function () {
+        jweixin.ready(function () {
           self.$util.wxUploadImage({
             maxnum: 1,
             handleCallback: (data) => {
@@ -827,7 +828,7 @@ export default {
       if (self.$util.isPC() || type === 'video') {
         fileInput.click()
       } else {
-        self.$wechat.ready(function () {
+        jweixin.ready(function () {
           let curMaxnum = self.maxnum
           if (type === 'video') {
             curMaxnum = 1

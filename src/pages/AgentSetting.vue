@@ -71,6 +71,7 @@
 import { XTextarea, XInput, TransferDom, Popup, Group } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
+const jweixin = require('../../static/jweixin')
 
 export default {
   directives: {
@@ -184,7 +185,7 @@ export default {
         if (type === 'contentphoto') {
           curmax = 9 - this.contentArr[this.clickIndex].photoarr.length
         }
-        self.$wechat.ready(function () {
+        jweixin.ready(function () {
           self.$util.wxUploadImage({
             maxnum: curmax,
             handleCallback: function (data) {
@@ -294,11 +295,11 @@ export default {
               if (self.query.minibackurl) {
                 let minibackurl = decodeURIComponent(self.query.minibackurl)
                 if (self.query.backtype === 'relaunch') {
-                  self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+                  jweixin.miniProgram.reLaunch({url: `${minibackurl}`})
                 } else if (self.query.backtype === 'redirect') {
-                  self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+                  jweixin.miniProgram.redirectTo({url: `${minibackurl}`})
                 } else {
-                  self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+                  jweixin.miniProgram.navigateTo({url: `${minibackurl}`})
                 }
               } else {
                 self.$router.push({path: '/agentDetail', query: {fid: self.query.fid}})

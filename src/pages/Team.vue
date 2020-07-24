@@ -104,6 +104,7 @@ import ListTags from '@/components/ListTags'
 import ListOthers from '@/components/ListOthers'
 import TipLayer from '@/components/TipLayer'
 import { User } from '#/storage'
+const jweixin = require('../../static/jweixin')
 export default {
   components: {
     ScrollView, ListTags, ListOthers, TipLayer
@@ -209,7 +210,7 @@ export default {
       if (this.query.fromapp) {
         type = this.query.fromapp
       }
-      this.$wechat.miniProgram.reLaunch({url: ENV.AppHomePage[type]})
+      jweixin.miniProgram.reLaunch({url: ENV.AppHomePage[type]})
     },
     closeTipModal () {
       this.showTip = false
@@ -299,7 +300,7 @@ export default {
               url = `${url}?weburl=${weburl}&webquery=${webquery}`
               _this.backurl = url
             }
-            _this.$wechat.miniProgram.navigateTo({url: url})
+            jweixin.miniProgram.navigateTo({url: url})
           }
         })
       } else {
@@ -363,7 +364,7 @@ export default {
       //         url = `${url}?weburl=${weburl}&webquery=${webquery}`
       //         _this.backurl = url
       //       }
-      //       _this.$wechat.miniProgram.navigateTo({url: url})
+      //       jweixin.miniProgram.navigateTo({url: url})
       //     }
       //   })
       // } else {
@@ -456,7 +457,7 @@ export default {
                 url = `${url}?weburl=${weburl}&webquery=${webquery}`
                 _this.backurl = url
               }
-              _this.$wechat.miniProgram.navigateTo({url: url})
+              jweixin.miniProgram.navigateTo({url: url})
             }
           })
         } else if (!this.teamInfo.join) {

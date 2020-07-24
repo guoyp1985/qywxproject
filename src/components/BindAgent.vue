@@ -81,6 +81,7 @@
 
 <script>
 import {} from 'vux'
+const jweixin = require('../../static/jweixin')
 export default {
   name: 'BindFactory',
   props: {
@@ -112,13 +113,13 @@ export default {
         }
         minibackurl = `${minibackurl}regwid=${this.loginUser.uid}`
         if (this.query.backtype === 'relaunch') {
-          this.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+          jweixin.miniProgram.reLaunch({url: `${minibackurl}`})
         } else if (this.query.backtype === 'redirect') {
-          this.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+          jweixin.miniProgram.redirectTo({url: `${minibackurl}`})
         } else if (this.query.backtype === 'navigateTo') {
-          this.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+          jweixin.miniProgram.navigateTo({url: `${minibackurl}`})
         } else {
-          this.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+          jweixin.miniProgram.redirectTo({url: `${minibackurl}`})
         }
       }
     }

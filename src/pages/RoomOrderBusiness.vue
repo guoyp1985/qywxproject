@@ -83,6 +83,7 @@
 import { XButton } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
+const jweixin = require('../../static/jweixin')
 const STATUS_NAME = {
   '-1': '已取消',
   '0': '待支付',
@@ -112,14 +113,14 @@ export default {
   methods: {
     toProduct () {
       if (this.query.from) {
-        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${this.item.pid}&wid=${this.item.wid}&module=product`})
+        jweixin.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${this.item.pid}&wid=${this.item.wid}&module=product`})
       } else {
         this.$router.push({path: '/product', query: {id: this.item.pid, wid: this.item.wid}})
       }
     },
     toPay () {
       if (this.query.from) {
-        this.$wechat.miniProgram.navigateTo({url: `/packageB/pages/pay?id=${this.item.orderid}&module=payorders&weburl=roomOrders`})
+        jweixin.miniProgram.navigateTo({url: `/packageB/pages/pay?id=${this.item.orderid}&module=payorders&weburl=roomOrders`})
       } else {
         let backurl = encodeURIComponent(`/roomOrders`)
         location.replace(`${ENV.Host}/#/pay?id=${this.item.orderid}&module=payorders&backurl=${backurl}`)

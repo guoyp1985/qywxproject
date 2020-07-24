@@ -66,6 +66,7 @@
 <script>
 import { Group, Cell, XButton } from 'vux'
 import ENV from 'env'
+const jweixin = require('../../static/jweixin')
 const STATUS_NAME = {
   '-1': '已取消',
   '0': '待支付',
@@ -119,7 +120,7 @@ export default {
     toPay () {
       let from = this.$route.query.from
       if (from) {
-        this.$wechat.miniProgram.navigateTo({url: `/packageB/pages/pay?id=${this.item.orderid}&module=payorders&weburl=roomOrders`})
+        jweixin.miniProgram.navigateTo({url: `/packageB/pages/pay?id=${this.item.orderid}&module=payorders&weburl=roomOrders`})
       } else {
         let backurl = encodeURIComponent('/roomOrders')
         location.replace(`${ENV.Host}/#/pay?id=${this.item.orderid}&module=payorders&backurl=${backurl}`)
