@@ -1072,16 +1072,16 @@ export default {
           self.$vux.toast.text('请输入商品利润', 'middle')
           return false
         }
-        let price = postdata.price.toString().replace(/,/g, '')
-        let oriprice = postdata.oriprice.toString().replace(/,/g, '')
-        let sprice = postdata.supplyprice.toString().replace(/,/g, '')
-        let tbprice = postdata.tb_price.toString().replace(/,/g, '')
-        let jdprice = postdata.jd_price.toString().replace(/,/g, '')
-        let postage = postdata.postage.toString().replace(/,/g, '')
-        let profit = postdata.profit.toString().replace(/,/g, '')
-        let salesrebate = postdata.salesrebate.toString().replace(/,/g, '')
-        let superrebate = postdata.superrebate.toString().replace(/,/g, '')
-        let agentrebate = postdata.agentrebate.toString().replace(/,/g, '')
+        let price = postdata.price ? postdata.price.toString().replace(/,/g, '') : ''
+        let oriprice = postdata.oriprice ? postdata.oriprice.toString().replace(/,/g, '') : ''
+        let sprice = postdata.supplyprice ? postdata.supplyprice.toString().replace(/,/g, '') : ''
+        let tbprice = postdata.tb_price ? postdata.tb_price.toString().replace(/,/g, '') : ''
+        let jdprice = postdata.jd_price ? postdata.jd_price.toString().replace(/,/g, '') : ''
+        let postage = postdata.postage ? postdata.postage.toString().replace(/,/g, '') : ''
+        let profit = postdata.profit ? postdata.profit.toString().replace(/,/g, '') : ''
+        let salesrebate = postdata.salesrebate ? postdata.salesrebate.toString().replace(/,/g, '') : ''
+        let superrebate = postdata.superrebate ? postdata.superrebate.toString().replace(/,/g, '') : ''
+        let agentrebate = postdata.agentrebate ? postdata.agentrebate.toString().replace(/,/g, '') : ''
         if (self.$util.trim(price).length > 7 || self.$util.trim(oriprice).length > 7 || self.$util.trim(tbprice).length > 7 || self.$util.trim(jdprice).length > 7) {
           self.$vux.alert.show({
             title: '',
@@ -1213,11 +1213,11 @@ export default {
             let curOption = this.optionsData[i]
             let curTitle = curOption.title
             // let curPhoto = curOption.photo
-            let curPrice = curOption.price.toString().replace(/,/g, '')
-            let curSprice = curOption.supplyprice.toString().replace(/,/g, '')
-            let curSales = curOption.salesrebate.toString().replace(/,/g, '')
-            let curSuper = curOption.superrebate.toString().replace(/,/g, '')
-            let curRebate = curOption.agentrebate.toString().replace(/,/g, '')
+            let curPrice = curOption.price ? curOption.price.toString().replace(/,/g, '') : ''
+            let curSprice = curOption.supplyprice ? curOption.supplyprice.toString().replace(/,/g, '') : ''
+            let curSales = curOption.salesrebate ? curOption.salesrebate.toString().replace(/,/g, '') : ''
+            let curSuper = curOption.superrebate ? curOption.superrebate.toString().replace(/,/g, '') : ''
+            let curRebate = curOption.agentrebate ? curOption.agentrebate.toString().replace(/,/g, '') : ''
             let curStorage = curOption.storage
             if (self.$util.trim(curTitle) === '' || self.$util.trim(curPrice) === '' || self.$util.trim(curStorage) === '') {
               self.$vux.toast.text('请完规格信息', 'middle')
