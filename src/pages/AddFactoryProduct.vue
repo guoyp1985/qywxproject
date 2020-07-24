@@ -1235,7 +1235,7 @@ export default {
               iscontinue = false
               break
             }
-            if (curSprice !== '' && (isNaN(curSprice) || parseFloat(curSprice) <= 0)) {
+            if (curSprice !== '' && (isNaN(curSprice) || parseFloat(curSprice) < 0)) {
               self.$vux.toast.text('请输入正确的供货价', 'middle')
               iscontinue = false
               break
