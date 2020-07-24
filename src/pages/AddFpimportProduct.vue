@@ -513,7 +513,7 @@ import { TransferDom, Previewer, Group, XInput, XTextarea, XSwitch } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
-const jweixin = require('../static/jweixin')
+const jweixin = require('../../static/jweixin')
 
 export default {
   directives: {
