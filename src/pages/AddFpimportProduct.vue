@@ -1298,11 +1298,11 @@ export default {
             let addoption = {
               title: curOption.title,
               photo: oPhoto,
-              price: curOption.price.toString().replace(/,/g, ''),
-              supplyprice: curOption.supplyprice.toString().replace(/,/g, ''),
-              salesrebate: curOption.salesrebate.toString().replace(/,/g, ''),
-              superrebate: curOption.superrebate.toString().replace(/,/g, ''),
-              agentrebate: curOption.agentrebate.toString().replace(/,/g, ''),
+              price: curOption.price ? curOption.price.toString().replace(/,/g, '') : '',
+              supplyprice: curOption.supplyprice ? curOption.supplyprice.toString().replace(/,/g, '') : '',
+              salesrebate: curOption.salesrebate ? curOption.salesrebate.toString().replace(/,/g, '') : '',
+              superrebate: curOption.superrebate ? curOption.superrebate.toString().replace(/,/g, '') : '',
+              agentrebate: curOption.agentrebate ? curOption.agentrebate.toString().replace(/,/g, '') : '',
               storage: curOption.storage
             }
             if (!addoption.salesrebate || addoption.salesrebate === '') {
