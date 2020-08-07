@@ -120,7 +120,7 @@
                 </div>
               </template>
               <div class="item" v-if="!clickdata.fromfid && !loginUser.factoryinfo.issupply">
-                <div class="inner" @click="clickpopup('fee')">设置佣金</div>
+                <div class="inner" @click="clickpopup('fee')">设置总佣金</div>
               </div>
               <div class="item">
                 <div class="inner" @click="clickpopup('stat')">统计</div>
@@ -221,20 +221,20 @@
             		</div>
                 <div class="form-item">
                   <div class="t-table">
-                    <div class="t-cell title-cell w80 font14 v_middle">销售佣金<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
+                    <div class="t-cell title-cell w80 font14 v_middle">总佣金<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
                     <div class="t-cell input-cell v_middle" style="position:relative;">
                       <x-input v-model="postSalesRebate" type="text" class="input" placeholder="销售佣金"></x-input>
                     </div>
                   </div>
                 </div>
-                <div class="form-item">
+                <!-- <div class="form-item">
                   <div class="t-table">
                     <div class="t-cell title-cell w80 font14 v_middle">推荐佣金<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
                     <div class="t-cell input-cell v_middle" style="position:relative;">
                       <x-input v-model="postSuperRebate" type="text" class="input" placeholder="推荐佣金"></x-input>
                     </div>
                   </div>
-                </div>
+                </div> -->
     					</div>
             </div>
             <div class="popup-bottom flex_center">
@@ -738,10 +738,10 @@ export default {
     submitFee () {
       const self = this
       let salesRebate = self.postSalesRebate
-      let superRebate = self.postSuperRebate
+      let superRebate = 0
       if (self.$util.trim(salesRebate) === '' || self.$util.trim(superRebate) === '') {
         self.$vux.toast.show({
-          text: '请输入销售佣金和推荐佣金'
+          text: '请输入总佣金'
         })
         return false
       }
