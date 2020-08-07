@@ -119,9 +119,9 @@
                   <div class="inner" @click="clickpopup('downShelf')">从货源移出</div>
                 </div>
               </template>
-              <div class="item" v-if="!clickdata.fromfid && !loginUser.factoryinfo.issupply">
+              <!-- <div class="item" v-if="!clickdata.fromfid && !loginUser.factoryinfo.issupply">
                 <div class="inner" @click="clickpopup('fee')">设置佣金</div>
-              </div>
+              </div> -->
               <div class="item">
                 <div class="inner" @click="clickpopup('stat')">统计</div>
               </div>
