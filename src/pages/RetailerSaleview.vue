@@ -175,7 +175,7 @@ import ApplyTip from '@/components/ApplyTip'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
-const jweixin = require('../../static/jweixin')
+// const jweixin = require('../../static/jweixin')
 
 export default {
   directives: {
