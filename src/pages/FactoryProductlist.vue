@@ -120,7 +120,7 @@
                 </div>
               </template>
               <div class="item" v-if="!clickdata.fromfid && !loginUser.factoryinfo.issupply">
-                <div class="inner" @click="clickpopup('fee')">设置总佣金</div>
+                <div class="inner" @click="clickpopup('fee')">设置佣金</div>
               </div>
               <div class="item">
                 <div class="inner" @click="clickpopup('stat')">统计</div>
@@ -738,7 +738,7 @@ export default {
     submitFee () {
       const self = this
       let salesRebate = self.postSalesRebate
-      let superRebate = 0
+      let superRebate = '0'
       if (self.$util.trim(salesRebate) === '' || self.$util.trim(superRebate) === '') {
         self.$vux.toast.show({
           text: '请输入总佣金'
