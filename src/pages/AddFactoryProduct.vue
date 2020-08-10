@@ -123,6 +123,15 @@
             </div>
             <div class="color-gray font12 mt5">系统会根据填写的最高销量自动计算每 5 分钟递增多少销量</div>
           </div>
+          <div class="form-item required bg-white" v-if="!optionsData.length">
+            <div class="flex_left">
+              <div class="w80 flex_left">允许金币数</div>
+              <div class="flex_left flex_cell">
+                <x-input v-model="submitdata.maxcredits" maxlength="7" size="7" type="text" class="input" name="maxcredits" placeholder="允许金币数" ></x-input>
+              </div>
+            </div>
+            <div class="color-gray font12 mt5">100金币可抵扣1元。</div>
+          </div>
           <div class="form-item required bg-white">
             <div class="flex_left">
               <div class="w_100">
@@ -317,6 +326,13 @@
                     <div class="title-cell1 flex_left">价格</div>
                     <div class="border-cell flex_left flex_cell">
                       <x-input v-model="item.price" class="input" placeholder="价格" maxlength="7" size="7" ></x-input>
+                    </div>
+                  </div>
+                  <div class="flex_left mt10 con-item">
+                    <div class="title-cell1 flex_left">允许金币数</div>
+                    <div class="border-cell flex_left flex_cell">
+                      <x-input v-model="item.maxcredits" class="input" placeholder="允许金币数" maxlength="7" size="7" ></x-input>
+                      <div class="color-gray font12 mt5">100金币可抵扣1元。</div>
                     </div>
                   </div>
                   <div class="flex_left mt10 con-item">
@@ -548,6 +564,7 @@ export default {
       submitdata: {
         classid: '0',
         title: '',
+        maxcredits: '',
         oriprice: '',
         price: '',
         supplyprice: '',
@@ -630,6 +647,7 @@ export default {
       this.submitdata = {
         classid: '0',
         title: '',
+        maxcredits: '',
         oriprice: '',
         price: '',
         supplyprice: '',
@@ -1123,6 +1141,17 @@ export default {
           return false
         }
         if (!self.optionsData.length) {
+          let maxcredits = postdata.maxcredits
+          if (maxcredits && maxcredits !== '') {
+            if (isNaN(maxcredits) || parseFloat(maxcredits) < 0 || !/^[0-9]*[1-9][0-9]*$/.test(maxcredits)) {
+              self.$vux.toast.text('请输入正确的金币数', 'middle')
+              return false
+            }
+            if (parseFloat(maxcredits) / 100 >= parseFloat(price)) {
+              self.$vux.toast.text('金币可抵扣金额不能超过商品价格', 'middle')
+              return false
+            }
+          }
           // 商品利润
           if (self.$util.trim(oriprice) !== '' && (isNaN(profit) || parseFloat(profit) < 0)) {
             self.$vux.alert.show({
@@ -1230,6 +1259,19 @@ export default {
               iscontinue = false
               break
             }
+            let maxcredits = curOption.maxcredits
+            if (maxcredits && maxcredits !== '') {
+              if (isNaN(maxcredits) || parseFloat(maxcredits) < 0 || !/^[0-9]*[1-9][0-9]*$/.test(maxcredits)) {
+                self.$vux.toast.text('请输入正确的金币数', 'middle')
+                iscontinue = false
+                break
+              }
+              if (parseFloat(maxcredits) / 100 >= parseFloat(curPrice)) {
+                self.$vux.toast.text('金币可抵扣金额不能超过商品价格', 'middle')
+                iscontinue = false
+                break
+              }
+            }
             if (curSprice !== '' && (isNaN(curSprice) || parseFloat(curSprice) < 0)) {
               self.$vux.toast.text('请输入正确的供货价', 'middle')
               iscontinue = false
@@ -1293,6 +1335,7 @@ export default {
               title: curOption.title,
               photo: oPhoto,
               price: curOption.price ? curOption.price.toString().replace(/,/g, '') : '',
+              maxcredits: curOption.maxcredits,
               supplyprice: curOption.supplyprice ? curOption.supplyprice.toString().replace(/,/g, '') : '',
               salesrebate: curOption.salesrebate ? curOption.salesrebate.toString().replace(/,/g, '') : '',
               superrebate: curOption.superrebate ? curOption.superrebate.toString().replace(/,/g, '') : '',
