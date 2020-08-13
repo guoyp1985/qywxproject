@@ -1181,6 +1181,12 @@ export default {
               })
               return false
             }
+            if (maxcredits && maxcredits !== '') {
+              if (parseFloat(maxcredits) / 100 >= parseFloat(price) - parseFloat(salesrebate)) {
+                self.$vux.toast.text('金币可抵扣金额大于等于商品价格-总佣金', 'middle')
+                return false
+              }
+            }
           }
           if (self.$util.trim(superrebate) !== '') {
             if (isNaN(superrebate) || parseFloat(superrebate) < 0) {
@@ -1302,6 +1308,12 @@ export default {
               self.$vux.toast.text('请输入正确的佣金', 'middle')
               iscontinue = false
               break
+            }
+            if (self.$util.trim(curSales) !== '' && maxcredits && maxcredits !== '') {
+              if (parseFloat(maxcredits) / 100 >= parseFloat(curPrice) - parseFloat(curSprice)) {
+                self.$vux.toast.text('金币可抵扣金额大于等于商品价格-总佣金', 'middle')
+                return false
+              }
             }
             if (isNaN(curStorage) || parseFloat(curStorage) <= 0) {
               self.$vux.toast.text('库存必须大于0', 'middle')
