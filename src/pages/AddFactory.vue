@@ -137,7 +137,7 @@
             </div>
 
             <!-- 分润比例设置 -->
-            <div class="form-item bg-white fg b-top">
+            <!-- <div class="form-item bg-white fg b-top">
               <div class=""><span>分润比例设置</span><span @click="clickTip"><i class="al al-wenhao color-red ml5 font24" style="vertical-align:-4px;"></i></span></div>
               <div class="flex_left padding10 b_bottom_after">
                 <div class="flex_left title-cell w90">推荐人佣金</div>
@@ -153,7 +153,7 @@
                 </div>
                 <div class="flex_right color-gray" style="width:20px;">%</div>
               </div>
-            </div>
+            </div> -->
             <template v-if="disClassData">
               <div class="form-item required border-box bg-white padding10 fg b-top" v-if="classData.length > 0">
                 <div class="pb10">经营产品<span class="color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>

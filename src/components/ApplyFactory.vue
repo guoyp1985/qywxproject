@@ -144,7 +144,7 @@
           </div>
         </div>
         <!-- 分润比例设置 -->
-        <div class="form-item bg-white fg b-top">
+        <!-- <div class="form-item bg-white fg b-top">
           <div class="">
             <span>分润比例设置</span><span @click="clickTip"><i class="al al-wenhao color-red ml5 font24" style="vertical-align:-4px;"></i></span>
           </div>
@@ -164,7 +164,7 @@
             </div>
             <div class="flex_right color-gray" style="width:20px;">%</div>
           </div>
-        </div>
+        </div> -->
         <template v-if="factoryInfo && factoryInfo.moderate == 0">
           <div class="form-item fg bg-white b-top b-bottom mb5">
             <div class="t-table">
