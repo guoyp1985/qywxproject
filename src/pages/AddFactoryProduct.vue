@@ -1143,7 +1143,7 @@ export default {
         if (!self.optionsData.length) {
           let maxcredits = postdata.maxcredits
           if (maxcredits && maxcredits !== '') {
-            if (isNaN(maxcredits) || parseFloat(maxcredits) < 0 || !/^[0-9]*[1-9][0-9]*$/.test(maxcredits)) {
+            if (isNaN(maxcredits) || parseFloat(maxcredits) < 0 || (parseFloat(maxcredits) > 0 && !/^[0-9]*[1-9][0-9]*$/.test(maxcredits))) {
               self.$vux.toast.text('请输入正确的金币数', 'middle')
               return false
             }
@@ -1267,7 +1267,7 @@ export default {
             }
             let maxcredits = curOption.maxcredits
             if (maxcredits && maxcredits !== '') {
-              if (isNaN(maxcredits) || parseFloat(maxcredits) < 0 || !/^[0-9]*[1-9][0-9]*$/.test(maxcredits)) {
+              if (isNaN(maxcredits) || parseFloat(maxcredits) < 0 || (parseFloat(maxcredits) > 0 && !/^[0-9]*[1-9][0-9]*$/.test(maxcredits))) {
                 self.$vux.toast.text('请输入正确的金币数', 'middle')
                 iscontinue = false
                 break
