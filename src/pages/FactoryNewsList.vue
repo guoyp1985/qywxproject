@@ -37,7 +37,7 @@
                 <img class="imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
               </div>
               <div class="t-cell v_middle">
-                <div class="clamp1 font14 color-lightgray"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
+                <div class="clamp1 font14 color-lightgray"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span><span class="color-gray" v-if="!item.moderate">【已隐藏】</span>{{item.title}}</div>
                 <div class="clamp1 font14 color-gray v_middle mt5">
                     <span class="v_middle color-999">{{ item.dateline | dateformat }}</span>
                     <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.views}}</span>
@@ -234,7 +234,7 @@ export default {
     },
     getData1 () {
       const self = this
-      const params = { fid: self.query.fid, pagestart: self.pagestart1, limit: self.limit, wid: this.loginUser.uid }
+      const params = { fid: self.query.fid, pagestart: self.pagestart1, limit: self.limit, wid: this.loginUser.uid, from: 'factory' }
       if (this.query.classid) {
         params.classid = this.query.classid
       }
