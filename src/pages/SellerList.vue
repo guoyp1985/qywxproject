@@ -48,7 +48,7 @@
                         <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                       </div>
                       <div class="t-cell v_middle pr10" style="box-sizing:border-box;">
-                        <div class="clamp1 font16">{{item.linkman}}</div>
+                        <div class="clamp1 font16">{{item.linkman}}<span class="color-gray font12">（积分：{{item.jifen}}）</span></div>
                         <div class="clamp1 font12 color-gray" v-if="item.identity && item.identity != 'W'">卖家等级: {{item.identity}}</div>
                         <div class="clamp1 font12 color-gray">店铺: {{item.title}}</div>
                         <div class="clamp1 font12 color-gray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
@@ -100,7 +100,7 @@
                         <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                       </div>
                       <div class="t-cell v_middle pr10" style="box-sizing:border-box;">
-                        <div class="clamp1 font16">{{item.linkman}}</div>
+                        <div class="clamp1 font16">{{item.linkman}}<span class="color-gray font12">（积分：{{item.jifen}}）</span></div>
                         <div class="clamp1 font12 color-gray" v-if="item.identity && item.identity != 'W'">卖家等级: {{item.identity}}</div>
                         <div class="clamp1 font12 color-gray">店铺: {{item.title}}</div>
                         <div class="clamp1 font12 color-gray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
@@ -193,7 +193,7 @@
                         <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                       </div>
                       <div class="t-cell v_middle pr10" style="box-sizing:border-box;">
-                        <div class="clamp1 font16">{{item.linkman}}</div>
+                        <div class="clamp1 font16">{{item.linkman}}<span class="color-gray font12">（积分：{{item.jifen}}）</span></div>
                         <div class="clamp1 font12 color-gray" v-if="item.identity && item.identity != 'W'">卖家等级: {{item.identity}}</div>
                         <div class="clamp1 font12 color-gray">店铺: {{item.title}}</div>
                         <div class="clamp1 font12 color-gray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
