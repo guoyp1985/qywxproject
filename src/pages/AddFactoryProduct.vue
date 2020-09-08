@@ -503,7 +503,12 @@
         <div v-else class="padding15 font14 align_center color-gray"  @click="expandevent">{{ $t('More') }}<i class="al al-jiantouyoushuang- font14"></i></div>
       </div>
       <div class="s-bottom flex_center color-white list-shadow02">
-        <div class="flex_cell flex_center color-white btn-bottom-red" @click="saveupevent">{{ $t('Shelf sale') }}</div>
+        <div class="flex_cell flex_center">
+          <div class="color-white btn-bottom-red flex_center" style="width:80%;" @click="saveupevent">{{ $t('Shelf sale') }}</div>
+        </div>
+        <div class="flex_cell flex_center">
+          <div class="color-white btn-bottom-orange flex_center" style="width:80%;" @click="saveevent">保存商品信息</div>
+        </div>
       </div>
       <div v-if="showTip" class="auto-modal flex_center">
         <div class="modal-inner border-box" style="width:80%;">
