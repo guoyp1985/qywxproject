@@ -420,7 +420,11 @@ export default {
       if (this.searchword !== '') {
         params.keyword = this.searchword
       }
-      self.$http.post(`${ENV.BokaApi}/api/list/factoryproduct`, params).then((res) => {
+      params.fid = ENV.SourceFid
+      params.from = 'factory'
+      params.moderate = 1
+      // self.$http.post(`${ENV.BokaApi}/api/list/factoryproduct`, params).then((res) => {
+      self.$http.get(`${ENV.BokaApi}/api/factory/getfpimportList`, params).then((res) => {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
