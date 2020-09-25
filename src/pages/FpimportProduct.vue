@@ -82,7 +82,7 @@
           </div>
           <div class="bg-page" style="height:10px;"></div>
         </template>
-        <div class="padding10 b_bottom_after levelarea">
+        <!-- <div class="padding10 b_bottom_after levelarea">
           <div class="levelitem">
             <div>
               <span class="bold">推荐人佣金:</span>
@@ -92,14 +92,14 @@
               <i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp"></i>
             </div>
           </div>
-        </div>
+        </div> -->
         <div class="padding10 b_bottom_after levelarea">
           <div class="levelitem">
             <div>
-              <span class="bold">销售佣金:</span>
+              <span class="bold">佣金:</span>
               <span class="bold"> {{ $t('RMB') }}</span>
               <span class="bold" v-if="productdata.minsalesrebate && productdata.maxsalesrebate && productdata.minsalesrebate != productdata.maxsalesrebate">{{ productdata.minsalesrebate }}-{{productdata.maxsalesrebate}}</span>
-              <span class="bold" v-else>{{ productdata.newsalesrebate }}</span>
+              <span class="bold" v-else>{{ productdata.minsalesrebate }}</span>
               <i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp1"></i>
             </div>
           </div>
@@ -152,7 +152,7 @@
         <!-- <div class="align_center flex_center flex_cell" v-if="!loginUser.retailerinfo.fid || loginUser.retailerinfo.fid == query.fid"> -->
         <div class="align_center flex_center flex_cell">
           <div class="btn-bottom-red flex_center" style="width:90%;background-color:#ccc;" v-if="productdata.havefpimport == 1">已代理</div>
-          <div class="btn-bottom-red flex_center" style="width:90%;" v-else @click="importEvent">加入我的厂家商品列表</div>
+          <div class="btn-bottom-red flex_center" style="width:90%;" v-else @click="importEvent">代理销售</div>
         </div>
       </div>
       <div v-transfer-dom>
