@@ -50,7 +50,7 @@
           			<div class="picarea">
           				<div class="pic">
                     <img class="imgcover" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-                    <div class="t-icon color-theme flex_center"><i class="al al-zhuanqian font18"></i><span>赚 {{$t('RMB')}}{{item.salesrebate ? item.salesrebate : item.levelagent}}</span></div>
+                    <div class="t-icon color-theme flex_center"><i class="al al-zhuanqian font18"></i><span>赚 {{$t('RMB')}}{{item.showsalesrebate}}</span></div>
                   </div>
           			</div>
           			<div class="desbox" style="overflow:hidden;">
@@ -58,7 +58,7 @@
                   <div class="clamp1 color-red" style="height:20px;" v-if="item.sellingpoint && item.sellingpoint != ''">{{item.sellingpoint}}</div>
                   <div class="flex_left mt5">
                     <div class="flex_cell flex_left">
-                      <div class="w_100 clamp1 color-red">{{ $t('RMB') }} {{ item.price }}</div>
+                      <div class="w_100 clamp1 color-red">{{ $t('RMB') }} {{ item.showprice }}</div>
                     </div>
                     <div class="flex_right" style="width:60px;">
                       <span v-if="item.haveimport == -1" class="bg-theme color-white flex_center padding5" style="border-radius:5px;" @click.stop="upEvent(item, index)">上架</span>
