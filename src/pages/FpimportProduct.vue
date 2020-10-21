@@ -525,8 +525,11 @@ export default {
     ajaxImport () {
       const self = this
       self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/factory/productshelf`, {
-        fid: self.loginUser.fid, module: 'factoryproduct', moduleid: self.productdata.id
+      // self.$http.post(`${ENV.BokaApi}/api/factory/productshelf`, {
+      //   fid: self.loginUser.fid, module: 'factoryproduct', moduleid: self.productdata.id
+      // }).then((res) => {
+      self.$http.post(`${ENV.BokaApi}/api/factory/importFactoryProduct`, {
+        fid: self.loginUser.fid, id: self.productdata.id
       }).then((res) => {
         let data = res.data
         self.$vux.loading.hide()
