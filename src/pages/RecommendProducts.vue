@@ -392,13 +392,12 @@ export default {
         }
       })
     },
-    getData1 (type) {
-      console.log(this.loginUser)
-      console.log(this.userInfo)
+    _getData1 (type) {
+      let ajaxUrl = `${ENV.BokaApi}/api/list/factoryproduct`
       let params = {pagestart: pageStart, limit: limit, wid: this.loginUser.uid}
-      if (this.loginUser.retailerinfo && this.loginUser.retailerinfo.fid) {
-        params.fid = this.loginUser.retailerinfo.fid
-      }
+      // if (this.loginUser.retailerinfo && this.loginUser.retailerinfo.fid) {
+      //   params.fid = this.loginUser.retailerinfo.fid
+      // }
       if (this.sort === 'dateline') {
         if (this.selectedIndex === 0) {
           params.orderby = 'recommendtime'
@@ -409,6 +408,10 @@ export default {
         params.ascdesc = this.pricecss
       }
       if (this.selectedIndex === 0) {
+        ajaxUrl = `${ENV.BokaApi}/api/factory/getfpimportList`
+        params.fid = ENV.SourceFid
+        params.from = 'factory'
+        params.moderate = 1
         // params.recommend = 2
       } else if (this.selectedIndex === 1) {
         // params.from = 'origin'
@@ -419,23 +422,58 @@ export default {
       if (this.searchword !== '') {
         params.keyword = this.searchword
       }
-      params.fid = ENV.SourceFid
-      params.from = 'factory'
-      params.moderate = 1
-      console.log('进入到了请求商品列表')
-      console.log(params)
       // self.$http.post(`${ENV.BokaApi}/api/list/factoryproduct`, params).then((res) => {
-      self.$http.get(`${ENV.BokaApi}/api/factory/getfpimportList`, {
+      self.$http.get(ajaxUrl, {
         params: params
       }).then((res) => {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
-        console.log('------------查询前-----------')
-        console.log(self.productData)
         self.productData = self.productData.concat(retdata)
-        console.log('------------查询后-----------')
-        console.log(self.productData)
+        self.disProductData = true
+        self.isLoading = false
+        if (this.searchword !== '') {
+          self.afterSearch = true
+        } else {
+          self.afterSearch = false
+        }
+        if (retdata.length < limit && this.productData.length && pageStart > 0) {
+          this.isDone = true
+        } else {
+          this.isDone = false
+        }
+      })
+    },
+    getData1 (type) {
+      let ajaxUrl = `${ENV.BokaApi}/api/list/factoryproduct`
+      let params = {pagestart: pageStart, limit: limit}
+      if (this.sort === 'dateline') {
+        params.ascdesc = this.datecss
+      } else {
+        params.orderby = 'salesrebate'
+        params.ascdesc = this.pricecss
+      }
+      if (this.selectedIndex === 0) {
+        ajaxUrl = `${ENV.BokaApi}/api/factory/getfpimportList`
+        params.fid = ENV.SourceFid
+        params.from = 'factory'
+        params.moderate = 1
+      } else {
+        params.wid = this.loginUser.uid
+      }
+      if (this.selectedIndex > 1) {
+        params.classid = self.classData[self.selectedIndex].id
+      }
+      if (this.searchword !== '') {
+        params.keyword = this.searchword
+      }
+      self.$http.get(ajaxUrl, {
+        params: params
+      }).then((res) => {
+        self.$vux.loading.hide()
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        self.productData = self.productData.concat(retdata)
         self.disProductData = true
         self.isLoading = false
         if (this.searchword !== '') {
