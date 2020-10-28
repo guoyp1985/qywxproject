@@ -85,7 +85,7 @@
         <div class="padding10 b_bottom_after levelarea">
           <div class="levelitem">
             <div>
-              <span class="bold">推荐人佣金:</span>
+              <span class="bold">推荐佣金:</span>
               <span class="bold">{{ $t('RMB') }}</span>
               <span class="bold" v-if="productdata.minsuperrebate && productdata.maxsuperrebate && productdata.minsuperrebate != productdata.maxsuperrebate">{{ productdata.minsuperrebate }}-{{productdata.maxsuperrebate}}</span>
               <span class="bold" v-else>{{ productdata.minsuperrebate }}</span>
