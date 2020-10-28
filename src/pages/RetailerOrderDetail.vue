@@ -689,8 +689,10 @@ export default {
           title: '您确认同意退款？',
           onConfirm: () => {
             this.$vux.loading.show()
-            this.$http.post(`${ENV.BokaApi}/api/order/refund`, {id: this.query.id, agree: 1})
-            .then(res => {
+            this.$http.post(`${ENV.BokaApi}/api/order/refund`, {
+              id: this.query.id, agree: 1
+            }).then(res => {
+              console.log(res)
               this.$vux.loading.hide()
               const data = res.data
               this.$vux.toast.show({
