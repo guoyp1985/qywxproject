@@ -217,14 +217,14 @@
           <div v-if="!optionsData.length" class="flex_row">
             <div class="form-item required bg-white bright">
               <div class="t-table">
-                <div class="t-cell title-cell w80 font14 v_middle">总佣金</div>
+                <div class="t-cell title-cell w80 font14 v_middle">销售佣金</div>
                 <div class="t-cell input-cell v_middle" style="position:relative;">
-                  <x-input v-model="submitdata.salesrebate" @keyup="priceChange('salesrebate')" maxlength="7" size="7" type="text" class="input priceInput" name="salesrebate" placeholder="总佣金" ></x-input>
+                  <x-input v-model="submitdata.salesrebate" @keyup="priceChange('salesrebate')" maxlength="7" size="7" type="text" class="input priceInput" name="salesrebate" placeholder="销售佣金" ></x-input>
                 </div>
                 <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
               </div>
             </div>
-            <!-- <div class="form-item required bg-white">
+            <div class="form-item required bg-white">
               <div class="t-table">
                 <div class="t-cell title-cell w80 font14 v_middle">推荐人佣金</div>
                 <div class="t-cell input-cell v_middle" style="position:relative;">
@@ -232,7 +232,7 @@
                 </div>
                 <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
               </div>
-            </div> -->
+            </div>
           </div>
           <div class="form-item required bg-white bright" v-if="!optionsData.length && loginUser.factoryinfo && loginUser.factoryinfo.issupply">
             <div class="t-table">
@@ -342,17 +342,17 @@
                     </div>
                   </div>
                   <div class="flex_left mt10 con-item">
-                    <div class="title-cell1 flex_left">总佣金</div>
+                    <div class="title-cell1 flex_left">销售佣金</div>
                     <div class="border-cell flex_left flex_cell">
-                      <x-input v-model="item.salesrebate" class="input" placeholder="总佣金" maxlength="7" size="7" ></x-input>
+                      <x-input v-model="item.salesrebate" class="input" placeholder="销售佣金" maxlength="7" size="7" ></x-input>
                     </div>
                   </div>
-                  <!-- <div class="flex_left mt10 con-item">
+                  <div class="flex_left mt10 con-item">
                     <div class="title-cell1 flex_left">推荐人佣金</div>
                     <div class="border-cell flex_left flex_cell">
                       <x-input v-model="item.superrebate" class="input" placeholder="推荐人佣金" maxlength="7" size="7" ></x-input>
                     </div>
-                  </div> -->
+                  </div>
                   <div class="flex_left mt10 con-item" v-if="loginUser.factoryinfo && loginUser.factoryinfo.issupply">
                     <div class="title-cell1 flex_left">平台佣金</div>
                     <div class="border-cell flex_left flex_cell">
@@ -1176,7 +1176,7 @@ export default {
             if (isNaN(salesrebate) || parseFloat(salesrebate) < 0) {
               self.$vux.alert.show({
                 title: '',
-                content: '请输入正确的总佣金'
+                content: '请输入正确的销售佣金'
               })
               return false
             } else if (parseFloat(salesrebate) >= price) {
@@ -1186,24 +1186,18 @@ export default {
               })
               return false
             }
-            if (maxcredits && maxcredits !== '') {
-              if (parseFloat(maxcredits) / 100 >= parseFloat(price) - parseFloat(salesrebate)) {
-                self.$vux.toast.text('金币可抵扣金额大于等于商品价格-总佣金', 'middle')
-                return false
-              }
-            }
           }
           if (self.$util.trim(superrebate) !== '') {
             if (isNaN(superrebate) || parseFloat(superrebate) < 0) {
               self.$vux.alert.show({
                 title: '',
-                content: '请输入正确的推荐人佣金'
+                content: '请输入正确的推荐佣金'
               })
               return false
             } else if (parseFloat(superrebate) >= price) {
               self.$vux.alert.show({
                 title: '',
-                content: '推荐人佣金应小于商品现价'
+                content: '推荐佣金应小于商品现价'
               })
               return false
             }
@@ -1211,9 +1205,19 @@ export default {
           if (self.$util.trim(salesrebate) !== '' && self.$util.trim(superrebate) !== '' && parseFloat(salesrebate) + parseFloat(superrebate) >= price) {
             self.$vux.alert.show({
               title: '',
-              content: '总佣金+推荐人佣金应小于商品现价'
+              content: '销售佣金+推荐佣金应小于商品现价'
             })
             return false
+          }
+          if (maxcredits && maxcredits !== '') {
+            let psales = salesrebate === '' ? 0 : parseFloat(salesrebate)
+            let psuper = superrebate === '' ? 0 : parseFloat(superrebate)
+            if (psales > 0 || psuper > 0) {
+              if (parseFloat(maxcredits) / 100 >= parseFloat(price) - parseFloat(salesrebate)) {
+                self.$vux.toast.text('金币可抵扣金额大于等于商品价格-销售佣金-推荐佣金', 'middle')
+                return false
+              }
+            }
           }
           if (parseFloat(profit) >= parseFloat(price)) {
             self.$vux.alert.show({
@@ -1305,7 +1309,7 @@ export default {
             }
             if (curSprice === '') curSprice = 0
             if (parseFloat(curPrice) < parseFloat(curSales) + parseFloat(curSuper)) {
-              self.$vux.toast.text('总佣金+推荐人佣金不得大于现价', 'middle')
+              self.$vux.toast.text('销售佣金+推荐佣金不得大于现价', 'middle')
               iscontinue = false
               break
             }
@@ -1315,8 +1319,10 @@ export default {
               break
             }
             if (self.$util.trim(curSales) !== '' && maxcredits && maxcredits !== '') {
-              if (parseFloat(maxcredits) / 100 >= parseFloat(curPrice) - parseFloat(curSprice)) {
-                self.$vux.toast.text('金币可抵扣金额大于等于商品价格-总佣金', 'middle')
+              let osales = curSales === '' ? 0 : parseFloat(curSales)
+              let osuper = curSuper === '' ? 0 : parseFloat(curSuper)
+              if (parseFloat(maxcredits) / 100 >= parseFloat(curPrice) - osales - osuper) {
+                self.$vux.toast.text('金币可抵扣金额大于等于商品价格-销售佣金-推荐佣金', 'middle')
                 return false
               }
             }

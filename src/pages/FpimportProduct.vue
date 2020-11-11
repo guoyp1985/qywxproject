@@ -82,21 +82,21 @@
           </div>
           <div class="bg-page" style="height:10px;"></div>
         </template>
-        <!-- <div class="padding10 b_bottom_after levelarea">
-          <div class="levelitem">
-            <div>
-              <span class="bold">推荐人佣金:</span>
-              <span class="bold">{{ $t('RMB') }}</span>
-              <span class="bold" v-if="productdata.minsuperrebate && productdata.maxsuperrebate && productdata.minsuperrebate != productdata.maxsuperrebate">{{ productdata.minsuperrebate }}-{{productdata.maxsuperrebate}}</span>
-              <span class="bold" v-else>{{ productdata.newsuperrebate }}</span>
-              <i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp"></i>
-            </div>
-          </div>
-        </div> -->
         <div class="padding10 b_bottom_after levelarea">
           <div class="levelitem">
             <div>
-              <span class="bold">佣金:</span>
+              <span class="bold">推荐佣金:</span>
+              <span class="bold">{{ $t('RMB') }}</span>
+              <span class="bold" v-if="productdata.minsuperrebate && productdata.maxsuperrebate && productdata.minsuperrebate != productdata.maxsuperrebate">{{ productdata.minsuperrebate }}-{{productdata.maxsuperrebate}}</span>
+              <span class="bold" v-else>{{ productdata.minsuperrebate }}</span>
+              <i class="al al-bangzhu font16 color-theme ml10" @click="clickHelp"></i>
+            </div>
+          </div>
+        </div>
+        <div class="padding10 b_bottom_after levelarea">
+          <div class="levelitem">
+            <div>
+              <span class="bold">销售佣金:</span>
               <span class="bold"> {{ $t('RMB') }}</span>
               <span class="bold" v-if="productdata.minsalesrebate && productdata.maxsalesrebate && productdata.minsalesrebate != productdata.maxsalesrebate">{{ productdata.minsalesrebate }}-{{productdata.maxsalesrebate}}</span>
               <span class="bold" v-else>{{ productdata.minsalesrebate }}</span>
@@ -148,7 +148,8 @@
           </div>
         </div>
       </div>
-      <div v-if="loginUser.fid != Fid" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
+      <div class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
+      <!-- <div v-if="loginUser.fid != Fid" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box"> -->
         <!-- <div class="align_center flex_center flex_cell" v-if="!loginUser.retailerinfo.fid || loginUser.retailerinfo.fid == query.fid"> -->
         <div class="align_center flex_center flex_cell">
           <div class="btn-bottom-red flex_center" style="width:90%;background-color:#ccc;" v-if="productdata.havefpimport == 1">已代理</div>
@@ -525,8 +526,11 @@ export default {
     ajaxImport () {
       const self = this
       self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/factory/productshelf`, {
-        fid: self.loginUser.fid, module: 'factoryproduct', moduleid: self.productdata.id
+      // self.$http.post(`${ENV.BokaApi}/api/factory/productshelf`, {
+      //   fid: self.loginUser.fid, module: 'factoryproduct', moduleid: self.productdata.id
+      // }).then((res) => {
+      self.$http.post(`${ENV.BokaApi}/api/factory/importFactoryProduct`, {
+        fid: self.loginUser.fid, id: self.productdata.id
       }).then((res) => {
         let data = res.data
         self.$vux.loading.hide()
