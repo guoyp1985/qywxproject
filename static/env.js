@@ -84,8 +84,12 @@ var ENV = {
   DebugMode: true,
   DebugList: [
     // {uid: 25465, name: '黄一萌'},
+    {uid: 1, name: '党卫东'},
+    {uid: 3821, name: '党大王'},
     {uid: 4903, name: 'gyp'},
     {uid: 8, name: 'young'},
+    {uid: 115800, name: '风偏'},
+    {uid: 16, name: '余鹏'},
     {uid: 27531, name: '戴飞'},
     {uid: 24675, name: '兰花草'},
     {uid: 1694},
