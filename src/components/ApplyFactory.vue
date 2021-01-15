@@ -137,12 +137,12 @@
         </div>
       -->
         <!-- 合作模式 -->
-        <div class="form-item fg bg-white b-top b-bottom">
+        <!-- <div class="form-item fg bg-white b-top b-bottom">
           <div class="t-table">
             <div class="t-cell title-cell font14 v_middle" style="width:100px;">合作模式<span @click="clickCommission"><i class="al al-wenhao color-red ml5 font24" style="vertical-align:-4px;"></i></span></div>
             <div class="t-cell v_middle flex_right" style="position:relative;top:6px;">每月分佣模式</div>
           </div>
-        </div>
+        </div> -->
         <!-- 分润比例设置 -->
         <!-- <div class="form-item bg-white fg b-top">
           <div class="">
@@ -165,7 +165,7 @@
             <div class="flex_right color-gray" style="width:20px;">%</div>
           </div>
         </div> -->
-        <template v-if="factoryInfo && factoryInfo.moderate == 0">
+        <!-- <template v-if="factoryInfo && factoryInfo.moderate == 0">
           <div class="form-item fg bg-white b-top b-bottom mb5">
             <div class="t-table">
               <div class="t-cell title-cell font14 v_middle" style="width:100px;">身份<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
@@ -185,8 +185,8 @@
               <checker-item class="border1px color-gray" v-for="(item, index) in identityArr" :key="index" :value="item.id">{{ item.title }}</checker-item>
             </checker>
           </div>
-        </template>
-        <template v-if="factoryInfo && factoryInfo.moderate == 0">
+        </template> -->
+        <!-- <template v-if="factoryInfo && factoryInfo.moderate == 0">
           <div class="form-item fg bg-white b-top b-bottom mb5">
             <div class="t-table">
               <div class="t-cell title-cell font14 v_middle" style="width:100px;">经营产品<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
@@ -207,7 +207,7 @@
               <checker-item class="border1px color-gray" v-for="(item, index) in classData" :key="index" :value="item.id">{{ item.title }}</checker-item>
             </checker>
           </div>
-        </template>
+        </template> -->
       </form>
     </div>
     <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
