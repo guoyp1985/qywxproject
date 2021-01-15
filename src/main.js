@@ -154,12 +154,14 @@ Vue.http.interceptors.request.use(config => {
     console.log(`interceptors: ${config.url}`)
     // console.log(`interceptors: ${JSON.stringify(token)}`)
     if (Token.isExpired()) {
+      console.log('token 过期')
       // console.log(config.url)
       cancelAllPendings(config)
       access((path) => {
         router.replace({path: path})
       })
     } else {
+      console.log('token有效')
       // console.log(`interceptors: Bearer ${token.token}`)
       config.headers['Authorization'] = `Bearer ${token.token}`
       if (config.url.indexOf(ENV.FactoryApi) > -1 && ENV.ApiVersion === 'V2') {
