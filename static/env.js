@@ -81,9 +81,10 @@ var ENV = {
   KefuQrcode: 'https://tossharingsales.boka.cn/images/kefu_qrcode.jpg',
   KefuWxNo: 'sharingsales',
   AllowQuickService: true, // 控制显示【完成售后按钮】，正式平台不需要
-  DebugMode: false,
+  DebugMode: true,
   DebugList: [
     // {uid: 25465, name: '黄一萌'},
+    {uid: 4903, name: 'gyp'},
     {uid: 8, name: 'young'},
     {uid: 27531, name: '戴飞'},
     {uid: 24675, name: '兰花草'},
