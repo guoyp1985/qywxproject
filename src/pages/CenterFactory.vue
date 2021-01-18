@@ -1,13 +1,13 @@
 <template>
   <div id="centersales" class="containerarea font14">
     <template v-if="loginUser.uid">
-      <template v-if="loginUser.subscribe != 1 && !query.from">
+      <!-- <template v-if="loginUser.subscribe != 1 && !query.from">
         <div class="pagemiddle flex_center" style="top:0;">
           <img :src="WeixinQrcode" style="max-width:90%;max-height:90%;" />
         </div>
         <div class="pagebottom flex_center b_top_after font16">请先关注</div>
-      </template>
-      <div v-else-if="!loginUser.factoryinfo || loginUser.factoryinfo.moderate != 1" class="w_100 h_100 flex_center">
+      </template> -->
+      <div v-if="!loginUser.factoryinfo || loginUser.factoryinfo.moderate != 1" class="w_100 h_100 flex_center">
         <apply-factory
           :factory-info="factoryInfo"
           :login-user="loginUser"
