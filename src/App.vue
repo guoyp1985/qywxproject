@@ -153,7 +153,11 @@ export default {
     console.info('App Start Up')
     document.title = this.$t('tIndex')
     this.getData()
-    this.$util.wxConfig()
+    console.log('当前页面的链接')
+    console.log()
+    if (this.$route.path !== '/jumpmp') {
+      this.$util.wxConfig()
+    }
   }
 }
 </script>
