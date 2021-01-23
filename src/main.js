@@ -313,51 +313,7 @@ const access = success => {
         Token.set(res.data.data)
         // 取用户信息
         // console.log(`defaultAccess: /user/show`)
-        Vue.http.get(`${ENV.BokaApi}/api/user/show`).then(
-          res => {
-            console.log('authuser成功后user/show也成功了')
-            console.log(res)
-            if (!res) return
-            const rData = res.data
-            for (let i = 0; i < ENV.DebugList.length; i++) {
-              console.log(ENV.DebugList[i].uid === rData.uid)
-              if (ENV.DebugList[i].uid === rData.uid) {
-                authCount = 0
-                vue.$vux.alert.show({
-                  title: '提示',
-                  content: `token:${Token.get().token} :: 已取到用户信息`,
-                  onShow () {
-                    console.log('Plugin: I\'m showing')
-                  },
-                  onHide () {
-                    const f = alertStack.pop()
-                    if (f) {
-                      f()
-                    }
-                  }
-                })
-              }
-            }
-            User.set(res.data)
-            // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
-            location.replace(`https://${lUrl.hostname}/#${lUrl.hash.replace(/#/, '')}?${query}`)
-            console.log('main.js user/show后跳转的页面路径')
-            console.log(`${lUrl.hash.replace(/#/, '')}?${query}`)
-            success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
-            // setTimeout(() => {
-            //   success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
-            // }, 50)
-          }, res => {
-            Token.remove()
-            vue.$vux.alert.show({
-              title: '提示',
-              content: `未取到用户信息`,
-              onHide () {
-                location.replace(lUrl.href)
-              }
-            })
-          }
-        )
+        return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
       }, res => {
         console.log('进入到了authUser请求失败')
         console.log(res)
@@ -365,6 +321,50 @@ const access = success => {
         vue.$vux.alert.show({
           title: '提示',
           content: `未获取到用户信息`,
+          onHide () {
+            location.replace(lUrl.href)
+          }
+        })
+      }
+    ).then(
+      res => {
+        console.log('authuser成功后user/show也成功了')
+        console.log(res)
+        if (!res) return
+        const rData = res.data
+        for (let i = 0; i < ENV.DebugList.length; i++) {
+          console.log(ENV.DebugList[i].uid === rData.uid)
+          if (ENV.DebugList[i].uid === rData.uid) {
+            authCount = 0
+            vue.$vux.alert.show({
+              title: '提示',
+              content: `token:${Token.get().token} :: 已取到用户信息`,
+              onShow () {
+                console.log('Plugin: I\'m showing')
+              },
+              onHide () {
+                const f = alertStack.pop()
+                if (f) {
+                  f()
+                }
+              }
+            })
+          }
+        }
+        User.set(res.data)
+        // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
+        location.replace(`https://${lUrl.hostname}/#${lUrl.hash.replace(/#/, '')}?${query}`)
+        console.log('main.js user/show后跳转的页面路径')
+        console.log(`${lUrl.hash.replace(/#/, '')}?${query}`)
+        success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
+        // setTimeout(() => {
+        //   success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
+        // }, 50)
+      }, res => {
+        Token.remove()
+        vue.$vux.alert.show({
+          title: '提示',
+          content: `未取到用户信息`,
           onHide () {
             location.replace(lUrl.href)
           }
