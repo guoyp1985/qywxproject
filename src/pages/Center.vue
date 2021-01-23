@@ -141,18 +141,23 @@
           </script>
         </wx-open-launch-weapp>
       </template> -->
-      <template>
+      <div class=" mt10 mb10 list-shadow radius5">
         <wx-open-launch-weapp
           id="launch-btn3"
           username="gh_dc6e3c73bc4c"
           @launch="handleLaunchFn"
-          @error="handleErrorFn">
+          @error="handleErrorFn"
+          style="width:100%;">
           <script type="text/wxtag-template">
-            <style>.btn { display: flex;align-items: center; }</style>
-            <button class="wx-btn">跳转小程序</button>
+            <div class="flext_left">
+              <div>跳转小程序</div>
+              <div class="flex_right flex_cell">灰太狼</div>
+            </div>
+            // <style>.btn { display: flex;align-items: center; }</style>
+            // <button class="wx-btn">跳转小程序</button>
           </script>
         </wx-open-launch-weapp>
-      </template>
+      </div>
     </div>
     <template v-if="showTip">
       <tip-layer buttonTxt="点击此处联系管理员" content="请联系管理员续费后，再来使用厂家功能哦！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
