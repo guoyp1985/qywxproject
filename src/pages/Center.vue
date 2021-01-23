@@ -141,7 +141,7 @@
           </script>
         </wx-open-launch-weapp>
       </template> -->
-      <!-- <template>
+      <template>
         <wx-open-launch-weapp
           id="launch-btn3"
           username="gh_dc6e3c73bc4c"
@@ -152,7 +152,7 @@
             <button class="wx-btn">跳转小程序</button>
           </script>
         </wx-open-launch-weapp>
-      </template> -->
+      </template>
     </div>
     <template v-if="showTip">
       <tip-layer buttonTxt="点击此处联系管理员" content="请联系管理员续费后，再来使用厂家功能哦！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
