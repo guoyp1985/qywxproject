@@ -141,7 +141,7 @@
           </script>
         </wx-open-launch-weapp>
       </template> -->
-      <div class=" mt10 mb10 list-shadow radius5">
+      <div v-if="isKaifa" class=" mt10 mb10 list-shadow radius5 bg-white">
         <wx-open-launch-weapp
           id="launch-btn3"
           username="gh_dc6e3c73bc4c"
@@ -234,7 +234,8 @@ export default {
       showApply: false,
       showTestManager: ENV.showTestManager,
       showWeapp: false,
-      weappHTML: ''
+      weappHTML: '',
+      isKaifa: ENV.IsKaifa
     }
   },
   methods: {

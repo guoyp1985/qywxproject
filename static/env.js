@@ -99,7 +99,8 @@ var ENV = {
     {uid: 25421},
     {uid: 98466}
   ],
-  SourceFid: 39 // 货源商品的厂家ID
+  SourceFid: 39, // 货源商品的厂家ID
+  IsKaifa: true
 }
 
 ENV.NoAccessUrls = [
