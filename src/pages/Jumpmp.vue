@@ -3,50 +3,76 @@
 * @auther: gyp
 * @created_date: 2021-01-23
 */
+<style lang="less">
+.jumpmp-page{
+  .btn{
+    margin-top:20px;
+    width: 184px;
+    padding: 8px 24px;
+    box-sizing: border-box;
+    font-weight: 700;
+    font-size: 17px;
+    text-align: center;
+    color: #fff;
+    line-height: 1.41176471;
+    border-radius: 4px;
+    background-color: #07c160;
+  }
+}
+</style>
 <template>
-  <div class="bg-page font14 bg-white">
-    <wx-open-launch-weapp
-      id="jumpt-btn"
-      username="gh_dc6e3c73bc4c"
-      @launch="handleLaunchFn"
-      @error="handleErrorFn"
-      style="width:100%;display:block;">
-      <script type="text/wxtag-template">
-        <div style="width:100%;height:39px;padding:0 12px;box-sizing:border-box;display:flex;justify-content:flex-left;">
-          <div style="color:#666;height:39px;flex:1;display:flex;justify-content:flex-start;align-items:center;">跳转小程序</div>
-          <div style="color:#ff712f;flex:1;display:flex;justify-content:flex-end;align-items:center;">灰太狼</div>
-        </div>
-      </script>
-    </wx-open-launch-weapp>
+  <div class="w_100 h_100 bg-white flex_center jumpmp-page">
+    <div class="public-web-container">
+      <div>正在打开 【灰太狼】小程序</div>
+      <div v-if="disLoading" class="btn" @click="jumpEvent">打开小程序</div>
+    </div>
   </div>
 </template>
 
-<i18n>
-</i18n>
-
 <script>
-import ENV from 'env'
-import jQuery from 'jquery'
+const cloud = require('../../static/cloud')
 export default {
   data () {
     return {
+      disLoading: true
     }
   },
   methods: {
-    handleLaunchFn (e) {
-      console.log(e)
+    async openWeapp (onBeforeJump) {
+      let c = window.c
+      const res = await c.callFunction({
+        name: 'public',
+        data: {
+          action: 'getUrlScheme'
+        }
+      })
+      console.warn(res)
+      if (onBeforeJump) {
+        onBeforeJump()
+      }
+      location.href = res.result.openlink
     },
-    handleErrorFn (e) {
-      console.log('fail', e.detail)
+    async jumpEvent () {
+      let c = new cloud.Cloud({
+        identityless: true, // 必填，表示是未登录模式
+        resourceAppid: 'wx1b22fe75584085ee', // 资源方 AppID
+        resourceEnv: 'duanxintiaozhuanmp-1ddeq566cdb41' // 资源方环境 ID
+      })
+      await c.init()
+      window.c = c
+      try {
+        await this.openWeapp(() => {
+          this.disLoading = true
+        })
+      } catch (e) {
+        this.disLoading = false
+        throw e
+      }
     },
     refresh () {
     }
   },
   activated () {
-    jQuery('#jumpt-btn')[0].click()
   }
 }
 </script>
-
-<style lang="less">
-</style>
