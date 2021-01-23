@@ -150,7 +150,7 @@
           style="width:100%;display:block;">
           <script type="text/wxtag-template">
             <div style="width:100%;height:39px;padding:0 12px;box-sizing:border-box;display:flex;justify-content:flex-left;">
-              <div style="color:#666;">跳转小程序</div>
+              <div style="color:#666;height:39px;flex:1;display:flex;justify-content:flex-start;align-items:center;">跳转小程序</div>
               <div style="color:#ff712f;flex:1;display:flex;justify-content:flex-end;align-items:center;">灰太狼</div>
             </div>
           </script>
