@@ -147,9 +147,9 @@
           username="gh_dc6e3c73bc4c"
           @launch="handleLaunchFn"
           @error="handleErrorFn"
-          style="width:100%;">
+          style="width:100%;display:block;">
           <script type="text/wxtag-template">
-            <div style="display:flex;justify-content:flex-left;">
+            <div style="width:100%;display:flex;justify-content:flex-left;">
               <div>跳转小程序</div>
               <div style="flex:1;display:flex;justify-content:flex-end;align-items:center;">灰太狼</div>
             </div>
