@@ -149,12 +149,10 @@
           @error="handleErrorFn"
           style="width:100%;">
           <script type="text/wxtag-template">
-            <div class="flext_left">
+            <div style="display:flex;justify-content:flex-left;">
               <div>跳转小程序</div>
-              <div class="flex_right flex_cell">灰太狼</div>
+              <div style="flex:1;display:flex;justify-content:flex-end;align-items:center;">灰太狼</div>
             </div>
-            // <style>.btn { display: flex;align-items: center; }</style>
-            // <button class="wx-btn">跳转小程序</button>
           </script>
         </wx-open-launch-weapp>
       </div>
