@@ -30,7 +30,7 @@
 </template>
 
 <script>
-const jweixin = require('../../static/jweixin')
+const jweixin = require('https://res.wx.qq.com/open/js/jweixin-1.6.0.js')
 const cloud = require('../../static/cloud')
 export default {
   data () {
