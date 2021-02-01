@@ -19,7 +19,7 @@ export default {
       const lUrl = urlParse(location.href, true)
       const code = lUrl.query.code
       if (code) {
-        const jumpUrl = decodeURICompent(lUrl.query.state)
+        const jumpUrl = decodeURIComponent(lUrl.query.state)
         this.$http.get(`${ENV.BokaApi}/api/visitor/workUserAuth/${code}`).then(res => {
           console.log('redirect页面workUserAuth', res)
           if (!res || !res.data || res.data.errcode || !res.data.flag) {
@@ -34,9 +34,9 @@ export default {
             return
           }
           Token.set(res.data.data)
-          return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
-        }, error => {
-          console.log('redirect页面workUserAuth请求失败', error)
+          return this.$http.get(`${ENV.BokaApi}/api/user/show`)
+        }, res => {
+          console.log('redirect页面workUserAuth请求失败', res)
           Token.remove()
           this.$vux.alert.show({
             title: '提示',
@@ -52,7 +52,6 @@ export default {
           for (let i = 0; i < ENV.DebugList.length; i++) {
             console.log(ENV.DebugList[i].uid === rData.uid)
             if (ENV.DebugList[i].uid === rData.uid) {
-              authCount = 0
               this.$vux.alert.show({
                 title: '提示',
                 content: `token:${Token.get().token} :: 已取到用户信息`,
@@ -71,7 +70,8 @@ export default {
           User.set(res.data)
           // 跳转到授权前打开的页面
           location.href = jumpUrl
-        }, error => {
+        }, res => {
+          console.log('redirect页面user/show失败了', res)
           Token.remove()
           this.$vux.alert.show({
             title: '提示',
