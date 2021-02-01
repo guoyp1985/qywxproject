@@ -210,126 +210,42 @@ const access = success => {
                 return `${p1}&${p3}${p2}` // '$1&$3$2'
               })
   const lUrl = urlParse(url, true)
-  const token = lUrl.query.token
+  const token = Token.get()
   const expiredAt = lUrl.query.expired_at
-  const code = lUrl.query.code
-  const state = lUrl.query.state
-  const from = lUrl.query.from
-  console.log('进入项目后的链接')
-  console.log(lUrl)
-  if (from === 'miniprogram') {
-    if (token && token !== '') {
-      Token.set({token: token, expired_at: expiredAt})
-      Vue.http.get(`${ENV.BokaApi}/api/user/show`)
-      .then(
-       res => {
-         if (!res) return
-         User.set(res.data)
-         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
-         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
-         console.log(`${lUrl.hash.replace(/#/, '')}?${query}&from=miniprogram`)
-         // router.push(`${lUrl.hash.replace(/#/, '')}?${query}`)
-         store.commit('updateMiniInvoke', {miniInvoke: true})
-         success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
-       }
-      )
-    }
-  } else if (state === 'defaultAccess' && code) {
-    console.log('进入到了defaultAccess code 的判断内')
-    console.log('code', code)
-    // 401授权，取得token
-    Vue.http.get(`${ENV.BokaApi}/api/visitor/workUserAuth/${code}`).then(res => {
-      console.log('weinxin/authUser success')
-      console.log(res)
-      if (!res || !res.data || res.data.errcode || !res.data.flag) {
-        // alert('清空缓存重试')
-        console.log('进入到了authUser请求未返回数据')
-        Token.remove()
-        vue.$vux.alert.show({
-          title: '提示',
-          content: `用户信息获取失败，请重新进入`,
-          onHide () {
-            location.replace(lUrl.href)
-          }
-        })
-        return
-      }
-      Token.set(res.data.data)
-      // 取用户信息
-      // console.log(`defaultAccess: /user/show`)
-      return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
-    }, res => {
-      console.log('进入到了authUser请求失败')
-      console.log(res)
-      Token.remove()
-      vue.$vux.alert.show({
-        title: '提示',
-        content: `未获取到用户信息`,
-        onHide () {
-          location.replace(lUrl.href)
-        }
-      })
-    }).then(
-      res => {
-        console.log('authuser成功后user/show也成功了')
-        console.log(res)
-        if (!res) return
-        const rData = res.data
-        for (let i = 0; i < ENV.DebugList.length; i++) {
-          console.log(ENV.DebugList[i].uid === rData.uid)
-          if (ENV.DebugList[i].uid === rData.uid) {
-            authCount = 0
-            vue.$vux.alert.show({
-              title: '提示',
-              content: `token:${Token.get().token} :: 已取到用户信息`,
-              onShow () {
-                console.log('Plugin: I\'m showing')
-              },
-              onHide () {
-                const f = alertStack.pop()
-                if (f) {
-                  f()
-                }
-              }
-            })
-          }
-        }
-        User.set(res.data)
-        // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
-        location.replace(`https://${lUrl.hostname}/#${lUrl.hash.replace(/#/, '')}?${query}`)
-        console.log('main.js user/show后跳转的页面路径')
-        console.log(`${lUrl.hash.replace(/#/, '')}?${query}`)
-        success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
-        // setTimeout(() => {
-        //   success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
-        // }, 50)
-      }, res => {
-        Token.remove()
-        vue.$vux.alert.show({
-          title: '提示',
-          content: `未取到用户信息`,
-          onHide () {
-            location.replace(lUrl.href)
-          }
-        })
-      }
-    )
-  } else if (state === 'pcAccess') {
-    console.log(lUrl)
+  // const code = lUrl.query.code
+  // const state = lUrl.query.state
+  // const from = lUrl.query.from
+  console.log('进入项目后的链接', lUrl)
+  console.log('token=', token)
+  if (token && token !== '' && !Token.isExpired()) {
+    Token.set({token: token, expired_at: expiredAt})
+    Vue.http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
+      if (!res) return
+      User.set(res.data)
+      // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
+      // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
+      console.log('进入的页面地址')
+      console.log(`${lUrl.hash.replace(/#/, '')}?${query}&from=miniprogram`)
+      // router.push(`${lUrl.hash.replace(/#/, '')}?${query}`)
+      store.commit('updateMiniInvoke', {miniInvoke: true})
+      success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
+    })
   } else {
-    console.log('已经授权过了')
+    console.log('token失效')
     Vue.access(isPC => {
       if (isPC) {
         console.log('进入到了pc端')
-        // success && success()
-        // router.push({name: 'tLogin'})
-        const originHref = encodeURIComponent(`${ENV.Host}/#/redirect`)
+        let lastIndex = location.href.lastIndexOf('/')
+        const originHref = encodeURIComponent(location.href.substr(lastIndex + 1))
+        const ruri = encodeURIComponent(`${ENV.Host}/#/redirect`)
         // pc登录二维码
-        location.replace(`${ENV.WxQrcodeAuthUrl}appid=${ENV.AppId}&agentid=${ENV.Agentid}&redirect_uri=${originHref}&state=${originHref}`)
+        location.replace(`${ENV.WxQrcodeAuthUrl}appid=${ENV.AppId}&agentid=${ENV.Agentid}&redirect_uri=${ruri}&state=${originHref}#wechat_redirect`)
       } else {
-        const originHref = encodeURIComponent(location.href)
+        let lastIndex = location.href.lastIndexOf('/')
+        const originHref = encodeURIComponent(location.href.substr(lastIndex + 1))
+        const ruri = encodeURIComponent(`${ENV.Host}/#/redirect`)
         // 微信授权
-        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=${originHref}`)
+        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${ruri}&response_type=code&scope=snsapi_base&state=${originHref}#wechat_redirect`)
       }
     })
   }
