@@ -238,9 +238,7 @@ const access = success => {
     console.log('进入到了defaultAccess code 的判断内')
     console.log('code', code)
     // 401授权，取得token
-    Vue.http.get(`${ENV.BokaApi}/api/visitor/workUserAuth`, {
-      params: {code: code}
-    }).then(
+    Vue.http.get(`${ENV.BokaApi}/api/visitor/workUserAuth/${code}`).then(
       res => {
         console.log('weinxin/authUser success')
         console.log(res)
