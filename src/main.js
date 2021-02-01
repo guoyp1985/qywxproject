@@ -325,11 +325,11 @@ const access = success => {
         // router.push({name: 'tLogin'})
         const originHref = encodeURIComponent(`${ENV.Host}/#/redirect`)
         // pc登录二维码
-        location.replace(`${ENV.WxQrcodeAuthUrl}appid=${ENV.AppId}&agentid=${ENV.Agentid}&redirect_uri=${originHref}&state=originHref`)
+        location.replace(`${ENV.WxQrcodeAuthUrl}appid=${ENV.AppId}&agentid=${ENV.Agentid}&redirect_uri=${originHref}&state=${originHref}`)
       } else {
         const originHref = encodeURIComponent(location.href)
         // 微信授权
-        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=originHref`)
+        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=${originHref}`)
       }
     })
   }
