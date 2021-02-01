@@ -16,7 +16,17 @@ export default {
   methods: {
     refresh () {
       this.$vux.loading.show()
-      const lUrl = urlParse(location.href, true)
+      let qp = ''
+      const url = location.href
+      .replace(/(.+?\/)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
+        qp = p3
+        return `${p1}?${p3}${p2}` // '$1?$3$2'
+      })
+      .replace(/(.+\?.+?)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
+        qp = p3
+        return `${p1}&${p3}${p2}` // '$1&$3$2'
+      })
+      const lUrl = urlParse(url, true)
       const code = lUrl.query.code
       console.log('========进入到了redirect页面了======')
       console.log('lurl=', lUrl)
