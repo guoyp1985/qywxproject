@@ -18,6 +18,9 @@ export default {
       this.$vux.loading.show()
       const lUrl = urlParse(location.href, true)
       const code = lUrl.query.code
+      console.log('========进入到了redirect页面了======')
+      console.log('lurl=', lUrl)
+      console.log('state=', lUrl.query.state)
       if (code) {
         const jumpUrl = decodeURIComponent(lUrl.query.state)
         this.$http.get(`${ENV.BokaApi}/api/visitor/workUserAuth/${code}`).then(res => {
