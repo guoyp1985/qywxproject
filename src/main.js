@@ -325,7 +325,7 @@ const access = success => {
     Vue.access(isPC => {
       if (isPC) {
         console.log('进入到了pc端')
-        success && success()
+        // success && success()
         // router.push({name: 'tLogin'})
         const originHref = encodeURIComponent(location.href)
         // pc登录二维码
