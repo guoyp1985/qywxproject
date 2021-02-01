@@ -5,7 +5,7 @@ var ENV = {
   FeedChars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
   WxAuthUrl: 'https://open.weixin.qq.com/connect/oauth2/authorize?',
   WxQrcodeAuthUrl: 'https://open.work.weixin.qq.com/wwopen/sso/qrConnect?',
-  Host: 'http://qywx.bsa.cn/',
+  Host: 'http://qywx.bsa.cn',
   BokaApi: 'https://qy.boka.cn',
   WeixinQrcode: 'https://osslaravel.boka.cn/weixin_qrcode.jpg',//vue 博卡授权中心: http://osslaravel.boka.cn/weixin_qrcode.jpg // vux 共销汇: http://vuxlaravel.boka.cn/weixin_qrcode.jpg
   WeixinName: '博卡授权中心', //vue: 博卡授权中心 // vux: 共销汇

@@ -238,40 +238,38 @@ const access = success => {
     console.log('进入到了defaultAccess code 的判断内')
     console.log('code', code)
     // 401授权，取得token
-    Vue.http.get(`${ENV.BokaApi}/api/visitor/workUserAuth/${code}`).then(
-      res => {
-        console.log('weinxin/authUser success')
-        console.log(res)
-        if (!res || !res.data || res.data.errcode || !res.data.flag) {
-          // alert('清空缓存重试')
-          console.log('进入到了authUser请求未返回数据')
-          Token.remove()
-          vue.$vux.alert.show({
-            title: '提示',
-            content: `用户信息获取失败，请重新进入`,
-            onHide () {
-              location.replace(lUrl.href)
-            }
-          })
-          return
-        }
-        Token.set(res.data.data)
-        // 取用户信息
-        // console.log(`defaultAccess: /user/show`)
-        return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
-      }, res => {
-        console.log('进入到了authUser请求失败')
-        console.log(res)
+    Vue.http.get(`${ENV.BokaApi}/api/visitor/workUserAuth/${code}`).then(res => {
+      console.log('weinxin/authUser success')
+      console.log(res)
+      if (!res || !res.data || res.data.errcode || !res.data.flag) {
+        // alert('清空缓存重试')
+        console.log('进入到了authUser请求未返回数据')
         Token.remove()
         vue.$vux.alert.show({
           title: '提示',
-          content: `未获取到用户信息`,
+          content: `用户信息获取失败，请重新进入`,
           onHide () {
             location.replace(lUrl.href)
           }
         })
+        return
       }
-    ).then(
+      Token.set(res.data.data)
+      // 取用户信息
+      // console.log(`defaultAccess: /user/show`)
+      return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
+    }, res => {
+      console.log('进入到了authUser请求失败')
+      console.log(res)
+      Token.remove()
+      vue.$vux.alert.show({
+        title: '提示',
+        content: `未获取到用户信息`,
+        onHide () {
+          location.replace(lUrl.href)
+        }
+      })
+    }).then(
       res => {
         console.log('authuser成功后user/show也成功了')
         console.log(res)
@@ -325,13 +323,13 @@ const access = success => {
         console.log('进入到了pc端')
         // success && success()
         // router.push({name: 'tLogin'})
-        const originHref = encodeURIComponent(location.href)
+        const originHref = encodeURIComponent(`${ENV.Host}/#/redirect`)
         // pc登录二维码
-        location.replace(`${ENV.WxQrcodeAuthUrl}appid=${ENV.AppId}&agentid=${ENV.Agentid}&redirect_uri=${originHref}&state=pcAccess#wechat_redirect`)
+        location.replace(`${ENV.WxQrcodeAuthUrl}appid=${ENV.AppId}&agentid=${ENV.Agentid}&redirect_uri=${originHref}&state=originHref`)
       } else {
         const originHref = encodeURIComponent(location.href)
         // 微信授权
-        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=defaultAccess#wechat_redirect`)
+        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=originHref`)
       }
     })
   }
