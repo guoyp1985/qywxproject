@@ -217,37 +217,41 @@ const access = success => {
   // const from = lUrl.query.from
   console.log('进入项目后的链接', lUrl)
   console.log('token=', token)
-  if (token && token !== '' && !Token.isExpired()) {
-    Token.set({token: token, expired_at: expiredAt})
-    Vue.http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
-      if (!res) return
-      User.set(res.data)
-      // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
-      // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
-      console.log('进入的页面地址')
-      console.log(`${lUrl.hash.replace(/#/, '')}?${query}&from=miniprogram`)
-      // router.push(`${lUrl.hash.replace(/#/, '')}?${query}`)
-      store.commit('updateMiniInvoke', {miniInvoke: true})
-      success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
-    })
+  if (location.href.indexOf('/redirect') < 0) {
+    if (token && token !== '' && !Token.isExpired()) {
+      Token.set({token: token, expired_at: expiredAt})
+      Vue.http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
+        if (!res) return
+        User.set(res.data)
+        // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
+        // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
+        console.log('进入的页面地址')
+        console.log(`${lUrl.hash.replace(/#/, '')}?${query}&from=miniprogram`)
+        // router.push(`${lUrl.hash.replace(/#/, '')}?${query}`)
+        store.commit('updateMiniInvoke', {miniInvoke: true})
+        success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
+      })
+    } else {
+      console.log('token失效')
+      Vue.access(isPC => {
+        if (isPC) {
+          console.log('进入到了pc端')
+          let lastIndex = location.href.lastIndexOf('/')
+          const originHref = encodeURIComponent(location.href.substr(lastIndex + 1))
+          const ruri = encodeURIComponent(`${ENV.Host}/#/redirect`)
+          // pc登录二维码
+          location.replace(`${ENV.WxQrcodeAuthUrl}appid=${ENV.AppId}&agentid=${ENV.Agentid}&redirect_uri=${ruri}&state=${originHref}#wechat_redirect`)
+        } else {
+          let lastIndex = location.href.lastIndexOf('/')
+          const originHref = encodeURIComponent(location.href.substr(lastIndex + 1))
+          const ruri = encodeURIComponent(`${ENV.Host}/#/redirect`)
+          // 微信授权
+          location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${ruri}&response_type=code&scope=snsapi_base&state=${originHref}#wechat_redirect`)
+        }
+      })
+    }
   } else {
-    console.log('token失效')
-    Vue.access(isPC => {
-      if (isPC) {
-        console.log('进入到了pc端')
-        let lastIndex = location.href.lastIndexOf('/')
-        const originHref = encodeURIComponent(location.href.substr(lastIndex + 1))
-        const ruri = encodeURIComponent(`${ENV.Host}/#/redirect`)
-        // pc登录二维码
-        location.replace(`${ENV.WxQrcodeAuthUrl}appid=${ENV.AppId}&agentid=${ENV.Agentid}&redirect_uri=${ruri}&state=${originHref}#wechat_redirect`)
-      } else {
-        let lastIndex = location.href.lastIndexOf('/')
-        const originHref = encodeURIComponent(location.href.substr(lastIndex + 1))
-        const ruri = encodeURIComponent(`${ENV.Host}/#/redirect`)
-        // 微信授权
-        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${ruri}&response_type=code&scope=snsapi_base&state=${originHref}#wechat_redirect`)
-      }
-    })
+    success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
   }
 }
 

@@ -42,6 +42,7 @@ export default {
             title: '提示',
             content: `未获取到用户信息`,
             onHide () {
+              this.$vux.loading.show()
               location.href = jumpUrl
             }
           })
@@ -69,6 +70,8 @@ export default {
           }
           User.set(res.data)
           // 跳转到授权前打开的页面
+          console.log('要跳转的页面链接', jumpUrl)
+          this.$vux.loading.show()
           if (jumpUrl && jumpUrl !== '') {
             this.$router.push(jumpUrl)
           } else {
@@ -76,11 +79,13 @@ export default {
           }
         }, res => {
           console.log('redirect页面user/show失败了', res)
+          console.log('要跳转的页面链接', jumpUrl)
           Token.remove()
           this.$vux.alert.show({
             title: '提示',
             content: `未取到用户信息`,
             onHide: () => {
+              this.$vux.loading.show()
               if (jumpUrl && jumpUrl !== '') {
                 this.$router.push(jumpUrl)
               } else {
