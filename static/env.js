@@ -1,12 +1,12 @@
 var ENV = {
   Version: '2.0.0.21',
-  AppId: 'wxd50f3623bec2f5b5', // vux:'wx1e72f0c45242a94e' // vue: 'wxd50f3623bec2f5b5'
-  // AppSecret: 'f22214afc8a01ec9a769bd0ba8551c48',
+  AppId: 'ww1f2b286b9ed5b8c0',
+  Agentid: '1000012',
   FeedChars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
   WxAuthUrl: 'https://open.weixin.qq.com/connect/oauth2/authorize?',
-  WxOAuthUrl: 'https://api.weixin.qq.com/sns/oauth2/access_token?',
-  Host: 'https://vue.boka.cn', // vue: http://vue.boka.cn // vux: http://vux.boka.cn
-  BokaApi: 'https://laravel.boka.cn',//'http://laravel.boka.cn', // test: http://124.207.246.107 // vux: http://vuxserver.boka.cn
+  WxQrcodeAuthUrl: 'https://open.work.weixin.qq.com/wwopen/sso/qrConnect?',
+  Host: 'http://qywx.bsa.cn/',
+  BokaApi: 'https://qy.boka.cn',
   WeixinQrcode: 'https://osslaravel.boka.cn/weixin_qrcode.jpg',//vue 博卡授权中心: http://osslaravel.boka.cn/weixin_qrcode.jpg // vux 共销汇: http://vuxlaravel.boka.cn/weixin_qrcode.jpg
   WeixinName: '博卡授权中心', //vue: 博卡授权中心 // vux: 共销汇
   SocketBokaRoom: 'laravel.boka.cn',
@@ -105,8 +105,7 @@ var ENV = {
 
 ENV.NoAccessUrls = [
   ENV.BokaApi + '/api/login/*',
-  ENV.BokaApi + '/api/authLogin/*',
-  ENV.BokaApi + '/api/authUser/*',
+  ENV.BokaApi + '/api/visitor/workUserAuth',
   ENV.BokaApi + '/api/qrcode/login*',
   ENV.BokaApi + '/api/scanlogin',
   ENV.BokaApi + '/api/withMiniLogin*'
