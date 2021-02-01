@@ -69,15 +69,23 @@ export default {
           }
           User.set(res.data)
           // 跳转到授权前打开的页面
-          location.href = jumpUrl
+          if (jumpUrl && jumpUrl !== '') {
+            this.$router.push(jumpUrl)
+          } else {
+            this.$router.push('/')
+          }
         }, res => {
           console.log('redirect页面user/show失败了', res)
           Token.remove()
           this.$vux.alert.show({
             title: '提示',
             content: `未取到用户信息`,
-            onHide () {
-              location.href = jumpUrl
+            onHide: () => {
+              if (jumpUrl && jumpUrl !== '') {
+                this.$router.push(jumpUrl)
+              } else {
+                this.$router.push('/')
+              }
             }
           })
         })
