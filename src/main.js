@@ -215,6 +215,7 @@ const access = success => {
   const code = lUrl.query.code
   const state = lUrl.query.state
   const from = lUrl.query.from
+  console.log('进入项目后的链接')
   console.log(lUrl)
   if (from === 'miniprogram') {
     if (token && token !== '') {
@@ -317,6 +318,8 @@ const access = success => {
         })
       }
     )
+  } else if (state === 'pcAccess') {
+    console.log(lUrl)
   } else {
     console.log('已经授权过了')
     Vue.access(isPC => {
@@ -326,7 +329,7 @@ const access = success => {
         // router.push({name: 'tLogin'})
         const originHref = encodeURIComponent(location.href)
         // pc登录二维码
-        location.replace(`${ENV.WxQrcodeAuthUrl}appid=${ENV.AppId}&agentid=${ENV.Agentid}&redirect_uri=${originHref}&state=defaultAccess#wechat_redirect`)
+        location.replace(`${ENV.WxQrcodeAuthUrl}appid=${ENV.AppId}&agentid=${ENV.Agentid}&redirect_uri=${originHref}&state=pcAccess#wechat_redirect`)
       } else {
         const originHref = encodeURIComponent(location.href)
         // 微信授权
