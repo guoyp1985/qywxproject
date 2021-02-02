@@ -284,7 +284,7 @@ const render = () => {
   vue.$mount('#app-box')
 }
 
-clearCache()
+// clearCache()
 
 const alertStack = []
 let authCount = 0
