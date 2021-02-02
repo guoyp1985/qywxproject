@@ -16,6 +16,22 @@
       <div class="box-outer">
         <div class="box-title">获客</div>
         <div class="box-list square">
+          <router-link to="/" class="list-item ico-pic-item">
+            <div class="item-inner">
+              <div class="ico-bg">
+                <span class="al al-wenzhang3"></span>
+              </div>
+              <div class="txt">文章</div>
+            </div>
+          </router-link>
+          <router-link to="/" class="list-item ico-pic-item">
+            <div class="item-inner">
+              <div class="ico-bg">
+                <span class="al al-shangpin"></span>
+              </div>
+              <div class="txt">产品</div>
+            </div>
+          </router-link>
           <router-link to="/activity" class="list-item ico-pic-item">
             <div class="item-inner">
               <div class="ico-bg">
@@ -24,12 +40,14 @@
               <div class="txt">活动</div>
             </div>
           </router-link>
-          <router-link to="/qiyeContent" class="list-item ico-pic-item">
+        </div>
+        <div class="box-list square">
+          <router-link to="/" class="list-item ico-pic-item">
             <div class="item-inner">
               <div class="ico-bg">
-                <span class="al al-wenzhang3"></span>
+                <span class="al al-zhaopian"></span>
               </div>
-              <div class="txt">内容</div>
+              <div class="txt">海报</div>
             </div>
           </router-link>
           <router-link to="/wechatGroup" class="list-item ico-pic-item">
@@ -40,8 +58,6 @@
               <div class="txt">微信群</div>
             </div>
           </router-link>
-        </div>
-        <div class="box-list square">
           <router-link to="" class="list-item ico-pic-item">
             <div class="item-inner">
               <div class="ico-bg">
@@ -50,8 +66,6 @@
               <div class="txt">微信</div>
             </div>
           </router-link>
-          <div class="list-item ico-pic-item"></div>
-          <div class="list-item ico-pic-item"></div>
         </div>
       </div>
       <div class="box-outer mt10">
