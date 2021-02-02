@@ -210,7 +210,7 @@ const access = success => {
                 return `${p1}&${p3}${p2}` // '$1&$3$2'
               })
   const lUrl = urlParse(url, true)
-  const token = Token.get()
+  let token = Token.get()
   const expiredAt = lUrl.query.expired_at
   // const code = lUrl.query.code
   // const state = lUrl.query.state

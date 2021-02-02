@@ -1,21 +1,25 @@
 <template>
-  <div>
+  <div v-transfer-dom>
+    <loading v-model="isLoading"></loading>
   </div>
 </template>
 
 <script>
 import ENV from 'env'
+import { Loading, TransferDom } from 'vux'
 import { User, Token } from '#/storage'
 import urlParse from 'url-parse'
 const alertStack = []
 export default {
+  directives: { TransferDom },
+  components: { Loading },
   data () {
     return {
+      isLoading: true
     }
   },
   methods: {
     refresh () {
-      this.$vux.loading.show()
       let qp = ''
       const url = location.href
       .replace(/(.+?\/)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
@@ -40,7 +44,8 @@ export default {
             this.$vux.alert.show({
               title: '提示',
               content: `用户信息获取失败，请重新进入`,
-              onHide () {
+              onHide: () => {
+                this.isLoading = false
                 location.replace(lUrl.href)
               }
             })
@@ -54,8 +59,8 @@ export default {
           this.$vux.alert.show({
             title: '提示',
             content: `未获取到用户信息`,
-            onHide () {
-              this.$vux.loading.show()
+            onHide: () => {
+              this.isLoading = false
               location.href = jumpUrl
             }
           })
@@ -84,7 +89,7 @@ export default {
           User.set(res.data)
           // 跳转到授权前打开的页面
           console.log('要跳转的页面链接', jumpUrl)
-          this.$vux.loading.show()
+          this.isLoading = false
           if (jumpUrl && jumpUrl !== '') {
             this.$router.push(jumpUrl)
           } else {
@@ -98,7 +103,7 @@ export default {
             title: '提示',
             content: `未取到用户信息`,
             onHide: () => {
-              this.$vux.loading.show()
+              this.isLoading = false
               if (jumpUrl && jumpUrl !== '') {
                 this.$router.push(jumpUrl)
               } else {

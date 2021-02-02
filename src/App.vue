@@ -155,7 +155,7 @@ export default {
     this.getData()
     console.log('当前页面的链接')
     console.log()
-    this.$util.wxConfig()
+    // this.$util.wxConfig()
   }
 }
 </script>

@@ -5,13 +5,34 @@
 */
 <template>
   <div id="personal-center" class="bg-page font14" v-cloak>
-    <c-title :avatar-href="avatarHref"
-            :user-name="linkMan"
-            :user-credits="userCredits"
-            :user-level="userLevels"
-            :profile="profile"
-            :messages="messages">
-    </c-title>
+    <div class="ctitle bg-page">
+      <div class="info-area">
+        <div class="bg"></div>
+        <div class="card_box">
+          <div class="card bg-white list-shadow02">
+            <div class="content-box">
+                <div class="user-info pt10 pb5">
+                    <div class="c_pic">
+                      <img :src="loginUser.avatar" class="v_middle" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                    </div>
+                </div>
+                <div class="flex_center">
+                  <div class="user-info pr5" style="color:#323232;">
+                    <div class="user-name" >
+                      <span class="font16 u-name">{{ loginUser.linkman }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="head_banner mt5"></div>
+          </div>
+        </div>
+        <div class="message-btn">
+          <span class="al al-xiaoxi1 color-white font22"></span>
+          <span class="msg-badge">0</span>
+        </div>
+      </div>
+    </div>
     <div class="pl12 pr12 posi_r pb10" style="top:65px;z-index:2;">
       <div class="list-shadow border-box bg-white mb10 radius5">
         <group>
@@ -31,13 +52,6 @@
           </grid-item>
         </grid>
       </div>
-      <template v-if="loginUser.whoseseller && loginUser.whoseseller.length > 0">
-        <group class="list-shadow radius5 no-after">
-          <cell :link="{path:'/recommend'}" class="pl12 pr12 pt10 pb10 border-box t-table bg-white list-shadow">
-            <div slot="inline-desc" class="color-orange2"><span>推荐购买赚佣金</span></div>
-          </cell>
-        </group>
-      </template>
       <div class=" mt10 list-shadow radius5">
         <group class="bg-white radius5">
           <cell>
@@ -117,45 +131,6 @@
           </grid-item>
         </grid>
       </div>
-      <!-- <template v-if="showWeapp">
-        <wx-open-launch-weapp
-          id="launch-btn"
-          username="gh_dc6e3c73bc4c"
-          path="pages/index">
-          <script type="text/wxtag-template">
-            <style>.btn { display: flex;align-items: center; }</style>
-            <button class="wx-btn">跳转小程序</button>
-          </script>
-        </wx-open-launch-weapp>
-      </template>
-      <div v-html="weappHTML"></div>
-      <template v-if="showWeapp">
-        <wx-open-launch-weapp
-          id="launch-btn3"
-          username="gh_dc6e3c73bc4c"
-          @launch="handleLaunchFn"
-          @error="handleErrorFn">
-          <script type="text/wxtag-template">
-            <style>.btn { display: flex;align-items: center; }</style>
-            <button class="wx-btn">跳转小程序</button>
-          </script>
-        </wx-open-launch-weapp>
-      </template> -->
-      <div v-if="isKaifa" class=" mt10 mb10 list-shadow radius5 bg-white">
-        <wx-open-launch-weapp
-          id="launch-btn3"
-          username="gh_dc6e3c73bc4c"
-          @launch="handleLaunchFn"
-          @error="handleErrorFn"
-          style="width:100%;display:block;">
-          <script type="text/wxtag-template">
-            <div style="width:100%;height:39px;padding:0 12px;box-sizing:border-box;display:flex;justify-content:flex-left;">
-              <div style="color:#666;height:39px;flex:1;display:flex;justify-content:flex-start;align-items:center;">跳转小程序</div>
-              <div style="color:#ff712f;flex:1;display:flex;justify-content:flex-end;align-items:center;">灰太狼</div>
-            </div>
-          </script>
-        </wx-open-launch-weapp>
-      </div>
     </div>
     <template v-if="showTip">
       <tip-layer buttonTxt="点击此处联系管理员" content="请联系管理员续费后，再来使用厂家功能哦！" @clickClose="closeTip" @clickButton="toApply"></tip-layer>
@@ -168,7 +143,6 @@
 
 <script>
 import { Grid, GridItem, Group, Cell } from 'vux'
-import CTitle from '@/components/CTitle'
 import TipLayer from '@/components/TipLayer'
 import ENV from 'env'
 import Time from '#/time'
@@ -177,7 +151,7 @@ import { Token, User, FirstInfo } from '#/storage'
 let self = {}
 export default {
   components: {
-    Grid, GridItem, CTitle, Group, Cell, TipLayer
+    Grid, GridItem, Group, Cell, TipLayer
   },
   filters: {
     dateformat: function (value) {
@@ -219,12 +193,6 @@ export default {
       ],
       avatarHref: 'https://tossharingsales.boka.cn/images/user.jpg',
       query: {},
-      linkMan: '',
-      userCredits: 0,
-      userLevels: 0,
-      profile: {},
-      messages: 0,
-      direct: '',
       loginUser: {},
       showCenter: false,
       showFactory: false,
@@ -284,54 +252,14 @@ export default {
         this.$router.push('/centerFactory')
       }
     },
-    setUserInfo () {
-      const user = User.get()
-      this.avatarHref = user.avatar
-      this.linkMan = user.linkman
-      this.userCredits = user.credit
-      this.userLevels = user.levels
-      this.profile = {
-        linkman: user.linkman,
-        avatar: user.avatar,
-        sex: user.sex,
-        mobile: user.mobile,
-        company: user.company
-      }
-      this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
-        if (!res) return
-        let data = res.data
-        self.messages = data.data
-        for (let i = 0; i < self.btns.length; i++) {
-          const keyValue = data[`count_${self.btns[i].type}`]
-          if (keyValue) {
-            self.btns[i].count = keyValue
-          }
-        }
-      })
-    },
     getData () {
-      self.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
+      this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
         if (!res) return
-        self.loginUser = res.data
-        User.set(self.loginUser)
-        self.setUserInfo()
-        if (this.loginUser.factoryinfo && this.loginUser.factoryinfo.moderate === 1) {
-          this.showFactory = true
-        }
-        this.showApply = true
-        for (let i = 0; i < self.loginUser.usergroup.length; i++) {
-          if (this.loginUser.usergroup[i] === 1) {
-            this.showManager = true
-            break
-          }
-        }
-        if (this.loginUser.isretailer) {
-          for (let i = 0; i < ENV.UidArr.length; i++) {
-            if (ENV.UidArr[i] === this.loginUser.uid) {
-              this.showCenter = true
-              break
-            }
-          }
+        const retdata = res.data
+        if (retdata.flag) {
+          this.loginUser = retdata.data
+          User.set(this.loginUser)
+          console.log('当前用户信息', this.loginUser)
         }
       })
     },
@@ -348,28 +276,120 @@ export default {
   activated () {
     self = this
     this.refresh()
-    this.$util.miniPost()
-    let str = '<wx-open-launch-weapp'
-    str += ' id="launch-btn1"'
-    str += ' username="gh_dc6e3c73bc4c"'
-    str += ' path="pages/index">'
-    str += '<template>'
-    str += '<button class="list-shadow radius5 mt10 bg-white" style="padding:10px;">测试跳转灰太狼小程序，从代码里添加的</button>'
-    str += '</template>'
-    str += '</wx-open-launch-weapp>'
-    // if (document.getElementById('wxapp')) {
-    //   document.getElementById('wxapp').innerHTML = str
-    // }
-    setTimeout(() => {
-      this.showWeapp = true
-      this.weappHTML = str
-    }, 2000)
   }
 }
 </script>
 
 <style lang="less">
 /* css extension */
+.ctitle .head_banner{
+  height:30px;
+  background: url(../assets/images/v_yinying.png);
+  background-size: cover;
+  background-position: top;
+}
+.ctitle .bg{
+  height: 140px;
+  background: url(../assets/images/v_centerbg.png);
+  background-size: cover;
+  background-position: bottom;
+}
+.ctitle .info-area {
+  position: relative;
+  width: 100%;
+  height: auto;
+  border-radius: 0;
+}
+.ctitle .card_box{
+  width: 100%;
+  padding:0 12px;
+  box-sizing:  border-box;
+  position: absolute;
+  top: 45px;
+  z-index: 1;
+}
+.ctitle .card{
+  width:100%;
+  border-radius:5px;
+  position: relative;
+  overflow: hidden;
+}
+.ctitle .card .c_pic img{
+  width: 71px;
+  height: 71px;
+  border-radius: 50%;
+  vertical-align: middle;
+  border: 2px solid #fff;
+}
+
+.ctitle .content .content-box {
+  max-width: 375px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.ctitle .content .content-box .user-info{
+  position: relative;
+  text-align: center !important;
+  text-align: center;
+}
+.ctitle .user-info {
+  position: relative;
+  text-align: center !important;
+  text-align: center;
+}
+.ctitle .content .user-info .u-name {
+  vertical-align: middle;
+}
+.ctitle .content .user-info .u-star {
+  color: yellow;
+}
+.ctitle .content .user-name,
+.ctitle .content .user-credits {
+  margin-top: 4px;
+}
+.ctitle .content .user-credits img {
+  width: 25px;
+}
+.ctitle .content .user-credits .u-credits {
+  vertical-align: top;
+}
+.ctitle .message-btn {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  z-index: 3
+}
+.ctitle .message-btn .msg-badge {
+  position: absolute;
+  top: -2px;
+  right: -8px;
+  z-index: 3
+}
+
+/* weui css hack */
+.ctitle .weui-grid__icon {
+  height: auto;
+  width: auto;
+  text-align: center;
+}
+
+.ctitle .weui-grids:before {
+  border-top: none;
+  height: 0;
+}
+.ctitle .msg-badge{
+  background-color: #ea3a3a;
+  text-align:center;
+  color:#fff;
+  font-size:8pt;
+  width: 20px;
+  height: 20px;
+  line-height: 18px;
+  border-radius: 50%;
+  display: block;
+  padding: 0px;
+}
 .grid-center {
   display: block;
   text-align: center;

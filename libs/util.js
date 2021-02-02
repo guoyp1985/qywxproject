@@ -725,12 +725,12 @@ Util.install = function (Vue, options) {
       return params
     },
     getSystemParams: (callback) => {
-      Vue.http.post(`${ENV.BokaApi}/api/common/getSysParas`).then(res => {
-        const data = res.data
-        const retdata = data.data ? data.data : data
-        SystemParams.set(retdata)
-        callback && callback()
-      })
+      // Vue.http.post(`${ENV.BokaApi}/api/common/getSysParas`).then(res => {
+      //   const data = res.data
+      //   const retdata = data.data ? data.data : data
+      //   SystemParams.set(retdata)
+      //   callback && callback()
+      // })
     },
     remindQrcode: (wid) => {
       Vue.http.post(`${ENV.BokaApi}/api/retailer/remindQrCode`, {
