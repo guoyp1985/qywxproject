@@ -218,7 +218,7 @@ const access = success => {
   console.log('进入项目后的链接', lUrl)
   console.log('token=', token)
   if (location.href.indexOf('/redirect') < 0) {
-    if (token && token !== '' && !Token.isExpired()) {
+    if (token && token !== '') {
       Token.set({token: token, expired_at: expiredAt})
       Vue.http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
         if (!res) return
@@ -264,6 +264,8 @@ const clearCache = () => {
   //               return `${p1}&${p3}${p2}`
   //             })
   // const lUrl = urlParse(url, true)
+  console.log('env.verison', ENV.Version)
+  console.log('缓存里的version', Version.get())
   if (ENV.Version !== Version.get()) {
     Token.remove()
     User.remove()
@@ -284,7 +286,7 @@ const render = () => {
   vue.$mount('#app-box')
 }
 
-// clearCache()
+clearCache()
 
 const alertStack = []
 let authCount = 0

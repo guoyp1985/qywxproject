@@ -58,7 +58,7 @@ export default {
         }
       })
     },
-    handleScroll (refname,) {
+    handleScroll (refname) {
       const scrollarea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
       this.$util.scrollEvent({
         element: scrollarea,

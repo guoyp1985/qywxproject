@@ -1,5 +1,5 @@
 var ENV = {
-  Version: '2.0.0.21',
+  Version: '1.0.0',
   AppId: 'ww1f2b286b9ed5b8c0',
   Agentid: '1000012',
   FeedChars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
