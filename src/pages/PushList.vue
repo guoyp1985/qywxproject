@@ -5,8 +5,9 @@
     <div class="s-topbanner s-topbanner1 bg-white">
       <div class="row">
         <tab v-model="selectedIndex" class="v-tab">
-          <tab-item selected @on-item-click="clickTab(0)">公司活动</tab-item>
-          <tab-item @on-item-click="clickTab(1)">我的活动</tab-item>
+          <tab-item selected @on-item-click="clickTab(0)">生日</tab-item>
+          <tab-item @on-item-click="clickTab(1)">标签</tab-item>
+          <tab-item @on-item-click="clickTab(2)">购买</tab-item>
         </tab>
       </div>
     </div>
@@ -35,6 +36,18 @@
           <div class="load-end-area done" v-else-if="isDone2"></div>
         </template>
       </div>
+      <div v-show="(selectedIndex == 2)" class="swiper-inner" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3', 2)">
+        <template v-if="disList3">
+          <div v-if="!listData3 || !listData3.length" class="flex_empty">暂无数据</div>
+          <div v-else class="scroll_list">
+            <div v-for="(item,index) in listData3" :key="index" class="scroll_item">
+              <div>{{item.title}}</div>
+            </div>
+          </div>
+          <div class="load-end-area loading" v-if="isLoading3"></div>
+          <div class="load-end-area done" v-else-if="isDone3"></div>
+        </template>
+      </div>
     </div>
   </div>
 </template>
@@ -46,7 +59,9 @@ import Time from '../../libs/time'
 import { User } from '#/storage'
 
 export default {
-  components: { Tab, TabItem },
+  components: {
+    Tab, TabItem
+  },
   data () {
     return {
       query: {},
@@ -62,7 +77,12 @@ export default {
       disList2: false,
       listData2: [],
       isLoading2: false,
-      isDone2: false
+      isDone2: false,
+      pagestart3: 0,
+      disList3: false,
+      listData3: [],
+      isLoading3: false,
+      isDone3: false
     }
   },
   methods: {
@@ -89,6 +109,17 @@ export default {
             this.isLoading2 = true
             this.isDone2 = false
             this.getList2()
+          }
+          break
+        case 2:
+          if (this.isLoading3) return false
+          if (this.listData3.length < this.limit) {
+            this.pagestart3 = 0
+            this.disList3 = false
+            this.listData3 = []
+            this.isLoading3 = true
+            this.isDone3 = false
+            this.getList3()
           }
           break
       }
@@ -131,6 +162,25 @@ export default {
         }
       })
     },
+    getList3 () {
+      let params = {pagestart: this.pagestart3, limit: this.limit}
+      this.$http.get(`${ENV.BokaApi}/api`, {
+        params: params
+      }).then(res => {
+        let data = res.data
+        this.$vux.loading.hide()
+        this.isLoading3 = false
+        let retdata = data.data ? data.data : data
+        for (var i = 0; i < retdata.length; i++) {
+          retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd')
+        }
+        this.listData3 = this.listData3.concat(retdata)
+        this.disList3 = true
+        if (retdata.length < this.limit) {
+          this.isDone3 = true
+        }
+      })
+    },
     handleScroll (refname, index) {
       const scrollarea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
       this.$util.scrollEvent({
@@ -151,6 +201,14 @@ export default {
                 this.pagestart2++
                 this.isLoading2 = true
                 this.getList2()
+              }
+              break
+            case 2:
+              if (this.isLoading3 || this.isDone3) return false
+              if (this.listData3.length === (this.pagestart3 + 1) * this.limit) {
+                this.pagestart3++
+                this.isLoading3 = true
+                this.getList3()
               }
               break
           }

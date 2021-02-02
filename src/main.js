@@ -256,19 +256,14 @@ const access = success => {
 }
 
 const clearCache = () => {
-  const url = location.href
-              .replace(/(.+?\/)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
-                return `${p1}?${p3}${p2}`
-              })
-              .replace(/(.+\?.+?)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
-                return `${p1}&${p3}${p2}`
-              })
-  const lUrl = urlParse(url, true)
-  const from = lUrl.query.from
-  if (from === 'miniprogram') {
-    console.log('mini clear')
-    Token.remove()
-  }
+  // const url = location.href
+  //             .replace(/(.+?\/)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
+  //               return `${p1}?${p3}${p2}`
+  //             })
+  //             .replace(/(.+\?.+?)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
+  //               return `${p1}&${p3}${p2}`
+  //             })
+  // const lUrl = urlParse(url, true)
   if (ENV.Version !== Version.get()) {
     Token.remove()
     User.remove()
@@ -305,16 +300,16 @@ try {
           if (ENV.DebugList[i].uid === User.get().uid) {
             alertStack.push(
               () => {
-                vue.$vux.alert.show({
-                  title: '提示',
-                  content: `token:${Token.get().token} :: 开始渲染页面`,
-                  onShow () {
-                    console.log('Plugin: I\'m showing')
-                  },
-                  onHide () {
-                    console.log('Plugin: I\'m hiding')
-                  }
-                })
+                // vue.$vux.alert.show({
+                //   title: '提示',
+                //   content: `token:${Token.get().token} :: 开始渲染页面`,
+                //   onShow () {
+                //     console.log('Plugin: I\'m showing')
+                //   },
+                //   onHide () {
+                //     console.log('Plugin: I\'m hiding')
+                //   }
+                // })
               }
             )
           }
@@ -323,20 +318,20 @@ try {
       render()
     })
   } else {
-    for (let i = 0; i < ENV.DebugList.length; i++) {
-      if (ENV.DebugList[i].uid === User.get().uid) {
-        vue.$vux.alert.show({
-          title: '提示',
-          content: `有token:${Token.get().token} :: 开始渲染页面`,
-          onShow () {
-            console.log('Plugin: I\'m showing')
-          },
-          onHide () {
-            console.log('Plugin: I\'m hiding')
-          }
-        })
-      }
-    }
+    // for (let i = 0; i < ENV.DebugList.length; i++) {
+    //   if (ENV.DebugList[i].uid === User.get().uid) {
+    //     vue.$vux.alert.show({
+    //       title: '提示',
+    //       content: `有token:${Token.get().token} :: 开始渲染页面`,
+    //       onShow () {
+    //         console.log('Plugin: I\'m showing')
+    //       },
+    //       onHide () {
+    //         console.log('Plugin: I\'m hiding')
+    //       }
+    //     })
+    //   }
+    // }
     render()
   }
 } catch (e) {

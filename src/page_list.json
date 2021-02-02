@@ -173,6 +173,7 @@
   "UserRevenue",
   "UserStory",
   "ViewList",
+  "WechatGroup",
   "wxOpen",
   "Payment",
   "PickUpManage",
@@ -189,5 +190,12 @@
   "RoomOrderBusiness",
   "RoomOrderDeal",
   "RoomOrders",
-  "CollectProduct"
+  "CollectProduct",
+  "QiyeContent",
+  "QiyeCustomerList",
+  "PushList",
+  "BuyerShow",
+  "SaleCustomerList",
+  "RetailSale",
+  "SaleChance"
 ]
