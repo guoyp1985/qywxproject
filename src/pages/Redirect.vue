@@ -1,6 +1,8 @@
 <template>
-  <div v-transfer-dom>
-    <loading v-model="isLoading"></loading>
+  <div class="w_100 h_100">
+    <div v-transfer-dom>
+      <loading v-model="isLoading"></loading>
+    </div>
   </div>
 </template>
 
