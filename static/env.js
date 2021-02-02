@@ -83,21 +83,20 @@ var ENV = {
   AllowQuickService: true, // 控制显示【完成售后按钮】，正式平台不需要
   DebugMode: true,
   DebugList: [
-    // {uid: 25465, name: '黄一萌'},
-    {uid: 1, name: '党卫东'},
-    {uid: 3821, name: '党大王'},
-    {uid: 4903, name: 'gyp'},
-    {uid: 8, name: 'young'},
-    {uid: 115800, name: '风偏'},
-    {uid: 16, name: '余鹏'},
-    {uid: 27531, name: '戴飞'},
-    {uid: 24675, name: '兰花草'},
-    {uid: 1694},
-    {uid: 65231},
-    {uid: 99756},
-    {uid: 39854},
-    {uid: 25421},
-    {uid: 98466}
+    // {uid: 1, name: '党卫东'},
+    // {uid: 3821, name: '党大王'},
+    // {uid: 4903, name: 'gyp'},
+    // {uid: 8, name: 'young'},
+    // {uid: 115800, name: '风偏'},
+    // {uid: 16, name: '余鹏'},
+    // {uid: 27531, name: '戴飞'},
+    // {uid: 24675, name: '兰花草'},
+    // {uid: 1694},
+    // {uid: 65231},
+    // {uid: 99756},
+    // {uid: 39854},
+    // {uid: 25421},
+    // {uid: 98466}
   ],
   SourceFid: 39, // 货源商品的厂家ID
   IsKaifa: true

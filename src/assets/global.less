@@ -1201,3 +1201,73 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 .load-end-area{width:100%;height:50px;color:#ccc;display:flex;align-items:center;justify-content: center;}
 .load-end-area.loading:after{content:'正在加载中';}
 .load-end-area.done:after{content:'没有更多数据啦';}
+
+.box-outer{
+	box-shadow: 0px 0px 3px 1px #e6ebed;border-radius: 5px;background-color:#fff;
+	.box-title{position:relative;padding:10px 15px;}
+	.box-title:after{
+		content: " ";
+    position: absolute;left: 0;bottom: 0;right: 0;
+    height: 1px;border-bottom: 1px solid #ededed;color: #ededed;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+	}
+	.box-list{
+		width:100%;display:flex;position:relative;
+		.list-item{
+			display:flex;padding:10px 0;position:relative;
+			.item-inner{width:100%;}
+		}
+		.list-item:not(:last-child):after{
+			content: " ";
+	    position: absolute;top: 0;bottom: 0;right: 0;
+	    width: 1px;border-right: 1px solid #ededed;color: #ededed;
+	    -webkit-transform-origin: 0 100%;
+	    transform-origin: 0 100%;
+	    -webkit-transform: scaleX(0.5);
+	    transform: scaleX(0.5);
+		}
+	}
+	.box-list:not(:last-child):after{
+		content: " ";
+    position: absolute;left: 0;bottom: 0;right: 0;
+    height: 1px;border-bottom: 1px solid #ededed;color: #ededed;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+	}
+	.box-list.square{
+		.list-item{
+			width:33.33333%;
+		}
+	}
+	.box-list.circle{
+		.list-item{
+			width:25%;
+		}
+	}
+}
+.ico-pic-item{
+	display:flex;justify-content: center;align-items: center;
+	.txt{
+		width:100%;margin-top:5px;display: block;text-align: center;
+		font-size:12px;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;
+	}
+}
+.square{
+	.ico-bg {
+		width: 40px;height: 40px;border-radius:4px;color:#fff;
+		margin: 0 auto;text-align: center;line-height:40px;background-color:#659af2;
+		.al{font-size:20px;}
+	}
+}
+.circle{
+	.ico-bg {
+		width: 40px;height: 40px;border-radius: 50%;color:#fff;
+		margin: 0 auto;text-align: center;line-height:40px;
+		.al{font-size:20px;}
+	}
+}
