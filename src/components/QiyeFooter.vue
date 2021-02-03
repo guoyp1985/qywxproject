@@ -29,7 +29,11 @@
     <div class="item">机会</div>
     <router-link class="item" to="/center">
       <span>我</span>
-      <img v-if="user && user.avatar && user.avatar != ''" :src="user.avatar" style="margin-left:3px;width:20px;height:20px;border-radius:50%;object-fit:cover;" />
+      <img
+        v-if="user && user.avatar && user.avatar != ''"
+        :src="user.avatar" 
+        onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"
+        style="margin-left:3px;width:20px;height:20px;border-radius:50%;object-fit:cover;" />
     </router-link>
   </div>
 </template>

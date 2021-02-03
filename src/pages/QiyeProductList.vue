@@ -1,18 +1,28 @@
 <style lang="less">
-.qiye-product-list-page{}
+.qiye-product-list-page{
+  .scroll_list{
+    .scroll_item{background-color:#fff;padding:10px;width:100%;box-sizing: border-box;}
+  }
+}
 </style>
 <template>
   <div class="qiye-product-list-page containerarea font14" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1')">
-    <template v-if="disList1">
+    <div v-if="disList1" class="scroll_list">
       <div v-if="!listData1 || !listData1.length" class="flex_empty">暂无数据</div>
-      <div v-else class="scroll_list">
-        <div v-for="(item,index) in listData1" :key="index" class="scroll_item">
-          <div>{{item.title}}</div>
+      <template v-else>
+        <div v-for="(item,index) in listData1" :key="index" class="scroll_item flex_left">
+          <div class="mr10">
+            <img :src="item.photo" style="width:50px;height:50px;object-fit:cover;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+          </div>
+          <div class="flex_cell">
+            <div class="clamp1">{{item.title}}</div>
+            <div class="mt5 color-red font12">￥{{item.price}}</div>
+          </div>
         </div>
-      </div>
+      </template>
       <div class="load-end-area loading" v-if="isLoading1"></div>
       <div class="load-end-area done" v-else-if="isDone1"></div>
-    </template>
+    </div>
   </div>
 </template>
 
@@ -40,8 +50,8 @@ export default {
   },
   methods: {
     getList1 () {
-      let params = {pagestart: this.pagestart1, limit: this.limit}
-      this.$http.get(`${ENV.BokaApi}/api`, {
+      let params = {pagestart: this.pagestart1, limit: this.limit, module: 'product'}
+      this.$http.get(`${ENV.BokaApi}/api/content/getList`, {
         params: params
       }).then(res => {
         let data = res.data
@@ -72,9 +82,15 @@ export default {
         }
       })
     },
-    refresh (query) {
+    refresh () {
       this.loginUser = User.get()
       this.query = this.$route.query
+      this.pagestart1 = 0
+      this.disList1 = false
+      this.listData1 = []
+      this.isLoading1 = false
+      this.isDone1 = false
+      this.getList1()
     }
   },
   created () {

@@ -10,7 +10,7 @@
 <template>
   <div class="bg-page font14 qycontent-page">
     <div class="top-box list-shadow02 flex_left">
-      <img class="avatar" :src="loginUser.avatar" />
+      <img class="avatar" :src="loginUser.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
       <div class="txt">{{ loginUser.linkman }}</div>
     </div>
     <div class="padding10">
