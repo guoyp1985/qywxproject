@@ -1,5 +1,9 @@
 en:
+  Contact customer: Contact customer
+  Customer text: Customer text
+  Percent: Percent
 zh-CN:
+  tRedirect: 授权中
   tIndex: 企业微信
   tCenter: 我
   tActivity: 活动
@@ -14,3 +18,6 @@ zh-CN:
   tQiyeNewsList: 文章
   tQiyeProductList: 产品
   tQiyePoster: 海报
+  Contact customer: 联系客户
+  Customer text: 客户
+  Percent: 成交概率
