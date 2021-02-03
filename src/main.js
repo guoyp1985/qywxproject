@@ -211,26 +211,40 @@ const access = success => {
               })
   const lUrl = urlParse(url, true)
   let token = Token.get()
-  const expiredAt = lUrl.query.expired_at
+  // const expiredAt = lUrl.query.expired_at
   // const code = lUrl.query.code
   // const state = lUrl.query.state
   // const from = lUrl.query.from
   console.log('进入项目后的链接', lUrl)
   console.log('token=', token)
+  // token = {
+  //   expired_at: 1613181922669,
+  //   refresh_expired_at: 1618365922669,
+  //   token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvcXkuYm9rYS5jblwvYXBpXC92aXNpdG9yXC93b3JrVXNlckF1dGhcL0FqYnJ0NHFydVhXcWZCNGF4ZUNsWGFuQWZDMjMxUHlac0VVWndSMVBHUUkiLCJpYXQiOjE2MTIzMTc5MjIsImV4cCI6MTYxMzE4MTkyMiwibmJmIjoxNjEyMzE3OTIyLCJqdGkiOiJXakRENUtEZTBhaTM4YWFkIiwic3ViIjoxLCJwcnYiOiI4NjY1YWU5Nzc1Y2YyNmY2YjhlNDk2Zjg2ZmE1MzZkNjhkZDcxODE4In0.3HLIE8BOwsOLzwFZAMzp_m-MMkVCwX_Gx8TbiP80E1o'
+  // }
+  // Token.set(token)
   if (location.href.indexOf('/redirect') < 0) {
     if (token && token !== '') {
-      Token.set({token: token, expired_at: expiredAt})
-      Vue.http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
-        if (!res) return
-        User.set(res.data)
-        // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
-        // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
+      let user = User.get()
+      if (!user || !user.uid) {
+        Vue.http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
+          if (!res) return
+          const data = res.data
+          let retUser = data.data ? data.data : data
+          User.set(retUser)
+          // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
+          // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
+          console.log('进入的页面地址')
+          console.log(`${lUrl.hash.replace(/#/, '')}?${query}&from=miniprogram`)
+          store.commit('updateMiniInvoke', {miniInvoke: true})
+          success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
+        })
+      } else {
         console.log('进入的页面地址')
         console.log(`${lUrl.hash.replace(/#/, '')}?${query}&from=miniprogram`)
-        // router.push(`${lUrl.hash.replace(/#/, '')}?${query}`)
         store.commit('updateMiniInvoke', {miniInvoke: true})
         success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
-      })
+      }
     } else {
       console.log('token失效')
       Vue.access(isPC => {

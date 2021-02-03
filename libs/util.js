@@ -236,7 +236,7 @@ Util.install = function (Vue, options) {
       })
     },
     wxConfig: function (callback) {
-      Vue.http.get(`${ENV.BokaApi}/api/jsconfig`,
+      Vue.http.get(`${ENV.BokaApi}/api/common/jsconfig`,
         { params: { url: encodeURIComponent(location.href.split('#')[0]) } }
       ).then(res => {
         if (!res) return
@@ -247,7 +247,9 @@ Util.install = function (Vue, options) {
         //   //   type: 'warn',
         //   // })
         // })
-        jweixin.config(res.data)
+        let data = res.data
+        data.debug = true
+        jweixin.config(data)
         jweixin.error(function () {
           // Vue.$vux.toast.show({
           //   text: '微信还没有准备好，请刷新页面',

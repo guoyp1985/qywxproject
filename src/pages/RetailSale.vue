@@ -2,15 +2,16 @@
 .rsale-page{
   .top-box{
     background-color:#f5f9fe;text-align:left;padding:10px;box-sizing: border-box;
+    .avatar{width:80px;height:80px;border-radius:50%;margin-right:10px;}
     .txt{font-size:16px;font-weight:bold;}
   }
 }
 </style>
 <template>
   <div class="bg-page font14 rsale-page">
-    <div class="top-box list-shadow02" style="">
+    <div class="top-box list-shadow02 flex_left">
+      <img class="avatar" :src="loginUser.avatar" />
       <div class="txt">{{ loginUser.linkman }}</div>
-      <div class="mt5 font12 color-gray">{{loginUser.email}}</div>
     </div>
     <div class="padding10">
       <div class="box-outer">

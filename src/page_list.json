@@ -197,5 +197,7 @@
   "BuyerShow",
   "SaleCustomerList",
   "RetailSale",
-  "SaleChance"
+  "SaleChance",
+  "QiyeNewsList",
+  "QiyeProductList"
 ]
