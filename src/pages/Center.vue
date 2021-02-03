@@ -46,7 +46,7 @@
             </router-link>
           </div>
           <div class="box-list square">
-            <router-link to="/" class="list-item ico-pic-item">
+            <router-link to="/qiyePoster" class="list-item ico-pic-item">
               <div class="item-inner">
                 <div class="ico-bg">
                   <span class="al al-zhaopian"></span>
@@ -59,7 +59,7 @@
                 <div class="ico-bg">
                   <span class="al al-weixinqun"></span>
                 </div>
-                <div class="txt">微信群</div>
+                <div class="txt">客户群</div>
               </div>
             </router-link>
             <router-link to="" class="list-item ico-pic-item">
@@ -88,7 +88,7 @@
                 <div class="ico-bg">
                   <span class="al al-wenzhang3"></span>
                 </div>
-                <div class="txt">精准推送</div>
+                <div class="txt">精准服务</div>
               </div>
             </router-link>
             <router-link to="/buyerShow" class="list-item ico-pic-item">

@@ -5,9 +5,9 @@
     <div class="s-topbanner s-topbanner1 bg-white">
       <div class="row">
         <tab v-model="selectedIndex" class="v-tab">
-          <tab-item selected @on-item-click="clickTab(0)">生日</tab-item>
+          <tab-item selected @on-item-click="clickTab(0)">购买</tab-item>
           <tab-item @on-item-click="clickTab(1)">标签</tab-item>
-          <tab-item @on-item-click="clickTab(2)">购买</tab-item>
+          <tab-item @on-item-click="clickTab(2)">生日</tab-item>
         </tab>
       </div>
     </div>
