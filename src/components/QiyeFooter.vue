@@ -23,7 +23,7 @@
     <div class="item">客户</div>
     <div class="item">
       <div class="inner">
-        <span class="al al-jiahao1"></span>
+        <span class="al al-jiahao1" style="font-size:35px;"></span>
       </div>
     </div>
     <div class="item">机会</div>

@@ -1,5 +1,6 @@
 <style lang="less">
 .center-page{
+  overflow:hidden;height:100%;
   .page-inner{position:absolute;left:0;top:0;right:0;bottom:50px;overflow-y:scroll;}
   .top-box{
     background-color:#f5f9fe;text-align:left;padding:10px;box-sizing: border-box;
