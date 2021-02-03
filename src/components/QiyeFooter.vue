@@ -5,13 +5,13 @@
   position: absolute;left: 0;right: 0;bottom: 0;
   box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.07);
   .item{
-    flex:1;display:flex;justify-content: center;align-items: center;
+    flex:1;display:flex;justify-content: center;align-items: center;height:100%;
     .inner{
       position:relative;
     }
+    .radius-area{width:35px;height:35px;position:relative;}
     .radius-ico{
-      width:30px;height:30px;display:flex;justify-content: center;align-items: center;
-      border-radius:50%;border:#ccc 1px solid;background-color:#fff;
+      position:absolute;left:50%;top:-10px;margin-left:-17px;
     }
   }
 }
@@ -19,18 +19,18 @@
 
 <template>
   <div class="qy-footer">
-    <div class="item">首页</div>
+    <router-link class="item" to="/">首页</router-link>
     <div class="item">客户</div>
     <div class="item">
       <div class="inner">
-        <span class="al al-jiahao1" style="font-size:35px;"></span>
+        <span class="al al-jiahao1" style="font-size:45px;"></span>
       </div>
     </div>
     <div class="item">机会</div>
-    <div class="item">
+    <router-link class="item" to="/center">
       <span>我</span>
       <img v-if="user && user.avatar && user.avatar != ''" :src="user.avatar" style="margin-left:3px;width:20px;height:20px;border-radius:50%;object-fit:cover;" />
-    </div>
+    </router-link>
   </div>
 </template>
 
@@ -42,6 +42,6 @@ export default {
       type: Object,
       default: {}
     }
-  },
+  }
 }
 </script>

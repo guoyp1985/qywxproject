@@ -1,7 +1,7 @@
 <style lang="less">
-.qiye-news-page{
+.qiye-news-list-page{
   .scroll_list{
-    .scroll_item{background-color:#fff;padding:10px;}
+    .scroll_item{background-color:#fff;padding:10px;width:100%;box-sizing: border-box;}
   }
 }
 </style>
@@ -15,7 +15,7 @@
             <img :src="item.photo" style="width:90px;height:50px;object-fit:cover;" />
           </div>
           <div class="flex_cell">
-            <div>{{item.title}}</div>
+            <div class="clamp1">{{item.title}}</div>
             <div class="mt5 color-gray font12">{{item.dateline_str}}</div>
           </div>
         </div>
