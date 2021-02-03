@@ -150,7 +150,7 @@
         </div>
       </div>
     </div>
-    <qiye-footer></qiye-footer>
+    <qiye-footer :user.sync="loginUser"></qiye-footer>
   </div>
 </template>
 
