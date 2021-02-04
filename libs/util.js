@@ -270,6 +270,7 @@ Util.install = function (Vue, options) {
       jweixin.ready(function () {
         params.readyCallback && params.readyCallback()
         console.log('微信准备好了')
+        console.log(jwxwork)
         console.log(ENV.wxConfigData)
         jwxwork.agentConfig(ENV.wxConfigData)
         jweixin.showMenuItems({
