@@ -377,32 +377,34 @@ Util.install = function (Vue, options) {
           cancel: function (resp) {
           }
         })
-        jweixin.invoke("shareToExternalChat", {
+        jweixin.shareToExternalChat({
           title: wxData.title,
           desc: wxData.desc,
           link: wxshareurl,
           imgUrl: wxData.photo,
-        }, function(res) {
-          if (res.err_msg == "shareToExternalChat:ok") {
-            self.wxShareSuccess({
-              data: wxData,
-              type: 'friend',
-              successCallback: params.successCallback
-            })
+          success: function (res) {
+            if (res.err_msg == "shareToExternalChat:ok") {
+              self.wxShareSuccess({
+                data: wxData,
+                type: 'friend',
+                successCallback: params.successCallback
+              })
+            }
           }
         })
-        jweixin.invoke("shareToExternalContact", {
+        jweixin.shareToExternalContact({
           title: wxData.title,
           desc: wxData.desc,
           link: wxshareurl,
           imgUrl: wxData.photo,
-        }, function(res) {
-          if (res.err_msg == "shareToExternalContact:ok") {
-            self.wxShareSuccess({
-              data: wxData,
-              type: 'friend',
-              successCallback: params.successCallback
-            })
+          success: function (res) {
+            if (res.err_msg == "shareToExternalContact:ok") {
+              self.wxShareSuccess({
+                data: wxData,
+                type: 'friend',
+                successCallback: params.successCallback
+              })
+            }
           }
         })
       })
