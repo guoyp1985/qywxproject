@@ -249,6 +249,8 @@ Util.install = function (Vue, options) {
         // })
         let data = res.data
         data.debug = true
+        data.jsApiList.push('shareToExternalContact')
+        data.jsApiList.push('shareToExternalChat')
         jweixin.config(data)
         jweixin.error(function () {
           // Vue.$vux.toast.show({

@@ -120,7 +120,7 @@ export default {
             data: this.viewData,
             module: this.module,
             moduleid: this.viewData.id,
-            link: `${ENV.Host}/#/factorynews?id=${this.viewData.id}&share_uid=${this.loginUser.uid}`
+            link: `${ENV.Host}/#/qiyeNews?id=${this.viewData.id}&share_uid=${this.loginUser.uid}`
           }
           if (this.query.share_uid) {
             shareParams.link = `${shareParams.link}&lastshareuid=${this.query.share_uid}`
