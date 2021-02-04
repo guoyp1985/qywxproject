@@ -7,6 +7,7 @@ import urlParse from 'url-parse'
 import jQuery from 'jquery'
 import { User, Roomid, Token, SystemParams } from './storage'
 const jweixin = require('../static/jweixin')
+const jwxwork = require('../static/jwxwork-1.0.0')
 const Util = {}
 
 Util.install = function (Vue, options) {
@@ -251,8 +252,8 @@ Util.install = function (Vue, options) {
         data.debug = true
         data.jsApiList.push('shareToExternalContact')
         data.jsApiList.push('shareToExternalChat')
+        ENV.wxConfigData = data
         jweixin.config(data)
-        jweixin.agentConfig(data)
         jweixin.error(function () {
           // Vue.$vux.toast.show({
           //   text: '微信还没有准备好，请刷新页面',
@@ -268,6 +269,9 @@ Util.install = function (Vue, options) {
       let isUpdate = false
       jweixin.ready(function () {
         params.readyCallback && params.readyCallback()
+        console.log('微信准备好了')
+        console.log(ENV.wxConfigData)
+        jwxwork.agentConfig(ENV.wxConfigData)
         jweixin.showMenuItems({
           menuList: [
             'menuItem:profile',
