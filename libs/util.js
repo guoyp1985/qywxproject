@@ -252,6 +252,7 @@ Util.install = function (Vue, options) {
         data.jsApiList.push('shareToExternalContact')
         data.jsApiList.push('shareToExternalChat')
         jweixin.config(data)
+        jweixin.agentConfig(data)
         jweixin.error(function () {
           // Vue.$vux.toast.show({
           //   text: '微信还没有准备好，请刷新页面',
