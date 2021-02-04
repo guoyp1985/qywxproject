@@ -58,53 +58,33 @@
         <div class="col2">{{viewData.mobile}}</div>
       </div>
       <div class="view-item">
-        <div class="col1">推荐人</div>
-        <div class="col2">{{loginUser.linkman}}</div>
-      </div>
-      <div class="view-item">
-        <div class="col1">标签</div>
-        <div class="col2"></div>
-      </div>
-      <div class="view-item">
         <div class="col1">价值</div>
         <div class="col2">{{viewData.yingxiangli}}</div>
       </div>
       <div class="view-item">
         <div class="col1">真实姓名</div>
         <div class="col2">{{viewData.truename}}</div>
-        <!-- <div class="btn-col">
+        <div class="btn-col">
           <div class="btn" @click="updateEvent('truename')">更新</div>
-        </div> -->
+        </div>
       </div>
       <div class="view-item">
         <div class="col1">公司名称</div>
         <div class="col2">{{viewData.company}}</div>
-        <!-- <div class="btn-col">
+        <div class="btn-col">
           <div class="btn" @click="updateEvent('company')">更新</div>
-        </div> -->
+        </div>
       </div>
       <div class="view-item">
         <div class="col1">地区</div>
         <div class="col2">{{ viewData.country }} {{ viewData.province }} {{ viewData.city }}</div>
       </div>
-      <div class="view-item">
-        <div class="col1">专属客服</div>
-        <div class="col2">{{viewData.linkman}}</div>
-      </div>
-      <div class="view-item">
-        <div class="col1">加入时间</div>
-        <div class="col2">{{viewData.linkman}}</div>
-      </div>
-      <div class="view-item">
-        <div class="col1">最后联系时间</div>
-        <div class="col2">{{viewData.linkman}}</div>
-      </div>
     </div>
-    <div class="box-outer mt10" style="border-radius:0;">
+    <!-- <div class="box-outer mt10" style="border-radius:0;">
       <div class="box-title">维护内容</div>
       <div class="box-con">
       </div>
-    </div>
+    </div> -->
     <div v-if="showModal" class="auto-modal flex_center update-modal">
       <div class="modal-inner border-box" style="width:80%;">
         <div class="align_center font18 bold pb10 b_bottom_after color-theme pt10">更新信息</div>
@@ -158,6 +138,7 @@ export default {
   methods: {
     updateEvent (char) {
       this.updateChar = char
+      this.updateVal = this.viewData[char]
       this.showModal = true
     },
     closeModal () {
@@ -174,7 +155,11 @@ export default {
       }).then(res => {
         this.$vux.loading.hide()
         let data = res.data
-        this.viewData = data.data ? data.data : data
+        this.$vux.toast.text(data.error)
+        if (data.flag) {
+          this.viewData[this.updateChar] = this.updateVal
+          this.showModal = false
+        }
       })
     },
     getInfo () {

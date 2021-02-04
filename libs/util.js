@@ -249,11 +249,32 @@ Util.install = function (Vue, options) {
         //   // })
         // })
         let data = res.data
-        data.debug = true
         data.jsApiList.push('shareToExternalContact')
         data.jsApiList.push('shareToExternalChat')
-        ENV.wxConfigData = data
         jweixin.config(data)
+        jweixin.error(function () {
+          // Vue.$vux.toast.show({
+          //   text: '微信还没有准备好，请刷新页面',
+          //   type: 'warn',
+          // })
+        })
+        callback && callback()
+      })
+      Vue.http.get(`${ENV.BokaApi}/api/common/agentConfig`,
+        { params: { url: encodeURIComponent(location.href.split('#')[0]) } }
+      ).then(res => {
+        if (!res) return
+        // jweixin.config(res.data)
+        // jweixin.error(function () {
+        //   // Vue.$vux.toast.show({
+        //   //   text: '微信还没有准备好，请刷新页面',
+        //   //   type: 'warn',
+        //   // })
+        // })
+        let data = res.data
+        data.jsApiList.push('shareToExternalContact')
+        data.jsApiList.push('shareToExternalChat')
+        wx.agentConfig(data)
         jweixin.error(function () {
           // Vue.$vux.toast.show({
           //   text: '微信还没有准备好，请刷新页面',
@@ -270,9 +291,6 @@ Util.install = function (Vue, options) {
       jweixin.ready(function () {
         params.readyCallback && params.readyCallback()
         console.log('微信准备好了')
-        console.log(jwxwork)
-        console.log(ENV.wxConfigData)
-        jwxwork.agentConfig(ENV.wxConfigData)
         jweixin.showMenuItems({
           menuList: [
             'menuItem:profile',
@@ -383,7 +401,39 @@ Util.install = function (Vue, options) {
           cancel: function (resp) {
           }
         })
-        jweixin.shareToExternalChat({
+        // wx.invoke('shareToExternalChat', {
+        //   title: wxData.title,
+        //   desc: wxData.desc,
+        //   link: wxshareurl,
+        //   imgUrl: wxData.photo,
+        //   success: function (res) {
+        //   }
+        // }, function (res) {
+        //   if (res.err_msg == "shareToExternalChat:ok") {
+        //     self.wxShareSuccess({
+        //       data: wxData,
+        //       type: 'friend',
+        //       successCallback: params.successCallback
+        //     })
+        //   }
+        // })
+        // wx.invoke('shareToExternalContact', {
+        //   title: wxData.title,
+        //   desc: wxData.desc,
+        //   link: wxshareurl,
+        //   imgUrl: wxData.photo,
+        //   success: function (res) {
+        //   }
+        // }, function (res) {
+        //   if (res.err_msg == "shareToExternalContact:ok") {
+        //     self.wxShareSuccess({
+        //       data: wxData,
+        //       type: 'friend',
+        //       successCallback: params.successCallback
+        //     })
+        //   }
+        // })
+        wx.shareToExternalChat({
           title: wxData.title,
           desc: wxData.desc,
           link: wxshareurl,
@@ -398,7 +448,7 @@ Util.install = function (Vue, options) {
             }
           }
         })
-        jweixin.shareToExternalContact({
+        wx.shareToExternalContact({
           title: wxData.title,
           desc: wxData.desc,
           link: wxshareurl,
