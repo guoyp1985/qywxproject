@@ -288,7 +288,7 @@ Util.install = function (Vue, options) {
             wxshareurl = wxshareurl.replace(`&openid=${query.openid}`, '').replace(`openid=${query.openid}`, '')
         }
         jweixin.checkJsApi({
-          jsApiList: ['onMenuShareAppMessage'],
+          jsApiList: ['onMenuShareAppMessage', 'shareToExternalChat', 'shareToExternalContact'],
           success: function(res) {
             if (!res.checkResult.onMenuShareAppMessage) {
               isUpdate = true
@@ -373,6 +373,34 @@ Util.install = function (Vue, options) {
             })
           },
           cancel: function (resp) {
+          }
+        })
+        jweixin.invoke("shareToExternalChat", {
+          title: wxData.title,
+          desc: wxData.desc,
+          link: wxshareurl,
+          imgUrl: wxData.photo,
+        }, function(res) {
+          if (res.err_msg == "shareToExternalChat:ok") {
+            self.wxShareSuccess({
+              data: wxData,
+              type: 'friend',
+              successCallback: params.successCallback
+            })
+          }
+        })
+        jweixin.invoke("shareToExternalContact", {
+          title: wxData.title,
+          desc: wxData.desc,
+          link: wxshareurl,
+          imgUrl: wxData.photo,
+        }, function(res) {
+          if (res.err_msg == "shareToExternalContact:ok") {
+            self.wxShareSuccess({
+              data: wxData,
+              type: 'friend',
+              successCallback: params.successCallback
+            })
           }
         })
       })

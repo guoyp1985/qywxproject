@@ -1,4 +1,13 @@
 <style lang="less">
+.qy-customer-list-page{
+  .scroll_list{
+    .scroll_item{
+      display:flex;justify-content: flex-start;align-items: center;
+      padding:10px;background-color:#fff;
+      .avatar{width:50px;height:50px;border-radius:50%;object-fit: cover;}
+    }
+  }
+}
 </style>
 <template>
   <div class="qy-customer-list-page containerarea font14">
@@ -16,8 +25,11 @@
         <template v-if="disList1">
           <div v-if="!listData1 || !listData1.length" class="flex_empty">暂无数据</div>
           <div v-else class="scroll_list">
-            <div v-for="(item,index) in listData1" :key="index" class="scroll_item">
-              <div>{{item.title}}</div>
+            <div v-for="(item,index) in listData1" :key="index" class="scroll_item" @click="toView(item)">
+              <div class="pr10">
+                <img class="avatar" :src="item.headimgurl" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+              </div>
+              <div class="flex_cell flex_left">{{item.linkman}}</div>
             </div>
           </div>
           <div class="load-end-area loading" v-if="isLoading1"></div>
@@ -28,8 +40,11 @@
         <template v-if="disList2">
           <div v-if="!listData2 || !listData2.length" class="flex_empty">暂无数据</div>
           <div v-else class="scroll_list">
-            <div v-for="(item,index) in listData2" :key="index" class="scroll_item">
-              <div>{{item.title}}</div>
+            <div v-for="(item,index) in listData2" :key="index" class="scroll_item" @click="toView(item)">
+              <div class="pr10">
+                <img class="avatar" :src="item.headimgurl" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+              </div>
+              <div class="flex_cell flex_left">{{item.linkman}}</div>
             </div>
           </div>
           <div class="load-end-area loading" v-if="isLoading2"></div>
@@ -40,8 +55,11 @@
         <template v-if="disList3">
           <div v-if="!listData3 || !listData3.length" class="flex_empty">暂无数据</div>
           <div v-else class="scroll_list">
-            <div v-for="(item,index) in listData3" :key="index" class="scroll_item">
-              <div>{{item.title}}</div>
+            <div v-for="(item,index) in listData3" :key="index" class="scroll_item" @click="toView(item)">
+              <div class="pr10">
+                <img class="avatar" :src="item.headimgurl" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+              </div>
+              <div class="flex_cell flex_left">{{item.linkman}}</div>
             </div>
           </div>
           <div class="load-end-area loading" v-if="isLoading3"></div>
@@ -84,6 +102,9 @@ export default {
     }
   },
   methods: {
+    toView (item) {
+      this.$router.push({path: '/qiyeCustomerView', query: {uid: item.uid}})
+    },
     clickTab (index) {
       this.selectedIndex = index
       switch (this.selectedIndex) {
@@ -109,11 +130,22 @@ export default {
             this.getList2()
           }
           break
+        case 2:
+          if (this.isLoading3) return false
+          if (this.listData3.length < this.limit) {
+            this.pagestart3 = 0
+            this.disList3 = false
+            this.listData3 = []
+            this.isLoading3 = true
+            this.isDone3 = false
+            this.getList3()
+          }
+          break
       }
     },
     getList1 () {
       let params = {pagestart: this.pagestart1, limit: this.limit}
-      this.$http.get(`${ENV.BokaApi}/api`, {
+      this.$http.get(`${ENV.BokaApi}/api/customer/getList`, {
         params: params
       }).then(res => {
         let data = res.data
@@ -132,7 +164,7 @@ export default {
     },
     getList2 () {
       let params = {pagestart: this.pagestart2, limit: this.limit}
-      this.$http.get(`${ENV.BokaApi}/api`, {
+      this.$http.get(`${ENV.BokaApi}/api/customer/getList`, {
         params: params
       }).then(res => {
         let data = res.data
@@ -151,7 +183,7 @@ export default {
     },
     getList3 () {
       let params = {pagestart: this.pagestart3, limit: this.limit}
-      this.$http.get(`${ENV.BokaApi}/api`, {
+      this.$http.get(`${ENV.BokaApi}/api/customer/getList`, {
         params: params
       }).then(res => {
         let data = res.data
@@ -202,9 +234,28 @@ export default {
         }
       })
     },
+    initData () {
+      this.pagestart1 = 0
+      this.disList1 = false
+      this.listData1 = []
+      this.isLoading1 = true
+      this.isDone1 = false
+      this.pagestart2 = 0
+      this.disList2 = false
+      this.listData2 = []
+      this.isLoading2 = true
+      this.isDone2 = false
+      this.pagestart3 = 0
+      this.disList3 = false
+      this.listData3 = []
+      this.isLoading3 = true
+      this.isDone3 = false
+    },
     refresh () {
       this.loginUser = User.get()
       this.query = this.$route.query
+      this.initData()
+      this.getList1()
     }
   },
   created () {

@@ -1272,3 +1272,23 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 		.al{font-size:20px;}
 	}
 }
+
+.form-list{
+  padding:0 10px 10px;box-sizing: border-box;
+  .form-item{
+    background-color:#fff;box-sizing: border-box;
+    box-shadow:0px 0px 3px 1px #e4e4e4;border-radius:2px;
+    width:100%;min-height:100rpx;display:flex;align-items:center;padding:10px;position:relative;
+    margin-top:10px;
+    .title-cell{height:100%;display: flex;align-items: left;justify-content:flex-start;align-items: center;text-align:left;}
+    .input-cell{
+      flex:1;height:100%;display:flex;justify-content: flex-end; align-items: center;position:relative;
+      input{
+        width:100%;padding:0 10rpx;box-sizing: border-box;border-radius:5px;
+        color: #333333;text-align:right;
+        justify-content:flex-end;align-items: center;
+      }
+      .input-placeholder{color:rgba(153,153,153,0.65)}
+    }
+  }
+}

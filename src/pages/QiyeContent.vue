@@ -49,7 +49,7 @@
 
 <script>
 import {} from 'vux'
-import ENV from 'env'
+// import ENV from 'env'
 import { User } from '#/storage'
 export default {
   components: {
