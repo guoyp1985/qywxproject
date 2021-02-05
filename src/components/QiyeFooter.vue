@@ -13,7 +13,7 @@
     .radius-ico{
       position:absolute;left:50%;top:-10px;margin-left:-17px;
     }
-    .avatar{width:20px;height:20px;border-radius:50%;object-fit:cover;display:block;margin:0 auto;}
+    .avatar{width:20px;height:20px;border-radius:50%;object-fit:cover;margin-left:3px;}
   }
 }
 </style>
@@ -29,14 +29,12 @@
     </div>
     <div class="item">机会</div>
     <router-link class="item" to="/center">
-      <div>
-        <img
-          class="avatar"
-          v-if="user && user.avatar && user.avatar != ''"
-          :src="user.avatar"
-          onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-        <div class="align_center">我</div>
-      </div>
+      <span>我</span>
+      <img
+        class="avatar"
+        v-if="user && user.avatar && user.avatar != ''"
+        :src="user.avatar"
+        onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
     </router-link>
   </div>
 </template>
