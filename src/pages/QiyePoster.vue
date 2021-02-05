@@ -9,7 +9,7 @@
 }
 </style>
 <template>
-  <div class="bg-page font14 wegroup-page">
+  <div class="bg-page wegroup-page">
     <div class="top-box list-shadow02 flex_left">
       <img class="avatar" :src="loginUser.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
       <div class="txt">{{ loginUser.linkman }}</div>

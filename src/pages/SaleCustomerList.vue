@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea bg-page font14 sale-customer-list-page">
+  <div class="containerarea bg-page sale-customer-list-page">
     <div class="s-topbanner s-topbanner1 bg-white">
       <div class="row">
         <tab v-model="selectedIndex" class="v-tab">

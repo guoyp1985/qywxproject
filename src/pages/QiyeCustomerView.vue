@@ -39,7 +39,7 @@
 }
 </style>
 <template>
-  <div class="bg-page font14 qy-customer-view-page">
+  <div class="bg-page qy-customer-view-page">
     <div class="top-box list-shadow02 flex_left">
       <img class="avatar" :src="viewData.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
       <div class="txt">{{ viewData.linkman }}</div>

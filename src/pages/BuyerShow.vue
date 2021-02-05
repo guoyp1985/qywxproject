@@ -1,7 +1,7 @@
 <style lang="less">
 </style>
 <template>
-  <div class="containerarea font14">
+  <div class="containerarea">
     <div class="s-topbanner s-topbanner1 bg-white">
       <div class="row">
         <tab v-model="selectedIndex" class="v-tab">

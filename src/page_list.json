@@ -1,8 +1,10 @@
 [
   "Index",
+  "AboutGxk",
   "Activity",
   "BuyerShow",
   "Center",
+  "Complaint",
   "PushList",
   "QiyeContent",
   "QiyeCustomerList",
@@ -15,5 +17,6 @@
   "RetailSale",
   "SaleChance",
   "SaleCustomerList",
+  "Service",
   "WechatGroup"
 ]

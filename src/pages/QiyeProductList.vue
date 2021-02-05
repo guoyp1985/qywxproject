@@ -6,7 +6,7 @@
 }
 </style>
 <template>
-  <div class="qiye-product-list-page containerarea font14" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1')">
+  <div class="qiye-product-list-page containerarea" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1')">
     <div v-if="disList1" class="scroll_list">
       <div v-if="!listData1 || !listData1.length" class="flex_empty">暂无数据</div>
       <template v-else>

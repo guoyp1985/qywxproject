@@ -10,7 +10,7 @@
 }
 </style>
 <template>
-  <div class="containerarea font14 bg-white qiye-news">
+  <div class="containerarea bg-white qiye-news">
     <div class="news-view">
       <div class="news-title">
         <h2>{{viewData.title}}</h2>

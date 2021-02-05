@@ -8,7 +8,7 @@
 }
 </style>
 <template>
-  <div class="bg-page font14 rsale-page">
+  <div class="bg-page rsale-page">
     <div class="top-box list-shadow02 flex_left">
       <img class="avatar" :src="loginUser.avatar" />
       <div class="txt">{{ loginUser.linkman }}</div>

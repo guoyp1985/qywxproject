@@ -453,13 +453,6 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 
 .containerarea{width:100%;height:100%;position:relative;overflow-x: hidden;}
 
-.bannerbg{
-  width: 100%;
-  background-image: url(images/bannerbg2.png);
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-}
 .s-topbanner{
 	width:100%;height:88px;position:absolute;left:0;top:0;right:0;box-sizing: border-box;
 	background:linear-gradient(#ff6a61, #f63f3d);
@@ -815,35 +808,6 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 	}
 }
 .scrollend.scrollend .inner{display:block;}
-/*
-.scrollendarea.scrollend:after {
-    content: "共销客";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 100px;
-    text-align: center;
-    color: #D6D6D8;
-    background-image: url(images/copyright.png);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 136px 47px;
-}
-
-.scrollendarea.scrollend:before {
-    content: "共销客";
-    position: absolute;top: 20px;left: 0;right: 0;height: 30px;
-    text-align: center;color: #D6D6D8;
-		display:flex;justify-content: center; align-items: center;
-}
-.scrollendarea.scrollend:after {
-    content: "-- 社交电商2.0 --";
-    position: absolute;bottom: 20px;left: 0;right: 0;height: 30px;
-    text-align: center;color: #D6D6D8;
-		display:flex;justify-content: center; align-items: center;
-}
-*/
 
 .x-checker .ck-item {
   display:inline-block;
@@ -989,27 +953,6 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 
 .red-check .weui-icon-success{color:#ea3a3a;}
 .red-check.vux-check-icon > .weui-icon-success:before{color:#ea3a3a;}
-
-.weui-loading{
-	background:transparent url('images/gxb.png') !important;
-	webkit-animation: weuiLoading1 3s steps(60, end) infinite !important;
-  animation: weuiLoading1 3s steps(60, end) infinite !important;
-}
-.weui-icon_toast.weui-loading{
-	margin:10px !important;
-	width:80px !important;
-	height:80px !important;
-}
-@keyframes weuiLoading1 {
-	0% {
-    -webkit-transform: rotate3d(0, 0, 1, 0deg);
-    transform: scale(0.5) rotate3d(0, 0, 1, 0deg);
-	}
-	100% {
-    -webkit-transform: rotate3d(0, 0, 1, 360deg);
-    transform: scale(0.5) rotate3d(0, 0, 1, 360deg);
-	}
-}
 
 .red-popup .weui-cells_radio .weui-check:checked + .weui-icon-checked:before {
     color: #ea3a3a;
@@ -1282,13 +1225,25 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
     margin-top:10px;
     .title-cell{height:100%;display: flex;align-items: left;justify-content:flex-start;align-items: center;text-align:left;}
     .input-cell{
-      flex:1;height:100%;display:flex;justify-content: flex-end; align-items: center;position:relative;
-      input{
+      flex:1;height:100%;display:flex;align-items: center;position:relative;
+      input[type=text]{
         width:100%;padding:0 10rpx;box-sizing: border-box;border-radius:5px;
-        color: #333333;text-align:right;
-        justify-content:flex-end;align-items: center;
+        color: #333333;align-items: center;
       }
       .input-placeholder{color:rgba(153,153,153,0.65)}
     }
   }
+	.form-item.left{
+		.title-cell{margin-right:10px;}
+		.input-cell{
+			justify-content: flex-start;
+			input[type=text]{text-align:left;justify-content:flex-start;}
+		}
+	}
+	.form-item.right{
+		.input-cell{
+			justify-content: flex-end;
+			input[type=text]{text-align:right;justify-content:flex-end;}
+		}
+	}
 }

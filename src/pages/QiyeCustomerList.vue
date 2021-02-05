@@ -10,7 +10,7 @@
 }
 </style>
 <template>
-  <div class="qy-customer-list-page containerarea font14">
+  <div class="qy-customer-list-page containerarea">
     <div class="s-topbanner s-topbanner1 bg-white">
       <div class="row">
         <tab v-model="selectedIndex" class="v-tab">
