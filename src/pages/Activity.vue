@@ -1,7 +1,10 @@
 <style lang="less">
+.activity-page{
+  
+}
 </style>
 <template>
-  <div class="containerarea">
+  <div class="containerarea activity-page">
     <div class="s-topbanner s-topbanner1 bg-white">
       <div class="row">
         <tab v-model="selectedIndex" class="v-tab">

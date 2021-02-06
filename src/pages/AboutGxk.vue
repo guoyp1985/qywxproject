@@ -1,5 +1,6 @@
 <style lang="less">
 .about-gxk-page{
+  
 }
 </style>
 <template>
