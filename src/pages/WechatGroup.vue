@@ -15,15 +15,16 @@
     </div>
     <div class="padding10">
       <div class="box-outer">
-        <div class="box-title">建群步骤1</div>
+        <div class="box-title">建立客户群须知</div>
         <div class="box-con">
-          <div>1、设置群名称</div>
-          <div>2、设置群欢迎语</div>
-          <div>3、设置打开相应的小程序</div>
+          <div style="color:red">请按照提示批量设置您的客户群，否则会影响客户群功能的使用</font></div>
+          <div>1、设置好群名称，建议设置群名为类似“北京宴靛厂路店福利群188”。</div>
+          <div>2、设置好群欢迎语。可以使用&nbsp;#客户昵称# 欢迎加入“北京宴靛厂路店福利群188”，本群为各位VIP客户提供红包、优惠券等多种福利。</div>
+          <div>3、设置好群欢迎语中的图片。用户可以通过该图片领取群福利。</div>
         </div>
       </div>
       <div class="box-outer mt10">
-        <div class="box-title">微信群</div>
+        <div class="box-title">客户群活动</div>
         <div class="box-list square">
           <div class="list-item ico-pic-item" @click="clickEvent">
             <div class="item-inner">
@@ -31,6 +32,14 @@
                 <span class="al al-youhuiquan"></span>
               </div>
               <div class="txt">新人优惠券</div>
+            </div>
+          </div>
+          <div to="" class="list-item ico-pic-item">
+            <div class="item-inner">
+              <div class="ico-bg">
+                <span class="al al-youhuiquan3"></span>
+              </div>
+              <div class="txt">专属优惠券</div>
             </div>
           </div>
           <div class="list-item ico-pic-item">
@@ -41,26 +50,6 @@
               <div class="txt">全员抢券</div>
             </div>
           </div>
-          <div to="" class="list-item ico-pic-item">
-            <div class="item-inner">
-              <div class="ico-bg">
-                <span class="al al-hongbao"></span>
-              </div>
-              <div class="txt">颜值红包</div>
-            </div>
-          </div>
-        </div>
-        <div class="box-list square">
-          <div class="list-item ico-pic-item">
-            <div class="item-inner">
-              <div class="ico-bg">
-                <span class="al al-youhuiquan3"></span>
-              </div>
-              <div class="txt">专属优惠券</div>
-            </div>
-          </div>
-          <div class="list-item ico-pic-item"></div>
-          <div class="list-item ico-pic-item"></div>
         </div>
       </div>
     </div>

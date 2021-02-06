@@ -80,7 +80,7 @@
                 <div class="ico-bg">
                   <span class="al al-huodong"></span>
                 </div>
-                <div class="txt">客户列表</div>
+                <div class="txt">客户服务</div>
               </div>
             </router-link>
             <router-link to="/pushList" class="list-item ico-pic-item">
@@ -106,7 +106,7 @@
                 <div class="ico-bg">
                   <span class="al al-weixin"></span>
                 </div>
-                <div class="txt">到店</div>
+                <div class="txt">到店服务</div>
               </div>
             </router-link>
             <router-link to="" class="list-item ico-pic-item">

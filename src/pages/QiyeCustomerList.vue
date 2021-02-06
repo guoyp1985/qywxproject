@@ -14,9 +14,10 @@
     <div class="s-topbanner s-topbanner1 bg-white">
       <div class="row">
         <tab v-model="selectedIndex" class="v-tab">
-          <tab-item selected @on-item-click="clickTab(0)">最近联系</tab-item>
-          <tab-item @on-item-click="clickTab(1)">定期联系的</tab-item>
-          <tab-item @on-item-click="clickTab(2)">刚购买客户</tab-item>
+          <tab-item selected @on-item-click="clickTab(0)">最近服务</tab-item>
+          <tab-item @on-item-click="clickTab(1)">消费服务</tab-item>
+          <tab-item @on-item-click="clickTab(2)">定期服务</tab-item>
+          <!--<tab-item @on-item-click="clickTab(3)">搜索服务</tab-item>-->
         </tab>
       </div>
     </div>
@@ -67,6 +68,21 @@
         </template>
       </div>
     </div>
+    <div v-show="(selectedIndex == 3)" class="swiper-inner" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3', 2)">
+        <template v-if="disList3">
+          <div v-if="!listData3 || !listData3.length" class="flex_empty">暂无数据</div>
+          <div v-else class="scroll_list">
+            <div v-for="(item,index) in listData3" :key="index" class="scroll_item" @click="toView(item)">
+              <div class="pr10">
+                <img class="avatar" :src="item.headimgurl" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+              </div>
+              <div class="flex_cell flex_left">{{item.linkman}}</div>
+            </div>
+          </div>
+          <div class="load-end-area loading" v-if="isLoading3"></div>
+          <div class="load-end-area done" v-else-if="isDone3"></div>
+        </template>
+      </div>
   </div>
 </template>
 

@@ -80,11 +80,11 @@
         <div class="col2">{{ viewData.country }} {{ viewData.province }} {{ viewData.city }}</div>
       </div>
     </div>
-    <!-- <div class="box-outer mt10" style="border-radius:0;">
+    <div class="box-outer mt10" style="border-radius:0;">
       <div class="box-title">维护内容</div>
       <div class="box-con">
       </div>
-    </div> -->
+    </div>
     <div v-if="showModal" class="auto-modal flex_center update-modal">
       <div class="modal-inner border-box" style="width:80%;">
         <div class="align_center font18 bold pb10 b_bottom_after color-theme pt10">更新信息</div>
