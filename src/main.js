@@ -220,7 +220,7 @@ const access = success => {
   // token = {
   //   expired_at: 1613181922669,
   //   refresh_expired_at: 1618365922669,
-  //   token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvcXkuYm9rYS5jblwvYXBpXC92aXNpdG9yXC93b3JrVXNlckF1dGhcL0FqYnJ0NHFydVhXcWZCNGF4ZUNsWGFuQWZDMjMxUHlac0VVWndSMVBHUUkiLCJpYXQiOjE2MTIzMTc5MjIsImV4cCI6MTYxMzE4MTkyMiwibmJmIjoxNjEyMzE3OTIyLCJqdGkiOiJXakRENUtEZTBhaTM4YWFkIiwic3ViIjoxLCJwcnYiOiI4NjY1YWU5Nzc1Y2YyNmY2YjhlNDk2Zjg2ZmE1MzZkNjhkZDcxODE4In0.3HLIE8BOwsOLzwFZAMzp_m-MMkVCwX_Gx8TbiP80E1o'
+  //   token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvcXkuYm9rYS5jblwvYXBpXC92aXNpdG9yXC93b3JrVXNlckF1dGhcL3F0ekVUT05ZSGtwRG5wNjZYbUViRXQxTVZCMlZxZ25UNll0cnhqN3B2RGMiLCJpYXQiOjE2MTI2MjExMzYsImV4cCI6MTYxMzQ4NTEzNiwibmJmIjoxNjEyNjIxMTM2LCJqdGkiOiJtRGVlUlRCOFNmd0FvbDlpIiwic3ViIjozLCJwcnYiOiI4NjY1YWU5Nzc1Y2YyNmY2YjhlNDk2Zjg2ZmE1MzZkNjhkZDcxODE4In0.2UGXRwl3gLxq0BTtlMe2yYxuvHus9xrEU1DyYKAZ8L0'
   // }
   // Token.set(token)
   if (location.href.indexOf('/redirect') < 0) {

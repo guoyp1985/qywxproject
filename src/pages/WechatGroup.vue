@@ -15,7 +15,7 @@
     </div>
     <div class="padding10">
       <div class="box-outer">
-        <div class="box-title">建群步骤</div>
+        <div class="box-title">建群步骤1</div>
         <div class="box-con">
           <div>1、设置群名称</div>
           <div>2、设置群欢迎语</div>
