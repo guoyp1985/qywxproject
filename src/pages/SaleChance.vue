@@ -5,11 +5,13 @@
     <div class="s-topbanner s-topbanner1 bg-white">
       <div class="row">
         <tab v-model="selectedIndex" class="v-tab">
-          <tab-item selected @on-item-click="clickTab(0)">购买</tab-item>
+          <tab-item selected @on-item-click="clickTab(0)">消费</tab-item>
+          <!--
           <tab-item @on-item-click="clickTab(1)">分享</tab-item>
           <tab-item @on-item-click="clickTab(2)">多次</tab-item>
           <tab-item @on-item-click="clickTab(3)">时长</tab-item>
           <tab-item @on-item-click="clickTab(4)">推荐</tab-item>
+          -->
         </tab>
       </div>
     </div>

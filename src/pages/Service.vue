@@ -8,10 +8,6 @@
     <div class="align_center">
       <img src="../assets/images/kefu.jpg" style="max-width:100%;" />
     </div>
-    <div class="align_center mt10 bold font16">仇红波</div>
-    <div class="align_center mt10 bold font16">
-      <a href="tel:18601033313;" style="color:#659af2;">18601033313</a>
-    </div>
   </div>
 </template>
 
