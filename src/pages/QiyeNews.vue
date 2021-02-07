@@ -102,8 +102,10 @@ export default {
       this.previewerPhotoarr = []
       let imgInterval = setInterval(() => {
         if (document.querySelectorAll('.qiye-news .news-content').length) {
+          console.log('查询文章的图片')
           clearInterval(imgInterval)
           let imgTags = document.querySelectorAll('.qiye-news .news-content img')
+          console.log(imgTags)
           if (imgTags.length) {
             for (let i = 0; i < imgTags.length; i++) {
               let curimg = imgTags[i]
@@ -117,6 +119,7 @@ export default {
       }, 100)
     },
     clickImg (event) {
+      console.log('图片点击事件')
       const node = event.target
       const src = node.getAttribute('src')
       let index = 0
