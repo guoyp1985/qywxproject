@@ -107,11 +107,9 @@ export default {
           if (imgTags.length) {
             for (let i = 0; i < imgTags.length; i++) {
               let curimg = imgTags[i]
-              if (jQuery(curimg).parents('.insertproduct').length === 0) {
-                this.photoarr.push(imgTags[i].getAttribute('src'))
-                curimg.removeEventListener('click', this.clickImg)
-                curimg.addEventListener('click', this.clickImg)
-              }
+              this.photoarr.push(imgTags[i].getAttribute('src'))
+              curimg.removeEventListener('click', this.clickImg)
+              curimg.addEventListener('click', this.clickImg)
             }
           }
           this.previewerPhotoarr = this.$util.previewerImgdata(this.photoarr)
@@ -132,15 +130,18 @@ export default {
     },
     showBigimg (index) {
       if (this.$util.isPC()) {
+        console.log('进入到了PC浏览器')
         this.$refs.previewer.show(index)
       } else {
         console.log('进入到了微信查看大图')
         console.log(window.WeixinJSBridge)
         console.log(this.photoarr)
-        window.WeixinJSBridge.invoke('imagePreview', {
-          current: this.photoarr[index],
-          urls: this.photoarr
-        })
+        if (window.WeixinJSBridge) {
+          window.WeixinJSBridge.invoke('imagePreview', {
+            current: this.photoarr[index],
+            urls: this.photoarr
+          })
+        }
       }
     },
     clickDig () {
