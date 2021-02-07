@@ -104,9 +104,6 @@ export default {
         if (document.querySelectorAll('.qiye-news .news-content').length) {
           clearInterval(imgInterval)
           let imgTags = document.querySelectorAll('.qiye-news .news-content img')
-          console.log('图片长度')
-          console.log(imgTags.length)
-          console.log(document.querySelectorAll('.qiye-news'))
           if (imgTags.length) {
             for (let i = 0; i < imgTags.length; i++) {
               let curimg = imgTags[i]
@@ -137,6 +134,9 @@ export default {
       if (this.$util.isPC()) {
         this.$refs.previewer.show(index)
       } else {
+        console.log('进入到了微信查看大图')
+        console.log(window.WeixinJSBridge)
+        console.log(this.photoarr)
         window.WeixinJSBridge.invoke('imagePreview', {
           current: this.photoarr[index],
           urls: this.photoarr
