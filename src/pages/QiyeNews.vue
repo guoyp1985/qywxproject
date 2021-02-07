@@ -100,15 +100,10 @@ export default {
     handleImg () {
       this.photoarr = []
       this.previewerPhotoarr = []
-      console.log('进入到了handleImg方法')
-      console.log(document.querySelectorAll('.qiye-news'))
-      console.log(document.querySelectorAll('.qiye-news .news-content'))
       let imgInterval = setInterval(() => {
         if (document.querySelectorAll('.qiye-news .news-content').length) {
-          console.log('查询文章的图片')
           clearInterval(imgInterval)
           let imgTags = document.querySelectorAll('.qiye-news .news-content img')
-          console.log(imgTags)
           if (imgTags.length) {
             for (let i = 0; i < imgTags.length; i++) {
               let curimg = imgTags[i]
@@ -122,7 +117,6 @@ export default {
       }, 100)
     },
     clickImg (event) {
-      console.log('图片点击事件')
       const node = event.target
       const src = node.getAttribute('src')
       let index = 0
@@ -136,12 +130,8 @@ export default {
     },
     showBigimg (index) {
       if (this.$util.isPC()) {
-        console.log('进入到了PC浏览器')
         this.$refs.previewer.show(index)
       } else {
-        console.log('进入到了微信查看大图')
-        console.log(window.WeixinJSBridge)
-        console.log(this.photoarr)
         if (window.WeixinJSBridge) {
           window.WeixinJSBridge.invoke('imagePreview', {
             current: this.photoarr[index],
@@ -204,8 +194,8 @@ export default {
             shareParams.link = `${shareParams.link}&lastshareuid=${this.query.share_uid}`
             shareParams.lastshareuid = this.query.share_uid
           }
-          this.$util.handleWxShare(shareParams)
           this.handleImg()
+          this.$util.handleWxShare(shareParams)
         }
       })
     },
