@@ -100,6 +100,9 @@ export default {
     handleImg () {
       this.photoarr = []
       this.previewerPhotoarr = []
+      console.log('进入到了handleImg方法')
+      console.log(document.querySelectorAll('.qiye-news'))
+      console.log(document.querySelectorAll('.qiye-news .news-content'))
       let imgInterval = setInterval(() => {
         if (document.querySelectorAll('.qiye-news .news-content').length) {
           console.log('查询文章的图片')
