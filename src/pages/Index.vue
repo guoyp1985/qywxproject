@@ -20,6 +20,14 @@
         <div class="box-outer">
           <div class="box-title">获客</div>
           <div class="box-list square">
+           <router-link to="/activity" class="list-item ico-pic-item">
+              <div class="item-inner">
+                <div class="ico-bg">
+                  <span class="al al-huodong"></span>
+                </div>
+                <div class="txt">活动</div>
+              </div>
+            </router-link>
             <router-link to="/qiyeNewsList" class="list-item ico-pic-item">
               <div class="item-inner">
                 <div class="ico-bg">
@@ -34,14 +42,6 @@
                   <span class="al al-shangpin"></span>
                 </div>
                 <div class="txt">产品</div>
-              </div>
-            </router-link>
-            <router-link to="/activity" class="list-item ico-pic-item">
-              <div class="item-inner">
-                <div class="ico-bg">
-                  <span class="al al-huodong"></span>
-                </div>
-                <div class="txt">活动</div>
               </div>
             </router-link>
           </div>

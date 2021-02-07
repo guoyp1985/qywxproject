@@ -291,7 +291,7 @@
                         <img class="v_middle" src="https://tossharingsales.boka.cn/images/infor.png"/>
                         <div class="color-blue">什么是成交概率</div>
                       </div>
-                      <div class="font12" >成交概率是系统自动根据客户查看文章等行为，自动计算出该客户的真正成为购买客户的可能性。数字越大,可能性越大,成交概率就越高。</div>
+                      <div class="font12" >成交概率是系统自动根据客户查看文章等行为，自动计算出该客户的真正成为消费客户的可能性。数字越大,可能性越大,成交概率就越高。</div>
                     </div>
                     <div class="pro-push">
                       <div class="flex_left">
