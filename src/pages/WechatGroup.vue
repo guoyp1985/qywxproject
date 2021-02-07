@@ -17,7 +17,7 @@
       <div class="box-outer">
         <div class="box-title">建立客户群须知</div>
         <div class="box-con">
-          <div style="color:red">请按照提示批量设置您的客户群，否则会影响客户群功能的使用</font></div>
+          <div style="color:red">请按照提示批量设置您的客户群，否则会影响客户群功能的使用</div>
           <div>1、设置好群名称，建议设置群名为类似“北京宴靛厂路店福利群188”。</div>
           <div>2、设置好群欢迎语。可以使用&nbsp;#客户昵称# 欢迎加入“北京宴靛厂路店福利群188”，本群为各位VIP客户提供红包、优惠券等多种福利。</div>
           <div>3、设置好群欢迎语中的图片。用户可以通过该图片领取群福利。</div>
