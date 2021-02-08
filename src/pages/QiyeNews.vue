@@ -66,7 +66,7 @@
 import { Popup, TransferDom, Previewer } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
-import jQuery from 'jquery'
+// import jQuery from 'jquery'
 import { User } from '#/storage'
 
 export default {

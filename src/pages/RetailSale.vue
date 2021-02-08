@@ -25,14 +25,14 @@
               <div class="txt">人员列表</div>
             </div>
           </div>
-          <div class="list-item ico-pic-item">
+          <router-link to="/inviteJoin" class="list-item ico-pic-item">
             <div class="item-inner">
               <div class="ico-bg">
                 <span class="al al-yaoqing1"></span>
               </div>
               <div class="txt">邀请加入</div>
             </div>
-          </div>
+          </router-link>
           <div class="list-item ico-pic-item">
             <div class="item-inner">
               <div class="ico-bg">
