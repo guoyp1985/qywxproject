@@ -10,7 +10,7 @@
     <div v-if="disList1" class="scroll_list">
       <div v-if="!listData1 || !listData1.length" class="flex_empty">暂无数据</div>
       <template v-else>
-        <div v-for="(item,index) in listData1" :key="index" class="scroll_item flex_left">
+        <div v-for="(item,index) in listData1" :key="index" class="scroll_item flex_left" @click="toDetail(item)">
           <div class="mr10">
             <img :src="item.photo" style="width:50px;height:50px;object-fit:cover;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
           </div>
@@ -49,6 +49,9 @@ export default {
     }
   },
   methods: {
+    toDetail (item) {
+      this.$router.push({path: '/qiyeProduct', query: {id: item.id}})
+    },
     getList1 () {
       let params = {pagestart: this.pagestart1, limit: this.limit, module: 'product'}
       this.$http.get(`${ENV.BokaApi}/api/content/getList`, {
