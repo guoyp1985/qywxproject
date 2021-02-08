@@ -23,7 +23,7 @@
            <router-link to="/activity" class="list-item ico-pic-item">
               <div class="item-inner">
                 <div class="ico-bg">
-                  <span class="al al-huodong"></span>
+                  <span class="al al-huodong1"></span>
                 </div>
                 <div class="txt">活动</div>
               </div>
@@ -78,7 +78,7 @@
             <router-link to="/qiyeCustomerList" class="list-item ico-pic-item">
               <div class="item-inner">
                 <div class="ico-bg">
-                  <span class="al al-huodong"></span>
+                  <span class="al al-kehufuwu"></span>
                 </div>
                 <div class="txt">客户服务</div>
               </div>
@@ -86,7 +86,7 @@
             <router-link to="/pushList" class="list-item ico-pic-item">
               <div class="item-inner">
                 <div class="ico-bg">
-                  <span class="al al-wenzhang3"></span>
+                  <span class="al al-service"></span>
                 </div>
                 <div class="txt">精准服务</div>
               </div>
@@ -94,7 +94,7 @@
             <router-link to="/buyerShow" class="list-item ico-pic-item">
               <div class="item-inner">
                 <div class="ico-bg">
-                  <span class="al al-weixinqun"></span>
+                  <span class="al al-maijiaxiu2"></span>
                 </div>
                 <div class="txt">买家秀</div>
               </div>
@@ -104,7 +104,7 @@
             <router-link to="" class="list-item ico-pic-item">
               <div class="item-inner">
                 <div class="ico-bg">
-                  <span class="al al-weixin"></span>
+                  <span class="al al-daodianfuwu"></span>
                 </div>
                 <div class="txt">到店服务</div>
               </div>
@@ -112,7 +112,7 @@
             <router-link to="" class="list-item ico-pic-item">
               <div class="item-inner">
                 <div class="ico-bg">
-                  <span class="al al-weixin"></span>
+                  <span class="al al-huodong"></span>
                 </div>
                 <div class="txt">活动</div>
               </div>
@@ -126,7 +126,7 @@
             <router-link to="/saleCustomerList" class="list-item ico-pic-item">
               <div class="item-inner">
                 <div class="ico-bg">
-                  <span class="al al-huodong"></span>
+                  <span class="al al-kehuliebiao"></span>
                 </div>
                 <div class="txt">客户列表</div>
               </div>
@@ -134,7 +134,7 @@
             <router-link to="/retailSale" class="list-item ico-pic-item">
               <div class="item-inner">
                 <div class="ico-bg">
-                  <span class="al al-wenzhang3"></span>
+                  <span class="al al-fenxiao"></span>
                 </div>
                 <div class="txt">分销</div>
               </div>
@@ -142,7 +142,7 @@
             <router-link to="/saleChance" class="list-item ico-pic-item">
               <div class="item-inner">
                 <div class="ico-bg">
-                  <span class="al al-weixinqun"></span>
+                  <span class="al al-xiaoshoujihui"></span>
                 </div>
                 <div class="txt">销售机会</div>
               </div>
