@@ -50,7 +50,6 @@
           </div>
       </div>
       <div class="form-item flex_left">
-          <div class="title-cell">满减金额<span class="ml3 vertical color-red">*</span></div>
           <div class="input-cell db-flex">
               <span style="line-height:34px">满:</span>
               <input class="mjje" v-model="submitData.ordermoney" type="number" />
