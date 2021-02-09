@@ -11,8 +11,7 @@
     text-align:left;color:#999;
   }
   .mjje{
-    border: 1px solid #ccc;border-radius: 4px;margin:0 3px;padding:0 5px;
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);line-height:30px;
+    border: 1px solid #ccc;border-radius: 4px;margin:0 3px;padding:0 5px;line-height:30px;
   }
   .btn{
     width:100px;line-height:40px;background-color:#07c160;color:#fff;border-radius:60px;text-align:center;
