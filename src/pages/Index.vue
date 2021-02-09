@@ -109,7 +109,7 @@
                 <div class="txt">到店服务</div>
               </div>
             </router-link>
-            <router-link to="" class="list-item ico-pic-item">
+            <router-link to="/serveActivity" class="list-item ico-pic-item">
               <div class="item-inner">
                 <div class="ico-bg">
                   <span class="al al-huodong"></span>

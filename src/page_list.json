@@ -2,6 +2,7 @@
   "Index",
   "AboutGxk",
   "Activity",
+  "AddCommonCard",
   "BuyerShow",
   "Center",
   "Complaint",
@@ -19,6 +20,7 @@
   "RetailSale",
   "SaleChance",
   "SaleCustomerList",
+  "ServeActivity",
   "Service",
   "WechatGroup"
 ]

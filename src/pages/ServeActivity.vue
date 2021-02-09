@@ -1,26 +1,9 @@
 <style lang="less">
-.activity-page{
-  .s-container{bottom:50px;overflow-y:auto;}
-  .scroll_list{
-    .scroll_item{
-      display:flex;background-color:#fff;padding:10px;box-sizing: border-box;
-      .al{color:#659af2;}
-    }
-  }
-  .page-footer{
-    display:flex;justify-content: center;align-items: center;
-    width:100%;box-sizing: border-box;height:50px;
-    position: absolute;left: 0;right: 0;bottom: 0;
-    box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.07);
-    .item{
-      flex:1;display:flex;justify-content: center;align-items: center;height:100%;
-      background-color:#07c160;color:#fff;
-    }
-  }
+.serve-activity-page{
 }
 </style>
 <template>
-  <div class="containerarea activity-page">
+  <div class="containerarea serve-activity-page">
     <div class="s-topbanner s-topbanner1 bg-white">
       <div class="row">
         <tab v-model="selectedIndex" class="v-tab">
@@ -35,16 +18,7 @@
           <div v-if="!listData1 || !listData1.length" class="flex_empty">暂无数据</div>
           <div v-else class="scroll_list">
             <div v-for="(item,index) in listData1" :key="index" class="scroll_item">
-              <div class="pr10 flex_left">
-                <span class="al al-youhuiquan"></span>
-              </div>
-              <div class="flex_cell flex_left">
-                <div>
-                  <div>满{{item.ordermoney}}减{{item.facemoney}}</div>
-                  <div class="color-gray font12">剩余数量: {{item.leftstorage}}</div>
-                  <div class="color-gray font12">有效期: {{item.starttime_str}}<span class="ml5 mr5">-</span>{{item.endtime_str}}</div>
-                </div>
-              </div>
+              <div>{{item.title}}</div>
             </div>
           </div>
           <div class="load-end-area loading" v-if="isLoading1"></div>
@@ -56,25 +30,13 @@
           <div v-if="!listData2 || !listData2.length" class="flex_empty">暂无数据</div>
           <div v-else class="scroll_list">
             <div v-for="(item,index) in listData2" :key="index" class="scroll_item">
-              <div class="pr10">
-                <span class="al al-youhuiquan"></span>
-              </div>
-              <div class="flex_cell flex_left">
-                <div>
-                  <div>满{{item.ordermoney}}减{{item.facemoney}}</div>
-                  <div class="color-gray font12">剩余数量: {{item.leftstorage}}</div>
-                  <div class="color-gray font12">有效期: {{item.starttime_str}}<span class="ml5 mr5">-</span>{{item.endtime_str}}</div>
-                </div>
-              </div>
+              <div>{{item.title}}</div>
             </div>
           </div>
           <div class="load-end-area loading" v-if="isLoading2"></div>
           <div class="load-end-area done" v-else-if="isDone2"></div>
         </template>
       </div>
-    </div>
-    <div class="page-footer">
-      <router-link class="item" to="/addCommonCard">添加活动</router-link>
     </div>
   </div>
 </template>
@@ -146,12 +108,11 @@ export default {
         this.isLoading1 = false
         let retdata = data.data ? data.data : data
         for (var i = 0; i < retdata.length; i++) {
-          retdata[i].starttime_str = new Time(retdata[i].starttime * 1000).dateFormat('yyyy-MM-dd hh:mm')
-          retdata[i].endtime_str = new Time(retdata[i].endtime * 1000).dateFormat('yyyy-MM-dd hh:mm')
+          retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd')
         }
         this.listData1 = this.listData1.concat(retdata)
         this.disList1 = true
-        if (this.listData1.length && retdata.length < this.limit) {
+        if (retdata.length < this.limit) {
           this.isDone1 = true
         }
       })
