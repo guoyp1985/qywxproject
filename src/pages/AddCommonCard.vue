@@ -11,7 +11,8 @@
     text-align:left;color:#999;
   }
   .mjje{
-    border: 1px solid #ccc;border-radius: 4px;margin:0 3px;padding:0 5px;line-height:30px;
+    flex:1;width:30%;border: 1px solid #ccc;border-radius: 4px;
+    margin:0 3px;padding:0 5px;line-height:30px;box-sizing:border-box;
   }
   .btn{
     width:100px;line-height:40px;background-color:#07c160;color:#fff;border-radius:60px;text-align:center;
@@ -49,12 +50,10 @@
           </div>
       </div>
       <div class="form-item flex_left">
-          <div class="input-cell db-flex">
-              <span style="line-height:34px">满:</span>
-              <input class="mjje" v-model="submitData.ordermoney" type="number" />
-              <span style="line-height:34px">减:</span>
-              <input class="mjje" v-model="submitData.facemoney" type="number" />
-          </div>
+          <span style="line-height:34px">满:</span>
+          <input class="mjje" v-model="submitData.ordermoney" type="number" />
+          <span style="line-height:34px">减:</span>
+          <input class="mjje" v-model="submitData.facemoney" type="number" />
       </div>
     </div>
     <div class="mt20 flex_center">
