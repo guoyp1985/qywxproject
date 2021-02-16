@@ -510,12 +510,11 @@ export default {
       }
     },
     showBigimg (index) {
-      const self = this
-      if (self.$util.isPC()) {
-        self.$refs.previewer.show(index)
+      if (this.$util.isPC()) {
+        this.$refs.previewer.show(index)
       } else {
         if (window.WeixinJSBridge) {
-          let viewarr = self.contentphotoarr.length > 0 ? self.contentphotoarr : self.photoarr
+          let viewarr = this.contentphotoarr.length > 0 ? this.contentphotoarr : this.photoarr
           window.WeixinJSBridge.invoke('imagePreview', {
             current: viewarr[index],
             urls: viewarr
@@ -524,20 +523,18 @@ export default {
       }
     },
     showBigimg1 (index) {
-      const self = this
-      if (self.$util.isPC()) {
-        self.$refs.previewerFlash.show(index)
+      if (this.$util.isPC()) {
+        this.$refs.previewerFlash.show(index)
       } else {
         window.WeixinJSBridge.invoke('imagePreview', {
-          current: self.photoarr[index],
-          urls: self.photoarr
+          current: this.photoarr[index],
+          urls: this.photoarr
         })
       }
     },
     viewBigImg (index) {
-      const self = this
-      if (self.$util.isPC()) {
-        self.$refs.previewerOption.show(0)
+      if (this.$util.isPC()) {
+        this.$refs.previewerOption.show(0)
       } else {
         window.WeixinJSBridge.invoke('imagePreview', {
           current: this.selectedOption.photo,
@@ -546,21 +543,20 @@ export default {
       }
     },
     handelShare () {
-      const self = this
       let shareData = {
-        module: self.module,
-        moduleid: self.productid,
-        link: `${ENV.Host}/#/qiyeProduct?id=${self.productid}&wid=${self.productdata.wid}&share_uid=${self.loginUser.uid}&wechatorderid=${this.query.wechatorderid}`,
-        successCallback: function () {
-          self.showVideo = false
+        module: this.module,
+        moduleid: this.productid,
+        link: `${ENV.Host}/#/qiyeProduct?id=${this.productid}&share_uid=${this.loginUser.uid}`,
+        successCallback: () => {
+          this.showVideo = false
         }
       }
-      if (self.query.share_uid) {
-        shareData.link = `${shareData.link}&lastshareuid=${self.query.share_uid}`
-        shareData.lastshareuid = self.query.share_uid
+      if (this.query.share_uid) {
+        shareData.link = `${shareData.link}&lastshareuid=${this.query.share_uid}`
+        shareData.lastshareuid = this.query.share_uid
       }
-      shareData.data = self.productdata
-      self.$util.handleWxShare(shareData)
+      shareData.data = this.productdata
+      this.$util.handleWxShare(shareData)
     },
     cutdown (item, interval) {
       interval = setInterval(function () {

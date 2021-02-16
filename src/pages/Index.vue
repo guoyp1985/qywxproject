@@ -172,7 +172,6 @@ export default {
     getData () {
       this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
         console.log('进入到了center页面的user/show', res)
-        console.log(res)
         if (!res) return
         const data = res.data
         let retdata = data.data ? data.data : data

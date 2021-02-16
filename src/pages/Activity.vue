@@ -214,7 +214,7 @@ export default {
       this.isLoading2 = false
       this.isDone2 = false
     },
-    refresh (query) {
+    refresh () {
       this.loginUser = User.get()
       this.query = this.$route.query
       this.initData()
@@ -224,7 +224,7 @@ export default {
   created () {
   },
   activated () {
-    this.refresh(this.$route.query)
+    this.refresh()
   }
 }
 </script>
