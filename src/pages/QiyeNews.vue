@@ -8,7 +8,7 @@
   .news-author {margin-left: 6px;color: #1aad19;}
   img {max-width: 100% !important;}
   .qrcode-area{
-    text-align:center;
+    text-align:center;margin-top:5px;
     img{display:block;margin:0 auto;width:80%;}
     .txt{color: #659af2;}
   }
@@ -57,13 +57,13 @@
           <div class="news-content" v-html="viewData.content"></div>
         </template>
       </template>
+      <div class="qrcode-area" v-if="showUser && showUser.uid">
+          <img :src="showUser.qrcode" />
+          <div class="txt">您的专属客服【{{showUser.linkman}}】</div>
+      </div>
       <div class="reading-info">
         <span class="font14 color-gray">阅读 {{viewData.views | readingCountFormat}}</span>
         <span class="font14 color-gray" @click="clickDig"><span :class="`digicon ${isdig ? 'diged' : ''}`"></span> {{viewData.dig}}</span>
-      </div>
-      <div class="qrcode-area" v-if="showUser && showUser.uid">
-          <img :src="showUser.qrcode" />
-          <div class="txt">识别二维码添加客服微信</div>
       </div>
     </div>
     <div v-transfer-dom>
