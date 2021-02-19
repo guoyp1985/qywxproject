@@ -67,7 +67,7 @@ export default {
           }
           let shareParams = {
             title: `送你一张${this.facemoney}元优惠券`,
-            desc: '使用优惠券下单吧',
+            desc: `有效期${this.viewData.starttime_str}-${this.viewData.endtime_str}`,
             photo: 'https://tossharingsales.boka.cn/month_202102/16137146626061.jpeg',
             link: `${ENV.Host}/#/activity?id=${this.viewData.id}&share_uid=${this.loginUser.uid}`
           }

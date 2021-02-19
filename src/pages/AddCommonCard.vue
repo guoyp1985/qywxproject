@@ -24,6 +24,12 @@
   <div class="bg-page add-comcard-page">
     <div class="form-list">
       <div class="form-item flex_left">
+          <div class="title-cell">标题<span class="ml3 vertical color-red">*</span></div>
+          <div class="input-cell">
+              <input v-model="submitData.title" type="text" placeholder="标题">
+          </div>
+      </div>
+      <div class="form-item flex_left">
           <div class="title-cell">开始时间<span class="ml3 vertical color-red">*</span></div>
           <div class="input-cell time-cell">
             <datetime format="YYYY-MM-DD HH:mm" v-model='submitData.starttime' :show.sync="visibility1" @on-change="datechange1" @on-cancel="datecancel1" @on-confirm="dateconfirm1"></datetime>
@@ -74,6 +80,7 @@ export default {
       query: {},
       loginUser: {},
       submitData: {
+        title: '',
         starttime: '',
         endtime: '',
         validday: '',
@@ -82,6 +89,7 @@ export default {
         facemoney: ''
       },
       requiredData: {
+        title: '',
         starttime: '',
         endtime: '',
         validday: '',
@@ -167,7 +175,7 @@ export default {
           time: this.$util.delay(data.error),
           onHide: () => {
             if (data.flag) {
-              this.$router.push('/activity')
+              this.$router.push('/activityList')
             } else {
               this.submitIng = false
             }
@@ -175,9 +183,26 @@ export default {
         })
       })
     },
+    initData () {
+      this.submitData = {
+        title: '',
+        starttime: '',
+        endtime: '',
+        validday: '',
+        totalcount: '',
+        ordermoney: '',
+        facemoney: ''
+      }
+      this.visibility1 = false
+      this.visibility2 = false
+      this.selectdatetxt1 = '选择开始时间'
+      this.selectdatetxt2 = '选择结束时间'
+      this.submitIng = false
+    },
     refresh () {
       this.query = this.$route.query
       this.loginUser = User.get()
+      this.initData()
     }
   },
   activated () {

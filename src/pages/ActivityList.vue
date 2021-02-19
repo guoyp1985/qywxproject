@@ -40,6 +40,7 @@
               </div>
               <div class="flex_cell flex_left">
                 <div>
+                  <div>{{item.title}}</div>
                   <div>满{{item.ordermoney}}减{{item.facemoney}}</div>
                   <div class="color-gray font12">剩余数量: {{item.leftstorage}}</div>
                   <div class="color-gray font12">有效期: {{item.starttime_str}}<span class="ml5 mr5">-</span>{{item.endtime_str}}</div>
