@@ -9,7 +9,7 @@
   img {max-width: 100% !important;}
   .qrcode-area{
     text-align:center;margin-top:5px;
-    img{display:block;margin:0 auto;width:80%;}
+    img{display:block;margin:0 auto;width:80%;max-width:300px !important;}
     .txt{color: #659af2;}
   }
 }
@@ -61,10 +61,10 @@
           <img :src="showUser.qrcode" />
           <div class="txt">您的专属客服【{{showUser.linkman}}】</div>
       </div>
-      <div class="reading-info">
+      <!-- <div class="reading-info">
         <span class="font14 color-gray">阅读 {{viewData.views | readingCountFormat}}</span>
         <span class="font14 color-gray" @click="clickDig"><span :class="`digicon ${isdig ? 'diged' : ''}`"></span> {{viewData.dig}}</span>
-      </div>
+      </div> -->
     </div>
     <div v-transfer-dom>
       <previewer :list="previewerPhotoarr" ref="previewer"></previewer>

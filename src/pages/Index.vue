@@ -20,7 +20,7 @@
         <div class="box-outer">
           <div class="box-title">获客</div>
           <div class="box-list square">
-           <router-link to="/activity" class="list-item ico-pic-item">
+           <router-link to="/activityList" class="list-item ico-pic-item">
               <div class="item-inner">
                 <div class="ico-bg">
                   <span class="al al-huodong1"></span>
