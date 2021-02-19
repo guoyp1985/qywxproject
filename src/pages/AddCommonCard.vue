@@ -11,7 +11,7 @@
     text-align:left;color:#999;
   }
   .mjje{
-    flex:1;width:30%;border: 1px solid #ccc;border-radius: 4px;
+    flex:1;width:30%;
     margin:0 3px;padding:0 5px;line-height:30px;box-sizing:border-box;
     text-decoration: none;
   }
@@ -58,9 +58,9 @@
       </div>
       <div class="form-item flex_left">
           <span style="line-height:34px">满:</span>
-          <input class="mjje" v-model="submitData.ordermoney" type="number" />
+          <input class="mjje" v-model="submitData.ordermoney" type="number" placeholder="请输入" />
           <span style="line-height:34px">减:</span>
-          <input class="mjje" v-model="submitData.facemoney" type="number" />
+          <input class="mjje" v-model="submitData.facemoney" type="number" placeholder="请输入" />
       </div>
     </div>
     <div class="mt20 flex_center">
