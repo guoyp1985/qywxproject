@@ -66,8 +66,8 @@ export default {
             this.ordermoney = cmoney[0]
             this.facemoney = cmoney[1]
           }
-          let shareStartTime = new Time(retdata.starttime * 1000).dateFormat('MM-dd hh:mm')
-          let shareEndTime = new Time(retdata.endtime * 1000).dateFormat('MM-dd hh:mm')
+          let shareStartTime = new Time(retdata.starttime * 1000).dateFormat('MM-dd')
+          let shareEndTime = new Time(retdata.endtime * 1000).dateFormat('MM-dd')
           let shareParams = {
             // title: `送你一张${this.facemoney}元优惠券`,
             title: this.viewData.title,
