@@ -60,15 +60,18 @@ export default {
           retdata.starttime_str = new Time(retdata.starttime * 1000).dateFormat('yyyy-MM-dd hh:mm')
           retdata.endtime_str = new Time(retdata.endtime * 1000).dateFormat('yyyy-MM-dd hh:mm')
           this.viewData = retdata
+          document.title = this.viewData.title
           if (this.viewData.type === 'cardcommon') {
             let cmoney = this.viewData.discounttype.split(',')
             this.ordermoney = cmoney[0]
             this.facemoney = cmoney[1]
           }
+          let shareStartTime = new Time(retdata.starttime * 1000).dateFormat('MM-dd hh:mm')
+          let shareEndTime = new Time(retdata.endtime * 1000).dateFormat('MM-dd hh:mm')
           let shareParams = {
             // title: `送你一张${this.facemoney}元优惠券`,
             title: this.viewData.title,
-            desc: `有效期${this.viewData.starttime_str}-${this.viewData.endtime_str}`,
+            desc: `有效期${shareStartTime}-${shareEndTime}`,
             photo: 'https://tossharingsales.boka.cn/month_202102/16137146626061.jpeg',
             link: `${ENV.Host}/#/activity?id=${this.viewData.id}&share_uid=${this.loginUser.uid}`
           }
