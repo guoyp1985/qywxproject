@@ -216,7 +216,7 @@ export default {
       if (shareUid && shareUid !== '' && parseInt(shareUid) && parseInt(shareUid) !== this.loginUser.uid) {
         this.$http.get(`${ENV.BokaApi}/api/user/show`, {
           params: {otheruid: shareUid}
-        }) .then(res => {
+        }).then(res => {
           const data = res.data
           if (data.flag) {
             this.showUser = data.data
