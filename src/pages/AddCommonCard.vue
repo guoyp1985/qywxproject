@@ -46,7 +46,7 @@
       <div class="form-item flex_left">
           <div class="title-cell">有效期<span class="ml3 vertical color-red">*</span></div>
           <div class="input-cell">
-              <input v-model="submitData.validday" type="text" placeholder="有效期，最多20天">
+              <input v-model="submitData.validday" type="text" placeholder="有效期，最多365天">
           </div>
           <div>天</div>
       </div>
@@ -101,7 +101,8 @@ export default {
       visibility2: false,
       selectdatetxt1: '选择开始时间',
       selectdatetxt2: '选择结束时间',
-      submitIng: false
+      submitIng: false,
+      maxDay: 365
     }
   },
   methods: {
@@ -147,8 +148,8 @@ export default {
         return false
       }
       let validday = this.submitData.validday
-      if (isNaN(validday) || parseInt(validday) > 20 || parseInt(validday) < 0 || !(/(^[1-9]\d*$)/.test(validday))) {
-        this.$vux.toast.text('请输入正确的有效期，最多20天')
+      if (isNaN(validday) || parseInt(validday) > this.maxDay || parseInt(validday) < 0 || !(/(^[1-9]\d*$)/.test(validday))) {
+        this.$vux.toast.text(`请输入正确的有效期，最多${this.maxDay}天`)
         return false
       }
       let totalcount = this.submitData.totalcount
