@@ -7,6 +7,11 @@
   .reading-info span + span {margin-left: 10px;}
   .news-author {margin-left: 6px;color: #1aad19;}
   img {max-width: 100% !important;}
+  .qrcode-area{
+    text-align:center;
+    img{display:block;margin:0 auto;width:80%;}
+    .txt{color: #659af2;}
+  }
 }
 </style>
 <template>
@@ -56,6 +61,10 @@
         <span class="font14 color-gray">阅读 {{viewData.views | readingCountFormat}}</span>
         <span class="font14 color-gray" @click="clickDig"><span :class="`digicon ${isdig ? 'diged' : ''}`"></span> {{viewData.dig}}</span>
       </div>
+      <div class="qrcode-area" v-if="showUser && showUser.uid">
+          <img :src="showUser.qrcode" />
+          <div class="txt">识别二维码添加客服微信</div>
+      </div>
     </div>
     <div v-transfer-dom>
       <previewer :list="previewerPhotoarr" ref="previewer"></previewer>
@@ -80,7 +89,8 @@ export default {
       viewData: {},
       isdig: 0,
       photoarr: [],
-      previewerPhotoarr: []
+      previewerPhotoarr: [],
+      showUser: {}
     }
   },
   filters: {
@@ -202,6 +212,19 @@ export default {
     refresh (query) {
       this.loginUser = User.get()
       this.query = this.$route.query
+      let shareUid = this.query.share_uid
+      if (shareUid && shareUid !== '' && parseInt(shareUid) && parseInt(shareUid) !== this.loginUser.uid) {
+        this.$http.get(`${ENV.BokaApi}/api/user/show`, {
+          params: {otheruid: shareUid}
+        }) .then(res => {
+          const data = res.data
+          if (data.flag) {
+            this.showUser = data.data
+          }
+        })
+      } else {
+        this.showUser = this.loginUser
+      }
       this.getData()
     }
   },

@@ -234,9 +234,9 @@ const access = success => {
   console.log('token=', token)
   console.log('query=', query)
   // token = {
-  //   expired_at: 1614310421523,
-  //   refresh_expired_at: 1614310421523,
-  //   token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvcXkuYm9rYS5jblwvYXBpXC92aXNpdG9yXC93b3JrVXNlckF1dGhcL3F0ekVUT05ZSGtwRG5wNjZYbUViRXQxTVZCMlZxZ25UNll0cnhqN3B2RGMiLCJpYXQiOjE2MTI2MjExMzYsImV4cCI6MTYxMzQ4NTEzNiwibmJmIjoxNjEyNjIxMTM2LCJqdGkiOiJtRGVlUlRCOFNmd0FvbDlpIiwic3ViIjozLCJwcnYiOiI4NjY1YWU5Nzc1Y2YyNmY2YjhlNDk2Zjg2ZmE1MzZkNjhkZDcxODE4In0.2UGXRwl3gLxq0BTtlMe2yYxuvHus9xrEU1DyYKAZ8L0'
+  //   expired_at: 1619685452823,
+  //   refresh_expired_at: 1619685452823,
+  //   token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvcXkuYm9rYS5jblwvYXBpXC92aXNpdG9yXC93b3JrVXNlckF1dGhcL3VRVTE4d0hERHo4R3drQzF6X2d5cFhPVHhLaUxrcVNRWXN0SmhKRG9qSmMiLCJpYXQiOjE2MTM2Mzc0NTIsImV4cCI6MTYxNDUwMTQ1MiwibmJmIjoxNjEzNjM3NDUyLCJqdGkiOiJKakJmNE4zTTg0bTVJQ1lSIiwic3ViIjoxLCJwcnYiOiI4NjY1YWU5Nzc1Y2YyNmY2YjhlNDk2Zjg2ZmE1MzZkNjhkZDcxODE4In0.otwccirnCVe6VsxMseutanMl0GHTVptzEnBPMnTRnHQ'
   // }
   // Token.set(token)
   if (location.href.indexOf('/redirect') < 0) {
