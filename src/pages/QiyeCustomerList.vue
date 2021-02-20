@@ -254,17 +254,17 @@ export default {
       this.pagestart1 = 0
       this.disList1 = false
       this.listData1 = []
-      this.isLoading1 = true
+      this.isLoading1 = false
       this.isDone1 = false
       this.pagestart2 = 0
       this.disList2 = false
       this.listData2 = []
-      this.isLoading2 = true
+      this.isLoading2 = false
       this.isDone2 = false
       this.pagestart3 = 0
       this.disList3 = false
       this.listData3 = []
-      this.isLoading3 = true
+      this.isLoading3 = false
       this.isDone3 = false
     },
     refresh () {

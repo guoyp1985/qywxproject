@@ -62,14 +62,15 @@
                 <div class="txt">客户群</div>
               </div>
             </router-link>
-            <router-link to="" class="list-item ico-pic-item">
+            <!-- <router-link to="" class="list-item ico-pic-item">
               <div class="item-inner">
                 <div class="ico-bg">
                   <span class="al al-weixin"></span>
                 </div>
                 <div class="txt">微信</div>
               </div>
-            </router-link>
+            </router-link> -->
+            <div class="list-item ico-pic-item"></div>
           </div>
         </div>
         <div class="box-outer mt10">
@@ -101,14 +102,14 @@
             </router-link>
           </div>
           <div class="box-list square">
-            <router-link to="" class="list-item ico-pic-item">
+            <!-- <router-link to="" class="list-item ico-pic-item">
               <div class="item-inner">
                 <div class="ico-bg">
                   <span class="al al-daodianfuwu"></span>
                 </div>
                 <div class="txt">到店服务</div>
               </div>
-            </router-link>
+            </router-link> -->
             <router-link to="/serveActivity" class="list-item ico-pic-item">
               <div class="item-inner">
                 <div class="ico-bg">
@@ -117,6 +118,7 @@
                 <div class="txt">活动</div>
               </div>
             </router-link>
+            <div class="list-item ico-pic-item"></div>
             <div class="list-item ico-pic-item"></div>
           </div>
         </div>
@@ -131,7 +133,9 @@
                 <div class="txt">客户列表</div>
               </div>
             </router-link>
-            <router-link to="/retailSale" class="list-item ico-pic-item">
+            <div class="list-item ico-pic-item"></div>
+            <div class="list-item ico-pic-item"></div>
+            <!-- <router-link to="/retailSale" class="list-item ico-pic-item">
               <div class="item-inner">
                 <div class="ico-bg">
                   <span class="al al-fenxiao"></span>
@@ -146,7 +150,7 @@
                 </div>
                 <div class="txt">销售机会</div>
               </div>
-            </router-link>
+            </router-link> -->
           </div>
         </div>
       </div>
