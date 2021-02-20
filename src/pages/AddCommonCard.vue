@@ -30,6 +30,16 @@
           </div>
       </div>
       <div class="form-item flex_left">
+          <div class="title-cell">客户群体<span class="ml3 vertical color-red">*</span></div>
+          <div class="input-cell">
+            <select v-model="submitData.customertype">
+              <option value="">请选择</option>
+              <option value="1">普通客户</option>
+              <option value="2">高端客户</option>
+            </select>
+          </div>
+      </div>
+      <div class="form-item flex_left">
           <div class="title-cell">开始时间<span class="ml3 vertical color-red">*</span></div>
           <div class="input-cell time-cell">
             <datetime format="YYYY-MM-DD HH:mm" v-model='submitData.starttime' :show.sync="visibility1" @on-change="datechange1" @on-cancel="datecancel1" @on-confirm="dateconfirm1"></datetime>
@@ -81,6 +91,7 @@ export default {
       loginUser: {},
       submitData: {
         title: '',
+        customertype: '',
         starttime: '',
         endtime: '',
         validday: '',
@@ -90,6 +101,7 @@ export default {
       },
       requiredData: {
         title: '',
+        customertype: '',
         starttime: '',
         endtime: '',
         validday: '',
