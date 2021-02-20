@@ -59,6 +59,12 @@
           </div>
           <div class="txt-cell">联系客服</div>
         </router-link>
+        <div class="item" @click="toAdmin">
+          <div class="ico-cell">
+            <span class="al al-houtaiguanli"></span>
+          </div>
+          <div class="txt-cell">后台管理</div>
+        </div>
       </div>
     </div>
     <qiye-footer :user.sync="loginUser"></qiye-footer>
@@ -97,6 +103,9 @@ export default {
     }
   },
   methods: {
+    toAdmin () {
+      location.href = `${ENV.AdminUrl}?username=${this.loginUser.username}`
+    },
     clickKefu () {
       this.showModal = true
     },

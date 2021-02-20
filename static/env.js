@@ -7,7 +7,7 @@ var ENV = {
   Host: 'http://qywx.bsa.cn',
   BokaApi: 'https://qy.boka.cn',
   WeixinName: '博卡授权中心', //vue: 博卡授权中心 // vux: 共销汇
-  AdminUrl: 'http://laravelcms.boka.cn/admin/login/unionIdLogin',
+  AdminUrl: 'https://qy.boka.cn/admin/loginFromBsa',
   FactoryApi: 'https://factorydev.boka.cn',
   ApiVersion: 'V2',
   ApiAccept: 'application/vnd.factorydev.v2+json',
