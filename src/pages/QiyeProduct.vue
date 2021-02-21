@@ -249,7 +249,10 @@
           <div class="font12">个人中心</div>
         </router-link>
         <div v-if="productdata.storage <= 0" class="t-cell color-white h_100 v_middle align_center bg-gray">已售罄</div>
-				<div v-else class="t-cell color-white h_100 v_middle align_center bg-red2">立即购买</div>
+        <template v-else>
+  				<div v-if="query && query.share_uid" class="t-cell color-white h_100 v_middle align_center bg-red2">立即购买</div>
+  				<div v-else class="t-cell color-white h_100 v_middle align_center bg-red2" @click="clickShare">分享赚</div>
+        </template>
         <!--
 				<div v-else class="t-cell color-white h_100 v_middle align_center bg-red2" @click="buyevent">立即购买</div>
       -->
