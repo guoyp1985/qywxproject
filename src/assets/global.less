@@ -484,9 +484,8 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 
 .percentlayer{z-index:10;position:absolute;left:0;right:0;bottom:0;top:0;}
 .percentlayer .bg{position:absolute;left:0;right:0;bottom:0;top:0;background:rgba(0,0,0,0.6);}
-.percentlayer .layerinner{
-	width:80%;padding-bottom:100%;position:relative;
-}
+.percentlayer .layer-outer{width:80%;}
+.percentlayer .layerinner{width:100%;padding-bottom:123%;max-height:80%;position:relative;}
 .percentlayer .layerinner .inner{
 	z-index:10;position:absolute;left:0;top:0;right:0;bottom:0;
 	padding:10px;box-sizing: border-box;

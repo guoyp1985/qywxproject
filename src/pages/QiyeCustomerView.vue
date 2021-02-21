@@ -76,6 +76,15 @@
         </div>
       </div>
       <div class="view-item">
+        <div class="col1">生日</div>
+        <div class="col2">
+          <datetime format="YYYY-MM-DD" v-model='viewData.birthday_str' :show.sync="showDateTime" @on-cancel="dateCancel" @on-confirm="dateConfirm"></datetime>
+        </div>
+        <div class="btn-col">
+          <div class="btn" @click="clickDate">更新</div>
+        </div>
+      </div>
+      <div class="view-item">
         <div class="col1">地区</div>
         <div class="col2">{{ viewData.country }} {{ viewData.province }} {{ viewData.city }}</div>
       </div>
@@ -104,11 +113,12 @@
 </template>
 
 <script>
-import {} from 'vux'
+import {Datetime} from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
+import Time from '../../libs/time'
 export default {
-  components: {},
+  components: {Datetime},
   data () {
     return {
       query: {},
@@ -120,7 +130,9 @@ export default {
         truename: '真实姓名',
         company: '公司名称'
       },
-      updateVal: ''
+      updateVal: '',
+      birthday: '',
+      showDateTime: false
     }
   },
   computed: {
@@ -136,6 +148,16 @@ export default {
     }
   },
   methods: {
+    clickDate () {
+      this.showDateTime = true
+    },
+    dateCancel () {
+    },
+    dateConfirm () {
+      this.ajaxUpdate('birthday', this.viewData.birthday_str, () => {
+        this.showDateTime = false
+      })
+    },
     updateEvent (char) {
       this.updateChar = char
       this.updateVal = this.viewData[char]
@@ -144,22 +166,27 @@ export default {
     closeModal () {
       this.showModal = false
     },
-    submitModal () {
-      if (this.updateVal === '') {
-        this.$vux.toast.text('请输入更新内容')
-        return false
-      }
+    ajaxUpdate (char, value, callback) {
       this.$vux.loading.show()
       this.$http.get(`${ENV.BokaApi}/api/customer/update`, {
-        params: {uid: this.query.uid, char: this.updateChar, value: this.updateVal}
+        params: {uid: this.query.uid, char: char, value: value}
       }).then(res => {
         this.$vux.loading.hide()
         let data = res.data
         this.$vux.toast.text(data.error)
         if (data.flag) {
-          this.viewData[this.updateChar] = this.updateVal
-          this.showModal = false
+          callback && callback()
         }
+      })
+    },
+    submitModal () {
+      if (this.updateVal === '') {
+        this.$vux.toast.text('请输入更新内容')
+        return false
+      }
+      this.ajaxUpdate(this.updateChar, this.updateVal, () => {
+        this.viewData[this.updateChar] = this.updateVal
+        this.showModal = false
       })
     },
     getInfo () {
@@ -169,7 +196,14 @@ export default {
       }).then(res => {
         this.$vux.loading.hide()
         let data = res.data
-        this.viewData = data.data ? data.data : data
+        let retdata = data.data ? data.data : data
+        if (retdata) {
+          retdata.birthday_str = ''
+          if (retdata.birthday) {
+            retdata.birthday_str = new Time(retdata.birthday * 1000).dateFormat('yyyy-MM-dd')
+          }
+          this.viewData = retdata
+        }
       })
     },
     refresh () {

@@ -433,36 +433,38 @@ Util.install = function (Vue, options) {
         //     })
         //   }
         // })
-        wx.shareToExternalChat({
-          title: wxData.title,
-          desc: wxData.desc,
-          link: wxshareurl,
-          imgUrl: wxData.photo,
-          success: function (res) {
-            if (res.err_msg == "shareToExternalChat:ok") {
-              self.wxShareSuccess({
-                data: wxData,
-                type: 'friend',
-                successCallback: params.successCallback
-              })
+        if (wx) {
+          wx.shareToExternalChat({
+            title: wxData.title,
+            desc: wxData.desc,
+            link: wxshareurl,
+            imgUrl: wxData.photo,
+            success: function (res) {
+              if (res.err_msg == "shareToExternalChat:ok") {
+                self.wxShareSuccess({
+                  data: wxData,
+                  type: 'friend',
+                  successCallback: params.successCallback
+                })
+              }
             }
-          }
-        })
-        wx.shareToExternalContact({
-          title: wxData.title,
-          desc: wxData.desc,
-          link: wxshareurl,
-          imgUrl: wxData.photo,
-          success: function (res) {
-            if (res.err_msg == "shareToExternalContact:ok") {
-              self.wxShareSuccess({
-                data: wxData,
-                type: 'friend',
-                successCallback: params.successCallback
-              })
+          })
+          wx.shareToExternalContact({
+            title: wxData.title,
+            desc: wxData.desc,
+            link: wxshareurl,
+            imgUrl: wxData.photo,
+            success: function (res) {
+              if (res.err_msg == "shareToExternalContact:ok") {
+                self.wxShareSuccess({
+                  data: wxData,
+                  type: 'friend',
+                  successCallback: params.successCallback
+                })
+              }
             }
-          }
-        })
+          })
+        }
       })
     },
     handleWxShare: function (os) {
