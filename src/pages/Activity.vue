@@ -27,7 +27,7 @@
     }
   }
 }
-.result-modal{
+.card-result-modal{
   .inner{
     width:90%;position:relative;
     .pic-outer{
@@ -55,6 +55,12 @@
   .close-area{position:absolute;left:0;bottom:-120rpx;right:0;height:100rpx;}
   .close-area .al{font-weight:bold;font-size:70rpx;color:#fff;}
 }
+.share-modal{
+  background-color:rgba(0,0,0,0.7) !important;color:#fff;
+  .ico{text-align:right;padding:15px 40px;box-sizing: border-box;}
+  .ico .al{font-size:60px;color:rgba(255,255,255,0.9);}
+  .txt{font-size:16px;text-shadow: -2px 0px 1px #000;padding:10px;box-sizing: border-box;text-align:center;}
+}
 </style>
 <template>
   <div class="activity-page">
@@ -75,6 +81,7 @@
                       <div class="btn flex_center" @click="openEvent">開</div>
                     </div>
                   </div>
+                  <div class="txt2" @click="clickShare" v-if="!query.share_uid || query.share_uid == ''">立即分享</div>
                 </div>
               </div>
             </div>
@@ -83,7 +90,7 @@
       </template>
     </template>
     <div v-transfer-dom class="x-popup">
-      <popup v-model="showResultModal" height="100%" class="result-modal">
+      <popup v-model="showResultModal" height="100%" class="card-result-modal">
         <div class="popup1 h_100 flex_center">
           <div class="inner">
             <div class="pic-outer">
@@ -102,6 +109,14 @@
               <div class="al al-close" @click="closeResultModal"></div>
             </div>
           </div>
+        </div>
+      </popup>
+    </div>
+    <div v-transfer-dom class="x-popup">
+      <popup v-model="showShareModal" height="100%" class="share-modal">
+        <div class="popup1 h_100" @click="clickShareModal">
+    			<div class="ico"><i class="al al-feiji"></i></div>
+    			<div class="txt">点击<span class="al al-asmkticon0165"></span>，分享给客户吧！</div>
         </div>
       </popup>
     </div>
@@ -124,10 +139,17 @@ export default {
       viewData: {},
       ordermoney: '0.00',
       facemoney: '0.00',
-      showResultModal: false
+      showResultModal: false,
+      showShareModal: false
     }
   },
   methods: {
+    clickShare () {
+      this.showShareModal = true
+    },
+    clickShareModal () {
+      this.showShareModal = false
+    },
     openEvent () {
       this.showResultModal = true
     },
