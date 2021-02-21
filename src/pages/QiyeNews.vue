@@ -59,7 +59,6 @@
       </template>
       <div class="qrcode-area" v-if="showUser && showUser.uid">
           <img :src="showUser.qrcode" />
-          <div class="txt">您的专属客服【{{showUser.linkman}}】</div>
       </div>
       <!-- <div class="reading-info">
         <span class="font14 color-gray">阅读 {{viewData.views | readingCountFormat}}</span>

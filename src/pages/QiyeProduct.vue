@@ -1,131 +1,127 @@
 
 <style lang="less">
 .notop .pagetop{display:none;}
-.product{
+.qyproduct-page.notop .pagemiddle{top:0px;}
+.qyproduct-page{
   .card-options{
     display: flex;flex-wrap: wrap;
     img{width:30px;height:30px;margin-right:10px;object-fit:cover;margin-top:10px;}
     .txt-item{margin-top:10px;}
     .btn{border-radius:10px;background-color:#ccc;color:#999;font-size:12px;height:22px;padding:0 10px;}
   }
-}
-.product .videobg{width:100%;height:100%;background-size:cover;background-position:center;position:relative;}
-.product .play-icon{
-  width:60px;height:60px;background: rgba(0,0,0,.4);border-radius: 50%;color:#fff;
-  position:absolute;left:50%;top:50%;margin-left:-30px;margin-top:-30px;
-}
-.product .play-icon .al{margin-left:4px;}
-.product .videoarea{
-  position:absolute;left:0;top:0;right:0;bottom:0;z-index:9999;background-color:#000;color:#fff;
-  .btn-area{
-    position:absolute;left:0;top:7px;right:0;height:50px;z-index:10;
-    .btn-item:not(:last-child){margin-right:20px;}
-    .btn-item{width:60px;height:30px;background-color:#232323;color:#fff;border-radius:10px;}
+  .videobg{width:100%;height:100%;background-size:cover;background-position:center;position:relative;}
+  .play-icon{
+    width:60px;height:60px;background: rgba(0,0,0,.4);border-radius: 50%;color:#fff;
+    position:absolute;left:50%;top:50%;margin-left:-30px;margin-top:-30px;
   }
-  .video-inner{
-    position:absolute;left:0;top:0;right:0;bottom:0;
-    video{position: absolute;width: 100%;height: 100%;}
+  .play-icon .al{margin-left:4px;}
+  .videoarea{
+    position:absolute;left:0;top:0;right:0;bottom:0;z-index:9999;background-color:#000;color:#fff;
+    .btn-area{
+      position:absolute;left:0;top:7px;right:0;height:50px;z-index:10;
+      .btn-item:not(:last-child){margin-right:20px;}
+      .btn-item{width:60px;height:30px;background-color:#232323;color:#fff;border-radius:10px;}
+    }
+    .video-inner{
+      position:absolute;left:0;top:0;right:0;bottom:0;
+      video{position: absolute;width: 100%;height: 100%;}
+    }
   }
-}
-.product .fixed-topcoll{position:absolute;right:0;top:20px;z-index:10;width:80px;height:35px;border-top-left-radius:20px;border-bottom-left-radius:20px;background-color:rgba(153,153,153,0.8);color:#fff;}
-.product .fixed-topcoll.start{top:60px;}
-.vline{position:relative;}
-.vline:after {
-  content: " ";
-  display: block;
-  position: absolute;
-  width: 2px;
-  top: 4px;
-  bottom: 4px;
-  margin: auto 0;
-  left: -1px;
-  background-color: #ff6600;
-}
-.product .buylist:after{
-  content:'';
-  display:block;
-  clear:both;
-}
-.product .buylist .item{
-  float: left;
-  width: 50px;
-  text-align: center;
-  display:block;
-  color:inherit;;
-}
-.productcontent{
-  padding:20px 15px;
-}
-.product .productcontent img{
-  max-width:100%;
-  vertical-align: middle;
-}
-.product .productarea.scrollend:after {
-    background-color: #f6f6f6;
-}
-
-.product .pagetop{
-  box-shadow: 0px 0px 10px 3px #d0d0d0;
-}
-.product .pagemiddle{top:50px;}
-.product.notop .pagemiddle{top:0px;}
-.product .numicon {
+  .fixed-topcoll{position:absolute;right:0;top:20px;z-index:10;width:80px;height:35px;border-top-left-radius:20px;border-bottom-left-radius:20px;background-color:rgba(153,153,153,0.8);color:#fff;}
+  .fixed-topcoll.start{top:60px;}
+  .vline{position:relative;}
+  .vline:after {
+    content: " ";
+    display: block;
     position: absolute;
-    top: 0;
-    right: -15px;
-    background: #f06825;
-    padding: 0 1px;
-    border-radius: 16%;
-    color: #fff;
-    font-size: 10px;
-    min-width: 18px;
+    width: 2px;
+    top: 4px;
+    bottom: 4px;
+    margin: auto 0;
+    left: -1px;
+    background-color: #ff6600;
+  }
+  .buylist:after{
+    content:'';
+    display:block;
+    clear:both;
+  }
+  .buylist .item{
+    float: left;
+    width: 50px;
     text-align: center;
-}
-.product .pic-swiper{box-sizing: border-box;width:100%;max-height:375px;}
-.product .pic-swiper:after{content:"";padding-top:100%;display:block;}
-.product .pic-swiper .vux-swiper{
-  position:absolute !important;left:0;top:0;right:0;bottom:0;height:100% !important;
-}
-.product .vux-swiper-item {}
-.product .vux-swiper-item img{}
-.product .vux-swiper-desc{display:none !important;}
-.product .help-icon{
-  color:#ff3b30;
-  border:#ff3b30 1px solid;
-  border-radius:50%;
-  display:inline-block;
-  width:13px;height:13px;
-  font-size:10px;
-  text-align:center;
-  line-height:14px;
-}
+    display:block;
+    color:inherit;;
+  }
+  .productcontent{
+    padding:20px 15px;
+  }
+  .productcontent img{
+    max-width:100%;
+    vertical-align: middle;
+  }
+  .productarea.scrollend:after {
+      background-color: #f6f6f6;
+  }
+  .pagetop{
+    box-shadow: 0px 0px 10px 3px #d0d0d0;
+  }
+  .pagemiddle{top:50px;}
+  .numicon {
+      position: absolute;
+      top: 0;
+      right: -15px;
+      background: #f06825;
+      padding: 0 1px;
+      border-radius: 16%;
+      color: #fff;
+      font-size: 10px;
+      min-width: 18px;
+      text-align: center;
+  }
+  .pic-swiper{box-sizing: border-box;width:100%;max-height:375px;}
+  .pic-swiper:after{content:"";padding-top:100%;display:block;}
+  .pic-swiper .vux-swiper{
+    position:absolute !important;left:0;top:0;right:0;bottom:0;height:100% !important;
+  }
+  .vux-swiper-item {}
+  .vux-swiper-item img{}
+  .vux-swiper-desc{display:none !important;}
+  .help-icon{
+    color:#ff3b30;
+    border:#ff3b30 1px solid;
+    border-radius:50%;
+    display:inline-block;
+    width:13px;height:13px;
+    font-size:10px;
+    text-align:center;
+    line-height:14px;
+  }
+  .btnfavorite.have .al:before{content:"\e68c";color:red;}
+  .btnfavorite.none .al:before{content:"\e68b";}
+  .groupbybottom .btnfavorite:after{display:block;}
+  .btnfavorite.none:after{content:"收藏";}
+  .btnfavorite.have:after{content:"已收藏";}
+  .center-cell{width:60px;}
 
-.product .btnfavorite.have .al:before{content:"\e68c";color:red;}
-.product .btnfavorite.none .al:before{content:"\e68b";}
-.product .groupbybottom .btnfavorite:after{display:block;}
-.product .btnfavorite.none:after{content:"收藏";}
-.product .btnfavorite.have:after{content:"已收藏";}
+  .pagemiddle{bottom:50px;}
+  .pagebottom{height:50px;}
 
-.product .center-cell{width:60px;}
+  .buylist{display:flex;overflow:hidden;}
+  .buylist:after{
+    content:'';
+    display:block;
+    clear:both;
+  }
+  .buylist .item{
+    width: 48px;padding-top:10px;
+    text-align: center;display:block;color:inherit;
+  }
+  .buylist .pic{padding-left:10px;width:38px;}
+  .buylist img{width:38px;height:38px;vertical-align:middle;object-fit: cover;border-radius:50%;}
+  .buylist .txt{padding-left:10px;width:38px;}
+  .moreicon{width:48px;}
 
-.product .pagemiddle{bottom:50px;}
-.product .pagebottom{height:50px;}
-
-.product .buylist{display:flex;overflow:hidden;}
-.product .buylist:after{
-  content:'';
-  display:block;
-  clear:both;
-}
-.product .buylist .item{
-  width: 48px;padding-top:10px;
-  text-align: center;display:block;color:inherit;
-}
-.product .buylist .pic{padding-left:10px;width:38px;}
-.product .buylist img{width:38px;height:38px;vertical-align:middle;object-fit: cover;border-radius:50%;}
-.product .buylist .txt{padding-left:10px;width:38px;}
-.product .moreicon{width:48px;}
-.product{
   .modalshow{
     position:absolute;left:0;right:0;bottom:0;top:0;z-index:1000;background-color:rgba(0,0,0,0.8);box-sizing: border-box;
     .modaInfo{
@@ -134,10 +130,14 @@
     }
     .btnknow{padding:3px 25px;border:1px solid #fff;color:#fff;margin: 0 auto;border-radius:20px;font-size:14px;margin-top: 20px;}
   }
+  .qrcode-area{
+    text-align:center;margin-top:5px;
+    img{display:block;margin:0 auto;width:80%;max-width:300px !important;}
+  }
 }
 </style>
 <template>
-  <div id="product-page" class="containerarea bg-white font14 product notop">
+  <div id="product-page" class="containerarea bg-white qyproduct-page notop">
     <div v-if="playVideo" class="videoarea">
       <div class="video-inner">
         <video
@@ -237,6 +237,9 @@
       <div class="productcontent">
         <div v-html="productdata.content"></div>
         <img v-for="(item,index) in previewerPhotoarr" :key="index" :src="item.src" @click="showBigimg(index)" />
+      </div>
+      <div class="qrcode-area" v-if="showUser && showUser.uid">
+          <img :src="showUser.qrcode" />
       </div>
     </div>
 		<div class="pagebottom b_top_after">
@@ -352,7 +355,8 @@ export default {
       showBuy: false,
       selectedOption: {},
       selectedOptionIndex: 0,
-      previewerOptionsPhoto: []
+      previewerOptionsPhoto: [],
+      showUser: {}
     }
   },
   watch: {
@@ -653,16 +657,24 @@ export default {
     },
     refresh () {
       this.loginUser = User.get()
-      if (this.loginUser) {
-        this.initData()
-        this.showVideo = true
-        this.query = this.$route.query
-        if (this.query.module) {
-          this.module = this.query.module
-        }
-        this.$vux.loading.show()
-        this.getData()
+      this.initData()
+      this.showVideo = true
+      this.query = this.$route.query
+      let shareUid = this.query.share_uid
+      if (shareUid && shareUid !== '' && parseInt(shareUid) && parseInt(shareUid) !== this.loginUser.uid) {
+        this.$http.get(`${ENV.BokaApi}/api/user/show`, {
+          params: {otheruid: shareUid}
+        }).then(res => {
+          const data = res.data
+          if (data.flag) {
+            this.showUser = data.data
+          }
+        })
+      } else {
+        this.showUser = this.loginUser
       }
+      this.$vux.loading.show()
+      this.getData()
     }
   },
   activated () {
