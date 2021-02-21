@@ -300,7 +300,8 @@
             </div>
             <div class="options-bottom flex_center">
               <div class="flex_cell h_100 flex_center">
-                <div class="bg-theme color-white flex_center btn" @click="buyOption">立即购买</div>
+                <div v-if="query && query.share_uid" class="bg-theme color-white flex_center btn" @click="buyOption">立即购买</div>
+                <div v-else class="bg-theme color-white flex_center btn" @click="clickShare">分享赚</div>
               </div>
             </div>
           </div>
@@ -319,6 +320,8 @@ import Time from '#/time'
 import jQuery from 'jquery'
 import ENV from 'env'
 import { User } from '#/storage'
+const jweixin = require('../../static/jweixin')
+const jwxwork = require('../../static/jwxwork-1.0.0')
 
 export default {
   directives: {
@@ -336,6 +339,7 @@ export default {
     return {
       module: 'product',
       query: {},
+      viewData: {},
       disTimeout: true,
       productid: null,
       productdata: {},
@@ -397,11 +401,22 @@ export default {
     }
   },
   methods: {
+    clickShare () {
+      if (wx) {
+        wx.invoke('shareToExternalChat', {
+          title: this.viewData.title,
+          desc: this.viewData.content,
+          link: `${ENV.Host}/#/qiyeProduct?id=${this.viewData.id}&share_uid=${this.loginUser.uid}`,
+          imgUrl: this.viewData.photo.split(',')[0]
+        })
+      }
+    },
     initData () {
       this.disTimeout = true
       this.showVideo = true
       this.productid = null
       this.productdata = {}
+      this.viewData = {}
       this.showFlash = false
       this.showdot = true
       this.flashdata = []
@@ -616,6 +631,7 @@ export default {
           self.$vux.loading.hide()
           if (data.flag) {
             self.productdata = data.data
+            this.viewData = data.data
             if (this.productdata.jd_price && this.productdata.jd_price !== '' && parseFloat(this.productdata.jd_price) > 0) {
               this.productdata.showJd = true
             } else {
