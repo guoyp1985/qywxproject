@@ -405,14 +405,16 @@ export default {
   },
   methods: {
     clickShare () {
-      if (wx) {
-        wx.invoke('shareToExternalChat', {
-          title: this.viewData.title,
-          desc: this.viewData.content,
-          link: `${ENV.Host}/#/qiyeProduct?id=${this.viewData.id}&share_uid=${this.loginUser.uid}`,
-          imgUrl: this.viewData.photo.split(',')[0]
-        })
-      }
+      jweixin.ready(function () {
+        if (wx) {
+          wx.invoke('shareToExternalChat', {
+            title: this.viewData.title,
+            desc: this.viewData.content,
+            link: `${ENV.Host}/#/qiyeProduct?id=${this.viewData.id}&share_uid=${this.loginUser.uid}`,
+            imgUrl: this.viewData.photo.split(',')[0]
+          })
+        }
+      })
     },
     initData () {
       this.disTimeout = true

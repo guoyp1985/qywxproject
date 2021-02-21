@@ -38,7 +38,19 @@ export default {
       console.log('lurl=', lUrl)
       console.log('state=', lUrl.query.state)
       if (code) {
-        const jumpUrl = decodeURIComponent(lUrl.query.state)
+        let urlQuery = lUrl.query
+        let jumpUrl = decodeURIComponent(urlQuery.state)
+        for (let key in urlQuery) {
+          if (key !== 'code') {
+            let curVal = urlQuery[key]
+            if (jumpUrl.indexOf('?') < 0) {
+              jumpUrl = `${jumpUrl}?`
+            } else {
+              jumpUrl = `${jumpUrl}&`
+            }
+            jumpUrl = `${jumpUrl}${key}=${curVal}`
+          }
+        }
         this.$http.get(`${ENV.BokaApi}/api/visitor/workUserAuth/${code}`).then(res => {
           console.log('redirect页面workUserAuth', res)
           if (!res || !res.data || res.data.errcode || !res.data.flag) {
