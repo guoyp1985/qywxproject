@@ -135,6 +135,12 @@
     img{display:block;margin:0 auto;width:80%;max-width:300px !important;}
   }
 }
+.share-modal{
+  background-color:rgba(0,0,0,0.7) !important;color:#fff;
+  .ico{text-align:right;padding:15px 40px;box-sizing: border-box;}
+  .ico .al{font-size:60px;color:rgba(255,255,255,0.9);}
+  .txt{font-size:16px;text-shadow: -2px 0px 1px #000;padding:10px;box-sizing: border-box;text-align:center;}
+}
 </style>
 <template>
   <div id="product-page" class="containerarea bg-white qyproduct-page notop">
@@ -314,6 +320,14 @@
     <div v-transfer-dom>
       <previewer :list="previewerOptionsPhoto" ref="previewerOption"></previewer>
     </div>
+    <div v-transfer-dom class="x-popup">
+      <popup v-model="showShareModal" height="100%" class="share-modal">
+        <div class="popup1 h_100" @click="clickShareModal">
+    			<div class="ico"><i class="al al-feiji"></i></div>
+    			<div class="txt">点击<span class="al al-asmkticon0165"></span>，分享给客户吧！</div>
+        </div>
+      </popup>
+    </div>
   </div>
 </template>
 
@@ -323,8 +337,6 @@ import Time from '#/time'
 import jQuery from 'jquery'
 import ENV from 'env'
 import { User } from '#/storage'
-const jweixin = require('../../static/jweixin')
-const jwxwork = require('../../static/jwxwork-1.0.0')
 
 export default {
   directives: {
@@ -363,7 +375,8 @@ export default {
       selectedOption: {},
       selectedOptionIndex: 0,
       previewerOptionsPhoto: [],
-      showUser: {}
+      showUser: {},
+      showShareModal: false
     }
   },
   watch: {
@@ -405,16 +418,10 @@ export default {
   },
   methods: {
     clickShare () {
-      jweixin.ready(function () {
-        if (wx) {
-          wx.invoke('shareToExternalChat', {
-            title: this.viewData.title,
-            desc: this.viewData.content,
-            link: `${ENV.Host}/#/qiyeProduct?id=${this.viewData.id}&share_uid=${this.loginUser.uid}`,
-            imgUrl: this.viewData.photo.split(',')[0]
-          })
-        }
-      })
+      this.showShareModal = true
+    },
+    clickShareModal () {
+      this.showShareModal = false
     },
     initData () {
       this.disTimeout = true
