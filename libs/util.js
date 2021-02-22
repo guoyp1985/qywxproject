@@ -433,7 +433,7 @@ Util.install = function (Vue, options) {
         //     })
         //   }
         // })
-        if (wx) {
+        if (wx && wx.shareToExternalChat) {
           wx.shareToExternalChat({
             title: wxData.title,
             desc: wxData.desc,
@@ -449,6 +449,8 @@ Util.install = function (Vue, options) {
               }
             }
           })
+        }
+        if (wx && wx.shareToExternalContact) {
           wx.shareToExternalContact({
             title: wxData.title,
             desc: wxData.desc,
