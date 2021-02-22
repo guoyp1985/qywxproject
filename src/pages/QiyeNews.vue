@@ -158,7 +158,7 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/content/digs`, postParams).then(res => {
         this.$vux.loading.hide()
         let data = res.data
-        if (data.flag === 1) {
+        if (data.code === 0) {
           if (this.isdig) {
             this.isdig = 0
             this.viewData.dig = this.viewData.dig - 1
@@ -168,9 +168,9 @@ export default {
           }
         } else {
           this.$vux.toast.show({
-            text: data.error,
+            text: data.msg,
             type: 'warning',
-            time: this.$util.delay(data.error)
+            time: this.$util.delay(data.msg)
           })
         }
       })
@@ -180,7 +180,7 @@ export default {
         id: this.query.id, module: this.module, action: 'show'
       }).then(res => {
         let data = res.data
-        if (data.flag) {
+        if (data.code === 0) {
           this.isdig = true
         }
       })
@@ -210,7 +210,7 @@ export default {
       .then(res => {
         const data = res.data
         this.$vux.loading.hide()
-        if (data.flag) {
+        if (data.code === 0) {
           const retdata = data.data
           this.loginUser = User.get()
           this.viewData = retdata
@@ -227,7 +227,7 @@ export default {
         params: {otheruid: uid}
       }).then(res => {
         const data = res.data
-        if (data.flag) {
+        if (data.code === 0) {
           let retdata = data.data
           if (retdata.identity === 2) {
             this.showUser = data.data

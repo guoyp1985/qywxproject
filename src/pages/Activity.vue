@@ -158,7 +158,7 @@ export default {
       }).then(res => {
         const data = res.data
         this.$vux.loading.hide()
-        if (data.flag) {
+        if (data.code === 0) {
           this.showResultModal = true
         }
       })
@@ -193,7 +193,7 @@ export default {
       .then(res => {
         const data = res.data
         this.$vux.loading.hide()
-        if (data.flag) {
+        if (data.code === 0) {
           let retdata = data.data
           retdata.starttime_str = new Time(retdata.starttime * 1000).dateFormat('yyyy-MM-dd hh:mm')
           retdata.endtime_str = new Time(retdata.endtime * 1000).dateFormat('yyyy-MM-dd hh:mm')

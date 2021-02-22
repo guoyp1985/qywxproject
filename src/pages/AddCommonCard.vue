@@ -190,11 +190,11 @@ export default {
         this.$vux.loading.hide()
         let data = res.data
         this.$vux.toast.show({
-          text: data.error,
-          type: (data.flag !== 1 ? 'warn' : 'success'),
-          time: this.$util.delay(data.error),
+          text: data.msg,
+          type: (data.code === 0 ? 'success' : 'warn'),
+          time: this.$util.delay(data.msg),
           onHide: () => {
-            if (data.flag) {
+            if (data.code === 0) {
               this.$router.push('/activityList')
             } else {
               this.submitIng = false

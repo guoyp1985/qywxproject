@@ -467,14 +467,14 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/order/addShop`, postData).then((res) => {
         let data = res.data
         this.$vux.loading.hide()
-        if (data.flag === 1) {
+        if (data.code === 0) {
           let rparams = {id: data.data}
           this.$router.push({ path: '/addOrder', query: rparams })
-        } else if (data.error) {
+        } else if (data.msg) {
           this.$vux.toast.show({
-            text: data.error,
+            text: data.msg,
             type: 'text',
-            time: this.$util.delay(data.error)
+            time: this.$util.delay(data.msg)
           })
         }
       })
@@ -645,7 +645,7 @@ export default {
         if (res && res.status === 200) {
           let data = res.data
           self.$vux.loading.hide()
-          if (data.flag) {
+          if (data.code === 0) {
             self.productdata = data.data
             this.viewData = data.data
             if (this.productdata.jd_price && this.productdata.jd_price !== '' && parseFloat(this.productdata.jd_price) > 0) {
@@ -693,7 +693,7 @@ export default {
         params: {otheruid: uid}
       }).then(res => {
         const data = res.data
-        if (data.flag) {
+        if (data.code === 0) {
           let retdata = data.data
           if (retdata.identity === 2) {
             this.showUser = data.data

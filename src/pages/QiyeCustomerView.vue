@@ -173,8 +173,8 @@ export default {
       }).then(res => {
         this.$vux.loading.hide()
         let data = res.data
-        this.$vux.toast.text(data.error)
-        if (data.flag) {
+        this.$vux.toast.text(data.msg)
+        if (data.code === 0) {
           callback && callback()
         }
       })

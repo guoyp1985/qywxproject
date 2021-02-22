@@ -53,7 +53,7 @@ export default {
         }
         this.$http.get(`${ENV.BokaApi}/api/visitor/workUserAuth/${code}`).then(res => {
           console.log('redirect页面workUserAuth', res)
-          if (!res || !res.data || res.data.errcode || !res.data.flag) {
+          if (!res || !res.data || res.data.errcode || res.data.code !== 0) {
             Token.remove()
             this.$vux.alert.show({
               title: '提示',

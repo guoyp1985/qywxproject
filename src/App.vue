@@ -124,13 +124,13 @@ export default {
       return title || ' '
     },
     getData () {
-      const user = User.get()
+      // const user = User.get()
       this.$http.get(`${ENV.BokaApi}/api/user/show`, {
         params: {init: 1}
       }).then(res => {
         if (res && res.status === 200) {
           const data = res.data
-          if (data.flag) {
+          if (data.code === 0) {
             User.set(data.data)
             SystemParams.set(data.paras)
           }
