@@ -76,8 +76,6 @@ import Time from '#/time'
 import ENV from 'env'
 // import jQuery from 'jquery'
 import { User } from '#/storage'
-const jweixin = require('../../static/jweixin')
-const jwxwork = require('../../static/jwxwork-1.0.0')
 
 export default {
   directives: { TransferDom },
