@@ -180,13 +180,28 @@ export default {
         }
       })
     },
+    handleShare () {
+      let shareLink = `${ENV.Host}/#/qiyeNews?id=${this.viewData.id}&share_uid=${this.loginUser.uid}`
+      if (this.wid && this.wid !== '') shareLink = `${shareLink}&wid=${this.wid}`
+      let shareParams = {
+        data: this.viewData,
+        module: this.module,
+        moduleid: this.viewData.id,
+        link: shareLink
+      }
+      if (this.query.share_uid) {
+        shareParams.link = `${shareParams.link}&lastshareuid=${this.query.share_uid}`
+        shareParams.lastshareuid = this.query.share_uid
+      }
+      this.$util.handleWxShare(shareParams)
+    },
     getData () {
-      const infoparams = {id: this.query.id, module: 'news'}
+      const infoparams = {id: this.query.id, module: 'news', addviews: 1}
       if (this.query['share_uid']) {
         infoparams['share_uid'] = this.query.share_uid
       }
       this.$vux.loading.show()
-      this.$http.post(`${ENV.BokaApi}/api/content_n/info`, infoparams) // 获取文章
+      this.$http.post(`${ENV.BokaApi}/api/content/info`, infoparams) // 获取文章
       .then(res => {
         const data = res.data
         this.$vux.loading.hide()
@@ -195,36 +210,41 @@ export default {
           this.loginUser = User.get()
           this.viewData = retdata
           document.title = this.viewData.title
-          let shareParams = {
-            data: this.viewData,
-            module: this.module,
-            moduleid: this.viewData.id,
-            link: `${ENV.Host}/#/qiyeNews?id=${this.viewData.id}&share_uid=${this.loginUser.uid}`
-          }
-          if (this.query.share_uid) {
-            shareParams.link = `${shareParams.link}&lastshareuid=${this.query.share_uid}`
-            shareParams.lastshareuid = this.query.share_uid
-          }
           this.handleImg()
-          this.$util.handleWxShare(shareParams)
+          this.handleShare()
+        }
+      })
+    },
+    getShowUser (uid) {
+      if (!uid) return false
+      this.$http.get(`${ENV.BokaApi}/api/user/show`, {
+        params: {otheruid: uid}
+      }).then(res => {
+        const data = res.data
+        if (data.flag) {
+          let retdata = data.data
+          if (retdata.identity === 2) {
+            this.showUser = data.data
+          }
         }
       })
     },
     refresh (query) {
       this.loginUser = User.get()
       this.query = this.$route.query
-      let shareUid = this.query.share_uid
-      if (shareUid && shareUid !== '' && parseInt(shareUid) && parseInt(shareUid) !== this.loginUser.uid) {
-        this.$http.get(`${ENV.BokaApi}/api/user/show`, {
-          params: {otheruid: shareUid}
-        }).then(res => {
-          const data = res.data
-          if (data.flag) {
-            this.showUser = data.data
-          }
-        })
-      } else {
-        this.showUser = this.loginUser
+      if (this.loginUser.identity !== 2) {
+        let wid = this.loginUser.ownid
+        if (!wid && this.query.wid) {
+          wid = parseInt(this.query.wid)
+        }
+        this.getShowUser(wid)
+      }
+      if (this.loginUser.identity === 2) {
+        this.wid = this.loginUser.uid
+      } else if (this.loginUser.ownid) {
+        this.wid = this.loginUser.ownid
+      } else if (this.query.wid) {
+        this.wid = this.query.wid
       }
       this.getData()
     }

@@ -22,60 +22,67 @@
 </style>
 <template>
   <div class="bg-page add-comcard-page">
-    <div class="form-list">
-      <div class="form-item flex_left">
-          <div class="title-cell">标题<span class="ml3 vertical color-red">*</span></div>
-          <div class="input-cell">
-              <input v-model="submitData.title" type="text" placeholder="标题">
+    <template v-if="loginUser && loginUser.uid">
+      <template v-if="!loginUser.isadmin">
+        <div class="flex_empty">抱歉，您没有权限</div>
+      </template>
+      <template v-else>
+        <div class="form-list">
+          <div class="form-item flex_left">
+              <div class="title-cell">标题<span class="ml3 vertical color-red">*</span></div>
+              <div class="input-cell">
+                  <input v-model="submitData.title" type="text" placeholder="标题">
+              </div>
           </div>
-      </div>
-      <div class="form-item flex_left">
-          <div class="title-cell">客户群体<span class="ml3 vertical color-red">*</span></div>
-          <div class="input-cell">
-            <select v-model="submitData.customertype">
-              <option value="">请选择</option>
-              <option value="1">普通客户</option>
-              <option value="2">高端客户</option>
-            </select>
+          <div class="form-item flex_left">
+              <div class="title-cell">客户群体<span class="ml3 vertical color-red">*</span></div>
+              <div class="input-cell">
+                <select v-model="submitData.customertype">
+                  <option value="">请选择</option>
+                  <option value="1">普通客户</option>
+                  <option value="2">高端客户</option>
+                </select>
+              </div>
           </div>
-      </div>
-      <div class="form-item flex_left">
-          <div class="title-cell">开始时间<span class="ml3 vertical color-red">*</span></div>
-          <div class="input-cell time-cell">
-            <datetime format="YYYY-MM-DD HH:mm" v-model='submitData.starttime' :show.sync="visibility1" @on-change="datechange1" @on-cancel="datecancel1" @on-confirm="dateconfirm1"></datetime>
-            <div @click="showxdate1" class="date-txt">{{ selectdatetxt1 }}</div>
+          <div class="form-item flex_left">
+              <div class="title-cell">开始时间<span class="ml3 vertical color-red">*</span></div>
+              <div class="input-cell time-cell">
+                <datetime format="YYYY-MM-DD HH:mm" v-model='submitData.starttime' :show.sync="visibility1" @on-change="datechange1" @on-cancel="datecancel1" @on-confirm="dateconfirm1"></datetime>
+                <div @click="showxdate1" class="date-txt">{{ selectdatetxt1 }}</div>
+              </div>
           </div>
-      </div>
-      <div class="form-item flex_left">
-          <div class="title-cell">结束时间<span class="ml3 vertical color-red">*</span></div>
-          <div class="input-cell time-cell">
-            <datetime format="YYYY-MM-DD HH:mm" v-model='submitData.endtime' :show.sync="visibility2" @on-change="datechange2" @on-cancel="datecancel2" @on-confirm="dateconfirm2"></datetime>
-            <div @click="showxdate2" class="date-txt">{{ selectdatetxt2 }}</div>
+          <div class="form-item flex_left">
+              <div class="title-cell">结束时间<span class="ml3 vertical color-red">*</span></div>
+              <div class="input-cell time-cell">
+                <datetime format="YYYY-MM-DD HH:mm" v-model='submitData.endtime' :show.sync="visibility2" @on-change="datechange2" @on-cancel="datecancel2" @on-confirm="dateconfirm2"></datetime>
+                <div @click="showxdate2" class="date-txt">{{ selectdatetxt2 }}</div>
+              </div>
           </div>
-      </div>
-      <div class="form-item flex_left">
-          <div class="title-cell">有效期<span class="ml3 vertical color-red">*</span></div>
-          <div class="input-cell">
-              <input v-model="submitData.validday" type="text" placeholder="有效期，最多365天">
+          <div class="form-item flex_left">
+              <div class="title-cell">有效期<span class="ml3 vertical color-red">*</span></div>
+              <div class="input-cell">
+                  <input v-model="submitData.validday" type="text" placeholder="有效期，最多365天">
+              </div>
+              <div>天</div>
           </div>
-          <div>天</div>
-      </div>
-      <div class="form-item flex_left">
-          <div class="title-cell">发放数量<span class="ml3 vertical color-red">*</span></div>
-          <div class="input-cell">
-              <input v-model="submitData.totalcount" type="text" placeholder="发放数量">
+          <div class="form-item flex_left">
+              <div class="title-cell">发放数量<span class="ml3 vertical color-red">*</span></div>
+              <div class="input-cell">
+                  <input v-model="submitData.totalcount" type="text" placeholder="发放数量">
+              </div>
           </div>
-      </div>
-      <div class="form-item flex_left">
-          <span style="line-height:34px">满:</span>
-          <input class="mjje" v-model="submitData.ordermoney" type="number" placeholder="请输入" />
-          <span style="line-height:34px">减:</span>
-          <input class="mjje" v-model="submitData.facemoney" type="number" placeholder="请输入" />
-      </div>
-    </div>
-    <div class="mt20 flex_center">
-      <div class="btn" @click="submitEvent">提交</div>
-    </div>
+          <div class="form-item flex_left">
+              <span style="line-height:34px">满:</span>
+              <input class="mjje" v-model="submitData.ordermoney" type="number" placeholder="请输入" />
+              <span style="line-height:34px">减:</span>
+              <input class="mjje" v-model="submitData.facemoney" type="number" placeholder="请输入" />
+          </div>
+        </div>
+        <div class="mt20 flex_center">
+          <div class="btn" @click="submitEvent">提交</div>
+        </div>
+      </template>
+    </template>
   </div>
 </template>
 

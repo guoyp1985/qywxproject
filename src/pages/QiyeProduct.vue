@@ -354,6 +354,7 @@ export default {
     return {
       module: 'product',
       query: {},
+      wid: 0,
       viewData: {},
       disTimeout: true,
       productid: null,
@@ -443,6 +444,7 @@ export default {
       this.selectedOption = {}
       this.selectedOptionIndex = 0
       this.previewerOptionsPhoto = []
+      this.wid = 0
     },
     closeOptions () {
       this.showBuy = false
@@ -574,10 +576,12 @@ export default {
       }
     },
     handelShare () {
+      let shareLink = `${ENV.Host}/#/qiyeProduct?id=${this.productid}&share_uid=${this.loginUser.uid}`
+      if (this.wid && this.wid !== '') shareLink = `${shareLink}&wid=${this.wid}`
       let shareData = {
         module: this.module,
         moduleid: this.productid,
-        link: `${ENV.Host}/#/qiyeProduct?id=${this.productid}&share_uid=${this.loginUser.uid}`,
+        link: shareLink,
         successCallback: () => {
           this.showVideo = false
         }
@@ -627,7 +631,7 @@ export default {
     getData () {
       const self = this
       this.productid = this.query.id
-      let infoparams = { id: this.productid, module: this.module }
+      let infoparams = { id: this.productid, module: this.module, addviews: 1 }
       if (this.query.wid) {
         infoparams.wid = this.query.wid
       }
@@ -637,7 +641,7 @@ export default {
       if (this.query.lastshareuid) {
         infoparams.lastshareuid = this.query.lastshareuid
       }
-      this.$http.post(`${ENV.BokaApi}/api/content_n/info`, infoparams).then((res) => {
+      this.$http.post(`${ENV.BokaApi}/api/content/info`, infoparams).then((res) => {
         if (res && res.status === 200) {
           let data = res.data
           self.$vux.loading.hide()
@@ -683,23 +687,38 @@ export default {
         }
       })
     },
+    getShowUser (uid) {
+      if (!uid) return false
+      this.$http.get(`${ENV.BokaApi}/api/user/show`, {
+        params: {otheruid: uid}
+      }).then(res => {
+        const data = res.data
+        if (data.flag) {
+          let retdata = data.data
+          if (retdata.identity === 2) {
+            this.showUser = data.data
+          }
+        }
+      })
+    },
     refresh () {
       this.loginUser = User.get()
       this.initData()
       this.showVideo = true
       this.query = this.$route.query
-      let shareUid = this.query.share_uid
-      if (shareUid && shareUid !== '' && parseInt(shareUid) && parseInt(shareUid) !== this.loginUser.uid) {
-        this.$http.get(`${ENV.BokaApi}/api/user/show`, {
-          params: {otheruid: shareUid}
-        }).then(res => {
-          const data = res.data
-          if (data.flag) {
-            this.showUser = data.data
-          }
-        })
-      } else {
-        this.showUser = this.loginUser
+      if (this.loginUser.identity !== 2) {
+        let wid = this.loginUser.ownid
+        if (!wid && this.query.wid) {
+          wid = parseInt(this.query.wid)
+        }
+        this.getShowUser(wid)
+      }
+      if (this.loginUser.identity === 2) {
+        this.wid = this.loginUser.uid
+      } else if (this.loginUser.ownid) {
+        this.wid = this.loginUser.ownid
+      } else if (this.query.wid) {
+        this.wid = this.query.wid
       }
       this.$vux.loading.show()
       this.getData()

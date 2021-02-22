@@ -1,4 +1,7 @@
 <style lang="less">
+.activity-list-page.nobottom{
+  .s-container{bottom:0;}
+}
 .activity-list-page{
   .s-container{bottom:50px;overflow-y:auto;}
   .scroll_list{
@@ -20,7 +23,7 @@
 }
 </style>
 <template>
-  <div class="containerarea activity-list-page">
+  <div :class="`containerarea activity-list-page ${(!loginUser || !loginUser.isadmin) ? 'nobottom' : ''}`">
     <div class="s-topbanner s-topbanner1 bg-white">
       <div class="row">
         <tab v-model="selectedIndex" class="v-tab">
@@ -74,7 +77,7 @@
         </template>
       </div>
     </div>
-    <div class="page-footer">
+    <div class="page-footer" v-if="loginUser && loginUser.isadmin">
       <router-link class="item" to="/addCommonCard">添加活动</router-link>
     </div>
   </div>

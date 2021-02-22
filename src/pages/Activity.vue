@@ -136,6 +136,7 @@ export default {
     return {
       query: {},
       loginUser: {},
+      wid: 0,
       viewData: {},
       ordermoney: '0.00',
       facemoney: '0.00',
@@ -155,6 +156,23 @@ export default {
     },
     closeResultModal () {
       this.showResultModal = false
+    },
+    handleShare () {
+      let shareStartTime = new Time(this.viewData.starttime * 1000).dateFormat('MM-dd')
+      let shareEndTime = new Time(this.viewData.endtime * 1000).dateFormat('MM-dd')
+      let shareLink = `${ENV.Host}/#/activity?id=${this.viewData.id}&share_uid=${this.loginUser.uid}`
+      if (this.wid && this.wid !== '') shareLink = `${shareLink}&wid=${this.wid}`
+      let shareParams = {
+        title: this.viewData.title,
+        desc: `有效期${shareStartTime}至${shareEndTime}`,
+        photo: 'https://tossharingsales.boka.cn/month_202102/16137146626061.jpeg',
+        link: shareLink
+      }
+      if (this.query.share_uid) {
+        shareParams.link = `${shareParams.link}&lastshareuid=${this.query.share_uid}`
+        shareParams.lastshareuid = this.query.share_uid
+      }
+      this.$util.handleWxShare(shareParams)
     },
     getData () {
       const infoparams = {id: this.query.id, module: 'miniactivity'}
@@ -177,26 +195,20 @@ export default {
             this.ordermoney = cmoney[0]
             this.facemoney = cmoney[1]
           }
-          let shareStartTime = new Time(retdata.starttime * 1000).dateFormat('MM-dd')
-          let shareEndTime = new Time(retdata.endtime * 1000).dateFormat('MM-dd')
-          let shareParams = {
-            // title: `送你一张${this.facemoney}元优惠券`,
-            title: this.viewData.title,
-            desc: `有效期${shareStartTime}至${shareEndTime}`,
-            photo: 'https://tossharingsales.boka.cn/month_202102/16137146626061.jpeg',
-            link: `${ENV.Host}/#/activity?id=${this.viewData.id}&share_uid=${this.loginUser.uid}`
-          }
-          if (this.query.share_uid) {
-            shareParams.link = `${shareParams.link}&lastshareuid=${this.query.share_uid}`
-            shareParams.lastshareuid = this.query.share_uid
-          }
-          this.$util.handleWxShare(shareParams)
+          this.handleShare()
         }
       })
     },
     refresh () {
       this.loginUser = User.get()
       this.query = this.$route.query
+      if (this.loginUser.identity === 2) {
+        this.wid = this.loginUser.uid
+      } else if (this.loginUser.ownid) {
+        this.wid = this.loginUser.ownid
+      } else if (this.query.wid) {
+        this.wid = this.query.wid
+      }
       this.getData()
     }
   },
