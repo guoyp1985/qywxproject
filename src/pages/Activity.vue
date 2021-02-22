@@ -175,12 +175,12 @@ export default {
       this.$util.handleWxShare(shareParams)
     },
     getData () {
-      const infoparams = {id: this.query.id, module: 'miniactivity'}
+      const infoparams = {id: this.query.id, module: 'miniactivity', addviews: 1}
       if (this.query['share_uid']) {
         infoparams['share_uid'] = this.query.share_uid
       }
       this.$vux.loading.show()
-      this.$http.post(`${ENV.BokaApi}/api/content_n/info`, infoparams) // 获取文章
+      this.$http.post(`${ENV.BokaApi}/api/content/info`, infoparams) // 获取文章
       .then(res => {
         const data = res.data
         this.$vux.loading.hide()
