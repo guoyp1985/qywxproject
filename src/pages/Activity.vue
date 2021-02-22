@@ -152,7 +152,16 @@ export default {
       this.showShareModal = false
     },
     openEvent () {
-      this.showResultModal = true
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/card/getCard`, {
+        id: this.query.id
+      }).then(res => {
+        const data = res.data
+        this.$vux.loading.hide()
+        if (data.flag) {
+          this.showResultModal = true
+        }
+      })
     },
     closeResultModal () {
       this.showResultModal = false

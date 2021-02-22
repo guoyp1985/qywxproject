@@ -238,19 +238,15 @@ export default {
     refresh (query) {
       this.loginUser = User.get()
       this.query = this.$route.query
-      if (this.loginUser.identity !== 2) {
-        let wid = this.loginUser.ownid
-        if (!wid && this.query.wid) {
-          wid = parseInt(this.query.wid)
-        }
-        this.getShowUser(wid)
-      }
       if (this.loginUser.identity === 2) {
         this.wid = this.loginUser.uid
+        this.showUser = this.loginUser
       } else if (this.loginUser.ownid) {
         this.wid = this.loginUser.ownid
+        this.getShowUser(this.wid)
       } else if (this.query.wid) {
         this.wid = this.query.wid
+        this.getShowUser(this.wid)
       }
       this.getData()
     }
