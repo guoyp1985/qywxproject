@@ -45,7 +45,7 @@
 <script>
 import { ViewBox, Loading, Tabbar, TabbarItem, TransferDom } from 'vux'
 import { mapState } from 'vuex'
-import { User } from '#/storage'
+import { User, SystemParams } from '#/storage'
 import ENV from 'env'
 
 export default {
@@ -125,15 +125,17 @@ export default {
     },
     getData () {
       const user = User.get()
-      if (!user || !user.uid) {
-        this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
-          if (res && res.status === 200) {
-            const data = res.data
-            let retUser = data.data ? data.data : data
-            User.set(retUser)
+      this.$http.get(`${ENV.BokaApi}/api/user/show`, {
+        params: {init: 1}
+      }).then(res => {
+        if (res && res.status === 200) {
+          const data = res.data
+          if (data.flag) {
+            User.set(data.data)
+            SystemParams.set(data.paras)
           }
-        })
-      }
+        }
+      })
     },
     globalTouch () {
       this.$vux.loading.hide()

@@ -242,6 +242,7 @@ const access = success => {
   // Token.set(token)
   if (location.href.indexOf('/redirect') < 0) {
     if (token && token !== '' && !Token.isExpired()) {
+      console.log('进入到了请求用户信息')
       let user = User.get()
       let routerUrl = `${lUrl.hash.replace(/#/, '')}`
       if (query && query !== '') {

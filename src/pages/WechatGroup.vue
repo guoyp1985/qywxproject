@@ -26,7 +26,7 @@
       <div class="box-outer mt10">
         <div class="box-title">客户群活动</div>
         <div class="box-list square">
-          <div class="list-item ico-pic-item" @click="clickEvent">
+          <div v-if="sysParams.newcustomer_card && sysParams.newcustomer_card != 0" class="list-item ico-pic-item" @click="clickEvent">
             <div class="item-inner">
               <div class="ico-bg">
                 <span class="al al-youhuiquan"></span>
@@ -34,7 +34,7 @@
               <div class="txt">新人优惠券</div>
             </div>
           </div>
-          <div to="" class="list-item ico-pic-item">
+          <div v-if="sysParams.zhuanshu_card && sysParams.zhuanshu_card != 0" class="list-item ico-pic-item">
             <div class="item-inner">
               <div class="ico-bg">
                 <span class="al al-youhuiquan3"></span>
@@ -42,7 +42,7 @@
               <div class="txt">专属优惠券</div>
             </div>
           </div>
-          <div class="list-item ico-pic-item">
+          <div v-if="sysParams.newcustomer_quncard && sysParams.newcustomer_quncard != 0" class="list-item ico-pic-item">
             <div class="item-inner">
               <div class="ico-bg">
                 <span class="al al-youhuiquan2"></span>
@@ -68,14 +68,15 @@
 <script>
 import {} from 'vux'
 // import ENV from 'env'
-import { User } from '#/storage'
+import { User, SystemParams } from '#/storage'
 export default {
   components: {},
   data () {
     return {
       query: {},
       loginUser: {},
-      showModal: false
+      showModal: false,
+      sysParams: {}
     }
   },
   methods: {
@@ -88,6 +89,7 @@ export default {
     refresh () {
       this.query = this.$route.query
       this.loginUser = User.get()
+      this.sysParams = SystemParams.get()
     }
   },
   activated () {
