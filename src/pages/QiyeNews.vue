@@ -60,10 +60,10 @@
       <div class="qrcode-area" v-if="showUser && showUser.uid">
           <img :src="showUser.qrcode" />
       </div>
-      <!-- <div class="reading-info">
+      <div class="reading-info">
         <span class="font14 color-gray">阅读 {{viewData.views | readingCountFormat}}</span>
         <span class="font14 color-gray" @click="clickDig"><span :class="`digicon ${isdig ? 'diged' : ''}`"></span> {{viewData.dig}}</span>
-      </div> -->
+      </div>
     </div>
     <div v-transfer-dom>
       <previewer :list="previewerPhotoarr" ref="previewer"></previewer>
@@ -86,7 +86,7 @@ export default {
       query: {},
       loginUser: {},
       viewData: {},
-      isdig: 0,
+      isdig: false,
       photoarr: [],
       previewerPhotoarr: [],
       showUser: {}
@@ -150,15 +150,12 @@ export default {
       }
     },
     clickDig () {
-      let url = `${ENV.BokaApi}/api/user/digs/add`
+      let postParams = {id: this.query.id, module: this.module, action: 'add'}
       if (this.isdig) {
-        url = `${ENV.BokaApi}/api/user/digs/delete`
+        postParams.action = 'delete'
       }
       this.$vux.loading.show()
-      this.$http.post(url, {
-        id: this.query.id,
-        module: 'news'
-      }).then(res => {
+      this.$http.post(`${ENV.BokaApi}/api/content/digs`, postParams).then(res => {
         this.$vux.loading.hide()
         let data = res.data
         if (data.flag === 1) {
@@ -175,6 +172,16 @@ export default {
             type: 'warning',
             time: this.$util.delay(data.error)
           })
+        }
+      })
+    },
+    getDig () {
+      this.$http.post(`${ENV.BokaApi}/api/content/digs`, {
+        id: this.query.id, module: this.module, action: 'show'
+      }).then(res => {
+        let data = res.data
+        if (data.flag) {
+          this.isdig = true
         }
       })
     },
@@ -210,6 +217,7 @@ export default {
           document.title = this.viewData.title
           this.handleImg()
           this.handleShare()
+          this.getDig()
         }
       })
     },
