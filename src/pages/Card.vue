@@ -64,30 +64,28 @@
 </style>
 <template>
   <div class="card-page">
-    <template v-if="viewData && viewData.id">
-      <template v-if="viewData.type == 'cardcommon'">
-        <div class="row1">
-          <img src="https://tossharingsales.boka.cn/minigxk/luck/bg3.png" />
-        </div>
-        <div class="row2">
-          <img src="https://tossharingsales.boka.cn/minigxk/luck/bg2.png" />
-          <div class="row2-inner">
-            <div class="w_100 flex_center">
-              <div class="pic-area">
-                <div class="pic">
-                  <img mode="widthFix" src="https://tossharingsales.boka.cn/minigxk/luck/hb1.png" />
-                  <div class="txt1">
-                    <div class="inner">
-                      <div class="btn flex_center" @click="openEvent">開</div>
-                    </div>
+    <template v-if="cardType == 'cardcommon'">
+      <div class="row1">
+        <img src="https://tossharingsales.boka.cn/minigxk/luck/bg3.png" />
+      </div>
+      <div class="row2">
+        <img src="https://tossharingsales.boka.cn/minigxk/luck/bg2.png" />
+        <div class="row2-inner">
+          <div class="w_100 flex_center">
+            <div class="pic-area">
+              <div class="pic">
+                <img mode="widthFix" src="https://tossharingsales.boka.cn/minigxk/luck/hb1.png" />
+                <div class="txt1">
+                  <div class="inner">
+                    <div class="btn flex_center" @click="openEvent">開</div>
                   </div>
-                  <div class="txt2" @click="clickShare" v-if="!query.share_uid || query.share_uid == ''">立即分享</div>
                 </div>
+                <div class="txt2" @click="clickShare" v-if="!query.share_uid || query.share_uid == ''">立即分享</div>
               </div>
             </div>
           </div>
         </div>
-      </template>
+      </div>
     </template>
     <div v-transfer-dom class="x-popup">
       <popup v-model="showResultModal" height="100%" class="card-result-modal">
@@ -141,7 +139,8 @@ export default {
       ordermoney: '0.00',
       facemoney: '0.00',
       showResultModal: false,
-      showShareModal: false
+      showShareModal: false,
+      cardType: 'cardcommon'
     }
   },
   methods: {
@@ -160,6 +159,12 @@ export default {
         this.$vux.loading.hide()
         if (data.code === 0) {
           this.showResultModal = true
+        } else {
+          this.$vux.toast.show({
+            text: data.msg,
+            type: 'text',
+            time: this.$util.delay(data.msg)
+          })
         }
       })
     },
@@ -211,6 +216,7 @@ export default {
     refresh () {
       this.loginUser = User.get()
       this.query = this.$route.query
+      if (this.query.type) this.cardType = this.query.type
       if (this.loginUser.identity === 2) {
         this.wid = this.loginUser.uid
       } else if (this.loginUser.ownid) {
