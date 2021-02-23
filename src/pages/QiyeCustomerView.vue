@@ -36,6 +36,18 @@
     .btn-cancel{background-color:#ccc;color:#fff;}
     .btn-submit{background-color:#07c160;color:#fff;}
   }
+  .tag-list{
+    display:flex;justify-content: flex-end;align-items: center;flex-wrap:wrap;
+    .item:not(:last-child){margin-right:5px;}
+    .item{border-radius:5px;border:#ccc 1px solid;padding:2px 5px;}
+  }
+}
+.tag-container{
+  .parent-item:not(:last-child){margin-bottom:10px;}
+  .child-area{
+    padding: 10px 15px;
+    .child-item:not(:first-child){margin-top:10px;}
+  }
 }
 </style>
 <template>
@@ -88,12 +100,23 @@
         <div class="col1">地区</div>
         <div class="col2">{{ viewData.country }} {{ viewData.province }} {{ viewData.city }}</div>
       </div>
+      <div class="view-item">
+        <div class="col1">标签</div>
+        <div class="col2">
+          <div v-if="viewData.tagsData && viewData.tagsData.length" class="tag-list">
+            <div class="item" v-for="(item, index) in viewData.tagsData" :key="index">{{item.group_name}}-{{item.tag_name}}</div>
+          </div>
+        </div>
+        <div class="btn-col">
+          <div class="btn" @click="clickTag">更新</div>
+        </div>
+      </div>
     </div>
-    <div class="box-outer mt10" style="border-radius:0;">
+    <!-- <div class="box-outer mt10" style="border-radius:0;">
       <div class="box-title">维护内容</div>
       <div class="box-con">
       </div>
-    </div>
+    </div> -->
     <div v-if="showModal" class="auto-modal flex_center update-modal">
       <div class="modal-inner border-box" style="width:80%;">
         <div class="align_center font18 bold pb10 b_bottom_after color-theme pt10">更新信息</div>
@@ -109,16 +132,48 @@
         </div>
       </div>
     </div>
+    <div v-transfer-dom class="x-popup">
+      <popup v-model="showTagModal" height="100%" class="bg-white">
+        <div class="popup1 tag-modal">
+          <div class="pagetop flex_center b_bottom_after" style="font-size:16px;font-weight:bold;">设置标签</div>
+          <div class="pagemiddle">
+            <div class="padding10 tag-container" style="box-sizing:border-box;" >
+              <template v-for="(item,index) in tagData">
+                <div v-if="item.parentid == 0" class="parent-item">
+                  <div class="box-outer">
+                    <div class="box-title">{{item.title}}</div>
+                    <div class="child-area" v-if="item.child && item.child.length">
+                      <div v-for="(citem, cindex) in item.child" class="child-item">
+                        <label>
+                          <input type="radio" :name="`radio${item.id}`" :value="citem.tagid" :checked="citem.checked" />
+                          <span>{{citem.title}}</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+          <div class="pagebottom bg-gray flex_center color-white">
+            <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeTagModal">取消</div>
+            <div class="flex_cell h_100 flex_center bg-green color-white" @click="submitTag">提交</div>
+          </div>
+        </div>
+      </popup>
+    </div>
   </div>
 </template>
 
 <script>
-import {Datetime} from 'vux'
+import {Datetime, Popup, TransferDom} from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 import Time from '../../libs/time'
+import jQuery from 'jquery'
 export default {
-  components: {Datetime},
+  directives: { TransferDom },
+  components: {Datetime, Popup},
   data () {
     return {
       query: {},
@@ -132,7 +187,10 @@ export default {
       },
       updateVal: '',
       birthday: '',
-      showDateTime: false
+      showDateTime: false,
+      showTagModal: false,
+      tagData: [],
+      isFirst: true
     }
   },
   computed: {
@@ -148,6 +206,35 @@ export default {
     }
   },
   methods: {
+    clickTag () {
+      this.showTagModal = true
+    },
+    closeTagModal () {
+      this.showTagModal = false
+    },
+    submitTag () {
+      let cks = jQuery('.tag-modal .tag-container input:checked')
+      if (!cks.length) {
+        this.$vux.toast.text('请选择标签')
+        return false
+      }
+      let tagsid = []
+      cks.each(function () {
+        tagsid.push(this.value)
+      })
+      this.$vux.loading.show()
+      this.$http.get(`${ENV.BokaApi}/api/customer/markTags`, {
+        params: {changeuid: this.query.uid, tagsid: tagsid}
+      }).then(res => {
+        this.$vux.loading.hide()
+        let data = res.data
+        this.$vux.toast.text(data.msg)
+        if (data.code === 0) {
+          this.getInfo()
+          this.showTagModal = false
+        }
+      })
+    },
     clickDate () {
       this.showDateTime = true
     },
@@ -189,6 +276,36 @@ export default {
         this.showModal = false
       })
     },
+    getTags () {
+      this.$http.get(`${ENV.BokaApi}/api/customer/getCorpTags`).then(res => {
+        let data = res.data
+        if (data.code === 0) {
+          let retdata = data.data
+          let userTags = this.viewData.tags
+          let tarr = userTags.split(',')
+          for (let i = 0; i < retdata.length; i++) {
+            let pdata = retdata[i]
+            if (pdata.parentid === 0) {
+              pdata.child = []
+              for (let j = 0; j < retdata.length; j++) {
+                let cdata = retdata[j]
+                if (cdata.parentid === pdata.id) {
+                  cdata.checked = false
+                  for (let t = 0; t < tarr.length; t++) {
+                    if (cdata.tagid === tarr[t]) {
+                      cdata.checked = true
+                      break
+                    }
+                  }
+                  pdata.child.push(cdata)
+                }
+              }
+            }
+          }
+          this.tagData = retdata
+        }
+      })
+    },
     getInfo () {
       this.$vux.loading.show()
       this.$http.get(`${ENV.BokaApi}/api/customer/info`, {
@@ -202,7 +319,12 @@ export default {
           if (retdata.birthday) {
             retdata.birthday_str = new Time(retdata.birthday * 1000).dateFormat('yyyy-MM-dd')
           }
+          retdata.tagsData = JSON.parse(retdata.tagsdata)
           this.viewData = retdata
+          if (this.isFirst) {
+            this.isFirst = false
+            this.getTags()
+          }
         }
       })
     },

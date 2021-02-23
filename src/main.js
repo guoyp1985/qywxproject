@@ -14,7 +14,10 @@ import { User, Version, Token, Access, SystemParams } from '#/storage'
 import ENV from 'env'
 import Util from '#/util'
 import { AjaxPlugin, WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
 
+Vue.use(ElementUI)
 Vue.use(VueRouter)
 Vue.use(Util)
 Vue.use(AjaxPlugin)
