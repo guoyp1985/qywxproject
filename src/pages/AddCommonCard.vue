@@ -40,7 +40,7 @@
                 <select v-model="submitData.customertype">
                   <option value="">请选择</option>
                   <option value="1">普通客户</option>
-                  <option value="2">高端客户</option>
+                  <option value="2">高档客户</option>
                 </select>
               </div>
           </div>

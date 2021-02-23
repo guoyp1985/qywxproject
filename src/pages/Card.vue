@@ -1,5 +1,5 @@
 <style lang="less">
-.activity-page{
+.card-page{
   height:100%;background-color:#f94929;
   .bg-image1{width:100%;}
   .row1{
@@ -63,7 +63,7 @@
 }
 </style>
 <template>
-  <div class="activity-page">
+  <div class="card-page">
     <template v-if="viewData && viewData.id">
       <template v-if="viewData.type == 'cardcommon'">
         <div class="row1">
