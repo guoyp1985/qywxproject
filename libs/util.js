@@ -36,7 +36,7 @@ Util.install = function (Vue, options) {
     // 判终端
     isPC: function () {
       const userAgentInfo = navigator.userAgent
-      return !Reg.rPlatfrom.test(userAgentInfo)
+      return !Reg.rPlatfrom.test(userAgentInfo) && !this.isQywx()
     },
     isAndroid: function() {
       const userAgentInfo = navigator.userAgent
@@ -45,6 +45,14 @@ Util.install = function (Vue, options) {
     isIOS: function() {
       const userAgentInfo = navigator.userAgent
       return Reg.rIOS.test(userAgentInfo)
+    },
+    isQywx: function () {
+      const userAgentInfo = navigator.userAgent.toLowerCase()
+      return userAgentInfo.match(/MicroMessenger/i) === 'wxwork'
+    },
+    isWx: function () {
+      const userAgentInfo = navigator.userAgent.toLowerCase()
+      return userAgentInfo.match(/MicroMessenger/i) === 'micromessenger'
     },
     // 判授权
     access: function (/*response, */authorization) {

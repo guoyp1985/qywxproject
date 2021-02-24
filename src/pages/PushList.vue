@@ -206,7 +206,10 @@ export default {
       listData3: [],
       isLoading3: false,
       isDone3: false,
-      showYxlModal: false
+      showYxlModal: false,
+      nextCursor1: null,
+      nextCursor2: null,
+      nextCursor3: null
     }
   },
   methods: {
@@ -280,6 +283,7 @@ export default {
     },
     getList1 () {
       let params = {pagestart: this.pagestart1, limit: this.limit}
+      if (this.nextCursor1) params.cursor = this.nextCursor1
       this.$http.get(`${ENV.BokaApi}/api/customer/getList`, {
         params: params
       }).then(res => {
@@ -290,6 +294,7 @@ export default {
         retdata = this.handleListData(retdata)
         this.listData1 = this.listData1.concat(retdata)
         this.disList1 = true
+        if (data.next_cursor && data.next_cursor !== this.nextCursor1) this.nextCursor1 = data.next_cursor
         if (retdata.length < this.limit) {
           this.isDone1 = true
         }
@@ -298,6 +303,7 @@ export default {
     getList2 () {
       console.log('in getlist2')
       let params = {pagestart: this.pagestart2, limit: this.limit}
+      if (this.nextCursor2) params.cursor = this.nextCursor2
       this.$http.get(`${ENV.BokaApi}/api/customer/getList`, {
         params: params
       }).then(res => {
@@ -308,6 +314,7 @@ export default {
         retdata = this.handleListData(retdata)
         this.listData2 = this.listData2.concat(retdata)
         this.disList2 = true
+        if (data.next_cursor && data.next_cursor !== this.nextCursor2) this.nextCursor2 = data.next_cursor
         if (retdata.length < this.limit) {
           this.isDone2 = true
         }
@@ -315,6 +322,7 @@ export default {
     },
     getList3 () {
       let params = {pagestart: this.pagestart3, limit: this.limit}
+      if (this.nextCursor3) params.cursor = this.nextCursor3
       this.$http.get(`${ENV.BokaApi}/api/customer/getList`, {
         params: params
       }).then(res => {
@@ -325,6 +333,7 @@ export default {
         retdata = this.handleListData(retdata)
         this.listData3 = this.listData3.concat(retdata)
         this.disList3 = true
+        if (data.next_cursor && data.next_cursor !== this.nextCursor3) this.nextCursor3 = data.next_cursor
         if (retdata.length < this.limit) {
           this.isDone3 = true
         }
@@ -381,6 +390,9 @@ export default {
       this.isLoading3 = false
       this.isDone3 = false
       this.showYxlModal = false
+      this.nextCursor1 = null
+      this.nextCursor2 = null
+      this.nextCursor3 = null
     },
     refresh (query) {
       this.loginUser = User.get()

@@ -21,7 +21,39 @@
           <div v-if="!listData1 || !listData1.length" class="flex_empty">暂无数据</div>
           <div v-else class="scroll_list">
             <div v-for="(item,index) in listData1" :key="index" class="scroll_item">
-              <div>{{item.title}}</div>
+              <div class="flex_left">
+                <div class="pr10">
+                  <img class="avatar" :src="item.headimgurl" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                </div>
+                <div class="flex_cell flex_left">{{item.linkman}}</div>
+                <div class="flex_right pl10">
+                  <div class="btn" @click="expandEvent(item)">
+                    <span class="al al-asmkticon0165"></span>
+                  </div>
+                </div>
+              </div>
+              <div v-if="item.checked">
+                <div class="info-area w_100 font14 color-gray b_bottom_after">
+                  <div class="txt-item" @click="btnDetail(index)">性别: {{item.sexname}}</div>
+                  <div class="txt-item db-flex" v-if="item.mobile && item.mobile != ''" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font16"></span></div></div>
+                  <div class="txt-item" @click="btnDetail(index)">地区: {{ item.country }} {{ item.province }} {{ item.city }}</div>
+                  <div class="txt-item flex_left" @click="clickYingxiangli">影响力:
+                    <span class="color-red4">{{item.yingxiangli}}</span>
+                    <span class="al al-wenhao font20 ml5"></span>
+                  </div>
+                  <div class="txt-item">推荐人: {{item.recommendname}}</div>
+                  <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.customertype}}</div>
+                  <div class="txt-item">获客时间: {{item.dateline_str}}</div>
+                </div>
+                <div class="flex_center bg-white h40">
+                  <div class="t-table align_center color-gray2 font14 color-gray2">
+                    <div class="t-cell v_middle b_right_after">
+                      <div>联系TA</div>
+                    </div>
+                    <div class="t-cell v_middle" @click="toView(item)">更多</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="load-end-area loading" v-if="isLoading1"></div>
@@ -33,7 +65,39 @@
           <div v-if="!listData2 || !listData2.length" class="flex_empty">暂无数据</div>
           <div v-else class="scroll_list">
             <div v-for="(item,index) in listData2" :key="index" class="scroll_item">
-              <div>{{item.title}}</div>
+              <div class="flex_left">
+                <div class="pr10">
+                  <img class="avatar" :src="item.headimgurl" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                </div>
+                <div class="flex_cell flex_left">{{item.linkman}}</div>
+                <div class="flex_right pl10">
+                  <div class="btn" @click="expandEvent(item)">
+                    <span class="al al-asmkticon0165"></span>
+                  </div>
+                </div>
+              </div>
+              <div v-if="item.checked">
+                <div class="info-area w_100 font14 color-gray b_bottom_after">
+                  <div class="txt-item" @click="btnDetail(index)">性别: {{item.sexname}}</div>
+                  <div class="txt-item db-flex" v-if="item.mobile && item.mobile != ''" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font16"></span></div></div>
+                  <div class="txt-item" @click="btnDetail(index)">地区: {{ item.country }} {{ item.province }} {{ item.city }}</div>
+                  <div class="txt-item flex_left" @click="clickYingxiangli">影响力:
+                    <span class="color-red4">{{item.yingxiangli}}</span>
+                    <span class="al al-wenhao font20 ml5"></span>
+                  </div>
+                  <div class="txt-item">推荐人: {{item.recommendname}}</div>
+                  <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.customertype}}</div>
+                  <div class="txt-item">获客时间: {{item.dateline_str}}</div>
+                </div>
+                <div class="flex_center bg-white h40">
+                  <div class="t-table align_center color-gray2 font14 color-gray2">
+                    <div class="t-cell v_middle b_right_after">
+                      <div>联系TA</div>
+                    </div>
+                    <div class="t-cell v_middle" @click="toView(item)">更多</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="load-end-area loading" v-if="isLoading2"></div>
@@ -45,7 +109,39 @@
           <div v-if="!listData3 || !listData3.length" class="flex_empty">暂无数据</div>
           <div v-else class="scroll_list">
             <div v-for="(item,index) in listData3" :key="index" class="scroll_item">
-              <div>{{item.title}}</div>
+              <div class="flex_left">
+                <div class="pr10">
+                  <img class="avatar" :src="item.headimgurl" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                </div>
+                <div class="flex_cell flex_left">{{item.linkman}}</div>
+                <div class="flex_right pl10">
+                  <div class="btn" @click="expandEvent(item)">
+                    <span class="al al-asmkticon0165"></span>
+                  </div>
+                </div>
+              </div>
+              <div v-if="item.checked">
+                <div class="info-area w_100 font14 color-gray b_bottom_after">
+                  <div class="txt-item" @click="btnDetail(index)">性别: {{item.sexname}}</div>
+                  <div class="txt-item db-flex" v-if="item.mobile && item.mobile != ''" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font16"></span></div></div>
+                  <div class="txt-item" @click="btnDetail(index)">地区: {{ item.country }} {{ item.province }} {{ item.city }}</div>
+                  <div class="txt-item flex_left" @click="clickYingxiangli">影响力:
+                    <span class="color-red4">{{item.yingxiangli}}</span>
+                    <span class="al al-wenhao font20 ml5"></span>
+                  </div>
+                  <div class="txt-item">推荐人: {{item.recommendname}}</div>
+                  <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.customertype}}</div>
+                  <div class="txt-item">获客时间: {{item.dateline_str}}</div>
+                </div>
+                <div class="flex_center bg-white h40">
+                  <div class="t-table align_center color-gray2 font14 color-gray2">
+                    <div class="t-cell v_middle b_right_after">
+                      <div>联系TA</div>
+                    </div>
+                    <div class="t-cell v_middle" @click="toView(item)">更多</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="load-end-area loading" v-if="isLoading3"></div>
@@ -57,7 +153,39 @@
           <div v-if="!listData4 || !listData4.length" class="flex_empty">暂无数据</div>
           <div v-else class="scroll_list">
             <div v-for="(item,index) in listData4" :key="index" class="scroll_item">
-              <div>{{item.title}}</div>
+              <div class="flex_left">
+                <div class="pr10">
+                  <img class="avatar" :src="item.headimgurl" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                </div>
+                <div class="flex_cell flex_left">{{item.linkman}}</div>
+                <div class="flex_right pl10">
+                  <div class="btn" @click="expandEvent(item)">
+                    <span class="al al-asmkticon0165"></span>
+                  </div>
+                </div>
+              </div>
+              <div v-if="item.checked">
+                <div class="info-area w_100 font14 color-gray b_bottom_after">
+                  <div class="txt-item" @click="btnDetail(index)">性别: {{item.sexname}}</div>
+                  <div class="txt-item db-flex" v-if="item.mobile && item.mobile != ''" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font16"></span></div></div>
+                  <div class="txt-item" @click="btnDetail(index)">地区: {{ item.country }} {{ item.province }} {{ item.city }}</div>
+                  <div class="txt-item flex_left" @click="clickYingxiangli">影响力:
+                    <span class="color-red4">{{item.yingxiangli}}</span>
+                    <span class="al al-wenhao font20 ml5"></span>
+                  </div>
+                  <div class="txt-item">推荐人: {{item.recommendname}}</div>
+                  <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.customertype}}</div>
+                  <div class="txt-item">获客时间: {{item.dateline_str}}</div>
+                </div>
+                <div class="flex_center bg-white h40">
+                  <div class="t-table align_center color-gray2 font14 color-gray2">
+                    <div class="t-cell v_middle b_right_after">
+                      <div>联系TA</div>
+                    </div>
+                    <div class="t-cell v_middle" @click="toView(item)">更多</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="load-end-area loading" v-if="isLoading4"></div>
@@ -69,7 +197,39 @@
           <div v-if="!listData5 || !listData5.length" class="flex_empty">暂无数据</div>
           <div v-else class="scroll_list">
             <div v-for="(item,index) in listData5" :key="index" class="scroll_item">
-              <div>{{item.title}}</div>
+              <div class="flex_left">
+                <div class="pr10">
+                  <img class="avatar" :src="item.headimgurl" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                </div>
+                <div class="flex_cell flex_left">{{item.linkman}}</div>
+                <div class="flex_right pl10">
+                  <div class="btn" @click="expandEvent(item)">
+                    <span class="al al-asmkticon0165"></span>
+                  </div>
+                </div>
+              </div>
+              <div v-if="item.checked">
+                <div class="info-area w_100 font14 color-gray b_bottom_after">
+                  <div class="txt-item" @click="btnDetail(index)">性别: {{item.sexname}}</div>
+                  <div class="txt-item db-flex" v-if="item.mobile && item.mobile != ''" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font16"></span></div></div>
+                  <div class="txt-item" @click="btnDetail(index)">地区: {{ item.country }} {{ item.province }} {{ item.city }}</div>
+                  <div class="txt-item flex_left" @click="clickYingxiangli">影响力:
+                    <span class="color-red4">{{item.yingxiangli}}</span>
+                    <span class="al al-wenhao font20 ml5"></span>
+                  </div>
+                  <div class="txt-item">推荐人: {{item.recommendname}}</div>
+                  <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.customertype}}</div>
+                  <div class="txt-item">获客时间: {{item.dateline_str}}</div>
+                </div>
+                <div class="flex_center bg-white h40">
+                  <div class="t-table align_center color-gray2 font14 color-gray2">
+                    <div class="t-cell v_middle b_right_after">
+                      <div>联系TA</div>
+                    </div>
+                    <div class="t-cell v_middle" @click="toView(item)">更多</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="load-end-area loading" v-if="isLoading5"></div>
@@ -118,10 +278,28 @@ export default {
       disList5: false,
       listData5: [],
       isLoading5: false,
-      isDone5: false
+      isDone5: false,
+      showYxlModal: false,
+      nextCursor1: null,
+      nextCursor2: null,
+      nextCursor3: null,
+      nextCursor4: null,
+      nextCursor5: null
     }
   },
   methods: {
+    toView (item) {
+      this.$router.push({path: '/qiyeCustomerView', query: {uid: item.uid}})
+    },
+    expandEvent (item) {
+      item.checked = !item.checked
+    },
+    clickYingxiangli () {
+      this.showYxlModal = true
+    },
+    closeYxlModal () {
+      this.showYxlModal = false
+    },
     clickTab (index) {
       this.selectedIndex = index
       switch (this.selectedIndex) {
@@ -182,8 +360,27 @@ export default {
           break
       }
     },
+    handleListData (retdata) {
+      for (var i = 0; i < retdata.length; i++) {
+        let curd = retdata[i]
+        curd.checked = false
+        curd.dateline_str = new Time(curd.dateline * 1000).dateFormat('yyyy-MM-dd')
+        switch (curd.sex) {
+          case 1:
+            curd.sexname = '男'
+            break
+          case 2:
+            curd.sexname = '女'
+            break
+          default:
+            curd.sexname = '未知'
+        }
+      }
+      return retdata
+    },
     getList1 () {
       let params = {pagestart: this.pagestart1, limit: this.limit}
+      if (this.nextCursor1) params.cursor = this.nextCursor1
       this.$http.get(`${ENV.BokaApi}/api`, {
         params: params
       }).then(res => {
@@ -191,11 +388,10 @@ export default {
         this.$vux.loading.hide()
         this.isLoading1 = false
         let retdata = data.data ? data.data : data
-        for (var i = 0; i < retdata.length; i++) {
-          retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd')
-        }
+        retdata = this.handleListData(retdata)
         this.listData1 = this.listData1.concat(retdata)
         this.disList1 = true
+        if (data.next_cursor && data.next_cursor !== this.nextCursor1) this.nextCursor1 = data.next_cursor
         if (retdata.length < this.limit) {
           this.isDone1 = true
         }
@@ -203,6 +399,7 @@ export default {
     },
     getList2 () {
       let params = {pagestart: this.pagestart2, limit: this.limit}
+      if (this.nextCursor2) params.cursor = this.nextCursor2
       this.$http.get(`${ENV.BokaApi}/api`, {
         params: params
       }).then(res => {
@@ -210,11 +407,10 @@ export default {
         this.$vux.loading.hide()
         this.isLoading2 = false
         let retdata = data.data ? data.data : data
-        for (var i = 0; i < retdata.length; i++) {
-          retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd')
-        }
+        retdata = this.handleListData(retdata)
         this.listData2 = this.listData2.concat(retdata)
         this.disList2 = true
+        if (data.next_cursor && data.next_cursor !== this.nextCursor2) this.nextCursor2 = data.next_cursor
         if (retdata.length < this.limit) {
           this.isDone2 = true
         }
@@ -222,6 +418,7 @@ export default {
     },
     getList3 () {
       let params = {pagestart: this.pagestart3, limit: this.limit}
+      if (this.nextCursor3) params.cursor = this.nextCursor3
       this.$http.get(`${ENV.BokaApi}/api`, {
         params: params
       }).then(res => {
@@ -229,11 +426,10 @@ export default {
         this.$vux.loading.hide()
         this.isLoading3 = false
         let retdata = data.data ? data.data : data
-        for (var i = 0; i < retdata.length; i++) {
-          retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd')
-        }
+        retdata = this.handleListData(retdata)
         this.listData3 = this.listData3.concat(retdata)
         this.disList3 = true
+        if (data.next_cursor && data.next_cursor !== this.nextCursor3) this.nextCursor3 = data.next_cursor
         if (retdata.length < this.limit) {
           this.isDone3 = true
         }
@@ -241,6 +437,7 @@ export default {
     },
     getList4 () {
       let params = {pagestart: this.pagestart4, limit: this.limit}
+      if (this.nextCursor4) params.cursor = this.nextCursor4
       this.$http.get(`${ENV.BokaApi}/api`, {
         params: params
       }).then(res => {
@@ -248,11 +445,10 @@ export default {
         this.$vux.loading.hide()
         this.isLoading4 = false
         let retdata = data.data ? data.data : data
-        for (var i = 0; i < retdata.length; i++) {
-          retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd')
-        }
+        retdata = this.handleListData(retdata)
         this.listData4 = this.listData4.concat(retdata)
         this.disList4 = true
+        if (data.next_cursor && data.next_cursor !== this.nextCursor4) this.nextCursor4 = data.next_cursor
         if (retdata.length < this.limit) {
           this.isDone4 = true
         }
@@ -260,6 +456,7 @@ export default {
     },
     getList5 () {
       let params = {pagestart: this.pagestart5, limit: this.limit}
+      if (this.nextCursor5) params.cursor = this.nextCursor5
       this.$http.get(`${ENV.BokaApi}/api`, {
         params: params
       }).then(res => {
@@ -267,11 +464,10 @@ export default {
         this.$vux.loading.hide()
         this.isLoading5 = false
         let retdata = data.data ? data.data : data
-        for (var i = 0; i < retdata.length; i++) {
-          retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd')
-        }
+        retdata = this.handleListData(retdata)
         this.listData5 = this.listData5.concat(retdata)
         this.disList5 = true
+        if (data.next_cursor && data.next_cursor !== this.nextCursor5) this.nextCursor5 = data.next_cursor
         if (retdata.length < this.limit) {
           this.isDone5 = true
         }
@@ -327,9 +523,44 @@ export default {
         }
       })
     },
+    initData () {
+      this.pagestart1 = 0
+      this.disList1 = false
+      this.listData1 = []
+      this.isLoading1 = false
+      this.isDone1 = false
+      this.pagestart2 = 0
+      this.disList2 = false
+      this.listData2 = []
+      this.isLoading2 = false
+      this.isDone2 = false
+      this.pagestart3 = 0
+      this.disList3 = false
+      this.listData3 = []
+      this.isLoading3 = false
+      this.isDone3 = false
+      this.pagestart4 = 0
+      this.disList4 = false
+      this.listData4 = []
+      this.isLoading4 = false
+      this.isDone4 = false
+      this.pagestart5 = 0
+      this.disList5 = false
+      this.listData5 = []
+      this.isLoading5 = false
+      this.isDone5 = false
+      this.showYxlModal = false
+      this.nextCursor1 = null
+      this.nextCursor2 = null
+      this.nextCursor3 = null
+      this.nextCursor4 = null
+      this.nextCursor5 = null
+    },
     refresh (query) {
       this.loginUser = User.get()
       this.query = this.$route.query
+      this.initData()
+      this.getList1()
     }
   },
   created () {
