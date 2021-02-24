@@ -41,11 +41,13 @@ Util.install = function (Vue, options) {
     // 判终端
     isPC: function () {
       const userAgentInfo = navigator.userAgent
+      console.log('userAgent', userAgentInfo)
       let ua = userAgentInfo.toLowerCase()
       let isWx = false
       if (ua.match(/MicroMessenger/i) === 'wxwork' || ua.match(/MicroMessenger/i) === 'micromessenger') {
         isWx = true
       }
+      console.log('iswx', isWx)
       return !Reg.rPlatfrom.test(userAgentInfo) && !isWx
     },
     isAndroid: function() {

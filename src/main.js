@@ -279,17 +279,15 @@ const access = success => {
     } else {
       console.log('token失效')
       Vue.access(isPC => {
+        let lastIndex = location.href.lastIndexOf('/')
+        const originHref = encodeURIComponent(location.href.substr(lastIndex + 1))
+        const ruri = encodeURIComponent(`${ENV.Host}/#/redirect`)
+        return false
         if (isPC) {
           console.log('进入到了pc端')
-          let lastIndex = location.href.lastIndexOf('/')
-          const originHref = encodeURIComponent(location.href.substr(lastIndex + 1))
-          const ruri = encodeURIComponent(`${ENV.Host}/#/redirect`)
           // pc登录二维码
           location.replace(`${ENV.WxQrcodeAuthUrl}appid=${ENV.AppId}&agentid=${ENV.Agentid}&redirect_uri=${ruri}&state=${originHref}#wechat_redirect`)
         } else {
-          let lastIndex = location.href.lastIndexOf('/')
-          const originHref = encodeURIComponent(location.href.substr(lastIndex + 1))
-          const ruri = encodeURIComponent(`${ENV.Host}/#/redirect`)
           // 微信授权
           location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${ruri}&response_type=code&scope=snsapi_base&state=${originHref}#wechat_redirect`)
         }
