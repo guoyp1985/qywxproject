@@ -13,7 +13,12 @@ const Util = {}
 Util.install = function (Vue, options) {
   Vue.isPC = function () {
     const userAgentInfo = navigator.userAgent
-    return !Reg.rPlatfrom.test(userAgentInfo)
+    let ua = userAgentInfo.toLowerCase()
+    let isWx = false
+    if (ua.match(/MicroMessenger/i) === 'wxwork' || ua.match(/MicroMessenger/i) === 'micromessenger') {
+      isWx = true
+    }
+    return !Reg.rPlatfrom.test(userAgentInfo) && !isWx
   }
 
   Vue.access = function (/*response, */authorization) {
@@ -36,7 +41,12 @@ Util.install = function (Vue, options) {
     // 判终端
     isPC: function () {
       const userAgentInfo = navigator.userAgent
-      return !Reg.rPlatfrom.test(userAgentInfo) && !this.isQywx()
+      let ua = userAgentInfo.toLowerCase()
+      let isWx = false
+      if (ua.match(/MicroMessenger/i) === 'wxwork' || ua.match(/MicroMessenger/i) === 'micromessenger') {
+        isWx = true
+      }
+      return !Reg.rPlatfrom.test(userAgentInfo) && !isWx
     },
     isAndroid: function() {
       const userAgentInfo = navigator.userAgent
