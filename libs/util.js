@@ -15,7 +15,7 @@ Util.install = function (Vue, options) {
     const userAgentInfo = navigator.userAgent
     let ua = userAgentInfo.toLowerCase()
     let isWx = false
-    if (ua.match(/MicroMessenger/i) === 'wxwork' || ua.match(/MicroMessenger/i) === 'micromessenger') {
+    if (/wxwork/i.test(ua) || /MicroMessenger/i.test(ua)) {
       isWx = true
     }
     return !Reg.rPlatfrom.test(userAgentInfo) && !isWx
@@ -44,10 +44,9 @@ Util.install = function (Vue, options) {
       console.log('userAgent', userAgentInfo)
       let ua = userAgentInfo.toLowerCase()
       let isWx = false
-      if (ua.match(/MicroMessenger/i) === 'wxwork' || ua.match(/MicroMessenger/i) === 'micromessenger') {
+      if (/wxwork/i.test(ua) || /MicroMessenger/i.test(ua)) {
         isWx = true
       }
-      console.log('iswx', isWx)
       return !Reg.rPlatfrom.test(userAgentInfo) && !isWx
     },
     isAndroid: function() {
@@ -60,11 +59,11 @@ Util.install = function (Vue, options) {
     },
     isQywx: function () {
       const userAgentInfo = navigator.userAgent.toLowerCase()
-      return userAgentInfo.match(/MicroMessenger/i) === 'wxwork'
+      return /wxwork/i.test(userAgentInfo)
     },
     isWx: function () {
       const userAgentInfo = navigator.userAgent.toLowerCase()
-      return userAgentInfo.match(/MicroMessenger/i) === 'micromessenger'
+      return /MicroMessenger/i.test(userAgentInfo)
     },
     // 判授权
     access: function (/*response, */authorization) {

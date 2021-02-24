@@ -207,11 +207,25 @@ Vue.http.interceptors.response.use(response => {
     })
     if (error.response.status === 401) {
       console.error('未授权请求')
-      Vue.access(isPC => {
-        if (isPC) {
-          router.push('login')
-        }
-      })
+      const userAgentInfo = navigator.userAgent
+      let ua = userAgentInfo.toLowerCase()
+      let isWx = false
+      if (/wxwork/i.test(ua) || /MicroMessenger/i.test(ua)) {
+        isWx = true
+      }
+      if (isWx) {
+        // 微信授权
+        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${ruri}&response_type=code&scope=snsapi_base&state=${originHref}#wechat_redirect`)
+      } else {
+        console.log('进入到了pc端')
+        // pc登录二维码
+        location.replace(`${ENV.WxQrcodeAuthUrl}appid=${ENV.AppId}&agentid=${ENV.Agentid}&redirect_uri=${ruri}&state=${originHref}#wechat_redirect`)
+      }
+      // Vue.access(isPC => {
+      //   if (isPC) {
+      //     router.push('login')
+      //   }
+      // })
     }
   }
 })
@@ -282,14 +296,19 @@ const access = success => {
         let lastIndex = location.href.lastIndexOf('/')
         const originHref = encodeURIComponent(location.href.substr(lastIndex + 1))
         const ruri = encodeURIComponent(`${ENV.Host}/#/redirect`)
-        return false
-        if (isPC) {
+        const userAgentInfo = navigator.userAgent
+        let ua = userAgentInfo.toLowerCase()
+        let isWx = false
+        if (/wxwork/i.test(ua) || /MicroMessenger/i.test(ua)) {
+          isWx = true
+        }
+        if (isWx) {
+          // 微信授权
+          location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${ruri}&response_type=code&scope=snsapi_base&state=${originHref}#wechat_redirect`)
+        } else {
           console.log('进入到了pc端')
           // pc登录二维码
           location.replace(`${ENV.WxQrcodeAuthUrl}appid=${ENV.AppId}&agentid=${ENV.Agentid}&redirect_uri=${ruri}&state=${originHref}#wechat_redirect`)
-        } else {
-          // 微信授权
-          location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${ruri}&response_type=code&scope=snsapi_base&state=${originHref}#wechat_redirect`)
         }
       })
     }
@@ -334,6 +353,7 @@ clearCache()
 let authCount = 0
 // 页面入口
 try {
+  render()
   if (!Token.get() || Token.isExpired() || !User.get()) {
     access(path => {
       console.log(`Entry: ${path}`)
