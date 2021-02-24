@@ -79,7 +79,7 @@
                   <div class="btn flex_center" @click="openEvent">開</div>
                 </div>
               </div>
-              <div class="txt2" @click="clickShare" v-if="inQywx">立即分享</div>
+              <div class="txt2" @click="clickShare">立即分享</div>
             </div>
           </div>
         </div>
