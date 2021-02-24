@@ -207,6 +207,9 @@ Vue.http.interceptors.response.use(response => {
     })
     if (error.response.status === 401) {
       console.error('未授权请求')
+      let lastIndex = location.href.lastIndexOf('/')
+      const originHref = encodeURIComponent(location.href.substr(lastIndex + 1))
+      const ruri = encodeURIComponent(`${ENV.Host}/#/redirect`)
       const userAgentInfo = navigator.userAgent
       let ua = userAgentInfo.toLowerCase()
       let isWx = false
@@ -256,7 +259,15 @@ const access = success => {
   //   refresh_expired_at: 1619685452823,
   //   token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvcXkuYm9rYS5jblwvYXBpXC92aXNpdG9yXC93b3JrVXNlckF1dGhcL3VRVTE4d0hERHo4R3drQzF6X2d5cFhPVHhLaUxrcVNRWXN0SmhKRG9qSmMiLCJpYXQiOjE2MTM2Mzc0NTIsImV4cCI6MTYxNDUwMTQ1MiwibmJmIjoxNjEzNjM3NDUyLCJqdGkiOiJKakJmNE4zTTg0bTVJQ1lSIiwic3ViIjoxLCJwcnYiOiI4NjY1YWU5Nzc1Y2YyNmY2YjhlNDk2Zjg2ZmE1MzZkNjhkZDcxODE4In0.otwccirnCVe6VsxMseutanMl0GHTVptzEnBPMnTRnHQ'
   // }
-  // Token.set(token)
+
+  // gyp的客户
+  Token.set(token)
+  token = {
+    expired_at: 1619685452823,
+    refresh_expired_at: 1619685452823,
+    token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9xeS5ib2thLmNuXC9hZG1pblwvdGVzdCIsImlhdCI6MTYxMzk2MTg4MywiZXhwIjoxNjE0ODI1ODgzLCJuYmYiOjE2MTM5NjE4ODMsImp0aSI6IkY1WWZCV3I2SXp1RzlwTTUiLCJzdWIiOjYsInBydiI6Ijg2NjVhZTk3NzVjZjI2ZjZiOGU0OTZmODZmYTUzNmQ2OGRkNzE4MTgifQ.Kbs9qE2elD9l5WOCROi-54xQ5j3LH2NfLzmHjijsKCg'
+  }
+  Token.set(token)
 
   // 仇总token
   // token = {

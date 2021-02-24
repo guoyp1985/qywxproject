@@ -64,29 +64,27 @@
 </style>
 <template>
   <div class="card-page">
-    <template v-if="cardType == 'cardcommon'">
-      <div class="row1">
-        <img src="https://tossharingsales.boka.cn/minigxk/luck/bg3.png" />
-      </div>
-      <div class="row2">
-        <img src="https://tossharingsales.boka.cn/minigxk/luck/bg2.png" />
-        <div class="row2-inner">
-          <div class="w_100 flex_center">
-            <div class="pic-area">
-              <div class="pic">
-                <img mode="widthFix" src="https://tossharingsales.boka.cn/minigxk/luck/hb1.png" />
-                <div class="txt1">
-                  <div class="inner">
-                    <div class="btn flex_center" @click="openEvent">開</div>
-                  </div>
+    <div class="row1">
+      <img src="https://tossharingsales.boka.cn/minigxk/luck/bg3.png" />
+    </div>
+    <div class="row2">
+      <img src="https://tossharingsales.boka.cn/minigxk/luck/bg2.png" />
+      <div class="row2-inner">
+        <div class="w_100 flex_center">
+          <div class="pic-area">
+            <div class="pic">
+              <img mode="widthFix" src="https://tossharingsales.boka.cn/minigxk/luck/hb1.png" />
+              <div class="txt1">
+                <div class="inner">
+                  <div class="btn flex_center" @click="openEvent">開</div>
                 </div>
-                <div class="txt2" @click="clickShare" v-if="inQywx">立即分享</div>
               </div>
+              <div class="txt2" @click="clickShare" v-if="inQywx">立即分享</div>
             </div>
           </div>
         </div>
       </div>
-    </template>
+    </div>
     <div v-transfer-dom class="x-popup">
       <popup v-model="showResultModal" height="100%" class="card-result-modal">
         <div class="popup1 h_100 flex_center">
@@ -140,7 +138,8 @@ export default {
       facemoney: '0.00',
       showResultModal: false,
       showShareModal: false,
-      cardType: 'cardcommon'
+      cardType: 'cardcommon',
+      inQywx: false
     }
   },
   methods: {
@@ -152,9 +151,9 @@ export default {
     },
     openEvent () {
       this.$vux.loading.show()
-      this.$http.post(`${ENV.BokaApi}/api/card/getCard`, {
-        id: this.query.id
-      }).then(res => {
+      let params = {type: this.query.type}
+      if (this.query.id) params.id = this.query.id
+      this.$http.post(`${ENV.BokaApi}/api/card/getCard`, params).then(res => {
         const data = res.data
         this.$vux.loading.hide()
         if (data.code === 0) {
@@ -224,7 +223,10 @@ export default {
       } else if (this.query.wid) {
         this.wid = this.query.wid
       }
-      this.getData()
+      this.inQywx = this.$util.isQywx()
+      if (this.query.id) {
+        this.getData()
+      }
     }
   },
   created () {

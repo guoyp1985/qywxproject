@@ -170,7 +170,7 @@ export default {
     handleShare () {
       let shareStartTime = new Time(this.viewData.starttime * 1000).dateFormat('MM-dd')
       let shareEndTime = new Time(this.viewData.endtime * 1000).dateFormat('MM-dd')
-      let shareLink = `${ENV.Host}/#/card?id=${this.viewData.id}&share_uid=${this.loginUser.uid}`
+      let shareLink = `${ENV.Host}/#/card?id=${this.viewData.id}&type=${this.viewData.type}&share_uid=${this.loginUser.uid}`
       if (this.wid && this.wid !== '') shareLink = `${shareLink}&wid=${this.wid}`
       let shareParams = {
         title: this.viewData.title,
