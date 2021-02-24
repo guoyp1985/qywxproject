@@ -261,13 +261,13 @@ const access = success => {
   // }
 
   // gyp的客户
-  Token.set(token)
-  token = {
-    expired_at: 1619685452823,
-    refresh_expired_at: 1619685452823,
-    token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9xeS5ib2thLmNuXC9hZG1pblwvdGVzdCIsImlhdCI6MTYxMzk2MTg4MywiZXhwIjoxNjE0ODI1ODgzLCJuYmYiOjE2MTM5NjE4ODMsImp0aSI6IkY1WWZCV3I2SXp1RzlwTTUiLCJzdWIiOjYsInBydiI6Ijg2NjVhZTk3NzVjZjI2ZjZiOGU0OTZmODZmYTUzNmQ2OGRkNzE4MTgifQ.Kbs9qE2elD9l5WOCROi-54xQ5j3LH2NfLzmHjijsKCg'
-  }
-  Token.set(token)
+  // Token.set(token)
+  // token = {
+  //   expired_at: 1619685452823,
+  //   refresh_expired_at: 1619685452823,
+  //   token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9xeS5ib2thLmNuXC9hZG1pblwvdGVzdCIsImlhdCI6MTYxMzk2MTg4MywiZXhwIjoxNjE0ODI1ODgzLCJuYmYiOjE2MTM5NjE4ODMsImp0aSI6IkY1WWZCV3I2SXp1RzlwTTUiLCJzdWIiOjYsInBydiI6Ijg2NjVhZTk3NzVjZjI2ZjZiOGU0OTZmODZmYTUzNmQ2OGRkNzE4MTgifQ.Kbs9qE2elD9l5WOCROi-54xQ5j3LH2NfLzmHjijsKCg'
+  // }
+  // Token.set(token)
 
   // 仇总token
   // token = {

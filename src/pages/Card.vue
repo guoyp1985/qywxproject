@@ -94,7 +94,7 @@
                 <img src="https://tossharingsales.boka.cn/minigxk/luck/hb2.png" />
               </div>
             </div>
-            <div class="top-txt flex_center">恭喜你获得<span class="big">优惠券</span></div>
+            <div class="top-txt flex_center">恭喜你获得<span class="big">{{cardObject[cardType] ? cardObject[cardType] : '优惠券'}}</span></div>
             <div class="con-txt flex_center">
               <div class="w_100 align_center">
                 <div class="big">￥{{facemoney}}</div>
@@ -139,7 +139,10 @@ export default {
       showResultModal: false,
       showShareModal: false,
       cardType: 'cardcommon',
-      inQywx: false
+      inQywx: false,
+      cardObject: {
+        newcustomer: '新人优惠券'
+      }
     }
   },
   methods: {
@@ -157,6 +160,9 @@ export default {
         const data = res.data
         this.$vux.loading.hide()
         if (data.code === 0) {
+          let retdata = data.data
+          this.ordermoney = retdata.ordermoney
+          this.facemoney = retdata.money
           this.showResultModal = true
         } else {
           this.$vux.toast.show({
@@ -173,7 +179,9 @@ export default {
     handleShare () {
       let shareStartTime = new Time(this.viewData.starttime * 1000).dateFormat('MM-dd')
       let shareEndTime = new Time(this.viewData.endtime * 1000).dateFormat('MM-dd')
-      let shareLink = `${ENV.Host}/#/card?id=${this.viewData.id}&share_uid=${this.loginUser.uid}`
+      let shareLink = `${ENV.Host}/#/card?share_uid=${this.loginUser.uid}`
+      if (this.query.id) shareLink = `${shareLink}&id=${this.query.id}`
+      if (this.query.type) shareLink = `${shareLink}&type=${this.query.type}`
       if (this.wid && this.wid !== '') shareLink = `${shareLink}&wid=${this.wid}`
       let shareParams = {
         title: this.viewData.title,
