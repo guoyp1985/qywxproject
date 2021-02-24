@@ -329,16 +329,6 @@ const access = success => {
 }
 
 const clearCache = () => {
-  // const url = location.href
-  //             .replace(/(.+?\/)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
-  //               return `${p1}?${p3}${p2}`
-  //             })
-  //             .replace(/(.+\?.+?)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
-  //               return `${p1}&${p3}${p2}`
-  //             })
-  // const lUrl = urlParse(url, true)
-  console.log('env.verison', ENV.Version)
-  console.log('缓存里的version', Version.get())
   if (ENV.Version !== Version.get()) {
     Token.remove()
     User.remove()
@@ -361,7 +351,6 @@ const render = () => {
 
 clearCache()
 
-let authCount = 0
 // 页面入口
 try {
   render()
@@ -375,25 +364,4 @@ try {
     render()
   }
 } catch (e) {
-  // if (authCount >= 3) {
-  //   vue.$vux.alert.show({
-  //     title: '提示',
-  //     content: `持续授权3次失败，请联系运营方处理`
-  //   })
-  // } else {
-  //   authCount++
-  //   vue.$vux.alert.show({
-  //     title: '提示',
-  //     content: `error:${e.toString()} :: 代码异常`,
-  //     onHide () {
-  //       Token.remove()
-  //       User.remove()
-  //       access(path => {
-  //         console.log(`Entry: ${path}`)
-  //         router.replace({path: path})
-  //         render()
-  //       })
-  //     }
-  //   })
-  // }
 }
