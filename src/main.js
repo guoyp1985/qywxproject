@@ -201,10 +201,10 @@ Vue.http.interceptors.response.use(response => {
 }, error => {
   if (error.response) {
     Token.remove()
-    vue.$vux.alert.show({
-      title: '提示',
-      content: `无效token:${Token.get().token} :: 禁止未授权访问`
-    })
+    // vue.$vux.alert.show({
+    //   title: '提示',
+    //   content: `无效token:${Token.get().token} :: 禁止未授权访问`
+    // })
     if (error.response.status === 401) {
       console.error('未授权请求')
       let lastIndex = location.href.lastIndexOf('/')
@@ -375,25 +375,25 @@ try {
     render()
   }
 } catch (e) {
-  if (authCount >= 3) {
-    vue.$vux.alert.show({
-      title: '提示',
-      content: `持续授权3次失败，请联系运营方处理`
-    })
-  } else {
-    authCount++
-    vue.$vux.alert.show({
-      title: '提示',
-      content: `error:${e.toString()} :: 代码异常`,
-      onHide () {
-        Token.remove()
-        User.remove()
-        access(path => {
-          console.log(`Entry: ${path}`)
-          router.replace({path: path})
-          render()
-        })
-      }
-    })
-  }
+  // if (authCount >= 3) {
+  //   vue.$vux.alert.show({
+  //     title: '提示',
+  //     content: `持续授权3次失败，请联系运营方处理`
+  //   })
+  // } else {
+  //   authCount++
+  //   vue.$vux.alert.show({
+  //     title: '提示',
+  //     content: `error:${e.toString()} :: 代码异常`,
+  //     onHide () {
+  //       Token.remove()
+  //       User.remove()
+  //       access(path => {
+  //         console.log(`Entry: ${path}`)
+  //         router.replace({path: path})
+  //         render()
+  //       })
+  //     }
+  //   })
+  // }
 }
