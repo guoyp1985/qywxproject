@@ -245,12 +245,12 @@ const access = success => {
   // Token.set(token)
 
   // 仇总token
-  token = {
-    expired_at: 1619685452823,
-    refresh_expired_at: 1619685452823,
-    token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvcXkuYm9rYS5jblwvYXBpXC92aXNpdG9yXC93b3JrVXNlckF1dGhcL0JoMTZzUE1xRkdLQzBmNVdKTTVMVi1jSFZvb3Zra0N4cFBfWUZ5XzlMelUiLCJpYXQiOjE2MTQxMzAzNTMsImV4cCI6MTYxNDk5NDM1MywibmJmIjoxNjE0MTMwMzUzLCJqdGkiOiJMUDlWcEk4NkQyUkRLOUw2Iiwic3ViIjozLCJwcnYiOiI4NjY1YWU5Nzc1Y2YyNmY2YjhlNDk2Zjg2ZmE1MzZkNjhkZDcxODE4In0.V0GN3CU2Ehm2h03Ba-UU4yom8hvB5IgMa6HW4F8Jh9w'
-  }
-  Token.set(token)
+  // token = {
+  //   expired_at: 1619685452823,
+  //   refresh_expired_at: 1619685452823,
+  //   token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvcXkuYm9rYS5jblwvYXBpXC92aXNpdG9yXC93b3JrVXNlckF1dGhcL0JoMTZzUE1xRkdLQzBmNVdKTTVMVi1jSFZvb3Zra0N4cFBfWUZ5XzlMelUiLCJpYXQiOjE2MTQxMzAzNTMsImV4cCI6MTYxNDk5NDM1MywibmJmIjoxNjE0MTMwMzUzLCJqdGkiOiJMUDlWcEk4NkQyUkRLOUw2Iiwic3ViIjozLCJwcnYiOiI4NjY1YWU5Nzc1Y2YyNmY2YjhlNDk2Zjg2ZmE1MzZkNjhkZDcxODE4In0.V0GN3CU2Ehm2h03Ba-UU4yom8hvB5IgMa6HW4F8Jh9w'
+  // }
+  // Token.set(token)
   if (location.href.indexOf('/redirect') < 0) {
     if (token && token !== '' && !Token.isExpired()) {
       console.log('进入到了请求用户信息')
