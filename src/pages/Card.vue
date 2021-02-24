@@ -142,7 +142,8 @@ export default {
       inQywx: false,
       cardObject: {
         newcustomer: '新人优惠券'
-      }
+      },
+      shareParams: {}
     }
   },
   methods: {
@@ -177,23 +178,20 @@ export default {
       this.showResultModal = false
     },
     handleShare () {
-      let shareStartTime = new Time(this.viewData.starttime * 1000).dateFormat('MM-dd')
-      let shareEndTime = new Time(this.viewData.endtime * 1000).dateFormat('MM-dd')
       let shareLink = `${ENV.Host}/#/card?share_uid=${this.loginUser.uid}`
       if (this.query.id) shareLink = `${shareLink}&id=${this.query.id}`
       if (this.query.type) shareLink = `${shareLink}&type=${this.query.type}`
       if (this.wid && this.wid !== '') shareLink = `${shareLink}&wid=${this.wid}`
-      let shareParams = {
-        title: this.viewData.title,
-        desc: `有效期${shareStartTime}至${shareEndTime}`,
+      this.shareParams = {
+        title: '优惠券',
+        desc: '送你一张优惠券',
         photo: 'https://tossharingsales.boka.cn/month_202102/16137146626061.jpeg',
         link: shareLink
       }
       if (this.query.share_uid) {
-        shareParams.link = `${shareParams.link}&lastshareuid=${this.query.share_uid}`
-        shareParams.lastshareuid = this.query.share_uid
+        this.shareParams.link = `${this.shareParams.link}&lastshareuid=${this.query.share_uid}`
+        this.shareParams.lastshareuid = this.query.share_uid
       }
-      this.$util.handleWxShare(shareParams)
     },
     getData () {
       const infoparams = {id: this.query.id, module: 'miniactivity', addviews: 1}
@@ -216,7 +214,11 @@ export default {
             this.ordermoney = cmoney[0]
             this.facemoney = cmoney[1]
           }
-          this.handleShare()
+          this.shareParams.title = this.viewData.title
+          let shareStartTime = new Time(this.viewData.starttime * 1000).dateFormat('MM-dd')
+          let shareEndTime = new Time(this.viewData.endtime * 1000).dateFormat('MM-dd')
+          this.shareParams.desc = `有效期${shareStartTime}至${shareEndTime}`
+          this.$util.handleWxShare(this.shareParams)
         }
       })
     },
@@ -232,7 +234,13 @@ export default {
         this.wid = this.query.wid
       }
       this.inQywx = this.$util.isQywx()
-      if (this.query.id) {
+      this.handleShare()
+      if (!this.query.id) {
+        if (this.query.type && this.cardObject[this.query.type]) {
+          this.shareParams.title = this.cardObject[this.query.type]
+        }
+        this.$util.handleWxShare(this.shareParams)
+      } else {
         this.getData()
       }
     }
