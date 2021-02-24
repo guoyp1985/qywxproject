@@ -120,14 +120,14 @@
 </template>
 
 <script>
-import { Tab, TabItem, TransferDom, Popup } from 'vux'
+import { TransferDom, Popup } from 'vux'
 import ENV from 'env'
 import Time from '../../libs/time'
 import { User } from '#/storage'
 
 export default {
   directives: { TransferDom },
-  components: { Tab, TabItem, Popup },
+  components: { Popup },
   data () {
     return {
       query: {},
