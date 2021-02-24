@@ -80,7 +80,7 @@
                     <div class="btn flex_center" @click="openEvent">開</div>
                   </div>
                 </div>
-                <div class="txt2" @click="clickShare" v-if="!query.share_uid || query.share_uid == ''">立即分享</div>
+                <div class="txt2" @click="clickShare" v-if="inQywx">立即分享</div>
               </div>
             </div>
           </div>

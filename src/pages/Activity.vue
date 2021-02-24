@@ -81,7 +81,7 @@
                       <div class="btn flex_center" @click="openEvent">開</div>
                     </div>
                   </div>
-                  <div class="txt2" @click="clickShare" v-if="!query.share_uid || query.share_uid == ''">立即分享</div>
+                  <div class="txt2" @click="clickShare" v-if="inQywx">立即分享</div>
                 </div>
               </div>
             </div>
@@ -141,7 +141,8 @@ export default {
       ordermoney: '0.00',
       facemoney: '0.00',
       showResultModal: false,
-      showShareModal: false
+      showShareModal: false,
+      inQywx: false
     }
   },
   methods: {
@@ -218,6 +219,7 @@ export default {
       } else if (this.query.wid) {
         this.wid = this.query.wid
       }
+      this.inQywx = this.$util.isQywx()
       this.getData()
     }
   },
