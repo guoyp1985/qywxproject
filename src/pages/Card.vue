@@ -1,6 +1,6 @@
 <style lang="less">
 .card-page{
-  height:100%;background-color:#f94929;
+  height:100%;background-color:#f94929;overflow-y:auto;
   .bg-image1{width:100%;}
   .row1{
     width:100%;
@@ -39,21 +39,24 @@
     }
   }
   .top-txt{
-    position:absolute;left:0;top:22%;right:0;width:100%;height:12%;color:#7a2716;font-weight:bold;font-size:30rpx;
-    .big{font-size:40rpx;color:#ff6a61;}
+    position:absolute;left:0;top:22%;right:0;width:100%;height:12%;color:#7a2716;font-weight:bold;font-size:15px;
+    .big{font-size:20px;color:#ff6a61;}
   }
   .con-txt{
-    position:absolute;left:0;top:33%;right:0;width:100%;height:29%;color:#7a2716;font-weight:bold;font-size:30rpx;
-    .big{font-size:80rpx;color:#ff6a61;}
+    position:absolute;left:0;top:33%;right:0;width:100%;height:29%;color:#7a2716;font-weight:bold;font-size:15px;
+    .big{font-size:40px;color:#ff6a61;}
   }
   .txt-list{
     position:absolute;left:0;bottom:10%;right:0;display:flex;
     .item{flex:1;color:#f8edad;box-sizing: border-box;}
-    .item:nth-child(1){padding-right:20rpx;}
-    .item:nth-child(2){padding-left:20rpx;}
+    .item:nth-child(1){padding-right:10px;}
+    .item:nth-child(2){padding-left:10px;}
   }
-  .close-area{position:absolute;left:0;bottom:-120rpx;right:0;height:100rpx;}
-  .close-area .al{font-weight:bold;font-size:70rpx;color:#fff;}
+  .desc-txt{
+    position:absolute;left:7%;top:79%;right:7%;color:#fff;
+  }
+  .close-area{position:absolute;left:0;bottom:-60px;right:0;height:50px;}
+  .close-area .al{font-weight:bold;font-size:35px;color:#fff;}
 }
 .share-modal{
   background-color:rgba(0,0,0,0.7) !important;color:#fff;
@@ -69,11 +72,11 @@
     </div>
     <div class="row2">
       <img src="https://tossharingsales.boka.cn/minigxk/luck/bg2.png" />
-      <div class="row2-inner">
+      <div v-if="showOpen" class="row2-inner">
         <div class="w_100 flex_center">
           <div class="pic-area">
             <div class="pic">
-              <img mode="widthFix" src="https://tossharingsales.boka.cn/minigxk/luck/hb1.png" />
+              <img src="https://tossharingsales.boka.cn/minigxk/luck/hb1.png" />
               <div class="txt1">
                 <div class="inner">
                   <div class="btn flex_center" @click="openEvent">開</div>
@@ -84,7 +87,30 @@
           </div>
         </div>
       </div>
+      <div v-if="showResult" class="row2-inner">
+        <div class="w_100 flex_center card-result-modal pb20">
+          <div class="inner">
+            <div class="pic-outer">
+              <div class="pic">
+                <img src="https://tossharingsales.boka.cn/minigxk/luck/hb2.png" />
+              </div>
+              <div class="top-txt flex_center">恭喜你获得<span class="big">{{cardObject[cardType] ? cardObject[cardType] : '优惠券'}}</span></div>
+              <div class="con-txt flex_center">
+                <div class="w_100 align_center">
+                  <div class="big">￥{{facemoney}}</div>
+                  <div>满{{ordermoney}}可用</div>
+                </div>
+              </div>
+              <div class="desc-txt">
+                <div class="flex_left">使用说明: {{viewData.content}}</div>
+                <div class="flex_left">有效期至: {{viewData.deadline_str}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+    <!--
     <div v-transfer-dom class="x-popup">
       <popup v-model="showResultModal" height="100%" class="card-result-modal">
         <div class="popup1 h_100 flex_center">
@@ -108,6 +134,7 @@
         </div>
       </popup>
     </div>
+  -->
     <div v-transfer-dom class="x-popup">
       <popup v-model="showShareModal" height="100%" class="share-modal">
         <div class="popup1 h_100" @click="clickShareModal">
@@ -143,7 +170,9 @@ export default {
       cardObject: {
         newcustomer: '新人优惠券'
       },
-      shareParams: {}
+      shareParams: {},
+      showOpen: true,
+      showResult: false
     }
   },
   methods: {
@@ -162,9 +191,13 @@ export default {
         this.$vux.loading.hide()
         if (data.code === 0) {
           let retdata = data.data
+          retdata.deadline_str = new Time(retdata.deadline * 1000).dateFormat('yyyy-MM-dd')
           this.ordermoney = retdata.ordermoney
           this.facemoney = retdata.money
-          this.showResultModal = true
+          // this.showResultModal = true
+          this.showOpen = false
+          this.showResult = true
+          this.viewData = retdata
         } else {
           this.$vux.toast.show({
             text: data.msg,
