@@ -11,7 +11,6 @@ import ENV from 'env'
 import { Loading, TransferDom } from 'vux'
 import { User, Token } from '#/storage'
 import urlParse from 'url-parse'
-const alertStack = []
 export default {
   directives: { TransferDom },
   components: { Loading },
@@ -55,14 +54,8 @@ export default {
           console.log('redirect页面workUserAuth', res)
           if (!res || !res.data || res.data.errcode || res.data.code !== 0) {
             Token.remove()
-            this.$vux.alert.show({
-              title: '提示',
-              content: `用户信息获取失败，请重新进入`,
-              onHide: () => {
-                this.isLoading = false
-                location.replace(lUrl.href)
-              }
-            })
+            this.isLoading = false
+            location.replace(lUrl.href)
             return
           }
           Token.set(res.data.data)
@@ -70,36 +63,11 @@ export default {
         }, res => {
           console.log('redirect页面workUserAuth请求失败', res)
           Token.remove()
-          this.$vux.alert.show({
-            title: '提示',
-            content: `未获取到用户信息`,
-            onHide: () => {
-              this.isLoading = false
-              location.href = jumpUrl
-            }
-          })
+          this.isLoading = false
+          location.href = jumpUrl
         }).then(res => {
           console.log('redirect页面user/show成功了', res)
           if (!res) return
-          const rData = res.data
-          for (let i = 0; i < ENV.DebugList.length; i++) {
-            console.log(ENV.DebugList[i].uid === rData.uid)
-            if (ENV.DebugList[i].uid === rData.uid) {
-              this.$vux.alert.show({
-                title: '提示',
-                content: `token:${Token.get().token} :: 已取到用户信息`,
-                onShow () {
-                  console.log('Plugin: I\'m showing')
-                },
-                onHide () {
-                  const f = alertStack.pop()
-                  if (f) {
-                    f()
-                  }
-                }
-              })
-            }
-          }
           User.set(res.data)
           // 跳转到授权前打开的页面
           console.log('要跳转的页面链接', jumpUrl)
@@ -113,18 +81,12 @@ export default {
           console.log('redirect页面user/show失败了', res)
           console.log('要跳转的页面链接', jumpUrl)
           Token.remove()
-          this.$vux.alert.show({
-            title: '提示',
-            content: `未取到用户信息`,
-            onHide: () => {
-              this.isLoading = false
-              if (jumpUrl && jumpUrl !== '') {
-                this.$router.push(jumpUrl)
-              } else {
-                this.$router.push('/')
-              }
-            }
-          })
+          this.isLoading = false
+          if (jumpUrl && jumpUrl !== '') {
+            this.$router.push(jumpUrl)
+          } else {
+            this.$router.push('/')
+          }
         })
       }
     }
