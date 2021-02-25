@@ -17,7 +17,7 @@
         <div class="txt">{{ loginUser.linkman }}</div>
       </div>
       <template v-if="loginUser && loginUser.uid">
-        <template v-if="loginUser && loginUser.identity == 2">
+        <template v-if="loginUser.identity == 2">
           <staff :user.sync="loginUser"></staff>
         </template>
         <template v-else>

@@ -170,17 +170,14 @@ Vue.http.interceptors.request.use(config => {
 
     const token = Token.get()
     console.log(`interceptors: ${config.url}`)
-    // console.log(`interceptors: ${JSON.stringify(token)}`)
     if (Token.isExpired()) {
       console.log('token 过期')
-      // console.log(config.url)
       cancelAllPendings(config)
       access((path) => {
         router.replace({path: path})
       })
     } else {
       console.log('token有效')
-      // console.log(`interceptors: Bearer ${token.token}`)
       config.headers['Authorization'] = `Bearer ${token.token}`
       if (config.url.indexOf(ENV.FactoryApi) > -1 && ENV.ApiVersion === 'V2') {
         config.headers['Accept'] = ENV.ApiAccept
@@ -195,40 +192,15 @@ Vue.http.interceptors.request.use(config => {
 
 // 响应拦截器
 Vue.http.interceptors.response.use(response => {
-  console.log('请求执行后')
-  console.log(response)
+  console.log('请求执行后，url=', response.config.headers.url)
+  console.log('请求执行后返回的数据，data=', response.data)
   return response
 }, error => {
   if (error.response) {
     Token.remove()
-    // vue.$vux.alert.show({
-    //   title: '提示',
-    //   content: `无效token:${Token.get().token} :: 禁止未授权访问`
-    // })
     if (error.response.status === 401) {
       console.error('未授权请求')
-      let lastIndex = location.href.lastIndexOf('/')
-      const originHref = encodeURIComponent(location.href.substr(lastIndex + 1))
-      const ruri = encodeURIComponent(`${ENV.Host}/#/redirect`)
-      const userAgentInfo = navigator.userAgent
-      let ua = userAgentInfo.toLowerCase()
-      let isWx = false
-      if (/wxwork/i.test(ua) || /MicroMessenger/i.test(ua)) {
-        isWx = true
-      }
-      if (isWx) {
-        // 微信授权
-        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${ruri}&response_type=code&scope=snsapi_base&state=${originHref}#wechat_redirect`)
-      } else {
-        console.log('进入到了pc端')
-        // pc登录二维码
-        location.replace(`${ENV.WxQrcodeAuthUrl}appid=${ENV.AppId}&agentid=${ENV.Agentid}&redirect_uri=${ruri}&state=${originHref}#wechat_redirect`)
-      }
-      // Vue.access(isPC => {
-      //   if (isPC) {
-      //     router.push('login')
-      //   }
-      // })
+      toAuth()
     }
   }
 })
@@ -246,10 +218,6 @@ const access = success => {
               })
   const lUrl = urlParse(url, true)
   let token = Token.get()
-  // const expiredAt = lUrl.query.expired_at
-  // const code = lUrl.query.code
-  // const state = lUrl.query.state
-  // const from = lUrl.query.from
   console.log('进入项目后的链接', lUrl)
   console.log('token=', token)
   console.log('query=', query)
@@ -290,8 +258,6 @@ const access = success => {
           const data = res.data
           let retUser = data.data ? data.data : data
           User.set(retUser)
-          // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
-          // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
           console.log('进入的页面地址', routerUrl)
           store.commit('updateMiniInvoke', {miniInvoke: true})
           success && success(routerUrl)
@@ -304,23 +270,7 @@ const access = success => {
     } else {
       console.log('token失效')
       Vue.access(isPC => {
-        let lastIndex = location.href.lastIndexOf('/')
-        const originHref = encodeURIComponent(location.href.substr(lastIndex + 1))
-        const ruri = encodeURIComponent(`${ENV.Host}/#/redirect`)
-        const userAgentInfo = navigator.userAgent
-        let ua = userAgentInfo.toLowerCase()
-        let isWx = false
-        if (/wxwork/i.test(ua) || /MicroMessenger/i.test(ua)) {
-          isWx = true
-        }
-        if (isWx) {
-          // 微信授权
-          location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${ruri}&response_type=code&scope=snsapi_base&state=${originHref}#wechat_redirect`)
-        } else {
-          console.log('进入到了pc端')
-          // pc登录二维码
-          location.replace(`${ENV.WxQrcodeAuthUrl}appid=${ENV.AppId}&agentid=${ENV.Agentid}&redirect_uri=${ruri}&state=${originHref}#wechat_redirect`)
-        }
+        toAuth()
       })
     }
   } else {
@@ -336,6 +286,26 @@ const clearCache = () => {
     Version.remove()
     Version.set(ENV.Version)
     SystemParams.remove()
+  }
+}
+
+const toAuth = () => {
+  let lastIndex = location.href.lastIndexOf('/')
+  const originHref = encodeURIComponent(location.href.substr(lastIndex + 1))
+  const ruri = encodeURIComponent(`${ENV.Host}/#/redirect`)
+  const userAgentInfo = navigator.userAgent
+  let ua = userAgentInfo.toLowerCase()
+  let isWx = false
+  if (/wxwork/i.test(ua) || /MicroMessenger/i.test(ua)) {
+    isWx = true
+  }
+  if (isWx) {
+    // 微信授权
+    location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${ruri}&response_type=code&scope=snsapi_base&state=${originHref}#wechat_redirect`)
+  } else {
+    console.log('进入到了pc端')
+    // pc登录二维码
+    location.replace(`${ENV.WxQrcodeAuthUrl}appid=${ENV.AppId}&agentid=${ENV.Agentid}&redirect_uri=${ruri}&state=${originHref}#wechat_redirect`)
   }
 }
 
