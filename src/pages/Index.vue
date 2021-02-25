@@ -18,10 +18,10 @@
       </div>
       <template v-if="loginUser && loginUser.uid">
         <template v-if="loginUser && loginUser.identity == 2">
-          <staff :user="loginUser"></staff>
+          <staff :user.sync="loginUser"></staff>
         </template>
         <template v-else>
-          <cuser :user="loginUser"></cuser>
+          <cuser :user.sync="loginUser"></cuser>
         </template>
       </template>
     </div>
