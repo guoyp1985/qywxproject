@@ -89,7 +89,8 @@ export default {
       isdig: false,
       photoarr: [],
       previewerPhotoarr: [],
-      showUser: {}
+      showUser: {},
+      ing: false
     }
   },
   filters: {
@@ -150,6 +151,8 @@ export default {
       }
     },
     clickDig () {
+      if (this.ing) return false
+      this.ing = true
       let postParams = {id: this.query.id, module: this.module, action: 'add'}
       if (this.isdig) {
         postParams.action = 'delete'
@@ -158,6 +161,7 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/content/digs`, postParams).then(res => {
         this.$vux.loading.hide()
         let data = res.data
+        this.ing = false
         if (data.code === 0) {
           if (this.isdig) {
             this.isdig = 0
