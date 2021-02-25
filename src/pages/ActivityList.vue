@@ -24,15 +24,15 @@
 </style>
 <template>
   <div :class="`containerarea activity-list-page ${(!loginUser || !loginUser.isadmin) ? 'nobottom' : ''}`">
-    <div class="s-topbanner s-topbanner1 bg-white">
+    <!-- <div class="s-topbanner s-topbanner1 bg-white">
       <div class="row">
         <tab v-model="selectedIndex" class="v-tab">
           <tab-item selected @on-item-click="clickTab(0)">公司活动</tab-item>
-          <!-- <tab-item @on-item-click="clickTab(1)">我的活动</tab-item> -->
+          <tab-item @on-item-click="clickTab(1)">我的活动</tab-item>
         </tab>
       </div>
-    </div>
-    <div class="s-container s-container1">
+    </div> -->
+    <div class="s-container s-container1" style="top:0;">
       <div v-show="(selectedIndex == 0)" class="swiper-inner" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', 0)">
         <template v-if="disList1">
           <div v-if="!listData1 || !listData1.length" class="flex_empty">暂无数据</div>

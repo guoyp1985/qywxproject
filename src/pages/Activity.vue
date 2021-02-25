@@ -27,6 +27,10 @@
             <div>使用门槛</div>
             <div class="flex_cell flex_right">满{{ordermoney}}元可用</div>
           </div>
+          <div class="b_top_after flex_left pt10 pb10 color-gray">
+            <div>使用说明</div>
+            <div class="flex_cell flex_right">{{viewData.content}}</div>
+          </div>
         </div>
       </template>
     </template>

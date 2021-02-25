@@ -26,6 +26,10 @@
       .txt2{position:absolute;left:0;bottom:15%;right:0;text-align:center;color:#F9EA72;font-size:15px;letter-spacing:1px;}
     }
   }
+  .txt-area{
+    padding:20px;box-sizing: border-box;color:#fff;
+    .txt{width:65px;text-align:right;padding-right:5px;box-sizing: border-box;}
+  }
 }
 .card-result-modal{
   .inner{
@@ -84,6 +88,20 @@
               </div>
               <div class="txt2" @click="clickShare">立即分享</div>
             </div>
+          </div>
+        </div>
+        <div v-if="viewData && viewData.id" class="txt-area">
+          <div class="flex_left">
+            <div class="txt">使用说明</div>
+            <div class="flex_cell">{{viewData.content}}</div>
+          </div>
+          <div class="flex_left" v-if="viewData.starttime">
+            <div class="txt">有效期</div>
+            <div class="flex_cell">{{viewData.starttime_str}} 至 {{viewData.endtime_str}}</div>
+          </div>
+          <div class="flex_left" v-else="viewData.deadline">
+            <div class="txt">有效期至</div>
+            <div class="flex_cell">{{viewData.deadline_str}}</div>
           </div>
         </div>
       </div>
@@ -238,8 +256,12 @@ export default {
         this.$vux.loading.hide()
         if (data.code === 0) {
           let retdata = data.data
-          retdata.starttime_str = new Time(retdata.starttime * 1000).dateFormat('yyyy-MM-dd hh:mm')
-          retdata.endtime_str = new Time(retdata.endtime * 1000).dateFormat('yyyy-MM-dd hh:mm')
+          if (retdata.starttime) {
+            retdata.starttime_str = new Time(retdata.starttime * 1000).dateFormat('yyyy-MM-dd')
+            retdata.endtime_str = new Time(retdata.endtime * 1000).dateFormat('yyyy-MM-dd')
+          } else if (retdata.deadline) {
+            retdata.deadline_str = new Time(retdata.deadline * 1000).dateFormat('yyyy-MM-dd')
+          }
           this.viewData = retdata
           document.title = this.viewData.title
           if (this.viewData.type === 'cardcommon') {

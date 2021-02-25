@@ -77,6 +77,12 @@
               <span style="line-height:34px">减:</span>
               <input class="mjje" v-model="submitData.facemoney" type="number" placeholder="请输入" />
           </div>
+          <div class="form-item flex_left">
+              <div class="title-cell">使用说明<span class="ml3 vertical color-red">*</span></div>
+              <div class="input-cell">
+                  <input v-model="submitData.content" type="text" placeholder="使用说明">
+              </div>
+          </div>
         </div>
         <div class="mt20 flex_center">
           <div class="btn" @click="submitEvent">提交</div>
@@ -104,7 +110,8 @@ export default {
         validday: '',
         totalcount: '',
         ordermoney: '',
-        facemoney: ''
+        facemoney: '',
+        content: ''
       },
       requiredData: {
         title: '',
@@ -114,7 +121,8 @@ export default {
         validday: '',
         totalcount: '',
         ordermoney: '',
-        facemoney: ''
+        facemoney: '',
+        content: ''
       },
       visibility1: false,
       visibility2: false,
