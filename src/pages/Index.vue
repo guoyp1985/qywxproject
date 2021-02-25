@@ -16,11 +16,13 @@
         <img class="avatar" :src="loginUser.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
         <div class="txt">{{ loginUser.linkman }}</div>
       </div>
-      <template v-if="loginUser && loginUser.identity == 2">
-        <staff :user="loginUser"></staff>
-      </template>
-      <template v-else>
-        <cuser :user="loginUser"></cuser>
+      <template v-if="loginUser && loginUser.uid">
+        <template v-if="loginUser && loginUser.identity == 2">
+          <staff :user="loginUser"></staff>
+        </template>
+        <template v-else>
+          <cuser :user="loginUser"></cuser>
+        </template>
       </template>
     </div>
     <qiye-footer :user.sync="loginUser"></qiye-footer>
