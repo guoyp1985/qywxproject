@@ -40,7 +40,7 @@ export default {
         let urlQuery = lUrl.query
         let jumpUrl = decodeURIComponent(urlQuery.state)
         for (let key in urlQuery) {
-          if (key !== 'code' && key !== 'state') {
+          if (key !== 'code' && key !== 'state' && key !== 'appid') {
             let curVal = urlQuery[key]
             if (jumpUrl.indexOf('?') < 0) {
               jumpUrl = `${jumpUrl}?`
