@@ -6,7 +6,7 @@
 }
 </style>
 <template>
-  <div class="qiye-news-list-page containerarea" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1')">
+  <div class="qiye-news-list-page containerarea" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
     <div v-if="disList1" class="scroll_list">
       <div v-if="!listData1 || !listData1.length" class="flex_empty">暂无数据</div>
       <template v-else>
@@ -45,7 +45,8 @@ export default {
       disList1: false,
       listData1: [],
       isLoading1: false,
-      isDone1: false
+      isDone1: false,
+      pageTop: 0
     }
   },
   methods: {
@@ -100,6 +101,11 @@ export default {
     this.refresh()
   },
   activated () {
+    this.$refs.scrollContainer.scrollTop = this.pageTop
+  },
+  beforeRouteLeave (to, from, next) {
+    this.pageTop = this.$refs.scrollContainer.scrollTop
+    next()
   }
 }
 </script>

@@ -64,7 +64,9 @@ export default {
       disList2: false,
       listData2: [],
       isLoading2: false,
-      isDone2: false
+      isDone2: false,
+      pageTop: 0,
+      tabLeft: 0
     }
   },
   methods: {
@@ -183,9 +185,34 @@ export default {
     }
   },
   created () {
+    this.refresh(this.$route.query)
   },
   activated () {
-    this.refresh(this.$route.query)
+    if (document.querySelector('.vux-tab')) {
+      document.querySelector('.vux-tab').scrollLeft = this.tabLeft
+    }
+    switch (this.selectedIndex) {
+      case 0:
+        this.$refs.scrollContainer1.scrollTop = this.pageTop
+        break
+      case 1:
+        this.$refs.scrollContainer2.scrollTop = this.pageTop
+        break
+    }
+  },
+  beforeRouteLeave (to, from, next) {
+    if (document.querySelector('.vux-tab')) {
+      this.tabLeft = document.querySelector('.vux-tab').scrollLeft
+    }
+    switch (this.selectedIndex) {
+      case 0:
+        this.pageTop = this.$refs.scrollContainer1.scrollTop
+        break
+      case 1:
+        this.pageTop = this.$refs.scrollContainer2.scrollTop
+        break
+    }
+    next()
   }
 }
 </script>

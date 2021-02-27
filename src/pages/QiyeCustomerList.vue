@@ -25,7 +25,6 @@
           <tab-item selected @on-item-click="clickTab(0)">最近服务</tab-item>
           <tab-item @on-item-click="clickTab(1)">消费服务</tab-item>
           <tab-item @on-item-click="clickTab(2)">定期服务</tab-item>
-          <!--<tab-item @on-item-click="clickTab(3)">搜索服务</tab-item>-->
         </tab>
       </div>
     </div>
@@ -163,50 +162,6 @@
         </template>
       </div>
     </div>
-    <div v-show="(selectedIndex == 3)" class="swiper-inner" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3', 2)">
-      <template v-if="disList3">
-        <div v-if="!listData3 || !listData3.length" class="flex_empty">暂无数据</div>
-        <div v-else class="scroll_list">
-          <div v-for="(item,index) in listData3" :key="index" class="scroll_item">
-            <div class="flex_left">
-              <div class="pr10">
-                <img class="avatar" :src="item.headimgurl" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-              </div>
-              <div class="flex_cell flex_left">{{item.linkman}}</div>
-              <div class="flex_right pl10">
-                <div class="btn" @click="expandEvent(item)">
-                  <span class="al al-asmkticon0165"></span>
-                </div>
-              </div>
-            </div>
-            <div v-if="item.checked">
-              <div class="info-area w_100 font14 color-gray b_bottom_after">
-                <div class="txt-item" @click="btnDetail(index)">性别: {{item.sexname}}</div>
-                <div class="txt-item db-flex" v-if="item.mobile && item.mobile != ''" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font16"></span></div></div>
-                <div class="txt-item" @click="btnDetail(index)">地区: {{ item.country }} {{ item.province }} {{ item.city }}</div>
-                <div class="txt-item flex_left" @click="clickYingxiangli">影响力:
-                  <span class="color-red4">{{item.yingxiangli}}</span>
-                  <span class="al al-wenhao font20 ml5"></span>
-                </div>
-                <div class="txt-item">推荐人: {{item.recommendname}}</div>
-                <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.customertype}}</div>
-                <div class="txt-item">获客时间: {{item.dateline_str}}</div>
-              </div>
-              <div class="flex_center bg-white h40">
-                <div class="t-table align_center color-gray2 font14 color-gray2">
-                  <div class="t-cell v_middle b_right_after">
-                    <div>联系TA</div>
-                  </div>
-                  <div class="t-cell v_middle" @click="toView(item)">更多</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="load-end-area loading" v-if="isLoading3"></div>
-        <div class="load-end-area done" v-else-if="isDone3"></div>
-      </template>
-    </div>
     <div v-transfer-dom class="x-popup">
       <popup v-model="showYxlModal" height="100%" class="bg-white">
         <div class="popup1">
@@ -254,7 +209,9 @@ export default {
       showYxlModal: false,
       nextCursor1: null,
       nextCursor2: null,
-      nextCursor3: null
+      nextCursor3: null,
+      pageTop: 0,
+      tabLeft: 0
     }
   },
   methods: {
@@ -446,9 +403,40 @@ export default {
     }
   },
   created () {
+    this.refresh()
   },
   activated () {
-    this.refresh()
+    if (document.querySelector('.vux-tab')) {
+      document.querySelector('.vux-tab').scrollLeft = this.tabLeft
+    }
+    switch (this.selectedIndex) {
+      case 0:
+        this.$refs.scrollContainer1.scrollTop = this.pageTop
+        break
+      case 1:
+        this.$refs.scrollContainer2.scrollTop = this.pageTop
+        break
+      case 2:
+        this.$refs.scrollContainer3.scrollTop = this.pageTop
+        break
+    }
+  },
+  beforeRouteLeave (to, from, next) {
+    if (document.querySelector('.vux-tab')) {
+      this.tabLeft = document.querySelector('.vux-tab').scrollLeft
+    }
+    switch (this.selectedIndex) {
+      case 0:
+        this.pageTop = this.$refs.scrollContainer1.scrollTop
+        break
+      case 1:
+        this.pageTop = this.$refs.scrollContainer2.scrollTop
+        break
+      case 2:
+        this.pageTop = this.$refs.scrollContainer3.scrollTop
+        break
+    }
+    next()
   }
 }
 </script>
