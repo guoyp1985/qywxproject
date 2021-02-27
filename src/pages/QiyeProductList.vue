@@ -41,7 +41,7 @@ export default {
       loginUser: {},
       selectedIndex: 0,
       limit: 15,
-      pagestart1: 0,
+      pagestart1: 1,
       disList1: false,
       listData1: [],
       isLoading1: false,
@@ -77,7 +77,7 @@ export default {
         element: scrollarea,
         callback: () => {
           if (this.isLoading1 || this.isDone1) return false
-          if (this.listData1.length === (this.pagestart1 + 1) * this.limit) {
+          if (this.listData1.length === this.pagestart1 * this.limit) {
             this.pagestart1++
             this.isLoading1 = true
             this.getList1()
@@ -88,7 +88,7 @@ export default {
     refresh () {
       this.loginUser = User.get()
       this.query = this.$route.query
-      this.pagestart1 = 0
+      this.pagestart1 = 1
       this.disList1 = false
       this.listData1 = []
       this.isLoading1 = false

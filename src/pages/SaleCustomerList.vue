@@ -191,17 +191,17 @@ export default {
       loginUser: {},
       selectedIndex: 0,
       limit: 15,
-      pagestart1: 0,
+      pagestart1: 1,
       disList1: false,
       listData1: [],
       isLoading1: false,
       isDone1: false,
-      pagestart2: 0,
+      pagestart2: 1,
       disList2: false,
       listData2: [],
       isLoading2: false,
       isDone2: false,
-      pagestart3: 0,
+      pagestart3: 1,
       disList3: false,
       listData3: [],
       isLoading3: false,
@@ -231,7 +231,7 @@ export default {
         case 0:
           if (this.isLoading1) return false
           if (this.listData1.length < this.limit) {
-            this.pagestart1 = 0
+            this.pagestart1 = 1
             this.disList1 = false
             this.listData1 = []
             this.isLoading1 = true
@@ -242,7 +242,7 @@ export default {
         case 1:
           if (this.isLoading2) return false
           if (this.listData2.length < this.limit) {
-            this.pagestart2 = 0
+            this.pagestart2 = 1
             this.disList2 = false
             this.listData2 = []
             this.isLoading2 = true
@@ -253,7 +253,7 @@ export default {
         case 2:
           if (this.isLoading3) return false
           if (this.listData3.length < this.limit) {
-            this.pagestart3 = 0
+            this.pagestart3 = 1
             this.disList3 = false
             this.listData3 = []
             this.isLoading3 = true
@@ -346,7 +346,7 @@ export default {
           switch (index) {
             case 0:
               if (this.isLoading1 || this.isDone1) return false
-              if (this.listData1.length === (this.pagestart1 + 1) * this.limit) {
+              if (this.listData1.length === this.pagestart1 * this.limit) {
                 this.pagestart1++
                 this.isLoading1 = true
                 this.getList1()
@@ -354,7 +354,7 @@ export default {
               break
             case 1:
               if (this.isLoading2 || this.isDone2) return false
-              if (this.listData2.length === (this.pagestart2 + 1) * this.limit) {
+              if (this.listData2.length === this.pagestart2 * this.limit) {
                 this.pagestart2++
                 this.isLoading2 = true
                 this.getList2()
@@ -362,7 +362,7 @@ export default {
               break
             case 2:
               if (this.isLoading3 || this.isDone3) return false
-              if (this.listData3.length === (this.pagestart3 + 1) * this.limit) {
+              if (this.listData3.length === this.pagestart3 * this.limit) {
                 this.pagestart3++
                 this.isLoading3 = true
                 this.getList3()
@@ -373,17 +373,17 @@ export default {
       })
     },
     initData () {
-      this.pagestart1 = 0
+      this.pagestart1 = 1
       this.disList1 = false
       this.listData1 = []
       this.isLoading1 = false
       this.isDone1 = false
-      this.pagestart2 = 0
+      this.pagestart2 = 1
       this.disList2 = false
       this.listData2 = []
       this.isLoading2 = false
       this.isDone2 = false
-      this.pagestart3 = 0
+      this.pagestart3 = 1
       this.disList3 = false
       this.listData3 = []
       this.isLoading3 = false
