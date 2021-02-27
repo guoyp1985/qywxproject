@@ -160,9 +160,7 @@ const matchExclude = url => {
 // let responseFail = false
 // 请求拦截器
 Vue.http.interceptors.request.use(config => {
-  console.log('进入到了请求拦截器')
-  console.log(config.url)
-  console.log(matchExclude(config.url))
+  console.log('进入到了请求拦截器, config.url=', config.url)
   if (!matchExclude(config.url)) {
     config.cancelToken = new CancelToken(c => {
       pendings.push({ u: config.url + '&' + config.method, f: c })
