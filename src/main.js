@@ -194,6 +194,7 @@ Vue.http.interceptors.request.use(config => {
 Vue.http.interceptors.response.use(response => {
   console.log('请求执行后，url=', response.config.url)
   console.log('请求传参，data=', response.config.data)
+  console.log('请求传参，params=', response.config.params)
   console.log('请求执行后返回的数据，data=', response.data)
   return response
 }, error => {
