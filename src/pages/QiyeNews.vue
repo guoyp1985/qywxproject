@@ -173,7 +173,7 @@ export default {
         } else {
           this.$vux.toast.show({
             text: data.msg,
-            type: 'warning',
+            type: 'text',
             time: this.$util.delay(data.msg)
           })
         }

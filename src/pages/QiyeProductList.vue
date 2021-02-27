@@ -53,7 +53,7 @@ export default {
       this.$router.push({path: '/qiyeProduct', query: {id: item.id}})
     },
     getList1 () {
-      let params = {pagestart: this.pagestart1, limit: this.limit, module: 'product'}
+      let params = {page: this.pagestart1, limit: this.limit, module: 'product'}
       this.$http.get(`${ENV.BokaApi}/api/content/getList`, {
         params: params
       }).then(res => {

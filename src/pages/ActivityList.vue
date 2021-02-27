@@ -144,7 +144,7 @@ export default {
       this.switchData()
     },
     getList1 () {
-      let params = {pagestart: this.pagestart1, limit: this.limit}
+      let params = {page: this.pagestart1, limit: this.limit}
       this.$http.get(`${ENV.BokaApi}/api/miniactivity/getList`, {
         params: params
       }).then(res => {
@@ -164,7 +164,7 @@ export default {
       })
     },
     getList2 () {
-      let params = {pagestart: this.pagestart2, limit: this.limit}
+      let params = {page: this.pagestart2, limit: this.limit}
       this.$http.get(`${ENV.BokaApi}/api/miniactivity/getList`, {
         params: params
       }).then(res => {

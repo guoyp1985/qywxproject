@@ -53,7 +53,7 @@ export default {
       this.$router.push({path: '/qiyeNews', query: {id: item.id}})
     },
     getList1 () {
-      let params = {pagestart: this.pagestart1, limit: this.limit, module: 'news'}
+      let params = {page: this.pagestart1, limit: this.limit, module: 'news'}
       this.$http.get(`${ENV.BokaApi}/api/content/getList`, {
         params: params
       }).then(res => {
@@ -97,9 +97,9 @@ export default {
     }
   },
   created () {
+    this.refresh()
   },
   activated () {
-    this.refresh()
   }
 }
 </script>

@@ -379,7 +379,7 @@ export default {
       return retdata
     },
     getList1 () {
-      let params = {pagestart: this.pagestart1, limit: this.limit}
+      let params = {page: this.pagestart1, limit: this.limit}
       if (this.nextCursor1) params.cursor = this.nextCursor1
       this.$http.get(`${ENV.BokaApi}/api`, {
         params: params
@@ -398,7 +398,7 @@ export default {
       })
     },
     getList2 () {
-      let params = {pagestart: this.pagestart2, limit: this.limit}
+      let params = {page: this.pagestart2, limit: this.limit}
       if (this.nextCursor2) params.cursor = this.nextCursor2
       this.$http.get(`${ENV.BokaApi}/api`, {
         params: params
@@ -417,7 +417,7 @@ export default {
       })
     },
     getList3 () {
-      let params = {pagestart: this.pagestart3, limit: this.limit}
+      let params = {page: this.pagestart3, limit: this.limit}
       if (this.nextCursor3) params.cursor = this.nextCursor3
       this.$http.get(`${ENV.BokaApi}/api`, {
         params: params
@@ -436,7 +436,7 @@ export default {
       })
     },
     getList4 () {
-      let params = {pagestart: this.pagestart4, limit: this.limit}
+      let params = {page: this.pagestart4, limit: this.limit}
       if (this.nextCursor4) params.cursor = this.nextCursor4
       this.$http.get(`${ENV.BokaApi}/api`, {
         params: params
@@ -455,7 +455,7 @@ export default {
       })
     },
     getList5 () {
-      let params = {pagestart: this.pagestart5, limit: this.limit}
+      let params = {page: this.pagestart5, limit: this.limit}
       if (this.nextCursor5) params.cursor = this.nextCursor5
       this.$http.get(`${ENV.BokaApi}/api`, {
         params: params
