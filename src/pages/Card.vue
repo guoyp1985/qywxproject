@@ -92,15 +92,15 @@
         </div>
         <div v-if="viewData && viewData.id" class="txt-area">
           <div class="flex_left">
-            <div class="txt">使用说明</div>
+            <div class="txt">使用说明: </div>
             <div class="flex_cell">{{viewData.content}}</div>
           </div>
           <div class="flex_left" v-if="viewData.starttime">
-            <div class="txt">有效期</div>
+            <div class="txt">有效期: </div>
             <div class="flex_cell">{{viewData.starttime_str}} 至 {{viewData.endtime_str}}</div>
           </div>
           <div class="flex_left" v-else="viewData.deadline">
-            <div class="txt">有效期至</div>
+            <div class="txt">有效期至: </div>
             <div class="flex_cell">{{viewData.deadline_str}}</div>
           </div>
         </div>
@@ -183,7 +183,7 @@ export default {
       facemoney: '0.00',
       showResultModal: false,
       showShareModal: false,
-      cardType: 'cardcommon',
+      cardType: '',
       inQywx: false,
       cardObject: {
         newcustomer: '新人优惠券'
@@ -277,9 +277,23 @@ export default {
         }
       })
     },
+    initData () {
+      this.wid = 0
+      this.viewData = {}
+      this.ordermoney = '0.00'
+      this.facemoney = '0.00'
+      this.showResultModal = false
+      this.showShareModal = false
+      this.cardType = ''
+      this.inQywx = false
+      this.shareParams = {}
+      this.showOpen = true
+      this.showResult = false
+    },
     refresh () {
       this.loginUser = User.get()
       this.query = this.$route.query
+      this.initData()
       if (this.query.type) this.cardType = this.query.type
       if (this.loginUser.identity === 2) {
         this.wid = this.loginUser.uid

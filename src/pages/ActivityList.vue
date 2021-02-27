@@ -113,7 +113,7 @@ export default {
   },
   methods: {
     toDetail (item) {
-      this.$router.push({path: '/activity', query: {id: item.id}})
+      this.$router.push({path: '/card', query: {id: item.id, type: item.type}})
     },
     switchData () {
       switch (this.selectedIndex) {

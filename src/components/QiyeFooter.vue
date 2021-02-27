@@ -21,13 +21,13 @@
 <template>
   <div class="qy-footer">
     <router-link class="item" to="/">首页</router-link>
-    <div class="item"><router-link class="item" to="/qiyeCustomerList">服务</router-link> </div>
+    <!-- <div class="item"><router-link class="item" to="/qiyeCustomerList">服务</router-link> </div> -->
     <div class="item">
       <div class="inner">
         <span class="al al-jiahao1" style="font-size:45px;"></span>
       </div>
     </div>
-    <div class="item"><router-link class="item" to="/saleChance">机会</router-link> </div>
+    <!-- <div class="item"><router-link class="item" to="/saleChance">机会</router-link> </div> -->
     <router-link class="item" to="/center">
       <span>我</span>
       <img
