@@ -185,7 +185,7 @@
         </swiper>
       </template>
       <div class="pt12 pb12 bg-white pl10 pr10 b_bottom_after">
-    		<div class="clamp2">
+    		<div class="clamp2" v-if="viewData && viewData.id">
           <span class="v_middle db-in bold" @click="copyTxt" style="position:relative;">
             <span v-if="productdata.moderate != 1" class="color-gray bold">【已下架】</span>{{ productdata.title }}
             <div class="copy_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ productdata.title }}</div>
