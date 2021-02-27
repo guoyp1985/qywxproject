@@ -1,24 +1,54 @@
 <style lang="less">
-.serve-activity-page{
+.serve-activity-list-page.nobottom{
+  .s-container{bottom:0;}
+}
+.serve-activity-list-page{
+  .s-container{bottom:50px;overflow-y:auto;}
+  .scroll_list{
+    .scroll_item{
+      display:flex;background-color:#fff;padding:10px;box-sizing: border-box;
+      .al{color:#659af2;}
+    }
+  }
+  .page-footer{
+    display:flex;justify-content: center;align-items: center;
+    width:100%;box-sizing: border-box;height:50px;
+    position: absolute;left: 0;right: 0;bottom: 0;
+    box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.07);
+    .item{
+      flex:1;display:flex;justify-content: center;align-items: center;height:100%;
+      background-color:#07c160;color:#fff;
+    }
+  }
 }
 </style>
 <template>
-  <div class="containerarea serve-activity-page">
-    <div class="s-topbanner s-topbanner1 bg-white">
+  <div :class="`containerarea serve-activity-list-page ${(!loginUser || !loginUser.isadmin) ? 'nobottom' : ''}`">
+    <!-- <div class="s-topbanner s-topbanner1 bg-white">
       <div class="row">
         <tab v-model="selectedIndex" class="v-tab">
           <tab-item selected @on-item-click="clickTab(0)">公司活动</tab-item>
           <tab-item @on-item-click="clickTab(1)">我的活动</tab-item>
         </tab>
       </div>
-    </div>
-    <div class="s-container s-container1">
+    </div> -->
+    <div class="s-container s-container1" style="top:0;">
       <div v-show="(selectedIndex == 0)" class="swiper-inner" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', 0)">
         <template v-if="disList1">
           <div v-if="!listData1 || !listData1.length" class="flex_empty">暂无数据</div>
           <div v-else class="scroll_list">
-            <div v-for="(item,index) in listData1" :key="index" class="scroll_item">
-              <div>{{item.title}}</div>
+            <div v-for="(item,index) in listData1" :key="index" class="scroll_item" @click="toDetail(item)">
+              <div class="pr10 flex_left">
+                <span class="al al-youhuiquan"></span>
+              </div>
+              <div class="flex_cell flex_left">
+                <div>
+                  <div>{{item.title}}</div>
+                  <div>满{{item.ordermoney}}减{{item.facemoney}}</div>
+                  <div class="color-gray font12">剩余数量: {{item.leftstorage}}</div>
+                  <div class="color-gray font12">有效期: {{item.starttime_str}}<span class="ml5 mr5">-</span>{{item.endtime_str}}</div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="load-end-area loading" v-if="isLoading1"></div>
@@ -29,14 +59,26 @@
         <template v-if="disList2">
           <div v-if="!listData2 || !listData2.length" class="flex_empty">暂无数据</div>
           <div v-else class="scroll_list">
-            <div v-for="(item,index) in listData2" :key="index" class="scroll_item">
-              <div>{{item.title}}</div>
+            <div v-for="(item,index) in listData2" :key="index" class="scroll_item" @click="toDetail(item)">
+              <div class="pr10">
+                <span class="al al-youhuiquan"></span>
+              </div>
+              <div class="flex_cell flex_left">
+                <div>
+                  <div>满{{item.ordermoney}}减{{item.facemoney}}</div>
+                  <div class="color-gray font12">剩余数量: {{item.leftstorage}}</div>
+                  <div class="color-gray font12">有效期: {{item.starttime_str}}<span class="ml5 mr5">-</span>{{item.endtime_str}}</div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="load-end-area loading" v-if="isLoading2"></div>
           <div class="load-end-area done" v-else-if="isDone2"></div>
         </template>
       </div>
+    </div>
+    <div class="page-footer" v-if="loginUser && loginUser.isadmin">
+      <router-link class="item" to="/addCommonCard">添加活动</router-link>
     </div>
   </div>
 </template>
@@ -70,6 +112,9 @@ export default {
     }
   },
   methods: {
+    toDetail (item) {
+      this.$router.push({path: '/card', query: {id: item.id, type: item.type}})
+    },
     switchData () {
       switch (this.selectedIndex) {
         case 0:
@@ -110,11 +155,12 @@ export default {
         this.isLoading1 = false
         let retdata = data.data ? data.data : data
         for (var i = 0; i < retdata.length; i++) {
-          retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd')
+          retdata[i].starttime_str = new Time(retdata[i].starttime * 1000).dateFormat('yyyy-MM-dd hh:mm')
+          retdata[i].endtime_str = new Time(retdata[i].endtime * 1000).dateFormat('yyyy-MM-dd hh:mm')
         }
         this.listData1 = this.listData1.concat(retdata)
         this.disList1 = true
-        if (retdata.length < this.limit) {
+        if (this.listData1.length && retdata.length < this.limit) {
           this.isDone1 = true
         }
       })
@@ -177,7 +223,7 @@ export default {
       this.isLoading2 = false
       this.isDone2 = false
     },
-    refresh (query) {
+    refresh () {
       this.loginUser = User.get()
       this.query = this.$route.query
       this.initData()
@@ -185,7 +231,7 @@ export default {
     }
   },
   created () {
-    this.refresh(this.$route.query)
+    this.refresh()
   },
   activated () {
     if (document.querySelector('.vux-tab')) {
