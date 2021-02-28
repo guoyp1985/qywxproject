@@ -28,7 +28,7 @@
   }
   .txt-area{
     padding:20px;box-sizing: border-box;color:#fff;
-    .txt{width:65px;text-align:right;padding-right:5px;box-sizing: border-box;}
+    .txt{width:75px;text-align:right;padding-right:5px;box-sizing: border-box;}
   }
 }
 .card-result-modal{

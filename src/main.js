@@ -14,10 +14,11 @@ import { User, Version, Token, Access, SystemParams } from '#/storage'
 import ENV from 'env'
 import Util from '#/util'
 import { AjaxPlugin, WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
 
-Vue.use(ElementUI)
+// import ElementUI from 'element-ui'
+// import 'element-ui/lib/theme-chalk/index.css'
+// Vue.use(ElementUI)
+
 Vue.use(VueRouter)
 Vue.use(Util)
 Vue.use(AjaxPlugin)
@@ -165,7 +166,6 @@ Vue.http.interceptors.request.use(config => {
     config.cancelToken = new CancelToken(c => {
       pendings.push({ u: config.url + '&' + config.method, f: c })
     })
-
     const token = Token.get()
     console.log(`interceptors: ${config.url}`)
     if (Token.isExpired()) {
@@ -223,24 +223,24 @@ const access = success => {
   console.log('query=', query)
   // gyp的token
   // token = {
-  //   expired_at: 1619685452823,
-  //   refresh_expired_at: 1619685452823,
-  //   token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvcXkuYm9rYS5jblwvYXBpXC92aXNpdG9yXC93b3JrVXNlckF1dGhcL3VRVTE4d0hERHo4R3drQzF6X2d5cFhPVHhLaUxrcVNRWXN0SmhKRG9qSmMiLCJpYXQiOjE2MTM2Mzc0NTIsImV4cCI6MTYxNDUwMTQ1MiwibmJmIjoxNjEzNjM3NDUyLCJqdGkiOiJKakJmNE4zTTg0bTVJQ1lSIiwic3ViIjoxLCJwcnYiOiI4NjY1YWU5Nzc1Y2YyNmY2YjhlNDk2Zjg2ZmE1MzZkNjhkZDcxODE4In0.otwccirnCVe6VsxMseutanMl0GHTVptzEnBPMnTRnHQ'
+  //   expired_at: 1615386907287,
+  //   refresh_expired_at: 1615386907287,
+  //   token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvcXkuYm9rYS5jblwvYXBpXC92aXNpdG9yXC93b3JrVXNlckF1dGhcL0lNMnVSWkllZXRvQ1NBZ2lEZXJGMjNQMEcxeVZQS2RjQ1lkUHV1M0FGUFEiLCJpYXQiOjE2MTQ1MjI5MDcsImV4cCI6MTYxNTM4NjkwNywibmJmIjoxNjE0NTIyOTA3LCJqdGkiOiIya0hjbTdDZlh4SXVyRXdPIiwic3ViIjoxLCJwcnYiOiI4NjY1YWU5Nzc1Y2YyNmY2YjhlNDk2Zjg2ZmE1MzZkNjhkZDcxODE4In0.KYyp5UPejPJDgb5oNSprGfR9B6RB6yCDI2ViQur-qjk'
   // }
+  // Token.set(token)
 
   // gyp的客户
-  // Token.set(token)
   // token = {
-  //   expired_at: 1619685452823,
-  //   refresh_expired_at: 1619685452823,
+  //   expired_at: 1615386907287,
+  //   refresh_expired_at: 1615386907287,
   //   token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9xeS5ib2thLmNuXC9hZG1pblwvdGVzdCIsImlhdCI6MTYxMzk2MTg4MywiZXhwIjoxNjE0ODI1ODgzLCJuYmYiOjE2MTM5NjE4ODMsImp0aSI6IkY1WWZCV3I2SXp1RzlwTTUiLCJzdWIiOjYsInBydiI6Ijg2NjVhZTk3NzVjZjI2ZjZiOGU0OTZmODZmYTUzNmQ2OGRkNzE4MTgifQ.Kbs9qE2elD9l5WOCROi-54xQ5j3LH2NfLzmHjijsKCg'
   // }
   // Token.set(token)
 
   // 仇总token
   // token = {
-  //   expired_at: 1619685452823,
-  //   refresh_expired_at: 1619685452823,
+  //   expired_at: 1615386907287,
+  //   refresh_expired_at: 1615386907287,
   //   token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvcXkuYm9rYS5jblwvYXBpXC92aXNpdG9yXC93b3JrVXNlckF1dGhcL0JoMTZzUE1xRkdLQzBmNVdKTTVMVi1jSFZvb3Zra0N4cFBfWUZ5XzlMelUiLCJpYXQiOjE2MTQxMzAzNTMsImV4cCI6MTYxNDk5NDM1MywibmJmIjoxNjE0MTMwMzUzLCJqdGkiOiJMUDlWcEk4NkQyUkRLOUw2Iiwic3ViIjozLCJwcnYiOiI4NjY1YWU5Nzc1Y2YyNmY2YjhlNDk2Zjg2ZmE1MzZkNjhkZDcxODE4In0.V0GN3CU2Ehm2h03Ba-UU4yom8hvB5IgMa6HW4F8Jh9w'
   // }
   // Token.set(token)

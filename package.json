@@ -18,7 +18,6 @@
   "dependencies": {
     "axios": "^0.18.0",
     "better-scroll": "^1.14.1",
-    "element-ui": "^2.15.0",
     "es6-promise": "^4.2.5",
     "fastclick": "^1.0.6",
     "js-sha1": "^0.6.0",

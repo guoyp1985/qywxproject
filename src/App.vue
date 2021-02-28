@@ -109,7 +109,7 @@ export default {
     //   return this.componentName ? `Demo/${this.componentName}` : 'Demo/~~'
     // },
     viewTransition () {
-      console.log(this.direction)
+      // console.log(this.direction)
       if (!this.direction) return ''
       return 'vux-' + (this.direction === 'forward' ? 'in' : 'out')
     }
@@ -145,8 +145,6 @@ export default {
     console.info('App Start Up')
     // document.title = this.$t('tIndex')
     this.getData()
-    console.log('当前页面的链接')
-    console.log()
     this.$util.wxConfig()
   }
 }
