@@ -31,7 +31,8 @@
 
 <script>
 import {} from 'vux'
-import { User, GlobalData } from '#/storage'
+import ENV from 'env'
+import { User, GlobalData, SystemParams } from '#/storage'
 import QiyeFooter from '@/components/QiyeFooter'
 import Staff from '@/components/Staff'
 import Cuser from '@/components/User'
@@ -49,11 +50,33 @@ export default {
     }
   },
   methods: {
+    getUser () {
+      this.$http.get(`${ENV.BokaApi}/api/user/show`, {
+        params: {init: 1}
+      }).then(res => {
+        if (res && res.status === 200) {
+          const data = res.data
+          if (data.code === 0) {
+            User.set(data.data)
+            SystemParams.set(data.paras)
+            GlobalData.set(data)
+            this.handleGlobalData()
+          }
+        }
+      })
+    },
+    handleGlobalData () {
+      this.globalData = GlobalData.get()
+      if (this.globalData.targets) this.targets = this.globalData.targets
+    },
     refresh () {
       this.query = this.$route.query
       this.loginUser = User.get()
-      this.globalData = GlobalData.get()
-      if (this.globalData.targets) this.targets = this.globalData.targets
+      if (GlobalData.get()) {
+        this.handleGlobalData()
+      } else {
+        this.getUser()
+      }
       this.isPC = this.$util.isPC
       this.isQywx = this.$util.isQywx()
       this.afterLoad = true

@@ -124,7 +124,6 @@ export default {
       return title || ' '
     },
     getData () {
-      // const user = User.get()
       this.$http.get(`${ENV.BokaApi}/api/user/show`, {
         params: {init: 1}
       }).then(res => {
