@@ -245,6 +245,7 @@ export default {
     refresh (query) {
       this.loginUser = User.get()
       this.sysParams = SystemParams.get()
+      console.log('sysParams=', this.sysParams)
       this.query = this.$route.query
       this.isPC = this.$util.isPC
       this.isQywx = this.$util.isQywx()

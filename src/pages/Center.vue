@@ -112,21 +112,9 @@ export default {
     closeEvent () {
       this.showModal = false
     },
-    getData () {
-      this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
-        console.log('进入到了center页面的user/show', res)
-        console.log(res)
-        if (!res) return
-        const data = res.data
-        let retdata = data.data ? data.data : data
-        this.loginUser = retdata
-        User.set(this.loginUser)
-        console.log('当前用户信息', this.loginUser)
-      })
-    },
     refresh () {
       this.query = this.$route.query
-      this.getData()
+      this.loginUser = User.get()
     }
   },
   activated () {
