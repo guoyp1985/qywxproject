@@ -9,7 +9,7 @@
 <script>
 import ENV from 'env'
 import { Loading, TransferDom } from 'vux'
-import { User, Token, SystemParams } from '#/storage'
+import { User, Token, SystemParams, GlobalData } from '#/storage'
 import urlParse from 'url-parse'
 export default {
   directives: { TransferDom },
@@ -78,6 +78,7 @@ export default {
           if (data.code === 0) {
             User.set(data.data)
             SystemParams.set(data.paras)
+            GlobalData.set(data)
             this.$util.wxConfig()
           }
           // 跳转到授权前打开的页面

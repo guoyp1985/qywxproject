@@ -181,6 +181,23 @@ const SystemParams = {
     }
   }
 }
+const GlobalData = {
+  set (info) {
+    localStorage.setItem('GlobalData', JSON.stringify(info))
+  },
+  get () {
+    if (localStorage.getItem('GlobalData') === 'undefined') {
+      return null
+    }
+    return JSON.parse(localStorage.getItem('GlobalData'))
+  },
+  remove () {
+    const info = GlobalData.get()
+    if (info) {
+      localStorage.removeItem('GlobalData')
+    }
+  }
+}
 
 let __height = 0
 const AdapterHeight = {
@@ -192,4 +209,4 @@ const AdapterHeight = {
   }
 }
 
-export { Token, OpenId, WxQrCode, User, Access, WxAccess, Roomid, Version, VoiceAccess, MiniApp, AdapterHeight, FirstInfo, SystemParams }
+export { Token, OpenId, WxQrCode, User, Access, WxAccess, Roomid, Version, VoiceAccess, MiniApp, AdapterHeight, FirstInfo, SystemParams, GlobalData }

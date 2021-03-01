@@ -45,7 +45,7 @@
 <script>
 import { ViewBox, Loading, Tabbar, TabbarItem, TransferDom } from 'vux'
 import { mapState } from 'vuex'
-import { User, SystemParams, Token } from '#/storage'
+import { User, SystemParams, Token, GlobalData } from '#/storage'
 import ENV from 'env'
 
 export default {
@@ -133,6 +133,7 @@ export default {
           if (data.code === 0) {
             User.set(data.data)
             SystemParams.set(data.paras)
+            GlobalData.set(data)
           }
         }
       })

@@ -18,7 +18,7 @@
       </div>
       <template v-if="afterLoad && loginUser && loginUser.uid">
         <template v-if="(isPC || isQywx) && loginUser.identity == 2">
-          <staff :user.sync="loginUser"></staff>
+          <staff :user.sync="loginUser" :targets.sync="targets"></staff>
         </template>
         <template v-else>
           <cuser :user.sync="loginUser"></cuser>
@@ -31,8 +31,7 @@
 
 <script>
 import {} from 'vux'
-import ENV from 'env'
-import { User } from '#/storage'
+import { User, GlobalData } from '#/storage'
 import QiyeFooter from '@/components/QiyeFooter'
 import Staff from '@/components/Staff'
 import Cuser from '@/components/User'
@@ -42,6 +41,8 @@ export default {
     return {
       query: {},
       loginUser: {},
+      globalData: {},
+      targets: {},
       afterLoad: false,
       isPC: false,
       isQywx: false
@@ -50,7 +51,9 @@ export default {
   methods: {
     refresh () {
       this.query = this.$route.query
-      this.loginUser = User.get(0)
+      this.loginUser = User.get()
+      this.globalData = GlobalData.get()
+      if (this.globalData.targets) this.targets = this.globalData.targets
       this.isPC = this.$util.isPC
       this.isQywx = this.$util.isQywx()
       this.afterLoad = true

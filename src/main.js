@@ -10,7 +10,7 @@ import store from './store'
 // import './coms'
 import App from './App'
 import objectAssign from 'object-assign'
-import { User, Version, Token, Access, SystemParams } from '#/storage'
+import { User, Version, Token, Access, SystemParams, GlobalData } from '#/storage'
 import ENV from 'env'
 import Util from '#/util'
 import { AjaxPlugin, WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
@@ -263,6 +263,7 @@ const access = success => {
           if (data.code === 0) {
             User.set(data.data)
             SystemParams.set(data.paras)
+            GlobalData.set(data)
             Vue.wxConfig()
           }
           console.log('进入的页面地址', routerUrl)

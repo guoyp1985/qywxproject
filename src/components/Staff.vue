@@ -1,9 +1,38 @@
 <style lang="less">
-
+.staff-container{
+  padding:10px;
+  .box-list{
+    .txt1{text-align:center;font-size:20px;font-weight:bold;}
+    .txt2{text-align:center;color:#999;}
+  }
+}
 </style>
 
 <template>
-  <div class="padding10">
+  <div class="staff-container">
+    <div :class="`box-outer ${targets ? 'mb10' : ''}`" v-if="targets">
+      <div class="box-title">{{targets.month | getMonth}}目标</div>
+      <div class="box-list square">
+        <div class="list-item">
+          <div class="item-inner">
+            <div class="txt1">{{targets.huoke}}</div>
+            <div class="txt2">获客</div>
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="item-inner">
+            <div class="txt1">{{targets.fuwu}}</div>
+            <div class="txt2">服务</div>
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="item-inner">
+            <div class="txt1">{{targets.xiaoshou}}</div>
+            <div class="txt2">销售</div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="box-outer">
       <div class="box-title">获客</div>
       <div class="box-list square">
@@ -150,6 +179,18 @@ export default {
     user: {
       type: Object,
       default: {}
+    },
+    targets: {
+      type: Object,
+      default: null
+    }
+  },
+  filters: {
+    getMonth: (val) => {
+      let monthVal = `${val}`
+      let curYear = monthVal.substr(0, 4)
+      let curMonth = monthVal.substr(4, 2)
+      return `${curYear}年${curMonth}月`
     }
   }
 }
