@@ -10,6 +10,55 @@ const jweixin = require('../static/jweixin')
 const jwxwork = require('../static/jwxwork-1.0.0')
 const Util = {}
 
+const wxConfigFun = function (callback) {
+  Vue.http.get(`${ENV.BokaApi}/api/common/jsconfig`,
+    { params: { url: encodeURIComponent(location.href.split('#')[0]) } }
+  ).then(res => {
+    if (!res) return
+    // jweixin.config(res.data)
+    // jweixin.error(function () {
+    //   // Vue.$vux.toast.show({
+    //   //   text: '微信还没有准备好，请刷新页面',
+    //   //   type: 'warn',
+    //   // })
+    // })
+    let data = res.data
+    data.jsApiList.push('shareToExternalContact')
+    data.jsApiList.push('shareToExternalChat')
+    jweixin.config(data)
+    jweixin.error(function () {
+      // Vue.$vux.toast.show({
+      //   text: '微信还没有准备好，请刷新页面',
+      //   type: 'warn',
+      // })
+    })
+    callback && callback()
+  })
+  Vue.http.get(`${ENV.BokaApi}/api/common/agentConfig`,
+    { params: { url: encodeURIComponent(location.href.split('#')[0]) } }
+  ).then(res => {
+    if (!res) return
+    // jweixin.config(res.data)
+    // jweixin.error(function () {
+    //   // Vue.$vux.toast.show({
+    //   //   text: '微信还没有准备好，请刷新页面',
+    //   //   type: 'warn',
+    //   // })
+    // })
+    let data = res.data
+    data.jsApiList.push('shareToExternalContact')
+    data.jsApiList.push('shareToExternalChat')
+    wx.agentConfig(data)
+    jweixin.error(function () {
+      // Vue.$vux.toast.show({
+      //   text: '微信还没有准备好，请刷新页面',
+      //   type: 'warn',
+      // })
+    })
+    callback && callback()
+  })
+}
+
 Util.install = function (Vue, options) {
   Vue.isPC = function () {
     const userAgentInfo = navigator.userAgent
@@ -26,6 +75,10 @@ Util.install = function (Vue, options) {
     // if (response && response.status === 401) {
     authorization(isPC)
     // }
+  }
+
+  Vue.wxConfig = function () {
+    wxConfigFun()
   }
 
   Vue.prototype.$util = {

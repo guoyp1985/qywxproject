@@ -45,7 +45,7 @@
 <script>
 import { ViewBox, Loading, Tabbar, TabbarItem, TransferDom } from 'vux'
 import { mapState } from 'vuex'
-import { User, SystemParams } from '#/storage'
+import { User, SystemParams, Token } from '#/storage'
 import ENV from 'env'
 
 export default {
@@ -144,8 +144,10 @@ export default {
   created () {
     console.info('App Start Up')
     // document.title = this.$t('tIndex')
-    this.getData()
-    this.$util.wxConfig()
+    if (Token.get() && !Token.isExpired()) {
+      this.getData()
+      this.$util.wxConfig()
+    }
   }
 }
 </script>

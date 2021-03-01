@@ -196,8 +196,8 @@ Vue.http.interceptors.response.use(response => {
   console.log('请求执行后返回的数据，data=', response.data)
   return response
 }, error => {
+  console.log('请求进入到了error, error=', error)
   if (error.response) {
-    Token.remove()
     if (error.response.status === 401) {
       console.error('未授权请求')
       clearCache()
@@ -205,7 +205,6 @@ Vue.http.interceptors.response.use(response => {
     }
   }
 })
-
 const access = success => {
   let query = ''
   const url = location.href
@@ -224,8 +223,8 @@ const access = success => {
   console.log('query=', query)
   // gyp的token
   // token = {
-  //   expired_at: 1615386907287,
-  //   refresh_expired_at: 1615386907287,
+  //   expired_at: 1615432897837,
+  //   refresh_expired_at: 1620616897837,
   //   token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvcXkuYm9rYS5jblwvYXBpXC92aXNpdG9yXC93b3JrVXNlckF1dGhcL0lNMnVSWkllZXRvQ1NBZ2lEZXJGMjNQMEcxeVZQS2RjQ1lkUHV1M0FGUFEiLCJpYXQiOjE2MTQ1MjI5MDcsImV4cCI6MTYxNTM4NjkwNywibmJmIjoxNjE0NTIyOTA3LCJqdGkiOiIya0hjbTdDZlh4SXVyRXdPIiwic3ViIjoxLCJwcnYiOiI4NjY1YWU5Nzc1Y2YyNmY2YjhlNDk2Zjg2ZmE1MzZkNjhkZDcxODE4In0.KYyp5UPejPJDgb5oNSprGfR9B6RB6yCDI2ViQur-qjk'
   // }
   // Token.set(token)
@@ -245,8 +244,8 @@ const access = success => {
   //   token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvcXkuYm9rYS5jblwvYXBpXC92aXNpdG9yXC93b3JrVXNlckF1dGhcL0JoMTZzUE1xRkdLQzBmNVdKTTVMVi1jSFZvb3Zra0N4cFBfWUZ5XzlMelUiLCJpYXQiOjE2MTQxMzAzNTMsImV4cCI6MTYxNDk5NDM1MywibmJmIjoxNjE0MTMwMzUzLCJqdGkiOiJMUDlWcEk4NkQyUkRLOUw2Iiwic3ViIjozLCJwcnYiOiI4NjY1YWU5Nzc1Y2YyNmY2YjhlNDk2Zjg2ZmE1MzZkNjhkZDcxODE4In0.V0GN3CU2Ehm2h03Ba-UU4yom8hvB5IgMa6HW4F8Jh9w'
   // }
   // Token.set(token)
-  console.log('设置了token后')
-  console.log(Token)
+  // console.log('设置了token后')
+  // console.log(Token.get())
   if (location.href.indexOf('/redirect') < 0) {
     if (token && token !== '' && !Token.isExpired()) {
       console.log('进入到了请求用户信息')
@@ -256,11 +255,16 @@ const access = success => {
         routerUrl = `${routerUrl}?${query}`
       }
       if (!user || !user.uid) {
-        Vue.http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
+        Vue.http.get(`${ENV.BokaApi}/api/user/show`, {
+          params: {init: 1}
+        }).then(res => {
           if (!res) return
           const data = res.data
-          let retUser = data.data ? data.data : data
-          User.set(retUser)
+          if (data.code === 0) {
+            User.set(data.data)
+            SystemParams.set(data.paras)
+            Vue.wxConfig()
+          }
           console.log('进入的页面地址', routerUrl)
           store.commit('updateMiniInvoke', {miniInvoke: true})
           success && success(routerUrl)
@@ -282,7 +286,11 @@ const access = success => {
 }
 
 const clearCache = () => {
+  console.log('ENV.Version=', ENV.Version)
+  console.log('Version.get()=', Version.get())
+  console.log(ENV.Version !== Version.get())
   if (ENV.Version !== Version.get()) {
+    console.log('清理了缓存')
     Token.remove()
     User.remove()
     Access.remove()
@@ -327,13 +335,19 @@ clearCache()
 // 页面入口
 try {
   // render()
+  console.log('=========页面入口===========')
+  console.log('缓存里的token=', Token.get())
+  console.log('token是否过期 ', Token.isExpired())
+  console.log('缓存里的user=', User.get())
   if (!Token.get() || Token.isExpired() || !User.get()) {
+    console.log('页面入口，token失效')
     access(path => {
       console.log(`Entry: ${path}`)
       router.replace({path: path})
       render()
     })
   } else {
+    console.log('页面入口，有token')
     render()
   }
 } catch (e) {

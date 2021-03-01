@@ -16,8 +16,8 @@
         <img class="avatar" :src="loginUser.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
         <div class="txt">{{ loginUser.linkman }}</div>
       </div>
-      <template v-if="loginUser && loginUser.uid">
-        <template v-if="loginUser.identity == 2">
+      <template v-if="afterLoad && loginUser && loginUser.uid">
+        <template v-if="(isPC || isQywx) && loginUser.identity == 2">
           <staff :user.sync="loginUser"></staff>
         </template>
         <template v-else>
@@ -41,24 +41,19 @@ export default {
   data () {
     return {
       query: {},
-      loginUser: {}
+      loginUser: {},
+      afterLoad: false,
+      isPC: false,
+      isQywx: false
     }
   },
   methods: {
-    getData () {
-      this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
-        console.log('进入到了center页面的user/show', res)
-        if (!res) return
-        const data = res.data
-        let retdata = data.data ? data.data : data
-        this.loginUser = retdata
-        User.set(this.loginUser)
-        console.log('当前用户信息', this.loginUser)
-      })
-    },
     refresh () {
       this.query = this.$route.query
-      this.getData()
+      this.loginUser = User.get(0)
+      this.isPC = this.$util.isPC
+      this.isQywx = this.$util.isQywx()
+      this.afterLoad = true
     }
   },
   activated () {

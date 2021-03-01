@@ -244,7 +244,7 @@
         <div v-html="productdata.content"></div>
         <img v-for="(item,index) in previewerPhotoarr" :key="index" :src="item.src" @click="showBigimg(index)" />
       </div>
-      <div class="qrcode-area" v-if="showUser && showUser.uid">
+      <div class="qrcode-area" v-if="afterLoad && showUser && showUser.uid">
           <img :src="showUser.qrcode" />
       </div>
     </div>
@@ -354,7 +354,6 @@ export default {
     return {
       module: 'product',
       query: {},
-      wid: 0,
       viewData: {},
       disTimeout: true,
       productid: null,
@@ -377,7 +376,11 @@ export default {
       selectedOptionIndex: 0,
       previewerOptionsPhoto: [],
       showUser: {},
-      showShareModal: false
+      showShareModal: false,
+      shareWid: 0,
+      afterLoad: false,
+      isPC: false,
+      isQywx: false
     }
   },
   watch: {
@@ -706,15 +709,19 @@ export default {
       this.initData()
       this.showVideo = true
       this.query = this.$route.query
-      if (this.loginUser.identity === 2) {
-        this.wid = this.loginUser.uid
+      this.isPC = this.$util.isPC
+      this.isQywx = this.$util.isQywx()
+      this.afterLoad = true
+      if (this.isQywx) {
+        this.shareWid = this.loginUser.uid
         this.showUser = this.loginUser
-      } else if (this.loginUser.ownid) {
-        this.wid = this.loginUser.ownid
-        this.getShowUser(this.wid)
-      } else if (this.query.wid) {
-        this.wid = this.query.wid
-        this.getShowUser(this.wid)
+      } else {
+        if (this.query.wid) {
+          this.shareWid = parseInt(this.query.wid)
+          this.getShowUser(this.query.wid)
+        } else if (this.loginUser.ownid) {
+          this.shareWid = this.loginUser.ownid
+        }
       }
       this.$vux.loading.show()
       this.getData()

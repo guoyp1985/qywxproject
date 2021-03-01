@@ -9,7 +9,7 @@
 <script>
 import ENV from 'env'
 import { Loading, TransferDom } from 'vux'
-import { User, Token } from '#/storage'
+import { User, Token, SystemParams } from '#/storage'
 import urlParse from 'url-parse'
 export default {
   directives: { TransferDom },
@@ -59,8 +59,13 @@ export default {
             location.replace(lUrl.href)
             return
           }
+          console.log('redirect页面设置token')
+          console.log(res.data.data)
           Token.set(res.data.data)
-          return this.$http.get(`${ENV.BokaApi}/api/user/show`)
+          console.log('设置后的token=', Token.get())
+          return this.$http.get(`${ENV.BokaApi}/api/user/show`, {
+            params: {init: 1}
+          })
         }, res => {
           console.log('redirect页面workUserAuth请求失败', res)
           Token.remove()
@@ -69,7 +74,12 @@ export default {
         }).then(res => {
           console.log('redirect页面user/show成功了', res)
           if (!res) return
-          User.set(res.data)
+          const data = res.data
+          if (data.code === 0) {
+            User.set(data.data)
+            SystemParams.set(data.paras)
+            this.$util.wxConfig()
+          }
           // 跳转到授权前打开的页面
           console.log('要跳转的页面链接', jumpUrl)
           this.isLoading = false

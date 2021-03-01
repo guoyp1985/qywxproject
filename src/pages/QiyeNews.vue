@@ -5,7 +5,6 @@
   .news-info {padding: 10px 0;}
   .reading-info {padding: 20px 0;}
   .reading-info span + span {margin-left: 10px;}
-  .news-author {margin-left: 6px;color: #1aad19;}
   img {max-width: 100% !important;}
   .qrcode-area{
     text-align:center;margin-top:5px;
@@ -24,8 +23,8 @@
         <h4>{{viewData.vicetitle}}</h4>
       </div>
       <div class="news-info" style="position:relative;">
-        <span class="color-gray">{{viewData.dateline | dateFormat}}</span>
-        <span class="news-author">{{viewData.author}}</span>
+        <span style="color:#659af2;">{{sysParams.company_short}}</span>
+        <span class="color-gray" :style="`${sysParams.company_short && sysParams.company_short != '' ? 'margin-left:6px;' : ''}`">{{viewData.dateline | dateFormat}}</span>
       </div>
       <template v-if="viewData && viewData.id">
         <video
@@ -57,7 +56,7 @@
           <div class="news-content" v-html="viewData.content"></div>
         </template>
       </template>
-      <div class="qrcode-area" v-if="showUser && showUser.uid">
+      <div class="qrcode-area" v-if="afterLoad && showUser && showUser.uid">
           <img :src="showUser.qrcode" />
       </div>
       <div class="reading-info">
@@ -74,8 +73,7 @@
 import { Popup, TransferDom, Previewer } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
-// import jQuery from 'jquery'
-import { User } from '#/storage'
+import { User, SystemParams } from '#/storage'
 
 export default {
   directives: { TransferDom },
@@ -90,7 +88,12 @@ export default {
       photoarr: [],
       previewerPhotoarr: [],
       showUser: {},
-      ing: false
+      ing: false,
+      sysParams: {},
+      shareWid: 0,
+      afterLoad: false,
+      isPC: false,
+      isQywx: false
     }
   },
   filters: {
@@ -191,7 +194,7 @@ export default {
     },
     handleShare () {
       let shareLink = `${ENV.Host}/#/qiyeNews?id=${this.viewData.id}&share_uid=${this.loginUser.uid}`
-      if (this.wid && this.wid !== '') shareLink = `${shareLink}&wid=${this.wid}`
+      if (this.shareWid && this.shareWid !== '') shareLink = `${shareLink}&wid=${this.shareWid}`
       let shareParams = {
         data: this.viewData,
         module: this.module,
@@ -241,16 +244,21 @@ export default {
     },
     refresh (query) {
       this.loginUser = User.get()
+      this.sysParams = SystemParams.get()
       this.query = this.$route.query
-      if (this.loginUser.identity === 2) {
-        this.wid = this.loginUser.uid
+      this.isPC = this.$util.isPC
+      this.isQywx = this.$util.isQywx()
+      this.afterLoad = true
+      if (this.isQywx) {
+        this.shareWid = this.loginUser.uid
         this.showUser = this.loginUser
-      } else if (this.loginUser.ownid) {
-        this.wid = this.loginUser.ownid
-        this.getShowUser(this.wid)
-      } else if (this.query.wid) {
-        this.wid = this.query.wid
-        this.getShowUser(this.wid)
+      } else {
+        if (this.query.wid) {
+          this.shareWid = parseInt(this.query.wid)
+          this.getShowUser(this.query.wid)
+        } else if (this.loginUser.ownid) {
+          this.shareWid = this.loginUser.ownid
+        }
       }
       this.getData()
     }
