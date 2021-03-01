@@ -200,6 +200,7 @@ Vue.http.interceptors.response.use(response => {
     Token.remove()
     if (error.response.status === 401) {
       console.error('未授权请求')
+      clearCache()
       toAuth()
     }
   }
@@ -244,6 +245,8 @@ const access = success => {
   //   token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvcXkuYm9rYS5jblwvYXBpXC92aXNpdG9yXC93b3JrVXNlckF1dGhcL0JoMTZzUE1xRkdLQzBmNVdKTTVMVi1jSFZvb3Zra0N4cFBfWUZ5XzlMelUiLCJpYXQiOjE2MTQxMzAzNTMsImV4cCI6MTYxNDk5NDM1MywibmJmIjoxNjE0MTMwMzUzLCJqdGkiOiJMUDlWcEk4NkQyUkRLOUw2Iiwic3ViIjozLCJwcnYiOiI4NjY1YWU5Nzc1Y2YyNmY2YjhlNDk2Zjg2ZmE1MzZkNjhkZDcxODE4In0.V0GN3CU2Ehm2h03Ba-UU4yom8hvB5IgMa6HW4F8Jh9w'
   // }
   // Token.set(token)
+  console.log('设置了token后')
+  console.log(Token)
   if (location.href.indexOf('/redirect') < 0) {
     if (token && token !== '' && !Token.isExpired()) {
       console.log('进入到了请求用户信息')
@@ -323,7 +326,7 @@ clearCache()
 
 // 页面入口
 try {
-  render()
+  // render()
   if (!Token.get() || Token.isExpired() || !User.get()) {
     access(path => {
       console.log(`Entry: ${path}`)
