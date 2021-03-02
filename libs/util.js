@@ -94,7 +94,6 @@ Util.install = function (Vue, options) {
     // 判终端
     isPC: function () {
       const userAgentInfo = navigator.userAgent
-      console.log('userAgent', userAgentInfo)
       let ua = userAgentInfo.toLowerCase()
       let isWx = false
       if (/wxwork/i.test(ua) || /MicroMessenger/i.test(ua)) {

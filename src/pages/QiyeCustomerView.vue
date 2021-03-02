@@ -144,9 +144,9 @@
                     <div class="box-title">{{item.title}}</div>
                     <div class="child-area" v-if="item.child && item.child.length">
                       <div v-for="(citem, cindex) in item.child" class="child-item">
-                        <label>
+                        <label class="flex_left">
                           <input type="radio" :name="`radio${item.id}`" :value="citem.tagid" :checked="citem.checked" />
-                          <span>{{citem.title}}</span>
+                          <span style="margin-left:5px;" @click="clickInput(index, citem, cindex)">{{citem.title}}</span>
                         </label>
                       </div>
                     </div>
@@ -206,6 +206,19 @@ export default {
     }
   },
   methods: {
+    clickInput (pindex, citem, cindex) {
+      let isPc = this.$util.isPC()
+      if (!isPc && !citem.checked) {
+        for (let i = 0; i < this.tagData[pindex].child.length; i++) {
+          if (i === cindex) {
+            this.tagData[pindex].child[cindex].checked = true
+          } else {
+            this.tagData[pindex].child[i].checked = false
+          }
+        }
+        console.log('in mobile click')
+      }
+    },
     clickTag () {
       this.showTagModal = true
     },
@@ -283,6 +296,7 @@ export default {
           let retdata = data.data
           let userTags = this.viewData.tags
           let tarr = userTags.split(',')
+          let arr = []
           for (let i = 0; i < retdata.length; i++) {
             let pdata = retdata[i]
             if (pdata.parentid === 0) {
@@ -300,9 +314,11 @@ export default {
                   pdata.child.push(cdata)
                 }
               }
+              arr.push(pdata)
             }
           }
-          this.tagData = retdata
+          this.tagData = arr
+          console.log(this.tagData)
         }
       })
     },
@@ -319,7 +335,11 @@ export default {
           if (retdata.birthday) {
             retdata.birthday_str = new Time(retdata.birthday * 1000).dateFormat('yyyy-MM-dd')
           }
-          retdata.tagsData = JSON.parse(retdata.tagsdata)
+          if (retdata.tagsdata && retdata.tagsdata !== '') {
+            retdata.tagsData = JSON.parse(retdata.tagsdata)
+          } else {
+            retdata.tagsData = []
+          }
           this.viewData = retdata
           if (this.isFirst) {
             this.isFirst = false

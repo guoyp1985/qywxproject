@@ -74,7 +74,7 @@
                       <div class="child-area" v-if="item.child && item.child.length">
                         <label v-for="(citem, cindex) in item.child" class="child-item">
                           <input type="checkbox" :name="`ck-${item.id}-[]`" :value="citem.tagid" :checked="citem.checked" />
-                          <span class="txt">{{citem.title}}</span>
+                          <span class="txt" @click="clickInput(index, citem, cindex)">{{citem.title}}</span>
                         </label>
                       </div>
                     </div>
@@ -172,6 +172,13 @@ export default {
     }
   },
   methods: {
+    clickInput (pindex, citem, cindex) {
+      let isPc = this.$util.isPC()
+      if (!isPc) {
+        this.tagData[pindex].child[cindex].checked = !citem.checked
+        console.log('in mobile click')
+      }
+    },
     showxdate1 () {
       this.visibility1 = true
     },
@@ -265,6 +272,7 @@ export default {
         let data = res.data
         if (data.code === 0) {
           let retdata = data.data
+          let arr = []
           for (let i = 0; i < retdata.length; i++) {
             let pdata = retdata[i]
             if (pdata.parentid === 0) {
@@ -276,9 +284,10 @@ export default {
                   pdata.child.push(cdata)
                 }
               }
+              arr.push(pdata)
             }
           }
-          this.tagData = retdata
+          this.tagData = arr
         }
       })
     },
