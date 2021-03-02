@@ -259,7 +259,7 @@ export default {
           time: this.$util.delay(data.msg),
           onHide: () => {
             if (data.code === 0) {
-              this.$router.push('/activityList')
+              this.$router.push('/activityList?refresh=1')
             } else {
               this.submitIng = false
             }

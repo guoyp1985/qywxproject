@@ -225,25 +225,32 @@ export default {
     },
     refresh () {
       this.loginUser = User.get()
-      this.query = this.$route.query
       this.initData()
       this.switchData()
     }
   },
   created () {
-    this.refresh()
+    this.query = this.$route.query
+    if (!this.query.refresh) {
+      this.refresh()
+    }
   },
   activated () {
-    if (document.querySelector('.vux-tab')) {
-      document.querySelector('.vux-tab').scrollLeft = this.tabLeft
-    }
-    switch (this.selectedIndex) {
-      case 0:
-        this.$refs.scrollContainer1.scrollTop = this.pageTop
-        break
-      case 1:
-        this.$refs.scrollContainer2.scrollTop = this.pageTop
-        break
+    this.query = this.$route.query
+    if (this.query.refresh) {
+      this.refresh()
+    } else {
+      if (document.querySelector('.vux-tab')) {
+        document.querySelector('.vux-tab').scrollLeft = this.tabLeft
+      }
+      switch (this.selectedIndex) {
+        case 0:
+          this.$refs.scrollContainer1.scrollTop = this.pageTop
+          break
+        case 1:
+          this.$refs.scrollContainer2.scrollTop = this.pageTop
+          break
+      }
     }
   },
   beforeRouteLeave (to, from, next) {
