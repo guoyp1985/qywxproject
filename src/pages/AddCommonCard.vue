@@ -24,8 +24,30 @@
     .child-area{
       padding: 10px 15px;display:flex;justify-content:flex-start;align-items:center;flex-wrap:wrap;
       .child-item:not(:first-child){margin-left:10px;}
+      .child-item{
+        border:#ddd 1px solid;border-radius:3px;line-height:30px;padding:0 10px;color:#999;
+        display:flex;justify-content:center;align-items:center;
+        .txt{margin-left:3px;}
+      }
     }
   }
+  .x-checker .ck-item{
+    font-size:13px;
+    display: inline-block;
+    padding: 0 15px;
+    height: 30px;
+    line-height: 30px;
+    border:0px;
+    text-align: center;
+    border-radius: 3px;
+    background-color: #fff;
+    margin-right: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    box-sizing: border-box;
+  }
+  .x-checker .border1px.ck-item-selected:after{border:1px solid #ea3a3a;}
+  .vux-check-icon > span{color:#666;display: inline-block;vertical-align: bottom;line-height: 19px;}
 }
 </style>
 <template>
@@ -50,12 +72,10 @@
                     <div v-if="item.parentid == 0" class="parent-item">
                       <div class="box-title">{{item.title}}</div>
                       <div class="child-area" v-if="item.child && item.child.length">
-                        <div v-for="(citem, cindex) in item.child" class="child-item">
-                          <label @click="clickRadio(citem)">
-                            <input type="checkbox" :name="`ck-${item.id}-[]`" :value="citem.tagid" :checked="citem.checked" />
-                            <span>{{citem.title}}</span>
-                          </label>
-                        </div>
+                        <label v-for="(citem, cindex) in item.child" class="child-item">
+                          <input type="checkbox" :name="`ck-${item.id}-[]`" :value="citem.tagid" :checked="citem.checked" />
+                          <span class="txt">{{citem.title}}</span>
+                        </label>
                       </div>
                     </div>
                   </template>
@@ -175,9 +195,6 @@ export default {
     },
     dateconfirm2 () {
       this.selectdatetxt2 = ''
-    },
-    clickRadio (item) {
-      console.log(item.checked)
     },
     submitEvent () {
       let postData = {...this.submitData, type: 'cardcommon'}
