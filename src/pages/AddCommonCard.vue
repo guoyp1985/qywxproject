@@ -18,6 +18,14 @@
   .btn{
     width:100px;line-height:40px;background-color:#07c160;color:#fff;border-radius:60px;text-align:center;
   }
+  textarea{resize:none;height:200px;}
+  .tag-container{
+    .parent-item:not(:last-child){margin-bottom:10px;}
+    .child-area{
+      padding: 10px 15px;display:flex;justify-content:flex-start;align-items:center;flex-wrap:wrap;
+      .child-item:not(:first-child){margin-left:10px;}
+    }
+  }
 }
 </style>
 <template>
@@ -37,11 +45,21 @@
           <div class="form-item flex_left">
               <div class="title-cell">客户群体<span class="ml3 vertical color-red">*</span></div>
               <div class="input-cell">
-                <select v-model="submitData.customertype">
-                  <option value="">请选择</option>
-                  <option value="1">普通客户</option>
-                  <option value="2">高档客户</option>
-                </select>
+                <div class="padding10 tag-container" style="box-sizing:border-box;" >
+                  <template v-for="(item,index) in tagData">
+                    <div v-if="item.parentid == 0" class="parent-item">
+                      <div class="box-title">{{item.title}}</div>
+                      <div class="child-area" v-if="item.child && item.child.length">
+                        <div v-for="(citem, cindex) in item.child" class="child-item">
+                          <label @click="clickRadio(citem)">
+                            <input type="checkbox" :name="`ck-${item.id}-[]`" :value="citem.tagid" :checked="citem.checked" />
+                            <span>{{citem.title}}</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                </div>
               </div>
           </div>
           <div class="form-item flex_left">
@@ -80,7 +98,7 @@
           <div class="form-item flex_left">
               <div class="title-cell">使用说明<span class="ml3 vertical color-red">*</span></div>
               <div class="input-cell">
-                  <input v-model="submitData.content" type="text" placeholder="使用说明">
+                  <textarea v-model="submitData.content" placeholder="使用说明"></textarea>
               </div>
           </div>
         </div>
@@ -96,6 +114,7 @@
 import ENV from 'env'
 import { Datetime } from 'vux'
 import { User } from '#/storage'
+import jQuery from 'jquery'
 export default {
   components: { Datetime },
   data () {
@@ -115,7 +134,6 @@ export default {
       },
       requiredData: {
         title: '',
-        customertype: '',
         starttime: '',
         endtime: '',
         validday: '',
@@ -129,7 +147,8 @@ export default {
       selectdatetxt1: '选择开始时间',
       selectdatetxt2: '选择结束时间',
       submitIng: false,
-      maxDay: 365
+      maxDay: 365,
+      tagData: []
     }
   },
   methods: {
@@ -157,44 +176,57 @@ export default {
     dateconfirm2 () {
       this.selectdatetxt2 = ''
     },
+    clickRadio (item) {
+      console.log(item.checked)
+    },
     submitEvent () {
-      if (this.submitIng) return false
+      let postData = {...this.submitData, type: 'cardcommon'}
       let iscontinue = true
       for (let key in this.requiredData) {
-        if (this.submitData[key] === '') {
+        if (postData[key] === '') {
           this.$vux.toast.text('请完善内容')
           iscontinue = false
           break
         }
       }
       if (!iscontinue) return false
-      let stime = new Date(this.submitData.starttime).valueOf()
-      let etime = new Date(this.submitData.endtime).valueOf()
+      let cks = jQuery.find('.tag-container input[type=checkbox]:checked')
+      if (!cks.length) {
+        this.$vux.toast.text('请选择客户群体')
+        return false
+      }
+      let tagarr = []
+      for (let i = 0; i < cks.length; i++) {
+        let cur = cks[i]
+        tagarr.push(cur.value)
+      }
+      postData.corptag = tagarr.join(',')
+      if (this.submitIng) return false
+      let stime = new Date(postData.starttime).valueOf()
+      let etime = new Date(postData.endtime).valueOf()
       if (stime > etime) {
         this.$vux.toast.text('请选择正确的起止时间')
         return false
       }
-      let validday = this.submitData.validday
+      let validday = postData.validday
       if (isNaN(validday) || parseInt(validday) > this.maxDay || parseInt(validday) < 0 || !(/(^[1-9]\d*$)/.test(validday))) {
         this.$vux.toast.text(`请输入正确的有效期，最多${this.maxDay}天`)
         return false
       }
-      let totalcount = this.submitData.totalcount
+      let totalcount = postData.totalcount
       if (isNaN(totalcount) || parseInt(totalcount) < 0 || !(/(^[1-9]\d*$)/.test(totalcount))) {
         this.$vux.toast.text('请输入正确的发放数量')
         return false
       }
-      let facemoney = this.submitData.facemoney
-      let ordermoney = this.submitData.ordermoney
+      let facemoney = postData.facemoney
+      let ordermoney = postData.ordermoney
       if (parseFloat(facemoney) < 0.01 || parseFloat(ordermoney) < 0) {
         this.$vux.toast.text('请输入正确的满减金额')
         return false
       }
       this.submitIng = true
       this.$vux.loading.show()
-      this.$http.post(`${ENV.BokaApi}/api/miniactivity/add`, {
-        ...this.submitData, type: 'cardcommon'
-      }).then(res => {
+      this.$http.post(`${ENV.BokaApi}/api/miniactivity/add`, postData).then(res => {
         this.$vux.loading.hide()
         let data = res.data
         this.$vux.toast.show({
@@ -209,6 +241,28 @@ export default {
             }
           }
         })
+      })
+    },
+    getTags () {
+      this.$http.get(`${ENV.BokaApi}/api/customer/getCorpTags`).then(res => {
+        let data = res.data
+        if (data.code === 0) {
+          let retdata = data.data
+          for (let i = 0; i < retdata.length; i++) {
+            let pdata = retdata[i]
+            if (pdata.parentid === 0) {
+              pdata.child = []
+              for (let j = 0; j < retdata.length; j++) {
+                let cdata = retdata[j]
+                if (cdata.parentid === pdata.id) {
+                  cdata.checked = false
+                  pdata.child.push(cdata)
+                }
+              }
+            }
+          }
+          this.tagData = retdata
+        }
       })
     },
     initData () {
@@ -231,6 +285,7 @@ export default {
       this.query = this.$route.query
       this.loginUser = User.get()
       this.initData()
+      this.getTags()
     }
   },
   activated () {

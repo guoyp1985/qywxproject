@@ -298,6 +298,7 @@ const clearCache = () => {
     Version.remove()
     Version.set(ENV.Version)
     SystemParams.remove()
+    GlobalData.remove()
   }
 }
 

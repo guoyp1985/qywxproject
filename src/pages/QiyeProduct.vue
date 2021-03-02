@@ -257,7 +257,7 @@
         <div v-if="productdata.storage <= 0" class="t-cell color-white h_100 v_middle align_center bg-gray">已售罄</div>
         <template v-else>
   				<div v-if="query && query.share_uid" class="t-cell color-white h_100 v_middle align_center bg-red2">立即购买</div>
-  				<div v-else class="t-cell color-white h_100 v_middle align_center bg-red2" @click="clickShare">分享赚</div>
+  				<div v-else class="t-cell color-white h_100 v_middle align_center bg-red2" @click="clickShare">分享赚 {{productdata.salesrebate}}</div>
         </template>
         <!--
 				<div v-else class="t-cell color-white h_100 v_middle align_center bg-red2" @click="buyevent">立即购买</div>
@@ -310,7 +310,7 @@
             <div class="options-bottom flex_center">
               <div class="flex_cell h_100 flex_center">
                 <div v-if="query && query.share_uid" class="bg-theme color-white flex_center btn" @click="buyOption">立即购买</div>
-                <div v-else class="bg-theme color-white flex_center btn" @click="clickShare">分享赚</div>
+                <div v-else class="bg-theme color-white flex_center btn" @click="clickShare">分享赚 {{productdata.salesrebate}}</div>
               </div>
             </div>
           </div>

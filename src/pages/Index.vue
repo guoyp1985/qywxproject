@@ -43,7 +43,7 @@ export default {
       query: {},
       loginUser: {},
       globalData: {},
-      targets: {},
+      targets: null,
       afterLoad: false,
       isPC: false,
       isQywx: false
