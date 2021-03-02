@@ -11,7 +11,7 @@
 </style>
 <template>
   <div class="bg-page center-page">
-    <div class="page-inner">
+    <div class="page-inner" :style="`${afterLoad && loginUser && loginUser.uid && !isPC && !isQywx ? 'bottom:0;' : ''}`">
       <div class="top-box list-shadow02 flex_left">
         <img class="avatar" :src="loginUser.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
         <div class="txt">{{ loginUser.linkman }}</div>
@@ -25,7 +25,9 @@
         </template>
       </template>
     </div>
-    <qiye-footer :user.sync="loginUser"></qiye-footer>
+    <template v-if="afterLoad && loginUser && loginUser.uid && (isPC || isQywx) && loginUser.identity == 2">
+      <qiye-footer :user.sync="loginUser"></qiye-footer>
+    </template>
   </div>
 </template>
 

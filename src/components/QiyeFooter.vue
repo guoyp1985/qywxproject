@@ -30,11 +30,11 @@
     <!-- <div class="item"><router-link class="item" to="/saleChance">机会</router-link> </div> -->
     <router-link class="item" to="/center">
       <span>我</span>
-      <img
+      <!-- <img
         class="avatar"
         v-if="user && user.avatar && user.avatar != ''"
         :src="user.avatar"
-        onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+        onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" /> -->
     </router-link>
   </div>
 </template>
