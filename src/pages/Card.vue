@@ -58,6 +58,7 @@
   }
   .desc-txt{
     position:absolute;left:7%;top:79%;right:7%;color:#fff;
+    .txt{width:75px;text-align:right;padding-right:5px;box-sizing: border-box;}
   }
   .close-area{position:absolute;left:0;bottom:-60px;right:0;height:50px;}
   .close-area .al{font-weight:bold;font-size:35px;color:#fff;}
@@ -91,9 +92,9 @@
           </div>
         </div>
         <div v-if="viewData && viewData.id" class="txt-area">
-          <div class="flex_left">
+          <div class="db-flex">
             <div class="txt">使用说明: </div>
-            <div class="flex_cell">{{viewData.content}}</div>
+            <div class="flex_cell" v-html="viewData.content"></div>
           </div>
           <div class="flex_left" v-if="viewData.starttime">
             <div class="txt">有效期: </div>
@@ -120,8 +121,14 @@
                 </div>
               </div>
               <div class="desc-txt">
-                <div class="flex_left">使用说明: {{viewData.content}}</div>
-                <div class="flex_left">有效期至: {{viewData.deadline_str}}</div>
+                <div class="db-flex">
+                  <div class="txt">使用说明: </div>
+                  <div class="flex_cell" v-html="viewData.content">{{viewData.deadline_str}}</div>
+                </div>
+                <div class="flex_left">
+                  <div class="txt">有效期至: </div>
+                  <div class="flex_cell">{{viewData.deadline_str}}</div>
+                </div>
               </div>
             </div>
           </div>
@@ -210,6 +217,7 @@ export default {
         if (data.code === 0) {
           let retdata = data.data
           retdata.deadline_str = new Time(retdata.deadline * 1000).dateFormat('yyyy-MM-dd')
+          retdata.content = retdata.content.replace(/\n/g, '<br />')
           this.ordermoney = retdata.ordermoney
           this.facemoney = retdata.money
           // this.showResultModal = true
@@ -256,6 +264,7 @@ export default {
         this.$vux.loading.hide()
         if (data.code === 0) {
           let retdata = data.data
+          retdata.content = retdata.content.replace(/\n/g, '<br />')
           if (retdata.starttime) {
             retdata.starttime_str = new Time(retdata.starttime * 1000).dateFormat('yyyy-MM-dd')
             retdata.endtime_str = new Time(retdata.endtime * 1000).dateFormat('yyyy-MM-dd')
