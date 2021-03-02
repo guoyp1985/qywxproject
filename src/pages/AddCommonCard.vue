@@ -122,7 +122,7 @@
               </div>
           </div>
         </div>
-        <div class="mt20 flex_center">
+        <div class="pt20 pb20 flex_center">
           <div class="btn" @click="submitEvent">提交</div>
         </div>
       </template>
