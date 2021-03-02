@@ -197,7 +197,11 @@ export default {
       },
       shareParams: {},
       showOpen: true,
-      showResult: false
+      showResult: false,
+      shareWid: 0,
+      afterLoad: false,
+      isPC: false,
+      isQywx: false
     }
   },
   methods: {
@@ -240,7 +244,7 @@ export default {
       let shareLink = `${ENV.Host}/#/card?share_uid=${this.loginUser.uid}`
       if (this.query.id) shareLink = `${shareLink}&id=${this.query.id}`
       if (this.query.type) shareLink = `${shareLink}&type=${this.query.type}`
-      if (this.wid && this.wid !== '') shareLink = `${shareLink}&wid=${this.wid}`
+      if (this.shareWid && this.shareWid !== '') shareLink = `${shareLink}&wid=${this.shareWid}`
       this.shareParams = {
         title: '优惠券',
         desc: '送你一张优惠券',
@@ -304,14 +308,19 @@ export default {
       this.query = this.$route.query
       this.initData()
       if (this.query.type) this.cardType = this.query.type
-      if (this.loginUser.identity === 2) {
-        this.wid = this.loginUser.uid
-      } else if (this.loginUser.ownid) {
-        this.wid = this.loginUser.ownid
-      } else if (this.query.wid) {
-        this.wid = this.query.wid
+
+      this.isPC = this.$util.isPC
+      this.isQywx = this.$util.isQywx()
+      this.afterLoad = true
+      if (this.isQywx) {
+        this.shareWid = this.loginUser.uid
+      } else {
+        if (this.query.wid) {
+          this.shareWid = parseInt(this.query.wid)
+        } else if (this.loginUser.ownid) {
+          this.shareWid = this.loginUser.ownid
+        }
       }
-      this.inQywx = this.$util.isQywx()
       this.handleShare()
       if (!this.query.id) {
         if (this.query.type && this.cardObject[this.query.type]) {
