@@ -22,11 +22,11 @@
   .tag-container{
     .parent-item:not(:last-child){margin-bottom:10px;}
     .child-area{
-      padding: 10px 15px;display:flex;justify-content:flex-start;align-items:center;flex-wrap:wrap;
+      padding: 10px 0;display:flex;justify-content:flex-start;align-items:center;flex-wrap:wrap;
       .child-item:not(:first-child){margin-left:10px;}
       .child-item{
         border:#ddd 1px solid;border-radius:3px;line-height:30px;padding:0 10px;color:#999;
-        display:flex;justify-content:center;align-items:center;
+        display:flex;justify-content:center;align-items:center;margin-bottom:5px;
         .txt{margin-left:3px;}
       }
     }
