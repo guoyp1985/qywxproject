@@ -81,7 +81,8 @@ export default {
   },
   methods: {
     clickEvent () {
-      this.showModal = true
+      // this.showModal = true
+      this.$router.push({path: '/card', query: {type: 'newcustomer'}})
     },
     closeEvent () {
       this.showModal = false
