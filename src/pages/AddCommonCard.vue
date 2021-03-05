@@ -31,119 +31,191 @@
       }
     }
   }
-  .x-checker .ck-item{
-    font-size:13px;
-    display: inline-block;
-    padding: 0 15px;
-    height: 30px;
-    line-height: 30px;
-    border:0px;
-    text-align: center;
-    border-radius: 3px;
-    background-color: #fff;
-    margin-right: 10px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    box-sizing: border-box;
+  .btn-select{
+    border:#ccc 1px solid;border-radius:5px;padding:5px 10px;
   }
-  .x-checker .border1px.ck-item-selected:after{border:1px solid #ea3a3a;}
-  .vux-check-icon > span{color:#666;display: inline-block;vertical-align: bottom;line-height: 19px;}
+}
+.user-modal{
+  .scroll_list{
+    .scroll_item{
+      padding:10px;background-color:#fff;display:flex;justify-content: flex-start;align-items: center;
+      .avatar{width:50px;height:50px;border-radius:50%;object-fit: cover;}
+    }
+  }
 }
 </style>
 <template>
-  <div class="bg-page add-comcard-page">
+  <div class="bg-page add-comcard-page containerarea">
     <template v-if="loginUser && loginUser.uid">
       <template v-if="!loginUser.isadmin">
         <div class="flex_empty">抱歉，您没有权限</div>
       </template>
       <template v-else>
-        <div class="form-list">
-          <div class="form-item flex_left">
-              <div class="title-cell">标题<span class="ml3 vertical color-red">*</span></div>
-              <div class="input-cell">
-                  <input v-model="submitData.title" type="text" placeholder="标题">
-              </div>
+        <div class="s-topbanner s-topbanner1 bg-white">
+          <div class="row">
+            <tab v-model="selectedIndex" class="v-tab">
+              <tab-item selected @on-item-click="clickTab(0)">普通优惠券</tab-item>
+              <tab-item @on-item-click="clickTab(1)">专属优惠券</tab-item>
+            </tab>
           </div>
-          <div class="form-item flex_left">
-              <div class="title-cell">客户群体<span class="ml3 vertical color-red">*</span></div>
-              <div class="input-cell">
-                <div class="padding10 tag-container" style="box-sizing:border-box;" >
-                  <template v-for="(item,index) in tagData">
-                    <div v-if="item.parentid == 0" class="parent-item">
-                      <div class="box-title">{{item.title}}</div>
-                      <div class="child-area" v-if="item.child && item.child.length">
-                        <label v-for="(citem, cindex) in item.child" class="child-item">
-                          <input type="checkbox" :name="`ck-${item.id}-[]`" :value="citem.tagid" :checked="citem.checked" />
-                          <span class="txt" @click="clickInput(index, citem, cindex)">{{citem.title}}</span>
-                        </label>
-                      </div>
+        </div>
+        <div class="s-container s-container1" style="bottom:45px;">
+          <template v-if="selectedIndex == 0">
+            <div class="form-list">
+              <div class="form-item flex_left">
+                  <div class="title-cell">标题<span class="ml3 vertical color-red">*</span></div>
+                  <div class="input-cell">
+                      <input v-model="submitData.title" type="text" placeholder="标题">
+                  </div>
+              </div>
+              <div class="form-item flex_left">
+                  <div class="title-cell">客户群体<span class="ml3 vertical color-red">*</span></div>
+                  <div class="input-cell">
+                    <div class="padding10 tag-container" style="box-sizing:border-box;" >
+                      <template v-for="(item,index) in tagData">
+                        <div v-if="item.parentid == 0" class="parent-item">
+                          <div class="box-title">{{item.title}}</div>
+                          <div class="child-area" v-if="item.child && item.child.length">
+                            <label v-for="(citem, cindex) in item.child" class="child-item">
+                              <input type="checkbox" :name="`ck-${item.id}-[]`" :value="citem.tagid" :checked="citem.checked" />
+                              <span class="txt" @click="clickInput(index, citem, cindex)">{{citem.title}}</span>
+                            </label>
+                          </div>
+                        </div>
+                      </template>
                     </div>
-                  </template>
+                  </div>
+              </div>
+              <div class="form-item flex_left">
+                  <div class="title-cell">开始时间<span class="ml3 vertical color-red">*</span></div>
+                  <div class="input-cell time-cell">
+                    <datetime format="YYYY-MM-DD HH:mm" v-model='submitData.starttime' :show.sync="visibility1" @on-change="datechange1" @on-cancel="datecancel1" @on-confirm="dateconfirm1"></datetime>
+                    <div @click="showxdate1" class="date-txt">{{ selectdatetxt1 }}</div>
+                  </div>
+              </div>
+              <div class="form-item flex_left">
+                  <div class="title-cell">结束时间<span class="ml3 vertical color-red">*</span></div>
+                  <div class="input-cell time-cell">
+                    <datetime format="YYYY-MM-DD HH:mm" v-model='submitData.endtime' :show.sync="visibility2" @on-change="datechange2" @on-cancel="datecancel2" @on-confirm="dateconfirm2"></datetime>
+                    <div @click="showxdate2" class="date-txt">{{ selectdatetxt2 }}</div>
+                  </div>
+              </div>
+              <div class="form-item flex_left">
+                  <div class="title-cell">有效期<span class="ml3 vertical color-red">*</span></div>
+                  <div class="input-cell">
+                      <input v-model="submitData.validday" type="text" placeholder="有效期，最多365天">
+                  </div>
+                  <div>天</div>
+              </div>
+              <div class="form-item flex_left">
+                  <div class="title-cell">发放数量<span class="ml3 vertical color-red">*</span></div>
+                  <div class="input-cell">
+                      <input v-model="submitData.totalcount" type="text" placeholder="发放数量">
+                  </div>
+              </div>
+              <div class="form-item flex_left">
+                  <span style="line-height:34px">满:</span>
+                  <input class="mjje" v-model="submitData.ordermoney" type="number" placeholder="请输入" />
+                  <span style="line-height:34px">减:</span>
+                  <input class="mjje" v-model="submitData.facemoney" type="number" placeholder="请输入" />
+              </div>
+              <div class="form-item flex_left">
+                  <div class="title-cell">使用说明<span class="ml3 vertical color-red">*</span></div>
+                  <div class="input-cell">
+                      <textarea v-model="submitData.content" placeholder="使用说明"></textarea>
+                  </div>
+              </div>
+            </div>
+          </template>
+          <template v-if="selectedIndex == 1">
+            <div class="form-list">
+              <div class="form-item flex_left">
+                <div class="title-cell">标题<span class="ml3 vertical color-red">*</span></div>
+                <div class="input-cell">
+                    <input v-model="submitData1.title" type="text" placeholder="标题">
                 </div>
               </div>
-          </div>
-          <div class="form-item flex_left">
-              <div class="title-cell">开始时间<span class="ml3 vertical color-red">*</span></div>
-              <div class="input-cell time-cell">
-                <datetime format="YYYY-MM-DD HH:mm" v-model='submitData.starttime' :show.sync="visibility1" @on-change="datechange1" @on-cancel="datecancel1" @on-confirm="dateconfirm1"></datetime>
-                <div @click="showxdate1" class="date-txt">{{ selectdatetxt1 }}</div>
+              <div class="form-item flex_left">
+                  <div class="title-cell">奖励语<span class="ml3 vertical color-red">*</span></div>
+                  <div class="input-cell">
+                      <input v-model="submitData1.remark" type="text" placeholder="标题">
+                  </div>
               </div>
-          </div>
-          <div class="form-item flex_left">
-              <div class="title-cell">结束时间<span class="ml3 vertical color-red">*</span></div>
-              <div class="input-cell time-cell">
-                <datetime format="YYYY-MM-DD HH:mm" v-model='submitData.endtime' :show.sync="visibility2" @on-change="datechange2" @on-cancel="datecancel2" @on-confirm="dateconfirm2"></datetime>
-                <div @click="showxdate2" class="date-txt">{{ selectdatetxt2 }}</div>
+              <div class="form-item flex_left">
+                <div class="title-cell">客户<span class="ml3 vertical color-red">*</span></div>
+                <div class="input-cell" @click="clickUser()">
+                  <div v-if="selectedUser && selectedUser.uid" class="flex_left">
+                    <img :src="selectedUser.avatar" class="mr5" style="width:50px;height:50px;border-radius:50%;" />
+                    <span>{{selectedUser.linkman}}</span>
+                  </div>
+                  <div v-else class="btn-select">选择客户</div>
+                </div>
               </div>
-          </div>
-          <div class="form-item flex_left">
-              <div class="title-cell">有效期<span class="ml3 vertical color-red">*</span></div>
-              <div class="input-cell">
-                  <input v-model="submitData.validday" type="text" placeholder="有效期，最多365天">
+              <div class="form-item flex_left">
+                  <span style="line-height:34px">满:</span>
+                  <input class="mjje" v-model="submitData1.ordermoney" type="number" placeholder="请输入" />
+                  <span style="line-height:34px">减:</span>
+                  <input class="mjje" v-model="submitData1.facemoney" type="number" placeholder="请输入" />
               </div>
-              <div>天</div>
-          </div>
-          <div class="form-item flex_left">
-              <div class="title-cell">发放数量<span class="ml3 vertical color-red">*</span></div>
-              <div class="input-cell">
-                  <input v-model="submitData.totalcount" type="text" placeholder="发放数量">
+              <div class="form-item flex_left">
+                  <div class="title-cell">使用说明<span class="ml3 vertical color-red">*</span></div>
+                  <div class="input-cell">
+                      <textarea v-model="submitData1.content" placeholder="使用说明"></textarea>
+                  </div>
               </div>
-          </div>
-          <div class="form-item flex_left">
-              <span style="line-height:34px">满:</span>
-              <input class="mjje" v-model="submitData.ordermoney" type="number" placeholder="请输入" />
-              <span style="line-height:34px">减:</span>
-              <input class="mjje" v-model="submitData.facemoney" type="number" placeholder="请输入" />
-          </div>
-          <div class="form-item flex_left">
-              <div class="title-cell">使用说明<span class="ml3 vertical color-red">*</span></div>
-              <div class="input-cell">
-                  <textarea v-model="submitData.content" placeholder="使用说明"></textarea>
-              </div>
-          </div>
+            </div>
+          </template>
         </div>
-        <div class="pt20 pb20 flex_center">
-          <div class="btn" @click="submitEvent">提交</div>
-        </div>
+        <div v-if="selectedIndex == 0" class="s-bottom bg-green flex_center color-white font16" @click="submitEvent">提交</div>
+        <div v-if="selectedIndex == 1" class="s-bottom bg-green flex_center color-white font16" @click="submitEvent1">提交</div>
       </template>
     </template>
+    <div v-transfer-dom class="x-popup">
+      <popup v-model="showUserModal" height="100%" class="bg-white user-modal">
+        <div class="popup1">
+          <div class="pagetop flex_center b_bottom_after" style="font-size:16px;font-weight:bold;">选择客户</div>
+          <div class="pagemiddle" ref="scrollContainer"  @scroll="handleScroll('scrollContainer')">
+            <template v-if="disList">
+              <div v-if="!userData || !userData.length" class="flex_empty">暂无客户</div>
+              <div v-else class="scroll_list">
+                <label v-for="(item,index) in userData" :key="index" class="scroll_item" @click="clickUserItem(item, index)">
+                  <div class="pr10">
+                    <input type="radio" name="cuser" :checked="item.checked" />
+                  </div>
+                  <div class="pr10">
+                    <img class="avatar" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                  </div>
+                  <div class="flex_cell flex_left">{{item.linkman}}</div>
+                </label>
+              </div>
+              <div class="load-end-area loading" v-if="isLoading"></div>
+              <div class="load-end-area done" v-else-if="isDone"></div>
+            </template>
+          </div>
+          <div class="pagebottom flex_center">
+            <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeUserModal">取消</div>
+            <div class="flex_cell h_100 flex_center bg-green color-white" @click="submitUser">提交</div>
+          </div>
+        </div>
+      </popup>
+    </div>
   </div>
 </template>
 
 <script>
 import ENV from 'env'
-import { Datetime } from 'vux'
+import { Datetime, Tab, TabItem, Popup, TransferDom } from 'vux'
 import { User } from '#/storage'
 import jQuery from 'jquery'
 export default {
-  components: { Datetime },
+  directives: { TransferDom },
+  components: { Datetime, Tab, TabItem, Popup },
   data () {
     return {
       query: {},
       loginUser: {},
       submitData: {
         title: '',
-        customertype: '',
         starttime: '',
         endtime: '',
         validday: '',
@@ -168,15 +240,113 @@ export default {
       selectdatetxt2: '选择结束时间',
       submitIng: false,
       maxDay: 365,
-      tagData: []
+      tagData: [],
+      selectedIndex: 0,
+      submitData1: {
+        title: '',
+        remark: '',
+        ordermoney: '',
+        facemoney: '',
+        content: ''
+      },
+      requiredData1: {
+        title: '',
+        remark: '',
+        ordermoney: '',
+        facemoney: '',
+        content: ''
+      },
+      selectedUser: null,
+      submitIng1: false,
+      showUserModal: false,
+      userData: [],
+      pagestart: 1,
+      limit: 15,
+      isLoading: false,
+      disList: false,
+      isDone: false,
+      nextCursor: null,
+      pannelUser: null
     }
   },
   methods: {
+    clickUser () {
+      this.showUserModal = true
+      if (!this.userData.length) {
+        this.getUser()
+      }
+    },
+    closeUserModal () {
+      this.showUserModal = false
+    },
+    clickUserItem (item, index) {
+      this.pannelUser = item
+      if (this.$util.isIOS()) {
+        if (!item.checked) {
+          for (let i = 0; i < this.userData.length; i++) {
+            if (this.userData[i].checked) {
+              this.userData[i].checked = false
+              break
+            }
+          }
+          this.userData[index].checked = true
+        }
+      }
+    },
+    submitUser () {
+      // let cks = jQuery('.user-modal').find(".scroll_list input:checked")
+      // if (!cks.length) {
+      //   this.$vux.toast.text('请选择客户')
+      //   return false
+      // }
+      if (!this.pannelUser) {
+        this.$vux.toast.text('请选择客户')
+        return false
+      }
+      this.selectedUser = this.pannelUser
+      this.showUserModal = false
+    },
+    getUser () {
+      let params = {page: this.pagestart, limit: this.limit}
+      if (this.nextCursor) params.cursor = this.nextCursor
+      this.$http.get(`${ENV.BokaApi}/api/customer/getList`, {
+        params: params
+      }).then(res => {
+        let data = res.data
+        this.$vux.loading.hide()
+        this.isLoading = false
+        let retdata = data.data ? data.data : data
+        for (let i = 0; i < retdata.length; i++) {
+          retdata[i].checked = false
+        }
+        this.userData = this.userData.concat(retdata)
+        if (data.next_cursor && data.next_cursor !== this.nextCursor) this.nextCursor = data.next_cursor
+        this.disList = true
+        if (retdata.length < this.limit) {
+          this.isDone = true
+        }
+      })
+    },
+    handleScroll (refname, index) {
+      const scrollarea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      this.$util.scrollEvent({
+        element: scrollarea,
+        callback: () => {
+          if (this.isLoading || this.isDone) return false
+          if (this.userData.length === this.pagestart * this.limit) {
+            this.pagestart++
+            this.isLoading = true
+            this.getUser()
+          }
+        }
+      })
+    },
+    clickTab (index) {
+      this.selectedIndex = parseInt(index)
+    },
     clickInput (pindex, citem, cindex) {
-      let isPc = this.$util.isPC()
-      if (!isPc) {
+      if (this.$util.isIOS()) {
         this.tagData[pindex].child[cindex].checked = !citem.checked
-        console.log('in mobile click')
       }
     },
     showxdate1 () {
@@ -204,6 +374,7 @@ export default {
       this.selectdatetxt2 = ''
     },
     submitEvent () {
+      if (this.submitIng) return false
       let postData = {...this.submitData, type: 'cardcommon'}
       let iscontinue = true
       for (let key in this.requiredData) {
@@ -225,7 +396,6 @@ export default {
         tagarr.push(cur.value)
       }
       postData.corptag = tagarr.join(',')
-      if (this.submitIng) return false
       let stime = new Date(postData.starttime).valueOf()
       let etime = new Date(postData.endtime).valueOf()
       if (stime > etime) {
@@ -267,6 +437,48 @@ export default {
         })
       })
     },
+    submitEvent1 () {
+      if (this.submitIng1) return false
+      let postData = {...this.submitData1, type: 'cardcommon'}
+      let iscontinue = true
+      for (let key in this.requiredData) {
+        if (postData[key] === '') {
+          this.$vux.toast.text('请完善内容')
+          iscontinue = false
+          break
+        }
+      }
+      if (!iscontinue) return false
+      if (!this.selectedUser || !this.selectedUser.uid) {
+        this.$vux.toast.text('请选择客户')
+        return false
+      }
+      postData.uid = this.selectedUser.uid
+      let facemoney = postData.facemoney
+      let ordermoney = postData.ordermoney
+      if (parseFloat(facemoney) < 0.01 || parseFloat(ordermoney) < 0) {
+        this.$vux.toast.text('请输入正确的满减金额')
+        return false
+      }
+      // this.submitIng1 = true
+      // this.$vux.loading.show()
+      // this.$http.post(`${ENV.BokaApi}/api/miniactivity/add`, postData).then(res => {
+      //   this.$vux.loading.hide()
+      //   let data = res.data
+      //   this.$vux.toast.show({
+      //     text: data.msg,
+      //     type: (data.code === 0 ? 'success' : 'warn'),
+      //     time: this.$util.delay(data.msg),
+      //     onHide: () => {
+      //       if (data.code === 0) {
+      //         this.$router.push('/activityList?refresh=1')
+      //       } else {
+      //         this.submitIng1 = false
+      //       }
+      //     }
+      //   })
+      // })
+    },
     getTags () {
       this.$http.get(`${ENV.BokaApi}/api/customer/getCorpTags`).then(res => {
         let data = res.data
@@ -306,6 +518,15 @@ export default {
       this.selectdatetxt1 = '选择开始时间'
       this.selectdatetxt2 = '选择结束时间'
       this.submitIng = false
+      this.submitData1 = {
+        title: '',
+        remark: '',
+        ordermoney: '',
+        facemoney: '',
+        content: ''
+      }
+      this.submitIng1 = false
+      this.selectedUser = null
     },
     refresh () {
       this.query = this.$route.query

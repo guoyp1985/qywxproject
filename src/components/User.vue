@@ -45,7 +45,7 @@
       </div>
       <div class="txt-cell">联系客服</div>
     </router-link>
-    <div class="item" @click="toAdmin" v-if="loginUser.isadmin">
+    <div class="item" @click="toAdmin" v-if="user.isadmin">
       <div class="ico-cell">
         <span class="al al-houtaiguanli"></span>
       </div>

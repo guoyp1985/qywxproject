@@ -162,21 +162,6 @@
         </template>
       </div>
     </div>
-    <div v-show="(selectedIndex == 3)" class="swiper-inner" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3', 2)">
-      <template v-if="disList3">
-        <div v-if="!listData3 || !listData3.length" class="flex_empty">暂无数据</div>
-        <div v-else class="scroll_list">
-          <div v-for="(item,index) in listData3" :key="index" class="scroll_item" @click="toView(item)">
-            <div class="pr10">
-              <img class="avatar" :src="item.headimgurl" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-            </div>
-            <div class="flex_cell flex_left">{{item.linkman}}</div>
-          </div>
-        </div>
-        <div class="load-end-area loading" v-if="isLoading3"></div>
-        <div class="load-end-area done" v-else-if="isDone3"></div>
-      </template>
-    </div>
     <div v-transfer-dom class="x-popup">
       <popup v-model="showYxlModal" height="100%" class="bg-white">
         <div class="popup1">
