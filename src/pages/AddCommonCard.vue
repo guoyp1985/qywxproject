@@ -70,7 +70,7 @@
                     <input v-model="submitData.title" type="text" placeholder="标题">
                 </div>
             </div>
-            <div class="form-item flex_left">
+            <!-- <div class="form-item flex_left">
               <div class="title-cell">优惠商品</div>
               <div class="input-cell" @click="clickProduct()">
                 <div v-if="selectedProduct && selectedProduct.id" class="flex_left">
@@ -79,7 +79,7 @@
                 </div>
                 <div v-else class="btn-select">选择优惠商品</div>
               </div>
-            </div>
+            </div> -->
             <div class="form-item flex_left">
                 <div class="title-cell">客户群体<span class="ml3 vertical color-red">*</span></div>
                 <div class="input-cell">
