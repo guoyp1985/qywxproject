@@ -29,62 +29,16 @@
 </style>
 <template>
   <div class="bg-page center-page">
-    <div class="page-inner">
+    <div class="page-inner" :style="`${afterLoad && loginUser && loginUser.uid && !isPC && !isQywx ? 'bottom:0;' : ''}`">
       <div class="top-box list-shadow02 flex_left">
         <img class="avatar" :src="loginUser.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
         <div class="txt">{{ loginUser.linkman }}</div>
       </div>
-      <div class="list-area">
-        <div class="item">
-          <div class="ico-cell">
-            <span class="al al-qitashouru"></span>
-          </div>
-          <div class="txt-cell">我的收入</div>
-        </div>
-        <router-link class="item" to="/aboutGxk">
-          <div class="ico-cell">
-            <span class="al al-guanyu"></span>
-          </div>
-          <div class="txt-cell">关于共销客</div>
-        </router-link>
-        <router-link class="item" to="/complaint">
-          <div class="ico-cell">
-            <span class="al al-wenti"></span>
-          </div>
-          <div class="txt-cell">问题反馈</div>
-        </router-link>
-        <router-link class="item" to="/service">
-          <div class="ico-cell">
-            <span class="al al-kefu1"></span>
-          </div>
-          <div class="txt-cell">联系客服</div>
-        </router-link>
-        <div class="item" @click="toAdmin">
-          <div class="ico-cell">
-            <span class="al al-houtaiguanli"></span>
-          </div>
-          <div class="txt-cell">后台管理</div>
-        </div>
-      </div>
+      <cuser :user.sync="loginUser"></cuser>
     </div>
-    <qiye-footer :user.sync="loginUser"></qiye-footer>
-    <div v-if="showModal" class="auto-modal flex_center">
-      <div class="modal-inner border-box" style="width:80%;">
-        <div class="align_center font18 bold pb10 b_bottom_after color-theme pt10">客服</div>
-        <div class="" style="padding:20px 10px;">
-          <div class="align_center">
-            <img src="../assets/images/kefu.jpg" style="width:100px;height:178px;" />
-          </div>
-          <div class="flex_left">
-            <span>仇红波</span>
-            <a class="ml5" href="tel:18601033313;" style="color:#659af2;">18601033313</a>
-          </div>
-        </div>
-        <div class="close-area flex_center" @click="closeEvent">
-          <span class="al al-close"></span>
-        </div>
-      </div>
-    </div>
+    <template v-if="afterLoad && loginUser && loginUser.uid && (isPC || isQywx) && loginUser.identity == 2">
+      <qiye-footer :user.sync="loginUser"></qiye-footer>
+    </template>
   </div>
 </template>
 
@@ -92,14 +46,18 @@
 import {} from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
+import Cuser from '@/components/User'
 import QiyeFooter from '@/components/QiyeFooter'
 export default {
-  components: { QiyeFooter },
+  components: { Cuser, QiyeFooter },
   data () {
     return {
       query: {},
       loginUser: {},
-      showModal: false
+      showModal: false,
+      afterLoad: false,
+      isPC: false,
+      isQywx: false
     }
   },
   methods: {
@@ -115,6 +73,9 @@ export default {
     refresh () {
       this.query = this.$route.query
       this.loginUser = User.get()
+      this.isPC = this.$util.isPC
+      this.isQywx = this.$util.isQywx()
+      this.afterLoad = true
     }
   },
   activated () {

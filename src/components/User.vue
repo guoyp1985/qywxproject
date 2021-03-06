@@ -21,6 +21,12 @@
 
 <template>
   <div class="user-list-area">
+    <router-link class="item" to="/userCard">
+      <div class="ico-cell">
+        <span class="al al-youhuiquan2"></span>
+      </div>
+      <div class="txt-cell">我的优惠券</div>
+    </router-link>
     <div class="item">
       <div class="ico-cell">
         <span class="al al-qitashouru"></span>

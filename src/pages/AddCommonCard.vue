@@ -62,22 +62,8 @@
         <div class="s-container" style="top:0;bottom:45px;">
           <div class="form-list">
             <div class="form-item flex_left">
-                <div class="title-cell">优惠券类型</div>
-                <div class="input-cell">
-                  <label class="flex_left">
-                    <input type="radio" name="model" value="1" :checked="cardType == 1" />
-                    <span class="ml5" @click="clickModel(1)">普通优惠券</span>
-                  </label>
-                  <label class="ml10 flex_left">
-                    <input type="radio" name="model" value="1" :checked="cardType == 2" />
-                    <span class="ml5" @click="clickModel(2)">专属优惠券</span>
-                  </label>
-                </div>
-            </div>
-            <div class="form-item flex_left">
                 <div class="title-cell">
-                  <span v-if="cardType == 1">标题</span>
-                  <span v-else>奖励语</span>
+                  <span>标题</span>
                   <span class="ml3 vertical color-red">*</span>
                 </div>
                 <div class="input-cell">
@@ -94,7 +80,7 @@
                 <div v-else class="btn-select">选择优惠商品</div>
               </div>
             </div>
-            <div class="form-item flex_left" v-if="cardType == 1">
+            <div class="form-item flex_left">
                 <div class="title-cell">客户群体<span class="ml3 vertical color-red">*</span></div>
                 <div class="input-cell">
                   <div class="padding10 tag-container" style="box-sizing:border-box;" >
@@ -111,16 +97,6 @@
                     </template>
                   </div>
                 </div>
-            </div>
-            <div class="form-item flex_left" v-else>
-              <div class="title-cell">领券客户<span class="ml3 vertical color-red">*</span></div>
-              <div class="input-cell" @click="clickUser()">
-                <div v-if="selectedUser && selectedUser.uid" class="flex_left">
-                  <img :src="selectedUser.avatar" class="mr5" style="width:50px;height:50px;border-radius:50%;" />
-                  <span>{{selectedUser.linkman}}</span>
-                </div>
-                <div v-else class="btn-select">选择领券客户</div>
-              </div>
             </div>
             <div class="form-item flex_left">
                 <div class="title-cell">开始时间<span class="ml3 vertical color-red">*</span></div>
@@ -143,7 +119,7 @@
                 </div>
                 <div>天</div>
             </div>
-            <div class="form-item flex_left" v-if="cardType == 1">
+            <div class="form-item flex_left">
                 <div class="title-cell">发放数量<span class="ml3 vertical color-red">*</span></div>
                 <div class="input-cell">
                     <input v-model="submitData.totalcount" type="text" placeholder="发放数量">
@@ -166,35 +142,6 @@
         <div class="s-bottom bg-green flex_center color-white font16" @click="submitEvent">提交</div>
       </template>
     </template>
-    <div v-transfer-dom class="x-popup">
-      <popup v-model="showUserModal" height="100%" class="bg-white user-modal">
-        <div class="popup1">
-          <div class="pagetop flex_center b_bottom_after" style="font-size:16px;font-weight:bold;">选择客户</div>
-          <div class="pagemiddle" ref="scrollContainer"  @scroll="handleScroll('scrollContainer')">
-            <template v-if="disList">
-              <div v-if="!userData || !userData.length" class="flex_empty">暂无客户</div>
-              <div v-else class="scroll_list">
-                <label v-for="(item,index) in userData" :key="index" class="scroll_item" @click="clickUserItem(item, index)">
-                  <div class="pr10">
-                    <input type="radio" name="cuser" :checked="item.checked" />
-                  </div>
-                  <div class="pr10">
-                    <img class="avatar" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-                  </div>
-                  <div class="flex_cell flex_left">{{item.linkman}}</div>
-                </label>
-              </div>
-              <div class="load-end-area loading" v-if="isLoading"></div>
-              <div class="load-end-area done" v-else-if="isDone"></div>
-            </template>
-          </div>
-          <div class="pagebottom flex_center">
-            <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeUserModal">取消</div>
-            <div class="flex_cell h_100 flex_center bg-green color-white" @click="submitUser">提交</div>
-          </div>
-        </div>
-      </popup>
-    </div>
     <div v-transfer-dom class="x-popup">
       <popup v-model="showProductModal" height="100%" class="bg-white product-modal">
         <div class="popup1">
@@ -239,7 +186,6 @@ export default {
     return {
       query: {},
       loginUser: {},
-      cardType: 1, // 1 通用券，2 专属券
       submitData: {
         title: '',
         starttime: '',
@@ -258,7 +204,7 @@ export default {
       maxDay: 365,
       tagData: [],
       selectedIndex: 0,
-      submitData1: {
+      requiredData: {
         title: '',
         starttime: '',
         endtime: '',
@@ -268,46 +214,7 @@ export default {
         facemoney: '',
         content: ''
       },
-      requiredData1: {
-        title: '',
-        starttime: '',
-        endtime: '',
-        validday: '',
-        totalcount: '',
-        ordermoney: '',
-        facemoney: '',
-        content: ''
-      },
-      submitData2: {
-        title: '',
-        starttime: '',
-        endtime: '',
-        validday: '',
-        totalcount: '',
-        ordermoney: '',
-        facemoney: '',
-        content: ''
-      },
-      requiredData2: {
-        title: '',
-        starttime: '',
-        endtime: '',
-        validday: '',
-        ordermoney: '',
-        facemoney: '',
-        content: ''
-      },
-      selectedUser: null,
-      submitIng1: false,
-      showUserModal: false,
-      userData: [],
-      pagestart: 1,
       limit: 10,
-      isLoading: false,
-      disList: false,
-      isDone: false,
-      nextCursor: null,
-      pannelUser: null,
       selectedProduct: null,
       showProductModal: false,
       productData: [],
@@ -319,82 +226,6 @@ export default {
     }
   },
   methods: {
-    clickModel (val) {
-      this.cardType = parseInt(val)
-    },
-    clickUser () {
-      this.showUserModal = true
-      if (!this.userData.length) {
-        this.$vux.loading.show()
-        this.getUser()
-      }
-    },
-    closeUserModal () {
-      this.showUserModal = false
-    },
-    clickUserItem (item, index) {
-      this.pannelUser = item
-      if (this.$util.isIOS()) {
-        if (!item.checked) {
-          for (let i = 0; i < this.userData.length; i++) {
-            if (this.userData[i].checked) {
-              this.userData[i].checked = false
-              break
-            }
-          }
-          this.userData[index].checked = true
-        }
-      }
-    },
-    submitUser () {
-      // let cks = jQuery('.user-modal').find(".scroll_list input:checked")
-      // if (!cks.length) {
-      //   this.$vux.toast.text('请选择客户')
-      //   return false
-      // }
-      if (!this.pannelUser) {
-        this.$vux.toast.text('请选择客户')
-        return false
-      }
-      this.selectedUser = this.pannelUser
-      this.showUserModal = false
-    },
-    getUser () {
-      let params = {page: this.pagestart, limit: this.limit}
-      if (this.nextCursor) params.cursor = this.nextCursor
-      this.$http.get(`${ENV.BokaApi}/api/customer/getList`, {
-        params: params
-      }).then(res => {
-        this.$vux.loading.hide()
-        let data = res.data
-        this.$vux.loading.hide()
-        this.isLoading = false
-        let retdata = data.data ? data.data : data
-        for (let i = 0; i < retdata.length; i++) {
-          retdata[i].checked = false
-        }
-        this.userData = this.userData.concat(retdata)
-        if (data.next_cursor && data.next_cursor !== this.nextCursor) this.nextCursor = data.next_cursor
-        this.disList = true
-        if (retdata.length < this.limit) {
-          this.isDone = true
-        }
-      })
-    },
-    handleScroll (refname, index) {
-      const scrollarea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
-      this.$util.scrollEvent({
-        element: scrollarea,
-        callback: () => {
-          if (this.isLoading || this.isDone) return false
-          if (this.userData.length === this.pagestart * this.limit) {
-            this.pagestart++
-            this.isLoading = true
-            this.getUser()
-          }
-        }
-      })
-    },
     clickProduct () {
       this.showProductModal = true
       if (!this.productData.length) {
@@ -494,24 +325,11 @@ export default {
       this.selectdatetxt2 = ''
     },
     submitEvent () {
-      console.log('this.submitData')
-      console.log(this.submitData)
-      console.log(this.submitData1)
       if (this.submitIng) return false
       let ajaxUrl = `${ENV.BokaApi}/api/miniactivity/add`
-      let checkEmptyData = {...this.requiredData1}
-      let postData = {}
-      for (let key in this.submitData1) {
-        postData[key] = this.submitData[key]
-      }
-      if (this.cardType === 1) {
-        postData.type = 'cardcommon'
-      } else {
-        ajaxUrl = `${ENV.BokaApi}/api/card/giveCard`
-        checkEmptyData = {...this.requiredData2}
-      }
+      let postData = {...this.submitData, type: 'cardcommon'}
       let iscontinue = true
-      for (let key in checkEmptyData) {
+      for (let key in this.requiredData) {
         if (postData[key] === '') {
           this.$vux.toast.text('请完善内容')
           iscontinue = false
@@ -519,25 +337,17 @@ export default {
         }
       }
       if (!iscontinue) return false
-      if (this.cardType === 1) {
-        let cks = jQuery.find('.tag-container input[type=checkbox]:checked')
-        if (!cks.length) {
-          this.$vux.toast.text('请选择客户群体')
-          return false
-        }
-        let tagarr = []
-        for (let i = 0; i < cks.length; i++) {
-          let cur = cks[i]
-          tagarr.push(cur.value)
-        }
-        postData.corptag = tagarr.join(',')
-      } else {
-        if (!this.selectedUser || !this.selectedUser.uid) {
-          this.$vux.toast.text('请选择客户')
-          return false
-        }
-        postData.touid = this.selectedUser.uid
+      let cks = jQuery.find('.tag-container input[type=checkbox]:checked')
+      if (!cks.length) {
+        this.$vux.toast.text('请选择客户群体')
+        return false
       }
+      let tagarr = []
+      for (let i = 0; i < cks.length; i++) {
+        let cur = cks[i]
+        tagarr.push(cur.value)
+      }
+      postData.corptag = tagarr.join(',')
       let stime = new Date(postData.starttime).valueOf()
       let etime = new Date(postData.endtime).valueOf()
       if (stime > etime) {
@@ -549,14 +359,10 @@ export default {
         this.$vux.toast.text(`请输入正确的有效期，最多${this.maxDay}天`)
         return false
       }
-      if (this.cardType === 1) {
-        let totalcount = postData.totalcount
-        if (isNaN(totalcount) || parseInt(totalcount) < 0 || !(/(^[1-9]\d*$)/.test(totalcount))) {
-          this.$vux.toast.text('请输入正确的发放数量')
-          return false
-        }
-      } else {
-        postData.totalcount = 1
+      let totalcount = postData.totalcount
+      if (isNaN(totalcount) || parseInt(totalcount) < 0 || !(/(^[1-9]\d*$)/.test(totalcount))) {
+        this.$vux.toast.text('请输入正确的发放数量')
+        return false
       }
       let facemoney = postData.facemoney
       let ordermoney = postData.ordermoney
@@ -585,48 +391,6 @@ export default {
           }
         })
       })
-    },
-    submitEvent1 () {
-      if (this.submitIng1) return false
-      let postData = {...this.submitData1, type: 'cardcommon'}
-      let iscontinue = true
-      for (let key in this.requiredData) {
-        if (postData[key] === '') {
-          this.$vux.toast.text('请完善内容')
-          iscontinue = false
-          break
-        }
-      }
-      if (!iscontinue) return false
-      if (!this.selectedUser || !this.selectedUser.uid) {
-        this.$vux.toast.text('请选择客户')
-        return false
-      }
-      postData.uid = this.selectedUser.uid
-      let facemoney = postData.facemoney
-      let ordermoney = postData.ordermoney
-      if (parseFloat(facemoney) < 0.01 || parseFloat(ordermoney) < 0) {
-        this.$vux.toast.text('请输入正确的满减金额')
-        return false
-      }
-      // this.submitIng1 = true
-      // this.$vux.loading.show()
-      // this.$http.post(`${ENV.BokaApi}/api/miniactivity/add`, postData).then(res => {
-      //   this.$vux.loading.hide()
-      //   let data = res.data
-      //   this.$vux.toast.show({
-      //     text: data.msg,
-      //     type: (data.code === 0 ? 'success' : 'warn'),
-      //     time: this.$util.delay(data.msg),
-      //     onHide: () => {
-      //       if (data.code === 0) {
-      //         this.$router.push('/activityList?refresh=1')
-      //       } else {
-      //         this.submitIng1 = false
-      //       }
-      //     }
-      //   })
-      // })
     },
     getTags () {
       this.$http.get(`${ENV.BokaApi}/api/customer/getCorpTags`).then(res => {
@@ -662,19 +426,11 @@ export default {
         ordermoney: '',
         facemoney: ''
       }
-      this.cardType = 1
       this.visibility1 = false
       this.visibility2 = false
       this.selectdatetxt1 = '选择开始时间'
       this.selectdatetxt2 = '选择结束时间'
       this.submitIng = false
-      this.submitIng1 = false
-      this.disList = false
-      this.userData = []
-      this.pagestart = 1
-      this.isLoading = false
-      this.isDone = false
-      this.selectedUser = null
       this.disList1 = false
       this.productData = []
       this.productPage = 1

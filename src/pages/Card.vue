@@ -218,23 +218,26 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/card/getCard`, params).then(res => {
         const data = res.data
         this.$vux.loading.hide()
-        if (data.code === 0) {
-          let retdata = data.data
-          retdata.deadline_str = new Time(retdata.deadline * 1000).dateFormat('yyyy-MM-dd')
-          retdata.content = retdata.content.replace(/\n/g, '<br />')
-          this.ordermoney = retdata.ordermoney
-          this.facemoney = retdata.money
-          // this.showResultModal = true
-          this.showOpen = false
-          this.showResult = true
-          this.viewData = retdata
-        } else {
+        if (data.code !== 0) {
           this.$vux.toast.show({
             text: data.msg,
             type: 'text',
             time: this.$util.delay(data.msg)
           })
         }
+        let retdata = data.activity
+        if (retdata) {
+          retdata.deadline_str = new Time(retdata.deadline * 1000).dateFormat('yyyy-MM-dd')
+          retdata.content = retdata.content.replace(/\n/g, '<br />')
+          let discounttype = retdata.discounttype.split(',')
+          this.ordermoney = discounttype[0]
+          this.facemoney = discounttype[1]
+          this.showOpen = false
+          this.showResult = true
+          this.viewData = retdata
+        }
+      }, res => {
+        this.$vux.loading.hide()
       })
     },
     closeResultModal () {
