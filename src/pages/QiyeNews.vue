@@ -6,23 +6,6 @@
   .reading-info {padding: 20px 0;}
   .reading-info span + span {margin-left: 10px;}
   img {max-width: 100% !important;}
-  .qrcode-area{
-    margin-top:10px;display:flex;justify-content:flex-start;align-items: center;
-    .qrcode-inner{
-      max-width:600px;display:flex;justify-content: flex-start;align-items: center;
-      box-shadow: 0px 0px 3px 1px #e6ebed;border-radius: 5px;background-color:#fff;
-      padding:10px;box-sizing: border-box;
-    }
-    .txt-cell{
-      display:flex;justify-content: flex-start;align-items: center;
-      margin-right:10px;color: #659af2;flex:1;
-    }
-    .pic-cell{
-      display:flex;justify-content: flex-end;align-items: center;
-      max-width:50%;
-      img{display:block;max-width:300px;}
-    }
-  }
 }
 </style>
 <template>
@@ -68,22 +51,9 @@
           <div class="news-content" v-html="viewData.content"></div>
         </template>
       </template>
-      <div class="qrcode-area" v-if="afterLoad && showUser && showUser.uid">
-        <div class="qrcode-inner">
-          <div class="txt-cell">
-            <div class="flex_cell">
-              <div>1、享受新客户福利</div>
-              <div>2、专属客服的一对一VIP服务</div>
-              <div>3、{{sysParams.company_short}}优惠券</div>
-              <div>4、领取微信红包</div>
-              <div>5、随机打折券</div>
-            </div>
-          </div>
-          <div class="pic-cell">
-            <img :src="showUser.qrcode" />
-          </div>
-        </div>
-      </div>
+      <template v-if="afterLoad && showUser && showUser.uid">
+        <StaffQrcode :user.sync="showUser" :sysParams.sync="sysParams"></StaffQrcode>
+      </template>
       <div class="reading-info">
         <span class="font14 color-gray">阅读 {{viewData.views | readingCountFormat}}</span>
         <span class="font14 color-gray" @click="clickDig"><span :class="`digicon ${isdig ? 'diged' : ''}`"></span> {{viewData.dig}}</span>
@@ -99,10 +69,11 @@ import { Popup, TransferDom, Previewer } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 import { User, SystemParams } from '#/storage'
+import StaffQrcode from '@/components/StaffQrcode'
 
 export default {
   directives: { TransferDom },
-  components: { Popup, Previewer },
+  components: { Popup, Previewer, StaffQrcode },
   data () {
     return {
       module: 'news',

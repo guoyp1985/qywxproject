@@ -130,10 +130,6 @@
     }
     .btnknow{padding:3px 25px;border:1px solid #fff;color:#fff;margin: 0 auto;border-radius:20px;font-size:14px;margin-top: 20px;}
   }
-  .qrcode-area{
-    text-align:center;margin-top:5px;
-    img{display:block;margin:0 auto;width:80%;max-width:300px !important;}
-  }
 }
 .share-modal{
   background-color:rgba(0,0,0,0.7) !important;color:#fff;
@@ -244,9 +240,11 @@
         <div v-html="productdata.content"></div>
         <img v-for="(item,index) in previewerPhotoarr" :key="index" :src="item.src" @click="showBigimg(index)" />
       </div>
-      <div class="qrcode-area" v-if="afterLoad && showUser && showUser.uid">
-          <img :src="showUser.qrcode" />
-      </div>
+      <template v-if="afterLoad && showUser && showUser.uid">
+        <div style="padding:0 15px 10px;">
+          <StaffQrcode :user.sync="showUser" :sysParams.sync="sysParams"></StaffQrcode>
+        </div>
+      </template>
     </div>
 		<div class="pagebottom b_top_after">
 			<div class="t-table h_100">
@@ -337,14 +335,11 @@ import Time from '#/time'
 import jQuery from 'jquery'
 import ENV from 'env'
 import { User } from '#/storage'
+import StaffQrcode from '@/components/StaffQrcode'
 
 export default {
-  directives: {
-    TransferDom
-  },
-  components: {
-    Previewer, Swiper, SwiperItem, Popup, Marquee, MarqueeItem, XImg
-  },
+  directives: {TransferDom},
+  components: {Previewer, Swiper, SwiperItem, Popup, Marquee, MarqueeItem, XImg, StaffQrcode},
   filters: {
     dateformat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd')
