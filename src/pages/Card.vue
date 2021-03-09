@@ -69,6 +69,12 @@
   .ico .al{font-size:60px;color:rgba(255,255,255,0.9);}
   .txt{font-size:16px;text-shadow: -2px 0px 1px #000;padding:10px;box-sizing: border-box;text-align:center;}
 }
+.qrcode-modal{
+  background-color:rgba(0,0,0,0.7) !important;color:#fff;
+  .ico{text-align:right;padding:15px 40px;box-sizing: border-box;}
+  .ico .al{font-size:60px;color:rgba(255,255,255,0.9);}
+  .txt{font-size:16px;text-shadow: -2px 0px 1px #000;padding:10px;box-sizing: border-box;text-align:center;}
+}
 </style>
 <template>
   <div class="card-page">
@@ -168,6 +174,23 @@
         </div>
       </popup>
     </div>
+    <div v-transfer-dom class="x-popup">
+      <popup v-model="showKefuModal" height="100%" class="qrcode-modal">
+        <div class="popup1 h_100 flex_center">
+          <div class="modal-inner border-box" style="width:80%;">
+            <div class="padding20 flex_center">
+              <img mode="widthFix" class="kefu-pic" :src="kefuQrcode" />
+            </div>
+            <div class="padding10 flex_center">
+              <span class="color-gray">扫描二维码加客服微信</span>
+            </div>
+            <div class="close-area flex_center">
+              <div @click="closeKefuEvent" class="al al-close"></div>
+            </div>
+          </div>
+        </div>
+      </popup>
+    </div>
   </div>
 </template>
 
@@ -201,10 +224,15 @@ export default {
       shareWid: 0,
       afterLoad: false,
       isPC: false,
-      isQywx: false
+      isQywx: false,
+      kefuQrcode: '',
+      showKefuModal: false
     }
   },
   methods: {
+    closeKefuEvent () {
+      this.showKefuModal = false
+    },
     clickShare () {
       this.showShareModal = true
     },
@@ -213,7 +241,7 @@ export default {
     },
     openEvent () {
       this.$vux.loading.show()
-      let params = {type: this.query.type}
+      let params = {type: this.query.type, wid: this.shareWid}
       if (this.query.id) params.id = this.query.id
       this.$http.post(`${ENV.BokaApi}/api/card/getCard`, params).then(res => {
         const data = res.data
@@ -224,6 +252,10 @@ export default {
             type: 'text',
             time: this.$util.delay(data.msg)
           })
+        }
+        if (data.code === 2 && data.qrcode !== '') {
+          this.kefuQrcode = data.qrcode
+          this.showKefuModal = true
         }
         let retdata = data.activity
         if (retdata) {
@@ -260,7 +292,7 @@ export default {
       }
     },
     getData () {
-      const infoparams = {id: this.query.id, module: 'miniactivity', addviews: 1}
+      let infoparams = {id: this.query.id, module: 'miniactivity', addviews: 1}
       if (this.query['share_uid']) {
         infoparams['share_uid'] = this.query.share_uid
       }
