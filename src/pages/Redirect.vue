@@ -38,7 +38,16 @@ export default {
       console.log('state=', lUrl.query.state)
       if (code) {
         let urlQuery = lUrl.query
-        let jumpUrl = decodeURIComponent(urlQuery.state)
+        let urlState = urlQuery.state
+        console.log(urlState)
+        if (urlState) {
+          console.log('in replace ===============')
+          urlState = urlState.replace(/\?clear=1/g, '')
+          urlState = urlState.replace(/&clear=1/g, '')
+          urlState = urlState.replace(/clear=1/g, '')
+        }
+        let jumpUrl = decodeURIComponent(urlState)
+        console.log(jumpUrl)
         if (!urlQuery.state) jumpUrl = '/'
         for (let key in urlQuery) {
           if (key !== 'code' && key !== 'state' && key !== 'appid' && key !== 'clear') {
