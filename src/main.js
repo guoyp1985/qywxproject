@@ -287,10 +287,7 @@ const access = success => {
 }
 
 const clearCache = () => {
-  console.log('ENV.Version=', ENV.Version)
-  console.log('Version.get()=', Version.get())
-  console.log(ENV.Version !== Version.get())
-  if (ENV.Version !== Version.get()) {
+  if (ENV.Version !== Version.get() || location.href.indexOf('clear=1') > -1) {
     console.log('清理了缓存')
     Token.remove()
     User.remove()
