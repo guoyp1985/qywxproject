@@ -1,15 +1,26 @@
 
 <style lang="less">
+.qiye-news.havebottom{position:absolute;left:0;top:0;right:0;bottom:50px;}
 .qiye-news{
+  width:100%;height:100%;
   .news-view {padding: 10px 15px;background: #ffffff;}
   .news-info {padding: 10px 0;}
   .reading-info {padding: 20px 0;}
   .reading-info span + span {margin-left: 10px;}
   img {max-width: 100% !important;}
+  .nav-bottom{
+    position:absolute;left:0;bottom:0;right:0;height:50px;border-top:#fff 1px solid;
+    box-shadow: 0px 0px 10px 0px #eee;border-top:1rpx solid #eee;box-sizing: border-box;
+    width:100%;display:flex;
+    .item{flex:1;height:100%;height:100%;}
+    .inner{height:100%;display:flex;justify-content:center;align-items:center;}
+    .item .al{color:#ea3a3a;font-size:20px;}
+    .al.share{font-size:17px;}
+  }
 }
 </style>
 <template>
-  <div class="containerarea bg-white qiye-news">
+  <div :class="`bg-white qiye-news ${isQywx ? 'havebottom' : ''}`">
     <div class="news-view">
       <div class="news-title">
         <h2>{{viewData.title}}</h2>
@@ -58,9 +69,19 @@
         <span class="font14 color-gray">阅读 {{viewData.views | readingCountFormat}}</span>
         <span class="font14 color-gray" @click="clickDig"><span :class="`digicon ${isdig ? 'diged' : ''}`"></span> {{viewData.dig}}</span>
       </div>
-      <div class="mt10 flex_center" v-if="isQywx">
-        <div class="flex_center font12" style="width:100px;height:25px;background-color:#659af2;color:#fff;border-radius:60px;" @click="toShare">分享给客户</div>
-        <div class="flex_center font12 ml10" style="width:100px;height:25px;background-color:#659af2;color:#fff;border-radius:60px;" @click="toShareGroup">分享到客户群</div>
+    </div>
+    <div class="nav-bottom" v-if="isQywx">
+      <div class="item b_right_after" @click="toShare">
+        <div class="inner">
+          <div class="al al-fenxiang1 share" open-type="share"></div>
+          <div class="font12 ml5">分享给客户</div>
+        </div>
+      </div>
+      <div class="item" @click="toShareGroup">
+        <div class="inner">
+          <div class="al al-fenxiang1 share"></div>
+          <div class="font12 ml5">分享到客户群</div>
+        </div>
       </div>
     </div>
     <div v-transfer-dom>

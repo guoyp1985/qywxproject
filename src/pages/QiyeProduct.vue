@@ -130,6 +130,14 @@
     }
     .btnknow{padding:3px 25px;border:1px solid #fff;color:#fff;margin: 0 auto;border-radius:20px;font-size:14px;margin-top: 20px;}
   }
+  .nav-bottom{
+    position:absolute;left:0;bottom:0;right:0;height:50px;border-top:#fff 1px solid;
+    box-shadow: 0px 0px 10px 0px #eee;border-top:1rpx solid #eee;box-sizing: border-box;
+    width:100%;display:flex;
+    .item{flex:1;height:100%;height:100%;}
+    .inner{height:100%;display:flex;justify-content:center;align-items:center;}
+    .item .al{color:#ea3a3a;font-size:20px;}
+  }
 }
 .share-modal{
   background-color:rgba(0,0,0,0.7) !important;color:#fff;
@@ -245,25 +253,32 @@
           <StaffQrcode :user.sync="showUser" :sysParams.sync="sysParams"></StaffQrcode>
         </div>
       </template>
-      <div class="pt10 pb10 flex_center" v-if="isQywx">
-        <div class="flex_center font12" style="width:100px;height:25px;background-color:#659af2;color:#fff;border-radius:60px;" @click="toShare">分享给客户</div>
-        <div class="flex_center font12 ml10" style="width:100px;height:25px;background-color:#659af2;color:#fff;border-radius:60px;" @click="toShareGroup">分享到客户群</div>
+    </div>
+    <div v-if="isQywx" class="nav-bottom">
+      <div class="item b_right_after font12 flex_center" @click="clickShare">
+        <div class="font12">分享赚 <span style="color:#ea3a3a;font-size:16px;">{{productdata.salesrebate}}</span></div>
+      </div>
+      <div class="item b_right_after" @click="toShare">
+        <div class="inner">
+          <div class="al al-fenxiang1 share" open-type="share"></div>
+          <div class="font12 ml5">分享给客户</div>
+        </div>
+      </div>
+      <div class="item" @click="toShareGroup">
+        <div class="inner">
+          <div class="al al-fenxiang1 share"></div>
+          <div class="font12 ml5">分享到客户群</div>
+        </div>
       </div>
     </div>
-		<div class="pagebottom b_top_after">
+		<div v-else class="pagebottom b_top_after flex_center">
 			<div class="t-table h_100">
         <router-link class="t-cell h_100 v_middle align_center center-cell" to="/center">
           <div><i class="al al-peoplefill font18 color-red"></i></div>
           <div class="font12">个人中心</div>
         </router-link>
         <div v-if="productdata.storage <= 0" class="t-cell color-white h_100 v_middle align_center bg-gray">已售罄</div>
-        <template v-else>
-  				<div v-if="query && query.share_uid" class="t-cell color-white h_100 v_middle align_center bg-red2">立即购买</div>
-  				<div v-else class="t-cell color-white h_100 v_middle align_center bg-red2" @click="clickShare">分享赚 {{productdata.salesrebate}}</div>
-        </template>
-        <!--
 				<div v-else class="t-cell color-white h_100 v_middle align_center bg-red2" @click="buyevent">立即购买</div>
-      -->
 			</div>
 		</div>
     <div v-transfer-dom>
