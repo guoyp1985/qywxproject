@@ -245,9 +245,9 @@
           <StaffQrcode :user.sync="showUser" :sysParams.sync="sysParams"></StaffQrcode>
         </div>
       </template>
-      <div class="mt10 flex_center" v-if="isQywx">
+      <div class="pt10 pb10 flex_center" v-if="isQywx">
         <div class="flex_center font12" style="width:100px;height:25px;background-color:#659af2;color:#fff;border-radius:60px;" @click="toShare">分享给客户</div>
-        <div class="flex_center font12 ml10" style="width:100px;height:25px;background-color:#659af2;color:#fff;border-radius:60px;" @click="toShare">分享到客户群</div>
+        <div class="flex_center font12 ml10" style="width:100px;height:25px;background-color:#659af2;color:#fff;border-radius:60px;" @click="toShareGroup">分享到客户群</div>
       </div>
     </div>
 		<div class="pagebottom b_top_after">
@@ -422,7 +422,7 @@ export default {
   },
   methods: {
     toShare () {
-      wx.invoke('shareToExternalChat', {
+      wx.invoke('shareToExternalContact', {
         title: this.viewData.title,
         desc: this.viewData.summary,
         link: this.shareParams.shareLink,
@@ -432,7 +432,7 @@ export default {
       })
     },
     toShareGroup () {
-      wx.invoke('shareToExternalContact', {
+      wx.invoke('shareToExternalChat', {
         title: this.viewData.title,
         desc: this.viewData.summary,
         link: this.shareParams.shareLink,

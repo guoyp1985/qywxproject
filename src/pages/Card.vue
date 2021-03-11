@@ -99,7 +99,7 @@
         </div>
         <div class="mt10 flex_center">
           <div class="flex_center font12" style="width:100px;height:25px;color:#fff;" @click="toShare">分享给客户</div>
-          <div class="flex_center font12 ml10" style="width:100px;height:25px;color:#fff;" @click="toShare">分享到客户群</div>
+          <div class="flex_center font12 ml10" style="width:100px;height:25px;color:#fff;" @click="toShareGroup">分享到客户群</div>
         </div>
         <div v-if="viewData && viewData.id" class="txt-area">
           <div class="db-flex">
@@ -235,21 +235,21 @@ export default {
   },
   methods: {
     toShare () {
-      wx.invoke('shareToExternalChat', {
-        title: this.viewData.push_title,
-        desc: this.viewData.push_desc,
-        link: this.shareParams.link,
-        imgUrl: this.viewData.photo,
+      wx.invoke('shareToExternalContact', {
+        title: this.viewData.title,
+        desc: this.viewData.summary,
+        link: this.shareParams.shareLink,
+        imgUrl: this.viewData.photo.split(',')[0],
         success: function (res) {
         }
       })
     },
     toShareGroup () {
-      wx.invoke('shareToExternalContact', {
-        title: this.viewData.push_title,
-        desc: this.viewData.push_desc,
-        link: this.shareParams.link,
-        imgUrl: this.viewData.photo,
+      wx.invoke('shareToExternalChat', {
+        title: this.viewData.title,
+        desc: this.viewData.summary,
+        link: this.shareParams.shareLink,
+        imgUrl: this.viewData.photo.split(',')[0],
         success: function (res) {
         }
       })
@@ -313,6 +313,21 @@ export default {
       if (this.query.share_uid) {
         this.shareParams.link = `${this.shareParams.link}&lastshareuid=${this.query.share_uid}`
         this.shareParams.lastshareuid = this.query.share_uid
+      }
+      if (!this.viewData.push_title || this.viewData.push_title === '') {
+        this.shareParams.title = this.viewData.title
+      }
+      if (!this.viewData.photo || this.viewData.photo === '') {
+        this.shareParams.photo = 'https://tossharingsales.boka.cn/month_202102/16137146626061.jpeg'
+      }
+      if (!this.viewData.push_desc || this.viewData.push_desc === '') {
+        if (!this.query.id) {
+          this.shareParams.desc = '送你一张优惠券'
+        } else {
+          let shareStartTime = new Time(this.viewData.starttime * 1000).dateFormat('MM-dd')
+          let shareEndTime = new Time(this.viewData.endtime * 1000).dateFormat('MM-dd')
+          this.shareParams.desc = `活动日期${shareStartTime}至${shareEndTime}`
+        }
       }
       this.$util.handleWxShare(this.shareParams)
     },
