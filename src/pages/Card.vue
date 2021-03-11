@@ -281,23 +281,31 @@ export default {
       if (this.query.type) shareLink = `${shareLink}&type=${this.query.type}`
       if (this.shareWid && this.shareWid !== '') shareLink = `${shareLink}&wid=${this.shareWid}`
       this.shareParams = {
-        title: '优惠券',
-        desc: '送你一张优惠券',
-        photo: 'https://tossharingsales.boka.cn/month_202102/16137146626061.jpeg',
+        title: this.viewData.push_title,
+        desc: this.viewData.push_desc,
+        photo: this.viewData.photo,
         link: shareLink
       }
       if (this.query.share_uid) {
         this.shareParams.link = `${this.shareParams.link}&lastshareuid=${this.query.share_uid}`
         this.shareParams.lastshareuid = this.query.share_uid
       }
+      this.$util.handleWxShare(this.shareParams)
     },
     getData () {
+      let ajaxUrl = `${ENV.BokaApi}/api/content/info`
       let infoparams = {id: this.query.id, module: 'miniactivity', addviews: 1}
+      if (this.query.id) {
+        infoparams.id = this.query.id
+      } else if (this.query.type) {
+        infoparams.type = this.query.type
+        ajaxUrl = `${ENV.BokaApi}/api/miniactivity/info`
+      }
       if (this.query['share_uid']) {
         infoparams['share_uid'] = this.query.share_uid
       }
       this.$vux.loading.show()
-      this.$http.post(`${ENV.BokaApi}/api/content/info`, infoparams) // 获取文章
+      this.$http.post(ajaxUrl, infoparams) // 获取文章
       .then(res => {
         const data = res.data
         this.$vux.loading.hide()
@@ -312,16 +320,12 @@ export default {
           }
           this.viewData = retdata
           document.title = this.viewData.title
-          if (this.viewData.type === 'cardcommon') {
+          if (this.query.type) {
             let cmoney = this.viewData.discounttype.split(',')
             this.ordermoney = cmoney[0]
             this.facemoney = cmoney[1]
           }
-          this.shareParams.title = this.viewData.title
-          let shareStartTime = new Time(this.viewData.starttime * 1000).dateFormat('MM-dd')
-          let shareEndTime = new Time(this.viewData.endtime * 1000).dateFormat('MM-dd')
-          this.shareParams.desc = `有效期${shareStartTime}至${shareEndTime}`
-          this.$util.handleWxShare(this.shareParams)
+          this.handleShare()
         }
       })
     },
@@ -356,15 +360,7 @@ export default {
           this.shareWid = this.loginUser.ownid
         }
       }
-      this.handleShare()
-      if (!this.query.id) {
-        if (this.query.type && this.cardObject[this.query.type]) {
-          this.shareParams.title = this.cardObject[this.query.type]
-        }
-        this.$util.handleWxShare(this.shareParams)
-      } else {
-        this.getData()
-      }
+      this.getData()
     }
   },
   created () {

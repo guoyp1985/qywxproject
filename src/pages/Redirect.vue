@@ -42,9 +42,9 @@ export default {
         console.log(urlState)
         if (urlState) {
           console.log('in replace ===============')
-          urlState = urlState.replace(/\?clear=1/g, '')
-          urlState = urlState.replace(/&clear=1/g, '')
-          urlState = urlState.replace(/clear=1/g, '')
+          urlState = urlState.replace('?clear=1', '')
+          urlState = urlState.replace('&clear=1', '')
+          urlState = urlState.replace('clear=1', '')
         }
         let jumpUrl = decodeURIComponent(urlState)
         console.log(jumpUrl)
@@ -60,6 +60,7 @@ export default {
             jumpUrl = `${jumpUrl}${key}=${curVal}`
           }
         }
+        if (jumpUrl === '') jumpUrl = '/'
         this.$http.get(`${ENV.BokaApi}/api/visitor/workUserAuth/${code}`).then(res => {
           console.log('redirect页面workUserAuth', res)
           if (!res || !res.data || res.data.errcode || res.data.code !== 0) {
