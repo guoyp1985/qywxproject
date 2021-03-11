@@ -58,6 +58,10 @@
         <span class="font14 color-gray">阅读 {{viewData.views | readingCountFormat}}</span>
         <span class="font14 color-gray" @click="clickDig"><span :class="`digicon ${isdig ? 'diged' : ''}`"></span> {{viewData.dig}}</span>
       </div>
+      <div class="mt10 flex_center" v-if="isQywx">
+        <div class="flex_center font12" style="width:100px;height:25px;background-color:#659af2;color:#fff;border-radius:60px;" @click="toShare">分享给客户</div>
+        <div class="flex_center font12 ml10" style="width:100px;height:25px;background-color:#659af2;color:#fff;border-radius:60px;" @click="toShare">分享到客户群</div>
+      </div>
     </div>
     <div v-transfer-dom>
       <previewer :list="previewerPhotoarr" ref="previewer"></previewer>
@@ -89,7 +93,8 @@ export default {
       shareWid: 0,
       afterLoad: false,
       isPC: false,
-      isQywx: false
+      isQywx: false,
+      shareParams: {}
     }
   },
   filters: {
@@ -106,6 +111,26 @@ export default {
     }
   },
   methods: {
+    toShare () {
+      wx.invoke('shareToExternalChat', {
+        title: this.viewData.title,
+        desc: this.viewData.summary,
+        link: this.shareParams.shareLink,
+        imgUrl: this.viewData.photo.split(',')[0],
+        success: function (res) {
+        }
+      })
+    },
+    toShareGroup () {
+      wx.invoke('shareToExternalContact', {
+        title: this.viewData.title,
+        desc: this.viewData.summary,
+        link: this.shareParams.shareLink,
+        imgUrl: this.viewData.photo.split(',')[0],
+        success: function (res) {
+        }
+      })
+    },
     handleImg () {
       this.photoarr = []
       this.previewerPhotoarr = []
@@ -201,6 +226,7 @@ export default {
         shareParams.link = `${shareParams.link}&lastshareuid=${this.query.share_uid}`
         shareParams.lastshareuid = this.query.share_uid
       }
+      this.shareParams = shareParams
       this.$util.handleWxShare(shareParams)
     },
     getData () {

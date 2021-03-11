@@ -97,6 +97,10 @@
             </div>
           </div>
         </div>
+        <div class="mt10 flex_center">
+          <div class="flex_center font12" style="width:100px;height:25px;color:#fff;" @click="toShare">分享给客户</div>
+          <div class="flex_center font12 ml10" style="width:100px;height:25px;color:#fff;" @click="toShare">分享到客户群</div>
+        </div>
         <div v-if="viewData && viewData.id" class="txt-area">
           <div class="db-flex">
             <div class="txt">使用说明: </div>
@@ -230,6 +234,26 @@ export default {
     }
   },
   methods: {
+    toShare () {
+      wx.invoke('shareToExternalChat', {
+        title: this.viewData.push_title,
+        desc: this.viewData.push_desc,
+        link: this.shareParams.link,
+        imgUrl: this.viewData.photo,
+        success: function (res) {
+        }
+      })
+    },
+    toShareGroup () {
+      wx.invoke('shareToExternalContact', {
+        title: this.viewData.push_title,
+        desc: this.viewData.push_desc,
+        link: this.shareParams.link,
+        imgUrl: this.viewData.photo,
+        success: function (res) {
+        }
+      })
+    },
     closeKefuEvent () {
       this.showKefuModal = false
     },

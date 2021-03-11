@@ -245,6 +245,10 @@
           <StaffQrcode :user.sync="showUser" :sysParams.sync="sysParams"></StaffQrcode>
         </div>
       </template>
+      <div class="mt10 flex_center" v-if="isQywx">
+        <div class="flex_center font12" style="width:100px;height:25px;background-color:#659af2;color:#fff;border-radius:60px;" @click="toShare">分享给客户</div>
+        <div class="flex_center font12 ml10" style="width:100px;height:25px;background-color:#659af2;color:#fff;border-radius:60px;" @click="toShare">分享到客户群</div>
+      </div>
     </div>
 		<div class="pagebottom b_top_after">
 			<div class="t-table h_100">
@@ -375,7 +379,8 @@ export default {
       shareWid: 0,
       afterLoad: false,
       isPC: false,
-      isQywx: false
+      isQywx: false,
+      shareParams: {}
     }
   },
   watch: {
@@ -416,6 +421,26 @@ export default {
     }
   },
   methods: {
+    toShare () {
+      wx.invoke('shareToExternalChat', {
+        title: this.viewData.title,
+        desc: this.viewData.summary,
+        link: this.shareParams.shareLink,
+        imgUrl: this.viewData.photo.split(',')[0],
+        success: function (res) {
+        }
+      })
+    },
+    toShareGroup () {
+      wx.invoke('shareToExternalContact', {
+        title: this.viewData.title,
+        desc: this.viewData.summary,
+        link: this.shareParams.shareLink,
+        imgUrl: this.viewData.photo.split(',')[0],
+        success: function (res) {
+        }
+      })
+    },
     clickShare () {
       this.showShareModal = true
     },
@@ -589,6 +614,7 @@ export default {
         shareData.lastshareuid = this.query.share_uid
       }
       shareData.data = this.productdata
+      this.shareParams = shareData
       this.$util.handleWxShare(shareData)
     },
     cutdown (item, interval) {
