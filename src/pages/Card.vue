@@ -1,6 +1,10 @@
 <style lang="less">
+.card-page.havebottom{
+  .card-inner{position:absolute;left:0;right:0;bottom:50px;}
+}
 .card-page{
-  height:100%;background-color:#f94929;overflow-y:auto;
+  width:100%;height:100%;background-color:#f94929;
+  .card-inner{background-color:#f94929;overflow-y:auto;}
   .bg-image1{width:100%;}
   .row1{
     width:100%;
@@ -29,6 +33,15 @@
   .txt-area{
     padding:20px;box-sizing: border-box;color:#fff;
     .txt{width:75px;text-align:right;padding-right:5px;box-sizing: border-box;}
+  }
+  .nav-bottom{
+    position:absolute;left:0;bottom:0;right:0;height:50px;border-top:#fff 1px solid;
+    box-shadow: 0px 0px 10px 0px #eee;border-top:1rpx solid #eee;box-sizing: border-box;
+    width:100%;display:flex;z-index:10;
+    .item{flex:1;height:100%;height:100%;color:#fff;}
+    .inner{height:100%;display:flex;justify-content:center;align-items:center;}
+    .item .al{font-size:20px;}
+    .al.share{font-size:17px;}
   }
 }
 .card-result-modal{
@@ -77,67 +90,65 @@
 }
 </style>
 <template>
-  <div class="card-page">
-    <div class="row1">
-      <img src="https://tossharingsales.boka.cn/minigxk/luck/bg3.png" />
-    </div>
-    <div class="row2">
-      <img src="https://tossharingsales.boka.cn/minigxk/luck/bg2.png" />
-      <div v-if="showOpen" class="row2-inner">
-        <div class="w_100 flex_center">
-          <div class="pic-area">
-            <div class="pic">
-              <img src="https://tossharingsales.boka.cn/minigxk/luck/hb1.png" />
-              <div class="txt1">
-                <div class="inner">
-                  <div class="btn flex_center" @click="openEvent">開</div>
+  <div :class="`card-page ${!isQywx ? 'havebottom' : ''}`">
+    <div class="card-inner">
+      <div class="row1">
+        <img src="https://tossharingsales.boka.cn/minigxk/luck/bg3.png" />
+      </div>
+      <div class="row2">
+        <img src="https://tossharingsales.boka.cn/minigxk/luck/bg2.png" />
+        <div v-if="showOpen" class="row2-inner">
+          <div class="w_100 flex_center">
+            <div class="pic-area">
+              <div class="pic">
+                <img src="https://tossharingsales.boka.cn/minigxk/luck/hb1.png" />
+                <div class="txt1">
+                  <div class="inner">
+                    <div class="btn flex_center" @click="openEvent">開</div>
+                  </div>
                 </div>
+                <div class="txt2" @click="clickShare">立即分享</div>
               </div>
-              <div class="txt2" @click="clickShare">立即分享</div>
+            </div>
+          </div>
+          <div v-if="viewData && viewData.id" class="txt-area">
+            <div class="db-flex">
+              <div class="txt">使用说明: </div>
+              <div class="flex_cell" v-html="viewData.content"></div>
+            </div>
+            <div class="flex_left" v-if="viewData.starttime">
+              <div class="txt">有效期: </div>
+              <div class="flex_cell">{{viewData.starttime_str}} 至 {{viewData.endtime_str}}</div>
+            </div>
+            <div class="flex_left" v-else="viewData.deadline">
+              <div class="txt">有效期至: </div>
+              <div class="flex_cell">{{viewData.deadline_str}}</div>
             </div>
           </div>
         </div>
-        <div class="mt10 flex_center">
-          <div class="flex_center font12" style="width:100px;height:25px;color:#fff;" @click="toShare">分享给客户</div>
-          <div class="flex_center font12 ml10" style="width:100px;height:25px;color:#fff;" @click="toShareGroup">分享到客户群</div>
-        </div>
-        <div v-if="viewData && viewData.id" class="txt-area">
-          <div class="db-flex">
-            <div class="txt">使用说明: </div>
-            <div class="flex_cell" v-html="viewData.content"></div>
-          </div>
-          <div class="flex_left" v-if="viewData.starttime">
-            <div class="txt">有效期: </div>
-            <div class="flex_cell">{{viewData.starttime_str}} 至 {{viewData.endtime_str}}</div>
-          </div>
-          <div class="flex_left" v-else="viewData.deadline">
-            <div class="txt">有效期至: </div>
-            <div class="flex_cell">{{viewData.deadline_str}}</div>
-          </div>
-        </div>
-      </div>
-      <div v-if="showResult" class="row2-inner">
-        <div class="w_100 flex_center card-result-modal pb20">
-          <div class="inner">
-            <div class="pic-outer">
-              <div class="pic">
-                <img src="https://tossharingsales.boka.cn/minigxk/luck/hb2.png" />
-              </div>
-              <div class="top-txt flex_center">恭喜你获得<span class="big">{{cardObject[cardType] ? cardObject[cardType] : '优惠券'}}</span></div>
-              <div class="con-txt flex_center">
-                <div class="w_100 align_center">
-                  <div class="big">￥{{facemoney}}</div>
-                  <div>满{{ordermoney}}可用</div>
+        <div v-if="showResult" class="row2-inner">
+          <div class="w_100 flex_center card-result-modal pb20">
+            <div class="inner">
+              <div class="pic-outer">
+                <div class="pic">
+                  <img src="https://tossharingsales.boka.cn/minigxk/luck/hb2.png" />
                 </div>
-              </div>
-              <div class="desc-txt">
-                <div class="db-flex">
-                  <div class="txt">使用说明: </div>
-                  <div class="flex_cell" v-html="viewData.content">{{viewData.deadline_str}}</div>
+                <div class="top-txt flex_center">恭喜你获得<span class="big">{{cardObject[cardType] ? cardObject[cardType] : '优惠券'}}</span></div>
+                <div class="con-txt flex_center">
+                  <div class="w_100 align_center">
+                    <div class="big">￥{{facemoney}}</div>
+                    <div>满{{ordermoney}}可用</div>
+                  </div>
                 </div>
-                <div class="flex_left">
-                  <div class="txt">有效期至: </div>
-                  <div class="flex_cell">{{viewData.deadline_str}}</div>
+                <div class="desc-txt">
+                  <div class="db-flex">
+                    <div class="txt">使用说明: </div>
+                    <div class="flex_cell" v-html="viewData.content">{{viewData.deadline_str}}</div>
+                  </div>
+                  <div class="flex_left">
+                    <div class="txt">有效期至: </div>
+                    <div class="flex_cell">{{viewData.deadline_str}}</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -145,31 +156,20 @@
         </div>
       </div>
     </div>
-    <!--
-    <div v-transfer-dom class="x-popup">
-      <popup v-model="showResultModal" height="100%" class="card-result-modal">
-        <div class="popup1 h_100 flex_center">
-          <div class="inner">
-            <div class="pic-outer">
-              <div class="pic">
-                <img src="https://tossharingsales.boka.cn/minigxk/luck/hb2.png" />
-              </div>
-            </div>
-            <div class="top-txt flex_center">恭喜你获得<span class="big">{{cardObject[cardType] ? cardObject[cardType] : '优惠券'}}</span></div>
-            <div class="con-txt flex_center">
-              <div class="w_100 align_center">
-                <div class="big">￥{{facemoney}}</div>
-                <div>满{{ordermoney}}可用</div>
-              </div>
-            </div>
-            <div class="close-area flex_center">
-              <div class="al al-close" @click="closeResultModal"></div>
-            </div>
-          </div>
+    <div class="nav-bottom">
+      <div class="item b_right_after" @click="toShare">
+        <div class="inner">
+          <div class="al al-fenxiang1 share" open-type="share"></div>
+          <div class="font12 ml5">分享给客户</div>
         </div>
-      </popup>
+      </div>
+      <div class="item" @click="toShareGroup">
+        <div class="inner">
+          <div class="al al-fenxiang1 share"></div>
+          <div class="font12 ml5">分享到客户群</div>
+        </div>
+      </div>
     </div>
-  -->
     <div v-transfer-dom class="x-popup">
       <popup v-model="showShareModal" height="100%" class="share-modal">
         <div class="popup1 h_100" @click="clickShareModal">

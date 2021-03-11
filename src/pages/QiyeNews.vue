@@ -1,9 +1,13 @@
 
 <style lang="less">
-.qiye-news.havebottom{position:absolute;left:0;top:0;right:0;bottom:50px;}
+.qiye-news.havebottom{
+  .news-view{
+    position:absolute;left:0;top:0;right:0;bottom:50px;
+  }
+}
 .qiye-news{
   width:100%;height:100%;
-  .news-view {padding: 10px 15px;background: #ffffff;}
+  .news-view {padding: 10px 15px;background: #ffffff;box-sizing: border-box;}
   .news-info {padding: 10px 0;}
   .reading-info {padding: 20px 0;}
   .reading-info span + span {margin-left: 10px;}

@@ -34,6 +34,9 @@
   .btn-select{
     border:#ccc 1px solid;border-radius:5px;padding:5px 10px;
   }
+  .q_photolist{
+    .photoitem{width:90px;height:90px;}
+  }
 }
 .user-modal{
   .scroll_list{
@@ -137,6 +140,47 @@
                     <textarea v-model="submitData.content" placeholder="使用说明"></textarea>
                 </div>
             </div>
+            <div class="form-item flex_left">
+                <div class="title-cell">推送标题</div>
+                <div class="input-cell">
+                    <input v-model="submitData.push_title" type="text" placeholder="推送标题">
+                </div>
+            </div>
+            <div class="form-item flex_left">
+                <div class="title-cell">推送描述</div>
+                <div class="input-cell">
+                    <textarea v-model="submitData.push_desc" placeholder="使用说明"></textarea>
+                </div>
+            </div>
+            <div class="form-item flex_left">
+              <div class="title-cell">推送图片</div>
+              <div class="input-cell">
+                <form ref="fileForm" enctype="multipart/form-data">
+                  <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange('fileForm')" />
+                </form>
+                <div class="q_photolist align_left bg-white">
+                  <template v-if="pushPhoto && pushPhoto != ''">
+                    <div class="photoitem">
+                      <div class="inner photo imgcover">
+                        <img :src="pushPhoto" class="pic" @click="uploadPhoto('fileInput')" />
+                        <div class="close" @click="deletePhoto()">×</div>
+                      </div>
+                    </div>
+                  </template>
+                  <div v-else class="photoitem add" @click="uploadPhoto('fileInput')">
+                    <div class="inner">
+                      <div class="innerlist">
+                        <div class="flex_center h_100">
+                          <div class="txt">
+                            <i class="al al-zhaopian" style="color:#bbb;line-height:30px;"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="s-bottom bg-green flex_center color-white font16" @click="submitEvent">提交</div>
@@ -194,7 +238,9 @@ export default {
         totalcount: '',
         ordermoney: '',
         facemoney: '',
-        content: ''
+        content: '',
+        push_title: '',
+        push_desc: ''
       },
       visibility1: false,
       visibility2: false,
@@ -222,10 +268,54 @@ export default {
       isLoading1: false,
       disList1: false,
       isDone1: false,
-      pannelProduct: null
+      pannelProduct: null,
+      pushPhoto: ''
     }
   },
   methods: {
+    deletePhoto () {
+      this.pushPhoto = ''
+    },
+    photoCallback (data) {
+      if (data.code === 0) {
+        this.pushPhoto = data.data
+      } else if (data.error) {
+        this.$vux.toast.show({
+          text: data.msg,
+          time: this.$util.delay(data.msg)
+        })
+      }
+    },
+    uploadPhoto (refname) {
+      const _this = this
+      const fileInput = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      if (this.$util.isPC()) {
+        fileInput.click()
+      } else {
+        jweixin.ready(() => {
+          _this.$util.wxUploadImage({
+            maxnum: 1,
+            handleCallback: (data) => {
+              _this.photoCallback(data)
+            }
+          })
+        })
+      }
+    },
+    fileChange (refname) {
+      const target = event.target
+      const files = target.files
+      if (files.length > 0) {
+        let fileForm = target.parentNode
+        const filedata = new FormData(fileForm)
+        this.$vux.loading.show()
+        this.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(res => {
+          this.$vux.loading.hide()
+          let data = res.data
+          this.photoCallback(data)
+        })
+      }
+    },
     clickProduct () {
       this.showProductModal = true
       if (!this.productData.length) {
@@ -373,6 +463,7 @@ export default {
       if (this.selectedProduct) {
         postData.pid = this.selectedProduct.id
       }
+      postData.photo = this.pushPhoto
       this.submitIng = true
       this.$vux.loading.show()
       this.$http.post(ajaxUrl, postData).then(res => {
