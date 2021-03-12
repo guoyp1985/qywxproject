@@ -57,7 +57,7 @@
             <div class="ico-bg">
               <span class="al al-shangpin"></span>
             </div>
-            <div class="txt">产品</div>
+            <div class="txt">商品</div>
           </div>
         </router-link>
       </div>

@@ -23,7 +23,7 @@
             <div v-for="(item,index) in listData1" :key="index" class="scroll_item">
               <div class="flex_left">
                 <div class="pr10">
-                  <img class="avatar" :src="item.headimgurl" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                  <img class="avatar" :src="item.headimgurl" onerror="javascript:this.src='https://tosqy.boka.cn/images/user.jpg';" />
                 </div>
                 <div class="flex_cell flex_left">{{item.linkman}}</div>
                 <div class="flex_right pl10">
@@ -67,7 +67,7 @@
             <div v-for="(item,index) in listData2" :key="index" class="scroll_item">
               <div class="flex_left">
                 <div class="pr10">
-                  <img class="avatar" :src="item.headimgurl" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                  <img class="avatar" :src="item.headimgurl" onerror="javascript:this.src='https://tosqy.boka.cn/images/user.jpg';" />
                 </div>
                 <div class="flex_cell flex_left">{{item.linkman}}</div>
                 <div class="flex_right pl10">
@@ -111,7 +111,7 @@
             <div v-for="(item,index) in listData3" :key="index" class="scroll_item">
               <div class="flex_left">
                 <div class="pr10">
-                  <img class="avatar" :src="item.headimgurl" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                  <img class="avatar" :src="item.headimgurl" onerror="javascript:this.src='https://tosqy.boka.cn/images/user.jpg';" />
                 </div>
                 <div class="flex_cell flex_left">{{item.linkman}}</div>
                 <div class="flex_right pl10">
@@ -155,7 +155,7 @@
             <div v-for="(item,index) in listData4" :key="index" class="scroll_item">
               <div class="flex_left">
                 <div class="pr10">
-                  <img class="avatar" :src="item.headimgurl" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                  <img class="avatar" :src="item.headimgurl" onerror="javascript:this.src='https://tosqy.boka.cn/images/user.jpg';" />
                 </div>
                 <div class="flex_cell flex_left">{{item.linkman}}</div>
                 <div class="flex_right pl10">
@@ -199,7 +199,7 @@
             <div v-for="(item,index) in listData5" :key="index" class="scroll_item">
               <div class="flex_left">
                 <div class="pr10">
-                  <img class="avatar" :src="item.headimgurl" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                  <img class="avatar" :src="item.headimgurl" onerror="javascript:this.src='https://tosqy.boka.cn/images/user.jpg';" />
                 </div>
                 <div class="flex_cell flex_left">{{item.linkman}}</div>
                 <div class="flex_right pl10">

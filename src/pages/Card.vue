@@ -35,8 +35,7 @@
     .txt{width:75px;text-align:right;padding-right:5px;box-sizing: border-box;}
   }
   .nav-bottom{
-    position:absolute;left:0;bottom:0;right:0;height:50px;border-top:#fff 1px solid;
-    box-shadow: 0px 0px 10px 0px #eee;border-top:1rpx solid #eee;box-sizing: border-box;
+    position:absolute;left:0;bottom:0;right:0;height:50px;box-sizing: border-box;
     width:100%;display:flex;z-index:10;
     .item{flex:1;height:100%;height:100%;color:#fff;}
     .inner{height:100%;display:flex;justify-content:center;align-items:center;}
@@ -90,7 +89,7 @@
 }
 </style>
 <template>
-  <div :class="`card-page ${!isQywx ? 'havebottom' : ''}`">
+  <div :class="`card-page ${isQywx ? 'havebottom' : ''}`">
     <div class="card-inner">
       <div class="row1">
         <img src="https://tossharingsales.boka.cn/minigxk/luck/bg3.png" />
@@ -156,7 +155,7 @@
         </div>
       </div>
     </div>
-    <div class="nav-bottom">
+    <div class="nav-bottom b_top_after" v-if="isQywx">
       <div class="item b_right_after" @click="toShare">
         <div class="inner">
           <div class="al al-fenxiang1 share" open-type="share"></div>

@@ -131,9 +131,9 @@
     .btnknow{padding:3px 25px;border:1px solid #fff;color:#fff;margin: 0 auto;border-radius:20px;font-size:14px;margin-top: 20px;}
   }
   .nav-bottom{
-    position:absolute;left:0;bottom:0;right:0;height:50px;border-top:#fff 1px solid;
+    position:absolute;left:0;bottom:0;right:0;height:50px;
     box-shadow: 0px 0px 10px 0px #eee;border-top:1rpx solid #eee;box-sizing: border-box;
-    width:100%;display:flex;
+    width:100%;display:flex;z-index:10;
     .item{flex:1;height:100%;height:100%;}
     .inner{height:100%;display:flex;justify-content:center;align-items:center;}
     .item .al{color:#ea3a3a;font-size:20px;}
@@ -179,7 +179,7 @@
           :aspect-ratio="1/1"
           loop>
           <swiper-item v-for="(item,index) in photoarr" :key="item.id">
-            <img class="db imgcover w_100 h_100" :src="item" default-src="https://tossharingsales.boka.cn/images/nopic.jpg" @click="showBigimg1(index)" />
+            <img class="db imgcover w_100 h_100" :src="item" default-src="https://tosqy.boka.cn/images/nopic.jpg" @click="showBigimg1(index)" />
             <template v-if="index == 0 && productdata.video && productdata.video != ''">
               <div class="play-icon flex_center" @click="clickPlay('productVideo')">
                 <i class="al al-bofang"></i>
@@ -278,7 +278,21 @@
           <div class="font12">个人中心</div>
         </router-link>
         <div v-if="productdata.storage <= 0" class="t-cell color-white h_100 v_middle align_center bg-gray">已售罄</div>
-				<div v-else class="t-cell color-white h_100 v_middle align_center bg-red2" @click="buyevent">立即购买</div>
+				<div v-else class="t-cell color-white h_100 v_middle align_center bg-red2">立即购买
+          <!-- <template v-if="isWx">
+            <wx-open-launch-weapp
+              id="launch-btn2"
+              username="gh_b5532144f48c"
+              @launch="handleLaunchFn"
+              @error="handleErrorFn"
+              style="width:100%;display:block;">
+              <script type="text/wxtag-template">
+                <div style="width:100%;height:50px;color:#fff;background-color:#ff4a01;box-sizing:border-box;display:flex;justify-content:center;align-items:center;">立即购买</div>
+              </script>
+            </wx-open-launch-weapp>
+          </template>
+          <span v-else>立即购买</span> -->
+        </div>
 			</div>
 		</div>
     <div v-transfer-dom>
@@ -326,8 +340,22 @@
             </div>
             <div class="options-bottom flex_center">
               <div class="flex_cell h_100 flex_center">
-                <div v-if="query && query.share_uid" class="bg-theme color-white flex_center btn" @click="buyOption">立即购买</div>
-                <div v-else class="bg-theme color-white flex_center btn" @click="clickShare">分享赚 {{productdata.salesrebate}}</div>
+                <div v-if="isQywx" class="bg-theme color-white flex_center btn" @click="clickShare">分享赚 {{productdata.salesrebate}}</div>
+                <div v-else class="bg-theme color-white flex_center btn" @click="buyOption">立即购买
+                  <!-- <template v-if="isWx">
+                    <wx-open-launch-weapp
+                      id="launch-btn2"
+                      username="gh_b5532144f48c"
+                      @launch="handleLaunchFn"
+                      @error="handleErrorFn"
+                      style="width:100%;display:block;">
+                      <script type="text/wxtag-template">
+                        <div style="width:100%;height:50px;color:#fff;background-color:#ff4a01;box-sizing:border-box;display:flex;justify-content:center;align-items:center;">立即购买</div>
+                      </script>
+                    </wx-open-launch-weapp>
+                  </template>
+                  <span v-else>立即购买</span> -->
+                </div>
               </div>
             </div>
           </div>
@@ -395,6 +423,7 @@ export default {
       afterLoad: false,
       isPC: false,
       isQywx: false,
+      isWx: false,
       shareParams: {}
     }
   },
@@ -436,6 +465,12 @@ export default {
     }
   },
   methods: {
+    handleLaunchFn (e) {
+      console.log(e)
+    },
+    handleErrorFn (e) {
+      console.log('fail', e.detail)
+    },
     toShare () {
       wx.invoke('shareToExternalContact', {
         title: this.viewData.title,
@@ -747,6 +782,7 @@ export default {
       this.query = this.$route.query
       this.isPC = this.$util.isPC
       this.isQywx = this.$util.isQywx()
+      this.isWx = this.$util.isWx()
       this.afterLoad = true
       if (this.isQywx) {
         this.shareWid = this.loginUser.uid

@@ -12,7 +12,7 @@
       <template v-else>
         <div v-for="(item,index) in listData1" :key="index" class="scroll_item flex_left" @click="toDetail(item)">
           <div class="mr10">
-            <img :src="item.photo" style="width:90px;height:50px;object-fit:cover;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+            <img :src="item.photo" style="width:90px;height:50px;object-fit:cover;" onerror="javascript:this.src='https://tosqy.boka.cn/images/nopic.jpg';" />
           </div>
           <div class="flex_cell">
             <div class="clamp1">{{item.title}}</div>

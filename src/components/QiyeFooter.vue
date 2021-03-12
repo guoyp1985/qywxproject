@@ -34,7 +34,7 @@
         class="avatar"
         v-if="user && user.avatar && user.avatar != ''"
         :src="user.avatar"
-        onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" /> -->
+        onerror="javascript:this.src='https://tosqy.boka.cn/images/user.jpg';" /> -->
     </router-link>
   </div>
 </template>

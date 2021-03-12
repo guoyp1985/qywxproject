@@ -335,6 +335,7 @@ clearCache()
 try {
   // render()
   console.log('=========页面入口===========')
+  console.log(location.href)
   console.log('缓存里的token=', Token.get())
   console.log('token是否过期 ', Token.isExpired())
   console.log('缓存里的user=', User.get())

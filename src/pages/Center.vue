@@ -31,7 +31,7 @@
   <div class="bg-page center-page">
     <div class="page-inner" :style="`${afterLoad && loginUser && loginUser.uid && !isPC && !isQywx ? 'bottom:0;' : ''}`">
       <div class="top-box list-shadow02 flex_left">
-        <img class="avatar" :src="loginUser.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+        <img class="avatar" :src="loginUser.avatar" onerror="javascript:this.src='https://tosqy.boka.cn/images/user.jpg';" />
         <div class="txt">{{ loginUser.linkman }}</div>
       </div>
       <cuser :user.sync="loginUser"></cuser>
@@ -61,6 +61,12 @@ export default {
     }
   },
   methods: {
+    handleLaunchFn (e) {
+      console.log(e)
+    },
+    handleErrorFn (e) {
+      console.log('fail', e.detail)
+    },
     toAdmin () {
       location.href = `${ENV.AdminUrl}?username=${this.loginUser.username}`
     },

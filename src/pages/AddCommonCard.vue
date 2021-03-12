@@ -199,7 +199,7 @@
                     <input type="radio" name="cproduct" :checked="item.checked" />
                   </div>
                   <div class="pr10">
-                    <img class="pic" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+                    <img class="pic" :src="item.photo" onerror="javascript:this.src='https://tosqy.boka.cn/images/nopic.jpg';" />
                   </div>
                   <div class="flex_cell flex_left">{{item.title}}</div>
                 </label>
@@ -289,7 +289,7 @@ export default {
     uploadPhoto (refname) {
       const _this = this
       const fileInput = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
-      if (this.$util.isPC()) {
+      if (this.$util.isPC() || this.$util.isQywx()) {
         fileInput.click()
       } else {
         jweixin.ready(() => {

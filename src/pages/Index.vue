@@ -13,7 +13,7 @@
   <div class="bg-page center-page">
     <div class="page-inner" :style="`${afterLoad && loginUser && loginUser.uid && !isPC && !isQywx ? 'bottom:0;' : ''}`">
       <div class="top-box list-shadow02 flex_left">
-        <img class="avatar" :src="loginUser.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+        <img class="avatar" :src="loginUser.avatar" onerror="javascript:this.src='https://tosqy.boka.cn/images/user.jpg';" />
         <div class="txt">{{ loginUser.linkman }}</div>
       </div>
       <template v-if="afterLoad && loginUser && loginUser.uid">

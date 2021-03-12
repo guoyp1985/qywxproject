@@ -27,7 +27,8 @@ var ENV = {
     // {uid: 39854},
     // {uid: 25421},
     // {uid: 98466}
-  ]
+  ],
+  isKaifa: false
 }
 
 ENV.NoAccessUrls = [

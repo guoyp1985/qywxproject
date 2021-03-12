@@ -2,7 +2,7 @@
 <style lang="less">
 .qiye-news.havebottom{
   .news-view{
-    position:absolute;left:0;top:0;right:0;bottom:50px;
+    position:absolute;left:0;top:0;right:0;bottom:50px;overflow-y:auto;
   }
 }
 .qiye-news{
@@ -13,9 +13,9 @@
   .reading-info span + span {margin-left: 10px;}
   img {max-width: 100% !important;}
   .nav-bottom{
-    position:absolute;left:0;bottom:0;right:0;height:50px;border-top:#fff 1px solid;
+    position:absolute;left:0;bottom:0;right:0;height:50px;
     box-shadow: 0px 0px 10px 0px #eee;border-top:1rpx solid #eee;box-sizing: border-box;
-    width:100%;display:flex;
+    width:100%;display:flex;z-index:10;
     .item{flex:1;height:100%;height:100%;}
     .inner{height:100%;display:flex;justify-content:center;align-items:center;}
     .item .al{color:#ea3a3a;font-size:20px;}

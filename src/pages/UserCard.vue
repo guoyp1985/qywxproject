@@ -99,16 +99,26 @@
         <template v-if="disList2">
           <div v-if="!listData2 || !listData2.length" class="flex_empty">暂无数据</div>
           <div v-else class="scroll_list">
-            <div v-for="(item,index) in listData2" :key="index" class="scroll_item" @click="toDetail(item)">
-              <div class="pr10">
-                <span class="al al-youhuiquan"></span>
-              </div>
-              <div class="flex_cell flex_left">
-                <div>
-                  <div>满{{item.ordermoney}}减{{item.facemoney}}</div>
-                  <div class="color-gray font12">剩余数量: {{item.leftstorage}}</div>
-                  <div class="color-gray font12">有效期: {{item.starttime_str}}<span class="ml5 mr5">-</span>{{item.endtime_str}}</div>
+            <div v-for="(item,index) in listData2" :key="index" class="scroll_item grayitem">
+              <div class="flex_cell txt-cell" style="overflow:visible">
+                <div class="font20 txt">满{{item.ordermoney}}减{{item.money}}</div>
+                <div class="font12 w_100 flex_left">
+                  <template v-if="item.limitpid">
+                    <span class="w40">仅限【</span>
+                    <span :class="`clamp1 producttitle ${item.producttitle.length >= 10 ? 'w120' : ''}`">{{item.producttitle}}</span>
+                    <span class="w40">】使用</span>
+                  </template>
+                  <span v-else :class="`clamp1 producttitle ${item.producttitle.length >= 10 ? 'w120' : ''}`">{{item.producttitle}}</span>
                 </div>
+                <div class="font12">到期时间 {{item.deadline_str}}</div>
+                <div class="ball ball-up"></div>
+                <div class="ball ball-down"></div>
+              </div>
+              <div class="btn-cell flex_center" v-if="item.used">
+                <span class="al al-yishiyong1"></span>
+              </div>
+              <div class="flex_center" style="width:110px;" v-else-if="item.validate">
+                <span class="al al-yiguoqi" style="font-size:50px;"></span>
               </div>
             </div>
           </div>
@@ -149,8 +159,22 @@ export default {
     }
   },
   methods: {
-    toDetail (item) {
-      this.$router.push({path: '/card', query: {id: item.id, type: item.type}})
+    toUse (item) {
+      this.$vux.loading.show()
+      this.$http.get(`${ENV.BokaApi}/api/card/useCard`, {
+        params: {id: item.id}
+      }).then(res => {
+        let data = res.data
+        this.$vux.loading.hide()
+        this.$vux.toast.show({
+          text: data.msg,
+          type: 'text',
+          time: this.$util.delay(data.msg)
+        })
+        if (data.code === 0) {
+          this.refresh()
+        }
+      })
     },
     switchData () {
       switch (this.selectedIndex) {

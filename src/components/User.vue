@@ -57,6 +57,21 @@
       </div>
       <div class="txt-cell">后台管理</div>
     </div>
+    <div v-if="(user.uid == 159 || user.uid == 1) && showWebApp && isKaifa" class="item">
+      <wx-open-launch-weapp
+        id="launch-btn3"
+        username="gh_dc6e3c73bc4c"
+        @launch="handleLaunchFn"
+        @error="handleErrorFn"
+        style="width:100%;display:block;">
+        <script type="text/wxtag-template">
+          <div style="width:100%;height:39px;padding:0 12px;box-sizing:border-box;display:flex;justify-content:flex-left;">
+            <div style="color:#666;height:39px;flex:1;display:flex;justify-content:flex-start;align-items:center;">跳转小程序</div>
+            <div style="color:#ff712f;flex:1;display:flex;justify-content:flex-end;align-items:center;">灰太狼</div>
+          </div>
+        </script>
+      </wx-open-launch-weapp>
+    </div>
   </div>
 </template>
 
@@ -72,18 +87,25 @@ export default {
   },
   data () {
     return {
-      showModal: false
+      showWebApp: false,
+      isKaifa: ENV.isKaifa
     }
   },
   methods: {
+    handleLaunchFn (e) {
+      console.log(e)
+    },
+    handleErrorFn (e) {
+      console.log('fail', e.detail)
+    },
     toAdmin () {
       location.href = `${ENV.AdminUrl}?username=${this.user.username}`
-    },
-    clickKefu () {
-      this.showModal = true
-    },
-    closeEvent () {
-      this.showModal = false
+    }
+  },
+  created () {
+    console.log('=========进入到了user页面的created方法')
+    if ((this.user.uid === 1 || this.user.uid === 159) && this.isKaifa) {
+      this.showWebApp = true
     }
   }
 }
