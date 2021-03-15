@@ -266,6 +266,7 @@ export default {
       this.$vux.loading.show()
       let params = {type: this.query.type, wid: this.shareWid}
       if (this.query.id) params.id = this.query.id
+      if (this.query.customeruid) params.customeruid = this.query.customeruid
       this.$http.post(`${ENV.BokaApi}/api/card/getCard`, params).then(res => {
         const data = res.data
         this.$vux.loading.hide()

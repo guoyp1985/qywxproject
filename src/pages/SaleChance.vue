@@ -20,41 +20,16 @@
         <template v-if="disList1">
           <div v-if="!listData1 || !listData1.length" class="flex_empty">暂无数据</div>
           <div v-else class="scroll_list">
-            <div v-for="(item,index) in listData1" :key="index" class="scroll_item">
-              <div class="flex_left">
-                <div class="pr10">
-                  <img class="avatar" :src="item.headimgurl" onerror="javascript:this.src='https://tosqy.boka.cn/images/user.jpg';" />
-                </div>
-                <div class="flex_cell flex_left">{{item.linkman}}</div>
-                <div class="flex_right pl10">
-                  <div class="btn" @click="expandEvent(item)">
-                    <span class="al al-asmkticon0165"></span>
-                  </div>
-                </div>
-              </div>
-              <div v-if="item.checked">
-                <div class="info-area w_100 font14 color-gray b_bottom_after">
-                  <div class="txt-item" @click="btnDetail(index)">性别: {{item.sexname}}</div>
-                  <div class="txt-item db-flex" v-if="item.mobile && item.mobile != ''" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font16"></span></div></div>
-                  <div class="txt-item" @click="btnDetail(index)">地区: {{ item.country }} {{ item.province }} {{ item.city }}</div>
-                  <div class="txt-item flex_left" @click="clickYingxiangli">影响力:
-                    <span class="color-red4">{{item.yingxiangli}}</span>
-                    <span class="al al-wenhao font20 ml5"></span>
-                  </div>
-                  <div class="txt-item">推荐人: {{item.recommendname}}</div>
-                  <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.customertype}}</div>
-                  <div class="txt-item">获客时间: {{item.dateline_str}}</div>
-                </div>
-                <div class="flex_center bg-white h40">
-                  <div class="t-table align_center color-gray2 font14 color-gray2">
-                    <div class="t-cell v_middle b_right_after">
-                      <div>联系TA</div>
-                    </div>
-                    <div class="t-cell v_middle" @click="toView(item)">更多</div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <customer-item
+              v-for="(item,index) in listData1"
+              :key="index"
+              :item.sync="item"
+              :index.sync="index"
+              :user.sync="loginUser"
+              :tabIndex = "0"
+              @expand-event="expandEvent"
+              @yxl-event="clickYingxiangli">
+            </customer-item>
           </div>
           <div class="load-end-area loading" v-if="isLoading1"></div>
           <div class="load-end-area done" v-else-if="isDone1"></div>
@@ -64,41 +39,16 @@
         <template v-if="disList2">
           <div v-if="!listData2 || !listData2.length" class="flex_empty">暂无数据</div>
           <div v-else class="scroll_list">
-            <div v-for="(item,index) in listData2" :key="index" class="scroll_item">
-              <div class="flex_left">
-                <div class="pr10">
-                  <img class="avatar" :src="item.headimgurl" onerror="javascript:this.src='https://tosqy.boka.cn/images/user.jpg';" />
-                </div>
-                <div class="flex_cell flex_left">{{item.linkman}}</div>
-                <div class="flex_right pl10">
-                  <div class="btn" @click="expandEvent(item)">
-                    <span class="al al-asmkticon0165"></span>
-                  </div>
-                </div>
-              </div>
-              <div v-if="item.checked">
-                <div class="info-area w_100 font14 color-gray b_bottom_after">
-                  <div class="txt-item" @click="btnDetail(index)">性别: {{item.sexname}}</div>
-                  <div class="txt-item db-flex" v-if="item.mobile && item.mobile != ''" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font16"></span></div></div>
-                  <div class="txt-item" @click="btnDetail(index)">地区: {{ item.country }} {{ item.province }} {{ item.city }}</div>
-                  <div class="txt-item flex_left" @click="clickYingxiangli">影响力:
-                    <span class="color-red4">{{item.yingxiangli}}</span>
-                    <span class="al al-wenhao font20 ml5"></span>
-                  </div>
-                  <div class="txt-item">推荐人: {{item.recommendname}}</div>
-                  <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.customertype}}</div>
-                  <div class="txt-item">获客时间: {{item.dateline_str}}</div>
-                </div>
-                <div class="flex_center bg-white h40">
-                  <div class="t-table align_center color-gray2 font14 color-gray2">
-                    <div class="t-cell v_middle b_right_after">
-                      <div>联系TA</div>
-                    </div>
-                    <div class="t-cell v_middle" @click="toView(item)">更多</div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <customer-item
+              v-for="(item,index) in listData2"
+              :key="index"
+              :item.sync="item"
+              :index.sync="index"
+              :user.sync="loginUser"
+              :tabIndex = "1"
+              @expand-event="expandEvent"
+              @yxl-event="clickYingxiangli">
+            </customer-item>
           </div>
           <div class="load-end-area loading" v-if="isLoading2"></div>
           <div class="load-end-area done" v-else-if="isDone2"></div>
@@ -108,41 +58,16 @@
         <template v-if="disList3">
           <div v-if="!listData3 || !listData3.length" class="flex_empty">暂无数据</div>
           <div v-else class="scroll_list">
-            <div v-for="(item,index) in listData3" :key="index" class="scroll_item">
-              <div class="flex_left">
-                <div class="pr10">
-                  <img class="avatar" :src="item.headimgurl" onerror="javascript:this.src='https://tosqy.boka.cn/images/user.jpg';" />
-                </div>
-                <div class="flex_cell flex_left">{{item.linkman}}</div>
-                <div class="flex_right pl10">
-                  <div class="btn" @click="expandEvent(item)">
-                    <span class="al al-asmkticon0165"></span>
-                  </div>
-                </div>
-              </div>
-              <div v-if="item.checked">
-                <div class="info-area w_100 font14 color-gray b_bottom_after">
-                  <div class="txt-item" @click="btnDetail(index)">性别: {{item.sexname}}</div>
-                  <div class="txt-item db-flex" v-if="item.mobile && item.mobile != ''" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font16"></span></div></div>
-                  <div class="txt-item" @click="btnDetail(index)">地区: {{ item.country }} {{ item.province }} {{ item.city }}</div>
-                  <div class="txt-item flex_left" @click="clickYingxiangli">影响力:
-                    <span class="color-red4">{{item.yingxiangli}}</span>
-                    <span class="al al-wenhao font20 ml5"></span>
-                  </div>
-                  <div class="txt-item">推荐人: {{item.recommendname}}</div>
-                  <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.customertype}}</div>
-                  <div class="txt-item">获客时间: {{item.dateline_str}}</div>
-                </div>
-                <div class="flex_center bg-white h40">
-                  <div class="t-table align_center color-gray2 font14 color-gray2">
-                    <div class="t-cell v_middle b_right_after">
-                      <div>联系TA</div>
-                    </div>
-                    <div class="t-cell v_middle" @click="toView(item)">更多</div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <customer-item
+              v-for="(item,index) in listData3"
+              :key="index"
+              :item.sync="item"
+              :index.sync="index"
+              :user.sync="loginUser"
+              :tabIndex = "2"
+              @expand-event="expandEvent"
+              @yxl-event="clickYingxiangli">
+            </customer-item>
           </div>
           <div class="load-end-area loading" v-if="isLoading3"></div>
           <div class="load-end-area done" v-else-if="isDone3"></div>
@@ -152,41 +77,16 @@
         <template v-if="disList4">
           <div v-if="!listData4 || !listData4.length" class="flex_empty">暂无数据</div>
           <div v-else class="scroll_list">
-            <div v-for="(item,index) in listData4" :key="index" class="scroll_item">
-              <div class="flex_left">
-                <div class="pr10">
-                  <img class="avatar" :src="item.headimgurl" onerror="javascript:this.src='https://tosqy.boka.cn/images/user.jpg';" />
-                </div>
-                <div class="flex_cell flex_left">{{item.linkman}}</div>
-                <div class="flex_right pl10">
-                  <div class="btn" @click="expandEvent(item)">
-                    <span class="al al-asmkticon0165"></span>
-                  </div>
-                </div>
-              </div>
-              <div v-if="item.checked">
-                <div class="info-area w_100 font14 color-gray b_bottom_after">
-                  <div class="txt-item" @click="btnDetail(index)">性别: {{item.sexname}}</div>
-                  <div class="txt-item db-flex" v-if="item.mobile && item.mobile != ''" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font16"></span></div></div>
-                  <div class="txt-item" @click="btnDetail(index)">地区: {{ item.country }} {{ item.province }} {{ item.city }}</div>
-                  <div class="txt-item flex_left" @click="clickYingxiangli">影响力:
-                    <span class="color-red4">{{item.yingxiangli}}</span>
-                    <span class="al al-wenhao font20 ml5"></span>
-                  </div>
-                  <div class="txt-item">推荐人: {{item.recommendname}}</div>
-                  <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.customertype}}</div>
-                  <div class="txt-item">获客时间: {{item.dateline_str}}</div>
-                </div>
-                <div class="flex_center bg-white h40">
-                  <div class="t-table align_center color-gray2 font14 color-gray2">
-                    <div class="t-cell v_middle b_right_after">
-                      <div>联系TA</div>
-                    </div>
-                    <div class="t-cell v_middle" @click="toView(item)">更多</div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <customer-item
+              v-for="(item,index) in listData4"
+              :key="index"
+              :item.sync="item"
+              :index.sync="index"
+              :user.sync="loginUser"
+              :tabIndex = "3"
+              @expand-event="expandEvent"
+              @yxl-event="clickYingxiangli">
+            </customer-item>
           </div>
           <div class="load-end-area loading" v-if="isLoading4"></div>
           <div class="load-end-area done" v-else-if="isDone4"></div>
@@ -196,41 +96,16 @@
         <template v-if="disList5">
           <div v-if="!listData5 || !listData5.length" class="flex_empty">暂无数据</div>
           <div v-else class="scroll_list">
-            <div v-for="(item,index) in listData5" :key="index" class="scroll_item">
-              <div class="flex_left">
-                <div class="pr10">
-                  <img class="avatar" :src="item.headimgurl" onerror="javascript:this.src='https://tosqy.boka.cn/images/user.jpg';" />
-                </div>
-                <div class="flex_cell flex_left">{{item.linkman}}</div>
-                <div class="flex_right pl10">
-                  <div class="btn" @click="expandEvent(item)">
-                    <span class="al al-asmkticon0165"></span>
-                  </div>
-                </div>
-              </div>
-              <div v-if="item.checked">
-                <div class="info-area w_100 font14 color-gray b_bottom_after">
-                  <div class="txt-item" @click="btnDetail(index)">性别: {{item.sexname}}</div>
-                  <div class="txt-item db-flex" v-if="item.mobile && item.mobile != ''" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font16"></span></div></div>
-                  <div class="txt-item" @click="btnDetail(index)">地区: {{ item.country }} {{ item.province }} {{ item.city }}</div>
-                  <div class="txt-item flex_left" @click="clickYingxiangli">影响力:
-                    <span class="color-red4">{{item.yingxiangli}}</span>
-                    <span class="al al-wenhao font20 ml5"></span>
-                  </div>
-                  <div class="txt-item">推荐人: {{item.recommendname}}</div>
-                  <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.customertype}}</div>
-                  <div class="txt-item">获客时间: {{item.dateline_str}}</div>
-                </div>
-                <div class="flex_center bg-white h40">
-                  <div class="t-table align_center color-gray2 font14 color-gray2">
-                    <div class="t-cell v_middle b_right_after">
-                      <div>联系TA</div>
-                    </div>
-                    <div class="t-cell v_middle" @click="toView(item)">更多</div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <customer-item
+              v-for="(item,index) in listData5"
+              :key="index"
+              :item.sync="item"
+              :index.sync="index"
+              :user.sync="loginUser"
+              :tabIndex = "4"
+              @expand-event="expandEvent"
+              @yxl-event="clickYingxiangli">
+            </customer-item>
           </div>
           <div class="load-end-area loading" v-if="isLoading5"></div>
           <div class="load-end-area done" v-else-if="isDone5"></div>
@@ -245,9 +120,10 @@ import { Tab, TabItem } from 'vux'
 import ENV from 'env'
 import Time from '../../libs/time'
 import { User } from '#/storage'
+import CustomerItem from '@/components/CustomerItem'
 
 export default {
-  components: { Tab, TabItem },
+  components: { Tab, TabItem, CustomerItem },
   data () {
     return {
       query: {},
@@ -291,8 +167,43 @@ export default {
     toView (item) {
       this.$router.push({path: '/qiyeCustomerView', query: {uid: item.uid}})
     },
-    expandEvent (item) {
-      item.checked = !item.checked
+    giveCard (item) {
+      this.cardUser = item
+      let shareTitle = this.cardInfo.title
+      if (this.cardInfo.push_title && this.cardInfo.push_title !== '') {
+        shareTitle = this.cardInfo.push_title
+      }
+      let shareDesc = this.cardInfo.push_desc
+      if (!shareDesc || shareDesc === '') {
+        let shareStartTime = new Time(this.cardInfo.starttime * 1000).dateFormat('MM-dd')
+        let shareEndTime = new Time(this.cardInfo.endtime * 1000).dateFormat('MM-dd')
+        shareDesc = `活动日期${shareStartTime}至${shareEndTime}`
+      }
+      wx.invoke('shareToExternalContact', {
+        title: shareTitle,
+        desc: shareDesc,
+        link: `${ENV.Host}/#/card?type=singlecard&customeruid=${this.cardUser.uid}&share_uid=${this.loginUser.uid}`,
+        imgUrl: this.cardInfo.photo
+      })
+    },
+    expandEvent (item, index, tabIndex) {
+      switch (tabIndex) {
+        case 0:
+          this.listData1[index].checked = !this.listData1[index].checked
+          break
+        case 1:
+          this.listData2[index].checked = !this.listData2[index].checked
+          break
+        case 2:
+          this.listData3[index].checked = !this.listData3[index].checked
+          break
+        case 3:
+          this.listData4[index].checked = !this.listData4[index].checked
+          break
+        case 4:
+          this.listData5[index].checked = !this.listData5[index].checked
+          break
+      }
     },
     clickYingxiangli () {
       this.showYxlModal = true
@@ -523,6 +434,19 @@ export default {
         }
       })
     },
+    getCardInfo () {
+      this.$http.post(`${ENV.BokaApi}/api/miniactivity/info`, {
+        type: 'singlecard'
+      }) // 获取文章
+      .then(res => {
+        const data = res.data
+        this.$vux.loading.hide()
+        if (data.code === 0) {
+          let retdata = data.data
+          this.cardInfo = retdata
+        }
+      })
+    },
     initData () {
       this.pagestart1 = 1
       this.disList1 = false
@@ -560,6 +484,7 @@ export default {
       this.loginUser = User.get()
       this.query = this.$route.query
       this.initData()
+      this.getCardInfo()
       this.getList1()
     }
   },
