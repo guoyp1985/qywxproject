@@ -28,7 +28,8 @@
               :user.sync="loginUser"
               :tabIndex = "0"
               @expand-event="expandEvent"
-              @yxl-event="clickYingxiangli">
+              @yxl-event="clickYingxiangli"
+              @give-card="giveCard">
             </customer-item>
           </div>
           <div class="load-end-area loading" v-if="isLoading1"></div>
@@ -47,7 +48,8 @@
               :user.sync="loginUser"
               :tabIndex = "1"
               @expand-event="expandEvent"
-              @yxl-event="clickYingxiangli">
+              @yxl-event="clickYingxiangli"
+              @give-card="giveCard">
             </customer-item>
           </div>
           <div class="load-end-area loading" v-if="isLoading2"></div>
@@ -66,7 +68,8 @@
               :user.sync="loginUser"
               :tabIndex = "2"
               @expand-event="expandEvent"
-              @yxl-event="clickYingxiangli">
+              @yxl-event="clickYingxiangli"
+              @give-card="giveCard">
             </customer-item>
           </div>
           <div class="load-end-area loading" v-if="isLoading3"></div>
@@ -85,7 +88,8 @@
               :user.sync="loginUser"
               :tabIndex = "3"
               @expand-event="expandEvent"
-              @yxl-event="clickYingxiangli">
+              @yxl-event="clickYingxiangli"
+              @give-card="giveCard">
             </customer-item>
           </div>
           <div class="load-end-area loading" v-if="isLoading4"></div>

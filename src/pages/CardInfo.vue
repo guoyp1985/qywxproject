@@ -1,8 +1,8 @@
 /*
-* @description: 领取过的优惠券详情页，核销操作
+* @description: 优惠券信息页，员工查看分享给客户
 */
 <style lang="less">
-.card-detail-page{
+.card-info-page{
   background-color:#f94c2a;padding-bottom:10px;box-sizing: border-box;width:100%;height:100%;
   .bg-pic{width:100%;}
 
@@ -30,7 +30,7 @@
   .btn-area{
     width:100%;padding-top:35px;border-top:#dba472 2px dashed;margin-top:10px;
     .btn{
-      width:70%;height:34px;box-sizing: border-box;
+      width:75%;height:34px;box-sizing: border-box;
       display:flex;justify-content: center;align-items: center;
       border-radius:20px;text-align:center;background-color:#FE6C5B;color:#fff;font-size:12px;
     }
@@ -53,7 +53,7 @@
 }
 </style>
 <template>
-  <div class="card-detail-page">
+  <div class="card-info-page">
     <div class="image-outer bg-img">
       <div class="imgarea">
         <div class="inner">
@@ -76,24 +76,31 @@
             <div class="money-txt">
               <div class="left_cell flex_center">
                 <template v-if="facemoney > 100">
-                  <div class="align_center"><span class="big-txt long">{{viewData.money}}</span>元</div>
+                  <div class="align_center"><span class="big-txt long">{{facemoney}}</span>元</div>
                 </template>
                 <template v-else>
-                  <div class="align_center"><span class="big-txt">{{viewData.money}}</span>元</div>
+                  <div class="align_center"><span class="big-txt">{{facemoney}}</span>元</div>
                 </template>
               </div>
               <div class="right_cell flex_cell flex_center">
                 <div class="w_100">
-                  <div class="flex_center">订单满{{viewData.ordermoney}}元可用</div>
+                  <div class="flex_center">订单满{{ordermoney}}元可用</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="flex_center btn-area" style="margin-bottom:20px;">
-        <div class="btn bg-gray" v-if="viewData.used">已核销</div>
-        <div class="btn" @click="toUse" v-else>核销</div>
+      <div v-if="afterLoad" class="flex_center btn-area" style="margin-bottom:20px;">
+        <template v-if="inQywx">
+          <div class="flex_cell flex_center">
+            <div class="btn" @click="toShare">分享给客户</div>
+          </div>
+          <div class="flex_cell flex_center">
+            <div class="btn" @click="toShareGroup">分享到客户群</div>
+          </div>
+        </template>
+        <div class="btn" @click="clickShare" v-else>分享</div>
       </div>
       <div class="con-area">
         <div class="flex_left" v-if="!viewData.starttime || !viewData.endtime">
@@ -110,8 +117,13 @@
         </div>
       </div>
     </div>
-    <div class="pb20">
-      <div class="flex_center btn-play" @click="toList">我的优惠券</div>
+    <div v-transfer-dom class="x-popup">
+      <popup v-model="showShareModal" height="100%" class="share-modal">
+        <div class="popup1 h_100" @click="clickShareModal">
+    			<div class="ico"><i class="al al-feiji"></i></div>
+    			<div class="txt">点击<span class="al al-asmkticon0165"></span>，分享给客户吧！</div>
+        </div>
+      </popup>
     </div>
   </div>
 </template>
@@ -133,10 +145,39 @@ export default {
       viewData: {},
       ordermoney: '0.00',
       facemoney: '0.00',
-      shareParams: {}
+      shareParams: {},
+      afterLoad: false,
+      inQywx: false,
+      showShareModal: false
     }
   },
   methods: {
+    clickShare () {
+      this.showShareModal = true
+    },
+    clickShareModal () {
+      this.showShareMenu = false
+    },
+    toShare () {
+      wx.invoke('shareToExternalContact', {
+        title: this.viewData.title,
+        desc: this.viewData.summary,
+        link: this.shareParams.shareLink,
+        imgUrl: this.viewData.photo.split(',')[0],
+        success: function (res) {
+        }
+      })
+    },
+    toShareGroup () {
+      wx.invoke('shareToExternalChat', {
+        title: this.viewData.title,
+        desc: this.viewData.summary,
+        link: this.shareParams.shareLink,
+        imgUrl: this.viewData.photo.split(',')[0],
+        success: function (res) {
+        }
+      })
+    },
     toList () {
       this.$router.push({path: '/userCard'})
     },
@@ -247,6 +288,7 @@ export default {
         this.wid = this.query.wid
       }
       this.inQywx = this.$util.isQywx()
+      this.afterLoad = true
       this.getData()
     }
   },

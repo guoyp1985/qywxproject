@@ -42,7 +42,7 @@
       </div>
       <div class="flex_center bg-white h40 color-gray2 font14 color-gray2">
         <div class="flex_cell h_100 flex_center b_right_after">联系TA</div>
-        <div class="flex_cell h_100 flex_center b_right_after" @click="giveCard(item)">发券</div>
+        <!-- <div class="flex_cell h_100 flex_center b_right_after" @click="giveCard(item)">发券</div> -->
         <div class="flex_cell h_100 flex_center" @click="toView(item)">更多</div>
       </div>
     </div>

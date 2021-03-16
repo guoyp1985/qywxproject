@@ -285,9 +285,14 @@ export default {
         if (retdata) {
           retdata.deadline_str = new Time(retdata.deadline * 1000).dateFormat('yyyy-MM-dd')
           retdata.content = retdata.content.replace(/\n/g, '<br />')
-          let discounttype = retdata.discounttype.split(',')
-          this.ordermoney = discounttype[0]
-          this.facemoney = discounttype[1]
+          if (retdata.discounttype && retdata.discounttype !== '') {
+            let cmoney = retdata.discounttype.split(',')
+            this.ordermoney = cmoney[0]
+            this.facemoney = cmoney[1]
+          } else {
+            this.ordermoney = retdata.ordermoney
+            this.facemoney = retdata.money
+          }
           this.showOpen = false
           this.showResult = true
           this.viewData = retdata
@@ -351,18 +356,23 @@ export default {
         if (data.code === 0) {
           let retdata = data.data
           retdata.content = retdata.content.replace(/\n/g, '<br />')
-          if (retdata.starttime) {
+          if (!retdata.starttime || !retdata.endtime) {
+            retdata.deadline_str = new Time(retdata.deadline * 1000).dateFormat('yyyy-MM-dd')
+          } else {
             retdata.starttime_str = new Time(retdata.starttime * 1000).dateFormat('yyyy-MM-dd')
             retdata.endtime_str = new Time(retdata.endtime * 1000).dateFormat('yyyy-MM-dd')
-          } else if (retdata.deadline) {
-            retdata.deadline_str = new Time(retdata.deadline * 1000).dateFormat('yyyy-MM-dd')
           }
           this.viewData = retdata
-          document.title = this.viewData.title
-          if (this.query.type) {
+          if (this.viewData.title) {
+            document.title = this.viewData.title
+          }
+          if (this.viewData.discounttype && this.viewData.discounttype !== '') {
             let cmoney = this.viewData.discounttype.split(',')
             this.ordermoney = cmoney[0]
             this.facemoney = cmoney[1]
+          } else {
+            this.ordermoney = this.viewData.ordermoney
+            this.facemoney = this.viewData.money
           }
           this.handleShare()
         }

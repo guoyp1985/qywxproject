@@ -73,12 +73,19 @@ export default {
       this.showShareModal = false
     },
     getData () {
-      const infoparams = {id: this.query.id, module: 'miniactivity', addviews: 1}
+      let ajaxUrl = `${ENV.BokaApi}/api/content/info`
+      let infoparams = {id: this.query.id, module: 'miniactivity', addviews: 1}
+      if (this.query.id) {
+        infoparams.id = this.query.id
+      } else if (this.query.type) {
+        infoparams.type = this.query.type
+        ajaxUrl = `${ENV.BokaApi}/api/miniactivity/info`
+      }
       if (this.query['share_uid']) {
         infoparams['share_uid'] = this.query.share_uid
       }
       this.$vux.loading.show()
-      this.$http.post(`${ENV.BokaApi}/api/content/info`, infoparams) // 获取文章
+      this.$http.post(ajaxUrl, infoparams)
       .then(res => {
         const data = res.data
         this.$vux.loading.hide()
@@ -87,11 +94,16 @@ export default {
           retdata.starttime_str = new Time(retdata.starttime * 1000).dateFormat('yyyy-MM-dd')
           retdata.endtime_str = new Time(retdata.endtime * 1000).dateFormat('yyyy-MM-dd')
           this.viewData = retdata
-          document.title = this.viewData.title
-          if (this.viewData.type === 'cardcommon') {
+          if (this.viewData.title) {
+            document.title = this.viewData.title
+          }
+          if (this.viewData.discounttype && this.viewData.discounttype !== '') {
             let cmoney = this.viewData.discounttype.split(',')
             this.ordermoney = cmoney[0]
             this.facemoney = cmoney[1]
+          } else {
+            this.ordermoney = this.viewData.ordermoney
+            this.facemoney = this.viewData.money
           }
           let shareStartTime = new Time(retdata.starttime * 1000).dateFormat('MM-dd')
           let shareEndTime = new Time(retdata.endtime * 1000).dateFormat('MM-dd')

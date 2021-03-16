@@ -26,7 +26,7 @@
       <div class="box-outer mt10">
         <div class="box-title">客户群活动</div>
         <div class="box-list square">
-          <div v-if="sysParams.newcustomer_card && sysParams.newcustomer_card != 0" class="list-item ico-pic-item" @click="clickEvent">
+          <div v-if="sysParams.newcustomer_card && sysParams.newcustomer_card != 0" class="list-item ico-pic-item" @click="toNewCard">
             <div class="item-inner">
               <div class="ico-bg">
                 <span class="al al-youhuiquan"></span>
@@ -34,7 +34,7 @@
               <div class="txt">新人优惠券</div>
             </div>
           </div>
-          <div v-if="sysParams.zhuanshu_card && sysParams.zhuanshu_card != 0" class="list-item ico-pic-item">
+          <div v-if="sysParams.zhuanshu_card && sysParams.zhuanshu_card != 0" class="list-item ico-pic-item" @click="toSinglecard">
             <div class="item-inner">
               <div class="ico-bg">
                 <span class="al al-youhuiquan3"></span>
@@ -80,9 +80,11 @@ export default {
     }
   },
   methods: {
-    clickEvent () {
-      // this.showModal = true
+    toNewCard () {
       this.$router.push({path: '/card', query: {type: 'newcustomer'}})
+    },
+    toSinglecard () {
+      this.$router.push({path: '/cardInfo', query: {type: 'singlecard'}})
     },
     closeEvent () {
       this.showModal = false
