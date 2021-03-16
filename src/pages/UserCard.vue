@@ -160,21 +160,22 @@ export default {
   },
   methods: {
     toUse (item) {
-      this.$vux.loading.show()
-      this.$http.get(`${ENV.BokaApi}/api/card/useCard`, {
-        params: {id: item.id}
-      }).then(res => {
-        let data = res.data
-        this.$vux.loading.hide()
-        this.$vux.toast.show({
-          text: data.msg,
-          type: 'text',
-          time: this.$util.delay(data.msg)
-        })
-        if (data.code === 0) {
-          this.refresh()
-        }
-      })
+      this.$router.push({path: '/cardDetail', query: {id: item.id}})
+      // this.$vux.loading.show()
+      // this.$http.get(`${ENV.BokaApi}/api/card/useCard`, {
+      //   params: {id: item.id}
+      // }).then(res => {
+      //   let data = res.data
+      //   this.$vux.loading.hide()
+      //   this.$vux.toast.show({
+      //     text: data.msg,
+      //     type: 'text',
+      //     time: this.$util.delay(data.msg)
+      //   })
+      //   if (data.code === 0) {
+      //     this.refresh()
+      //   }
+      // })
     },
     switchData () {
       switch (this.selectedIndex) {
