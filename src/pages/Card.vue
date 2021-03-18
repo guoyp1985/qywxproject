@@ -1,6 +1,6 @@
 <style lang="less">
 .card-page.havebottom{
-  .card-inner{position:absolute;left:0;right:0;bottom:50px;}
+  .card-inner{position:absolute;left:0;right:0;bottom:50px;z-index:1;}
 }
 .card-page{
   width:100%;height:100%;background-color:#f94929;
@@ -90,71 +90,33 @@
 </style>
 <template>
   <div :class="`card-page ${isQywx ? 'havebottom' : ''}`">
-    <div class="card-inner">
-      <div class="row1">
-        <img src="https://tossharingsales.boka.cn/minigxk/luck/bg3.png" />
-      </div>
-      <div class="row2">
-        <img src="https://tossharingsales.boka.cn/minigxk/luck/bg2.png" />
-        <div v-if="showOpen" class="row2-inner">
-          <div class="w_100 flex_center">
-            <div class="pic-area">
-              <div class="pic">
-                <img src="https://tossharingsales.boka.cn/minigxk/luck/hb1.png" />
-                <div class="txt1">
-                  <div class="inner">
-                    <div class="btn flex_center" @click="openEvent">開</div>
-                  </div>
-                </div>
-                <div class="txt2" @click="clickShare">立即分享</div>
-              </div>
-            </div>
-          </div>
-          <div v-if="viewData && viewData.id" class="txt-area">
-            <div class="db-flex">
-              <div class="txt">使用说明: </div>
-              <div class="flex_cell" v-html="viewData.content"></div>
-            </div>
-            <div class="flex_left" v-if="viewData.starttime">
-              <div class="txt">有效期: </div>
-              <div class="flex_cell">{{viewData.starttime_str}} 至 {{viewData.endtime_str}}</div>
-            </div>
-            <div class="flex_left" v-else="viewData.deadline">
-              <div class="txt">有效期至: </div>
-              <div class="flex_cell">{{viewData.deadline_str}}</div>
-            </div>
-          </div>
-        </div>
-        <div v-if="showResult" class="row2-inner">
-          <div class="w_100 flex_center card-result-modal pb20">
-            <div class="inner">
-              <div class="pic-outer">
-                <div class="pic">
-                  <img src="https://tossharingsales.boka.cn/minigxk/luck/hb2.png" />
-                </div>
-                <div class="top-txt flex_center">恭喜你获得<span class="big">{{cardObject[cardType] ? cardObject[cardType] : '优惠券'}}</span></div>
-                <div class="con-txt flex_center">
-                  <div class="w_100 align_center">
-                    <div class="big">￥{{facemoney}}</div>
-                    <div>满{{ordermoney}}可用</div>
-                  </div>
-                </div>
-                <div class="desc-txt">
-                  <div class="db-flex">
-                    <div class="txt">使用说明: </div>
-                    <div class="flex_cell" v-html="viewData.content">{{viewData.deadline_str}}</div>
-                  </div>
-                  <div class="flex_left">
-                    <div class="txt">有效期至: </div>
-                    <div class="flex_cell">{{viewData.deadline_str}}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <get-card
+      v-if="showGetPage"
+      :afterLoad.sync="afterLoad"
+      :user.sync="loginUser"
+      :viewData.sync="viewData"
+      :shareWid.sync="shareWid"
+      @after-open="afterOpen"
+      @click-share="clickShare">
+    </get-card>
+    <user-card
+      v-if="showUserPage"
+      :afterLoad.sync="afterLoad"
+      :user.sync="loginUser"
+      :viewData.sync="viewData"
+      :ordermoney.sync="ordermoney"
+      :facemoney.sync="facemoney"
+      :shareWid.sync="shareWid"
+      @after-use="afterUse">
+    </user-card>
+    <view-card
+      v-if="showViewPage"
+      :afterLoad.sync="afterLoad"
+      :user.sync="loginUser"
+      :viewData.sync="viewData"
+      :ordermoney.sync="ordermoney"
+      :facemoney.sync="facemoney">
+    </view-card>
     <div class="nav-bottom b_top_after" v-if="isQywx">
       <div class="item b_right_after" @click="toShare">
         <div class="inner">
@@ -202,10 +164,13 @@ import { TransferDom, Popup } from 'vux'
 import ENV from 'env'
 import Time from '../../libs/time'
 import { User } from '#/storage'
+import GetCard from '@/components/GetCard'
+import UserCard from '@/components/UserCard'
+import ViewCard from '@/components/ViewCard'
 
 export default {
   directives: { TransferDom },
-  components: { Popup },
+  components: { Popup, GetCard, UserCard, ViewCard },
   data () {
     return {
       query: {},
@@ -219,7 +184,8 @@ export default {
       cardType: '',
       inQywx: false,
       cardObject: {
-        newcustomer: '新人优惠券'
+        newcustomer: '新人优惠券',
+        singlecard: '专属优惠券'
       },
       shareParams: {},
       showOpen: true,
@@ -229,28 +195,27 @@ export default {
       isPC: false,
       isQywx: false,
       kefuQrcode: '',
-      showKefuModal: false
+      showKefuModal: false,
+      showGetPage: false,
+      showUserPage: false,
+      showViewPage: false
     }
   },
   methods: {
     toShare () {
       wx.invoke('shareToExternalContact', {
-        title: this.viewData.title,
-        desc: this.viewData.summary,
-        link: this.shareParams.shareLink,
-        imgUrl: this.viewData.photo.split(',')[0],
-        success: function (res) {
-        }
+        title: this.shareParams.title,
+        desc: this.shareParams.desc,
+        link: this.shareParams.link,
+        imgUrl: this.shareParams.photo
       })
     },
     toShareGroup () {
       wx.invoke('shareToExternalChat', {
-        title: this.viewData.title,
-        desc: this.viewData.summary,
-        link: this.shareParams.shareLink,
-        imgUrl: this.viewData.photo.split(',')[0],
-        success: function (res) {
-        }
+        title: this.shareParams.title,
+        desc: this.shareParams.desc,
+        link: this.shareParams.link,
+        imgUrl: this.shareParams.photo
       })
     },
     closeKefuEvent () {
@@ -262,53 +227,35 @@ export default {
     clickShareModal () {
       this.showShareModal = false
     },
-    openEvent () {
-      this.$vux.loading.show()
-      let params = {type: this.query.type, wid: this.shareWid}
-      if (this.query.id) params.id = this.query.id
-      if (this.query.customeruid) params.customeruid = this.query.customeruid
-      this.$http.post(`${ENV.BokaApi}/api/card/getCard`, params).then(res => {
-        const data = res.data
-        this.$vux.loading.hide()
-        if (data.code !== 0) {
-          this.$vux.toast.show({
-            text: data.msg,
-            type: 'text',
-            time: this.$util.delay(data.msg)
-          })
-        }
-        if (data.code === 2 && data.qrcode !== '') {
-          this.kefuQrcode = data.qrcode
-          this.showKefuModal = true
-        }
-        let retdata = data.activity
-        if (retdata) {
-          retdata.deadline_str = new Time(retdata.deadline * 1000).dateFormat('yyyy-MM-dd')
-          retdata.content = retdata.content.replace(/\n/g, '<br />')
-          if (retdata.discounttype && retdata.discounttype !== '') {
-            let cmoney = retdata.discounttype.split(',')
-            this.ordermoney = cmoney[0]
-            this.facemoney = cmoney[1]
-          } else {
-            this.ordermoney = retdata.ordermoney
-            this.facemoney = retdata.money
-          }
-          this.showOpen = false
-          this.showResult = true
-          this.viewData = retdata
-        }
-      }, res => {
-        this.$vux.loading.hide()
-      })
+    afterOpen (data) {
+      if (data.code === 2 && data.qrcode !== '') {
+        this.kefuQrcode = data.qrcode
+        this.showKefuModal = true
+      }
+      let retdata = data.data
+      if (retdata) {
+        this.viewData = retdata
+      }
     },
-    closeResultModal () {
-      this.showResultModal = false
+    afterUse (data) {
+      if (data.code === 0) {
+        this.viewData.used = 1
+      }
     },
     handleShare () {
       let shareLink = `${ENV.Host}/#/card?share_uid=${this.loginUser.uid}`
-      if (this.query.id) shareLink = `${shareLink}&id=${this.query.id}`
-      if (this.query.type) shareLink = `${shareLink}&type=${this.query.type}`
-      if (this.shareWid && this.shareWid !== '') shareLink = `${shareLink}&wid=${this.shareWid}`
+      if (this.query.id) {
+        shareLink = `${shareLink}&id=${this.query.id}`
+      }
+      if (this.query.type) {
+        shareLink = `${shareLink}&type=${this.query.type}`
+      }
+      if (this.query.frompage) {
+        shareLink = `${shareLink}&frompage=${this.query.frompage}`
+      }
+      if (this.shareWid && this.shareWid !== '') {
+        shareLink = `${shareLink}&wid=${this.shareWid}`
+      }
       this.shareParams = {
         title: this.viewData.push_title,
         desc: this.viewData.push_desc,
@@ -329,21 +276,32 @@ export default {
         if (!this.query.id) {
           this.shareParams.desc = '送你一张优惠券'
         } else {
-          let shareStartTime = new Time(this.viewData.starttime * 1000).dateFormat('MM-dd')
-          let shareEndTime = new Time(this.viewData.endtime * 1000).dateFormat('MM-dd')
-          this.shareParams.desc = `活动日期${shareStartTime}至${shareEndTime}`
+          if (!this.viewData.starttime || !this.viewData.endtime) {
+            let deadtime = new Time(this.viewData.deadline * 1000).dateFormat('yyyy-MM-dd')
+            this.shareParams.desc = `有效期至${deadtime}`
+          } else {
+            let shareStartTime = new Time(this.viewData.starttime * 1000).dateFormat('MM-dd')
+            let shareEndTime = new Time(this.viewData.endtime * 1000).dateFormat('MM-dd')
+            this.shareParams.desc = `活动日期${shareStartTime}至${shareEndTime}`
+          }
         }
       }
+      console.log('进入到了分享参数的配置')
+      console.log(this.shareParams)
       this.$util.handleWxShare(this.shareParams)
     },
     getData () {
       let ajaxUrl = `${ENV.BokaApi}/api/content/info`
       let infoparams = {id: this.query.id, module: 'miniactivity', addviews: 1}
-      if (this.query.id) {
-        infoparams.id = this.query.id
-      } else if (this.query.type) {
-        infoparams.type = this.query.type
-        ajaxUrl = `${ENV.BokaApi}/api/miniactivity/info`
+      if (this.query.id && this.query.frompage === 'user') {
+        ajaxUrl = `${ENV.BokaApi}/api/card/info`
+      } else {
+        if (this.query.id) {
+          infoparams.id = this.query.id
+        } else if (this.query.type) {
+          infoparams.type = this.query.type
+          ajaxUrl = `${ENV.BokaApi}/api/miniactivity/info`
+        }
       }
       if (this.query['share_uid']) {
         infoparams['share_uid'] = this.query.share_uid
@@ -356,6 +314,7 @@ export default {
         if (data.code === 0) {
           let retdata = data.data
           retdata.content = retdata.content.replace(/\n/g, '<br />')
+          console.log(retdata.content)
           if (!retdata.starttime || !retdata.endtime) {
             retdata.deadline_str = new Time(retdata.deadline * 1000).dateFormat('yyyy-MM-dd')
           } else {
@@ -368,14 +327,19 @@ export default {
           }
           if (this.viewData.discounttype && this.viewData.discounttype !== '') {
             let cmoney = this.viewData.discounttype.split(',')
-            this.ordermoney = cmoney[0]
-            this.facemoney = cmoney[1]
+            this.ordermoney = `${cmoney[0]}`
+            if (cmoney.length === 3 && cmoney[1] !== cmoney[2]) {
+              this.facemoney = `${cmoney[1]}-${cmoney[2]}`
+            } else {
+              this.facemoney = `${cmoney[1]}`
+            }
           } else {
-            this.ordermoney = this.viewData.ordermoney
-            this.facemoney = this.viewData.money
+            this.ordermoney = `${this.viewData.ordermoney}`
+            this.facemoney = `${this.viewData.money}`
           }
           this.handleShare()
         }
+        this.afterLoad = true
       })
     },
     initData () {
@@ -390,16 +354,21 @@ export default {
       this.shareParams = {}
       this.showOpen = true
       this.showResult = false
+      this.showGetPage = false
+      this.showUserPage = false
+      this.showViewPage = false
     },
-    refresh () {
-      this.loginUser = User.get()
-      this.query = this.$route.query
-      this.initData()
+    handleQuery () {
       if (this.query.type) this.cardType = this.query.type
-
+      if (this.query.share_uid) {
+        this.showGetPage = true
+      } else if (this.query.frompage === 'user' && this.query.id) {
+        this.showUserPage = true
+      } else {
+        this.showViewPage = true
+      }
       this.isPC = this.$util.isPC
       this.isQywx = this.$util.isQywx()
-      this.afterLoad = true
       if (this.isQywx) {
         this.shareWid = this.loginUser.uid
       } else {
@@ -409,6 +378,12 @@ export default {
           this.shareWid = this.loginUser.ownid
         }
       }
+    },
+    refresh () {
+      this.loginUser = User.get()
+      this.query = this.$route.query
+      this.initData()
+      this.handleQuery()
       this.getData()
     }
   },

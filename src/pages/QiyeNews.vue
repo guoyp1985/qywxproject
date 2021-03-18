@@ -140,7 +140,7 @@ export default {
       wx.invoke('shareToExternalContact', {
         title: this.viewData.title,
         desc: this.viewData.summary,
-        link: this.shareParams.shareLink,
+        link: this.shareParams.link,
         imgUrl: this.viewData.photo.split(',')[0],
         success: function (res) {
         }
@@ -240,7 +240,9 @@ export default {
     },
     handleShare () {
       let shareLink = `${ENV.Host}/#/qiyeNews?id=${this.viewData.id}&share_uid=${this.loginUser.uid}`
-      if (this.shareWid && this.shareWid !== '') shareLink = `${shareLink}&wid=${this.shareWid}`
+      if (this.shareWid && this.shareWid !== '') {
+        shareLink = `${shareLink}&wid=${this.shareWid}`
+      }
       let shareParams = {
         data: this.viewData,
         module: this.module,
@@ -251,8 +253,9 @@ export default {
         shareParams.link = `${shareParams.link}&lastshareuid=${this.query.share_uid}`
         shareParams.lastshareuid = this.query.share_uid
       }
-      this.shareParams = shareParams
-      this.$util.handleWxShare(shareParams)
+      console.log('进入到了分享参数的配置')
+      console.log(this.shareParams)
+      this.$util.handleWxShare(this.shareParams)
     },
     getData () {
       const infoparams = {id: this.query.id, module: 'news', addviews: 1}
@@ -289,13 +292,7 @@ export default {
         }
       })
     },
-    refresh (query) {
-      this.loginUser = User.get()
-      this.sysParams = SystemParams.get()
-      this.query = this.$route.query
-      this.isPC = this.$util.isPC
-      this.isQywx = this.$util.isQywx()
-      this.afterLoad = true
+    handleQuery () {
       if (this.isQywx) {
         this.shareWid = this.loginUser.uid
         this.showUser = this.loginUser
@@ -307,6 +304,15 @@ export default {
           this.shareWid = this.loginUser.ownid
         }
       }
+    },
+    refresh (query) {
+      this.loginUser = User.get()
+      this.sysParams = SystemParams.get()
+      this.query = this.$route.query
+      this.isPC = this.$util.isPC
+      this.isQywx = this.$util.isQywx()
+      this.afterLoad = true
+      this.handleQuery()
       this.getData()
     }
   },

@@ -135,6 +135,9 @@ export default {
             GlobalData.set(data)
           }
         }
+      }, error => {
+        console.log('error, app 页面的 user/show')
+        console.log(error)
       })
     },
     globalTouch () {
@@ -145,6 +148,7 @@ export default {
     console.info('App Start Up')
     // document.title = this.$t('tIndex')
     if (Token.get() && !Token.isExpired()) {
+      console.log('app页面token存在')
       this.getData()
       this.$util.wxConfig()
     }

@@ -65,6 +65,9 @@ export default {
             this.handleGlobalData()
           }
         }
+      }, error => {
+        console.log('进入到了首页的 user/show')
+        console.log(error)
       })
     },
     handleGlobalData () {

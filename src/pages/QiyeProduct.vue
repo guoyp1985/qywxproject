@@ -475,7 +475,7 @@ export default {
       wx.invoke('shareToExternalContact', {
         title: this.viewData.title,
         desc: this.viewData.summary,
-        link: this.shareParams.shareLink,
+        link: this.shareParams.link,
         imgUrl: this.viewData.photo.split(',')[0],
         success: function (res) {
         }
@@ -485,7 +485,7 @@ export default {
       wx.invoke('shareToExternalChat', {
         title: this.viewData.title,
         desc: this.viewData.summary,
-        link: this.shareParams.shareLink,
+        link: this.shareParams.link,
         imgUrl: this.viewData.photo.split(',')[0],
         success: function (res) {
         }
@@ -775,15 +775,7 @@ export default {
         }
       })
     },
-    refresh () {
-      this.loginUser = User.get()
-      this.initData()
-      this.showVideo = true
-      this.query = this.$route.query
-      this.isPC = this.$util.isPC
-      this.isQywx = this.$util.isQywx()
-      this.isWx = this.$util.isWx()
-      this.afterLoad = true
+    handleQuery () {
       if (this.isQywx) {
         this.shareWid = this.loginUser.uid
         this.showUser = this.loginUser
@@ -795,7 +787,18 @@ export default {
           this.shareWid = this.loginUser.ownid
         }
       }
+    },
+    refresh () {
+      this.loginUser = User.get()
+      this.initData()
+      this.showVideo = true
+      this.query = this.$route.query
+      this.isPC = this.$util.isPC
+      this.isQywx = this.$util.isQywx()
+      this.isWx = this.$util.isWx()
+      this.afterLoad = true
       this.$vux.loading.show()
+      this.handleQuery()
       this.getData()
     }
   },

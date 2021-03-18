@@ -17,7 +17,7 @@ const Token = {
     if (token) {
       const expired = new Date(token.expired_at).getTime()
       const now = new Date().getTime()
-      return now > expired
+      return now > expired - 1000 * 60 * 2
     }
     return false
   }
@@ -209,4 +209,19 @@ const AdapterHeight = {
   }
 }
 
-export { Token, OpenId, WxQrCode, User, Access, WxAccess, Roomid, Version, VoiceAccess, MiniApp, AdapterHeight, FirstInfo, SystemParams, GlobalData }
+const AuthCount = {
+  set (info) {
+    localStorage.setItem('AuthCount', info)
+  },
+  get () {
+    return localStorage.getItem('AuthCount')
+  },
+  remove () {
+    const info = AuthCount.get()
+    if (info) {
+      localStorage.removeItem('AuthCount')
+    }
+  }
+}
+
+export { Token, OpenId, WxQrCode, User, Access, WxAccess, Roomid, Version, VoiceAccess, MiniApp, AdapterHeight, FirstInfo, SystemParams, GlobalData, AuthCount }

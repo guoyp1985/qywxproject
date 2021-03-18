@@ -10,7 +10,7 @@ import store from './store'
 // import './coms'
 import App from './App'
 import objectAssign from 'object-assign'
-import { User, Version, Token, Access, SystemParams, GlobalData } from '#/storage'
+import { User, Version, Token, Access, SystemParams, GlobalData, AuthCount } from '#/storage'
 import ENV from 'env'
 import Util from '#/util'
 import { AjaxPlugin, WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
@@ -138,15 +138,6 @@ router.afterEach(function (to) {
   store.commit('updateLoadingStatus', {isLoading: false})
 })
 
-let pendings = []
-let cancelAllPendings = () => {
-  for (let p of pendings) {
-    console.info(`canceled request: ${p.u}`)
-    p.f()
-  }
-  pendings = []
-}
-
 // 排除全局请求过滤器中的请求url
 const rExcludeUrls = ENV.NoAccessUrls.map(url => RegExp(url.replace(/\*/g, '.*').replace(/\?/g, '\\?')))
 const matchExclude = url => {
@@ -163,28 +154,17 @@ const matchExclude = url => {
 Vue.http.interceptors.request.use(config => {
   console.log('进入到了请求拦截器, config.url=', config.url)
   if (!matchExclude(config.url)) {
+    const token = Token.get()
     config.cancelToken = new CancelToken(c => {
       pendings.push({ u: config.url + '&' + config.method, f: c })
     })
-    const token = Token.get()
-    console.log(`interceptors: ${config.url}`)
-    if (Token.isExpired()) {
-      console.log('token 过期')
-      cancelAllPendings(config)
-      access((path) => {
-        router.replace({path: path})
-      })
-    } else {
-      console.log('token有效')
-      config.headers['Authorization'] = `Bearer ${token.token}`
-      if (config.url.indexOf(ENV.FactoryApi) > -1 && ENV.ApiVersion === 'V2') {
-        config.headers['Accept'] = ENV.ApiAccept
-      }
-    }
+    config.headers['Authorization'] = `Bearer ${token.token}`
   }
   console.log('request config', config)
   return config
 }, error => {
+  console.log('请求拦截器 进入到了error')
+  console.log(error)
   return Promise.reject(error)
 })
 
@@ -196,13 +176,14 @@ Vue.http.interceptors.response.use(response => {
   console.log('请求执行后返回的数据，data=', response.data)
   return response
 }, error => {
-  console.log('请求进入到了error, error=', error)
+  console.log('response 请求进入到了error, error=', error)
+  console.log(error.response)
   if (error.response) {
-    if (error.response.status === 401) {
-      console.error('未授权请求')
-      clearCache()
-      toAuth()
-    }
+    // if (error.response.status === 401) {
+    //   console.error('未授权请求')
+    //   clearCache()
+    //   toAuth()
+    // }
   }
 })
 const access = success => {
@@ -221,32 +202,49 @@ const access = success => {
   console.log('进入项目后的链接', lUrl)
   console.log('token=', token)
   console.log('query=', query)
-  // gyp的token
-  // token = {
-  //   expired_at: 1616639402707,
-  //   refresh_expired_at: 1616639402707,
-  //   token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvcXkuYm9rYS5jblwvYXBpXC92aXNpdG9yXC93b3JrVXNlckF1dGhcL3B4UjdnVmFnZWlkek5ldXdhRmJzR1RpeG1jeE1nb1dYQW1aV1BTMUZVZGMiLCJpYXQiOjE2MTU3NzU0MDIsImV4cCI6MTYxNjYzOTQwMiwibmJmIjoxNjE1Nzc1NDAyLCJqdGkiOiJOZzRsTjJUeDE0NVpDOVdHIiwic3ViIjoxLCJwcnYiOiI4NjY1YWU5Nzc1Y2YyNmY2YjhlNDk2Zjg2ZmE1MzZkNjhkZDcxODE4In0.la6QdP2XcuGX00Jt-5AAxFZRcZMKb_YG_dj2cg4V7TQ'
-  // }
-  // Token.set(token)
-
-  // gyp的客户
-  // token = {
-  //   expired_at: 1621908653179,
-  //   refresh_expired_at: 1621908653179,
-  //   token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvcXkuYm9rYS5jblwvYXBpXC92aXNpdG9yXC9nZXRUb2tlbiIsImlhdCI6MTYxNTg2MDY1MywiZXhwIjoxNjE2NzI0NjUzLCJuYmYiOjE2MTU4NjA2NTMsImp0aSI6IllsbUhDSkFhNEw1SDViTXQiLCJzdWIiOjEyMCwicHJ2IjoiODY2NWFlOTc3NWNmMjZmNmI4ZTQ5NmY4NmZhNTM2ZDY4ZGQ3MTgxOCJ9.9uEd-orbmavVDfe6JPuYmv8lhQw2YSZ7itX1rvRC7Mw'
-  // }
-  // Token.set(token)
-
-  // 仇总token
-  // token = {
-  //   expired_at: 1615386907287,
-  //   refresh_expired_at: 1615386907287,
-  //   token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvcXkuYm9rYS5jblwvYXBpXC92aXNpdG9yXC93b3JrVXNlckF1dGhcL0JoMTZzUE1xRkdLQzBmNVdKTTVMVi1jSFZvb3Zra0N4cFBfWUZ5XzlMelUiLCJpYXQiOjE2MTQxMzAzNTMsImV4cCI6MTYxNDk5NDM1MywibmJmIjoxNjE0MTMwMzUzLCJqdGkiOiJMUDlWcEk4NkQyUkRLOUw2Iiwic3ViIjozLCJwcnYiOiI4NjY1YWU5Nzc1Y2YyNmY2YjhlNDk2Zjg2ZmE1MzZkNjhkZDcxODE4In0.V0GN3CU2Ehm2h03Ba-UU4yom8hvB5IgMa6HW4F8Jh9w'
-  // }
-  // Token.set(token)
-  // console.log('设置了token后')
-  // console.log(Token.get())
-  if (location.href.indexOf('/redirect') < 0) {
+  const urlQuery = lUrl.query
+  const code = urlQuery.code
+  const state = urlQuery.state
+  if (state === 'defaultAccess' && code) {
+    const jumpUrl = `${lUrl.hash.replace(/#/, '')}?${query}`
+    console.log('授权成功后要跳转的页面')
+    console.log(jumpUrl)
+    Vue.http.get(`${ENV.BokaApi}/api/visitor/workUserAuth/${code}`).then(res => {
+      console.log('main.js页面workUserAuth成功了', res)
+      const ret = res.data
+      if (!res) {
+        Token.remove()
+        location.replace(lUrl.href)
+        return
+      }
+      console.log('main.js页面设置token')
+      console.log(ret.data)
+      Token.set(ret.data)
+      console.log('设置后的token=', Token.get())
+      return Vue.http.get(`${ENV.BokaApi}/api/user/show`, {
+        params: {init: 1}
+      })
+    }, res => {
+      console.log('main.js页面workUserAuth请求失败', res)
+      Token.remove()
+      success && success(jumpUrl)
+    }).then(res => {
+      console.log('main.js页面user/show成功了', res)
+      if (!res) return
+      const data = res.data
+      if (data.code === 0) {
+        User.set(data.data)
+        SystemParams.set(data.paras)
+        GlobalData.set(data)
+        Vue.wxConfig()
+      }
+      success && success(jumpUrl)
+    }, res => {
+      console.log('redirect页面user/show失败了', res)
+      Token.remove()
+      success && success(jumpUrl)
+    })
+  } else {
     if (token && token !== '' && !Token.isExpired()) {
       console.log('进入到了请求用户信息')
       let user = User.get()
@@ -269,6 +267,9 @@ const access = success => {
           console.log('进入的页面地址', routerUrl)
           store.commit('updateMiniInvoke', {miniInvoke: true})
           success && success(routerUrl)
+        }, error => {
+          console.log('main.js页面的user/show出错了')
+          console.log(error)
         })
       } else {
         console.log('进入的页面地址', routerUrl)
@@ -281,41 +282,38 @@ const access = success => {
         toAuth()
       })
     }
-  } else {
-    success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
   }
 }
 
 const clearCache = () => {
-  if (ENV.Version !== Version.get() || location.href.indexOf('clear=1') > -1) {
-    console.log('清理了缓存')
-    Token.remove()
-    User.remove()
-    Access.remove()
-    Version.remove()
-    Version.set(ENV.Version)
-    SystemParams.remove()
-    GlobalData.remove()
-  }
+  console.log('清理了缓存')
+  Token.remove()
+  User.remove()
+  Access.remove()
+  Version.remove()
+  Version.set(ENV.Version)
+  SystemParams.remove()
+  GlobalData.remove()
+  AuthCount.remove()
 }
 
 const toAuth = () => {
-  let lastIndex = location.href.lastIndexOf('/')
-  const originHref = encodeURIComponent(location.href.substr(lastIndex + 1))
-  const ruri = encodeURIComponent(`${ENV.Host}/#/redirect`)
+  const ruri = encodeURIComponent(location.href)
   const userAgentInfo = navigator.userAgent
   let ua = userAgentInfo.toLowerCase()
   let isWx = false
   if (/wxwork/i.test(ua) || /MicroMessenger/i.test(ua)) {
     isWx = true
   }
+  console.log('进入到了授权页面')
+  console.log(location.href)
   if (isWx) {
     // 微信授权
-    location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${ruri}&response_type=code&scope=snsapi_base&state=${originHref}#wechat_redirect`)
+    location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${ruri}&response_type=code&scope=snsapi_base&state=defaultAccess#wechat_redirect`)
   } else {
     console.log('进入到了pc端')
     // pc登录二维码
-    location.replace(`${ENV.WxQrcodeAuthUrl}appid=${ENV.AppId}&agentid=${ENV.Agentid}&redirect_uri=${ruri}&state=${originHref}#wechat_redirect`)
+    location.replace(`${ENV.WxQrcodeAuthUrl}appid=${ENV.AppId}&agentid=${ENV.Agentid}&redirect_uri=${ruri}&state=defaultAccess#wechat_redirect`)
   }
 }
 
@@ -329,7 +327,13 @@ const render = () => {
   vue.$mount('#app-box')
 }
 
-clearCache()
+console.log('进入到了main.js')
+console.log(ENV.Version)
+console.log(Version.get())
+console.log(ENV.Version === Version.get())
+if (ENV.Version !== Version.get()) {
+  clearCache()
+}
 
 // 页面入口
 try {
@@ -339,16 +343,22 @@ try {
   console.log('缓存里的token=', Token.get())
   console.log('token是否过期 ', Token.isExpired())
   console.log('缓存里的user=', User.get())
-  if (!Token.get() || Token.isExpired() || !User.get()) {
-    console.log('页面入口，token失效')
-    access(path => {
-      console.log(`Entry: ${path}`)
-      router.replace({path: path})
-      render()
-    })
-  } else {
-    console.log('页面入口，有token')
+  if (location.href.indexOf('/clear') > -1) {
     render()
+  } else {
+    if (!Token.get() || Token.isExpired() || !User.get()) {
+      console.log('页面入口，token失效')
+      access(path => {
+        console.log(`Entry: ${path}`)
+        router.replace({path: path})
+        render()
+      })
+    } else {
+      console.log('页面入口，有token')
+      render()
+    }
   }
 } catch (e) {
+  console.log('页面入口catch到了错误')
+  console.log(e)
 }

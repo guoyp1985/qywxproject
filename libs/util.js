@@ -279,16 +279,16 @@ Util.install = function (Vue, options) {
         url = location.href
       }
       let query = {}
-      let lastindex = url.lastIndexOf('?')
-      if (lastindex >= 0) {
-        url = url.substr(lastindex + 1)
-      } else {
-        return query
-      }
-      let params = url.split('&')
-      for (let i = 0; i < params.length; i++ ) {
-        let p = params[i].split('=')
-        query[p[0]] = p[1]
+      if (url && url !== '') {
+        let lastindex = url.lastIndexOf('?')
+        if (lastindex >= 0) {
+          url = url.substr(lastindex + 1)
+        }
+        let params = url.split('&')
+        for (let i = 0; i < params.length; i++ ) {
+          let p = params[i].split('=')
+          query[p[0]] = p[1]
+        }
       }
       return query
     },
@@ -348,7 +348,8 @@ Util.install = function (Vue, options) {
         data.jsApiList.push('shareToExternalContact')
         data.jsApiList.push('shareToExternalChat')
         jweixin.config(data)
-        jweixin.error(function () {
+        jweixin.error((error) => {
+          console.log('进入到了jweixin error, 微信还没有准备好')
           // Vue.$vux.toast.show({
           //   text: '微信还没有准备好，请刷新页面',
           //   type: 'warn',
@@ -375,7 +376,8 @@ Util.install = function (Vue, options) {
           data.jsApiList.push('shareToExternalContact')
           data.jsApiList.push('shareToExternalChat')
           wx.agentConfig(data)
-          jweixin.error(function () {
+          jweixin.error((error) => {
+            console.log('进入到了jweixin error, 微信还没有准备好')
             // Vue.$vux.toast.show({
             //   text: '微信还没有准备好，请刷新页面',
             //   type: 'warn',
@@ -417,6 +419,8 @@ Util.install = function (Vue, options) {
         if (query.openid) {
             wxshareurl = wxshareurl.replace(`&openid=${query.openid}`, '').replace(`openid=${query.openid}`, '')
         }
+        console.log('到了util处理的分享链接')
+        console.log(wxshareurl)
         jweixin.checkJsApi({
           jsApiList: ['onMenuShareAppMessage', 'shareToExternalChat', 'shareToExternalContact'],
           success: function(res) {

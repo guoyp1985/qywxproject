@@ -160,7 +160,7 @@ export default {
   },
   methods: {
     toUse (item) {
-      this.$router.push({path: '/cardDetail', query: {id: item.id}})
+      this.$router.push({path: '/card', query: {id: item.id, frompage: 'user'}})
       // this.$vux.loading.show()
       // this.$http.get(`${ENV.BokaApi}/api/card/useCard`, {
       //   params: {id: item.id}

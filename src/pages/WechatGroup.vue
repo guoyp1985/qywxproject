@@ -84,7 +84,7 @@ export default {
       this.$router.push({path: '/card', query: {type: 'newcustomer'}})
     },
     toSinglecard () {
-      this.$router.push({path: '/cardInfo', query: {type: 'singlecard'}})
+      this.$router.push({path: '/card', query: {type: 'singlecard'}})
     },
     closeEvent () {
       this.showModal = false
