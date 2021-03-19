@@ -153,7 +153,7 @@ export default {
           type: 'text',
           time: this.$util.delay(data.msg)
         })
-        this.$emit('after-use')
+        this.$emit('after-use', data)
       })
     }
   }

@@ -234,6 +234,13 @@ export default {
       }
       let retdata = data.data
       if (retdata) {
+        retdata.content = data.activity.content.replace(/\n/g, '<br />')
+        if (!retdata.starttime || !retdata.endtime) {
+          retdata.deadline_str = new Time(retdata.deadline * 1000).dateFormat('yyyy-MM-dd')
+        } else {
+          retdata.starttime_str = new Time(retdata.starttime * 1000).dateFormat('yyyy-MM-dd')
+          retdata.endtime_str = new Time(retdata.endtime * 1000).dateFormat('yyyy-MM-dd')
+        }
         this.viewData = retdata
       }
     },
@@ -360,7 +367,7 @@ export default {
     },
     handleQuery () {
       if (this.query.type) this.cardType = this.query.type
-      if (this.query.share_uid) {
+      if (this.query.share_uid || this.query.push) {
         this.showGetPage = true
       } else if (this.query.frompage === 'user' && this.query.id) {
         this.showUserPage = true

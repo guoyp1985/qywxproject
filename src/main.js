@@ -138,6 +138,15 @@ router.afterEach(function (to) {
   store.commit('updateLoadingStatus', {isLoading: false})
 })
 
+let pendings = []
+let cancelAllPendings = () => {
+  for (let p of pendings) {
+    console.info(`canceled request: ${p.u}`)
+    p.f()
+  }
+  pendings = []
+}
+
 // 排除全局请求过滤器中的请求url
 const rExcludeUrls = ENV.NoAccessUrls.map(url => RegExp(url.replace(/\*/g, '.*').replace(/\?/g, '\\?')))
 const matchExclude = url => {

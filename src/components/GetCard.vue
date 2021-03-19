@@ -43,18 +43,32 @@
     </div>
     <div class="row2">
       <img src="https://tossharingsales.boka.cn/minigxk/luck/bg2.png" />
-      <template v-if="showOpen">
-        <div class="row2-inner">
-          <div class="w_100 flex_center">
-            <div class="pic-area">
-              <div class="pic">
-                <img src="https://tossharingsales.boka.cn/minigxk/luck/hb1.png" />
-                <div class="txt1">
-                  <div class="inner">
-                    <div class="btn flex_center" @click="openEvent">開</div>
-                  </div>
+      <div class="row2-inner">
+        <div v-if="showOpen" class="w_100 flex_center">
+          <div class="pic-area">
+            <div class="pic">
+              <img src="https://tossharingsales.boka.cn/minigxk/luck/hb1.png" />
+              <div class="txt1">
+                <div class="inner">
+                  <div class="btn flex_center" @click="openEvent">開</div>
                 </div>
-                <div class="txt2" @click="clickShare">立即分享</div>
+              </div>
+              <div class="txt2" @click="clickShare">立即分享</div>
+            </div>
+          </div>
+        </div>
+        <div v-if="showResult" class="w_100 flex_center card-result-modal pb20">
+          <div class="inner">
+            <div class="pic-outer">
+              <div class="pic">
+                <img src="https://tossharingsales.boka.cn/minigxk/luck/hb2.png" />
+              </div>
+              <div class="top-txt flex_center">恭喜你获得<span class="big">{{(cardType && cardObject[cardType]) ? cardObject[cardType] : '优惠券'}}</span></div>
+              <div class="con-txt flex_center">
+                <div class="w_100 align_center">
+                  <div class="big">￥{{facemoney}}</div>
+                  <div>满{{ordermoney}}可用</div>
+                </div>
               </div>
             </div>
           </div>
@@ -73,35 +87,7 @@
             <div class="flex_cell">{{viewData.deadline_str}}</div>
           </div>
         </div>
-      </template>
-      <div v-if="showResult" class="row2-inner">
-        <div class="w_100 flex_center card-result-modal pb20">
-          <div class="inner">
-            <div class="pic-outer">
-              <div class="pic">
-                <img src="https://tossharingsales.boka.cn/minigxk/luck/hb2.png" />
-              </div>
-              <div class="top-txt flex_center">恭喜你获得<span class="big">{{(cardType && cardObject[cardType]) ? cardObject[cardType] : '优惠券'}}</span></div>
-              <div class="con-txt flex_center">
-                <div class="w_100 align_center">
-                  <div class="big">￥{{facemoney}}</div>
-                  <div>满{{ordermoney}}可用</div>
-                </div>
-              </div>
-              <div class="desc-txt">
-                <div class="db-flex" v-if="viewData.content && viewData.content != ''">
-                  <div class="txt">使用说明: </div>
-                  <div class="flex_cell" v-html="viewData.content"></div>
-                </div>
-                <div class="flex_left">
-                  <div class="txt">有效期至: </div>
-                  <div class="flex_cell">{{viewData.deadline_str}}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="pb20">
+        <div v-if="showResult" class="pb20">
           <div class="flex_center btn-play" @click="toList">我的优惠券</div>
         </div>
       </div>
@@ -111,7 +97,6 @@
 
 <script>
 import ENV from 'env'
-import Time from '../../libs/time'
 export default {
   name: 'GetCard',
   props: {
@@ -169,10 +154,7 @@ export default {
           })
         }
         let retdata = data.data
-        console.log(data.data)
         if (retdata) {
-          retdata.deadline_str = new Time(retdata.deadline * 1000).dateFormat('yyyy-MM-dd')
-          retdata.content = retdata.content.replace(/\n/g, '<br />')
           this.ordermoney = retdata.ordermoney
           this.facemoney = retdata.money
           this.showOpen = false
