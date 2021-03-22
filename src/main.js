@@ -212,8 +212,25 @@ const access = success => {
   console.log('token=', token)
   console.log('query=', query)
   const urlQuery = lUrl.query
-  const code = urlQuery.code
-  const state = urlQuery.state
+  let code = urlQuery.code
+  let state = urlQuery.state
+  if (lUrl.hash.indexOf('code=') > -1 && !code) {
+    let hashUrl = lUrl.hash
+    let uquery = {}
+    let lastindex = hashUrl.lastIndexOf('?')
+    if (lastindex >= 0) {
+      hashUrl = hashUrl.substr(lastindex + 1)
+    }
+    let params = hashUrl.split('&')
+    for (let i = 0; i < params.length; i++) {
+      let p = params[i].split('=')
+      uquery[p[0]] = p[1]
+    }
+    code = uquery.code
+    state = uquery.state
+    console.log('获取hashUrl里的参数')
+    console.log(uquery)
+  }
   if (state === 'defaultAccess' && code) {
     const jumpUrl = `${lUrl.hash.replace(/#/, '')}?${query}`
     console.log('授权成功后要跳转的页面')

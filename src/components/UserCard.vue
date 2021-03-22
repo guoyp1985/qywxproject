@@ -137,6 +137,11 @@ export default {
       default: false
     }
   },
+  data () {
+    return {
+      query: {}
+    }
+  },
   methods: {
     toList () {
       this.$router.push({path: '/userCard'})
@@ -156,6 +161,9 @@ export default {
         this.$emit('after-use', data)
       })
     }
+  },
+  created () {
+    this.query = this.$route.query
   }
 }
 </script>

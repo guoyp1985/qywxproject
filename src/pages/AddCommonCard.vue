@@ -1,6 +1,6 @@
 <style lang="less">
 .add-comcard-page{
-  width:100%;box-sizing: border-box;
+  width:100%;heihgt:100%;overflow:hidden;box-sizing: border-box;
   .form-list{
     .title-cell{margin-right:10px;}
     .input-cell.time-cell{height:30px;}
@@ -56,7 +56,7 @@
 }
 </style>
 <template>
-  <div class="bg-page add-comcard-page containerarea">
+  <div class="bg-page add-comcard-page">
     <template v-if="loginUser && loginUser.uid">
       <template v-if="!loginUser.isadmin">
         <div class="flex_empty">抱歉，您没有权限</div>

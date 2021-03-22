@@ -127,9 +127,6 @@ export default {
       type: Boolean,
       default: false
     }
-  },
-  created () {
-    console.log('======================进入到了viewcard page')
   }
 }
 </script>

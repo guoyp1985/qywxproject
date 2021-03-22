@@ -71,14 +71,7 @@
             <div v-for="(item,index) in listData1" :key="index" :class="`scroll_item ${item.validate <= 0 ? 'grayitem' : ''}`" @click="toUse(item)">
               <div class="flex_cell txt-cell" style="overflow:visible">
                 <div class="font20 txt">满{{item.ordermoney}}减{{item.money}}</div>
-                <div class="font12 w_100 flex_left">
-                  <template v-if="item.limitpid">
-                    <span class="w40">仅限【</span>
-                    <span :class="`clamp1 producttitle ${item.producttitle.length >= 10 ? 'w120' : ''}`">{{item.producttitle}}</span>
-                    <span class="w40">】使用</span>
-                  </template>
-                  <span v-else :class="`clamp1 producttitle ${item.producttitle.length >= 10 ? 'w120' : ''}`">{{item.producttitle}}</span>
-                </div>
+                <div class="font12 w_100 flex_left" v-if="item.cardtype && item.cardtype != '' && cardObject[item.cardtype]">{{cardObject[item.cardtype]}}</div>
                 <div class="font12">到期时间 {{item.deadline_str}}</div>
                 <div class="ball ball-up"></div>
                 <div class="ball ball-down"></div>
@@ -102,14 +95,7 @@
             <div v-for="(item,index) in listData2" :key="index" class="scroll_item grayitem">
               <div class="flex_cell txt-cell" style="overflow:visible">
                 <div class="font20 txt">满{{item.ordermoney}}减{{item.money}}</div>
-                <div class="font12 w_100 flex_left">
-                  <template v-if="item.limitpid">
-                    <span class="w40">仅限【</span>
-                    <span :class="`clamp1 producttitle ${item.producttitle.length >= 10 ? 'w120' : ''}`">{{item.producttitle}}</span>
-                    <span class="w40">】使用</span>
-                  </template>
-                  <span v-else :class="`clamp1 producttitle ${item.producttitle.length >= 10 ? 'w120' : ''}`">{{item.producttitle}}</span>
-                </div>
+                <div class="font12 w_100 flex_left" v-if="item.cardtype && item.cardtype != '' && cardObject[item.cardtype]">{{cardObject[item.cardtype]}}</div>
                 <div class="font12">到期时间 {{item.deadline_str}}</div>
                 <div class="ball ball-up"></div>
                 <div class="ball ball-down"></div>
@@ -155,12 +141,20 @@ export default {
       isLoading2: false,
       isDone2: false,
       pageTop: 0,
-      tabLeft: 0
+      tabLeft: 0,
+      cardObject: {
+        newcustomer: '新人优惠券',
+        singlecard: '专属优惠券'
+      }
     }
   },
   methods: {
     toUse (item) {
-      this.$router.push({path: '/card', query: {id: item.id, frompage: 'user'}})
+      if (item.remark && item.remark !== '') {
+        this.$router.push({path: '/multiCardList', query: {shopid: item.remark}})
+      } else {
+        this.$router.push({path: '/card', query: {id: item.id, frompage: 'user'}})
+      }
       // this.$vux.loading.show()
       // this.$http.get(`${ENV.BokaApi}/api/card/useCard`, {
       //   params: {id: item.id}
@@ -240,7 +234,7 @@ export default {
         }
         this.listData2 = this.listData2.concat(retdata)
         this.disList2 = true
-        if (retdata.length < this.limit) {
+        if (this.listData2.length && retdata.length < this.limit) {
           this.isDone2 = true
         }
       })

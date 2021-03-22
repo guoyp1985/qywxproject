@@ -28,7 +28,7 @@
       .money-txt{
         position:absolute;left:0;top:0;right:0;bottom:0;z-index:1;display:flex;width:100%;
         .ico{
-          position:absolute;right:5px;top:2px;color:#f94929;
+          position:absolute;left:5px;top:2px;color:#FBF1B8;
           .al{font-size:14px;}
         }
       }
@@ -46,9 +46,9 @@
   .btn-area{
     width:100%;padding-top:15px;border-top:#dba472 2px dashed;margin-top:20px;
     .btn{
-      width:80%;height:40px;box-sizing: border-box;
+      width:100%;height:80px;box-sizing: border-box;
       display:flex;justify-content: center;align-items: center;
-      border-radius:20px;text-align:center;background-color:#FE6C5B;color:#fff;font-size:18px;
+      border-radius:20px;text-align:center;background-color:#FE6C5B;color:#fff;font-size:30px;
     }
   }
 
@@ -193,7 +193,7 @@
             </div> -->
           </div>
           <div v-if="listData1.length" class="flex_center btn-area" style="padding-bottom:20px;">
-            <div class="btn" @click="toUsePage">核销</div>
+            <div class="btn" @click="toUsePage">核销<span class="ml5" v-if="totalPrice">{{totalPrice}}</span>元</div>
           </div>
         </template>
       </div>
@@ -215,7 +215,8 @@ export default {
       loginUser: {},
       disList1: false,
       listData1: [],
-      afterUse: false
+      afterUse: false,
+      totalPrice: 0
     }
   },
   methods: {
@@ -256,6 +257,7 @@ export default {
         let retdata = data.data ? data.data : data
         let max = 0
         let maxIndex = 0
+        let total = 0
         for (var i = 0; i < retdata.length; i++) {
           let curd = retdata[i]
           curd.usedateline_str = new Time(curd.usedateline * 1000).dateFormat('yyyy-MM-dd hh:mm')
@@ -263,7 +265,9 @@ export default {
             max = curd.money
             maxIndex = i
           }
+          total = total + parseFloat(curd.money)
         }
+        this.totalPrice = total.toFixed(2)
         if (max > 0) {
           retdata[maxIndex].zuijia = true
         }

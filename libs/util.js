@@ -285,7 +285,7 @@ Util.install = function (Vue, options) {
           url = url.substr(lastindex + 1)
         }
         let params = url.split('&')
-        for (let i = 0; i < params.length; i++ ) {
+        for (let i = 0; i < params.length; i++) {
           let p = params[i].split('=')
           query[p[0]] = p[1]
         }
