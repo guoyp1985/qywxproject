@@ -10,7 +10,7 @@
 
 <template>
   <div class="staff-container">
-    <div class="box-outer mb10">
+    <div class="box-outer mb10" @click="toIncome">
       <div class="box-title flex_left">
         <div>可提现</div>
         <div class="flex_cell flex_right bold color-red">￥{{user.waitcashmoney}}</div>
@@ -197,6 +197,11 @@ export default {
       let curYear = monthVal.substr(0, 4)
       let curMonth = monthVal.substr(4, 2)
       return `${curYear}年${curMonth}月`
+    }
+  },
+  methods: {
+    toIncome () {
+      this.$router.push('/income')
     }
   }
 }
