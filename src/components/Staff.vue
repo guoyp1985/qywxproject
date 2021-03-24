@@ -10,6 +10,12 @@
 
 <template>
   <div class="staff-container">
+    <div class="box-outer mb10">
+      <div class="box-title flex_left">
+        <div>可提现</div>
+        <div class="flex_cell flex_right bold color-red">￥{{user.waitcashmoney}}</div>
+      </div>
+    </div>
     <div :class="`box-outer ${targets ? 'mb10' : ''}`" v-if="targets">
       <div class="box-title">{{targets.month | getMonth}}目标</div>
       <div class="box-list square">

@@ -23,7 +23,8 @@
 }
 </style>
 <template>
-  <div :class="`containerarea activity-list-page ${(!loginUser || !loginUser.isadmin) ? 'nobottom' : ''}`">
+  <!-- <div :class="`containerarea activity-list-page ${(!loginUser || !loginUser.isadmin) ? 'nobottom' : ''}`"> -->
+  <div :class="`containerarea activity-list-page nobottom`">
     <!-- <div class="s-topbanner s-topbanner1 bg-white">
       <div class="row">
         <tab v-model="selectedIndex" class="v-tab">
@@ -77,9 +78,9 @@
         </template>
       </div>
     </div>
-    <div class="page-footer" v-if="loginUser && loginUser.isadmin">
+    <!-- <div class="page-footer" v-if="loginUser && loginUser.isadmin">
       <router-link class="item" to="/addCommonCard">添加活动</router-link>
-    </div>
+    </div> -->
   </div>
 </template>
 

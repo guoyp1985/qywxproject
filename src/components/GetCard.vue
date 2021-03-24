@@ -1,6 +1,6 @@
 <style lang="less">
 .get-card-inner{
-  background-color:#f94929;width:100%;height:100%;
+  background-color:#f94929;width:100%;box-sizing: border-box;
   .bg-image1{width:100%;}
   .row1{
     width:100%;
@@ -8,8 +8,9 @@
   }
   .row2{
     width:100%;position:relative;
+    background:url('https://tossharingsales.boka.cn/minigxk/luck/bg2.png') no-repeat left top;
+    background-size:100%;
     img{width:100%;display:block;}
-    .row2-inner{position:absolute;left:0;top:0;right:0;bottom:0;}
   }
   .pic-area{
     width:53%;
@@ -42,7 +43,7 @@
       <img src="https://tossharingsales.boka.cn/minigxk/luck/bg3.png" />
     </div>
     <div class="row2">
-      <img src="https://tossharingsales.boka.cn/minigxk/luck/bg2.png" />
+      <!-- <img src="https://tossharingsales.boka.cn/minigxk/luck/bg2.png" /> -->
       <div class="row2-inner">
         <div v-if="showOpen" class="w_100 flex_center">
           <div class="pic-area">
@@ -73,7 +74,7 @@
             </div>
           </div>
         </div>
-        <div v-if="viewData && viewData.id" class="txt-area">
+        <!-- <div v-if="viewData && viewData.id" class="txt-area">
           <div class="db-flex" v-if="viewData.content && viewData.content != ''">
             <div class="txt">使用说明: </div>
             <div class="flex_cell" v-html="viewData.content"></div>
@@ -89,8 +90,25 @@
         </div>
         <div v-if="showResult" class="pb20">
           <div class="flex_center btn-play" @click="toList">我的优惠券</div>
-        </div>
+        </div> -->
       </div>
+    </div>
+    <div v-if="viewData && viewData.id" class="txt-area">
+      <div class="db-flex" v-if="viewData.content && viewData.content != ''">
+        <div class="txt">使用说明: </div>
+        <div class="flex_cell" v-html="viewData.content"></div>
+      </div>
+      <div class="flex_left" v-if="viewData.starttime">
+        <div class="txt">有效期: </div>
+        <div class="flex_cell">{{viewData.starttime_str}} 至 {{viewData.endtime_str}}</div>
+      </div>
+      <div class="flex_left" v-else="viewData.deadline">
+        <div class="txt">有效期至: </div>
+        <div class="flex_cell">{{viewData.deadline_str}}</div>
+      </div>
+    </div>
+    <div v-if="showResult" class="pb20">
+      <div class="flex_center btn-play" @click="toList">我的优惠券</div>
     </div>
   </div>
 </template>

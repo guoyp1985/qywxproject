@@ -125,6 +125,7 @@ import ENV from 'env'
 import Time from '../../libs/time'
 import { User } from '#/storage'
 import CustomerItem from '@/components/CustomerItem'
+import jweixin from 'jweixin'
 
 export default {
   components: { Tab, TabItem, CustomerItem },
@@ -183,7 +184,7 @@ export default {
         let shareEndTime = new Time(this.cardInfo.endtime * 1000).dateFormat('MM-dd')
         shareDesc = `活动日期${shareStartTime}至${shareEndTime}`
       }
-      wx.invoke('shareToExternalContact', {
+      jweixin.invoke('shareToExternalContact', {
         title: shareTitle,
         desc: shareDesc,
         link: `${ENV.Host}/#/card?type=singlecard&customeruid=${this.cardUser.uid}&share_uid=${this.loginUser.uid}`,

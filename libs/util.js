@@ -5,58 +5,49 @@ import SHA1 from 'js-sha1'
 import Time from './time'
 import urlParse from 'url-parse'
 import jQuery from 'jquery'
+import jweixin from 'jweixin'
 import { User, Roomid, Token, SystemParams } from './storage'
-const jweixin = require('../static/jweixin')
-const jwxwork = require('../static/jwxwork-1.0.0')
+// const jweixin = require('../static/jweixin')
+// const jwxwork = require('../static/jwxwork-1.0.0')
+// const jweixin = require('https://res.wx.qq.com/wwopen/js/jsapi/jweixin-1.0.0.js')
 const Util = {}
-
+console.log('进入到了util.js')
+console.log(jweixin)
 const wxConfigFun = function (callback) {
   Vue.http.get(`${ENV.BokaApi}/api/common/jsconfig`,
     { params: { url: encodeURIComponent(location.href.split('#')[0]) } }
   ).then(res => {
     if (!res) return
-    // jweixin.config(res.data)
-    // jweixin.error(function () {
-    //   // Vue.$vux.toast.show({
-    //   //   text: '微信还没有准备好，请刷新页面',
-    //   //   type: 'warn',
-    //   // })
-    // })
     let data = res.data
+    // data.jsApiList.push('shareToExternalContact')
+    // data.jsApiList.push('shareToExternalChat')
+    console.log('wxconfigfun common/jsconfig')
     data.jsApiList.push('shareToExternalContact')
     data.jsApiList.push('shareToExternalChat')
     jweixin.config(data)
-    jweixin.error(function () {
-      // Vue.$vux.toast.show({
-      //   text: '微信还没有准备好，请刷新页面',
-      //   type: 'warn',
-      // })
+    jweixin.error(function (error) {
+      console.log('common/jsconfig 微信 error了')
+      console.log(error)
     })
     callback && callback()
   })
-  Vue.http.get(`${ENV.BokaApi}/api/common/agentConfig`,
-    { params: { url: encodeURIComponent(location.href.split('#')[0]) } }
-  ).then(res => {
-    if (!res) return
-    // jweixin.config(res.data)
-    // jweixin.error(function () {
-    //   // Vue.$vux.toast.show({
-    //   //   text: '微信还没有准备好，请刷新页面',
-    //   //   type: 'warn',
-    //   // })
-    // })
-    let data = res.data
-    data.jsApiList.push('shareToExternalContact')
-    data.jsApiList.push('shareToExternalChat')
-    wx.agentConfig(data)
-    jweixin.error(function () {
-      // Vue.$vux.toast.show({
-      //   text: '微信还没有准备好，请刷新页面',
-      //   type: 'warn',
-      // })
+  const userAgentInfo = navigator.userAgent.toLowerCase()
+  if (/wxwork/i.test(userAgentInfo)) {
+    Vue.http.get(`${ENV.BokaApi}/api/common/agentConfig`,
+      { params: { url: encodeURIComponent(location.href.split('#')[0]) } }
+    ).then(res => {
+      if (!res) return
+      let data = res.data
+      data.jsApiList.push('shareToExternalContact')
+      data.jsApiList.push('shareToExternalChat')
+      jweixin.agentConfig(data)
+      jweixin.error(function () {
+        console.log('common/agentConfig 微信 error了')
+        console.log(error)
+      })
+      callback && callback()
     })
-    callback && callback()
-  })
+  }
 }
 
 Util.install = function (Vue, options) {
@@ -293,19 +284,20 @@ Util.install = function (Vue, options) {
       return query
     },
     wxShareSuccess: function (params) {
-      let self = this
-      let wxData = params.data
-      let postparams = {
-        id: wxData.moduleid,
-        type: params.type
-      }
-      if (wxData.lastshareuid) {
-        postparams.lastshareuid = wxData.lastshareuid
-      }
-      Vue.http.post(`${ENV.BokaApi}/api/share/${wxData.module}`, postparams).then(function (res) {
-        let data = res.data
-        params.successCallback && params.successCallback(data)
-      })
+      console.log('进入到了分享成功')
+      // let self = this
+      // let wxData = params.data
+      // let postparams = {
+      //   id: wxData.moduleid,
+      //   type: params.type
+      // }
+      // if (wxData.lastshareuid) {
+      //   postparams.lastshareuid = wxData.lastshareuid
+      // }
+      // Vue.http.post(`${ENV.BokaApi}/api/share/${wxData.module}`, postparams).then(function (res) {
+      //   let data = res.data
+      //   params.successCallback && params.successCallback(data)
+      // })
     },
     wxConfig1: function (callback) {
       console.log('======进入到了wxconfig1')
@@ -316,7 +308,6 @@ Util.install = function (Vue, options) {
         let data = res.data
         data.jsApiList.push('shareToExternalContact')
         data.jsApiList.push('shareToExternalChat')
-        data.debug = true
         console.log('wxconfig1请求结束了')
         console.log(data)
         jweixin.config(data)
@@ -337,23 +328,14 @@ Util.install = function (Vue, options) {
         { params: { url: encodeURIComponent(location.href.split('#')[0]) } }
       ).then(res => {
         if (!res) return
-        // jweixin.config(res.data)
-        // jweixin.error(function () {
-        //   // Vue.$vux.toast.show({
-        //   //   text: '微信还没有准备好，请刷新页面',
-        //   //   type: 'warn',
-        //   // })
-        // })
         let data = res.data
+        console.log('微信config好了')
+        console.log(data)
         data.jsApiList.push('shareToExternalContact')
         data.jsApiList.push('shareToExternalChat')
         jweixin.config(data)
         jweixin.error((error) => {
           console.log('进入到了jweixin error, 微信还没有准备好')
-          // Vue.$vux.toast.show({
-          //   text: '微信还没有准备好，请刷新页面',
-          //   type: 'warn',
-          // })
         })
         callback && callback()
       }, error => {
@@ -365,23 +347,12 @@ Util.install = function (Vue, options) {
           { params: { url: encodeURIComponent(location.href.split('#')[0]) } }
         ).then(res => {
           if (!res) return
-          // jweixin.config(res.data)
-          // jweixin.error(function () {
-          //   // Vue.$vux.toast.show({
-          //   //   text: '微信还没有准备好，请刷新页面',
-          //   //   type: 'warn',
-          //   // })
-          // })
           let data = res.data
           data.jsApiList.push('shareToExternalContact')
           data.jsApiList.push('shareToExternalChat')
-          wx.agentConfig(data)
+          jweixin.agentConfig(data)
           jweixin.error((error) => {
             console.log('进入到了jweixin error, 微信还没有准备好')
-            // Vue.$vux.toast.show({
-            //   text: '微信还没有准备好，请刷新页面',
-            //   type: 'warn',
-            // })
           })
           callback && callback()
         }, error => {
@@ -394,188 +365,162 @@ Util.install = function (Vue, options) {
       const self = this
       let wxData = params.data
       let isUpdate = false
-      jweixin.ready(function () {
-        params.readyCallback && params.readyCallback()
-        console.log('微信准备好了')
-        jweixin.showMenuItems({
-          menuList: [
-            'menuItem:profile',
-            'menuItem:addContact'
-          ]
-        })
-        jweixin.hideMenuItems({
-          menuList: [
-            'menuItem:exposeArticle',
-            'menuItem:setFont',
-            'menuItem:readMode',
-            'menuItem:share:qq',
-            'menuItem:share:QZone',
-            'menuItem:share:weiboApp',
-            'menuItem:share:facebook'
-          ]
-        })
-        let wxshareurl = wxData.link
-        let query = self.query(wxshareurl)
-        if (query.openid) {
-            wxshareurl = wxshareurl.replace(`&openid=${query.openid}`, '').replace(`openid=${query.openid}`, '')
-        }
-        console.log('到了util处理的分享链接')
-        console.log(wxshareurl)
-        jweixin.checkJsApi({
-          jsApiList: ['onMenuShareAppMessage', 'shareToExternalChat', 'shareToExternalContact'],
-          success: function(res) {
-            if (!res.checkResult.onMenuShareAppMessage) {
-              isUpdate = true
-            }
+      try {
+        jweixin.ready(function () {
+          params.readyCallback && params.readyCallback()
+          console.log('===微信准备好了')
+          jweixin.showMenuItems({
+            menuList: [
+              'menuItem:profile',
+              'menuItem:addContact'
+            ]
+          })
+          jweixin.hideMenuItems({
+            menuList: [
+              'menuItem:exposeArticle',
+              'menuItem:setFont',
+              'menuItem:readMode',
+              'menuItem:share:qq',
+              'menuItem:share:QZone',
+              'menuItem:share:weiboApp',
+              'menuItem:share:facebook'
+            ]
+          })
+          let wxshareurl = wxData.link
+          let query = self.query(wxshareurl)
+          if (query.openid) {
+              wxshareurl = wxshareurl.replace(`&openid=${query.openid}`, '').replace(`openid=${query.openid}`, '')
           }
-        })
-        jweixin.onMenuShareAppMessage({
-          title: wxData.title,
-          desc: wxData.desc,
-          link: wxshareurl,
-          imgUrl: wxData.photo,
-          type: wxData.type,
-          dataUrl:wxData.dataUrl,
-          trigger: function (res) {
-            //分享之前执行
-            //	alert('用户点击发送给朋友');
-            params.beforeShare && params.beforeShare()
-            // if (wxData.desc == "undefined" || wxData.desc == undefined) {
-            //   alert("微信还没准备好分享，请稍后再试");
-            // }
-            if (res.shareTo == "favorite") {
+          console.log('到了util处理的分享链接')
+          console.log(wxshareurl)
+          console.log(wxData)
+          jweixin.checkJsApi({
+            jsApiList: ['onMenuShareAppMessage', 'shareToExternalChat', 'shareToExternalContact'],
+            success: function(res) {
+              if (!res.checkResult.onMenuShareAppMessage) {
+                isUpdate = true
+              }
+            }
+          })
+          jweixin.onMenuShareAppMessage({
+            title: wxData.title,
+            desc: wxData.desc,
+            link: wxshareurl,
+            imgUrl: wxData.photo,
+            type: wxData.type,
+            dataUrl:wxData.dataUrl,
+            trigger: function (res) {
+              //分享之前执行
+              //	alert('用户点击发送给朋友');
+              params.beforeShare && params.beforeShare()
+              // if (wxData.desc == "undefined" || wxData.desc == undefined) {
+              //   alert("微信还没准备好分享，请稍后再试");
+              // }
+              if (res.shareTo == "favorite") {
+                self.wxShareSuccess({
+                  data: wxData,
+                  type: 'favorite',
+                  successCallback: params.successCallback
+                })
+              }
+            },
+            success: function (resp) {
+              if (isUpdate) {
+                alert("微信版本太低，请先升级微信客户端!")
+              }
               self.wxShareSuccess({
                 data: wxData,
-                type: 'favorite',
+                type: 'friend',
                 successCallback: params.successCallback
               })
+            },
+            cancel: function (resp) {
             }
-          },
-          success: function (resp) {
-            if (isUpdate) {
-              alert("微信版本太低，请先升级微信客户端!")
+          })
+          jweixin.onMenuShareTimeline({
+            title: wxData.title,
+            link: wxshareurl,
+            imgUrl: wxData.photo,
+            trigger: function (res) {
+              //分享之前执行
+              //	alert('用户点击发送给朋友');
+              params.beforeShare && params.beforeShare()
+              // if (wxData.desc === "undefined" || wxData.desc === undefined) {
+              //   alert("微信还没准备好分享，请稍后再试");
+              // }
+            },
+            success: function (resp) {
+              self.wxShareSuccess({
+                data: wxData,
+                type: 'timeline',
+                successCallback: params.successCallback
+              })
+            },
+            cancel: function (resp) {
             }
-            self.wxShareSuccess({
-              data: wxData,
-              type: 'friend',
-              successCallback: params.successCallback
-            })
-          },
-          cancel: function (resp) {
-          }
-        })
-        jweixin.onMenuShareTimeline({
-          title: wxData.title,
-          link: wxshareurl,
-          imgUrl: wxData.photo,
-          trigger: function (res) {
-            //分享之前执行
-            //	alert('用户点击发送给朋友');
-            params.beforeShare && params.beforeShare()
-            // if (wxData.desc === "undefined" || wxData.desc === undefined) {
-            //   alert("微信还没准备好分享，请稍后再试");
-            // }
-          },
-          success: function (resp) {
-            self.wxShareSuccess({
-              data: wxData,
-              type: 'timeline',
-              successCallback: params.successCallback
-            })
-          },
-          cancel: function (resp) {
-          }
-        })
-        jweixin.onMenuShareQQ({
-          title: wxData.title,
-          desc: wxData.desc,
-          link: wxshareurl,
-          imgUrl: wxData.photo,
-          trigger: function (res) {
-            //分享之前执行
-            //	alert('用户点击发送给朋友');
-            params.beforeShare && params.beforeShare()
-            // if (wxData.desc === "undefined" || wxData.desc === undefined) {
-            //   alert("微信还没准备好分享，请稍后再试");
-            // }
-          },
-          success: function (resp) {
-            self.wxShareSuccess({
-              data: wxData,
-              type: 'qq',
-              successCallback: params.successCallback
-            })
-          },
-          cancel: function (resp) {
-          }
-        })
-        // wx.invoke('shareToExternalChat', {
-        //   title: wxData.title,
-        //   desc: wxData.desc,
-        //   link: wxshareurl,
-        //   imgUrl: wxData.photo,
-        //   success: function (res) {
-        //   }
-        // }, function (res) {
-        //   if (res.err_msg == "shareToExternalChat:ok") {
-        //     self.wxShareSuccess({
-        //       data: wxData,
-        //       type: 'friend',
-        //       successCallback: params.successCallback
-        //     })
-        //   }
-        // })
-        // wx.invoke('shareToExternalContact', {
-        //   title: wxData.title,
-        //   desc: wxData.desc,
-        //   link: wxshareurl,
-        //   imgUrl: wxData.photo,
-        //   success: function (res) {
-        //   }
-        // }, function (res) {
-        //   if (res.err_msg == "shareToExternalContact:ok") {
-        //     self.wxShareSuccess({
-        //       data: wxData,
-        //       type: 'friend',
-        //       successCallback: params.successCallback
-        //     })
-        //   }
-        // })
-        if (wx && wx.shareToExternalChat) {
-          wx.shareToExternalChat({
+          })
+          jweixin.onMenuShareQQ({
             title: wxData.title,
             desc: wxData.desc,
             link: wxshareurl,
             imgUrl: wxData.photo,
-            success: function (res) {
-              if (res.err_msg == "shareToExternalChat:ok") {
-                self.wxShareSuccess({
-                  data: wxData,
-                  type: 'friend',
-                  successCallback: params.successCallback
-                })
-              }
+            trigger: function (res) {
+              //分享之前执行
+              //	alert('用户点击发送给朋友');
+              params.beforeShare && params.beforeShare()
+              // if (wxData.desc === "undefined" || wxData.desc === undefined) {
+              //   alert("微信还没准备好分享，请稍后再试");
+              // }
+            },
+            success: function (resp) {
+              self.wxShareSuccess({
+                data: wxData,
+                type: 'qq',
+                successCallback: params.successCallback
+              })
+            },
+            cancel: function (resp) {
             }
           })
-        }
-        if (wx && wx.shareToExternalContact) {
-          wx.shareToExternalContact({
-            title: wxData.title,
-            desc: wxData.desc,
-            link: wxshareurl,
-            imgUrl: wxData.photo,
-            success: function (res) {
-              if (res.err_msg == "shareToExternalContact:ok") {
-                self.wxShareSuccess({
-                  data: wxData,
-                  type: 'friend',
-                  successCallback: params.successCallback
-                })
+          if (jweixin && jweixin.shareToExternalChat) {
+            jweixin.shareToExternalChat({
+              title: wxData.title,
+              desc: wxData.desc,
+              link: wxshareurl,
+              imgUrl: wxData.photo,
+              success: function (res) {
+                if (res.err_msg == "shareToExternalChat:ok") {
+                  self.wxShareSuccess({
+                    data: wxData,
+                    type: 'friend',
+                    successCallback: params.successCallback
+                  })
+                }
               }
-            }
-          })
-        }
-      })
+            })
+          }
+          if (jweixin && jweixin.shareToExternalContact) {
+            jweixin.shareToExternalContact({
+              title: wxData.title,
+              desc: wxData.desc,
+              link: wxshareurl,
+              imgUrl: wxData.photo,
+              success: function (res) {
+                if (res.err_msg == "shareToExternalContact:ok") {
+                  self.wxShareSuccess({
+                    data: wxData,
+                    type: 'friend',
+                    successCallback: params.successCallback
+                  })
+                }
+              }
+            })
+          }
+        })
+      } catch (e) {
+        console.log('util.js catch 到了wx.ready的错误 ')
+        console.log(e)
+      }
     },
     handleWxShare: function (os) {
       const self = this
@@ -616,6 +561,8 @@ Util.install = function (Vue, options) {
       if (os.lastshareuid) {
         wxData.lastshareuid = os.lastshareuid
       }
+      console.log('进入到了handleWxShare')
+      console.log(wxData)
       self.wxShare({
         data: wxData,
         successCallback: function (data) {

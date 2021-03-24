@@ -383,6 +383,7 @@ import jQuery from 'jquery'
 import ENV from 'env'
 import { User } from '#/storage'
 import StaffQrcode from '@/components/StaffQrcode'
+import jweixin from 'jweixin'
 
 export default {
   directives: {TransferDom},
@@ -472,7 +473,7 @@ export default {
       console.log('fail', e.detail)
     },
     toShare () {
-      wx.invoke('shareToExternalContact', {
+      jweixin.invoke('shareToExternalContact', {
         title: this.viewData.title,
         desc: this.viewData.summary,
         link: this.shareParams.link,
@@ -482,7 +483,7 @@ export default {
       })
     },
     toShareGroup () {
-      wx.invoke('shareToExternalChat', {
+      jweixin.invoke('shareToExternalChat', {
         title: this.viewData.title,
         desc: this.viewData.summary,
         link: this.shareParams.link,

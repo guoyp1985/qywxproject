@@ -298,6 +298,7 @@ const access = success => {
           console.log(error)
         })
       } else {
+        Vue.wxConfig()
         console.log('进入的页面地址', routerUrl)
         store.commit('updateMiniInvoke', {miniInvoke: true})
         success && success(routerUrl)

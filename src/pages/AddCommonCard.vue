@@ -223,6 +223,7 @@ import ENV from 'env'
 import { Datetime, Tab, TabItem, Popup, TransferDom } from 'vux'
 import { User } from '#/storage'
 import jQuery from 'jquery'
+import jweixin from 'jweixin'
 export default {
   directives: { TransferDom },
   components: { Datetime, Tab, TabItem, Popup },

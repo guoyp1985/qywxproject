@@ -1,42 +1,13 @@
 <style lang="less">
 .card-page.havebottom{
-  .card-inner{position:absolute;left:0;right:0;bottom:50px;z-index:1;}
+  .card-inner{position:absolute;left:0;top:0;right:0;bottom:50px;z-index:1;}
 }
 .card-page{
-  width:100%;height:100%;background-color:#f94929;
+  width:100%;height:100%;background-color:#f94929;position:relative;
   .card-inner{background-color:#f94929;overflow-y:auto;}
-  .bg-image1{width:100%;}
-  .row1{
-    width:100%;
-    img{width:100%;display:block;}
-  }
-  .row2{
-    width:100%;position:relative;
-    img{width:100%;display:block;}
-    .row2-inner{position:absolute;left:0;top:0;right:0;bottom:0;}
-  }
-  .pic-area{
-    width:53%;
-    .pic{
-      width:100%;position:relative;
-      img{width:100%;}
-      .txt1{
-        width:34%;max-height:100%;position:absolute;left:33%;top:34%;
-        .inner{width:100%;max-height:100%;position:relative;}
-        .inner:after{padding-top:100%;content:"";display:block;}
-        .btn{position:absolute;left:0;top:0;right:0;bottom:0;font-size:25px;color:#f95a51;}
-        .btn.disable{color:#999;}
-      }
-      .txt2{position:absolute;left:0;bottom:15%;right:0;text-align:center;color:#F9EA72;font-size:15px;letter-spacing:1px;}
-    }
-  }
-  .txt-area{
-    padding:20px;box-sizing: border-box;color:#fff;
-    .txt{width:75px;text-align:right;padding-right:5px;box-sizing: border-box;}
-  }
   .nav-bottom{
     position:absolute;left:0;bottom:0;right:0;height:50px;box-sizing: border-box;
-    width:100%;display:flex;z-index:10;
+    width:100%;display:flex;z-index:10;background-color:#f94929;
     .item{flex:1;height:100%;height:100%;color:#fff;}
     .inner{height:100%;display:flex;justify-content:center;align-items:center;}
     .item .al{font-size:20px;}
@@ -167,6 +138,7 @@ import { User } from '#/storage'
 import GetCard from '@/components/GetCard'
 import UserCard from '@/components/UserCard'
 import ViewCard from '@/components/ViewCard'
+import jweixin from 'jweixin'
 
 export default {
   directives: { TransferDom },
@@ -203,7 +175,7 @@ export default {
   },
   methods: {
     toShare () {
-      wx.invoke('shareToExternalContact', {
+      jweixin.invoke('shareToExternalContact', {
         title: this.shareParams.title,
         desc: this.shareParams.desc,
         link: this.shareParams.link,
@@ -211,7 +183,7 @@ export default {
       })
     },
     toShareGroup () {
-      wx.invoke('shareToExternalChat', {
+      jweixin.invoke('shareToExternalChat', {
         title: this.shareParams.title,
         desc: this.shareParams.desc,
         link: this.shareParams.link,

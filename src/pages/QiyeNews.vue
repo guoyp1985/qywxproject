@@ -99,6 +99,7 @@ import Time from '#/time'
 import ENV from 'env'
 import { User, SystemParams } from '#/storage'
 import StaffQrcode from '@/components/StaffQrcode'
+import jweixin from 'jweixin'
 
 export default {
   directives: { TransferDom },
@@ -137,7 +138,7 @@ export default {
   },
   methods: {
     toShare () {
-      wx.invoke('shareToExternalContact', {
+      jweixin.invoke('shareToExternalContact', {
         title: this.viewData.title,
         desc: this.viewData.summary,
         link: this.shareParams.link,
@@ -147,7 +148,7 @@ export default {
       })
     },
     toShareGroup () {
-      wx.invoke('shareToExternalChat', {
+      jweixin.invoke('shareToExternalChat', {
         title: this.viewData.title,
         desc: this.viewData.summary,
         link: this.shareParams.shareLink,
@@ -253,6 +254,7 @@ export default {
         shareParams.link = `${shareParams.link}&lastshareuid=${this.query.share_uid}`
         shareParams.lastshareuid = this.query.share_uid
       }
+      this.shareParams = shareParams
       console.log('进入到了分享参数的配置')
       console.log(this.shareParams)
       this.$util.handleWxShare(this.shareParams)
