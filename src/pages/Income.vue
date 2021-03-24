@@ -130,7 +130,7 @@
         </div>
       </div>
       <template v-if="showTxt">
-        <cashTxt :themeObject.sync="themeObject"></cashTxt>
+        <cashTxt></cashTxt>
       </template>
     </div>
     <!-- 提现至微信零钱 -->
@@ -216,21 +216,14 @@ export default {
   data () {
     return {
       query: {},
-      userInfo: {waitcash: '0.00'},
-      globalData: {},
-      wid: 0,
-      animationPop: {},
-      animationFlag: 0,
+      loginUser: {waitcash: '0.00'},
       wechatShow: false,
       bankShow: false,
       cashMoney: '',
       cashBankMoney: '',
       submitIng: false,
-      pendingmoney: '0.00',
       showTxt: false,
-      cashInfo: {ketixian: '0.00', zongshouru: '0.00', yijiesuan: '0.00', daijiesuan: '0.00', yitixian: '0.00'},
-      themeObject: {},
-      submitIng: false
+      cashInfo: {ketixian: '0.00', zongshouru: '0.00', yijiesuan: '0.00', daijiesuan: '0.00', yitixian: '0.00'}
     }
   },
   methods: {
@@ -309,10 +302,17 @@ export default {
         if (res && res.status === 200) {
           const data = res.data
           if (data.code === 0) {
-            this.userInfo = data.data
+            this.loginUser = data.data
             User.set(data.data)
             SystemParams.set(data.paras)
             GlobalData.set(data)
+            this.cashInfo = {
+              ketixian: this.loginUser.waitcashmoney,
+              zongshouru: this.loginUser.moneyin,
+              yijiesuan: this.loginUser.jiesuanmoney,
+              daijiesuan: this.loginUser.pendingmoney,
+              yitixian: this.loginUser.moneyout
+            }
           }
         }
       }, error => {
@@ -323,8 +323,13 @@ export default {
     refresh () {
       this.query = this.$route.query
       this.loginUser = User.get()
-      this.cashInfo.daijiesuan = this.loginUser.pendingmoney
-      this.cashInfo.ketixian = this.loginUser.waitcashmoney
+      this.cashInfo = {
+        ketixian: this.loginUser.waitcashmoney,
+        zongshouru: this.loginUser.moneyin,
+        yijiesuan: this.loginUser.jiesuanmoney,
+        daijiesuan: this.loginUser.pendingmoney,
+        yitixian: this.loginUser.moneyout
+      }
     }
   },
   activated () {
