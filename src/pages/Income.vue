@@ -207,9 +207,7 @@
 <script>
 import {} from 'vux'
 import ENV from 'env'
-import Time from '../../libs/time'
 import { User, SystemParams, GlobalData } from '#/storage'
-import Reg from '#/reg'
 import CashTxt from '@/components/CashTxt'
 export default {
   components: {CashTxt},

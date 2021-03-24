@@ -16,7 +16,6 @@
 </template>
 
 <script>
-import ENV from 'env'
 export default {
   name: 'CashTxt'
 }
