@@ -245,9 +245,8 @@ export default {
         shareLink = `${shareLink}&wid=${this.shareWid}`
       }
       let shareParams = {
-        data: this.viewData,
-        module: this.module,
-        moduleid: this.viewData.id,
+        title: this.viewData.title,
+        photo: this.viewData.photo.split(',')[0],
         link: shareLink
       }
       if (this.query.share_uid) {

@@ -15,18 +15,19 @@
 
 <template>
   <div class="scroll_item bg-white mt10 list-shadow income-list-item">
-    <div class="flex_left padding10">
+    <div class="flex_left padding10 b_bottom_after">
       <div class="flex_left pic">
         <img :src="item.avatar" />
       </div>
-      <div class="flex_cell flex_left">
-        <div class="w_100 clamp1">{{item.buyername}}</div>
+      <div class="flex_cell flex_left ml5 mr5">
+        <div class="w_100 clamp1">{{item.customername}}</div>
       </div>
-      <div class="flex_right date-cell">
+      <div class="flex_right bold font16">￥{{item.money}}</div>
+      <!-- <div class="flex_right date-cell">
         <div class="w_100 clamp1 font12 color-gray align_right">{{item.dateline_str}}</div>
-      </div>
+      </div> -->
     </div>
-    <div class="padding10 font12 border_bottomAndTop">
+    <!-- <div class="padding10 font12 border_bottomAndTop">
       <div class="db-flex mb5">
         <div class="flex_left color-gray">佣金类型</div>
         <div class="flex_cell align_right color-orange">{{item.content}}</div>
@@ -39,7 +40,7 @@
         <div class="flex_left color-gray">佣金</div>
         <div class="flex_cell align_right color-orange">{{item.money}}</div>
       </div>
-    </div>
+    </div> -->
     <div class="padding10 flex_left color-theme">{{item.desc}}</div>
   </div>
 </template>

@@ -79,28 +79,28 @@
       <image class="wave-pic" mode="widthFix" src="https://tossharingsales.boka.cn/minigxk/wave.png"></image>
     </div>
     <div class="txt-list bg-white">
-      <div class="txt-item" data-flag="0" bindtap="toIncome">
+      <div class="txt-item" @click="toIncome(0)">
         <div>
           <div class="txt1">{{cashInfo.zongshouru}}</div>
           <div class="txt2">总收入(元)</div>
         </div>
         <div class="al al-mjiantou-copy2"></div>
       </div>
-      <div class="txt-item" data-flag="2" bindtap="toIncome">
+      <div class="txt-item" @click="toIncome(1)">
         <div>
           <div class="txt1">{{cashInfo.yijiesuan}}</div>
           <div class="txt2">已结算(元)</div>
         </div>
         <div class="al al-mjiantou-copy2"></div>
       </div>
-      <div class="txt-item" data-flag="1" bindtap="toIncome">
+      <div class="txt-item" @click="toIncome(0)">
         <div>
           <div class="txt1">{{cashInfo.daijiesuan}}</div>
           <div class="txt2">待结算(元)</div>
         </div>
         <div class="al al-mjiantou-copy2"></div>
       </div>
-      <div class="txt-item" data-flag="3" bindtap="toIncome">
+      <div class="txt-item" @click="toIncome(2)">
         <div>
           <div class="txt1">{{cashInfo.yitixian}}</div>
           <div class="txt2">已提现(元)</div>
@@ -225,6 +225,9 @@ export default {
     }
   },
   methods: {
+    toIncome (flag) {
+      this.$router.push(`/incomeList?flag=${flag}`)
+    },
     clickTxt () {
       this.showTxt = !this.showTxt
     },
@@ -270,7 +273,7 @@ export default {
       }
       this.submitIng = true
       this.$vux.loading.show()
-      this.$http.post(`${ENV.BokaApi}/api/accounting/cashMoney`, {
+      this.$http.post(`${ENV.BokaApi}/api/account/cashMoney`, {
         money: inputMoney, type: type
       }).then(res => {
         this.$vux.loading.hide()
@@ -281,6 +284,9 @@ export default {
           type: (data.code === 0 ? 'success' : 'warn'),
           time: this.$util.delay(data.msg)
         })
+        if (data.code === 0) {
+          this.getData()
+        }
         this.bankShow = false
         this.wechatShow = false
         this.cashMoney = ''

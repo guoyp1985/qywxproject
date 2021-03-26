@@ -2,6 +2,7 @@ var ENV = {
   Version: '1.0.2',
   AppId: 'ww1f2b286b9ed5b8c0',
   Agentid: '1000012',
+  AppGhId: 'gh_b5532144f48c', // 小程序原始id
   WxAuthUrl: 'https://open.weixin.qq.com/connect/oauth2/authorize?',
   WxQrcodeAuthUrl: 'https://open.work.weixin.qq.com/wwopen/sso/qrConnect?',
   Host: 'http://qywx.bsa.cn',
@@ -11,7 +12,7 @@ var ENV = {
   DebugMode: true,
   DebugList: [
   ],
-  isKaifa: false
+  isKaifa: true
 }
 
 ENV.NoAccessUrls = [

@@ -278,20 +278,18 @@
           <div class="font12">个人中心</div>
         </router-link>
         <div v-if="productdata.storage <= 0" class="t-cell color-white h_100 v_middle align_center bg-gray">已售罄</div>
-				<div v-else class="t-cell color-white h_100 v_middle align_center bg-red2">立即购买
-          <!-- <template v-if="isWx">
-            <wx-open-launch-weapp
-              id="launch-btn2"
-              username="gh_b5532144f48c"
-              @launch="handleLaunchFn"
-              @error="handleErrorFn"
-              style="width:100%;display:block;">
-              <script type="text/wxtag-template">
-                <div style="width:100%;height:50px;color:#fff;background-color:#ff4a01;box-sizing:border-box;display:flex;justify-content:center;align-items:center;">立即购买</div>
-              </script>
-            </wx-open-launch-weapp>
-          </template>
-          <span v-else>立即购买</span> -->
+				<div v-else class="t-cell color-white h_100 v_middle align_center bg-red2">
+          <!-- 立即购买 -->
+          <wx-open-launch-weapp
+            id="launch-btn2"
+            :username="AppGhId"
+            @launch="handleLaunchFn"
+            @error="handleErrorFn"
+            style="width:100%;display:block;">
+            <script type="text/wxtag-template">
+              <div style="width:100%;height:50px;color:#fff;background-color:#ff4a01;box-sizing:border-box;display:flex;justify-content:center;align-items:center;">立即购买</div>
+            </script>
+          </wx-open-launch-weapp>
         </div>
 			</div>
 		</div>
@@ -341,21 +339,7 @@
             <div class="options-bottom flex_center">
               <div class="flex_cell h_100 flex_center">
                 <div v-if="isQywx" class="bg-theme color-white flex_center btn" @click="clickShare">分享赚 {{productdata.salesrebate}}</div>
-                <div v-else class="bg-theme color-white flex_center btn" @click="buyOption">立即购买
-                  <!-- <template v-if="isWx">
-                    <wx-open-launch-weapp
-                      id="launch-btn2"
-                      username="gh_b5532144f48c"
-                      @launch="handleLaunchFn"
-                      @error="handleErrorFn"
-                      style="width:100%;display:block;">
-                      <script type="text/wxtag-template">
-                        <div style="width:100%;height:50px;color:#fff;background-color:#ff4a01;box-sizing:border-box;display:flex;justify-content:center;align-items:center;">立即购买</div>
-                      </script>
-                    </wx-open-launch-weapp>
-                  </template>
-                  <span v-else>立即购买</span> -->
-                </div>
+                <div v-else class="bg-theme color-white flex_center btn" @click="buyOption">立即购买</div>
               </div>
             </div>
           </div>
@@ -425,7 +409,9 @@ export default {
       isPC: false,
       isQywx: false,
       isWx: false,
-      shareParams: {}
+      shareParams: {},
+      isKaifa: ENV.IsKaifa,
+      AppGhId: ENV.AppGhId
     }
   },
   watch: {
@@ -475,7 +461,7 @@ export default {
     toShare () {
       jweixin.invoke('shareToExternalContact', {
         title: this.viewData.title,
-        desc: this.viewData.summary,
+        desc: this.viewData.title,
         link: this.shareParams.link,
         imgUrl: this.viewData.photo.split(',')[0],
         success: function (res) {
@@ -485,7 +471,7 @@ export default {
     toShareGroup () {
       jweixin.invoke('shareToExternalChat', {
         title: this.viewData.title,
-        desc: this.viewData.summary,
+        desc: this.viewData.title,
         link: this.shareParams.link,
         imgUrl: this.viewData.photo.split(',')[0],
         success: function (res) {
@@ -653,8 +639,8 @@ export default {
       let shareLink = `${ENV.Host}/#/qiyeProduct?id=${this.productid}&share_uid=${this.loginUser.uid}`
       if (this.wid && this.wid !== '') shareLink = `${shareLink}&wid=${this.wid}`
       let shareData = {
-        module: this.module,
-        moduleid: this.productid,
+        title: this.viewData.title,
+        photo: this.viewData.photo.split(',')[0],
         link: shareLink,
         successCallback: () => {
           this.showVideo = false
@@ -797,6 +783,7 @@ export default {
       this.isPC = this.$util.isPC
       this.isQywx = this.$util.isQywx()
       this.isWx = this.$util.isWx()
+      console.log('是否为微信', this.isWx)
       this.afterLoad = true
       this.$vux.loading.show()
       this.handleQuery()

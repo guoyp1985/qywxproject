@@ -14,6 +14,8 @@ const Util = {}
 console.log('进入到了util.js')
 console.log(jweixin)
 const wxConfigFun = function (callback) {
+  const userAgentInfo = navigator.userAgent.toLowerCase()
+  let isQywx = /wxwork/i.test(userAgentInfo)
   Vue.http.get(`${ENV.BokaApi}/api/common/jsconfig`,
     { params: { url: encodeURIComponent(location.href.split('#')[0]) } }
   ).then(res => {
@@ -31,8 +33,7 @@ const wxConfigFun = function (callback) {
     })
     callback && callback()
   })
-  const userAgentInfo = navigator.userAgent.toLowerCase()
-  if (/wxwork/i.test(userAgentInfo)) {
+  if (!isQywx) {
     Vue.http.get(`${ENV.BokaApi}/api/common/agentConfig`,
       { params: { url: encodeURIComponent(location.href.split('#')[0]) } }
     ).then(res => {
@@ -298,30 +299,6 @@ Util.install = function (Vue, options) {
       //   let data = res.data
       //   params.successCallback && params.successCallback(data)
       // })
-    },
-    wxConfig1: function (callback) {
-      console.log('======进入到了wxconfig1')
-      Vue.http.get(`${ENV.BokaApi}/api/common/jsconfig`,
-        { params: { url: encodeURIComponent(location.href.split('#')[0]) } }
-      ).then(res => {
-        if (!res) return
-        let data = res.data
-        data.jsApiList.push('shareToExternalContact')
-        data.jsApiList.push('shareToExternalChat')
-        console.log('wxconfig1请求结束了')
-        console.log(data)
-        jweixin.config(data)
-        jweixin.error(function () {
-          // Vue.$vux.toast.show({
-          //   text: '微信还没有准备好，请刷新页面',
-          //   type: 'warn',
-          // })
-        })
-        callback && callback()
-      }, error => {
-        console.log('========wxconfig1 请求失败了')
-        console.log(error)
-      })
     },
     wxConfig: function (callback) {
       Vue.http.get(`${ENV.BokaApi}/api/common/jsconfig`,

@@ -10,8 +10,9 @@
     <div class="s-topbanner s-topbanner1 bg-white">
       <div class="row">
         <tab v-model="selectedIndex" class="v-tab">
-          <tab-item selected @on-item-click="clickTab(0)">未结算</tab-item>
-          <tab-item @on-item-click="clickTab(1)">已结算</tab-item>
+          <tab-item :selected="selectedIndex == 0" @on-item-click="clickTab(0)">未结算</tab-item>
+          <tab-item :selected="selectedIndex == 1" @on-item-click="clickTab(1)">已结算</tab-item>
+          <tab-item :selected="selectedIndex == 2" @on-item-click="clickTab(2)">提现明细</tab-item>
         </tab>
       </div>
     </div>
@@ -50,6 +51,30 @@
           <div class="load-end-area done" v-else-if="isDone2"></div>
         </template>
       </div>
+      <div v-show="(selectedIndex == 2)" class="swiper-inner" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3', 2)">
+        <template v-if="disList3">
+          <div v-if="!listData3 || !listData3.length" class="flex_empty">暂无数据</div>
+          <div v-else class="scroll_list">
+            <div v-for="(item,index1) in listData3" :key="index1" class="scroll_item bg-white mt10 list-shadow">
+              <div class="pl12 pr12 pt10 pb10">
+                <div class="db-flex">
+                  <div class="flex_cell flex_left">
+                    <div class="w_100">
+                      <div><span>{{item.cashtypetext}}</span><span v-if="item.status == 1" class="color-green2">【{{item.statustext}}】</span><span v-else class="color-theme">【{{item.statustext}}】</span></div>
+                      <div class="mt5 color-gray" v-if="item.cmms && item.cmms > 0">手续费: ￥{{item.cmms}}</div>
+                      <div class="color-theme mt5" v-if="item.reason && item.reason != ''">{{item.reason}}</div>
+                      <div class="mt5 font12 clamp1 color-gray">{{ item.dateline | dateformat }}</div>
+                    </div>
+                  </div>
+                  <div class="flex_right ml5 color-theme bold">￥{{item.money}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="load-end-area loading" v-if="isLoading3"></div>
+          <div class="load-end-area done" v-else-if="isDone3"></div>
+        </template>
+      </div>
     </div>
   </div>
 </template>
@@ -80,13 +105,20 @@ export default {
       listData2: [],
       isLoading2: false,
       isDone2: false,
-      showYxlModal: false,
-      nextCursor1: null,
-      nextCursor2: null,
+      pagestart3: 1,
+      disList3: false,
+      listData3: [],
+      isLoading3: false,
+      isDone3: false,
       pageTop: 0,
       tabLeft: 0,
       cardUser: {},
       cardInfo: {}
+    }
+  },
+  filters: {
+    dateformat: function (value) {
+      return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
     }
   },
   methods: {
@@ -113,6 +145,36 @@ export default {
             this.isLoading2 = true
             this.isDone2 = false
             this.getList2()
+          }
+          break
+        case 2:
+          if (this.isLoading3) return false
+          if (this.listData3.length < this.limit) {
+            this.pagestart3 = 1
+            this.disList3 = false
+            this.listData3 = []
+            this.isLoading3 = true
+            this.isDone3 = false
+            this.getList3()
+          }
+          break
+      }
+    },
+    switchData () {
+      switch (this.selectedIndex) {
+        case 0:
+          if (!this.listData1.length) {
+            this.getList1()
+          }
+          break
+        case 1:
+          if (!this.listData2.length) {
+            this.getList2()
+          }
+          break
+        case 2:
+          if (!this.listData3.length) {
+            this.getList3()
           }
           break
       }
@@ -158,6 +220,23 @@ export default {
         }
       })
     },
+    getList3 () {
+      let params = {page: this.pagestart3, limit: this.limit}
+      this.$http.get(`${ENV.BokaApi}/api/account/cashList`, {
+        params: params
+      }).then(res => {
+        let data = res.data
+        this.$vux.loading.hide()
+        this.isLoading3 = false
+        let retdata = data.data ? data.data : data
+        retdata = this.handleListData(retdata)
+        this.listData3 = this.listData3.concat(retdata)
+        this.disList3 = true
+        if (retdata.length && retdata.length < this.limit) {
+          this.isDone3 = true
+        }
+      })
+    },
     handleScroll (refname, index) {
       const scrollarea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
       this.$util.scrollEvent({
@@ -180,6 +259,14 @@ export default {
                 this.getList2()
               }
               break
+            case 2:
+              if (this.isLoading3 || this.isDone3) return false
+              if (this.listData3.length === this.pagestart3 * this.limit) {
+                this.pagestart3++
+                this.isLoading3 = true
+                this.getList3()
+              }
+              break
           }
         }
       })
@@ -195,21 +282,31 @@ export default {
       this.listData2 = []
       this.isLoading2 = false
       this.isDone2 = false
-      this.showYxlModal = false
-      this.nextCursor1 = null
-      this.nextCursor2 = null
+      this.pagestart3 = 1
+      this.disList3 = false
+      this.listData3 = []
+      this.isLoading3 = false
+      this.isDone3 = false
     },
     refresh () {
       this.loginUser = User.get()
       this.query = this.$route.query
       this.initData()
-      this.getList1()
     }
   },
   created () {
     this.refresh()
   },
   activated () {
+    this.query = this.$route.query
+    if (this.query.flag) {
+      this.selectedIndex = parseInt(this.query.flag)
+    } else {
+      this.selectedIndex = 0
+    }
+    console.log('flag', this.query.flag)
+    console.log('index', this.selectedIndex)
+    this.switchData()
     if (document.querySelector('.vux-tab')) {
       document.querySelector('.vux-tab').scrollLeft = this.tabLeft
     }
