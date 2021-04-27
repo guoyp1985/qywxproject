@@ -179,7 +179,7 @@ export default {
         }
         this.listData2 = this.listData2.concat(retdata)
         this.disList2 = true
-        if (retdata.length < this.limit) {
+        if (this.listData2.length && retdata.length < this.limit) {
           this.isDone2 = true
         }
       })

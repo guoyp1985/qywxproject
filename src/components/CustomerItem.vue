@@ -42,7 +42,7 @@
       </div>
       <div class="flex_center bg-white h40 color-gray2 font14 color-gray2">
         <div class="flex_cell h_100 flex_center b_right_after">联系TA</div>
-        <!-- <div class="flex_cell h_100 flex_center b_right_after" @click="giveCard(item)">发券</div> -->
+        <router-link to="/activityList" class="flex_cell h_100 flex_center b_right_after" v-if="item.exceed_7">推送活动</router-link>
         <div class="flex_cell h_100 flex_center" @click="toView(item)">更多</div>
       </div>
     </div>
@@ -85,6 +85,9 @@ export default {
     },
     giveCard (item) {
       this.$emit('give-card', item)
+    },
+    pushEvent (item) {
+      this.$emit('push-event', item)
     }
   }
 }

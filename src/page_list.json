@@ -11,6 +11,7 @@
   "Income",
   "IncomeList",
   "InviteJoin",
+  "LotteryResult",
   "MultiCardList",
   "PushList",
   "QiyeContent",
@@ -27,6 +28,9 @@
   "SaleCustomerList",
   "ServeActivity",
   "Service",
+  "StoreActivity",
+  "TableIndex",
   "UserCard",
-  "WechatGroup"
+  "WechatGroup",
+  "Test"
 ]

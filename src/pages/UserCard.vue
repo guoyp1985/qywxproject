@@ -3,6 +3,7 @@
   .s-container{bottom:50px;overflow-y:auto;}
   .scroll_list{
     padding:20px;box-sizing: border-box;
+    .scroll_item:after{display:none;}
     .scroll_item:not(:first-child){margin-top:20px;}
     .scroll_item{
       width: 100%;position:relative;background-color: #eb6b5e;color:#fff;
@@ -58,8 +59,8 @@
     <div class="s-topbanner s-topbanner1 bg-white">
       <div class="row">
         <tab v-model="selectedIndex" class="v-tab">
-          <tab-item selected @on-item-click="clickTab(0)">未使用</tab-item>
-          <tab-item @on-item-click="clickTab(1)">已使用</tab-item>
+          <tab-item :selected="selectedIndex == 0" @on-item-click="clickTab(0)">优惠券</tab-item>
+          <tab-item :selected="selectedIndex == 1" @on-item-click="clickTab(1)">礼品</tab-item>
         </tab>
       </div>
     </div>
@@ -72,15 +73,19 @@
               <div class="flex_cell txt-cell" style="overflow:visible">
                 <div class="font20 txt">满{{item.ordermoney}}减{{item.money}}</div>
                 <div class="font12 w_100 flex_left" v-if="item.cardtype && item.cardtype != '' && cardObject[item.cardtype]">{{cardObject[item.cardtype]}}</div>
+                <div class="font12" v-if="item.limittime">【{{limitObject[item.limittime]}}】</div>
                 <div class="font12">到期时间 {{item.deadline_str}}</div>
                 <div class="ball ball-up"></div>
                 <div class="ball ball-down"></div>
               </div>
-              <div class="btn-cell flex_center" v-if="item.validate">
+              <div class="btn-cell flex_center" v-if="item.canuse">
                 <div class="rbtn color-theme">去使用</div>
               </div>
-              <div class="flex_center" style="width:110px;" v-else>
-                <span class="al al-yiguoqi" style="font-size:50px;"></span>
+              <div class="btn-cell flex_center" v-else>
+                <div class="w_100 font12">
+                  <div class="align_center">{{item.startdate_str}}</div>
+                  <div class="align_center">后可用</div>
+                </div>
               </div>
             </div>
           </div>
@@ -90,27 +95,41 @@
       </div>
       <div v-show="(selectedIndex == 1)" class="swiper-inner" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', 1)">
         <template v-if="disList2">
-          <div v-if="!listData2 || !listData2.length" class="flex_empty">暂无数据</div>
+          <div v-if="(!listData2 || !listData2.length)" class="flex_empty">暂无数据</div>
           <div v-else class="scroll_list">
-            <div v-for="(item,index) in listData2" :key="index" class="scroll_item grayitem">
-              <div class="flex_cell txt-cell" style="overflow:visible">
-                <div class="font20 txt">满{{item.ordermoney}}减{{item.money}}</div>
-                <div class="font12 w_100 flex_left" v-if="item.cardtype && item.cardtype != '' && cardObject[item.cardtype]">{{cardObject[item.cardtype]}}</div>
-                <div class="font12">到期时间 {{item.deadline_str}}</div>
+            <div v-for="(item,index) in listData2" :key="index" class="scroll_item" @click="toUseProduct(item,index)">
+              <div class="flex_cell txt-cell flex_left" style="overflow:visible">
+                <img v-if="item.photo && item.photo != ''" :src="item.photo" style="width:50px;height:50px;object-fit:cover;" />
+                <div class="ml10 flex_cell">
+                  <div class="w_100 clamp1">{{item.title}}</div>
+                </div>
                 <div class="ball ball-up"></div>
                 <div class="ball ball-down"></div>
               </div>
-              <div class="btn-cell flex_center" v-if="item.used">
-                <span class="al al-yishiyong1"></span>
-              </div>
-              <div class="flex_center" style="width:110px;" v-else-if="item.validate">
-                <span class="al al-yiguoqi" style="font-size:50px;"></span>
+              <div class="btn-cell flex_center">
+                <div class="rbtn color-theme">去使用</div>
               </div>
             </div>
           </div>
           <div class="load-end-area loading" v-if="isLoading2"></div>
           <div class="load-end-area done" v-else-if="isDone2"></div>
         </template>
+      </div>
+    </div>
+    <div class="auto-modal flex_center" v-if="showModal">
+      <div class="modal-inner">
+        <div class="box-outer">
+          <div class="box-title bold font18 align_center">请输入桌号</div>
+          <div class="padding10">
+            <input v-model="tableid" type="text" class="input" placeholder="桌号" />
+          </div>
+          <div class="flex_center pt20 pb20">
+            <div class="flex_center" style="width:80%;height:30px;border-radius:60px;background-color:#eb6b5e;color:#fff;" @click="submitTable">加入本桌菜单</div>
+          </div>
+        </div>
+        <div class="close-area flex_center">
+          <div class="al al-close" @click="closeModal"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -145,7 +164,14 @@ export default {
       cardObject: {
         newcustomer: '新人优惠券',
         singlecard: '专属优惠券'
-      }
+      },
+      giveProduct: null,
+      showModal: false,
+      clickData: null,
+      clickIndex: 0,
+      tableid: '',
+      submitIng: false,
+      limitObject: {1: '限早餐使用', 2: '限午餐使用', 3: '限晚餐使用'}
     }
   },
   methods: {
@@ -170,6 +196,40 @@ export default {
       //     this.refresh()
       //   }
       // })
+    },
+    toUseProduct (item, index) {
+      this.tableid = ''
+      this.clickData = item
+      this.clickIndex = index
+      this.showModal = true
+    },
+    closeModal () {
+      this.showModal = false
+      this.tableid = ''
+    },
+    submitTable () {
+      if (this.submitIng) return false
+      if (!this.tableid || this.tableid === '') {
+        this.$vux.toast.show({
+          text: '请输入桌号',
+          type: 'text'
+        })
+        return false
+      }
+      this.submitIng = true
+      this.$vux.loading.show()
+      this.$http.get(`${ENV.BokaApi}/api/card/useGiveProduct`, {
+        params: {id: this.clickData.id, tableid: this.tableid}
+      }).then(res => {
+        this.submitIng = false
+        let data = res.data
+        this.$vux.loading.hide()
+        this.$vux.toast.show({
+          text: data.msg,
+          type: 'text',
+          time: this.$util.delay(data.msg)
+        })
+      })
     },
     switchData () {
       switch (this.selectedIndex) {
@@ -209,9 +269,16 @@ export default {
         let data = res.data
         this.$vux.loading.hide()
         this.isLoading1 = false
+        if (data.giveproduct) {
+          this.giveProduct = data.giveproduct
+        }
         let retdata = data.data ? data.data : data
         for (var i = 0; i < retdata.length; i++) {
-          retdata[i].usedateline_str = new Time(retdata[i].usedateline * 1000).dateFormat('yyyy-MM-dd hh:mm')
+          let curd = retdata[i]
+          curd.usedateline_str = new Time(curd.usedateline * 1000).dateFormat('yyyy-MM-dd hh:mm')
+          curd.startdate_str = new Time(curd.startdate * 1000).dateFormat('yyyy-MM-dd')
+          let now = new Date().getTime()
+          if (now >= curd.startdate * 1000) curd.canuse = true
         }
         this.listData1 = this.listData1.concat(retdata)
         this.disList1 = true
@@ -221,8 +288,8 @@ export default {
       })
     },
     getList2 () {
-      let params = {page: this.pagestart2, limit: this.limit, used: 1}
-      this.$http.get(`${ENV.BokaApi}/api/card/cardList`, {
+      let params = {page: this.pagestart2, limit: this.limit}
+      this.$http.get(`${ENV.BokaApi}/api/card/giveProductList`, {
         params: params
       }).then(res => {
         let data = res.data
@@ -281,31 +348,25 @@ export default {
     refresh () {
       this.loginUser = User.get()
       this.initData()
+      if (this.query.flag) this.selectedIndex = parseInt(this.query.flag)
       this.switchData()
     }
   },
   created () {
-    this.query = this.$route.query
-    if (!this.query.refresh) {
-      this.refresh()
-    }
   },
   activated () {
     this.query = this.$route.query
-    if (this.query.refresh) {
-      this.refresh()
-    } else {
-      if (document.querySelector('.vux-tab')) {
-        document.querySelector('.vux-tab').scrollLeft = this.tabLeft
-      }
-      switch (this.selectedIndex) {
-        case 0:
-          this.$refs.scrollContainer1.scrollTop = this.pageTop
-          break
-        case 1:
-          this.$refs.scrollContainer2.scrollTop = this.pageTop
-          break
-      }
+    this.refresh()
+    if (document.querySelector('.vux-tab')) {
+      document.querySelector('.vux-tab').scrollLeft = this.tabLeft
+    }
+    switch (this.selectedIndex) {
+      case 0:
+        this.$refs.scrollContainer1.scrollTop = this.pageTop
+        break
+      case 1:
+        this.$refs.scrollContainer2.scrollTop = this.pageTop
+        break
     }
   },
   beforeRouteLeave (to, from, next) {

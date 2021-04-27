@@ -79,24 +79,25 @@
                 <div class="right_cell flex_cell flex_center">
                   <div class="w_100">
                     <div class="flex_center">订单满{{viewData.ordermoney}}元可用</div>
+                    <div class="flex_center" v-if="viewData.limittime">【{{limitObject[viewData.limittime]}}】</div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="flex_center btn-area" style="margin-bottom:20px;">
+        <div class="flex_center btn-area" v-if="viewData.canuse">
           <div class="btn bg-gray" v-if="viewData.used">已核销</div>
           <div class="btn" @click="toUse" v-else>核销</div>
         </div>
-        <div class="con-area">
-          <div class="flex_left" v-if="!viewData.starttime || !viewData.endtime">
+        <div class="con-area" style="margin-top:20px;">
+          <div class="flex_left" v-if="viewData.startdate">
+            <div class="txt-cell">可用时间</div>
+            <div class="flex_cell">{{viewData.startdate_str}}后可用</div>
+          </div>
+          <div class="flex_left" v-if="viewData.deadline">
             <div class="txt-cell">有效期至</div>
             <div class="flex_cell">{{viewData.deadline_str}}</div>
-          </div>
-          <div class="flex_left" v-else>
-            <div class="txt-cell">有效期</div>
-            <div class="flex_cell">{{viewData.starttime_str}} 至 {{viewData.endtime_str}}</div>
           </div>
           <div class="db-flex" v-if="viewData.content && viewData.content != ''">
             <div class="txt-cell">使用说明</div>
@@ -139,7 +140,8 @@ export default {
   },
   data () {
     return {
-      query: {}
+      query: {},
+      limitObject: {1: '限早餐使用', 2: '限午餐使用', 3: '限晚餐使用'}
     }
   },
   methods: {

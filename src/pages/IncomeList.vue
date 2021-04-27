@@ -198,7 +198,7 @@ export default {
         retdata = this.handleListData(retdata)
         this.listData1 = this.listData1.concat(retdata)
         this.disList1 = true
-        if (retdata.length && retdata.length < this.limit) {
+        if (this.listData1.length && retdata.length < this.limit) {
           this.isDone1 = true
         }
       })
@@ -215,7 +215,7 @@ export default {
         retdata = this.handleListData(retdata)
         this.listData2 = this.listData2.concat(retdata)
         this.disList2 = true
-        if (retdata.length && retdata.length < this.limit) {
+        if (this.listData2.length && retdata.length < this.limit) {
           this.isDone2 = true
         }
       })
@@ -232,7 +232,7 @@ export default {
         retdata = this.handleListData(retdata)
         this.listData3 = this.listData3.concat(retdata)
         this.disList3 = true
-        if (retdata.length && retdata.length < this.limit) {
+        if (this.listData3.length && retdata.length < this.limit) {
           this.isDone3 = true
         }
       })

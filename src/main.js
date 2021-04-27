@@ -14,11 +14,12 @@ import { User, Version, Token, Access, SystemParams, GlobalData, AuthCount } fro
 import ENV from 'env'
 import Util from '#/util'
 import { AjaxPlugin, WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
+import LuckDraw from 'vue-luck-draw'
+Vue.use(LuckDraw)
 
 // import ElementUI from 'element-ui'
 // import 'element-ui/lib/theme-chalk/index.css'
 // Vue.use(ElementUI)
-
 Vue.use(VueRouter)
 Vue.use(Util)
 Vue.use(AjaxPlugin)
@@ -55,6 +56,7 @@ Vue.i18n.set('zh-CN')
 FastClick.attach(document.body)
 
 Vue.config.productionTip = false
+Vue.config.ignoredElements = ['wx-open-launch-app', 'wx-open-launch-weapp']
 
 // The following line will be replaced with by vux-loader with routes in ./page_list.json
 const routes = []
@@ -186,13 +188,19 @@ Vue.http.interceptors.response.use(response => {
   return response
 }, error => {
   console.log('response 请求进入到了error, error=', error)
+  console.log('输出了erro.response')
   console.log(error.response)
   if (error.response) {
-    // if (error.response.status === 401) {
-    //   console.error('未授权请求')
-    //   clearCache()
-    //   toAuth()
-    // }
+    console.log('error.response 进入了')
+    console.log(error.response.status)
+    console.log(error.response.status === 401)
+    if (error.response.status === 401) {
+      console.error('未授权请求')
+      if (Vue.isPC) {
+        clearCache()
+        toAuth()
+      }
+    }
   }
 })
 const access = success => {
@@ -361,7 +369,6 @@ console.log(ENV.Version === Version.get())
 if (ENV.Version !== Version.get()) {
   clearCache()
 }
-
 // 页面入口
 try {
   // render()

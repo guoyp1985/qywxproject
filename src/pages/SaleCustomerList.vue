@@ -243,7 +243,7 @@ export default {
         this.listData1 = this.listData1.concat(retdata)
         this.disList1 = true
         if (data.next_cursor && data.next_cursor !== this.nextCursor1) this.nextCursor1 = data.next_cursor
-        if (retdata.length < this.limit) {
+        if (this.listData1.length && retdata.length < this.limit) {
           this.isDone1 = true
         }
       })
@@ -262,7 +262,7 @@ export default {
         this.listData2 = this.listData2.concat(retdata)
         this.disList2 = true
         if (data.next_cursor && data.next_cursor !== this.nextCursor2) this.nextCursor2 = data.next_cursor
-        if (retdata.length < this.limit) {
+        if (this.listData2.length && retdata.length < this.limit) {
           this.isDone2 = true
         }
       })
@@ -281,7 +281,7 @@ export default {
         this.listData3 = this.listData3.concat(retdata)
         this.disList3 = true
         if (data.next_cursor && data.next_cursor !== this.nextCursor3) this.nextCursor3 = data.next_cursor
-        if (retdata.length < this.limit) {
+        if (this.listData3.length && retdata.length < this.limit) {
           this.isDone3 = true
         }
       })

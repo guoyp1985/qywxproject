@@ -46,12 +46,6 @@
   .close-area{position:absolute;left:0;bottom:-60px;right:0;height:50px;}
   .close-area .al{font-weight:bold;font-size:35px;color:#fff;}
 }
-.share-modal{
-  background-color:rgba(0,0,0,0.7) !important;color:#fff;
-  .ico{text-align:right;padding:15px 40px;box-sizing: border-box;}
-  .ico .al{font-size:60px;color:rgba(255,255,255,0.9);}
-  .txt{font-size:16px;text-shadow: -2px 0px 1px #000;padding:10px;box-sizing: border-box;text-align:center;}
-}
 .qrcode-modal{
   background-color:rgba(0,0,0,0.7) !important;color:#fff;
   .ico{text-align:right;padding:15px 40px;box-sizing: border-box;}
@@ -207,12 +201,10 @@ export default {
       let retdata = data.data
       if (retdata) {
         retdata.content = data.activity.content.replace(/\n/g, '<br />')
-        if (!retdata.starttime || !retdata.endtime) {
-          retdata.deadline_str = new Time(retdata.deadline * 1000).dateFormat('yyyy-MM-dd')
-        } else {
-          retdata.starttime_str = new Time(retdata.starttime * 1000).dateFormat('yyyy-MM-dd')
-          retdata.endtime_str = new Time(retdata.endtime * 1000).dateFormat('yyyy-MM-dd')
-        }
+        if (retdata.startdate) retdata.startdate_str = new Time(retdata.startdate * 1000).dateFormat('yyyy-MM-dd')
+        if (retdata.deadline) retdata.deadline_str = new Time(retdata.deadline * 1000).dateFormat('yyyy-MM-dd')
+        if (retdata.starttime) retdata.starttime_str = new Time(retdata.starttime * 1000).dateFormat('yyyy-MM-dd')
+        if (retdata.endtime) retdata.endtime_str = new Time(retdata.endtime * 1000).dateFormat('yyyy-MM-dd')
         this.viewData = retdata
       }
     },
@@ -293,12 +285,15 @@ export default {
         if (data.code === 0) {
           let retdata = data.data
           retdata.content = retdata.content.replace(/\n/g, '<br />')
-          console.log(retdata.content)
-          if (!retdata.starttime || !retdata.endtime) {
-            retdata.deadline_str = new Time(retdata.deadline * 1000).dateFormat('yyyy-MM-dd')
+          if (retdata.startdate) retdata.startdate_str = new Time(retdata.startdate * 1000).dateFormat('yyyy-MM-dd')
+          if (retdata.deadline) retdata.deadline_str = new Time(retdata.deadline * 1000).dateFormat('yyyy-MM-dd')
+          if (retdata.starttime) retdata.starttime_str = new Time(retdata.starttime * 1000).dateFormat('yyyy-MM-dd')
+          if (retdata.endtime) retdata.endtime_str = new Time(retdata.endtime * 1000).dateFormat('yyyy-MM-dd')
+          if (retdata.startdate) {
+            let now = new Date().getTime()
+            if (now >= retdata.startdate * 1000) retdata.canuse = true
           } else {
-            retdata.starttime_str = new Time(retdata.starttime * 1000).dateFormat('yyyy-MM-dd')
-            retdata.endtime_str = new Time(retdata.endtime * 1000).dateFormat('yyyy-MM-dd')
+            retdata.canuse = true
           }
           this.viewData = retdata
           if (this.viewData.title) {

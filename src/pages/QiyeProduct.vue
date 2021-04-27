@@ -139,12 +139,6 @@
     .item .al{color:#ea3a3a;font-size:20px;}
   }
 }
-.share-modal{
-  background-color:rgba(0,0,0,0.7) !important;color:#fff;
-  .ico{text-align:right;padding:15px 40px;box-sizing: border-box;}
-  .ico .al{font-size:60px;color:rgba(255,255,255,0.9);}
-  .txt{font-size:16px;text-shadow: -2px 0px 1px #000;padding:10px;box-sizing: border-box;text-align:center;}
-}
 </style>
 <template>
   <div id="product-page" class="containerarea bg-white qyproduct-page notop">

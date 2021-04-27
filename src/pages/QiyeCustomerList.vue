@@ -3,6 +3,14 @@
   .scroll_list{
   }
 }
+.pop-activity{
+  .scroll_list{
+    .scroll_item{
+      display:flex;background-color:#fff;padding:10px;box-sizing: border-box;
+      .al{color:#659af2;}
+    }
+  }
+}
 </style>
 <template>
   <div class="qy-customer-list-page containerarea">
@@ -29,7 +37,8 @@
               :tabIndex = "0"
               @expand-event="expandEvent"
               @yxl-event="clickYingxiangli"
-              @give-card="giveCard">
+              @give-card="giveCard"
+              @push-event="pushEvent">
             </customer-item>
           </div>
           <div class="load-end-area loading" v-if="isLoading1"></div>
@@ -49,7 +58,8 @@
               :tabIndex = "1"
               @expand-event="expandEvent"
               @yxl-event="clickYingxiangli"
-              @give-card="giveCardEvent">
+              @give-card="giveCardEvent"
+              @push-event="pushEvent">
             </customer-item>
           </div>
           <div class="load-end-area loading" v-if="isLoading2"></div>
@@ -69,7 +79,8 @@
               :tabIndex = "2"
               @expand-event="expandEvent"
               @yxl-event="clickYingxiangli"
-              @give-card="giveCardEvent">
+              @give-card="giveCardEvent"
+              @push-event="pushEvent">
             </customer-item>
           </div>
           <div class="load-end-area loading" v-if="isLoading3"></div>
@@ -88,6 +99,38 @@
         </div>
       </popup>
     </div>
+    <div v-transfer-dom class="x-popup pop-activity">
+      <popup v-model="showPushModal" height="100%" class="bg-white">
+        <div class="popup1">
+          <div class="pagetop flex_center b_bottom_after" style="font-size:16px;font-weight:bold;">优惠券</div>
+          <div class="pagemiddle" ref="activityContainer" @scroll="popHandleScroll('activityContainer')">
+            <template v-if="disPopList">
+              <div v-if="!popData || !popData.length" class="flex_empty">暂无数据</div>
+              <div v-else class="scroll_list">
+                <label v-for="(item,index) in popData" :key="index" class="scroll_item">
+                  <div class="pr10 flex_left">
+                    <input type="radio" name="active-radio" :checked="clickedActivity && clickedActivity.id == item.id"/>
+                  </div>
+                  <div class="flex_cell flex_left" @click="clickInput(item)">
+                    <div>
+                      <div>满{{item.ordermoney}}减{{item.facemoney}}</div>
+                      <div class="color-gray font12">剩余数量: {{item.leftstorage}}</div>
+                      <div class="color-gray font12">有效期: {{item.starttime_str}}<span class="ml5 mr5">-</span>{{item.endtime_str}}</div>
+                    </div>
+                  </div>
+                </label>
+              </div>
+              <div class="load-end-area loading" v-if="popIsLoading"></div>
+              <div class="load-end-area done" v-else-if="popIsDone"></div>
+            </template>
+          </div>
+          <div class="pagebottom flex_center color-white">
+            <div class="flex_cell h_100 flex_center bg-gray" @click="cancelPop">取消</div>
+            <div class="flex_cell h_100 flex_center bg-theme" @click="submitPop">提交</div>
+          </div>
+        </div>
+      </popup>
+    </div>
   </div>
 </template>
 
@@ -96,6 +139,7 @@ import { Tab, TabItem, Popup, TransferDom } from 'vux'
 import ENV from 'env'
 import Time from '../../libs/time'
 import { User } from '#/storage'
+import jQuery from 'jquery'
 import CustomerItem from '@/components/CustomerItem'
 import jweixin from 'jweixin'
 
@@ -130,7 +174,14 @@ export default {
       pageTop: 0,
       tabLeft: 0,
       cardUser: {},
-      cardInfo: {}
+      cardInfo: {},
+      showPushModal: false,
+      poppage: 1,
+      disPopList: false,
+      popData: [],
+      popIsLoading: false,
+      popIsDone: false,
+      clickedActivity: null
     }
   },
   methods: {
@@ -176,7 +227,61 @@ export default {
       this.showYxlModal = false
     },
     giveCardEvent (item) {
-
+    },
+    pushEvent (item) {
+      if (!this.popData.length) {
+        this.getActivityData()
+      }
+      this.showPushModal = true
+    },
+    clickInput (item) {
+      if (this.$util.isIOS()) {
+        this.clickedActivity = item
+      }
+    },
+    getActivityData () {
+      let params = {page: this.poppage, limit: this.limit}
+      this.$http.get(`${ENV.BokaApi}/api/miniactivity/getList`, {
+        params: params
+      }).then(res => {
+        let data = res.data
+        this.$vux.loading.hide()
+        this.popIsLoading = false
+        let retdata = data.data ? data.data : data
+        for (var i = 0; i < retdata.length; i++) {
+          retdata[i].starttime_str = new Time(retdata[i].starttime * 1000).dateFormat('yyyy-MM-dd hh:mm')
+          retdata[i].endtime_str = new Time(retdata[i].endtime * 1000).dateFormat('yyyy-MM-dd hh:mm')
+        }
+        this.popData = this.popData.concat(retdata)
+        this.disPopList = true
+        if (this.popData.length && retdata.length < this.limit) {
+          this.popIsDone = true
+        }
+      })
+    },
+    popHandleScroll (refname) {
+      const scrollarea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      this.$util.scrollEvent({
+        element: scrollarea,
+        callback: () => {
+          if (this.popIsLoading || this.popIsDone) return false
+          if (this.popData.length === this.poppage * this.limit) {
+            this.poppage++
+            this.popIsLoading = true
+            this.getActivityData()
+          }
+        }
+      })
+    },
+    cancelPop () {
+      this.showPushModal = false
+    },
+    submitPop () {
+      let cks = jQuery.find('.pop-activity input[type=radio]:checked')
+      if (!cks.length) {
+        this.$vux.toast.text('请选择要推送的优惠券')
+        return false
+      }
     },
     clickTab (index) {
       this.selectedIndex = index
@@ -248,7 +353,7 @@ export default {
         this.listData1 = this.listData1.concat(retdata)
         this.disList1 = true
         if (data.next_cursor && data.next_cursor !== this.nextCursor1) this.nextCursor1 = data.next_cursor
-        if (retdata.length < this.limit) {
+        if (this.listData1.length && retdata.length < this.limit) {
           this.isDone1 = true
         }
       })
@@ -267,7 +372,7 @@ export default {
         this.listData2 = this.listData2.concat(retdata)
         this.disList2 = true
         if (data.next_cursor && data.next_cursor !== this.nextCursor2) this.nextCursor2 = data.next_cursor
-        if (retdata.length < this.limit) {
+        if (this.listData2.length && retdata.length < this.limit) {
           this.isDone2 = true
         }
       })
@@ -286,7 +391,7 @@ export default {
         this.listData3 = this.listData3.concat(retdata)
         this.disList3 = true
         if (data.next_cursor && data.next_cursor !== this.nextCursor3) this.nextCursor3 = data.next_cursor
-        if (retdata.length < this.limit) {
+        if (this.listData3.length && retdata.length < this.limit) {
           this.isDone3 = true
         }
       })
@@ -358,6 +463,12 @@ export default {
       this.nextCursor1 = null
       this.nextCursor2 = null
       this.nextCursor3 = null
+      this.showPushModal = false
+      this.disPopList = false
+      this.poppage = 1
+      this.popData = []
+      this.popIsLoading = false
+      this.popIsDone = false
     },
     refresh () {
       this.loginUser = User.get()

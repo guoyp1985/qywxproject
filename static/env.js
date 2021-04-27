@@ -12,7 +12,17 @@ var ENV = {
   DebugMode: true,
   DebugList: [
   ],
-  isKaifa: true
+  isKaifa: true,
+  MiniPage: {
+    store: '/pages/qyshop',
+    order: '/packageD/pages/userOrders',
+    center: '/pages/own',
+    storeActivity: '/package/pages/storeActivity',
+    gift: '/packageD/pages/cardList'
+  },
+  MiniStorePage: '/pages/qyshop',
+  MiniOrderPage: '/packageD/pages/userOrders',
+  MiniCenterPage: '/pages/own'
 }
 
 ENV.NoAccessUrls = [
