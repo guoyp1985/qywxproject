@@ -201,8 +201,8 @@
             </div>
           </div>
           <div class="pb10 color-white" style="margin-top:40px;">
-            <div class="flex_center">每个用户每天只有一次抽奖机会</div>
-            <!-- <div>2、分享给好友下单增加一次抽奖机会</div> -->
+            <div class="flex_center" v-if="chances">还剩{{chances}}次抽奖机会</div>
+            <div class="flex_center" v-else>您的抽奖机会已用完</div>
           </div>
         </div>
       </div>
@@ -630,7 +630,8 @@ export default {
       showQrcode: false,
       isLottery: false,
       showChance: false,
-      afterStart: false
+      afterStart: false,
+      chances: 0
     }
   },
   methods: {
@@ -684,9 +685,10 @@ export default {
     },
     startCallBack () {
       this.showChance = false
-      if (this.afterStart || this.isLottery) {
+      // if (this.afterStart || this.isLottery) {
+      if (!this.chances) {
         this.$vux.toast.show({
-          text: '您今天已经抽过奖了',
+          text: '您今天的抽奖机会已用完',
           type: 'text'
         })
       } else {
@@ -710,6 +712,7 @@ export default {
               }
             }
             setTimeout(() => {
+              this.chances = data.chances
               this.$refs.LuckyWheel.stop(winIndex)
             }, 1000)
           } else {
@@ -800,6 +803,7 @@ export default {
         let data = res.data
         if (data.code === 0) {
           let retdata = data.data
+          this.chances = retdata.chances
           if (this.query.newcustomer && (typeof retdata.first !== undefined && typeof retdata.first !== 'undefined')) {
             this.disTip = true
           }
