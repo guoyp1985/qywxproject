@@ -141,7 +141,8 @@ export default {
   data () {
     return {
       query: {},
-      limitObject: {1: '限早餐使用', 2: '限午餐使用', 3: '限晚餐使用'}
+      limitObject: {1: '限早餐使用', 2: '限午餐使用', 3: '限晚餐使用'},
+      isUsing: false
     }
   },
   methods: {
@@ -149,10 +150,13 @@ export default {
       this.$router.push({path: '/userCard'})
     },
     toUse (item) {
+      if (this.isUsing) return false
+      this.isUsing = true
       this.$vux.loading.show()
       this.$http.get(`${ENV.BokaApi}/api/card/useCard`, {
         params: {id: this.query.id}
       }).then(res => {
+        this.isUsing = false
         let data = res.data
         this.$vux.loading.hide()
         this.$vux.toast.show({
