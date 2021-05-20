@@ -15,14 +15,21 @@ var ENV = {
   isKaifa: true,
   MiniPage: {
     store: '/pages/qyshop',
-    order: '/packageD/pages/userOrders',
+    // order: '/packageD/pages/userOrders',
+    order: '/pages/pay',
     center: '/pages/own',
     storeActivity: '/package/pages/storeActivity',
     gift: '/packageD/pages/cardList'
   },
   MiniStorePage: '/pages/qyshop',
   MiniOrderPage: '/packageD/pages/userOrders',
-  MiniCenterPage: '/pages/own'
+  MiniCenterPage: '/pages/own',
+  factory: 'boka', // boka 博卡供销社，guxiang 顾湘，longhui 四海龙洲
+  tableLink: {
+    boka: '/pages/product?id=447212903&ordertype=4',
+    guxiang: '/pages/product?id=447212903&ordertype=4',
+    longhui: false
+  }
 }
 
 ENV.NoAccessUrls = [

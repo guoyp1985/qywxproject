@@ -312,7 +312,8 @@ Util.install = function (Vue, options) {
         data.jsApiList.push('shareToExternalChat')
         jweixin.config(data)
         jweixin.error((error) => {
-          console.log('进入到了jweixin error, 微信还没有准备好')
+          console.log('进入到了api/common/jsconfig error, 微信还没有准备好')
+          console.log(error)
         })
         callback && callback()
       }, error => {
@@ -329,7 +330,8 @@ Util.install = function (Vue, options) {
           data.jsApiList.push('shareToExternalChat')
           jweixin.agentConfig(data)
           jweixin.error((error) => {
-            console.log('进入到了jweixin error, 微信还没有准备好')
+            console.log('进入到了api/common/agentConfig error, 微信还没有准备好')
+            console.log(error)
           })
           callback && callback()
         }, error => {

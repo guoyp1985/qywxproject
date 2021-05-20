@@ -369,6 +369,7 @@ console.log(ENV.Version === Version.get())
 if (ENV.Version !== Version.get()) {
   clearCache()
 }
+
 // 页面入口
 try {
   // render()

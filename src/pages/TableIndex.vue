@@ -19,6 +19,27 @@
     .avatar{width:80px;height:80px;border-radius:50%;margin-right:10px;}
     .txt{font-size:16px;font-weight:bold;}
   }
+  .product-area:after{content:"";padding-top:100%;display:block;}
+  .product-area{
+    position:relative;box-sizing:border-box;
+    .inner{
+      position:absolute;left:20px;top:20px;right:20px;bottom:20px;border-radius:10px;
+      .img{border-radius:10px;}
+      .qrcode{
+        position:absolute;right:0;bottom:0;width:30%;z-index:1;
+      }
+      .ico{
+        width:80px;height:80px;border-radius:50%;background-color:#f94929;color:#fff;
+        display:flex;justify-content:center;align-items:center;
+        position:absolute;left:50%;margin-left:-40px;top:50%;margin-top:-40px;
+      }
+      .txt{
+        position:absolute;left:0;bottom:0;width:70%;padding:5px;box-sizing: border-box;font-size:14px;
+        background-color:rgba(0,0,0,0.5);color:#fff;border-top-right-radius:10px;
+        border-bottom-left-radius:10px;
+      }
+    }
+  }
   .pic-swiper:after{content:"";padding-top:100%;display:block;}
   .pic-swiper{
     overflow:inherit;
@@ -170,6 +191,13 @@
     .item{padding:10px;}
     .item.active{background-color:#ccc;}
   }
+  .banner-area:after{content:'';display:block;padding-top:56%;}
+  .banner-area{
+    width:100%;position:relative;
+    .banner-inner{position:absolute;left:0;top:0;right:0;bottom:0;}
+    .vux-swiper{height:100% !important;}
+    .img{display:block;width:100%;height:100%;object-fit:cover;}
+  }
 }
 .auto-modal-qrcode{
   .modal-inner{width:80%;}
@@ -183,77 +211,114 @@
 <template>
   <div class="table-index-page">
     <template v-if="afterLoad">
-      <div class="page-inner" v-if="isOld && disLottery">
-        <div class="flex_center">
-          <img style="display:block;width:100%;" src="../assets/images/tableindex.jpg" />
+      <div class="page-inner">
+        <div v-if="bannerData.length" class="banner-area">
+          <swiper
+            class="banner-inner"
+            dots-position="center"
+            :auto="bannerData.length > 1"
+            :interval=6000
+            :show-dots="bannerData.length > 1"
+            :aspect-ratio="1/1"
+            loop>
+            <swiper-item v-for="(item,index) in bannerData" :key="item.id">
+              <img class="img" :src="item.photo" @click="clickBanner(item)" />
+              <template v-if="isWx && !isQywx && item.linktype == 'miniprogram' && item.url != ''">
+                <wx-open-launch-weapp
+                  :username="AppGhId"
+                  :path.sync="item.url"
+                  @launch="handleLaunchFn"
+                  @error="handleErrorFn"
+                  style="position:absolute;left:0;top:0;right:0;bottom:0;z-index:1;">
+                  <script type="text/wxtag-template">
+                    <div style="position:absolute;left:0;top:0;right:0;bottom:0;z-index:1;background-color:transparent;"></div>
+                  </script>
+                </wx-open-launch-weapp>
+              </template>
+            </swiper-item>
+          </swiper>
         </div>
-        <div class="pl10 pt20 pr10" style="width:100%;box-sizing:border-box;">
-          <div class="draw-outer">
-            <div class="draw-inner">
-              <LuckyWheel
-                ref="LuckyWheel"
-                style="width:100%;height:100%;position:absolute;left:0;top:0;right:0;bottom:0;"
-                :blocks.sync="blocks"
-                :prizes.sync="prizes"
-                :buttons.sync="buttons"
-                @start="startCallBack"
-                @end="endCallBack"/>
+        <template v-if="isOld && disLottery">
+          <div class="pl10 pt20 pr10" style="width:100%;box-sizing:border-box;">
+            <div class="draw-outer">
+              <div class="draw-inner">
+                <LuckyWheel
+                  ref="LuckyWheel"
+                  style="width:100%;height:100%;position:absolute;left:0;top:0;right:0;bottom:0;"
+                  :blocks.sync="blocks"
+                  :prizes.sync="prizes"
+                  :buttons.sync="buttons"
+                  @start="startCallBack"
+                  @end="endCallBack"/>
+              </div>
+            </div>
+            <div class="pb10 color-white" style="margin-top:40px;">
+              <div class="flex_center" v-if="chances">还剩{{chances}}次抽奖机会</div>
+              <div class="flex_center" v-else>您的抽奖机会已用完</div>
             </div>
           </div>
-          <div class="pb10 color-white" style="margin-top:40px;">
-            <div class="flex_center" v-if="chances">还剩{{chances}}次抽奖机会</div>
-            <div class="flex_center" v-else>您的抽奖机会已用完</div>
-          </div>
-        </div>
-      </div>
-      <div class="page-inner" v-if="isNew">
-        <div class="flex_center">
-          <img style="display:block;width:100%;" src="../assets/images/tableindex.jpg" />
-        </div>
-        <div class="pl10 pr10 mt10">
-          <div class="box-outer">
-            <div class="box-title bold font18" style="color:#f94929;">新客送菜</div>
-            <div class="box-title b_top_after">尊敬的新客户{{loginUser.linkman}}，您可以领取本店免费赠送您的一份新菜！长按下方二维码，并加本店员工方可领取。</div>
-            <div style="padding:0 1px 40px;box-sizing:border-box;" v-if="disProduct">
-              <swiper
-                class="pic-swiper notitle"
-                dots-position="center"
-                :auto="1==1"
-                :interval=6000
-                :show-dots="1==1"
-                :aspect-ratio="1/1"
-                loop>
-                <swiper-item v-for="(item,index) in productData" :key="item.id">
-                  <img class="img db imgcover w_100 h_100" :src="item.photo" default-src="https://tosqy.boka.cn/images/nopic.jpg" />
+        </template>
+        <template v-if="isNew">
+          <div class="pl10 pr10 mt10" v-if="disProduct && todayProduct">
+            <div class="box-outer">
+              <div class="box-title bold font18" style="color:#f94929;">新客送菜</div>
+              <div class="box-title b_top_after">尊敬的新客户{{loginUser.linkman}}，您可以领取本店免费赠送您的一份新菜！长按下方二维码，并加本店员工方可领取。</div>
+              <div class="product-area">
+                <div class="inner">
+                  <img class="img db imgcover w_100 h_100" :src="todayProduct.photo" default-src="https://tosqy.boka.cn/images/nopic.jpg" />
                   <img v-if="qrcode && qrcode != ''" class="qrcode" :src="qrcode" />
-                  <div class="ico">免费送</div>
-                  <div class="txt">
-                    <div class="clamp1">{{item.title}}</div>
-                    <div style="color:#f94929;font-weight:bold;">￥{{item.price}}</div>
+                  <div class="ico" @touchstart="getTouchStart" @touchend="getTouchEnd">
+                    <div>
+                      <div class="align_center">长按扫码</div>
+                      <div class="align_center">免费送</div>
+                    </div>
                   </div>
-                </swiper-item>
-              </swiper>
-            </div>
-            <!-- <div class="padding10 flex_center" @click="clickShare" style="position:relative;z-index:10;">
-              <div style="color: #f94929;">分享给好友，一起免费吃</div>
-            </div> -->
-            <div v-if="isWx && !isQywx" style="position:relative;z-index:10;width:100%;">
-              <wx-open-launch-weapp
-                :username="AppGhId"
-                :path.sync="storeActivityPath"
-                @launch="handleLaunchFn"
-                @error="handleErrorFn"
-                style="width:100%;padding:10px;box-sizing:border-box;display:flex;justify-content:center;align-items:center;">
-                <script type="text/wxtag-template">
-                  <div style="color: #f94929;text-align:center;">分享给好友，一起免费吃</div>
-                </script>
-              </wx-open-launch-weapp>
-            </div>
-            <div v-else class="padding10 flex_center" @click="clickShare" style="position:relative;z-index:10;">
-              <div style="color: #f94929;">分享给好友，一起免费吃</div>
+                  <div class="txt">
+                    <div class="clamp1">{{todayProduct.title}}</div>
+                    <div style="color:#f94929;font-weight:bold;">￥{{todayProduct.price}}</div>
+                  </div>
+                </div>
+              </div>
+              <!--
+              <div style="padding:0 1px 40px;box-sizing:border-box;">
+                <swiper
+                  class="pic-swiper notitle"
+                  dots-position="center"
+                  :auto="1==1"
+                  :interval=6000
+                  :show-dots="1==1"
+                  :aspect-ratio="1/1"
+                  loop>
+                  <swiper-item v-for="(item,index) in productData" :key="item.id">
+                    <img class="img db imgcover w_100 h_100" :src="item.photo" default-src="https://tosqy.boka.cn/images/nopic.jpg" />
+                    <img v-if="qrcode && qrcode != ''" class="qrcode" :src="qrcode" />
+                    <div class="ico">免费送</div>
+                    <div class="txt">
+                      <div class="clamp1">{{item.title}}</div>
+                      <div style="color:#f94929;font-weight:bold;">￥{{item.price}}</div>
+                    </div>
+                  </swiper-item>
+                </swiper>
+              </div>
+              -->
+              <div v-if="isWx && !isQywx" style="position:relative;z-index:10;width:100%;">
+                <wx-open-launch-weapp
+                  :username="AppGhId"
+                  :path.sync="storeActivityPath"
+                  @launch="handleLaunchFn"
+                  @error="handleErrorFn"
+                  style="width:100%;padding:10px;box-sizing:border-box;display:flex;justify-content:center;align-items:center;">
+                  <script type="text/wxtag-template">
+                    <div style="color: #f94929;text-align:center;">分享给好友，一起免费吃</div>
+                  </script>
+                </wx-open-launch-weapp>
+              </div>
+              <div v-else class="padding10 flex_center" @click="clickShare" style="position:relative;z-index:10;">
+                <div style="color: #f94929;">分享给好友，一起免费吃</div>
+              </div>
             </div>
           </div>
-        </div>
+        </template>
       </div>
     </template>
     <div class="auto-modal flex_center" v-if="isOld && showCard">
@@ -631,10 +696,35 @@ export default {
       isLottery: false,
       showChance: false,
       afterStart: false,
-      chances: 0
+      chances: 0,
+      curFactory: ENV.factory,
+      productPath: ENV.tableLink[ENV.factory],
+      adImage: require(`../assets/images/${ENV.factory}/tableindex.jpg`),
+      touchTime: null,
+      bannerData: []
     }
   },
   methods: {
+    clickBanner (item) {
+      if (item.linktype === 'h5' && item.url && item.url !== '') {
+        this.$router.push(item.url)
+      }
+    },
+    getTouchStart () {
+      clearTimeout(this.touchTime)
+      if (this.qrcode && this.qrcode !== '') {
+        this.touchTime = setTimeout(() => {
+          this.$vux.toast.show({
+            text: '请长按二维码领取免费菜品',
+            type: 'text',
+            time: 1500
+          })
+        }, 500)
+      }
+    },
+    getTouchEnd () {
+      clearTimeout(this.touchTime)
+    },
     clickDiancan () {
       this.showQrcode = true
     },
@@ -803,6 +893,7 @@ export default {
         let data = res.data
         if (data.code === 0) {
           let retdata = data.data
+          this.bannerData = retdata.banner
           this.chances = retdata.chances
           if (this.query.newcustomer && (typeof retdata.first !== undefined && typeof retdata.first !== 'undefined')) {
             this.disTip = true
@@ -861,6 +952,7 @@ export default {
       this.isQywx = this.$util.isQywx()
       console.log('isWx=', this.isWx)
       console.log('isQywx=', this.isQywx)
+      console.log('productPath=', this.productPath)
       this.afterLoad = true
       if (this.isQywx) {
         this.shareWid = this.loginUser.uid

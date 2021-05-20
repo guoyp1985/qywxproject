@@ -1,6 +1,6 @@
 <style lang="less">
 .staff-container{
-  padding:10px;
+  padding:10px;box-sizing:border-box;
   .box-list{
     .txt1{text-align:center;font-size:20px;font-weight:bold;}
     .txt2{text-align:center;color:#999;}
@@ -10,6 +10,20 @@
 
 <template>
   <div class="staff-container">
+    <div v-if="isWx && !isQywx" class="box-outer mb10">
+      <div class="box-title flex_center">
+        <wx-open-launch-weapp
+          :username="AppGhId"
+          :path.sync="miniPage"
+          @launch="handleLaunchFn"
+          @error="handleErrorFn"
+          style="width:100%;display:flex;justify-content:center;align-items:center;">
+          <script type="text/wxtag-template">
+            <div style="color:red;font-weight:bold;">绑定小程序</div>
+          </script>
+        </wx-open-launch-weapp>
+      </div>
+    </div>
     <div class="box-outer mb10" @click="toIncome">
       <div class="box-title flex_left">
         <div>可提现</div>
@@ -140,7 +154,14 @@
             <div class="txt">活动</div>
           </div>
         </router-link>
-        <div class="list-item ico-pic-item"></div>
+        <router-link to="/customerStat" class="list-item ico-pic-item">
+          <div class="item-inner">
+            <div class="ico-bg">
+              <span class="al al-tongji1"></span>
+            </div>
+            <div class="txt">本周统计</div>
+          </div>
+        </router-link>
         <div class="list-item ico-pic-item"></div>
       </div>
     </div>
@@ -155,7 +176,14 @@
             <div class="txt">客户列表</div>
           </div>
         </router-link>
-        <div class="list-item ico-pic-item"></div>
+        <router-link to="/ingOrders" class="list-item ico-pic-item">
+          <div class="item-inner">
+            <div class="ico-bg">
+              <span class="al al-kehuliebiao"></span>
+            </div>
+            <div class="txt">未结订单</div>
+          </div>
+        </router-link>
         <div class="list-item ico-pic-item"></div>
         <!-- <router-link to="/retailSale" class="list-item ico-pic-item">
           <div class="item-inner">
@@ -179,6 +207,7 @@
 </template>
 
 <script>
+import ENV from 'env'
 export default {
   name: 'Staff',
   props: {
@@ -189,6 +218,23 @@ export default {
     targets: {
       type: Object,
       default: null
+    },
+    miniPage: {
+      type: String,
+      default: ''
+    },
+    isQywx: {
+      type: Boolean,
+      default: false
+    },
+    isWx: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data () {
+    return {
+      AppGhId: ENV.AppGhId
     }
   },
   filters: {
@@ -202,6 +248,12 @@ export default {
   methods: {
     toIncome () {
       this.$router.push('/income')
+    },
+    handleLaunchFn (e) {
+      console.log(e)
+    },
+    handleErrorFn (e) {
+      console.log('fail', e.detail)
     }
   }
 }

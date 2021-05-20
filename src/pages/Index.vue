@@ -18,7 +18,7 @@
       </div>
       <template v-if="afterLoad && loginUser && loginUser.uid">
         <template v-if="(isPC || isQywx) && loginUser.identity == 2">
-          <staff :user.sync="loginUser" :targets.sync="targets"></staff>
+          <staff :user.sync="loginUser" :targets.sync="targets" :miniPage.sync="miniPage" :isQywx.sync="isQywx" :isWx.sync="isWx"></staff>
         </template>
         <template v-else>
           <cuser :user.sync="loginUser"></cuser>
@@ -48,7 +48,9 @@ export default {
       targets: null,
       afterLoad: false,
       isPC: false,
-      isQywx: false
+      isQywx: false,
+      isWx: false,
+      miniPage: '/pages/index'
     }
   },
   methods: {
@@ -71,18 +73,20 @@ export default {
       })
     },
     handleGlobalData () {
+      this.loginUser = User.get()
+      this.miniPage = `/pages/index?combineuid=${this.loginUser.uid}`
       this.globalData = GlobalData.get()
       if (this.globalData.targets) this.targets = this.globalData.targets
     },
     refresh () {
       this.query = this.$route.query
-      this.loginUser = User.get()
       if (GlobalData.get()) {
         this.handleGlobalData()
       } else {
         this.getUser()
       }
       this.isPC = this.$util.isPC
+      this.isWx = this.$util.isWx()
       this.isQywx = this.$util.isQywx()
       this.afterLoad = true
     }
