@@ -1,7 +1,10 @@
 <style lang="less">
 .qiye-product-list-page{
   .scroll_list{
-    .scroll_item{background-color:#fff;padding:10px;width:100%;box-sizing: border-box;}
+    .scroll_item{
+      background-color:#fff;width:100%;box-sizing: border-box;
+      .item-inner{padding:10px;width:100%;box-sizing: border-box;}
+    }
     .btn{
       border-radius:60px;background-color:#659af2;color:#fff;
       padding:0 10px;height:30px;display:flex;justify-content:center;align-items:center;
@@ -49,22 +52,31 @@
         <div v-if="disList1" class="scroll_list">
           <div v-if="!listData1 || !listData1.length" class="flex_empty">暂无数据</div>
           <template v-else>
-            <div v-for="(item,index) in listData1" :key="index" class="scroll_item flex_left" @click="toDetail(item)">
-              <div class="mr10">
-                <img :src="item.photo" style="width:50px;height:50px;object-fit:cover;" onerror="javascript:this.src='https://tosqy.boka.cn/images/nopic.jpg';" />
-              </div>
-              <div class="flex_cell">
-                <div class="clamp1">
-                  <span class="color-gray" v-if="item.moderate == 0">【已下架】</span>
-                  <span class="color-gray" v-if="item.moderate == 2">【已沽清】</span>
-                  <span>{{item.title}}</span>
+            <div v-for="(item,index) in listData1" :key="index" class="scroll_item">
+              <div class="flex_left item-inner" @click="toDetail(item)">
+                <div class="mr10">
+                  <img :src="item.photo" style="width:50px;height:50px;object-fit:cover;" onerror="javascript:this.src='https://tosqy.boka.cn/images/nopic.jpg';" />
                 </div>
-                <div class="mt5 color-red font12">￥{{item.price}}</div>
+                <div class="flex_cell">
+                  <div class="clamp1">
+                    <span class="color-gray" v-if="item.moderate == 0">【已下架】</span>
+                    <span class="color-gray" v-if="item.moderate == 2">【已沽清】</span>
+                    <span>{{item.title}}</span>
+                  </div>
+                  <div class="mt5 color-red font12">￥{{item.price}}</div>
+                </div>
+                <!-- <div class="ml10">
+                  <div class="btn" v-if="item.moderate == 1" @click.stop="moderateEvent(item,index)">沽清</div>
+                  <div class="btn" v-if="item.moderate == 2" @click.stop="moderateEvent(item,index)">取消沽清</div>
+                </div> -->
               </div>
-              <div class="ml10">
-                <div class="btn" v-if="item.moderate == 1" @click.stop="moderateEvent(item,index)">沽清</div>
-                <div class="btn" v-if="item.moderate == 2" @click.stop="moderateEvent(item,index)">取消沽清</div>
+              <div class="flex_center bg-white h40 font14 b_top_after" style="color:#659af2">
+                <div class="flex_cell h_100 flex_center b_right_after" v-if="item.moderate == 1" @click.stop="moderateEvent(item,index,2)">沽清</div>
+                <div class="flex_cell h_100 flex_center b_right_after" v-if="item.moderate == 2" @click.stop="moderateEvent(item,index,1)">取消沽清</div>
+                <div class="flex_cell h_100 flex_center b_right_after" v-if="item.moderate == 1" @click.stop="moderateEvent(item,index,0)">下架</div>
+                <div class="flex_cell h_100 flex_center b_right_after" v-if="!item.moderate" @click.stop="moderateEvent(item,index,1)">上架</div>
               </div>
+              <div v-if="index < listData1.length - 1" class="pt10 bg-page"></div>
             </div>
           </template>
           <div class="load-end-area loading" v-if="isLoading1"></div>
@@ -75,22 +87,31 @@
         <div v-if="disList2" class="scroll_list">
           <div v-if="!listData2 || !listData2.length" class="flex_empty">暂无数据</div>
           <template v-else>
-            <div v-for="(item,index) in listData2" :key="index" class="scroll_item flex_left" @click="toDetail(item)">
-              <div class="mr10">
-                <img :src="item.photo" style="width:50px;height:50px;object-fit:cover;" onerror="javascript:this.src='https://tosqy.boka.cn/images/nopic.jpg';" />
-              </div>
-              <div class="flex_cell">
-                <div class="clamp1">
-                  <span class="color-gray" v-if="item.moderate == 0">【已下架】</span>
-                  <span class="color-gray" v-if="item.moderate == 2">【已沽清】</span>
-                  <span>{{item.title}}</span>
+            <div v-for="(item,index) in listData2" :key="index" class="scroll_item">
+              <div class="flex_left item-inner" @click="toDetail(item)">
+                <div class="mr10">
+                  <img :src="item.photo" style="width:50px;height:50px;object-fit:cover;" onerror="javascript:this.src='https://tosqy.boka.cn/images/nopic.jpg';" />
                 </div>
-                <div class="mt5 color-red font12">￥{{item.price}}</div>
+                <div class="flex_cell">
+                  <div class="clamp1">
+                    <span class="color-gray" v-if="item.moderate == 0">【已下架】</span>
+                    <span class="color-gray" v-if="item.moderate == 2">【已沽清】</span>
+                    <span>{{item.title}}</span>
+                  </div>
+                  <div class="mt5 color-red font12">￥{{item.price}}</div>
+                </div>
+                <!-- <div class="ml10">
+                  <div class="btn" v-if="item.moderate == 1" @click.stop="moderateEvent(item,index)">沽清</div>
+                  <div class="btn" v-if="item.moderate == 2" @click.stop="moderateEvent(item,index)">取消沽清</div>
+                </div> -->
               </div>
-              <div class="ml10">
-                <div class="btn" v-if="item.moderate == 1" @click.stop="moderateEvent(item,index)">沽清</div>
-                <div class="btn" v-if="item.moderate == 2" @click.stop="moderateEvent(item,index)">取消沽清</div>
+              <div class="flex_center bg-white h40 font14 b_top_after" style="color:#659af2">
+                <div class="flex_cell h_100 flex_center b_right_after" v-if="item.moderate == 1" @click.stop="moderateEvent(item,index,2)">沽清</div>
+                <div class="flex_cell h_100 flex_center b_right_after" v-if="item.moderate == 2" @click.stop="moderateEvent(item,index,1)">取消沽清</div>
+                <div class="flex_cell h_100 flex_center b_right_after" v-if="item.moderate == 1" @click.stop="moderateEvent(item,index,0)">下架</div>
+                <div class="flex_cell h_100 flex_center b_right_after" v-if="!item.moderate" @click.stop="moderateEvent(item,index,1)">上架</div>
               </div>
+              <div v-if="index < listData12.length - 1" class="pt10 bg-page"></div>
             </div>
           </template>
           <div class="load-end-area loading" v-if="isLoading2"></div>
@@ -185,15 +206,10 @@ export default {
     toDetail (item) {
       this.$router.push({path: '/qiyeProduct', query: {id: item.id}})
     },
-    moderateEvent (item, index) {
+    moderateEvent (item, index, val) {
       if (this.submitIng) return false
       this.submitIng = true
-      let ajaxParams = {id: item.id, module: 'product'}
-      if (item.moderate === 2) {
-        ajaxParams.moderate = 1
-      } else if (item.moderate === 1) {
-        ajaxParams.moderate = 2
-      }
+      let ajaxParams = {id: item.id, module: 'product', moderate: val}
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/content/moderate`, ajaxParams).then(res => {
         this.submitIng = false

@@ -783,40 +783,52 @@ export default {
         })
       } else {
         this.$refs.LuckyWheel.play()
-        this.$http.get(`${ENV.BokaApi}/api/tableindex/startLottery`, {
-          params: {storeid: this.storeid}
-        }).then(res => {
-          let data = res.data
-          this.afterStart = true
-          if (data.code === 0) {
-            this.isLottery = true
-            this.lotterResult = true
-            let retdata = data.wininfo
-            if (retdata.content && retdata.content !== '') retdata.content = retdata.content.replace(/\n/g, '<br />')
-            this.winInfo = retdata
-            let winIndex = 0
-            for (let i = 0; i < this.lotteryData.length; i++) {
-              if (this.lotteryData[i].id === retdata.id) {
-                winIndex = i
-                break
+        try {
+          this.$http.get(`${ENV.BokaApi}/api/tableindex/startLottery`, {
+            params: {storeid: this.storeid}
+          }).then(res => {
+            let data = res.data
+            this.afterStart = true
+            if (data.code === 0) {
+              this.isLottery = true
+              this.lotterResult = true
+              let retdata = data.wininfo
+              if (retdata.content && retdata.content !== '') retdata.content = retdata.content.replace(/\n/g, '<br />')
+              this.winInfo = retdata
+              let winIndex = 0
+              for (let i = 0; i < this.lotteryData.length; i++) {
+                if (this.lotteryData[i].id === retdata.id) {
+                  winIndex = i
+                  break
+                }
               }
+              setTimeout(() => {
+                this.chances = data.chances
+                this.$refs.LuckyWheel.stop(winIndex)
+              }, 1000)
+            } else {
+              this.lotterResult = false
+              setTimeout(() => {
+                this.$refs.LuckyWheel.stop(Math.random() * 8 >> 0)
+                this.$vux.toast.show({
+                  text: data.msg,
+                  type: 'text',
+                  time: this.$util.delay(data.msg)
+                })
+              }, 1000)
             }
-            setTimeout(() => {
-              this.chances = data.chances
-              this.$refs.LuckyWheel.stop(winIndex)
-            }, 1000)
-          } else {
-            this.lotterResult = false
-            setTimeout(() => {
-              this.$refs.LuckyWheel.stop(Math.random() * 8 >> 0)
-              this.$vux.toast.show({
-                text: data.msg,
-                type: 'text',
-                time: this.$util.delay(data.msg)
-              })
-            }, 1000)
-          }
-        })
+          })
+        } catch (e) {
+          console.log('catch到了错误')
+          console.log(e)
+          this.lotterResult = false
+          this.$refs.LuckyWheel.stop(Math.random() * 8 >> 0)
+          this.$vux.toast.show({
+            text: '请求超时，请检查网络',
+            type: 'text',
+            time: 1500
+          })
+        }
       }
     },
     endCallBack (e) {

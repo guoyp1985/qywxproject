@@ -138,14 +138,21 @@ export default {
   },
   methods: {
     toShare () {
-      jweixin.invoke('shareToExternalContact', {
-        title: this.viewData.title,
-        desc: this.viewData.summary,
-        link: this.shareParams.link,
-        imgUrl: this.viewData.photo.split(',')[0],
-        success: function (res) {
-        }
-      })
+      console.log('点击分享给客户')
+      console.log(jweixin)
+      try {
+        jweixin.invoke('shareToExternalContact', {
+          title: this.viewData.title,
+          desc: this.viewData.summary,
+          link: this.shareParams.link,
+          imgUrl: this.viewData.photo.split(',')[0],
+          success: function (res) {
+          }
+        })
+      } catch (e) {
+        console.log('监控到了分享报错')
+        console.log(e)
+      }
     },
     toShareGroup () {
       jweixin.invoke('shareToExternalChat', {

@@ -1,11 +1,8 @@
 <style lang="less">
-.table-index-page.havebottom{
-  .page-inner{bottom:50px;}
-}
 .table-index-page{
   width:100%;height:100%;box-sizing: border-box;background-color:#f94929;
   .page-inner{
-    position:absolute;left:0;top:0;right:0;bottom:0;
+    position:absolute;left:0;top:0;right:0;bottom:50px;
     padding-bottom:20px;box-sizing: border-box;overflow-y:auto;
     background-color:#f94929;
   }
@@ -13,14 +10,35 @@
     position:absolute;left:0;bottom:0;right:0;height:50px;background-color:transparent;z-index:1;
     display:flex;
     .btn{
-      width:102px;height:37px;border-radius:60px;color:#fff;
-      display:flex;justify-content:center;align-items:center;font-size:18px;
+      width:90px;height:35px;border-radius:60px;color:#fff;margin:0 auto;box-sizing:border-box;
+      display:flex;justify-content:center;align-items:center;font-size:16px;
     }
   }
   .top-box{
     text-align:left;padding:10px;box-sizing: border-box;position:relative;color:#fff;
     .avatar{width:80px;height:80px;border-radius:50%;margin-right:10px;}
     .txt{font-size:16px;font-weight:bold;}
+  }
+  .product-area:after{content:"";padding-top:100%;display:block;}
+  .product-area{
+    position:relative;box-sizing:border-box;
+    .inner{
+      position:absolute;left:20px;top:20px;right:20px;bottom:20px;border-radius:10px;
+      .img{border-radius:10px;}
+      .qrcode{
+        position:absolute;right:0;bottom:0;width:30%;z-index:1;
+      }
+      .ico{
+        width:80px;height:80px;border-radius:50%;background-color:#f94929;color:#fff;
+        display:flex;justify-content:center;align-items:center;
+        position:absolute;left:50%;margin-left:-40px;top:50%;margin-top:-40px;
+      }
+      .txt{
+        position:absolute;left:0;bottom:0;width:70%;padding:5px;box-sizing: border-box;font-size:14px;
+        background-color:rgba(0,0,0,0.5);color:#fff;border-top-right-radius:10px;
+        border-bottom-left-radius:10px;
+      }
+    }
   }
   .pic-swiper:after{content:"";padding-top:100%;display:block;}
   .pic-swiper{
@@ -169,61 +187,150 @@
     position:relative;width:100%;
     .draw-inner{position:absolute;left:0;top:0;right:0;bottom:0;}
   }
+  .md-list{
+    .item{padding:10px;}
+    .item.active{background-color:#ccc;}
+  }
+  .banner-area:after{content:'';display:block;padding-top:56%;}
+  .banner-area{
+    width:100%;position:relative;
+    .banner-inner{position:absolute;left:0;top:0;right:0;bottom:0;}
+    .vux-swiper{height:100% !important;}
+    .img{display:block;width:100%;height:100%;object-fit:cover;}
+  }
+  .image-outer{width:100%;margin:0 auto;padding:0 10px;box-sizing: border-box;}
+  .image-outer .imgarea{width:100%;max-height:100%;position:relative;}
+  .image-outer .imgarea:after{content:"";display:block;padding-top:76%;}
+  .image-outer .imgarea .inner{position:absolute;left:0;top:0;right:0;bottom:0;display:flex !important;justify-content: center; align-items: center;}
+  .image-outer .imgarea img{width:100%;height:100%;max-width:100%;max-height:100%;}
+  .image-outer.card-outer .imgarea:after{content:"";display:block;padding-top:26%;}
+  .money-txt{position:absolute;left:0;top:0;right:0;bottom:0;z-index:1;display:flex;width:100%;}
+  .money-txt .left_cell{width:35%;color:#FBF1B8;}
+  .money-txt .big-txt{font-size:14px;}
+  .money-txt .big-txt.long{font-size:22px;}
+  .money-txt .big-txt.big1{font-size:30px;}
+  .money-txt .big-txt.big2{font-size:30px;}
+  .money-txt .big-txt.big3{font-size:30px;}
+  .money-txt .big-txt.big4{font-size:30px;}
+  .money-txt .big-txt.big5{font-size:25px;}
+  .money-txt .big-txt.big6{font-size:22px;}
+  .con-area{color:#FE6C5B;width:100%;box-sizing: border-box;font-size:14px;padding:0 10px;box-sizing:border-box;}
+  .txt-cell{width:65px;}
+}
+.auto-modal-qrcode{
+  .modal-inner{width:80%;}
+  .btn{
+    width:100px;height:35px;border-radius:60px;margin:0 auto;box-sizing:border-box;
+    background-color:#f94929;color:#fff;
+    display:flex;justify-content:center;align-items:center;font-size:14px;
+  }
 }
 </style>
 <template>
-  <div :class="`table-index-page ${isWx && !isQywx ? 'havebottom' : ''}`">
+  <div class="table-index-page">
     <template v-if="afterLoad">
-      <div class="page-inner flex_center" v-if="isOld && disLottery">
-        <div class="pl10 pr10" style="width:100%;box-sizing:border-box;">
-          <div class="draw-outer">
-            <div class="draw-inner">
-              <LuckyWheel
-                ref="LuckyWheel"
-                style="width:100%;height:100%;position:absolute;left:0;top:0;right:0;bottom:0;"
-                :blocks.sync="blocks"
-                :prizes.sync="prizes"
-                :buttons.sync="buttons"
-                @start="startCallBack"
-                @end="endCallBack"/>
+      <div class="page-inner">
+        <div v-if="bannerData.length" class="banner-area">
+          <swiper
+            class="banner-inner"
+            dots-position="center"
+            :auto="bannerData.length > 1"
+            :interval=6000
+            :show-dots="bannerData.length > 1"
+            :aspect-ratio="1/1"
+            loop>
+            <swiper-item v-for="(item,index) in bannerData" :key="item.id">
+              <img class="img" :src="item.photo" @click="clickBanner(item)" />
+              <template v-if="isWx && !isQywx && item.linktype == 'miniprogram' && item.url != ''">
+                <wx-open-launch-weapp
+                  :username="AppGhId"
+                  :path.sync="item.url"
+                  @launch="handleLaunchFn"
+                  @error="handleErrorFn"
+                  style="position:absolute;left:0;top:0;right:0;bottom:0;z-index:1;">
+                  <script type="text/wxtag-template">
+                    <div style="position:absolute;left:0;top:0;right:0;bottom:0;z-index:1;background-color:transparent;"></div>
+                  </script>
+                </wx-open-launch-weapp>
+              </template>
+            </swiper-item>
+          </swiper>
+        </div>
+        <template v-if="isOld && disLottery">
+          <div class="pl10 pt20 pr10" style="width:100%;box-sizing:border-box;">
+            <div class="draw-outer">
+              <div class="draw-inner">
+                <LuckyWheel
+                  ref="LuckyWheel"
+                  style="width:100%;height:100%;position:absolute;left:0;top:0;right:0;bottom:0;"
+                  :blocks.sync="blocks"
+                  :prizes.sync="prizes"
+                  :buttons.sync="buttons"
+                  @start="startCallBack"
+                  @end="endCallBack"/>
+              </div>
+            </div>
+            <div class="pb10 color-white" style="margin-top:40px;">
+              <div class="flex_center" v-if="chances">还剩{{chances}}次抽奖机会</div>
+              <div class="flex_center" v-else>您的抽奖机会已用完</div>
             </div>
           </div>
-          <div class="pb10 color-white" style="margin-top:40px;">
-            <div>1、每个用户每天只有一次抽奖机会</div>
-            <div>2、分享给好友下单增加一次抽奖机会</div>
-          </div>
-        </div>
-      </div>
-      <div class="page-inner" v-if="isNew">
-        <div class="pl10 pr10 mt10">
-          <div class="box-outer">
-            <div class="box-title bold font18" style="color:#f94929;">新客送菜</div>
-            <div class="box-title b_top_after">尊敬的新客户{{loginUser.linkman}}，您可以领取本店免费赠送您的一份新菜！长按下方二维码，并加本店员工方可领取。</div>
-            <div style="padding:0 1px 40px;box-sizing:border-box;" v-if="disProduct">
-              <swiper
-                class="pic-swiper notitle"
-                dots-position="center"
-                :auto="1==1"
-                :interval=6000
-                :show-dots="1==1"
-                :aspect-ratio="1/1"
-                loop>
-                <swiper-item v-for="(item,index) in productData" :key="item.id">
-                  <img class="img db imgcover w_100 h_100" :src="item.photo" default-src="https://tosqy.boka.cn/images/nopic.jpg" />
-                  <img v-if="qrcode && qrcode != ''" class="qrcode" :src="qrcode" />
-                  <div class="ico">免费送</div>
-                  <div class="txt">
-                    <div class="clamp1">{{item.title}}</div>
-                    <div style="color:#f94929;font-weight:bold;">￥{{item.price}}</div>
+        </template>
+        <template v-if="isNew">
+          <div class="pl10 pr10 mt10" v-if="disProduct && todayProduct">
+            <div class="box-outer">
+              <div class="box-title bold font18" style="color:#f94929;">新客送优惠券</div>
+              <div class="box-title b_top_after">尊敬的新客户{{loginUser.linkman}}，您可以领取本店免费赠送您的一张优惠券！</div>
+              <div class="db image-outer card-outer mt15">
+                <div class="imgarea">
+                  <div class="inner">
+                    <img class="bg-pic" src="https://tossharingsales.boka.cn/minigxk/voucher/voucher1.png" />
+                    <div class="money-txt">
+                      <div class="left_cell flex_center">
+                        <div class="align_center"><span :class="`big-txt big${cardInfo.facemoney.length}`">{{cardInfo.money}}</span>元</div>
+                      </div>
+                      <div class="right_cell flex_cell flex_center">
+                        <div class="w_100">
+                          <div class="flex_center">订单满{{cardInfo.ordermoney}}元可用</div>
+                          <div class="flex_center" v-if="cardInfo.limittime">【{{limitObject[cardInfo.limittime]}}】</div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </swiper-item>
-              </swiper>
+                </div>
+              </div>
+              <div class="con-area" style="margin-top:20px;">
+                <div class="flex_left" v-if="cardInfo.startdate">
+                  <div class="txt-cell">可用时间</div>
+                  <div class="flex_cell">{{cardInfo.startdate_str}}后可用</div>
+                </div>
+                <div class="flex_left" v-if="cardInfo.deadline">
+                  <div class="txt-cell">有效期至</div>
+                  <div class="flex_cell">{{cardInfo.deadline_str}}</div>
+                </div>
+                <div class="db-flex" v-if="cardInfo.content && cardInfo.content != ''">
+                  <div class="txt-cell">使用说明</div>
+                  <div class="flex_cell" v-html="cardInfo.content"></div>
+                </div>
+              </div>
+              <div v-if="isWx && !isQywx" style="position:relative;z-index:10;width:100%;">
+                <wx-open-launch-weapp
+                  :username="AppGhId"
+                  :path.sync="storeActivityPath"
+                  @launch="handleLaunchFn"
+                  @error="handleErrorFn"
+                  style="width:100%;padding:10px;box-sizing:border-box;display:flex;justify-content:center;align-items:center;">
+                  <script type="text/wxtag-template">
+                    <div style="color: #f94929;text-align:center;">分享给好友，一起免费吃</div>
+                  </script>
+                </wx-open-launch-weapp>
+              </div>
+              <div v-else class="padding10 flex_center" @click="clickShare" style="position:relative;z-index:10;">
+                <div style="color: #f94929;">分享给好友，一起免费领优惠券</div>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="padding10 flex_center">
-          <div style="text-decoration: underline;color: #fff;" @click="clickShare">分享给好友，一起免费吃</div>
-        </div>
+        </template>
       </div>
     </template>
     <div class="auto-modal flex_center" v-if="isOld && showCard">
@@ -243,8 +350,23 @@
             </div>
           </div>
           <div class="b_top_after padding10" v-if="winInfo && winInfo.content != ''" v-html="winInfo.content"></div>
-          <div class="padding10 flex_center">
-            <div class="btn-share" @click="toCard">我的优惠券</div>
+          <!-- <div class="padding10 flex_center">
+            <div class="btn-share" @click="toGift">我的活动奖品</div>
+          </div> -->
+          <div v-if="isWx && !isQywx" class="padding10">
+            <wx-open-launch-weapp
+              :username="AppGhId"
+              :path.sync="giftPath"
+              @launch="handleLaunchFn"
+              @error="handleErrorFn"
+              style="width:100%;display:flex;justify-content:center;align-items:center;">
+              <script type="text/wxtag-template">
+                <div style="text-decoration: underline;color:#f94929;text-align:center;">我的活动奖品</div>
+              </script>
+            </wx-open-launch-weapp>
+          </div>
+          <div v-else class="padding10 flex_center">
+            <div style="text-decoration: underline;color:#f94929;" @click="toGift">我的活动奖品</div>
           </div>
         </div>
         <div class="close-area flex_center">
@@ -252,9 +374,106 @@
         </div>
       </div>
     </div>
-    <div v-if="isWx && !isQywx" class="fix-page-bottom">
-      <div class="flex_cell flex_center">
-        <div class="btn">
+    <div class="auto-modal flex_center" v-if="showStore">
+      <div class="modal-inner">
+        <div class="box-outer">
+          <div class="box-title bold font18 align_center">请选择门店</div>
+          <div class="md-list">
+            <div :class="`item ${selectedMd.id == item.id ? 'active' : ''} ${index < StoreData.length - 1 ? 'b_bottom_after' : ''}`" v-for="(item, index) in StoreData" :key="index" @click="clickMd(item,index)">
+              <div class="flex_left">{{item.title}}</div>
+              <div class="flex_left">{{item.address}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="auto-modal flex_center" v-if="disTip">
+      <div class="modal-inner">
+        <div class="box-outer">
+          <div class="box-title bold align_center font18" style="color:#f94929;">恭喜你获得菜品一份</div>
+          <div class="pl10 pr10 pt20 pb20">
+            <div>
+              <span>请到</span>
+              <span v-if="isWx && !isQywx" style="width:66px;text-align:center;color:#f94929;font-weight:bold;">
+                <wx-open-launch-weapp
+                  :username="AppGhId"
+                  :path.sync="centerPath"
+                  @launch="handleLaunchFn"
+                  @error="handleErrorFn"
+                  style="width:100%;text-align:center;color:#f94929;font-weight:bold;">
+                  <script type="text/wxtag-template">
+                    <span style="width:100%;text-align:center;color:#f94929;font-weight:bold;">个人中心</span>
+                  </script>
+                </wx-open-launch-weapp>
+              </span>
+              <span v-else @click="toCenter" style="width:66px;text-align:center;color:#f94929;font-weight:bold;">个人中心</span>
+              <span>查看</span>
+            </div>
+            <div class="mt10">再次进入请扫餐桌上的二维码</div>
+          </div>
+        </div>
+        <div class="close-area flex_center">
+          <div class="al al-close" @click="closeTip"></div>
+        </div>
+      </div>
+    </div>
+    <div class="auto-modal flex_center auto-modal-qrcode" v-if="showChance">
+      <div class="modal-inner">
+        <div class="box-outer">
+          <div class="box-title bold flex_center" style="color:#f94929;">您有一次免费抽奖机会</div>
+          <div class="flex_center pt20 pb20">
+            <div class="flex_cell flex_center">
+              <div class="btn" @click="startCallBack">立即抽奖</div>
+            </div>
+            <div class="flex_cell flex_center">
+              <div class="btn">
+                <wx-open-launch-weapp
+                  :username="AppGhId"
+                  :path.sync="weappPath"
+                  @launch="handleLaunchFn"
+                  @error="handleErrorFn"
+                  style="width:100%;height:35px;display:block;">
+                  <script type="text/wxtag-template">
+                    <div style="width:100px;height:35px;box-sizing:border-box;border-radius:60px;display:flex;justify-content:center;align-items:center;border:#fff 1px solid;color:#fff;font-size:14px;">继续点餐</div>
+                  </script>
+                </wx-open-launch-weapp>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="auto-modal flex_center auto-modal-qrcode" v-if="showQrcode">
+      <div class="modal-inner">
+        <div class="box-outer">
+          <div class="box-title bold flex_left" style="color:#f94929;">您有一次免费领菜的机会，现在去扫码领菜？</div>
+          <div class="flex_center pt20 pb20">
+            <div class="flex_cell flex_center">
+              <div class="btn" @click="closeQrcode">扫码领菜</div>
+            </div>
+            <div class="flex_cell flex_center">
+              <div class="btn">
+                <wx-open-launch-weapp
+                  :username="AppGhId"
+                  :path.sync="weappPath"
+                  @launch="handleLaunchFn"
+                  @error="handleErrorFn"
+                  style="width:100%;height:35px;display:block;">
+                  <script type="text/wxtag-template">
+                    <div style="width:100px;height:35px;box-sizing:border-box;border-radius:60px;display:flex;justify-content:center;align-items:center;border:#fff 1px solid;color:#fff;font-size:14px;">继续点餐</div>
+                  </script>
+                </wx-open-launch-weapp>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fix-page-bottom">
+      <div v-if="isWx && !isQywx" class="flex_cell">
+        <div class="btn" @click="clickDiancan" v-if="isNew && query.newcustomer != 1" style="border:#fff 1px solid;">点餐</div>
+        <div class="btn" @click="clickDiancan1" v-else-if="isOld && !isLottery" style="border:#fff 1px solid;">点餐</div>
+        <div class="btn" v-else>
           <wx-open-launch-weapp
             :username="AppGhId"
             :path.sync="weappPath"
@@ -262,12 +481,29 @@
             @error="handleErrorFn"
             style="width:100%;height:35px;display:block;">
             <script type="text/wxtag-template">
-              <div style="width:100px;height:35px;border-radius:60px;display:flex;justify-content:center;align-items:center;border:#ccc 1px solid;color:#fff;font-size:18px;">点餐</div>
+              <div style="width:80px;height:35px;box-sizing:border-box;border-radius:60px;display:flex;justify-content:center;align-items:center;border:#fff 1px solid;color:#fff;font-size:16px;">点餐</div>
             </script>
           </wx-open-launch-weapp>
         </div>
       </div>
-      <div class="flex_cell flex_center">
+      <div v-if="isWx && !isQywx" class="flex_cell">
+        <div class="btn">
+          <wx-open-launch-weapp
+            :username="AppGhId"
+            :path.sync="centerPath"
+            @launch="handleLaunchFn"
+            @error="handleErrorFn"
+            style="width:100%;height:35px;display:block;">
+            <script type="text/wxtag-template">
+              <div style="width:90px;height:35px;box-sizing:border-box;border-radius:60px;display:flex;justify-content:center;align-items:center;border:#fff 1px solid;color:#fff;font-size:16px;">个人中心</div>
+            </script>
+          </wx-open-launch-weapp>
+        </div>
+      </div>
+      <div v-else class="flex_cell">
+        <div class="btn" @click="toCenter" style="border:#fff 1px solid;">个人中心</div>
+      </div>
+      <div v-if="isWx && !isQywx" class="flex_cell">
         <div class="btn">
           <wx-open-launch-weapp
             :username="AppGhId"
@@ -276,7 +512,7 @@
             @error="handleErrorFn"
             style="width:100%;height:35px;display:block;">
             <script type="text/wxtag-template">
-              <div style="width:100px;height:35px;border-radius:60px;display:flex;justify-content:center;align-items:center;border:#ccc 1px solid;color:#fff;font-size:18px;">结账</div>
+              <div style="width:90px;height:35px;box-sizing:border-box;border-radius:60px;display:flex;justify-content:center;align-items:center;border:#fff 1px solid;color:#fff;font-size:16px;">结账</div>
             </script>
           </wx-open-launch-weapp>
         </div>
@@ -314,12 +550,15 @@ export default {
       productData: [],
       isWx: false,
       isQywx: false,
-      cardInfo: {},
+      cardInfo: {facemoney: 5, money: 5, ordermoney: 100, limittime: 1, content: '这张优惠券的使用规则'},
       cardSet: {},
       qrcode: '',
       todayProduct: null,
       weappPath: ENV.MiniPage.store,
       orderPath: ENV.MiniPage.order,
+      centerPath: ENV.MiniPage.center,
+      storeActivityPath: ENV.MiniPage.storeActivity,
+      giftPath: ENV.MiniPage.gift,
       shareParams: {},
       shareWid: 0,
       storeInfo: {},
@@ -459,47 +698,158 @@ export default {
       disLottery: false,
       lotteryData: null,
       lotterResult: false,
-      winInfo: {}
+      winInfo: {},
+      showStore: false,
+      StoreData: [],
+      selectedMd: {},
+      storeid: 0,
+      disTip: false,
+      showQrcode: false,
+      isLottery: false,
+      showChance: false,
+      afterStart: false,
+      chances: 0,
+      curFactory: ENV.factory,
+      productPath: ENV.tableLink[ENV.factory],
+      adImage: require(`../assets/images/${ENV.factory}/tableindex.jpg`),
+      touchTime: null,
+      bannerData: [],
+      limitObject: {1: '限早餐使用', 2: '限午餐使用', 3: '限晚餐使用'}
     }
   },
   methods: {
-    startCallBack () {
-      this.$http.get(`${ENV.BokaApi}/api/tableindex/startLottery`, {
-        params: {storeid: this.query.storeid}
-      }).then(res => {
-        let data = res.data
-        if (data.code === 0) {
-          this.$refs.LuckyWheel.play()
-          this.lotterResult = true
-          let retdata = data.wininfo
-          this.winInfo = retdata
-          let winIndex = 0
-          for (let i = 0; i < this.lotteryData.length; i++) {
-            if (this.lotteryData[i].id === retdata.id) {
-              winIndex = i
-              break
-            }
-          }
-          setTimeout(() => {
-            this.$refs.LuckyWheel.stop(winIndex)
-          }, 1000)
+    clickBanner (item) {
+      if (item.linktype === 'h5' && item.url && item.url !== '') {
+        this.$router.push(item.url)
+      }
+    },
+    getTouchStart () {
+      clearTimeout(this.touchTime)
+      if (this.qrcode && this.qrcode !== '') {
+        this.touchTime = setTimeout(() => {
+          this.$vux.toast.show({
+            text: '请长按二维码领取免费菜品',
+            type: 'text',
+            time: 1500
+          })
+        }, 500)
+      }
+    },
+    getTouchEnd () {
+      clearTimeout(this.touchTime)
+    },
+    clickDiancan () {
+      this.showQrcode = true
+    },
+    clickDiancan1 () {
+      this.showChance = true
+    },
+    closeQrcode () {
+      this.showQrcode = false
+    },
+    closeTip () {
+      this.disTip = false
+    },
+    afterSelectMd () {
+      if (this.query.newcustomer) {
+        this.isNew = true
+        this.isOld = false
+      } else {
+        if (!this.loginUser.identity) {
+          this.isNew = true
         } else {
-          this.lotterResult = false
-          setTimeout(() => {
-            this.$refs.LuckyWheel.stop(Math.random() * 8 >> 0)
-            this.$vux.toast.show({
-              text: data.msg,
-              type: 'text',
-              time: this.$util.delay(data.msg)
-            })
-          }, 1000)
+          this.isOld = true
+          this.getLottery()
         }
-      })
+      }
+      this.getData()
+    },
+    clickMd (item, index) {
+      this.selectedMd = item
+      this.storeid = item.id
+      this.setAppPath()
+      setTimeout(() => {
+        this.showStore = false
+        this.afterSelectMd()
+      }, 300)
+    },
+    closeStoreModal () {
+      this.showStore = false
+    },
+    toCenter () {
+      this.$router.push('/center')
+    },
+    toGift () {
+      if (this.winInfo.type === 'card') {
+        this.$router.push('/userCard')
+      } else {
+        this.$router.push('/userCard?flag=1')
+      }
+    },
+    startCallBack () {
+      this.showChance = false
+      // if (this.afterStart || this.isLottery) {
+      if (!this.chances) {
+        this.$vux.toast.show({
+          text: '您今天的抽奖机会已用完',
+          type: 'text'
+        })
+      } else {
+        this.$refs.LuckyWheel.play()
+        try {
+          this.$http.get(`${ENV.BokaApi}/api/tableindex/startLottery`, {
+            params: {storeid: this.storeid}
+          }).then(res => {
+            let data = res.data
+            this.afterStart = true
+            if (data.code === 0) {
+              this.isLottery = true
+              this.lotterResult = true
+              let retdata = data.wininfo
+              if (retdata.content && retdata.content !== '') retdata.content = retdata.content.replace(/\n/g, '<br />')
+              this.winInfo = retdata
+              let winIndex = 0
+              for (let i = 0; i < this.lotteryData.length; i++) {
+                if (this.lotteryData[i].id === retdata.id) {
+                  winIndex = i
+                  break
+                }
+              }
+              setTimeout(() => {
+                this.chances = data.chances
+                this.$refs.LuckyWheel.stop(winIndex)
+              }, 1000)
+            } else {
+              this.lotterResult = false
+              setTimeout(() => {
+                this.$refs.LuckyWheel.stop(Math.random() * 8 >> 0)
+                this.$vux.toast.show({
+                  text: data.msg,
+                  type: 'text',
+                  time: this.$util.delay(data.msg)
+                })
+              }, 1000)
+            }
+          })
+        } catch (e) {
+          console.log('catch到了错误')
+          console.log(e)
+          this.lotterResult = false
+          this.$refs.LuckyWheel.stop(Math.random() * 8 >> 0)
+          this.$vux.toast.show({
+            text: '请求超时，请检查网络',
+            type: 'text',
+            time: 1500
+          })
+        }
+      }
     },
     endCallBack (e) {
-      setTimeout(() => {
-        this.showCard = true
-      }, 500)
+      if (this.lotterResult) {
+        setTimeout(() => {
+          this.showCard = true
+        }, 500)
+      }
     },
     handleLaunchFn (e) {
       console.log(e)
@@ -515,13 +865,13 @@ export default {
     },
     clickShare () {
       // this.showShareModal = true
-      this.$router.push(`/storeActivity?storeid=${this.query.storeid}&tableid=${this.query.tableid}`)
+      this.$router.push(`/storeActivity?storeid=${this.storeid}&tableid=${this.query.tableid}`)
     },
     clickShareModal () {
       this.showShareModal = false
     },
     handleShare () {
-      let shareLink = `${ENV.Host}/#/tableIndex?storeid=${this.query.storeid}&tableid=${this.query.tableid}&share_uid=${this.loginUser.uid}`
+      let shareLink = `${ENV.Host}/#/tableIndex?storeid=${this.storeid}&tableid=${this.query.tableid}&share_uid=${this.loginUser.uid}`
       if (this.shareWid && this.shareWid !== '') {
         shareLink = `${shareLink}&wid=${this.shareWid}`
       }
@@ -538,8 +888,10 @@ export default {
       this.$util.handleWxShare(this.shareParams)
     },
     getLottery () {
+      console.log('默认奖品列表')
+      console.log(this.defaultPrizes)
       this.$http.get(`${ENV.BokaApi}/api/content/getList`, {
-        params: {module: 'lottery', storeid: this.query.storeid}
+        params: {module: 'lottery', storeid: this.storeid}
       }).then(res => {
         let data = res.data
         if (data.code === 0) {
@@ -557,12 +909,20 @@ export default {
       })
     },
     getData () {
+      let params = {storeid: this.storeid, tableid: this.query.tableid}
+      if (this.query.newcustomer) params.newcustomer = this.query.newcustomer
+      if (this.query.share_uid) params.shareuid = this.query.share_uid
       this.$http.get(`${ENV.BokaApi}/api/tableindex/index`, {
-        params: {storeid: this.query.storeid, tableid: this.query.tableid}
+        params: params
       }).then(res => {
         let data = res.data
         if (data.code === 0) {
           let retdata = data.data
+          this.bannerData = retdata.banner
+          this.chances = retdata.chances
+          if (this.query.newcustomer && (typeof retdata.first !== undefined && typeof retdata.first !== 'undefined')) {
+            this.disTip = true
+          }
           if (retdata.prestoresetting) {
             this.listData = retdata.prestoresetting
             this.disList = true
@@ -587,6 +947,7 @@ export default {
           }
           if (retdata.qrcode) this.qrcode = retdata.qrcode
           if (retdata.storeinfo) this.storeInfo = retdata.storeinfo
+          this.isLottery = retdata.islottery
           this.handleShare()
         }
       })
@@ -597,21 +958,27 @@ export default {
       this.isNew = false
       this.isOld = false
       this.isWx = false
+      this.disTip = false
+      this.showCard = false
+      this.lotterResult = false
+    },
+    setAppPath () {
+      this.weappPath = `${this.weappPath}.html?storeid=${this.storeid}&tableid=${this.query.tableid}`
+      this.orderPath = `${this.orderPath}.html?storeid=${this.storeid}&tableid=${this.query.tableid}`
+      this.centerPath = `${this.centerPath}.html?storeid=${this.storeid}&tableid=${this.query.tableid}`
+      this.storeActivityPath = `${this.storeActivityPath}.html?storeid=${this.storeid}&tableid=${this.query.tableid}`
+      this.giftPath = `${this.giftPath}.html?flag=1&storeid=${this.storeid}&tableid=${this.query.tableid}`
     },
     refresh () {
       this.query = this.$route.query
-      this.weappPath = `${this.weappPath}.html?storeid=${this.query.storeid}&tableid=${this.query.tableid}`
-      this.orderPath = `${this.orderPath}.html?storeid=${this.query.storeid}&tableid=${this.query.tableid}`
-      console.log(this.weappPath)
       this.loginUser = User.get()
       this.initData()
-      this.afterLoad = true
       this.isWx = this.$util.isWx()
       this.isQywx = this.$util.isQywx()
-      this.isWx = true
-      this.isQywx = false
       console.log('isWx=', this.isWx)
       console.log('isQywx=', this.isQywx)
+      console.log('productPath=', this.productPath)
+      this.afterLoad = true
       if (this.isQywx) {
         this.shareWid = this.loginUser.uid
       } else {
@@ -621,13 +988,31 @@ export default {
           this.shareWid = this.loginUser.ownid
         }
       }
-      if (!this.loginUser.identity) {
-        this.isNew = true
+      if (this.query.tableid && parseInt(this.query.tableid) === 10000) {
+        this.showStore = true
+        this.$http.get(`${ENV.BokaApi}/api/content/getList`, {
+          params: {module: 'store'}
+        }).then(res => {
+          let data = res.data
+          if (data.code === 0) {
+            this.StoreData = data.data
+          }
+        })
+      } else if (this.query.newcustomer) {
+        this.showStore = true
+        this.$http.get(`${ENV.BokaApi}/api/content/getList`, {
+          params: {module: 'store'}
+        }).then(res => {
+          let data = res.data
+          if (data.code === 0) {
+            this.StoreData = data.data
+          }
+        })
       } else {
-        this.isOld = true
-        this.getLottery()
+        this.storeid = this.query.storeid
+        this.setAppPath()
+        this.afterSelectMd()
       }
-      this.getData()
     }
   },
   activated () {

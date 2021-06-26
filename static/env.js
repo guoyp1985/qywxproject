@@ -29,6 +29,11 @@ var ENV = {
     boka: '/pages/product?id=447212903&ordertype=4',
     guxiang: '/pages/product?id=447212903&ordertype=4',
     longhui: false
+  },
+  BookPage: {
+    boka: '/package/pages/guxiangBook',
+    guxiang: '/package/pages/guxiangBook',
+    longhui: '/package/pages/longhuiBook'
   }
 }
 

@@ -1,8 +1,8 @@
 <style lang="less">
-.ing-orders-page.nobottom{
+.online-order-page.nobottom{
   .s-container{bottom:0;}
 }
-.ing-orders-page{
+.online-order-page{
   .s-container{bottom:50px;overflow-y:auto;}
   .scroll_list{
     padding-top:10px;
@@ -29,7 +29,7 @@
 }
 </style>
 <template>
-  <div :class="`containerarea ing-orders-page nobottom`">
+  <div :class="`containerarea online-order-page nobottom`">
     <search
       class="v-search bg-white"
       v-model='searchword'
@@ -62,14 +62,9 @@
                 <div class="flex_right color-gray">× <span class="font12">{{ pitem.quantity }}</span></div>
               </div>
             </div>
-            <div v-if="item.carddeduct && item.carddeduct != '0.00' && item.carddeduct != 0" class="flex_right b_top_after" style="width:100%;padding:10px;box-sizing:border-box;">
-              <div class="flex_right color-gray">优惠券抵扣: <span class="color-gray">￥</span><span class="color-gray">{{item.carddeduct}}</span></div>
-            </div>
             <div class="flex_left b_top_after" style="width:100%;padding:10px;box-sizing:border-box;">
-              <div class="flex_cell flex_left">支付金额: <span class="color-red">￥</span><span class="font16 color-red">{{item.needpaymoney}}</span></div>
-              <div class="flex_right">
-                <div class="btn" @click="finishOrder(item,index)">线下付款</div>
-              </div>
+              <div v-if="item.carddeduct && item.carddeduct != '0.00' && item.carddeduct != 0" class="flex_left color-gray">优惠券抵扣: <span class="color-gray">￥</span><span class="color-gray">{{item.carddeduct}}</span></div>
+              <div class="flex_cell flex_right">支付金额: <span class="color-red">￥</span><span class="font16 color-red">{{item.needpaymoney}}</span></div>
             </div>
           </div>
         </div>
@@ -149,7 +144,7 @@ export default {
     getList1 () {
       console.log('进入到了列表')
       let isSearch = false
-      let params = {fromqy: 1, ordertype: 3, page: this.pagestart1, limit: this.limit}
+      let params = {fromqy: 2, ordertype: 3, page: this.pagestart1, limit: this.limit}
       if (this.searchword && this.searchword !== '') {
         isSearch = true
         params.tableid = this.searchword

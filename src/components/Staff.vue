@@ -31,23 +31,23 @@
       </div>
     </div>
     <div :class="`box-outer ${targets ? 'mb10' : ''}`" v-if="targets">
-      <div class="box-title">{{targets.month | getMonth}}目标</div>
+      <div class="box-title">{{targets.month | getMonth}}指标（已完成/目标）</div>
       <div class="box-list square">
         <div class="list-item">
           <div class="item-inner">
-            <div class="txt1">{{targets.huoke}}</div>
+            <div class="txt1"><span class="color-red">{{targets.huoke_at}}</span>/{{targets.huoke}}</div>
             <div class="txt2">获客</div>
           </div>
         </div>
         <div class="list-item">
           <div class="item-inner">
-            <div class="txt1">{{targets.fuwu}}</div>
+            <div class="txt1"><span class="color-red">{{targets.fuwu_at}}</span>/{{targets.fuwu}}</div>
             <div class="txt2">服务</div>
           </div>
         </div>
         <div class="list-item">
           <div class="item-inner">
-            <div class="txt1">{{targets.xiaoshou}}</div>
+            <div class="txt1"><span class="color-red">{{targets.xiaoshou_at}}</span>/{{targets.xiaoshou}}</div>
             <div class="txt2">销售</div>
           </div>
         </div>
@@ -162,7 +162,14 @@
             <div class="txt">本周统计</div>
           </div>
         </router-link>
-        <div class="list-item ico-pic-item"></div>
+        <router-link to="/bookList" class="list-item ico-pic-item">
+          <div class="item-inner">
+            <div class="ico-bg">
+              <span class="al al-wenzhang3"></span>
+            </div>
+            <div class="txt">预订到店</div>
+          </div>
+        </router-link>
       </div>
     </div>
     <div class="box-outer mt10">
@@ -179,12 +186,19 @@
         <router-link to="/ingOrders" class="list-item ico-pic-item">
           <div class="item-inner">
             <div class="ico-bg">
-              <span class="al al-kehuliebiao"></span>
+              <span class="al al-dingdan"></span>
             </div>
             <div class="txt">未结订单</div>
           </div>
         </router-link>
-        <div class="list-item ico-pic-item"></div>
+        <router-link to="/onlineOrder" class="list-item ico-pic-item">
+          <div class="item-inner">
+            <div class="ico-bg">
+              <span class="al al-dingdan"></span>
+            </div>
+            <div class="txt">在线结账订单</div>
+          </div>
+        </router-link>
         <!-- <router-link to="/retailSale" class="list-item ico-pic-item">
           <div class="item-inner">
             <div class="ico-bg">
